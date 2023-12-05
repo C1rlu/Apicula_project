@@ -1,0 +1,83 @@
+[gd_scene load_steps=4 format=3 uid="uid://b3va63eww3a6x"]
+
+[ext_resource type="PackedScene" uid="uid://dvyncnep1cy2q" path="res://00_PLAYER/Boat/boat_all.tscn" id="2_e8bnm"]
+
+[sub_resource type="GDScript" id="GDScript_f6541"]
+script/source = "extends RigidBody3D
+
+@export var move_speed: float = 5.0
+@export var maxSpeed = 10.0 
+@export var rotation_speed = 0.5
+
+func _physics_process(_delta):
+	
+	var translation = get_global_transform().origin
+	_global_datas.player_position = translation
+	
+	if _global_datas.Player_InBoard == true:
+		return
+	
+	if _global_datas.Player_InSubScene == true:
+		return
+	if _global_datas.Player_InMenu == true:
+		return
+			
+	var forward_value = 0.0
+	if Input.is_action_pressed((\"move_forward\")):
+		var forward_vector = -transform.basis.z
+		apply_central_force(forward_vector * move_speed)	
+		forward_value = 1	
+	if Input.is_action_pressed((\"move_backward\")):
+		var backward_vector = transform.basis.z
+		apply_central_force(backward_vector * move_speed/2 )		
+		forward_value = -1				
+	var current_velocity = linear_velocity
+	var current_speed = current_velocity.length()
+	
+	if Input.is_action_pressed((\"move_right\")):
+		apply_torque(Vector3(0,-rotation_speed * current_speed * forward_value,0))
+	if Input.is_action_pressed((\"move_left\")):  
+		apply_torque(Vector3(0,rotation_speed * current_speed * forward_value,0))
+	
+	if current_speed > maxSpeed:
+		current_velocity = current_velocity.normalized() * maxSpeed
+		linear_velocity = current_velocity
+	
+	self.transform.origin.y = 0.0	
+	
+
+
+
+"
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bufvh"]
+radius = 0.251435
+height = 1.87309
+
+[node name="Player_Boat" type="RigidBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.040225, 0)
+axis_lock_angular_x = true
+axis_lock_angular_z = true
+center_of_mass_mode = 1
+gravity_scale = 0.0
+linear_damp = 1.0
+angular_damp = 2.5
+script = SubResource("GDScript_f6541")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, -7.25367e-23, -1.98947e-22, 2.11758e-22, 0.342545, 0.939501, 0, -0.939501, 0.342545, 0.130404, 3.19906, -0.0379682)
+visible = false
+layers = 3081
+light_color = Color(0.431373, 0.431373, 0.431373, 1)
+light_indirect_energy = 0.0
+light_volumetric_fog_energy = 0.0
+light_specular = 0.0
+omni_range = 7.0
+omni_attenuation = 0.258817
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -0.0561239, 0.0878515)
+shape = SubResource("CapsuleShape3D_bufvh")
+
+[node name="Boat_all" parent="." instance=ExtResource("2_e8bnm")]
+transform = Transform3D(1, 0, 0, 0, 0.999639, -0.0268729, 0, 0.0268729, 0.999639, 0, -0.245228, 0)

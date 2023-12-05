@@ -1,0 +1,88 @@
+[gd_scene load_steps=5 format=3 uid="uid://cthnvrrtdi4n5"]
+
+[ext_resource type="Material" uid="uid://clw3a375133r3" path="res://05_SHADER_TEST/Subscene_materials/Light_yelow.tres" id="1_c1hic"]
+
+[sub_resource type="GDScript" id="GDScript_is3q2"]
+script/source = "extends RigidBody3D
+
+func _ready():
+	_add_ForceRandom_bottom()
+	
+func _addForce_ini():
+	var target_pos = Vector3(_global_datas.mouseRaycastPosition.x,_global_datas.mouseRaycastPosition.y,0.0)
+	var actualPos = global_transform.origin
+	var direction = target_pos - actualPos
+	direction  = direction .normalized()
+	var force = direction  * 100.0
+	apply_force(force)
+
+
+
+func _add_ForceRandom():
+	var player_position = _global_datas.subbscene_playerPosition
+	var circle_radius = 50.0
+	var random_angle = randf_range(0, 2 * PI)
+
+	var random_offset = Vector3(
+		circle_radius * cos(random_angle),
+		circle_radius * sin(random_angle), 0.0
+		
+	)
+	var random_position = player_position + random_offset
+
+	apply_force(random_position)
+
+func _add_ForceRandom_bottom():
+	
+	var player_position = _global_datas.subbscene_playerPosition
+	var half_circle = PI  # 180 degrees
+	var random_angle = randf_range(0, half_circle)  # Random angle within 0 to 180 degrees
+	var circle_radius = 50.0
+	
+	var random_offset = Vector3 (
+		circle_radius * cos(random_angle),
+		-circle_radius * sin(random_angle), 0.0  # Negative sin to make it go down
+	)
+	var random_position = player_position + random_offset
+
+	apply_force(random_position)
+	
+	
+	
+func _add_ForceUp():
+	var player_position = _global_datas.subbscene_playerPosition
+	
+	var random_offset = Vector3(randf_range(-250.0, 250.0),50.0,0.0)
+	var target_pos = player_position + random_offset
+	
+	var actualPos = global_transform.origin
+	var direction = target_pos - actualPos
+	direction  = direction .normalized()
+	var force = direction  * 50.0
+	apply_force(force )
+"
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_2puuk"]
+radius = 0.517835
+
+[sub_resource type="SphereMesh" id="SphereMesh_0g12f"]
+material = ExtResource("1_c1hic")
+
+[node name="FLARE" type="RigidBody3D"]
+collision_layer = 2
+collision_mask = 2
+gravity_scale = 0.03
+linear_damp = 1.0
+angular_damp = 2.5
+script = SubResource("GDScript_is3q2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(0.0610402, 0, 0, 0, 0.0610402, 0, 0, 0, 0.0610402, 0, 0, 0)
+shape = SubResource("SphereShape3D_2puuk")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CollisionShape3D"]
+layers = 4
+mesh = SubResource("SphereMesh_0g12f")
+
+[node name="LIGHTS" type="OmniLight3D" parent="."]
+layers = 4

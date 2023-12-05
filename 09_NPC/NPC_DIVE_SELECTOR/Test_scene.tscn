@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3 uid="uid://cg246migm0lxg"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_nn6cr"]
+
+[sub_resource type="GDScript" id="GDScript_b3yo3"]
+script/source = "extends MeshInstance3D
+
+
+func _on_area_3d_mouse_entered():
+		print(\"MOUSE ENTERED\")
+"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_e3as8"]
+
+[node name="Test_scene" type="Node3D"]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.962451, 0.271457, 0, -0.271457, 0.962451, 0, 1.46644, 5.40476)
+visible = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_nn6cr")
+script = SubResource("GDScript_b3yo3")
+
+[node name="Area3D" type="Area3D" parent="MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/Area3D"]
+shape = SubResource("BoxShape3D_e3as8")
+
+[connection signal="mouse_entered" from="MeshInstance3D/Area3D" to="MeshInstance3D" method="_on_area_3d_mouse_entered"]

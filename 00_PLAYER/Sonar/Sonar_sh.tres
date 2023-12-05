@@ -1,0 +1,129 @@
+[gd_resource type="VisualShader" load_steps=8 format=3 uid="uid://bduoqim3kfbs6"]
+
+[sub_resource type="VisualShaderNodeProximityFade" id="VisualShaderNodeProximityFade_yprbq"]
+default_input_values = [0, 1.5]
+
+[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_ntavi"]
+function = 31
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_dv1ok"]
+parameter_name = "Sonar_color"
+default_value_enabled = true
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_w8tpi"]
+size = Vector2(634.014, 470.339)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_tijej"]
+constant = 0.4
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_45al8"]
+constant = 1.0
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_k7rm7"]
+
+[resource]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_never, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+
+uniform vec4 Sonar_color : source_color = vec4(1.000000, 1.000000, 1.000000, 1.000000);
+uniform sampler2D depth_tex_frg_37 : hint_depth_texture;
+
+
+
+void fragment() {
+// ColorParameter:44
+	vec4 n_out44p0 = Sonar_color;
+
+
+// FloatConstant:47
+	float n_out47p0 = 1.000000;
+
+
+// FloatConstant:46
+	float n_out46p0 = 0.400000;
+
+
+	float n_out45p0;
+// Expression:45
+	n_out45p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out46p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out45p0 = n_out47p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+	float n_out37p0;
+// ProximityFade:37
+	float n_in37p0 = 1.50000;
+	{
+		float __depth_tex = texture(depth_tex_frg_37, SCREEN_UV).r;
+		vec4 __depth_world_pos = INV_PROJECTION_MATRIX * vec4(SCREEN_UV * 2.0 - 1.0, __depth_tex, 1.0);
+		__depth_world_pos.xyz /= __depth_world_pos.w;
+		n_out37p0 = clamp(1.0 - smoothstep(__depth_world_pos.z + n_in37p0, __depth_world_pos.z, VERTEX.z), 0.0, 1.0);
+	}
+
+
+// FloatFunc:43
+	float n_out43p0 = 1.0 - n_out37p0;
+
+
+// Step:48
+	float n_out48p0 = step(n_out45p0, n_out43p0);
+
+
+// Output:0
+	ALBEDO = vec3(n_out44p0.xyz);
+	ALPHA = n_out48p0;
+
+
+}
+"
+modes/depth_draw = 2
+flags/unshaded = true
+nodes/fragment/0/position = Vector2(1060, 200)
+nodes/fragment/37/node = SubResource("VisualShaderNodeProximityFade_yprbq")
+nodes/fragment/37/position = Vector2(0, 80)
+nodes/fragment/43/node = SubResource("VisualShaderNodeFloatFunc_ntavi")
+nodes/fragment/43/position = Vector2(280, 60)
+nodes/fragment/44/node = SubResource("VisualShaderNodeColorParameter_dv1ok")
+nodes/fragment/44/position = Vector2(120, -260)
+nodes/fragment/45/node = SubResource("VisualShaderNodeExpression_w8tpi")
+nodes/fragment/45/position = Vector2(40, 480)
+nodes/fragment/45/size = Vector2(634.014, 470.339)
+nodes/fragment/45/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/45/output_ports = "0,0,Dither_Node;"
+nodes/fragment/45/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/46/node = SubResource("VisualShaderNodeFloatConstant_tijej")
+nodes/fragment/46/position = Vector2(-200, 540)
+nodes/fragment/47/node = SubResource("VisualShaderNodeFloatConstant_45al8")
+nodes/fragment/47/position = Vector2(-200, 440)
+nodes/fragment/48/node = SubResource("VisualShaderNodeStep_k7rm7")
+nodes/fragment/48/position = Vector2(760, 300)
+nodes/fragment/connections = PackedInt32Array(37, 0, 43, 0, 44, 0, 0, 0, 43, 0, 48, 1, 45, 0, 48, 0, 48, 0, 0, 1, 46, 0, 45, 1, 47, 0, 45, 0)

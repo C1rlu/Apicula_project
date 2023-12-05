@@ -1,0 +1,450 @@
+[gd_scene load_steps=4 format=3 uid="uid://bm5xk7weoecoe"]
+
+[sub_resource type="GDScript" id="GDScript_wfyaq"]
+script/source = "extends Node
+
+@onready var Joint_a : Joint3D = $\"../PinJoint_01\"
+@onready var Joint_b : Joint3D = $\"../PinJoint_23\"
+
+
+func _ready():
+	Joint_a.set_node_a(\"../../POD\")
+	
+	_global_datas._tools_scie_active.connect(_connect_to)	
+
+
+func _connect_to():
+	$\"../Joint_22\".transform.origin = _global_datas.player_position
+	$\"../PinJoint_23\".transform.origin  = _global_datas.player_position
+	Joint_b.set_node_b(\"../../Player_Sub\")
+"
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_v6l5i"]
+radius = 0.0202964
+
+[sub_resource type="SphereMesh" id="SphereMesh_xueeh"]
+
+[node name="Rope" type="Node3D"]
+
+[node name="Node" type="Node" parent="."]
+script = SubResource("GDScript_wfyaq")
+
+[node name="PinJoint_01" type="PinJoint3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0225666, 0)
+node_b = NodePath("../Joint_01")
+
+[node name="Joint_01" type="RigidBody3D" parent="."]
+collision_layer = 8
+collision_mask = 8
+gravity_scale = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Joint_01"]
+shape = SubResource("SphereShape3D_v6l5i")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Joint_01/CollisionShape3D"]
+transform = Transform3D(0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0)
+layers = 4
+mesh = SubResource("SphereMesh_xueeh")
+
+[node name="PinJoint_02" type="PinJoint3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0225717, 0)
+node_a = NodePath("../Joint_01")
+node_b = NodePath("../Joint_02")
+
+[node name="Joint_02" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.040723, 0)
+collision_layer = 8
+collision_mask = 8
+gravity_scale = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Joint_02"]
+shape = SubResource("SphereShape3D_v6l5i")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Joint_02/CollisionShape3D"]
+transform = Transform3D(0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0)
+layers = 4
+mesh = SubResource("SphereMesh_xueeh")
+
+[node name="PinJoint_03" type="PinJoint3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0629004, 0)
+node_a = NodePath("../Joint_02")
+node_b = NodePath("../Joint_03")
+
+[node name="Joint_03" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0810518, 0)
+collision_layer = 8
+collision_mask = 8
+gravity_scale = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Joint_03"]
+shape = SubResource("SphereShape3D_v6l5i")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Joint_03/CollisionShape3D"]
+transform = Transform3D(0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0)
+layers = 4
+mesh = SubResource("SphereMesh_xueeh")
+
+[node name="PinJoint_04" type="PinJoint3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.107012, 0)
+node_a = NodePath("../Joint_03")
+node_b = NodePath("../Joint_04")
+
+[node name="Joint_04" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.125163, 0)
+collision_layer = 8
+collision_mask = 8
+gravity_scale = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Joint_04"]
+shape = SubResource("SphereShape3D_v6l5i")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Joint_04/CollisionShape3D"]
+transform = Transform3D(0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0)
+layers = 4
+mesh = SubResource("SphereMesh_xueeh")
+
+[node name="PinJoint_05" type="PinJoint3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.149049, 0)
+node_a = NodePath("../Joint_04")
+node_b = NodePath("../Joint_05")
+
+[node name="Joint_05" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.167201, 0)
+collision_layer = 8
+collision_mask = 8
+gravity_scale = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Joint_05"]
+shape = SubResource("SphereShape3D_v6l5i")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Joint_05/CollisionShape3D"]
+transform = Transform3D(0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0)
+layers = 4
+mesh = SubResource("SphereMesh_xueeh")
+
+[node name="PinJoint_06" type="PinJoint3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.189012, 0)
+node_a = NodePath("../Joint_05")
+node_b = NodePath("../Joint_06")
+
+[node name="Joint_06" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.207163, 0)
+collision_layer = 8
+collision_mask = 8
+gravity_scale = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Joint_06"]
+shape = SubResource("SphereShape3D_v6l5i")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Joint_06/CollisionShape3D"]
+transform = Transform3D(0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0)
+layers = 4
+mesh = SubResource("SphereMesh_xueeh")
+
+[node name="PinJoint_07" type="PinJoint3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.22997, 0)
+node_a = NodePath("../Joint_06")
+node_b = NodePath("../Joint_07")
+
+[node name="Joint_07" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.248121, 0)
+collision_layer = 8
+collision_mask = 8
+gravity_scale = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Joint_07"]
+shape = SubResource("SphereShape3D_v6l5i")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Joint_07/CollisionShape3D"]
+transform = Transform3D(0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0)
+layers = 4
+mesh = SubResource("SphereMesh_xueeh")
+
+[node name="PinJoint_08" type="PinJoint3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.272254, 0)
+node_a = NodePath("../Joint_07")
+node_b = NodePath("../Joint_08")
+
+[node name="Joint_08" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.290406, 0)
+collision_layer = 8
+collision_mask = 8
+gravity_scale = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Joint_08"]
+shape = SubResource("SphereShape3D_v6l5i")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Joint_08/CollisionShape3D"]
+transform = Transform3D(0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0)
+layers = 4
+mesh = SubResource("SphereMesh_xueeh")
+
+[node name="PinJoint_09" type="PinJoint3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.319193, 0)
+node_a = NodePath("../Joint_08")
+node_b = NodePath("../Joint_09")
+
+[node name="Joint_09" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.332198, 0)
+collision_layer = 8
+collision_mask = 8
+gravity_scale = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Joint_09"]
+shape = SubResource("SphereShape3D_v6l5i")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Joint_09/CollisionShape3D"]
+transform = Transform3D(0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0)
+layers = 4
+mesh = SubResource("SphereMesh_xueeh")
+
+[node name="PinJoint_10" type="PinJoint3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35477, 0)
+node_a = NodePath("../Joint_09")
+node_b = NodePath("../Joint_10")
+
+[node name="Joint_10" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.372921, 0)
+collision_layer = 8
+collision_mask = 8
+gravity_scale = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Joint_10"]
+shape = SubResource("SphereShape3D_v6l5i")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Joint_10/CollisionShape3D"]
+transform = Transform3D(0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0)
+layers = 4
+mesh = SubResource("SphereMesh_xueeh")
+
+[node name="PinJoint_11" type="PinJoint3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.395099, 0)
+node_a = NodePath("../Joint_10")
+node_b = NodePath("../Joint_11")
+
+[node name="Joint_11" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.41325, 0)
+collision_layer = 8
+collision_mask = 8
+gravity_scale = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Joint_11"]
+shape = SubResource("SphereShape3D_v6l5i")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Joint_11/CollisionShape3D"]
+transform = Transform3D(0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0)
+layers = 4
+mesh = SubResource("SphereMesh_xueeh")
+
+[node name="PinJoint_12" type="PinJoint3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.43921, 0)
+node_a = NodePath("../Joint_11")
+node_b = NodePath("../Joint_12")
+
+[node name="Joint_12" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.457361, 0)
+collision_layer = 8
+collision_mask = 8
+gravity_scale = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Joint_12"]
+shape = SubResource("SphereShape3D_v6l5i")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Joint_12/CollisionShape3D"]
+transform = Transform3D(0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0)
+layers = 4
+mesh = SubResource("SphereMesh_xueeh")
+
+[node name="PinJoint_13" type="PinJoint3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.481248, 0)
+node_a = NodePath("../Joint_12")
+node_b = NodePath("../Joint_13")
+
+[node name="Joint_13" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.499399, 0)
+collision_layer = 8
+collision_mask = 8
+gravity_scale = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Joint_13"]
+shape = SubResource("SphereShape3D_v6l5i")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Joint_13/CollisionShape3D"]
+transform = Transform3D(0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0)
+layers = 4
+mesh = SubResource("SphereMesh_xueeh")
+
+[node name="PinJoint_14" type="PinJoint3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.52121, 0)
+node_a = NodePath("../Joint_13")
+node_b = NodePath("../Joint_14")
+
+[node name="Joint_14" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.539362, 0)
+collision_layer = 8
+collision_mask = 8
+gravity_scale = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Joint_14"]
+shape = SubResource("SphereShape3D_v6l5i")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Joint_14/CollisionShape3D"]
+transform = Transform3D(0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0)
+layers = 4
+mesh = SubResource("SphereMesh_xueeh")
+
+[node name="PinJoint_15" type="PinJoint3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.562168, 0)
+node_a = NodePath("../Joint_14")
+node_b = NodePath("../Joint_15")
+
+[node name="Joint_15" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.58032, 0)
+collision_layer = 8
+collision_mask = 8
+gravity_scale = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Joint_15"]
+shape = SubResource("SphereShape3D_v6l5i")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Joint_15/CollisionShape3D"]
+transform = Transform3D(0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0)
+layers = 4
+mesh = SubResource("SphereMesh_xueeh")
+
+[node name="PinJoint_16" type="PinJoint3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.604453, 0)
+node_a = NodePath("../Joint_15")
+node_b = NodePath("../Joint_16")
+
+[node name="Joint_16" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.622604, 0)
+collision_layer = 8
+collision_mask = 8
+gravity_scale = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Joint_16"]
+shape = SubResource("SphereShape3D_v6l5i")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Joint_16/CollisionShape3D"]
+transform = Transform3D(0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0)
+layers = 4
+mesh = SubResource("SphereMesh_xueeh")
+
+[node name="PinJoint_17" type="PinJoint3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.651391, 0)
+node_a = NodePath("../Joint_16")
+node_b = NodePath("../Joint_17")
+
+[node name="Joint_17" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.665108, 0)
+collision_layer = 8
+collision_mask = 8
+gravity_scale = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Joint_17"]
+shape = SubResource("SphereShape3D_v6l5i")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Joint_17/CollisionShape3D"]
+transform = Transform3D(0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0)
+layers = 4
+mesh = SubResource("SphereMesh_xueeh")
+
+[node name="PinJoint_18" type="PinJoint3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.693895, 0)
+node_a = NodePath("../Joint_17")
+node_b = NodePath("../Joint_18")
+
+[node name="Joint_18" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.711926, 0)
+collision_layer = 8
+collision_mask = 8
+gravity_scale = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Joint_18"]
+shape = SubResource("SphereShape3D_v6l5i")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Joint_18/CollisionShape3D"]
+transform = Transform3D(0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0)
+layers = 4
+mesh = SubResource("SphereMesh_xueeh")
+
+[node name="PinJoint_19" type="PinJoint3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.740713, 0)
+node_a = NodePath("../Joint_18")
+node_b = NodePath("../Joint_19")
+
+[node name="Joint_19" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.755489, 0)
+collision_layer = 8
+collision_mask = 8
+gravity_scale = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Joint_19"]
+shape = SubResource("SphereShape3D_v6l5i")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Joint_19/CollisionShape3D"]
+transform = Transform3D(0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0)
+layers = 4
+mesh = SubResource("SphereMesh_xueeh")
+
+[node name="PinJoint_20" type="PinJoint3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.784276, 0)
+node_a = NodePath("../Joint_19")
+node_b = NodePath("../Joint_20")
+
+[node name="Joint_20" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.799634, 0)
+collision_layer = 8
+collision_mask = 8
+gravity_scale = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Joint_20"]
+shape = SubResource("SphereShape3D_v6l5i")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Joint_20/CollisionShape3D"]
+transform = Transform3D(0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0)
+layers = 4
+mesh = SubResource("SphereMesh_xueeh")
+
+[node name="PinJoint_21" type="PinJoint3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.828421, 0)
+node_a = NodePath("../Joint_20")
+node_b = NodePath("../Joint_21")
+
+[node name="Joint_21" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.842857, 0)
+collision_layer = 8
+collision_mask = 8
+gravity_scale = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Joint_21"]
+shape = SubResource("SphereShape3D_v6l5i")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Joint_21/CollisionShape3D"]
+transform = Transform3D(0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0)
+layers = 4
+mesh = SubResource("SphereMesh_xueeh")
+
+[node name="PinJoint_22" type="PinJoint3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.871644, 0)
+node_a = NodePath("../Joint_21")
+node_b = NodePath("../Joint_22")
+
+[node name="Joint_22" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.885597, 0)
+collision_layer = 8
+collision_mask = 8
+gravity_scale = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Joint_22"]
+shape = SubResource("SphereShape3D_v6l5i")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Joint_22/CollisionShape3D"]
+transform = Transform3D(0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0, 0.0385907, 0, 0, 0)
+layers = 4
+mesh = SubResource("SphereMesh_xueeh")
+
+[node name="PinJoint_23" type="PinJoint3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.914384, 0)
+node_a = NodePath("../Joint_22")

@@ -1,0 +1,290 @@
+[gd_scene load_steps=16 format=3 uid="uid://c80oknta2f6c4"]
+
+[ext_resource type="Script" path="res://08_SUBSCENES/Reload_oxy.gd" id="1_x2awf"]
+[ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="2_kry00"]
+[ext_resource type="Material" uid="uid://clw3a375133r3" path="res://05_SHADER_TEST/Subscene_materials/Light_yelow.tres" id="3_4ipl8"]
+[ext_resource type="PackedScene" uid="uid://d32pm6ao6u7gq" path="res://08_SUBSCENES/POD/pod_prefabs.tscn" id="4_v14rd"]
+
+[sub_resource type="GDScript" id="GDScript_yrt8j"]
+script/source = "extends Node
+
+@onready var Joint : Joint3D = 	$\"../Connect_Joint\"
+@onready var pod : RigidBody3D = $\"..\"
+
+@onready var timer = $Timer
+
+var is_connecting = false
+
+func _ready():
+	
+	_global_datas._connect_pod_to_Player.connect(_connect)
+	_global_datas._dicconnect_pod_to_Player.connect(_disconnect)
+	#_global_datas._splash.connect(splash_ini_connect)
+	
+	
+func splash_ini_connect():
+		pod.position = _global_datas.Player_Rg.position
+		end_connect()	
+		
+	
+func _connect():	
+	timer.start()
+
+
+func end_connect():
+	
+	pod.linear_velocity = Vector3.ZERO
+	pod.angular_velocity = Vector3.ZERO
+	_global_datas.Player_Rg.linear_velocity = Vector3.ZERO
+	_global_datas.Player_Rg.angular_velocity = Vector3.ZERO
+	
+	Joint.set_node_b(\"../../Player_Sub\")
+	_global_datas._reload_oxygene.emit()	
+	pod.rotation_degrees = Vector3(0.0,0.0,0.0)
+	
+func _disconnect():
+	_global_datas._use_oxygene.emit()
+	Joint.set_node_b(\"\")
+
+	
+func _process(delta):
+	
+	if timer.is_stopped():
+		return	
+		
+	_global_datas.Player_Rg.position = lerp(_global_datas.Player_Rg.position,pod.position,0.25 * timer.time_left / timer.wait_time)
+	pod.rotation_degrees = lerp(pod.rotation_degrees,Vector3(0.0,0.0,0.0), 0.25 * timer.time_left / timer.wait_time)
+
+func _on_timer_timeout():
+	
+	timer.stop()
+	end_connect()
+"
+
+[sub_resource type="GDScript" id="GDScript_lwne2"]
+script/source = "extends Node
+
+var in_zone_right = false
+var in_zone_left = false
+
+var scie = false
+var photo = false
+
+var active_inputs = false
+
+func _ready():
+	_global_datas._splash.connect(set_zone)
+	_global_datas._end_ini_subscene.connect(_active_inputs)	
+	_global_datas._start_ini_subscene.connect(_disable_inputs)
+	$\"../Pod_prefabs/Right_zone_indic\".visible = false
+	$\"../Pod_prefabs/left_zone_indic\".visible = false
+func _disable_inputs():
+	active_inputs = false	
+	
+func _active_inputs():
+	active_inputs = true
+
+func set_zone():
+	in_zone_right = false
+	in_zone_left = false
+	
+func _input(event: InputEvent) -> void:
+	
+	if !active_inputs:
+		return
+	
+	if event.is_action_pressed(\"jump\"):
+		
+	
+		if in_zone_right and !photo:
+			_global_datas.player_is_equip = !_global_datas.player_is_equip
+			
+			if _global_datas.player_is_equip:
+				scie = false
+				_global_datas._tools_scie_disable.emit()
+				$\"../Pod_prefabs/Scie\".visible = true
+			else :
+				scie = true
+				_global_datas._tools_scie_active.emit()	
+				$\"../Pod_prefabs/Scie\".visible = false
+			
+		if in_zone_left and !scie:
+			_global_datas.player_is_equip = !_global_datas.player_is_equip
+			
+			if _global_datas.player_is_equip:
+				photo = false
+				_global_datas._tools_photographe_disable.emit()
+				$\"../Pod_prefabs/Photographe\".visible = true		
+				
+			else :
+				photo = true
+				_global_datas._tools_photographe_active.emit()	
+				$\"../Pod_prefabs/Photographe\".visible = false	
+		
+
+
+
+
+
+func _on_area_right_tools(area_rid, area, area_shape_index, local_shape_index):
+	in_zone_right = true
+	$\"../Pod_prefabs/Right_zone_indic\".visible = true
+func _on_area_right_tools_left(area_rid, area, area_shape_index, local_shape_index):
+	in_zone_right = false
+	$\"../Pod_prefabs/Right_zone_indic\".visible = false
+
+func _on_area_left_tools(area_rid, area, area_shape_index, local_shape_index):
+	in_zone_left = true
+	$\"../Pod_prefabs/left_zone_indic\".visible = true
+func _on_area_left_tools_left(area_rid, area, area_shape_index, local_shape_index):
+	in_zone_left = false
+	$\"../Pod_prefabs/left_zone_indic\".visible = false
+"
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_iariw"]
+radius = 0.394857
+height = 0.789715
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8q7yu"]
+radius = 0.111817
+height = 0.228875
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_10slb"]
+radius = 0.0754454
+height = 0.232918
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_2atut"]
+radius = 0.0733139
+height = 0.227408
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_anlxg"]
+size = Vector3(0.343966, 0.352552, 0.234472)
+
+[sub_resource type="BoxMesh" id="BoxMesh_rdshp"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_q8clf"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_a506e"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_3n7wq"]
+
+[node name="POD" type="RigidBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0757203, 0)
+collision_layer = 4
+collision_mask = 4
+axis_lock_linear_z = true
+axis_lock_angular_x = true
+axis_lock_angular_z = true
+mass = 5.0
+gravity_scale = 0.0
+linear_velocity = Vector3(0, 10, 0)
+linear_damp = 1.0
+angular_damp = 1.0
+
+[node name="Connect_to_player" type="Node" parent="."]
+script = SubResource("GDScript_yrt8j")
+
+[node name="Timer" type="Timer" parent="Connect_to_player"]
+wait_time = 0.35
+
+[node name="Player_In_Area_POD" type="Node" parent="."]
+script = ExtResource("1_x2awf")
+
+[node name="Player_in_Area_TOOLS" type="Node" parent="."]
+script = SubResource("GDScript_lwne2")
+
+[node name="Player_Oxygene_area" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.162828, 0.000854105)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player_Oxygene_area"]
+shape = SubResource("CapsuleShape3D_iariw")
+
+[node name="Player_connect_area" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.162828, 0.000854105)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player_connect_area"]
+shape = SubResource("CapsuleShape3D_8q7yu")
+
+[node name="Player_tools_right_area" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.227963, 0.162828, 0.000854105)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player_tools_right_area"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.034696, 0.0568756, 0)
+shape = SubResource("CapsuleShape3D_10slb")
+
+[node name="Player_tools_left_area" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.175545, 0.162828, 0.000854105)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player_tools_left_area"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0942197, 0.0572323, 0)
+shape = SubResource("CapsuleShape3D_2atut")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.228661, -0.229571)
+shape = SubResource("BoxShape3D_anlxg")
+
+[node name="Pod_prefabs" type="Node3D" parent="."]
+transform = Transform3D(-1.61346e-08, 0, -0.369117, 0, 0.369117, 0, 0.369117, 0, -1.61346e-08, 1.02759e-08, 0.209142, -0.235086)
+
+[node name="Pod_mesh_01" parent="Pod_prefabs" instance=ExtResource("4_v14rd")]
+transform = Transform3D(0.378773, 0, 1.65567e-08, 0, 0.378773, 0, -1.65567e-08, 0, 0.378773, -0.01654, 0.0878102, 2.85621e-08)
+
+[node name="Right_zone_indic" type="MeshInstance3D" parent="Pod_prefabs"]
+transform = Transform3D(0.147996, 0, 0, 0, 0.147996, 0, 0, 0, 0.147996, 5.96046e-08, 0.0830354, -0.511431)
+layers = 4
+mesh = SubResource("BoxMesh_rdshp")
+surface_material_override/0 = ExtResource("3_4ipl8")
+
+[node name="left_zone_indic" type="MeshInstance3D" parent="Pod_prefabs"]
+transform = Transform3D(0.147996, 0, 8.88178e-16, 0, 0.147996, 0, -8.88178e-16, 0, 0.147996, 5.96046e-08, 0.0830354, 0.509541)
+layers = 4
+mesh = SubResource("BoxMesh_rdshp")
+surface_material_override/0 = ExtResource("3_4ipl8")
+
+[node name="Scie" type="Node3D" parent="Pod_prefabs"]
+transform = Transform3D(-1.98508e-08, -0.0598334, -5.32907e-15, 0.454133, -2.6154e-09, 0, -1.05879e-22, -4.44089e-16, 0.454133, 5.96046e-08, 0.0844454, -0.380993)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Pod_prefabs/Scie"]
+transform = Transform3D(1, -4.44089e-16, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+layers = 4
+mesh = SubResource("CylinderMesh_q8clf")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("3_4ipl8")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Pod_prefabs/Scie"]
+transform = Transform3D(0.798765, -8.88178e-16, 0, 0, 1.40692, 0, 0, 0, 0.798765, 0, 0, 0)
+layers = 4
+mesh = SubResource("CylinderMesh_q8clf")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("2_kry00")
+
+[node name="Photographe" type="Node3D" parent="Pod_prefabs"]
+transform = Transform3D(-1.98517e-08, 0.438679, -0.117544, 0.454154, 1.91753e-08, -5.13801e-09, -4.76456e-22, -0.117544, -0.438679, -0.114723, 0.0734362, 0.53226)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Pod_prefabs/Photographe"]
+transform = Transform3D(0.477894, -5.32907e-15, 0, 5.32907e-15, 0.477894, 0, 0, 0, 0.477894, 0, 0, 0.236441)
+layers = 4
+mesh = SubResource("BoxMesh_a506e")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("3_4ipl8")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Pod_prefabs/Photographe"]
+transform = Transform3D(0.690044, 0, 0, 0, 0.690044, 0, 0, 0, 0.690044, 0, 0, 0)
+layers = 4
+mesh = SubResource("BoxMesh_3n7wq")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("2_kry00")
+
+[node name="Connect_Joint" type="PinJoint3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.153908, -0.0334856)
+node_a = NodePath("..")
+
+[connection signal="timeout" from="Connect_to_player/Timer" to="Connect_to_player" method="_on_timer_timeout"]
+[connection signal="area_shape_entered" from="Player_Oxygene_area" to="Player_In_Area_POD" method="_on_player_oxygene_area_area_shape_entered"]
+[connection signal="area_shape_exited" from="Player_Oxygene_area" to="Player_In_Area_POD" method="_on_player_oxygene_area_area_shape_exited"]
+[connection signal="area_shape_entered" from="Player_connect_area" to="Player_In_Area_POD" method="_on_area_3d_area_shape_entered"]
+[connection signal="area_shape_exited" from="Player_connect_area" to="Player_In_Area_POD" method="_on_area_3d_area_shape_exited"]
+[connection signal="area_shape_entered" from="Player_tools_right_area" to="Player_in_Area_TOOLS" method="_on_area_right_tools"]
+[connection signal="area_shape_exited" from="Player_tools_right_area" to="Player_in_Area_TOOLS" method="_on_area_right_tools_left"]
+[connection signal="area_shape_entered" from="Player_tools_left_area" to="Player_in_Area_TOOLS" method="_on_area_left_tools"]
+[connection signal="area_shape_exited" from="Player_tools_left_area" to="Player_in_Area_TOOLS" method="_on_area_left_tools_left"]

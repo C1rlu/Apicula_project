@@ -1,0 +1,370 @@
+[gd_scene load_steps=17 format=3 uid="uid://brnety4bcyq4p"]
+
+[sub_resource type="GDScript" id="GDScript_cp3s6"]
+script/source = "extends Control
+
+var rotate = false
+
+@onready var circle = $Oxygene_circle/Control
+
+@onready var Oxygene_circle = $Oxygene_circle
+@onready var theta_radians_right = atan2($Control3.position.x,$Control3.position.y)
+@onready var theta_radians_left = atan2($Control2.position.x,$Control2.position.y)
+@onready var theta_radians_top = atan2($Control4.position.x,$Control4.position.y)
+
+var lerp_time = 0.0
+
+func _ready():
+	_global_datas._end_ini_subscene.connect(rotate_on)
+	_global_datas._backFrom_subscene.connect(rotate_false)
+
+	
+
+func rotate_on():
+	rotate = true
+	Oxygene_circle.rotation_degrees = 0.0
+	
+func rotate_false():
+	rotate = false	
+	
+	
+func _process(delta):
+	
+	if !rotate:
+		return
+		
+	lerp_time = lerp(0.0,1.0,_global_datas.Oxygene_amout / 0.4)
+	
+	oxygene_circle(delta)
+
+	$Control2.position = new_position(theta_radians_left)
+	$Control3.position = new_position(theta_radians_right)
+	$Control4.position = new_position(theta_radians_top)
+	
+func oxygene_circle(delta):
+	
+
+	var lerp_circle = lerp(0.0,-424.0,lerp_time)
+
+	circle.position.x = lerp_circle
+	
+	Oxygene_circle.rotation_degrees += 100 / lerp_time * delta	
+
+	rotation_degrees -= 25 / lerp_time * delta	
+
+
+func new_position(radians):
+	
+
+	var new_x = lerp_time * 424 * cos(radians)
+	var new_y = lerp_time * 424 * sin(radians)
+	
+	var new_pos = Vector2(new_x,new_y)
+	return new_pos
+"
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_jw3ae"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_oci3p"]
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_224fa"]
+input_name = "color"
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_cdyro"]
+size = Vector2(513.781, 284.487)
+expression = "vec2 n_uv = UV -0.5;
+float d = length(n_uv);
+float c = smoothstep(r,r + feather,d);
+color = vec4(vec3(c),1.0);"
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_2qas5"]
+input_name = "uv"
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_r245y"]
+constant = 0.5
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_omqcl"]
+
+[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_6e24e"]
+function = 31
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_gqkbm"]
+constant = 0.4
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_y84st"]
+constant = 0.38
+
+[sub_resource type="VisualShader" id="VisualShader_qr4lo"]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+
+
+
+void fragment() {
+// Input:2
+	vec4 n_out2p0 = COLOR;
+
+
+// Input:4
+	vec2 n_out4p0 = UV;
+
+
+// FloatConstant:5
+	float n_out5p0 = 0.500000;
+
+
+// FloatConstant:6
+	float n_out6p0 = 0.000000;
+
+
+	vec4 n_out3p0;
+// Expression:3
+	n_out3p0 = vec4(0.0, 0.0, 0.0, 0.0);
+	{
+		vec2 n_uv = n_out4p0 -0.5;
+		float d = length(n_uv);
+		float c = smoothstep(n_out5p0,n_out5p0 + n_out6p0,d);
+		n_out3p0 = vec4(vec3(c),1.0);
+	}
+
+
+// FloatConstant:9
+	float n_out9p0 = 0.380000;
+
+
+// FloatConstant:8
+	float n_out8p0 = 0.400000;
+
+
+	float n_out10p0;
+// Expression:10
+	n_out10p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out8p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out10p0 = n_out9p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Step:11
+	float n_out11p0 = step(n_out3p0.x, n_out10p0);
+
+
+// Output:0
+	COLOR.rgb = vec3(n_out2p0.xyz);
+	COLOR.a = n_out11p0;
+
+
+}
+"
+graph_offset = Vector2(-741.74, 26.7819)
+mode = 1
+flags/light_only = false
+nodes/fragment/2/node = SubResource("VisualShaderNodeInput_224fa")
+nodes/fragment/2/position = Vector2(-230.584, 113.063)
+nodes/fragment/3/node = SubResource("VisualShaderNodeExpression_cdyro")
+nodes/fragment/3/position = Vector2(-520, 320)
+nodes/fragment/3/size = Vector2(513.781, 284.487)
+nodes/fragment/3/input_ports = "0,3,UV;1,0,r;2,0,feather;"
+nodes/fragment/3/output_ports = "0,5,color;"
+nodes/fragment/3/expression = "vec2 n_uv = UV -0.5;
+float d = length(n_uv);
+float c = smoothstep(r,r + feather,d);
+color = vec4(vec3(c),1.0);"
+nodes/fragment/4/node = SubResource("VisualShaderNodeInput_2qas5")
+nodes/fragment/4/position = Vector2(-920, 260)
+nodes/fragment/5/node = SubResource("VisualShaderNodeFloatConstant_r245y")
+nodes/fragment/5/position = Vector2(-800, 420)
+nodes/fragment/6/node = SubResource("VisualShaderNodeFloatConstant_omqcl")
+nodes/fragment/6/position = Vector2(-716.909, 533.204)
+nodes/fragment/7/node = SubResource("VisualShaderNodeFloatFunc_6e24e")
+nodes/fragment/7/position = Vector2(47.291, 272.07)
+nodes/fragment/8/node = SubResource("VisualShaderNodeFloatConstant_gqkbm")
+nodes/fragment/8/position = Vector2(-820, 840)
+nodes/fragment/9/node = SubResource("VisualShaderNodeFloatConstant_y84st")
+nodes/fragment/9/position = Vector2(-820, 700)
+nodes/fragment/10/node = SubResource("VisualShaderNodeExpression_jw3ae")
+nodes/fragment/10/position = Vector2(-500, 920)
+nodes/fragment/10/size = Vector2(724.789, 654.559)
+nodes/fragment/10/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/10/output_ports = "0,0,Dither_Node;"
+nodes/fragment/10/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/11/node = SubResource("VisualShaderNodeStep_oci3p")
+nodes/fragment/11/position = Vector2(320, 420)
+nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0, 4, 0, 3, 0, 5, 0, 3, 1, 6, 0, 3, 2, 8, 0, 10, 1, 9, 0, 10, 0, 10, 0, 11, 1, 11, 0, 0, 1, 3, 0, 11, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4rkla"]
+shader = SubResource("VisualShader_qr4lo")
+
+[sub_resource type="GDScript" id="GDScript_vg06p"]
+script/source = "extends Control
+
+
+func _on_area_2d_area_entered(area):
+	print(\"CAN CLICK\")
+
+
+func _on_area_2d_area_exited(area):
+	print(\"CANT CLICK OUUUUT\")
+"
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_b1756"]
+radius = 25.02
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_uqtrn"]
+radius = 16.0312
+
+[node name="Cercle_UI" type="Control"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_cp3s6")
+
+[node name="Control2" type="Control" parent="."]
+anchors_preset = 0
+offset_left = -359.0
+offset_top = 220.0
+offset_right = -359.0
+offset_bottom = 220.0
+
+[node name="Circle" type="ColorRect" parent="Control2"]
+material = SubResource("ShaderMaterial_4rkla")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -25.0
+offset_top = -25.0
+offset_right = 25.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.254902, 0.627451, 0.658824, 1)
+
+[node name="Control3" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 329.0
+offset_top = 269.0
+offset_right = 329.0
+offset_bottom = 269.0
+
+[node name="Circle" type="ColorRect" parent="Control3"]
+material = SubResource("ShaderMaterial_4rkla")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -25.0
+offset_top = -25.0
+offset_right = 25.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.254902, 0.627451, 0.658824, 1)
+
+[node name="Control4" type="Control" parent="."]
+anchors_preset = 0
+offset_top = -424.0
+offset_bottom = -424.0
+script = SubResource("GDScript_vg06p")
+
+[node name="Circle" type="ColorRect" parent="Control4"]
+material = SubResource("ShaderMaterial_4rkla")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -25.0
+offset_top = -25.0
+offset_right = 25.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.254902, 0.627451, 0.658824, 1)
+
+[node name="Area2D" type="Area2D" parent="Control4"]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Control4/Area2D"]
+shape = SubResource("CircleShape2D_b1756")
+
+[node name="Oxygene_circle" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Control" type="Control" parent="Oxygene_circle"]
+anchors_preset = 0
+offset_left = -424.0
+offset_right = -424.0
+
+[node name="Circle" type="ColorRect" parent="Oxygene_circle/Control"]
+material = SubResource("ShaderMaterial_4rkla")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -12.5
+offset_top = -12.5
+offset_right = 12.5
+offset_bottom = 12.5
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.78125, 0.707031, 0.511719, 1)
+
+[node name="Area2D2" type="Area2D" parent="Oxygene_circle/Control"]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Oxygene_circle/Control/Area2D2"]
+shape = SubResource("CircleShape2D_uqtrn")
+
+[connection signal="area_entered" from="Control4/Area2D" to="Control4" method="_on_area_2d_area_entered"]
+[connection signal="area_exited" from="Control4/Area2D" to="Control4" method="_on_area_2d_area_exited"]

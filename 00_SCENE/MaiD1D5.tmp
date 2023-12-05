@@ -1,0 +1,233 @@
+[gd_scene load_steps=25 format=3 uid="uid://cb8k68mtsigvd"]
+
+[ext_resource type="Script" path="res://00_SYSTEMS/Global_datas.gd" id="1_64l51"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Subscene_behaviour.gd" id="1_if5gv"]
+[ext_resource type="Script" path="res://06_UI/Fps_counter.gd" id="1_smk2e"]
+[ext_resource type="Shader" uid="uid://b3rm1lse2ntpr" path="res://06_UI/Subscene/Subscene_CamUi.tres" id="2_74qap"]
+[ext_resource type="PackedScene" uid="uid://vpdvl0v7dubd" path="res://00_PLAYER/Player_boat.tscn" id="2_coboc"]
+[ext_resource type="Script" path="res://06_UI/Color_Managers.gd" id="3_ccowu"]
+[ext_resource type="Script" path="res://03_CAMERA/CameraFollow.gd" id="3_hnv77"]
+[ext_resource type="PackedScene" uid="uid://cjypmjqnbqsbw" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Mountain/ice_berg_02.tscn" id="3_ml74t"]
+[ext_resource type="PackedScene" uid="uid://biiofg53lwx38" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Mountain/ice_berg_03.tscn" id="4_lc656"]
+[ext_resource type="PackedScene" uid="uid://bjfuwgxyiffs4" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Mountain/ice_berg_01.tscn" id="5_p1h6m"]
+[ext_resource type="MeshLibrary" uid="uid://cku6u4tttcg67" path="res://04_SCENE_MAIN_MAP/cells_library.tres" id="6_aoqwj"]
+[ext_resource type="Shader" uid="uid://bxavm32wwtse2" path="res://05_SHADER_TEST/Clouds_sh.tres" id="6_bvyhb"]
+[ext_resource type="Script" path="res://04_SCENE_MAIN_MAP/Grid_gizmo.gd" id="7_l7ace"]
+[ext_resource type="Material" uid="uid://b64juw612xqpu" path="res://05_SHADER_TEST/Sea_sh/Sea_mat.tres" id="7_oho42"]
+[ext_resource type="Script" path="res://06_UI/Subscene/Button_goSubscene.gd" id="7_rfl33"]
+[ext_resource type="Script" path="res://06_UI/Subscene/Button_go_Mainscene.gd" id="8_eepys"]
+[ext_resource type="PackedScene" uid="uid://g7u8o55jrnyy" path="res://08_SUBSCENES/Sub_Player/Player_sub.tscn" id="12_lsxk4"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v82ts"]
+shader = ExtResource("2_74qap")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8p064"]
+render_priority = 0
+shader = ExtResource("6_bvyhb")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_k8245"]
+material = SubResource("ShaderMaterial_8p064")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8k7he"]
+size = Vector3(30, 1, 30)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wmrfd"]
+material = ExtResource("7_oho42")
+size = Vector3(30, 1, 30)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_8q6wo"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_o6ncj"]
+
+[node name="Main" type="Node"]
+metadata/_edit_horizontal_guides_ = [-31.0]
+
+[node name="00_GAME_MANAGERS" type="Node" parent="."]
+script = ExtResource("1_64l51")
+
+[node name="Active_subscene" type="Node" parent="00_GAME_MANAGERS" node_paths=PackedStringArray("SubsceneCam_scene_ui")]
+script = ExtResource("1_if5gv")
+SubsceneCam_scene_ui = NodePath("../../01_GAME_UI/SUBSCENES_CAM_SCENE")
+
+[node name="Color_Managers" type="Node" parent="00_GAME_MANAGERS"]
+script = ExtResource("3_ccowu")
+Darker_value = 1.5
+Darker_newColor = Color(0, 0.054902, 0.0666667, 1)
+Normal_newColor = Color(0, 0.215686, 0.239216, 1)
+
+[node name="01_GAME_UI" type="Node" parent="."]
+
+[node name="MAIN_CAM_SCENE" type="SubViewportContainer" parent="01_GAME_UI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="01_GAME_UI/MAIN_CAM_SCENE"]
+handle_input_locally = false
+scaling_3d_scale = 0.9
+fsr_sharpness = 2.0
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="CAM_STATE_BOAT_root" type="Node3D" parent="01_GAME_UI/MAIN_CAM_SCENE/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 0.882947, 0.469472, 0, -0.469472, 0.882947, 0, 16.056, 29.059)
+script = ExtResource("3_hnv77")
+
+[node name="CAM_STATE_BOAT" type="Camera3D" parent="01_GAME_UI/MAIN_CAM_SCENE/SubViewport/CAM_STATE_BOAT_root"]
+cull_mask = 1
+current = true
+fov = 10.2
+
+[node name="SUBSCENES_CAM_SCENE" type="SubViewportContainer" parent="01_GAME_UI"]
+visible = false
+material = SubResource("ShaderMaterial_v82ts")
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -444.0
+offset_top = 185.0
+offset_right = 580.0
+offset_bottom = 1209.0
+grow_horizontal = 2
+scale = Vector2(0.805198, 0.826622)
+
+[node name="SubViewport" type="SubViewport" parent="01_GAME_UI/SUBSCENES_CAM_SCENE"]
+handle_input_locally = false
+scaling_3d_scale = 0.9
+fsr_sharpness = 2.0
+size = Vector2i(1024, 1024)
+render_target_update_mode = 0
+
+[node name="CAM_STATE_BOAT_root" type="Node3D" parent="01_GAME_UI/SUBSCENES_CAM_SCENE/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.762)
+
+[node name="CAM_STATE_BOAT" type="Camera3D" parent="01_GAME_UI/SUBSCENES_CAM_SCENE/SubViewport/CAM_STATE_BOAT_root"]
+cull_mask = 4
+current = true
+
+[node name="FPS_COUNTER" type="Label" parent="01_GAME_UI"]
+z_index = 1
+offset_left = 14.0
+offset_top = 10.0
+offset_right = 64.0
+offset_bottom = 36.0
+text = "FPS COUNTER"
+script = ExtResource("1_smk2e")
+
+[node name="Button_go_subscene" type="Node" parent="01_GAME_UI"]
+script = ExtResource("7_rfl33")
+
+[node name="Button" type="Button" parent="01_GAME_UI/Button_go_subscene"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 360.0
+offset_top = -43.0
+offset_right = 460.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 25
+text = "Plonger"
+
+[node name="Button_go_Mainscene" type="Node" parent="01_GAME_UI"]
+script = ExtResource("8_eepys")
+
+[node name="Button" type="Button" parent="01_GAME_UI/Button_go_Mainscene"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -35.0
+offset_top = -43.0
+offset_right = 65.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 25
+text = "Retour"
+
+[node name="02_MAIN_SCENES" type="Node" parent="."]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="02_MAIN_SCENES"]
+transform = Transform3D(0.639805, -0.768439, 0.0122619, -0.25964, -0.201105, 0.944534, -0.723351, -0.607501, -0.328186, 2.6316, 7.46515, 0)
+visible = false
+light_indirect_energy = 0.0
+light_volumetric_fog_energy = 0.0
+
+[node name="Player_Boat" parent="02_MAIN_SCENES" instance=ExtResource("2_coboc")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
+mass = 4.0
+move_speed = 5.0
+rotation_speed = 2.0
+
+[node name="--DECOR--" type="Node" parent="02_MAIN_SCENES"]
+
+[node name="IceBerg_02" parent="02_MAIN_SCENES/--DECOR--" instance=ExtResource("3_ml74t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.255885, -0.594813, -6.71901)
+
+[node name="IceBerg_03" parent="02_MAIN_SCENES/--DECOR--" instance=ExtResource("4_lc656")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.77998, -0.794425, -8.34244)
+
+[node name="IceBerg_01" parent="02_MAIN_SCENES/--DECOR--" instance=ExtResource("5_p1h6m")]
+transform = Transform3D(-0.529492, 0, 2.98023e-08, 0, 0.529492, 0, -2.98023e-08, 0, -0.529492, 5.51049, -0.389302, -3.51967)
+
+[node name="Clouds" type="MeshInstance3D" parent="02_MAIN_SCENES/--DECOR--"]
+transform = Transform3D(57.2458, 0, 0, 0, 57.2458, 0, 0, 0, 57.2458, 0, 3.94325, 0)
+mesh = SubResource("PlaneMesh_k8245")
+skeleton = NodePath("../../..")
+
+[node name="SEA" type="StaticBody3D" parent="02_MAIN_SCENES/--DECOR--"]
+transform = Transform3D(4.4285, 0, 0, 0, 0.44285, 0, 0, 0, 4.4285, 0.739399, -0.436631, 1.21398)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="02_MAIN_SCENES/--DECOR--/SEA"]
+visible = false
+shape = SubResource("BoxShape3D_8k7he")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="02_MAIN_SCENES/--DECOR--/SEA"]
+mesh = SubResource("BoxMesh_wmrfd")
+
+[node name="GridMap" type="GridMap" parent="02_MAIN_SCENES/--DECOR--"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+visible = false
+mesh_library = ExtResource("6_aoqwj")
+cell_size = Vector3(5, 1, 5)
+cell_center_y = false
+cell_scale = 2.5
+collision_layer = 0
+collision_mask = 0
+data = {
+"cells": PackedInt32Array(0, 65535, 0, 0, 65533, 0, 0, 65532, 0, 0, 65531, 0, 1, 65535, 0, 1, 65534, 0, 1, 65533, 0, 1, 65532, 0, 1, 65531, 0, 2, 65535, 0, 2, 65534, 0, 2, 65533, 0, 2, 65532, 0, 2, 65531, 0, 3, 65535, 0, 3, 65534, 0, 3, 65533, 0, 3, 65532, 0, 3, 65531, 0, 4, 65535, 0, 4, 65534, 0, 4, 65533, 0, 4, 65532, 0, 4, 65531, 0, 0, 65534, 0)
+}
+script = ExtResource("7_l7ace")
+
+[node name="03_SUBSCENES" type="Node" parent="."]
+
+[node name="Player_Sub" parent="03_SUBSCENES" instance=ExtResource("12_lsxk4")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="03_SUBSCENES"]
+transform = Transform3D(7.74673, 0, 0, 0, 2.38419e-07, -7.74673, 0, 7.74673, 2.38419e-07, 0, -6.24314, 0)
+layers = 4
+mesh = SubResource("PlaneMesh_8q6wo")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="03_SUBSCENES"]
+transform = Transform3D(1.60737, -0.000998168, -0.096107, -0.0790454, 0.902234, -1.33139, 0.0546752, 1.33373, 0.900577, -1.31537, -4.15861, 0.42708)
+layers = 4
+mesh = SubResource("SphereMesh_o6ncj")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="03_SUBSCENES"]
+transform = Transform3D(1.60737, -0.000998168, -0.096107, -0.0790454, 0.902234, -1.33139, 0.0546752, 1.33373, 0.900577, 1.59964, -3.9024, -0.0180091)
+layers = 4
+mesh = SubResource("SphereMesh_o6ncj")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="03_SUBSCENES"]
+transform = Transform3D(1.60737, -0.000998168, -0.096107, -0.0790454, 0.902234, -1.33139, 0.0546752, 1.33373, 0.900577, 0.0858531, -2.54338, -0.337895)
+layers = 4
+mesh = SubResource("SphereMesh_o6ncj")
+
+[connection signal="pressed" from="01_GAME_UI/Button_go_subscene/Button" to="01_GAME_UI/Button_go_subscene" method="_on_button_pressed"]
+[connection signal="pressed" from="01_GAME_UI/Button_go_Mainscene/Button" to="01_GAME_UI/Button_go_Mainscene" method="_on_button_pressed"]

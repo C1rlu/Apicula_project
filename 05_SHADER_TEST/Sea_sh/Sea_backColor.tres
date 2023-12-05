@@ -1,0 +1,42 @@
+[gd_resource type="VisualShader" load_steps=3 format=3 uid="uid://bhklbqbh4yg2k"]
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_bf2a0"]
+parameter_name = "Dark_color"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_0bfa3"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, 0.073]
+op_type = 4
+
+[resource]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+
+global uniform vec4 Dark_color : source_color;
+
+
+
+void fragment() {
+// ColorParameter:2
+	vec4 n_out2p0 = Dark_color;
+
+
+// Mix:3
+	vec3 n_in3p0 = vec3(0.00000, 0.00000, 0.00000);
+	float n_in3p2 = 0.07300;
+	vec3 n_out3p0 = mix(n_in3p0, vec3(n_out2p0.xyz), n_in3p2);
+
+
+// Output:0
+	ALBEDO = n_out3p0;
+	SSS_STRENGTH = n_out3p0.x;
+
+
+}
+"
+flags/unshaded = true
+nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_bf2a0")
+nodes/fragment/2/position = Vector2(-680, 80)
+nodes/fragment/3/node = SubResource("VisualShaderNodeMix_0bfa3")
+nodes/fragment/3/position = Vector2(-160, 140)
+nodes/fragment/connections = PackedInt32Array(2, 0, 3, 1, 3, 0, 0, 17, 3, 0, 0, 0)

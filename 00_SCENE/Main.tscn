@@ -1,0 +1,367 @@
+[gd_scene load_steps=29 format=3 uid="uid://cb8k68mtsigvd"]
+
+[ext_resource type="Script" path="res://00_SYSTEMS/Global_datas.gd" id="1_64l51"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Subscene_behaviour.gd" id="1_if5gv"]
+[ext_resource type="Script" path="res://06_UI/Fps_counter.gd" id="1_smk2e"]
+[ext_resource type="Script" path="res://03_CAMERA/CameraFollow.gd" id="3_hnv77"]
+[ext_resource type="Script" path="res://06_UI/Color_management/Color_Managers.gd" id="3_r6ky2"]
+[ext_resource type="Resource" uid="uid://bdc7qt8b3h6ja" path="res://06_UI/Color_management/Main_Color_01.tres" id="4_wremn"]
+[ext_resource type="Material" uid="uid://cndqni443mbf" path="res://00_PLAYER/Boat/Boat_mat.tres" id="5_aps83"]
+[ext_resource type="Shader" uid="uid://dxtkig2genofx" path="res://05_SHADER_TEST/Full_screen/FullScreen_sh.tres" id="6_63ifo"]
+[ext_resource type="Shader" uid="uid://bqd3h43rhgah0" path="res://05_SHADER_TEST/Full_screen/Sonar_fullscreen_show.tres" id="7_8gi2l"]
+[ext_resource type="Script" path="res://06_UI/Back_call_manager.gd" id="7_l6yr5"]
+[ext_resource type="Script" path="res://00_SCENE/Mouse_mode.gd" id="8_m0sr0"]
+[ext_resource type="Material" uid="uid://c5bjyygfj5elu" path="res://06_UI/Circle_progress_dither_mat.tres" id="13_aibqx"]
+[ext_resource type="Texture2D" uid="uid://dafg2qvpi6wmk" path="res://06_UI/Loader_circle/Loader_circle.png" id="13_uirxy"]
+[ext_resource type="PackedScene" uid="uid://cnmptm7i0xxmj" path="res://00_SCENE/02_main_scenes.tscn" id="18_gvi4q"]
+[ext_resource type="PackedScene" uid="uid://bbp1ccoa6te1g" path="res://11_SPEAKER/05_speaker_02.tscn" id="18_l1ne5"]
+[ext_resource type="PackedScene" uid="uid://nigmie4bbn6" path="res://00_SCENE/03_subscenes.tscn" id="19_cnotd"]
+[ext_resource type="PackedScene" uid="uid://dmg5brvcww8lq" path="res://12_INVENTORY/06_inventory.tscn" id="19_v7nhs"]
+
+[sub_resource type="GDScript" id="GDScript_gl82p"]
+script/source = "extends Node
+
+
+func _ready():
+	_global_datas._forreuse_impact_origin = Vector3.ZERO
+func _input(event):
+	
+	if event.is_action_pressed(\"Go_subscene_debug\"):
+		_global_datas.cell_name = \"A1\"
+		_global_datas._go_Subscene.emit()
+		#_global_datas._start_ini_subscene.emit()
+		#_global_datas._splash.emit()
+		
+"
+
+[sub_resource type="GDScript" id="GDScript_xp6ow"]
+script/source = "extends Camera3D
+
+@onready var target  = $\"../MAIN_CAM_SCENE/SubViewport/CAM_STATE_BOAT_root\"
+
+
+func _process(_delta):
+	
+	transform.origin = target.position
+
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_agi6a"]
+shader = ExtResource("6_63ifo")
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_fjoeh"]
+input_name = "texture"
+
+[sub_resource type="CameraTexture" id="CameraTexture_u7w4g"]
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_mfhxu"]
+expanded_output_ports = [0]
+source = 5
+texture = SubResource("CameraTexture_u7w4g")
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_l1rpc"]
+parameter_name = "ColorParameter"
+
+[sub_resource type="VisualShader" id="VisualShader_aoud6"]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+uniform vec4 ColorParameter : source_color;
+
+
+
+void fragment() {
+// ColorParameter:4
+	vec4 n_out4p0 = ColorParameter;
+
+
+	vec4 n_out3p0;
+// Texture2D:3
+	n_out3p0 = texture(TEXTURE, UV);
+
+
+// Output:0
+	COLOR.rgb = vec3(n_out4p0.xyz);
+	COLOR.a = n_out3p0.x;
+
+
+}
+"
+mode = 1
+flags/light_only = false
+nodes/fragment/2/node = SubResource("VisualShaderNodeInput_fjoeh")
+nodes/fragment/2/position = Vector2(-1380, 240)
+nodes/fragment/3/node = SubResource("VisualShaderNodeTexture_mfhxu")
+nodes/fragment/3/position = Vector2(-760, 260)
+nodes/fragment/4/node = SubResource("VisualShaderNodeColorParameter_l1rpc")
+nodes/fragment/4/position = Vector2(-200.659, 38.1564)
+nodes/fragment/connections = PackedInt32Array(2, 0, 3, 2, 4, 0, 0, 0, 3, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6q4t7"]
+shader = SubResource("VisualShader_aoud6")
+shader_parameter/ColorParameter = Color(0.407843, 0.729412, 0.639216, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5m3rs"]
+shader = ExtResource("7_8gi2l")
+
+[sub_resource type="GDScript" id="GDScript_f0h6u"]
+script/source = "extends Node
+@onready var button = $Button
+
+func _ready():
+	_global_datas.in_dialogue_zone.connect(active_buton)
+	_global_datas.out_dialogue_zone.connect(disable_buton)
+	_global_datas._open_dialogue.connect(disable_buton)
+	
+func active_buton():
+	button.visible = true
+	
+func disable_buton():
+	button.visible = false
+
+func _on_button_pressed():
+	
+	if _global_datas.Npc_Dialogue == null:
+		return
+	_global_datas._open_dialogue.emit()
+"
+
+[node name="Main" type="Node"]
+metadata/_edit_horizontal_guides_ = [-31.0]
+
+[node name="00_GAME_MANAGERS" type="Node" parent="."]
+script = ExtResource("1_64l51")
+
+[node name="DEBUG_STATE" type="Node" parent="00_GAME_MANAGERS"]
+script = SubResource("GDScript_gl82p")
+
+[node name="Active_subscene" type="Node" parent="00_GAME_MANAGERS"]
+script = ExtResource("1_if5gv")
+
+[node name="Timer" type="Timer" parent="00_GAME_MANAGERS/Active_subscene"]
+one_shot = true
+
+[node name="Color_Managers" type="Node" parent="00_GAME_MANAGERS"]
+script = ExtResource("3_r6ky2")
+ColorRessource = ExtResource("4_wremn")
+KeepInFocus = ExtResource("5_aps83")
+
+[node name="Timer" type="Timer" parent="00_GAME_MANAGERS/Color_Managers"]
+wait_time = 0.523
+
+[node name="Back_call" type="Node" parent="00_GAME_MANAGERS"]
+script = ExtResource("7_l6yr5")
+
+[node name="Mouse_mode" type="Node" parent="00_GAME_MANAGERS"]
+script = ExtResource("8_m0sr0")
+
+[node name="01_GAME_UI" type="Node" parent="."]
+
+[node name="MAIN_SCENE_UI" type="Control" parent="01_GAME_UI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="CAM_MAIN_RAYCAST" type="Camera3D" parent="01_GAME_UI/MAIN_SCENE_UI"]
+transform = Transform3D(1, 0, 0, 0, 0.882947, 0.469472, 0, -0.469472, 0.882947, 0, 16.056, 29.059)
+cull_mask = 0
+fov = 10.2
+script = SubResource("GDScript_xp6ow")
+
+[node name="MAIN_CAM_SCENE" type="SubViewportContainer" parent="01_GAME_UI/MAIN_SCENE_UI"]
+material = SubResource("ShaderMaterial_agi6a")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="01_GAME_UI/MAIN_SCENE_UI/MAIN_CAM_SCENE"]
+handle_input_locally = false
+canvas_item_default_texture_filter = 0
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="CAM_STATE_BOAT_root" type="Node3D" parent="01_GAME_UI/MAIN_SCENE_UI/MAIN_CAM_SCENE/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 0.882947, 0.469472, 0, -0.469472, 0.882947, 0, 16.056, 29.059)
+script = ExtResource("3_hnv77")
+
+[node name="CAM_STATE_BOAT" type="Camera3D" parent="01_GAME_UI/MAIN_SCENE_UI/MAIN_CAM_SCENE/SubViewport/CAM_STATE_BOAT_root"]
+transform = Transform3D(1, 0, 0, 0, 1, 5.96046e-08, 0, -2.98023e-08, 1, 0, 0, 0)
+cull_mask = 17
+current = true
+fov = 10.2
+
+[node name="MAIN_CAM_FOAM" type="SubViewportContainer" parent="01_GAME_UI/MAIN_SCENE_UI"]
+material = SubResource("ShaderMaterial_6q4t7")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="01_GAME_UI/MAIN_SCENE_UI/MAIN_CAM_FOAM"]
+handle_input_locally = false
+canvas_item_default_texture_filter = 0
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="CAM_STATE_BOAT_root" type="Node3D" parent="01_GAME_UI/MAIN_SCENE_UI/MAIN_CAM_FOAM/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 0.882947, 0.469472, 0, -0.469472, 0.882947, 0, 16.056, 29.059)
+script = ExtResource("3_hnv77")
+
+[node name="CAM_STATE_BOAT" type="Camera3D" parent="01_GAME_UI/MAIN_SCENE_UI/MAIN_CAM_FOAM/SubViewport/CAM_STATE_BOAT_root"]
+transform = Transform3D(1, 0, 0, 0, 1, 5.96046e-08, 0, -2.98023e-08, 1, 0, 0, 0)
+cull_mask = 3072
+current = true
+fov = 10.2
+
+[node name="SONAR_CAM" type="SubViewportContainer" parent="01_GAME_UI/MAIN_SCENE_UI"]
+material = SubResource("ShaderMaterial_5m3rs")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="01_GAME_UI/MAIN_SCENE_UI/SONAR_CAM"]
+handle_input_locally = false
+scaling_3d_scale = 0.9
+canvas_item_default_texture_filter = 0
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="CAM_STATE_BOAT_root" type="Node3D" parent="01_GAME_UI/MAIN_SCENE_UI/SONAR_CAM/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 0.882947, 0.469472, 0, -0.469472, 0.882947, 0, 16.056, 29.059)
+script = ExtResource("3_hnv77")
+
+[node name="CAM_STATE_BOAT" type="Camera3D" parent="01_GAME_UI/MAIN_SCENE_UI/SONAR_CAM/SubViewport/CAM_STATE_BOAT_root"]
+transform = Transform3D(1, 0, 0, 0, 1, 5.96046e-08, 0, -2.98023e-08, 1, 0, 0, 0)
+cull_mask = 24
+current = true
+fov = 10.2
+
+[node name="FPS_COUNTER" type="Label" parent="01_GAME_UI/MAIN_SCENE_UI"]
+z_index = 1
+layout_mode = 0
+offset_left = 14.0
+offset_top = 10.0
+offset_right = 121.0
+offset_bottom = 36.0
+text = "FPS COUNTER"
+script = ExtResource("1_smk2e")
+
+[node name="Button_active_Dialogue" type="Node" parent="01_GAME_UI/MAIN_SCENE_UI"]
+script = SubResource("GDScript_f0h6u")
+
+[node name="Button" type="Control" parent="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+
+[node name="ColorRect2" type="ColorRect" parent="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue/Button"]
+layout_mode = 0
+offset_left = 934.978
+offset_top = 458.0
+offset_right = 1084.98
+offset_bottom = 532.505
+rotation = 1.17948
+scale = Vector2(0.577567, 0.231991)
+color = Color(0.952941, 0.815686, 0.690196, 1)
+
+[node name="ColorRect3" type="ColorRect" parent="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue/Button"]
+layout_mode = 0
+offset_left = 956.978
+offset_top = 456.0
+offset_right = 1106.98
+offset_bottom = 530.505
+rotation = 1.43593
+scale = Vector2(0.577567, 0.231991)
+color = Color(0.952941, 0.815686, 0.690196, 1)
+
+[node name="ColorRect" type="ColorRect" parent="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue/Button"]
+layout_mode = 0
+offset_left = 839.0
+offset_top = 434.0
+offset_right = 989.0
+offset_bottom = 508.505
+color = Color(0.952941, 0.815686, 0.690196, 1)
+
+[node name="Label" type="Label" parent="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue/Button/ColorRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.129412, 0.25098, 0.254902, 1)
+theme_override_font_sizes/font_size = 40
+text = "..."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Push_button" type="Button" parent="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue/Button/ColorRect"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.188235, 0.188235, 0.188235, 1)
+theme_override_font_sizes/font_size = 40
+text = "..."
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="01_GAME_UI/MAIN_SCENE_UI"]
+visible = false
+material = ExtResource("13_aibqx")
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -52.0
+offset_top = -109.0
+offset_right = 460.0
+offset_bottom = 403.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(0.13417, 0.13417)
+mouse_filter = 2
+max_value = 1.0
+step = 0.025
+fill_mode = 4
+texture_under = ExtResource("13_uirxy")
+texture_progress = ExtResource("13_uirxy")
+tint_under = Color(0.207843, 0.368627, 0.376471, 1)
+tint_progress = Color(0.949219, 0.667969, 0.394531, 1)
+
+[node name="02_MAIN_SCENES" parent="." instance=ExtResource("18_gvi4q")]
+
+[node name="03_SUBSCENES" parent="." instance=ExtResource("19_cnotd")]
+metadata/_edit_vertical_guides_ = [962.0]
+metadata/_edit_horizontal_guides_ = [542.0]
+
+[node name="05_SPEAKER" parent="." instance=ExtResource("18_l1ne5")]
+
+[node name="06_INVENTORY" parent="." instance=ExtResource("19_v7nhs")]
+
+[connection signal="timeout" from="00_GAME_MANAGERS/Active_subscene/Timer" to="00_GAME_MANAGERS/Active_subscene" method="_on_timer_timeout"]
+[connection signal="timeout" from="00_GAME_MANAGERS/Color_Managers/Timer" to="00_GAME_MANAGERS/Color_Managers" method="_on_timer_timeout"]
+[connection signal="pressed" from="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue/Button/ColorRect/Push_button" to="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue" method="_on_button_pressed"]

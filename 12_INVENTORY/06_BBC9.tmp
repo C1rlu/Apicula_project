@@ -1,0 +1,66 @@
+[gd_scene load_steps=4 format=3 uid="uid://dmg5brvcww8lq"]
+
+[ext_resource type="PackedScene" uid="uid://dr7pcue70x0dt" path="res://10_BOARD/Behaviour/paper_square_prefabs.tscn" id="2_3xfr3"]
+
+[sub_resource type="GDScript" id="GDScript_mh7vf"]
+script/source = "extends Node
+
+@onready var control = $Control
+
+func _ready():
+	_global_datas._open_board.connect(_hide_2d_enventory)
+	_global_datas._close_board.connect(_show_2d_enventory)
+
+func _hide_2d_enventory():
+	pass
+	#control.visible = false
+	
+
+func _show_2d_enventory():
+	pass
+	#control.visible = true
+"
+
+[sub_resource type="GDScript" id="GDScript_om7tc"]
+script/source = "extends Node
+
+@onready var photo_prefab = preload(\"res://10_BOARD/Behaviour/paper_square_prefabs.tscn\")
+@onready var control = $\"../Control\"
+
+
+
+func _ready():
+	_global_datas._take_photo.connect(_intance_photo)	
+	
+func _intance_photo():
+	print(\"INSTANCE PHOTO\")
+	var new_node = photo_prefab.instantiate()
+	control.add_child(new_node)
+	
+	var screen_center = Vector2(get_viewport().size.x / 2, get_viewport().size.y / 2)
+	var random_angle = randf_range(-6.0, 6.0)
+	new_node.rotation_degrees = random_angle
+	new_node.position = screen_center
+"
+
+[node name="06_INVENTORY" type="Node"]
+script = SubResource("GDScript_mh7vf")
+
+[node name="INSTANCE_PICTURES" type="Node" parent="."]
+script = SubResource("GDScript_om7tc")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TileMap" type="TileMap" parent="Control"]
+visible = false
+format = 2
+
+[node name="PaperSquare_prefabs" parent="Control" instance=ExtResource("2_3xfr3")]
+position = Vector2(863, 443)

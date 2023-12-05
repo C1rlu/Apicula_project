@@ -1,0 +1,207 @@
+[gd_scene load_steps=12 format=3 uid="uid://nigmie4bbn6"]
+
+[ext_resource type="Script" path="res://08_SUBSCENES/Grid_scene/Subscene_loader.gd" id="1_7uoo0"]
+[ext_resource type="Shader" uid="uid://b3rm1lse2ntpr" path="res://06_UI/Subscene/Subscene_CamUi.tres" id="2_p3tto"]
+[ext_resource type="PackedScene" uid="uid://g7u8o55jrnyy" path="res://08_SUBSCENES/Player_subscene/Player_sub.tscn" id="2_ri8q1"]
+[ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="3_2i3gt"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Cam_subscene_behaviour.gd" id="3_jsuc6"]
+[ext_resource type="PackedScene" uid="uid://d26m10iups7vx" path="res://08_SUBSCENES/Grid_scene/A2.tscn" id="4_10t5h"]
+[ext_resource type="Script" path="res://06_UI/Subscene/Button_go_Mainscene.gd" id="4_n6p6t"]
+[ext_resource type="Texture2D" uid="uid://dafg2qvpi6wmk" path="res://06_UI/Loader_circle/Loader_circle.png" id="5_84mj0"]
+
+[sub_resource type="GDScript" id="GDScript_dkyfn"]
+script/source = "extends Node
+
+@onready var O2_reserve = \"res://08_SUBSCENES/02/O2_point.tscn\"
+
+
+var scene_resource
+
+var reserve = 3
+
+func _ready():
+	scene_resource = load(O2_reserve)
+	_global_datas._go_Subscene.connect(_resert_circle)
+	
+func _input(event: InputEvent) -> void:
+	
+
+	
+	if !_global_datas.Player_InSubScene:
+		return
+		
+	if event.is_action_pressed(\"jump\"):
+		$Timer.start()
+		
+		
+	if event.is_action_released(\"jump\"):
+		$Timer.stop()
+		
+
+
+func _process(_delta):
+	#$\"../Control/r\".value = $Timer.wait_time - $Timer.time_left
+	pass
+	
+func _instance_O2():
+	var instance_scene = scene_resource.instantiate()
+	instance_scene.position = $\"../Player_Sub\".position
+	$\"../LoadScene\".add_child(instance_scene)
+	
+	if reserve == 2:
+		$\"../Control/r3\".visible = false
+	if reserve == 1:
+		$\"../Control/r2\".visible = false
+	if reserve == 0:
+		$\"../Control/r1\".visible = false	
+
+func _on_timer_timeout():
+	reserve -= reserve
+	print(reserve)
+	_instance_O2()
+	
+	
+func _resert_circle():
+	
+	$\"../Control/r1\".visible = true
+	$\"../Control/r2\".visible = true
+	$\"../Control/r3\".visible = true
+
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tsr6x"]
+shader = ExtResource("2_p3tto")
+shader_parameter/Opacity = 1.0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_8q6wo"]
+material = ExtResource("3_2i3gt")
+
+[node name="03_SUBSCENES" type="Node"]
+script = ExtResource("1_7uoo0")
+
+[node name="INSTANCE_O2_RESERVE" type="Node" parent="."]
+script = SubResource("GDScript_dkyfn")
+
+[node name="Timer" type="Timer" parent="INSTANCE_O2_RESERVE"]
+
+[node name="SUBSCENES_CAM_SCENE" type="SubViewportContainer" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_tsr6x")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="SUBSCENES_CAM_SCENE"]
+handle_input_locally = false
+size = Vector2i(1920, 1080)
+render_target_update_mode = 0
+
+[node name="CAM_STATE_BOAT_root" type="Node3D" parent="SUBSCENES_CAM_SCENE/SubViewport" node_paths=PackedStringArray("Player_position")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 2.7)
+script = ExtResource("3_jsuc6")
+Player_position = NodePath("../../../Player_Sub")
+
+[node name="CAM_STATE_BOAT" type="Camera3D" parent="SUBSCENES_CAM_SCENE/SubViewport/CAM_STATE_BOAT_root"]
+cull_mask = 4
+current = true
+
+[node name="Button_go_Mainscene" type="Node" parent="SUBSCENES_CAM_SCENE"]
+script = ExtResource("4_n6p6t")
+
+[node name="Button" type="Button" parent="SUBSCENES_CAM_SCENE/Button_go_Mainscene"]
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -35.0
+offset_top = -43.0
+offset_right = 65.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 25
+text = "Retour"
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 1239.0
+offset_top = 819.0
+offset_right = 1279.0
+offset_bottom = 859.0
+
+[node name="r1" type="TextureProgressBar" parent="Control"]
+visible = false
+layout_mode = 2
+offset_right = 512.0
+offset_bottom = 512.0
+scale = Vector2(0.129122, 0.129122)
+max_value = 1.0
+step = 0.025
+fill_mode = 4
+texture_under = ExtResource("5_84mj0")
+texture_progress = ExtResource("5_84mj0")
+tint_under = Color(0.207843, 0.368627, 0.376471, 1)
+tint_progress = Color(0.949219, 0.667969, 0.394531, 1)
+
+[node name="r2" type="TextureProgressBar" parent="Control"]
+visible = false
+layout_mode = 2
+offset_left = 46.0
+offset_top = -68.0
+offset_right = 558.0
+offset_bottom = 444.0
+scale = Vector2(0.129122, 0.129122)
+max_value = 1.0
+step = 0.025
+fill_mode = 4
+texture_under = ExtResource("5_84mj0")
+texture_progress = ExtResource("5_84mj0")
+tint_under = Color(0.207843, 0.368627, 0.376471, 1)
+tint_progress = Color(0.949219, 0.667969, 0.394531, 1)
+
+[node name="r3" type="TextureProgressBar" parent="Control"]
+visible = false
+layout_mode = 2
+offset_left = 75.0
+offset_top = -146.0
+offset_right = 587.0
+offset_bottom = 366.0
+scale = Vector2(0.129122, 0.129122)
+max_value = 1.0
+step = 0.025
+fill_mode = 4
+texture_under = ExtResource("5_84mj0")
+texture_progress = ExtResource("5_84mj0")
+tint_under = Color(0.207843, 0.368627, 0.376471, 1)
+tint_progress = Color(0.949219, 0.667969, 0.394531, 1)
+
+[node name="Player_Sub" parent="." instance=ExtResource("2_ri8q1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.106053, 0)
+mass = 5.0
+linear_damp = 1.0
+angular_damp = 2.5
+move_speed = 2.5
+maxSpeed = 2.0
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Player_Sub"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0604165, 0.114098)
+layers = 4
+omni_range = 1.654
+
+[node name="SubScene_back" type="MeshInstance3D" parent="."]
+transform = Transform3D(7.74673, 0, 0, 0, 2.38419e-07, -7.74673, 0, 7.74673, 2.38419e-07, 0, -0.6344, -0.957467)
+layers = 4
+mesh = SubResource("PlaneMesh_8q6wo")
+
+[node name="LoadScene" type="Node" parent="."]
+
+[node name="A2" parent="LoadScene" instance=ExtResource("4_10t5h")]
+
+[connection signal="subscene_loaded_iniPlayer" from="." to="Player_Sub" method="_on__subscenes_subscene_loaded_ini_player"]
+[connection signal="timeout" from="INSTANCE_O2_RESERVE/Timer" to="INSTANCE_O2_RESERVE" method="_on_timer_timeout"]
+[connection signal="pressed" from="SUBSCENES_CAM_SCENE/Button_go_Mainscene/Button" to="SUBSCENES_CAM_SCENE/Button_go_Mainscene" method="_on_button_pressed"]

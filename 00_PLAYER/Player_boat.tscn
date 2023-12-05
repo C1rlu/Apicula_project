@@ -1,0 +1,39 @@
+[gd_scene load_steps=4 format=3 uid="uid://vpdvl0v7dubd"]
+
+[ext_resource type="Script" path="res://00_PLAYER/Player_movement.gd" id="1_escsj"]
+[ext_resource type="PackedScene" uid="uid://dvyncnep1cy2q" path="res://00_PLAYER/Boat/boat_all.tscn" id="2_bk3dn"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bufvh"]
+radius = 0.251435
+height = 1.87309
+
+[node name="Player_Boat" type="RigidBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.040225, 0)
+axis_lock_angular_x = true
+axis_lock_angular_z = true
+center_of_mass_mode = 1
+gravity_scale = 0.0
+linear_damp = 1.0
+angular_damp = 2.5
+script = ExtResource("1_escsj")
+move_speed = 9.0
+maxSpeed = 1.5
+rotation_speed = 0.25
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, -7.25367e-23, -1.98947e-22, 2.11758e-22, 0.342545, 0.939501, 0, -0.939501, 0.342545, 0.130404, 3.19906, -0.0379682)
+visible = false
+layers = 3081
+light_color = Color(0.431373, 0.431373, 0.431373, 1)
+light_indirect_energy = 0.0
+light_volumetric_fog_energy = 0.0
+light_specular = 0.0
+omni_range = 7.0
+omni_attenuation = 0.258817
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -0.0561239, 0.0878515)
+shape = SubResource("CapsuleShape3D_bufvh")
+
+[node name="Boat_all" parent="." instance=ExtResource("2_bk3dn")]
+transform = Transform3D(1, 0, 0, 0, 0.999639, -0.0268729, 0, 0.0268729, 0.999639, 0, -0.245228, 0)

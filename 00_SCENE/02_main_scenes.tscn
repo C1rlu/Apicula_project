@@ -1,0 +1,530 @@
+[gd_scene load_steps=53 format=3 uid="uid://cnmptm7i0xxmj"]
+
+[ext_resource type="PackedScene" uid="uid://vpdvl0v7dubd" path="res://00_PLAYER/Player_boat.tscn" id="1_qltht"]
+[ext_resource type="Script" path="res://00_PLAYER/Sonar/Sonar_behaviour.gd" id="2_n8uar"]
+[ext_resource type="Shader" uid="uid://bduoqim3kfbs6" path="res://00_PLAYER/Sonar/Sonar_sh.tres" id="3_todel"]
+[ext_resource type="Script" path="res://00_PLAYER/Sonar/Click_to_Sonar.gd" id="4_h4pmi"]
+[ext_resource type="Shader" uid="uid://bxavm32wwtse2" path="res://05_SHADER_TEST/Clouds_sh.tres" id="5_83wu6"]
+[ext_resource type="Material" uid="uid://ctnqf5d3uj1g7" path="res://05_SHADER_TEST/All_Materials/new_standard_material_3d.tres" id="6_vcmny"]
+[ext_resource type="Material" uid="uid://b64juw612xqpu" path="res://05_SHADER_TEST/Sea_sh/Sea_mat.tres" id="7_4y8ld"]
+[ext_resource type="PackedScene" uid="uid://dla1534gcagbl" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Pine/pine_prefabs.tscn" id="10_c6r5x"]
+[ext_resource type="PackedScene" uid="uid://cjp6vd8eetmyf" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Iceberg/ice_berg_03.tscn" id="10_h0nl5"]
+[ext_resource type="PackedScene" uid="uid://cegdqm3et2y35" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Iceberg/ice_berg_02.tscn" id="11_086vv"]
+[ext_resource type="PackedScene" uid="uid://d3h77dy71bcme" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Iceberg/ice_berg_01.tscn" id="12_638yx"]
+[ext_resource type="PackedScene" uid="uid://cjypmjqnbqsbw" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Mountain/Mountain_02.tscn" id="13_mb82m"]
+[ext_resource type="PackedScene" uid="uid://biiofg53lwx38" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Mountain/Mountain_03.tscn" id="14_fqdgl"]
+[ext_resource type="PackedScene" uid="uid://bjfuwgxyiffs4" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Mountain/Mountain_01.tscn" id="15_bqwbg"]
+[ext_resource type="PackedScene" uid="uid://fcjcvy77lg0o" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Lighthouse/lighthouse_prefabs.tscn" id="16_u78ww"]
+[ext_resource type="PackedScene" uid="uid://dnxexehkt6k6v" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Banquise/banquise_01_prefabs.tscn" id="17_4pwgg"]
+[ext_resource type="Resource" uid="uid://xuxu60afj84h" path="res://09_NPC/Npc_data/Guy_02_data.tres" id="18_3k0t8"]
+[ext_resource type="Resource" uid="uid://b5kt2xn16lfgt" path="res://09_NPC/Npc_data/Otis_data.tres" id="19_2ojeu"]
+[ext_resource type="Resource" uid="uid://l3coaeai3lx6" path="res://09_NPC/Npc_data/Baltazar_data.tres" id="19_qcquc"]
+[ext_resource type="Material" uid="uid://dgl2um0yp8e3c" path="res://05_SHADER_TEST/All_Materials/Building_mat.tres" id="20_24d3w"]
+[ext_resource type="PackedScene" uid="uid://dti7l20thp2rk" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Subscene_elements/epave_zone.tscn" id="23_txlwt"]
+
+[sub_resource type="VisualShaderNodeLinearSceneDepth" id="VisualShaderNodeLinearSceneDepth_38fsn"]
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_cvrn3"]
+input_name = "view"
+
+[sub_resource type="VisualShaderNodeProximityFade" id="VisualShaderNodeProximityFade_dnk0e"]
+default_input_values = [0, 1.5]
+
+[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_hh02i"]
+function = 31
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_5t4il"]
+parameter_name = "Sonar_color"
+default_value_enabled = true
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_upo43"]
+size = Vector2(634.014, 470.339)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_cgibr"]
+constant = 0.4
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_mms8m"]
+constant = 1.0
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_txsxr"]
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_if58a"]
+input_name = "node_position_world"
+
+[sub_resource type="VisualShader" id="VisualShader_f73p6"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_never, cull_front, diffuse_lambert, specular_schlick_ggx, unshaded;
+
+uniform vec4 Sonar_color : source_color = vec4(1.000000, 1.000000, 1.000000, 1.000000);
+uniform sampler2D depth_tex_frg_37 : hint_depth_texture;
+
+
+
+void fragment() {
+// ColorParameter:44
+	vec4 n_out44p0 = Sonar_color;
+
+
+// FloatConstant:47
+	float n_out47p0 = 1.000000;
+
+
+// FloatConstant:46
+	float n_out46p0 = 0.400000;
+
+
+	float n_out45p0;
+// Expression:45
+	n_out45p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out46p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out45p0 = n_out47p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+	float n_out37p0;
+// ProximityFade:37
+	float n_in37p0 = 1.50000;
+	{
+		float __depth_tex = texture(depth_tex_frg_37, SCREEN_UV).r;
+		vec4 __depth_world_pos = INV_PROJECTION_MATRIX * vec4(SCREEN_UV * 2.0 - 1.0, __depth_tex, 1.0);
+		__depth_world_pos.xyz /= __depth_world_pos.w;
+		n_out37p0 = clamp(1.0 - smoothstep(__depth_world_pos.z + n_in37p0, __depth_world_pos.z, VERTEX.z), 0.0, 1.0);
+	}
+
+
+// FloatFunc:43
+	float n_out43p0 = 1.0 - n_out37p0;
+
+
+// Step:48
+	float n_out48p0 = step(n_out45p0, n_out43p0);
+
+
+// Output:0
+	ALBEDO = vec3(n_out44p0.xyz);
+	ALPHA = n_out48p0;
+
+
+}
+"
+modes/depth_draw = 2
+modes/cull = 1
+flags/unshaded = true
+nodes/fragment/0/position = Vector2(1060, 200)
+nodes/fragment/9/node = SubResource("VisualShaderNodeInput_if58a")
+nodes/fragment/9/position = Vector2(-1460, 360)
+nodes/fragment/26/node = SubResource("VisualShaderNodeLinearSceneDepth_38fsn")
+nodes/fragment/26/position = Vector2(-700, -260)
+nodes/fragment/36/node = SubResource("VisualShaderNodeInput_cvrn3")
+nodes/fragment/36/position = Vector2(-900, 0)
+nodes/fragment/37/node = SubResource("VisualShaderNodeProximityFade_dnk0e")
+nodes/fragment/37/position = Vector2(0, 80)
+nodes/fragment/43/node = SubResource("VisualShaderNodeFloatFunc_hh02i")
+nodes/fragment/43/position = Vector2(280, 60)
+nodes/fragment/44/node = SubResource("VisualShaderNodeColorParameter_5t4il")
+nodes/fragment/44/position = Vector2(120, -260)
+nodes/fragment/45/node = SubResource("VisualShaderNodeExpression_upo43")
+nodes/fragment/45/position = Vector2(40, 480)
+nodes/fragment/45/size = Vector2(634.014, 470.339)
+nodes/fragment/45/input_ports = "0,4,noise;1,0,In;2,0,Size;"
+nodes/fragment/45/output_ports = "0,0,Dither_Node;"
+nodes/fragment/45/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/46/node = SubResource("VisualShaderNodeFloatConstant_cgibr")
+nodes/fragment/46/position = Vector2(-200, 540)
+nodes/fragment/47/node = SubResource("VisualShaderNodeFloatConstant_mms8m")
+nodes/fragment/47/position = Vector2(-200, 440)
+nodes/fragment/48/node = SubResource("VisualShaderNodeStep_txsxr")
+nodes/fragment/48/position = Vector2(760, 300)
+nodes/fragment/connections = PackedInt32Array(37, 0, 43, 0, 46, 0, 45, 2, 47, 0, 45, 1, 44, 0, 0, 0, 43, 0, 48, 1, 45, 0, 48, 0, 48, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1cmcm"]
+render_priority = 1
+shader = SubResource("VisualShader_f73p6")
+shader_parameter/Sonar_color = Color(1, 1, 1, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_pgy1w"]
+material = SubResource("ShaderMaterial_1cmcm")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kcje2"]
+render_priority = 1
+shader = ExtResource("3_todel")
+shader_parameter/Sonar_color = Color(1, 1, 1, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_56jr0"]
+material = SubResource("ShaderMaterial_kcje2")
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_x2n16"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_yt2xy"]
+radius = 0.990634
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8p064"]
+render_priority = 0
+shader = ExtResource("5_83wu6")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_k8245"]
+material = SubResource("ShaderMaterial_8p064")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2pkhh"]
+render_priority = 0
+shader = ExtResource("5_83wu6")
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_kdi3x"]
+parameter_name = "Dark_color"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_71s6s"]
+default_input_values = [0, 0.0, 1, 0.435]
+operator = 2
+
+[sub_resource type="VisualShader" id="VisualShader_lshfh"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx;
+
+global uniform vec4 Dark_color : source_color;
+
+
+
+void fragment() {
+// ColorParameter:2
+	vec4 n_out2p0 = Dark_color;
+
+
+// Output:0
+	ALBEDO = vec3(n_out2p0.xyz);
+
+
+}
+"
+nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_kdi3x")
+nodes/fragment/2/position = Vector2(-272.177, 153.732)
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatOp_71s6s")
+nodes/fragment/3/position = Vector2(156.284, 335.958)
+nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qtam4"]
+render_priority = 0
+shader = SubResource("VisualShader_lshfh")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_7ftl5"]
+material = SubResource("ShaderMaterial_qtam4")
+size = Vector2(30, 30)
+
+[sub_resource type="BoxMesh" id="BoxMesh_hogrq"]
+material = ExtResource("6_vcmny")
+size = Vector3(30, 0, 30)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wmrfd"]
+material = ExtResource("7_4y8ld")
+size = Vector3(30, 0, 30)
+
+[sub_resource type="GDScript" id="GDScript_w8xnd"]
+script/source = "extends Area3D
+
+@export var Npc_data : Npc_datas
+
+func _on_area_entered(_area):
+	_global_datas.Npc_Dialogue = Npc_data
+	_global_datas.in_dialogue_zone.emit()
+
+
+func _on_area_exited(_area):
+	_global_datas.Npc_Dialogue = null
+	_global_datas.out_dialogue_zone.emit()
+
+"
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_jvty4"]
+radius = 0.67208
+
+[sub_resource type="BoxMesh" id="BoxMesh_jmuil"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_ujnfl"]
+
+[node name="02_MAIN_SCENES" type="Node"]
+
+[node name="Player_Boat" parent="." instance=ExtResource("1_qltht")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.73433, 0, 0.35998)
+mass = 4.0
+move_speed = 5.0
+rotation_speed = 2.0
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="Player_Boat"]
+transform = Transform3D(1, -3.55271e-15, 0, 2.11758e-22, 0.342545, 0.939501, 0, -0.939501, 0.342545, 0.130404, 3.19906, -0.0379682)
+layers = 3081
+light_indirect_energy = 0.0
+light_volumetric_fog_energy = 0.0
+light_specular = 0.0
+omni_range = 7.0
+omni_attenuation = 0.258817
+
+[node name="Sonar" type="Node3D" parent="Player_Boat"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
+script = ExtResource("2_n8uar")
+_sonar_speed = 200.0
+
+[node name="01" type="Node3D" parent="Player_Boat/Sonar"]
+transform = Transform3D(5.52237, 0, 0, 0, 5.52237, 0, 0, 0, 5.52237, 0.049623, -0.743807, -0.269134)
+visible = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player_Boat/Sonar/01"]
+layers = 8
+mesh = SubResource("SphereMesh_pgy1w")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Player_Boat/Sonar/01"]
+layers = 8
+mesh = SubResource("SphereMesh_56jr0")
+skeleton = NodePath("../..")
+
+[node name="02" type="Node3D" parent="Player_Boat/Sonar"]
+transform = Transform3D(3.89763, 0.0211405, -0.0748208, -0.0200288, 3.89793, 0.0579978, 0.075126, -0.0576019, 3.89726, 0.049623, -0.743807, -0.269134)
+visible = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player_Boat/Sonar/02"]
+layers = 8
+mesh = SubResource("SphereMesh_pgy1w")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Player_Boat/Sonar/02"]
+layers = 8
+mesh = SubResource("SphereMesh_56jr0")
+skeleton = NodePath("../..")
+
+[node name="Timer" type="Timer" parent="Player_Boat/Sonar"]
+wait_time = 2.0
+one_shot = true
+
+[node name="Sonar_Aera" type="Area3D" parent="Player_Boat/Sonar"]
+visible = false
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player_Boat/Sonar/Sonar_Aera"]
+transform = Transform3D(5.39371, 0, -1.42109e-14, 0, 5.39371, 0, 1.42109e-14, 0, 5.39371, 1.77636e-15, 0, -0.39557)
+shape = SubResource("SphereShape3D_x2n16")
+
+[node name="Area3D" type="Area3D" parent="Player_Boat"]
+visible = false
+input_ray_pickable = false
+script = ExtResource("4_h4pmi")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player_Boat/Area3D"]
+shape = SubResource("SphereShape3D_yt2xy")
+
+[node name="--DECOR--" type="Node" parent="."]
+
+[node name="Clouds" type="MeshInstance3D" parent="--DECOR--"]
+transform = Transform3D(57.2458, 0, 0, 0, 57.2458, 0, 0, 0, 57.2458, 0, 6.93092, 0)
+mesh = SubResource("PlaneMesh_k8245")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("ShaderMaterial_2pkhh")
+
+[node name="SEA" type="StaticBody3D" parent="--DECOR--"]
+transform = Transform3D(4.4285, 0, 0, 0, 0.44285, 0, 0, 0, 4.4285, 0.739399, -0.436631, 1.21398)
+
+[node name="back_color" type="MeshInstance3D" parent="--DECOR--/SEA"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -34.098, 0)
+mesh = SubResource("PlaneMesh_7ftl5")
+
+[node name="Sea_collider" type="MeshInstance3D" parent="--DECOR--/SEA"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.067, 0)
+layers = 8
+mesh = SubResource("BoxMesh_hogrq")
+skeleton = NodePath("../Sea_foam")
+
+[node name="Sea_foam" type="MeshInstance3D" parent="--DECOR--/SEA"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+layers = 2048
+mesh = SubResource("BoxMesh_wmrfd")
+
+[node name="WORLD_ELEMENTS" type="Node" parent="--DECOR--"]
+
+[node name="Pine_prefabs" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(0.0545151, 0, 0.0545151, 0, 0.077096, 0, -0.0545151, 0, 0.0545151, 3.25482, -0.195296, -2.63829)
+
+[node name="Pine_prefabs9" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(0.0545151, 0, 0.0545151, 0, 0.077096, 0, -0.0545151, 0, 0.0545151, 5.47213, 0.345963, 1.59928)
+
+[node name="Pine_prefabs10" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(0.0579629, 0, 0.0508339, 0, 0.077096, 0, -0.0508339, 0, 0.0579629, 5.78435, 0.603637, 0.491063)
+
+[node name="Pine_prefabs11" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(0.0660738, 0, -0.0397247, 0, 0.077096, 0, 0.0397247, 0, 0.0660738, 5.94377, 0.477386, 1.18782)
+
+[node name="Pine_prefabs12" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(0.016035, 0, -0.049225, 0, 0.0517709, 0, 0.049225, 0, 0.016035, 6.73643, 0.541952, 1.19464)
+
+[node name="Pine_prefabs13" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(0.016035, 0, -0.049225, 0, 0.0517709, 0, 0.049225, 0, 0.016035, 5.26729, 0.401321, 1.21414)
+
+[node name="Pine_prefabs14" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(0.016035, 0, -0.049225, 0, 0.0517709, 0, 0.049225, 0, 0.016035, 6.99264, 0.635002, 0.254115)
+
+[node name="Pine_prefabs15" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(-0.0289184, 0, -0.0429412, 0, 0.0517709, 0, 0.0429412, 0, -0.0289184, 6.49081, 0.446315, 1.27244)
+
+[node name="Pine_prefabs16" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(-0.038259, 0, -0.056811, 0, 0.0684926, 0, 0.056811, 0, -0.038259, 6.63197, 0.340055, 1.60303)
+
+[node name="Pine_prefabs17" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(-0.038259, 0, -0.056811, 0, 0.0684926, 0, 0.056811, 0, -0.038259, 7.39401, 0.561633, 0.471473)
+
+[node name="Pine_prefabs18" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(-0.0313252, 0, -0.046515, 0, 0.0560795, 0, 0.046515, 0, -0.0313252, 7.75434, 0.561633, 1.25328)
+
+[node name="Pine_prefabs19" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(-0.0264121, 0, -0.0392195, 0, 0.0472839, 0, 0.0392195, 0, -0.0264121, 7.96182, 0.62868, 0.739459)
+
+[node name="Pine_prefabs2" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(0.0758118, 0.000890531, -0.0139848, -0.000905554, 0.0770907, 0, 0.0139838, 0.000164263, 0.075817, 3.86584, -0.195296, -2.86036)
+
+[node name="Pine_prefabs3" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(-0.0557971, 0, 0.0276506, 0, 0.0622726, 0, -0.0276506, 0, -0.0557971, 3.53989, -0.185731, -2.6847)
+
+[node name="Pine_prefabs4" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(0.0469456, 0, 0.0409143, 0, 0.0622726, 0, -0.0409143, 0, 0.0469456, 3.01557, -0.185731, -3.94966)
+
+[node name="Pine_prefabs5" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(0.0324622, 0, 0.0531421, 0, 0.0622726, 0, -0.0531421, 0, 0.0324622, 3.69644, -0.185731, -3.65007)
+
+[node name="Pine_prefabs6" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(-0.018676, 0, 0.0594061, 0, 0.0622726, 0, -0.0594061, 0, -0.018676, 3.57012, -0.185731, -3.23198)
+
+[node name="Pine_prefabs7" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(0.0327151, 0, 0.0529868, 0, 0.0622726, 0, -0.0529868, 0, 0.0327151, 4.65193, 0.469775, -3.57208)
+
+[node name="Pine_prefabs8" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(-0.018676, 0, 0.0594061, 0, 0.0622726, 0, -0.0594061, 0, -0.018676, 4.79783, 0.469775, -3.10797)
+
+[node name="IceBerg_06" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_h0nl5")]
+transform = Transform3D(0.437557, 0, -0.0971482, 0, 0.448212, 0, 0.0971482, 0, 0.437557, 0.571211, -0.479977, -3.57455)
+
+[node name="IceBerg_07" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_h0nl5")]
+transform = Transform3D(0.717731, 0, -0.0726512, 0, 0.721399, 0, 0.0726512, 0, 0.717731, -5.977, -0.656455, -3.08)
+
+[node name="IceBerg_05" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("11_086vv")]
+transform = Transform3D(0.256164, 0, 0.371844, 0, 0.45154, 0, -0.371844, 0, 0.256164, 5.18118, -0.477896, -2.15945)
+layers = 1
+cast_shadow = 0
+
+[node name="IceBerg_04" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("12_638yx")]
+transform = Transform3D(-0.32981, 0, -0.246846, 0, 0.411956, 0, 0.246846, 0, -0.32981, 8.42354, -0.451744, -2.29614)
+layers = 1
+
+[node name="IceBerg_08" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("12_638yx")]
+transform = Transform3D(-0.334611, 0, 0.0349742, 0, 0.336434, 0, -0.0349742, 0, -0.334611, 0.135678, -0.414282, 3.39587)
+layers = 1
+
+[node name="IceBerg_02" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("13_mb82m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.255885, -0.208811, -6.71901)
+
+[node name="IceBerg_03" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("14_fqdgl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.77998, -0.194708, -8.34244)
+
+[node name="IceBerg_01" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("15_bqwbg")]
+transform = Transform3D(-0.529492, 0, 2.98023e-08, 0, 0.529492, 0, -2.98023e-08, 0, -0.529492, 5.51049, -0.219669, -3.51967)
+
+[node name="IceBerg_10" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("15_bqwbg")]
+transform = Transform3D(-0.273803, 0, 2.84997e-08, 0, 0.0925972, 0, -1.54109e-08, 0, -0.506349, 3.20761, -0.214851, -3.19881)
+
+[node name="IceBerg_09" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("15_bqwbg")]
+transform = Transform3D(-0.529492, 0, 2.98023e-08, 0, 0.529492, 0, -2.98023e-08, 0, -0.529492, 6.28434, -0.228083, 1.37311)
+
+[node name="IceBerg_11" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("15_bqwbg")]
+transform = Transform3D(-0.137043, 0, -0.51145, 0, 0.529492, 0, 0.51145, 0, -0.137043, -5.98852, -0.228083, 0.594712)
+
+[node name="Banquise_02" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("17_4pwgg")]
+transform = Transform3D(-0.963635, 0, 1.0304e-07, 0, 0.963635, 0, -1.0304e-07, 0, -0.963635, -3.52465, -0.21875, -0.831186)
+
+[node name="Banquise_04" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("17_4pwgg")]
+transform = Transform3D(0.99037, 0, -0.138447, 0, 1, 0, 0.138447, 0, 0.99037, -3.30637, -0.21875, 0.795343)
+
+[node name="Banquise_05" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("17_4pwgg")]
+transform = Transform3D(-0.7043, 0, 0.298349, 0, 0.764886, 0, -0.298349, 0, -0.7043, -2.28483, -0.21875, -4.09302)
+
+[node name="Lighthouse2" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("16_u78ww")]
+
+[node name="NPC_TRIGGER_ZONE" type="Node" parent="--DECOR--"]
+
+[node name="NPC_AREA" type="Area3D" parent="--DECOR--/NPC_TRIGGER_ZONE"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.61404, 1.19209e-07, -2.30636)
+script = SubResource("GDScript_w8xnd")
+Npc_data = ExtResource("18_3k0t8")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.465855, 0, 0.113853)
+shape = SubResource("SphereShape3D_jvty4")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA"]
+transform = Transform3D(0.803273, 0, 0.156978, 0, 0.068, 0, -0.803273, 0, 0.156978, -0.419204, -0.155468, -0.0303779)
+mesh = SubResource("BoxMesh_jmuil")
+surface_material_override/0 = ExtResource("20_24d3w")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA/MeshInstance3D"]
+layers = 1032
+mesh = SubResource("BoxMesh_ujnfl")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("6_vcmny")
+
+[node name="NPC_AREA3" type="Area3D" parent="--DECOR--/NPC_TRIGGER_ZONE"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.94219, 1.19209e-07, -2.968)
+script = SubResource("GDScript_w8xnd")
+Npc_data = ExtResource("19_2ojeu")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA3"]
+shape = SubResource("SphereShape3D_jvty4")
+
+[node name="NPC_AREA2" type="Area3D" parent="--DECOR--/NPC_TRIGGER_ZONE"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.07606, 5.96046e-07, -4.45534)
+script = SubResource("GDScript_w8xnd")
+Npc_data = ExtResource("19_qcquc")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA2"]
+shape = SubResource("SphereShape3D_jvty4")
+
+[node name="UNDER_WATER" type="Node" parent="--DECOR--"]
+
+[node name="EPAVE_ZONE" parent="--DECOR--/UNDER_WATER" instance=ExtResource("23_txlwt")]
+
+[node name="EPAVE_ZONE2" parent="--DECOR--/UNDER_WATER" instance=ExtResource("23_txlwt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.02417, 4.76837e-07, 1.87812)
+scene_name = "A2"
+
+[connection signal="timeout" from="Player_Boat/Sonar/Timer" to="Player_Boat/Sonar" method="_on_timer_timeout"]
+[connection signal="mouse_entered" from="Player_Boat/Area3D" to="Player_Boat/Area3D" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Player_Boat/Area3D" to="Player_Boat/Area3D" method="_on_mouse_exited"]
+[connection signal="area_entered" from="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA" to="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA" method="_on_area_entered"]
+[connection signal="area_exited" from="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA" to="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA" method="_on_area_exited"]
+[connection signal="area_entered" from="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA3" to="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA3" method="_on_area_entered"]
+[connection signal="area_exited" from="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA3" to="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA3" method="_on_area_exited"]
+[connection signal="area_entered" from="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA2" to="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA2" method="_on_area_entered"]
+[connection signal="area_exited" from="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA2" to="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA2" method="_on_area_exited"]
