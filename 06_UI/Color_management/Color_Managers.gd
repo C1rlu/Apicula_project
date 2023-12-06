@@ -36,9 +36,9 @@ func _process(_delta):
 	if timer.is_stopped():
 		return
 		
-	var lerp = lerp(0.1,1.0,timer.time_left)
-	print(lerp)
-	RenderingServer.global_shader_parameter_set("isSubscene_value", lerp)
+	var lerp_opacity = lerp(0.1,1.0,timer.time_left)
+	
+	RenderingServer.global_shader_parameter_set("isSubscene_value", lerp_opacity)
 	
 	if Engine.is_editor_hint():
 		_NormalColor_mainScene()
