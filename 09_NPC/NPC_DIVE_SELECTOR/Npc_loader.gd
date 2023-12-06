@@ -12,9 +12,11 @@ func update_NPC():
 	
 func update_npc():
 
-	for child in loader_node.get_children():
-		loader_node.remove_child(child)
-	
-	
+	_clear()
+
 	var instance = _global_datas.Npc_Dialogue.prefabs.instantiate()
 	loader_node.add_child(instance)
+
+func _clear():
+	for child in loader_node.get_children():
+		loader_node.remove_child(child)	

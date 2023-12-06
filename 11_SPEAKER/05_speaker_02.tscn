@@ -1,4 +1,4 @@
-[gd_scene load_steps=61 format=3 uid="uid://bbp1ccoa6te1g"]
+[gd_scene load_steps=52 format=3 uid="uid://bbp1ccoa6te1g"]
 
 [ext_resource type="Script" path="res://11_SPEAKER/Open_Dialogue.gd" id="1_6gph5"]
 [ext_resource type="Script" path="res://09_NPC/NPC_DIVE_SELECTOR/Npc_loader.gd" id="2_gecf5"]
@@ -7,9 +7,26 @@
 [ext_resource type="Resource" uid="uid://b5kt2xn16lfgt" path="res://09_NPC/Npc_data/Otis_data.tres" id="5_wppld"]
 [ext_resource type="Resource" uid="uid://xuxu60afj84h" path="res://09_NPC/Npc_data/Guy_02_data.tres" id="6_6xaf4"]
 [ext_resource type="Material" uid="uid://dxkegh8ms5y46" path="res://06_UI/Panel_ui_disolved_mat.tres" id="7_mabi4"]
-[ext_resource type="PackedScene" uid="uid://c36kqh5uobfku" path="res://09_NPC/baltazar_prefabs.tscn" id="9_0yo5k"]
-[ext_resource type="PackedScene" uid="uid://bhp5srocc6bwr" path="res://09_NPC/otis_prefabs.tscn" id="10_3jfpd"]
+[ext_resource type="PackedScene" uid="uid://ccq1654e6goa5" path="res://09_NPC/Model/hand_basic.tscn" id="8_rq6rq"]
 [ext_resource type="PackedScene" uid="uid://kfeia6x8pslm" path="res://09_NPC/guy_02_prefab.tscn" id="11_60j22"]
+
+[sub_resource type="GDScript" id="GDScript_d4nqo"]
+script/source = "extends Node
+
+@onready var hand_basic = $\"../00_NPC_CREATOR/Models/hand_basic\"
+@onready var Npc = $\"../00_NPC_CREATOR/Models/Loader\"
+
+func _ready():
+	_global_datas._show_hand.connect(_show_hand)
+	_global_datas._hide_hand.connect(_hide_hand)
+	
+func _show_hand():
+	hand_basic.visible = true
+	Npc.visible = false
+func _hide_hand():
+	hand_basic.visible = false
+	Npc.visible = true
+"
 
 [sub_resource type="GDScript" id="GDScript_ktgfg"]
 script/source = "extends Node
@@ -54,117 +71,6 @@ flags/light_only = false
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6s3bf"]
 shader = SubResource("VisualShader_6uu1l")
-
-[sub_resource type="Gradient" id="Gradient_avlc8"]
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_eirss"]
-gradient = SubResource("Gradient_avlc8")
-fill_from = Vector2(0.748927, 0)
-fill_to = Vector2(0.570815, 0)
-
-[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_2y3b1"]
-texture = SubResource("GradientTexture2D_eirss")
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_vea8u"]
-constant = 0.3
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_8n855"]
-constant = 0.855
-
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_no76q"]
-size = Vector2(634.014, 470.339)
-expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_1b4pt"]
-
-[sub_resource type="VisualShader" id="VisualShader_e727j"]
-code = "shader_type canvas_item;
-render_mode blend_mix;
-
-uniform sampler2D tex_frg_10;
-
-
-
-void fragment() {
-// Texture2D:10
-	vec4 n_out10p0 = texture(tex_frg_10, UV);
-
-
-// FloatConstant:7
-	float n_out7p0 = 0.855000;
-
-
-// FloatConstant:6
-	float n_out6p0 = 0.300000;
-
-
-	float n_out8p0;
-// Expression:8
-	n_out8p0 = 0.0;
-	{
-		const float DITHER_THRESHOLDS[16] ={
-				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-			};
-			
-		vec2 uv = FRAGCOORD.xy * n_out6p0;
-		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-		n_out8p0 = n_out7p0 - DITHER_THRESHOLDS[index];
-	}
-
-
-// Step:9
-	float n_out9p0 = step(n_out10p0.x, n_out8p0);
-
-
-// Output:0
-	COLOR.a = n_out9p0;
-
-
-}
-"
-graph_offset = Vector2(-2556.27, 722.209)
-mode = 1
-flags/light_only = false
-nodes/fragment/0/position = Vector2(700, 160)
-nodes/fragment/6/node = SubResource("VisualShaderNodeFloatConstant_vea8u")
-nodes/fragment/6/position = Vector2(-2760, 1220)
-nodes/fragment/7/node = SubResource("VisualShaderNodeFloatConstant_8n855")
-nodes/fragment/7/position = Vector2(-2880, 940)
-nodes/fragment/8/node = SubResource("VisualShaderNodeExpression_no76q")
-nodes/fragment/8/position = Vector2(-1580, 1000)
-nodes/fragment/8/size = Vector2(634.014, 470.339)
-nodes/fragment/8/input_ports = "0,0,In;1,0,Size;"
-nodes/fragment/8/output_ports = "0,0,Dither_Node;"
-nodes/fragment/8/expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/9/node = SubResource("VisualShaderNodeStep_1b4pt")
-nodes/fragment/9/position = Vector2(260, 480)
-nodes/fragment/10/node = SubResource("VisualShaderNodeTexture_2y3b1")
-nodes/fragment/10/position = Vector2(-1460, 80)
-nodes/fragment/connections = PackedInt32Array(6, 0, 8, 1, 7, 0, 8, 0, 8, 0, 9, 1, 9, 0, 0, 1, 10, 0, 9, 0)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_fj3am"]
-shader = SubResource("VisualShader_e727j")
 
 [sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_2je4u"]
 default_input_values = [0, 0.0, 1, 0.945]
@@ -643,6 +549,9 @@ script = ExtResource("2_gecf5")
 
 [node name="Next_dialogue" type="Node" parent="."]
 
+[node name="Show_Hand" type="Node" parent="."]
+script = SubResource("GDScript_d4nqo")
+
 [node name="Random_FaceChanger" type="Node" parent="."]
 script = SubResource("GDScript_ktgfg")
 
@@ -653,7 +562,6 @@ script = ExtResource("3_u2fyv")
 Npc_all = Array[Resource("res://09_NPC/Npc_data.gd")]([ExtResource("4_y4ud3"), ExtResource("5_wppld"), ExtResource("6_6xaf4")])
 
 [node name="Npc_convas" type="Control" parent="00_NPC_CREATOR"]
-visible = false
 texture_filter = 1
 texture_repeat = 2
 material = SubResource("ShaderMaterial_6s3bf")
@@ -665,17 +573,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-
-[node name="ColorRect2" type="ColorRect" parent="00_NPC_CREATOR/Npc_convas"]
-visible = false
-material = SubResource("ShaderMaterial_fj3am")
-layout_mode = 2
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-color = Color(0.00392157, 0.0784314, 0.0901961, 1)
 
 [node name="Button" type="Button" parent="00_NPC_CREATOR/Npc_convas"]
 layout_mode = 2
@@ -827,7 +724,7 @@ stretch = true
 transparent_bg = true
 handle_input_locally = false
 size = Vector2i(500, 500)
-render_target_update_mode = 0
+render_target_update_mode = 4
 
 [node name="Camera3D" type="Camera3D" parent="00_NPC_CREATOR/Npc_convas/CAM_NPCS/SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.12, 5.735)
@@ -846,14 +743,12 @@ omni_attenuation = 0.0915056
 
 [node name="Models" type="Node" parent="00_NPC_CREATOR"]
 
+[node name="hand_basic" parent="00_NPC_CREATOR/Models" instance=ExtResource("8_rq6rq")]
+transform = Transform3D(-0.650672, 0.317145, -0.739777, 0.370271, -0.726697, -0.63721, -0.714668, -0.665248, 0.343393, 1.105, 10.953, 0)
+visible = false
+
 [node name="Loader" type="Node3D" parent="00_NPC_CREATOR/Models"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.26, 0)
-
-[node name="Baltazar" parent="00_NPC_CREATOR/Models/Loader" instance=ExtResource("9_0yo5k")]
-visible = false
-
-[node name="Otis_mesh" parent="00_NPC_CREATOR/Models/Loader" instance=ExtResource("10_3jfpd")]
-visible = false
 
 [node name="Guy_02" parent="00_NPC_CREATOR/Models/Loader" instance=ExtResource("11_60j22")]
 

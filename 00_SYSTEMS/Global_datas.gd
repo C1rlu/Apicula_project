@@ -29,7 +29,8 @@ signal in_dialogue_zone
 signal out_dialogue_zone
 signal  _open_dialogue
 signal  _close_dialogue
-
+signal _show_hand
+signal _hide_hand
 #subsceneSignal
 
 var subbscene_playerPosition : Vector3
