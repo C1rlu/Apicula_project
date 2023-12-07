@@ -4,12 +4,8 @@ extends Node
 
 func _ready():
 	_global_datas._open_dialogue.connect(update_npc)
-	#_global_datas._update_npc_ini.connect(update_NPC)
 
-func update_NPC():
-	pass
-	#$"../Speacker_ui/BACKDROP/BACKDROP2/TextureRect".set_texture(ImageTexture.create_from_image(npc_data.image))
-	
+
 func update_npc():
 
 	_clear()

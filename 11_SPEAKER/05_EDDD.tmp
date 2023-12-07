@@ -1,9 +1,10 @@
-[gd_scene load_steps=55 format=3 uid="uid://bbp1ccoa6te1g"]
+[gd_scene load_steps=56 format=3 uid="uid://bbp1ccoa6te1g"]
 
 [ext_resource type="Script" path="res://11_SPEAKER/Open_Dialogue.gd" id="1_6gph5"]
 [ext_resource type="Script" path="res://09_NPC/NPC_DIVE_SELECTOR/Npc_loader.gd" id="2_gecf5"]
 [ext_resource type="Script" path="res://addons/ez_dialogue/ez_dialogue_node.gd" id="2_iqwu8"]
 [ext_resource type="Script" path="res://11_SPEAKER/Dialogue/Dialogue_asset/Ini_dialogue.gd" id="2_pxao7"]
+[ext_resource type="JSON" path="res://11_SPEAKER/Dialogue/Dialogue_asset/Prologue_test.json" id="3_dopll"]
 [ext_resource type="Script" path="res://09_NPC/Npc_Init.gd" id="3_u2fyv"]
 [ext_resource type="Resource" uid="uid://l3coaeai3lx6" path="res://09_NPC/Npc_data/Baltazar_data.tres" id="4_y4ud3"]
 [ext_resource type="Resource" uid="uid://b5kt2xn16lfgt" path="res://09_NPC/Npc_data/Otis_data.tres" id="5_wppld"]
@@ -29,25 +30,16 @@ func _show_hand():
 func _hide_hand():
 	hand_basic.visible = false
 	Npc.visible = true
-
 "
 
 [sub_resource type="GDScript" id="GDScript_ktgfg"]
 script/source = "extends Node
 
-
-func _ready():
-	_global_datas._open_dialogue.connect(_start_update)
-	_global_datas._close_dialogue.connect(_stop_update)
+func _on_button_pressed():
+	_updateFace()
 
 
-func _start_update():
-	$Timer.start()
-	
-func _stop_update():
-	$Timer.stop()
-	
-		
+
 func _updateFace():
 	var rng = RandomNumberGenerator.new()
 	var number = rng.randf_range(0.0, 1.0)
@@ -64,8 +56,9 @@ func _updateFace():
 	
 	
 func _on_timer_timeout():
-	_updateFace()
-	$Timer.start()
+	pass
+	#_updateFace()
+	#$Timer.start()
 	
 "
 
@@ -557,6 +550,7 @@ script = ExtResource("1_6gph5")
 
 [node name="Dialogue" type="Node" parent="."]
 script = ExtResource("2_pxao7")
+dialogue_json = ExtResource("3_dopll")
 
 [node name="EzDialogue" type="Node" parent="Dialogue"]
 script = ExtResource("2_iqwu8")
@@ -579,7 +573,6 @@ script = ExtResource("3_u2fyv")
 Npc_all = Array[Resource("res://09_NPC/Npc_data.gd")]([ExtResource("4_y4ud3"), ExtResource("5_wppld"), ExtResource("6_6xaf4")])
 
 [node name="Npc_convas" type="Control" parent="00_NPC_CREATOR"]
-visible = false
 texture_filter = 1
 texture_repeat = 2
 material = SubResource("ShaderMaterial_6s3bf")
@@ -597,6 +590,7 @@ script = ExtResource("9_n4i7c")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="00_NPC_CREATOR/Npc_convas/Dialogue_box"]
 material = ExtResource("7_mabi4")
+anchors_preset = -1
 offset_left = 723.0
 offset_top = 856.0
 offset_right = 1243.0
@@ -653,7 +647,7 @@ stretch = true
 transparent_bg = true
 handle_input_locally = false
 size = Vector2i(500, 500)
-render_target_update_mode = 0
+render_target_update_mode = 4
 
 [node name="Camera3D" type="Camera3D" parent="00_NPC_CREATOR/Npc_convas/CAM_NPCS/SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.12, 5.735)

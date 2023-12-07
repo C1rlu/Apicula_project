@@ -17,6 +17,8 @@ func _open_dialogue():
 	
 	_global_datas._call_back.connect(close_dialogue)
 	$Random_FaceChanger/Timer.start()				
+
+
 	
 func close_dialogue():
 	_global_datas.in_dialogue_zone.emit()
