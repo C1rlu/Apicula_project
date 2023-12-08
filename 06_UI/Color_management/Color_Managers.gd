@@ -33,6 +33,9 @@ func _NormalColor_mainScene():
 	
 func _process(_delta):
 	
+	if Engine.is_editor_hint():
+		_NormalColor_mainScene()
+	
 	if timer.is_stopped():
 		return
 		
@@ -40,8 +43,7 @@ func _process(_delta):
 	
 	RenderingServer.global_shader_parameter_set("isSubscene_value", lerp_opacity)
 	
-	if Engine.is_editor_hint():
-		_NormalColor_mainScene()
+
 	
 	
 
