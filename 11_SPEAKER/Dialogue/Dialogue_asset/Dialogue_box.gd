@@ -3,7 +3,8 @@ extends Node2D
 @onready var choice_button_scn = preload("res://11_SPEAKER/Dialogue/Dialogue_asset/Choice_button.tscn")
 
 var choice_buttons : Array[Button] = []
-@onready var text_node = $VBoxContainer/Dialogue_text
+@onready var text_node = $Dialogue_text
+
 
 @onready var v_box_container = $VBoxContainer
 
