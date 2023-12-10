@@ -15,7 +15,7 @@ func _open_dialogue():
 	_global_datas.Player_InMenu = true
 	dialogue.visible = true
 	
-	_global_datas._call_back.connect(close_dialogue)
+	#_global_datas._call_back.connect(close_dialogue)
 	$Random_FaceChanger/Timer.start()				
 
 
@@ -26,5 +26,9 @@ func close_dialogue():
 	_global_datas.Player_InDialogue = false
 	_global_datas.Player_InMenu = false
 	
-	_global_datas._call_back.disconnect(close_dialogue)
+	#_global_datas._call_back.disconnect(close_dialogue)
 	$Random_FaceChanger/Timer.stop()
+
+
+func _on_leave_button_pressed():
+	close_dialogue()

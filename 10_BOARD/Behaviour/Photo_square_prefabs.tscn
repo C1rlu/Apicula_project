@@ -1,8 +1,29 @@
-[gd_scene load_steps=48 format=3 uid="uid://dr7pcue70x0dt"]
+[gd_scene load_steps=49 format=3 uid="uid://dr7pcue70x0dt"]
 
 [ext_resource type="Script" path="res://10_BOARD/Behaviour/Movable_paper.tres.gd" id="1_h5skt"]
 [ext_resource type="Script" path="res://10_BOARD/Behaviour/Apply_pos_anim.gd" id="2_jaqpo"]
 [ext_resource type="Texture2D" uid="uid://cvgf4l4anpjfx" path="res://12_INVENTORY/Photo/PhotoTest_01 .jpg" id="4_a771i"]
+
+[sub_resource type="GDScript" id="GDScript_6ohgl"]
+script/source = "extends Node
+
+
+@onready var color_rect = $\"../ColorRect5/ColorRect7\"
+@onready var _material : Material = color_rect.get_material()
+
+func _ready():
+	_apply_photo_NPC()
+	
+func _apply_photo_NPC():
+	
+	if _global_datas.Npc_Dialogue == null:
+		return
+		
+	var imageN = _global_datas.Npc_Dialogue.image
+	
+	_material.set_shader_parameter(\"Photo\",imageN)
+	_material.set_shader_parameter(\"Denoiser\" , 1.0)	
+"
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_fu3ha"]
 constant = 0.3
@@ -445,7 +466,7 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-450.224, 251.131)
+graph_offset = Vector2(-2040.24, 91.1325)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(1220, 340)
@@ -510,6 +531,7 @@ nodes/fragment/38/position = Vector2(420, 780)
 nodes/fragment/connections = PackedInt32Array(3, 0, 5, 1, 17, 0, 18, 2, 2, 0, 7, 0, 8, 0, 7, 1, 7, 0, 0, 0, 18, 0, 19, 0, 31, 0, 19, 1, 19, 0, 6, 0, 5, 0, 6, 1, 5, 0, 31, 0, 32, 0, 31, 1, 33, 0, 5, 0, 35, 0, 37, 1, 37, 0, 38, 1, 19, 0, 38, 0, 38, 0, 7, 2, 24, 0, 37, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_idu35"]
+resource_local_to_scene = true
 shader = SubResource("VisualShader_n63tb")
 shader_parameter/Denoiser = 1.45
 shader_parameter/Photo = ExtResource("4_a771i")
@@ -529,6 +551,9 @@ size = Vector2(82, 81.7143)
 
 [node name="Photo_Square_prefabs" type="Node2D"]
 scale = Vector2(4, 4)
+
+[node name="Change_photo" type="Node" parent="."]
+script = SubResource("GDScript_6ohgl")
 
 [node name="Take_object" type="Node" parent="."]
 script = ExtResource("1_h5skt")
