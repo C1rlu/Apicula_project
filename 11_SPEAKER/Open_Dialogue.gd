@@ -1,6 +1,7 @@
 extends Node
 
 @onready var dialogue = $"00_NPC_CREATOR/Npc_convas"
+@onready var name_text = $"00_NPC_CREATOR/Npc_convas/Dialogue_box/Name_text"
 
 
 func _ready():
@@ -14,7 +15,7 @@ func _open_dialogue():
 	_global_datas.Player_InDialogue = true
 	_global_datas.Player_InMenu = true
 	dialogue.visible = true
-	
+	name_text.text = _global_datas.Npc_Dialogue.name
 	#_global_datas._call_back.connect(close_dialogue)
 	$Random_FaceChanger/Timer.start()				
 
