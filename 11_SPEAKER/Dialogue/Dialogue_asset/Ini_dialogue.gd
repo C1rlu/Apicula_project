@@ -41,14 +41,14 @@ func _on_ez_dialogue_custom_signal_received(value):
 		var variable_name = params[1]
 		var variable_value = params[2]
 		state[variable_name] = variable_value
-		
+		return
 		
 	# for extern signal call example affichage la main
 	if params[0] == "emit":
 		#set variable command
 		var variable_name = params[1]
 		state[variable_name].emit()
-	
+		return
 		
 			
 
