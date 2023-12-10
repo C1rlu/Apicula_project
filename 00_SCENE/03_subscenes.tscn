@@ -1,10 +1,14 @@
-[gd_scene load_steps=109 format=3 uid="uid://nigmie4bbn6"]
+[gd_scene load_steps=129 format=3 uid="uid://nigmie4bbn6"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/Grid_scene/Subscene_loader.gd" id="1_7uoo0"]
 [ext_resource type="PackedScene" uid="uid://g7u8o55jrnyy" path="res://08_SUBSCENES/Player_subscene/Player_sub.tscn" id="2_ri8q1"]
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="3_2i3gt"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Cam_subscene_behaviour.gd" id="3_jsuc6"]
 [ext_resource type="PackedScene" uid="uid://d26m10iups7vx" path="res://08_SUBSCENES/Grid_scene/A2.tscn" id="4_10t5h"]
+[ext_resource type="Material" uid="uid://c5bjyygfj5elu" path="res://06_UI/Circle_progress_dither_mat.tres" id="4_deky0"]
+[ext_resource type="Texture2D" uid="uid://ckdvhk12w3kkb" path="res://12_INVENTORY/Tools/tools_photo.png" id="5_712pv"]
+[ext_resource type="Texture2D" uid="uid://c50e5jei68ocp" path="res://12_INVENTORY/Tools/tools_pioche.png" id="5_q2da4"]
+[ext_resource type="Texture2D" uid="uid://dafg2qvpi6wmk" path="res://06_UI/Loader_circle/Loader_circle.png" id="5_ty2lj"]
 
 [sub_resource type="GDScript" id="GDScript_yjydq"]
 script/source = "extends Node
@@ -126,6 +130,7 @@ func _instance_oxygene_empty():
 script/source = "extends Node
 var _process_timer = false
 
+@onready var texture_progress_bar = $\"../TextureProgressBar\"
 @onready var timer = $Timer
 @onready var photo_circle = $\"../Photo_circle\"
 @onready var circle_material : Material = photo_circle.get_material()
@@ -133,6 +138,8 @@ var _process_timer = false
 
 signal take_picture
 
+func _ready():
+	texture_progress_bar.max_value = $Timer.wait_time
 
 func _input(event: InputEvent):
 	
@@ -142,11 +149,13 @@ func _input(event: InputEvent):
 	if event.is_action_released(\"Click\"):
 		timer.stop()
 		_process_timer = false
+		#texture_progress_bar.visible = false
 		photo_circle.visible = false
 		
 func _process(_delta):
 		
 	if !timer.is_stopped():
+		texture_progress_bar.value = timer.wait_time - timer.time_left
 		
 		var lerp_time = lerp(0.0,0.4, timer.time_left / timer.wait_time)	
 		circle_material.set_shader_parameter(\"Circle\",lerp_time)		
@@ -155,7 +164,7 @@ func _on_timer_timeout():
 	print(\"TAKE PHOTO\")
 	take_picture.emit()
 	timer.stop()
-
+	texture_progress_bar.visible = false
 	photo_circle.visible = false
 	
 func _on_area_2d_input_event(viewport, event, shape_idx):
@@ -166,7 +175,7 @@ func _on_area_2d_input_event(viewport, event, shape_idx):
 	
 	if event.is_action_released(\"Photo\"):
 		timer.stop()
-
+		#texture_progress_bar.visible = false
 		_global_datas.Player_lock_click = false
 		photo_circle.visible = false
 		
@@ -174,7 +183,7 @@ func _on_area_2d_input_event(viewport, event, shape_idx):
 		return
 			
 	if event.is_action_pressed(\"Photo\"):
-	
+		#texture_progress_bar.visible = true
 		photo_circle.visible = true
 		timer.start()
 		_global_datas.Player_lock_click = true	
@@ -416,20 +425,20 @@ nodes/fragment/connections = PackedInt32Array(4, 0, 7, 1, 18, 0, 7, 0, 5, 0, 4, 
 shader = SubResource("VisualShader_8isr1")
 shader_parameter/Opacity = 0.0
 
-[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_vfe5h"]
-default_input_values = [0, 0.0, 1, 0.89]
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_mpvsq"]
+default_input_values = [0, 0.0, 1, 0.99]
 operator = 2
 
-[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_cnr3a"]
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_8vklm"]
 default_input_values = [0, 0.0, 1, 1.96, 2, 0.775]
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_seipv"]
-constant = 0.4
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_i0hfy"]
+constant = 0.5
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_84pw8"]
-constant = 1.858
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_6x14i"]
+constant = 1.8
 
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_tgtn2"]
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_1orns"]
 size = Vector2(724.789, 654.559)
 expression = "const float DITHER_THRESHOLDS[16] ={
 		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
@@ -442,47 +451,279 @@ vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
 
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_wdlka"]
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_ieamj"]
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_gciv2"]
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_p1l8q"]
+size = Vector2(513.781, 284.487)
+expression = "vec2 n_uv = UV -0.5;
+float d = length(n_uv);
+float c = smoothstep(r,r + feather,d);
+color = vec4(vec3(c),1.0);"
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_an5md"]
+constant = 0.001
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_m0dgc"]
+input_name = "uv"
+
+[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_jbl13"]
+function = 31
+
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_1h3wi"]
+default_input_values = [1, Vector2(1.8, 1), 2, Vector2(0.5, 0)]
+function = 1
+
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_x04xo"]
+default_input_values = [1, Vector2(0, 1), 2, Vector2(0, 0)]
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_ah8ca"]
+parameter_name = "Oxygene_frame"
+qualifier = 1
+default_value_enabled = true
+default_value = 0.4
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_jj08p"]
+size = Vector2(513.781, 284.487)
+expression = "vec2 n_uv = UV -0.5;
+float d = length(n_uv);
+float c = smoothstep(r,r + feather,d);
+color = vec4(vec3(c),1.0);"
+
+[sub_resource type="VisualShader" id="VisualShader_nvxk7"]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+global uniform float Oxygene_frame = 0.40000000596046;
+
+
+
+void fragment() {
+// FloatConstant:13
+	float n_out13p0 = 1.800000;
+
+
+// FloatConstant:12
+	float n_out12p0 = 0.500000;
+
+
+	float n_out14p0;
+// Expression:14
+	n_out14p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out12p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out14p0 = n_out13p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Input:4
+	vec2 n_out4p0 = UV;
+
+
+// UVFunc:6
+	vec2 n_in6p1 = vec2(1.80000, 1.00000);
+	vec2 n_in6p2 = vec2(0.50000, 0.00000);
+	vec2 n_out6p0 = (n_out4p0 - n_in6p2) * n_in6p1 + n_in6p2;
+
+
+// UVFunc:7
+	vec2 n_in7p1 = vec2(0.00000, 1.00000);
+	vec2 n_in7p2 = vec2(0.00000, 0.00000);
+	vec2 n_out7p0 = n_in7p2 * n_in7p1 + n_out6p0;
+
+
+// FloatParameter:8
+	float n_out8p0 = Oxygene_frame;
+
+
+// FloatConstant:3
+	float n_out3p0 = 0.001000;
+
+
+	vec4 n_out2p0;
+// Expression:2
+	n_out2p0 = vec4(0.0, 0.0, 0.0, 0.0);
+	{
+		vec2 n_uv = n_out7p0 -0.5;
+		float d = length(n_uv);
+		float c = smoothstep(n_out8p0,n_out8p0 + n_out3p0,d);
+		n_out2p0 = vec4(vec3(c),1.0);
+	}
+
+
+// FloatFunc:5
+	float n_out5p0 = 1.0 - n_out2p0.x;
+
+
+// FloatOp:10
+	float n_in10p1 = 0.99000;
+	float n_out10p0 = n_out8p0 * n_in10p1;
+
+
+	vec4 n_out9p0;
+// Expression:9
+	n_out9p0 = vec4(0.0, 0.0, 0.0, 0.0);
+	{
+		vec2 n_uv = n_out7p0 -0.5;
+		float d = length(n_uv);
+		float c = smoothstep(n_out10p0,n_out10p0 + n_out3p0,d);
+		n_out9p0 = vec4(vec3(c),1.0);
+	}
+
+
+// Mix:11
+	float n_in11p0 = 0.00000;
+	float n_out11p0 = mix(n_in11p0, n_out5p0, n_out9p0.x);
+
+
+// Step:15
+	float n_out15p0 = step(n_out14p0, n_out11p0);
+
+
+// Output:0
+	COLOR.a = n_out15p0;
+
+
+}
+"
+graph_offset = Vector2(-2321.72, 1282.6)
+mode = 1
+flags/light_only = false
+nodes/fragment/0/position = Vector2(1240, 520)
+nodes/fragment/2/node = SubResource("VisualShaderNodeExpression_p1l8q")
+nodes/fragment/2/position = Vector2(-880, 140)
+nodes/fragment/2/size = Vector2(513.781, 284.487)
+nodes/fragment/2/input_ports = "0,3,UV;1,0,r;2,0,feather;"
+nodes/fragment/2/output_ports = "0,5,color;"
+nodes/fragment/2/expression = "vec2 n_uv = UV -0.5;
+float d = length(n_uv);
+float c = smoothstep(r,r + feather,d);
+color = vec4(vec3(c),1.0);"
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_an5md")
+nodes/fragment/3/position = Vector2(-1100, 440)
+nodes/fragment/4/node = SubResource("VisualShaderNodeInput_m0dgc")
+nodes/fragment/4/position = Vector2(-2300, -60)
+nodes/fragment/5/node = SubResource("VisualShaderNodeFloatFunc_jbl13")
+nodes/fragment/5/position = Vector2(-280, 160)
+nodes/fragment/6/node = SubResource("VisualShaderNodeUVFunc_1h3wi")
+nodes/fragment/6/position = Vector2(-1960, -120)
+nodes/fragment/7/node = SubResource("VisualShaderNodeUVFunc_x04xo")
+nodes/fragment/7/position = Vector2(-1720, -120)
+nodes/fragment/8/node = SubResource("VisualShaderNodeFloatParameter_ah8ca")
+nodes/fragment/8/position = Vector2(-1720, 340)
+nodes/fragment/9/node = SubResource("VisualShaderNodeExpression_jj08p")
+nodes/fragment/9/position = Vector2(-655.858, 530.852)
+nodes/fragment/9/size = Vector2(513.781, 284.487)
+nodes/fragment/9/input_ports = "0,3,UV;1,0,r;2,0,feather;"
+nodes/fragment/9/output_ports = "0,5,color;"
+nodes/fragment/9/expression = "vec2 n_uv = UV -0.5;
+float d = length(n_uv);
+float c = smoothstep(r,r + feather,d);
+color = vec4(vec3(c),1.0);"
+nodes/fragment/10/node = SubResource("VisualShaderNodeFloatOp_mpvsq")
+nodes/fragment/10/position = Vector2(-1160, 640)
+nodes/fragment/11/node = SubResource("VisualShaderNodeMix_8vklm")
+nodes/fragment/11/position = Vector2(460, 580)
+nodes/fragment/12/node = SubResource("VisualShaderNodeFloatConstant_i0hfy")
+nodes/fragment/12/position = Vector2(-260, 1180)
+nodes/fragment/13/node = SubResource("VisualShaderNodeFloatConstant_6x14i")
+nodes/fragment/13/position = Vector2(-260, 1040)
+nodes/fragment/14/node = SubResource("VisualShaderNodeExpression_1orns")
+nodes/fragment/14/position = Vector2(40, 1160)
+nodes/fragment/14/size = Vector2(724.789, 654.559)
+nodes/fragment/14/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/14/output_ports = "0,0,Dither_Node;"
+nodes/fragment/14/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/15/node = SubResource("VisualShaderNodeStep_ieamj")
+nodes/fragment/15/position = Vector2(880, 780)
+nodes/fragment/connections = PackedInt32Array(3, 0, 2, 2, 2, 0, 5, 0, 4, 0, 6, 0, 6, 0, 7, 0, 7, 0, 2, 0, 8, 0, 2, 1, 7, 0, 9, 0, 3, 0, 9, 2, 8, 0, 10, 0, 10, 0, 9, 1, 9, 0, 11, 2, 5, 0, 11, 1, 12, 0, 14, 1, 13, 0, 14, 0, 11, 0, 15, 1, 14, 0, 15, 0, 15, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_m1bwh"]
+shader = SubResource("VisualShader_nvxk7")
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_t1wnh"]
+default_input_values = [0, 0.0, 1, 0.89]
+operator = 2
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_wea74"]
+default_input_values = [0, 0.0, 1, 1.96, 2, 0.775]
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_oov18"]
+constant = 0.4
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_t70sg"]
+constant = 1.858
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_mlids"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_w1if8"]
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_gwqr5"]
 constant = 0.3
 
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_r7032"]
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_fipwi"]
 parameter_name = "Circle"
 default_value_enabled = true
 default_value = 0.4
 
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_nlg0y"]
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_5ywv0"]
 size = Vector2(513.781, 284.487)
 expression = "vec2 n_uv = UV -0.5;
 float d = length(n_uv);
 float c = smoothstep(r,r + feather,d);
 color = vec4(vec3(c),1.0);"
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_1p47y"]
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_aajdc"]
 constant = 0.001
 
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_1qua0"]
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_cdrum"]
 input_name = "uv"
 
-[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_grkvo"]
+[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_anrrl"]
 function = 31
 
-[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_cv387"]
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_usvts"]
 default_input_values = [1, Vector2(1.8, 1), 2, Vector2(0.5, 0)]
 function = 1
 
-[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_wwjmh"]
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_hws01"]
 default_input_values = [1, Vector2(0, 1), 2, Vector2(0, 0)]
 
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_e8log"]
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_d3gtm"]
 size = Vector2(513.781, 284.487)
 expression = "vec2 n_uv = UV -0.5;
 float d = length(n_uv);
 float c = smoothstep(r,r + feather,d);
 color = vec4(vec3(c),1.0);"
 
-[sub_resource type="VisualShader" id="VisualShader_qsrd0"]
+[sub_resource type="VisualShader" id="VisualShader_hyb1k"]
 code = "shader_type canvas_item;
 render_mode blend_mix;
 
@@ -590,7 +831,7 @@ graph_offset = Vector2(-541.09, -39.0843)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(1240, 520)
-nodes/fragment/2/node = SubResource("VisualShaderNodeExpression_nlg0y")
+nodes/fragment/2/node = SubResource("VisualShaderNodeExpression_5ywv0")
 nodes/fragment/2/position = Vector2(-540, 20)
 nodes/fragment/2/size = Vector2(513.781, 284.487)
 nodes/fragment/2/input_ports = "0,3,UV;1,0,r;2,0,feather;"
@@ -599,17 +840,17 @@ nodes/fragment/2/expression = "vec2 n_uv = UV -0.5;
 float d = length(n_uv);
 float c = smoothstep(r,r + feather,d);
 color = vec4(vec3(c),1.0);"
-nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_1p47y")
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_aajdc")
 nodes/fragment/3/position = Vector2(-820, 380)
-nodes/fragment/4/node = SubResource("VisualShaderNodeInput_1qua0")
+nodes/fragment/4/node = SubResource("VisualShaderNodeInput_cdrum")
 nodes/fragment/4/position = Vector2(-2300, -60)
-nodes/fragment/5/node = SubResource("VisualShaderNodeFloatFunc_grkvo")
+nodes/fragment/5/node = SubResource("VisualShaderNodeFloatFunc_anrrl")
 nodes/fragment/5/position = Vector2(60, 40)
-nodes/fragment/6/node = SubResource("VisualShaderNodeUVFunc_cv387")
+nodes/fragment/6/node = SubResource("VisualShaderNodeUVFunc_usvts")
 nodes/fragment/6/position = Vector2(-1960, -120)
-nodes/fragment/7/node = SubResource("VisualShaderNodeUVFunc_wwjmh")
+nodes/fragment/7/node = SubResource("VisualShaderNodeUVFunc_hws01")
 nodes/fragment/7/position = Vector2(-1720, -120)
-nodes/fragment/9/node = SubResource("VisualShaderNodeExpression_e8log")
+nodes/fragment/9/node = SubResource("VisualShaderNodeExpression_d3gtm")
 nodes/fragment/9/position = Vector2(-655.858, 530.852)
 nodes/fragment/9/size = Vector2(513.781, 284.487)
 nodes/fragment/9/input_ports = "0,3,UV;1,0,r;2,0,feather;"
@@ -618,15 +859,15 @@ nodes/fragment/9/expression = "vec2 n_uv = UV -0.5;
 float d = length(n_uv);
 float c = smoothstep(r,r + feather,d);
 color = vec4(vec3(c),1.0);"
-nodes/fragment/10/node = SubResource("VisualShaderNodeFloatOp_vfe5h")
+nodes/fragment/10/node = SubResource("VisualShaderNodeFloatOp_t1wnh")
 nodes/fragment/10/position = Vector2(-1160, 640)
-nodes/fragment/11/node = SubResource("VisualShaderNodeMix_cnr3a")
+nodes/fragment/11/node = SubResource("VisualShaderNodeMix_wea74")
 nodes/fragment/11/position = Vector2(460, 580)
-nodes/fragment/12/node = SubResource("VisualShaderNodeFloatConstant_seipv")
+nodes/fragment/12/node = SubResource("VisualShaderNodeFloatConstant_oov18")
 nodes/fragment/12/position = Vector2(-260, 1180)
-nodes/fragment/13/node = SubResource("VisualShaderNodeFloatConstant_84pw8")
+nodes/fragment/13/node = SubResource("VisualShaderNodeFloatConstant_t70sg")
 nodes/fragment/13/position = Vector2(-260, 1040)
-nodes/fragment/14/node = SubResource("VisualShaderNodeExpression_tgtn2")
+nodes/fragment/14/node = SubResource("VisualShaderNodeExpression_mlids")
 nodes/fragment/14/position = Vector2(40, 1160)
 nodes/fragment/14/size = Vector2(724.789, 654.559)
 nodes/fragment/14/input_ports = "0,0,In;1,0,Size;"
@@ -641,34 +882,34 @@ nodes/fragment/14/expression = "const float DITHER_THRESHOLDS[16] ={
 vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/15/node = SubResource("VisualShaderNodeStep_wdlka")
+nodes/fragment/15/node = SubResource("VisualShaderNodeStep_w1if8")
 nodes/fragment/15/position = Vector2(880, 780)
-nodes/fragment/16/node = SubResource("VisualShaderNodeFloatConstant_gciv2")
+nodes/fragment/16/node = SubResource("VisualShaderNodeFloatConstant_gwqr5")
 nodes/fragment/16/position = Vector2(-1660, 280)
-nodes/fragment/17/node = SubResource("VisualShaderNodeFloatParameter_r7032")
+nodes/fragment/17/node = SubResource("VisualShaderNodeFloatParameter_fipwi")
 nodes/fragment/17/position = Vector2(-1809.95, 419.028)
 nodes/fragment/connections = PackedInt32Array(3, 0, 2, 2, 2, 0, 5, 0, 4, 0, 6, 0, 6, 0, 7, 0, 7, 0, 2, 0, 7, 0, 9, 0, 3, 0, 9, 2, 10, 0, 9, 1, 9, 0, 11, 2, 5, 0, 11, 1, 12, 0, 14, 1, 13, 0, 14, 0, 11, 0, 15, 1, 14, 0, 15, 0, 15, 0, 0, 1, 17, 0, 2, 1, 17, 0, 10, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kde8k"]
-shader = SubResource("VisualShader_qsrd0")
+shader = SubResource("VisualShader_hyb1k")
 shader_parameter/Circle = 0.4
 
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_j83pl"]
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_l6s44"]
 size = Vector2(513.781, 284.487)
 expression = "vec2 n_uv = UV -0.5;
 float d = length(n_uv);
 float c = smoothstep(r,r + feather,d);
 color = vec4(vec3(c),1.0);"
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_rfiml"]
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_ihrmg"]
 constant = 0.608
 
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_1yxdo"]
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_08tgl"]
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_67q05"]
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_suokg"]
 constant = 0.4
 
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_qghgo"]
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_x10ei"]
 size = Vector2(724.789, 654.559)
 expression = "const float DITHER_THRESHOLDS[16] ={
 		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
@@ -681,27 +922,27 @@ vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_mkmlx"]
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_hqhh4"]
 constant = 0.01
 
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_qddq0"]
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_nixh4"]
 parameter_name = "flash_opacity"
 hint = 1
 max = 0.5
 default_value_enabled = true
 default_value = 0.5
 
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_yspjp"]
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_3kxch"]
 input_name = "uv"
 
-[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_3aw3d"]
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_ag11v"]
 default_input_values = [1, Vector2(1.8, 1), 2, Vector2(0.5, 0)]
 function = 1
 
-[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_bnrd7"]
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_oq4ai"]
 default_input_values = [1, Vector2(0, 1), 2, Vector2(0, 0)]
 
-[sub_resource type="VisualShader" id="VisualShader_rj1p2"]
+[sub_resource type="VisualShader" id="VisualShader_2tdle"]
 code = "shader_type canvas_item;
 render_mode blend_mix;
 
@@ -784,13 +1025,13 @@ graph_offset = Vector2(-1210.26, 278.484)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(1320, 520)
-nodes/fragment/4/node = SubResource("VisualShaderNodeInput_yspjp")
+nodes/fragment/4/node = SubResource("VisualShaderNodeInput_3kxch")
 nodes/fragment/4/position = Vector2(-2380, 860)
-nodes/fragment/6/node = SubResource("VisualShaderNodeUVFunc_3aw3d")
+nodes/fragment/6/node = SubResource("VisualShaderNodeUVFunc_ag11v")
 nodes/fragment/6/position = Vector2(-2040, 800)
-nodes/fragment/7/node = SubResource("VisualShaderNodeUVFunc_bnrd7")
+nodes/fragment/7/node = SubResource("VisualShaderNodeUVFunc_oq4ai")
 nodes/fragment/7/position = Vector2(-1800, 800)
-nodes/fragment/16/node = SubResource("VisualShaderNodeExpression_j83pl")
+nodes/fragment/16/node = SubResource("VisualShaderNodeExpression_l6s44")
 nodes/fragment/16/position = Vector2(-1540, 1020)
 nodes/fragment/16/size = Vector2(513.781, 284.487)
 nodes/fragment/16/input_ports = "0,3,UV;1,0,r;2,0,feather;"
@@ -799,13 +1040,13 @@ nodes/fragment/16/expression = "vec2 n_uv = UV -0.5;
 float d = length(n_uv);
 float c = smoothstep(r,r + feather,d);
 color = vec4(vec3(c),1.0);"
-nodes/fragment/17/node = SubResource("VisualShaderNodeFloatConstant_rfiml")
+nodes/fragment/17/node = SubResource("VisualShaderNodeFloatConstant_ihrmg")
 nodes/fragment/17/position = Vector2(-2080, 1260)
-nodes/fragment/22/node = SubResource("VisualShaderNodeStep_1yxdo")
+nodes/fragment/22/node = SubResource("VisualShaderNodeStep_08tgl")
 nodes/fragment/22/position = Vector2(700, 500)
-nodes/fragment/23/node = SubResource("VisualShaderNodeFloatConstant_67q05")
+nodes/fragment/23/node = SubResource("VisualShaderNodeFloatConstant_suokg")
 nodes/fragment/23/position = Vector2(20, 1180)
-nodes/fragment/25/node = SubResource("VisualShaderNodeExpression_qghgo")
+nodes/fragment/25/node = SubResource("VisualShaderNodeExpression_x10ei")
 nodes/fragment/25/position = Vector2(320, 1160)
 nodes/fragment/25/size = Vector2(724.789, 654.559)
 nodes/fragment/25/input_ports = "0,0,In;1,0,Size;"
@@ -820,14 +1061,14 @@ nodes/fragment/25/expression = "const float DITHER_THRESHOLDS[16] ={
 vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/26/node = SubResource("VisualShaderNodeFloatConstant_mkmlx")
+nodes/fragment/26/node = SubResource("VisualShaderNodeFloatConstant_hqhh4")
 nodes/fragment/26/position = Vector2(-2021.14, 1036.45)
-nodes/fragment/27/node = SubResource("VisualShaderNodeFloatParameter_qddq0")
+nodes/fragment/27/node = SubResource("VisualShaderNodeFloatParameter_nixh4")
 nodes/fragment/27/position = Vector2(-40, 880)
 nodes/fragment/connections = PackedInt32Array(4, 0, 6, 0, 6, 0, 7, 0, 17, 0, 16, 2, 23, 0, 25, 1, 25, 0, 22, 1, 7, 0, 16, 0, 22, 0, 0, 1, 16, 0, 22, 0, 26, 0, 16, 1, 27, 0, 25, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ugii6"]
-shader = SubResource("VisualShader_rj1p2")
+shader = SubResource("VisualShader_2tdle")
 shader_parameter/flash_opacity = 0.5
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6dfyr"]
@@ -1348,6 +1589,52 @@ basePos = Vector3(0, 0.6, 2.7)
 cull_mask = 4
 current = true
 
+[node name="TextureProgressBar" type="TextureProgressBar" parent="."]
+visible = false
+material = ExtResource("4_deky0")
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -35.0
+offset_top = -101.0
+offset_right = 477.0
+offset_bottom = 411.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(0.13417, 0.13417)
+mouse_filter = 2
+max_value = 1.0
+step = 0.025
+fill_mode = 4
+texture_under = ExtResource("5_ty2lj")
+texture_progress = ExtResource("5_ty2lj")
+tint_under = Color(0.207843, 0.368627, 0.376471, 1)
+tint_progress = Color(0.949219, 0.667969, 0.394531, 1)
+
+[node name="Oxy_UI" type="ColorRect" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_m1bwh")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.6, 0.521569, 0.341176, 1)
+
+[node name="Oxy_zone" type="ColorRect" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_kde8k")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.160784, 0.423529, 0.443137, 1)
+
 [node name="Photo_circle" type="ColorRect" parent="."]
 visible = false
 material = SubResource("ShaderMaterial_kde8k")
@@ -1386,6 +1673,36 @@ collision_mask = 2
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tools/Area2D"]
 visible = false
 shape = SubResource("RectangleShape2D_6dfyr")
+
+[node name="Pioche" type="Node2D" parent="Tools"]
+visible = false
+position = Vector2(262, 141)
+
+[node name="TextureButton" type="TextureButton" parent="Tools/Pioche"]
+modulate = Color(1, 1, 1, 0.196078)
+offset_left = -26.0
+offset_top = -25.0
+offset_right = 24.0
+offset_bottom = 25.0
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("5_712pv")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Photo" type="Node2D" parent="Tools"]
+visible = false
+position = Vector2(217, 201)
+
+[node name="TextureButton" type="TextureButton" parent="Tools/Photo"]
+modulate = Color(1, 1, 1, 0.196078)
+offset_left = -24.0
+offset_top = -27.0
+offset_right = 26.0
+offset_bottom = 23.0
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("5_q2da4")
+ignore_texture_size = true
+stretch_mode = 0
 
 [node name="Player_Sub" parent="." instance=ExtResource("2_ri8q1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.334, 0)
