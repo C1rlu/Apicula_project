@@ -37,17 +37,21 @@ var subbscene_playerPosition : Vector3
 signal _reset_oxygene
 signal _speedUp
 signal _speedDown
-signal spawnFlare
-signal _reload_oxygene
-signal _use_oxygene
 signal _take_photo
 signal _find_coins
 signal _forreuse_on
 signal _forreuse_off
 signal _forreuse_impact
+signal _spawn_empty_oxygene
+
+
 var _forreuse_impact_origin : Vector3
+
 func _ready():
 	_forreuse_impact_origin = Vector3.ZERO
+	
+	
+	
 #board scene
 signal mouse_raycast
 signal using_board_enable

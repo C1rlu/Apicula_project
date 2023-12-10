@@ -23,7 +23,7 @@ func _Darker_mainScene():
 	RenderingServer.global_shader_parameter_set("Dark_color", ColorRessource.Darker_Color )
 	RenderingServer.global_shader_parameter_set("isSubscene_value", 0.1)
 	KeepInFocus.set_shader_parameter("stayGlobal",false)
-	#timer.start()
+	timer.start()
 	
 func _NormalColor_mainScene():
 	RenderingServer.global_shader_parameter_set("Dark_color", ColorRessource.MainColor)

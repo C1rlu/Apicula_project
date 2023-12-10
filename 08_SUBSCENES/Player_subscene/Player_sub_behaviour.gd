@@ -70,11 +70,7 @@ func _physics_process(_delta):
 		current_velocity = current_velocity.normalized() * maxSpeed
 		linear_velocity = current_velocity
 
-	#if current_speed > 0.1 :
-	#	$"../OXYGENE_MANAGER/Timer".paused = false
-	#else :
-	#	$"../OXYGENE_MANAGER/Timer".paused = true
-		
+
 	_global_datas.subbscene_playerPosition = transform.origin	
 
 func _on_ini_subscene_ini_pos():
