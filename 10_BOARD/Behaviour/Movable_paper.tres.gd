@@ -97,7 +97,8 @@ func _unselect_element():
 	#shadow.visible = false
 	pos_anim.emit()
 	move_behind()
-
+	
+	
 func _notification(what):
 	#if what == NOTIFICATION_WM_FOCUS_IN:
 	if what == NOTIFICATION_WM_MOUSE_EXIT:
@@ -119,8 +120,8 @@ func move_behind():
 		return
 				
 	for a in behind:
-				
-		if(a.get_node("Apply_pos_behind")) == null:
+		var behind_node = a.get_node_or_null("Apply_pos_behind")		
+		if behind_node == null:
 			return
 					
 		var c = a.get_node("Apply_pos_behind")
@@ -137,3 +138,6 @@ func _on_area_2d_mouse_exited():
 	mouse_entered = false
 	var value = 0 as int 
 	Input.set_default_cursor_shape(value)
+
+
+

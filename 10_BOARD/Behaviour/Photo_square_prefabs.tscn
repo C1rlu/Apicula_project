@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=3 uid="uid://dr7pcue70x0dt"]
+[gd_scene load_steps=50 format=3 uid="uid://dr7pcue70x0dt"]
 
 [ext_resource type="Script" path="res://10_BOARD/Behaviour/Movable_paper.tres.gd" id="1_h5skt"]
 [ext_resource type="Script" path="res://10_BOARD/Behaviour/Apply_pos_anim.gd" id="2_jaqpo"]
@@ -536,6 +536,30 @@ shader = SubResource("VisualShader_n63tb")
 shader_parameter/Denoiser = 1.45
 shader_parameter/Photo = ExtResource("4_a771i")
 
+[sub_resource type="GDScript" id="GDScript_7y6yw"]
+script/source = "extends Node
+@onready var photo_square_prefabs = $\"../..\"
+
+
+var in_burn_zone : bool
+
+func _destroy():
+	if !in_burn_zone:
+		return
+	print(\"DETROYED\")
+	photo_square_prefabs.queue_free()
+func _in_zone():
+	in_burn_zone = true
+
+func _out_zone():
+	in_burn_zone = false
+	
+
+
+func _on_take_object_pos_anim():
+	_destroy()
+"
+
 [sub_resource type="GDScript" id="GDScript_p3ga4"]
 script/source = "extends Node
 
@@ -624,6 +648,9 @@ color = Color(0.45098, 0.396078, 0.278431, 1)
 
 [node name="Area2D" type="Area2D" parent="."]
 
+[node name="I_Burn" type="Node" parent="Area2D"]
+script = SubResource("GDScript_7y6yw")
+
 [node name="Apply_pos_behind" type="Node" parent="Area2D"]
 script = SubResource("GDScript_p3ga4")
 
@@ -633,6 +660,7 @@ position = Vector2(-0.142859, -5.72205e-06)
 shape = SubResource("RectangleShape2D_p5bvn")
 
 [connection signal="pos_anim" from="Take_object" to="Apply_pos_anim" method="_on_take_object_pos_anim"]
+[connection signal="pos_anim" from="Take_object" to="Area2D/I_Burn" method="_on_take_object_pos_anim"]
 [connection signal="timeout" from="Apply_pos_anim/Timer" to="Apply_pos_anim" method="_on_timer_timeout"]
 [connection signal="mouse_entered" from="Area2D" to="Take_object" method="_on_area_2d_mouse_entered"]
 [connection signal="mouse_exited" from="Area2D" to="Take_object" method="_on_area_2d_mouse_exited"]
