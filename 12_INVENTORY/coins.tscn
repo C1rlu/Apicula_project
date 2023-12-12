@@ -15,17 +15,23 @@ var target : Vector2
 
 func _push():
 	
-	start_pos = main_root.global_position 
-	timer.start()	
+	var random_x = randf_range(-50.0, 50.0)
+	start_pos = Vector2(main_root.global_position.x + random_x,main_root.global_position.y)
 	
-	target = main_root.global_position + Vector2.UP * 100
+	var random_y = randf_range(130, 160)
+	target = start_pos + Vector2.UP * random_y
+	
+	
+	var random_wait_time =  randf_range(0.15, 0.35)
+	timer.wait_time = random_wait_time
+	timer.start()	
 	
 func _process(delta):
 	
 	if timer.is_stopped():
 		return
 		
-	main_root.global_position = lerp(start_pos,target,timer.time_left / timer.wait_time)	
+	main_root.global_position = lerp(start_pos,target,1-timer.time_left / timer.wait_time)	
 
 
 func _on_timer_timeout():

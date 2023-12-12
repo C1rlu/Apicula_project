@@ -38,27 +38,45 @@ data = PackedVector3Array(-4.4745, -1, 0, -3.4146, 0.5434, -1.5436, -5.5085, 0.5
 script/source = "extends Node
 
 var life : int = 8
+var max_life : int = 8
 @onready var destructible_elements = $\"..\"
 
+var empty : bool = false
+
 func _on_area_3d_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
+	
 	if area.name == \"foreuse_area\":
 		
 		_global_datas._forreuse_impact_origin = destructible_elements.global_position
 		_global_datas._forreuse_impact.emit()
+		
+		
+		if empty:
+			return
+			
+		_global_datas._find_coins.emit()
+		
 		life -= 1
-	
-	
-	if life <= 0:
-		delete_element()
+		
+		if life <= 0:
+			delete_element()
 
 func delete_element():
 	
 	_global_datas._forreuse_impact_origin = destructible_elements.global_position
 	_global_datas._forreuse_impact.emit()
+
+	empty = true
 	
-	_global_datas._find_coins.emit()
+	#destructible_elements.queue_free()
+
+
+func check_fractions():
 	
-	destructible_elements.queue_free()
+	if life < max_life:
+		print(\"FREE\")	
+
+	
 "
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nx1q7"]
