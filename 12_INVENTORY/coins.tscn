@@ -1,7 +1,36 @@
-[gd_scene load_steps=73 format=3 uid="uid://bba4phbllf3f8"]
+[gd_scene load_steps=74 format=3 uid="uid://bba4phbllf3f8"]
 
 [ext_resource type="Script" path="res://10_BOARD/Behaviour/Movable_paper.tres.gd" id="1_2ud6v"]
 [ext_resource type="Script" path="res://10_BOARD/Behaviour/Apply_pos_anim.gd" id="2_ry4qx"]
+
+[sub_resource type="GDScript" id="GDScript_diyhb"]
+script/source = "extends Node
+@onready var main_root = $\"..\"
+
+@onready var timer = $Timer
+
+var start_pos : Vector2
+var target : Vector2
+
+
+func _push():
+	
+	start_pos = main_root.global_position 
+	timer.start()	
+	
+	target = main_root.global_position + Vector2.UP * 100
+	
+func _process(delta):
+	
+	if timer.is_stopped():
+		return
+		
+	main_root.global_position = lerp(start_pos,target,timer.time_left / timer.wait_time)	
+
+
+func _on_timer_timeout():
+	timer.stop()
+"
 
 [sub_resource type="GDScript" id="GDScript_3ng4g"]
 script/source = "extends Node
@@ -815,6 +844,12 @@ radius = 75.0067
 [node name="Coins" type="Node2D"]
 position = Vector2(249, 356)
 
+[node name="Push" type="Node" parent="."]
+script = SubResource("GDScript_diyhb")
+
+[node name="Timer" type="Timer" parent="Push"]
+wait_time = 0.25
+
 [node name="Fade_in" type="Node" parent="."]
 script = SubResource("GDScript_3ng4g")
 elements = [[], null]
@@ -888,6 +923,7 @@ script = SubResource("GDScript_fyyax")
 visible = false
 shape = SubResource("CircleShape2D_ox1q2")
 
+[connection signal="timeout" from="Push/Timer" to="Push" method="_on_timer_timeout"]
 [connection signal="pos_anim" from="Take_object" to="Apply_pos_anim" method="_on_take_object_pos_anim"]
 [connection signal="timeout" from="Apply_pos_anim/Timer" to="Apply_pos_anim" method="_on_timer_timeout"]
 [connection signal="mouse_entered" from="Area2D" to="Take_object" method="_on_area_2d_mouse_entered"]

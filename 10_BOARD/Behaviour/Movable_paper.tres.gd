@@ -14,6 +14,7 @@ extends Node
 #@onready var shadow = $"../shadow"
 
 
+
 var mouse_entered = false
 var click = false
 var offset
@@ -126,10 +127,11 @@ func move_behind():
 					
 		var c = a.get_node("Apply_pos_behind")
 		c._move_behind()
-	
+		
 			
 			
 func _on_area_2d_mouse_entered():
+
 	mouse_entered = true
 	var value = 2 as int 
 	Input.set_default_cursor_shape(value)

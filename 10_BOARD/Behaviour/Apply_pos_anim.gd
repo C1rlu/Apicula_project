@@ -20,8 +20,8 @@ func _apply_pos_anim():
 	var randomWaitTime = randf_range(0.05, 0.1)
 	timer.wait_time = randomWaitTime
 	timer.start()	
-
-
+		
+		
 func _apply_pos_agains():
 	
 	if !timer.is_stopped():

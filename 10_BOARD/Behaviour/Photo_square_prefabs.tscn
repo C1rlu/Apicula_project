@@ -8,7 +8,7 @@
 script/source = "extends Node
 
 
-@onready var color_rect = $\"../ColorRect5/ColorRect7\"
+@onready var color_rect = $\"../ColorRect5/Photo\"
 @onready var _material : Material = color_rect.get_material()
 
 func _ready():
@@ -543,17 +543,21 @@ script/source = "extends Node
 
 var in_burn_zone : bool
 
-func _destroy():
+func _destroy(): 
 	if !in_burn_zone:
 		return
-	print(\"DETROYED\")
+	print(\"PHOTO DETROYED\")
 	photo_square_prefabs.queue_free()
 func _in_zone():
 	in_burn_zone = true
+	var a = Color(1.0, 0.25, 0.25, 0.5)
+	photo_square_prefabs.set_modulate(a)
+
 
 func _out_zone():
 	in_burn_zone = false
-	
+	var a = Color(1.0, 1.0, 1.0, 1.0)
+	photo_square_prefabs.set_modulate(a)
 
 
 func _on_take_object_pos_anim():
@@ -597,16 +601,35 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -41.25
-offset_top = -36.75
-offset_right = 36.75
-offset_bottom = 41.25
+offset_left = -40.4924
+offset_top = -35.9924
+offset_right = 37.5076
+offset_bottom = 42.0076
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.990485, 0.990485)
 pivot_offset = Vector2(40, 40)
 mouse_filter = 2
 color = Color(0.0117647, 0.0941176, 0.105882, 1)
+
+[node name="BURN" type="ColorRect" parent="."]
+light_mask = 3
+material = SubResource("ShaderMaterial_b0g2v")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -40.0
+offset_right = 40.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(40, 40)
+mouse_filter = 2
+color = Color(1, 0.529412, 0.494118, 1)
+metadata/_edit_use_anchors_ = true
 
 [node name="ColorRect5" type="ColorRect" parent="."]
 light_mask = 3
@@ -625,8 +648,9 @@ grow_vertical = 2
 pivot_offset = Vector2(40, 40)
 mouse_filter = 2
 color = Color(0.52549, 0.482353, 0.392157, 1)
+metadata/_edit_use_anchors_ = true
 
-[node name="ColorRect7" type="ColorRect" parent="ColorRect5"]
+[node name="Photo" type="ColorRect" parent="ColorRect5"]
 light_mask = 3
 material = SubResource("ShaderMaterial_idu35")
 layout_mode = 1
