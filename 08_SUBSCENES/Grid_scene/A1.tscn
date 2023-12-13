@@ -1,9 +1,10 @@
-[gd_scene load_steps=14 format=3 uid="uid://bdnl7k72gp6so"]
+[gd_scene load_steps=15 format=3 uid="uid://bdnl7k72gp6so"]
 
 [ext_resource type="PackedScene" uid="uid://bneebc6fpaysa" path="res://08_SUBSCENES/Elements/Ice/ice_msh_01.tscn" id="1_eihyl"]
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="1_xsylq"]
 [ext_resource type="PackedScene" uid="uid://chipng023vh22" path="res://08_SUBSCENES/Elements/Ice/ice_msh_01_far.tscn" id="2_jg4dq"]
 [ext_resource type="PackedScene" uid="uid://bn6e8mjuvii5k" path="res://07_VFX/Coins_Flare/Coins_flare_fx.tscn" id="4_vb1h0"]
+[ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_elements_mat.tres" id="5_davjn"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_gecko"]
 resource_name = "Boat_underscene_01-ebbc7278ce3f6736198ea02480c387ec_Cube_001"
@@ -189,13 +190,22 @@ shape = SubResource("ConcavePolygonShape3D_ipksv")
 transform = Transform3D(0.358544, 0, 0, 0, 0.358544, 0, 0, 0, 0.358544, 0, -0.228681, 0)
 
 [node name="Particule" parent="Destructible_elements" instance=ExtResource("4_vb1h0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.29584)
+transform = Transform3D(0.422766, 0, 0, 0, 0.422766, 0, 0, 0, 0.422766, 0, 0, -0.0517065)
+visible = false
 
 [node name="_push" type="Node" parent="Destructible_elements"]
 script = SubResource("GDScript_krued")
 
 [node name="add_coins" type="Node" parent="Destructible_elements"]
 script = SubResource("GDScript_thhg0")
+
+[node name="Coins_msh_02_sh" type="MeshInstance3D" parent="Destructible_elements"]
+transform = Transform3D(0.215047, 0, 0, 0, 0.215047, 0, 0, 0, 0.215047, 0, 0, 0)
+visible = false
+layers = 4
+mesh = SubResource("ArrayMesh_qhnvo")
+skeleton = NodePath("")
+surface_material_override/0 = ExtResource("5_davjn")
 
 [node name="Ice_msh_01" type="MeshInstance3D" parent="Destructible_elements"]
 transform = Transform3D(0.2046, 0, 0, 0, 0.2046, 0, 0, 0, 0.2046, 0, 0, 0)
