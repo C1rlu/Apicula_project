@@ -10,19 +10,21 @@ script/source = "extends Node
 @onready var timer = $Timer
 
 var start_pos : Vector2
-var target : Vector2
+var dir : Vector2
 
 
 func _push():
 	
+	var target = get_viewport().get_camera_3d().unproject_position(_global_datas.subbscene_playerPosition)
+	target = Vector2(target.x,target.y - 80)
 	var random_x = randf_range(-50.0, 50.0)
-	start_pos = Vector2(main_root.global_position.x + random_x,main_root.global_position.y)
+	start_pos = Vector2(main_root.global_position.x,main_root.global_position.y)
 	
 	var random_y = randf_range(50, 80)
-	target = start_pos + Vector2.UP * random_y
+	dir = (target - start_pos).normalized()
+
 	
-	
-	var random_wait_time =  randf_range(0.05, 0.15)
+	var random_wait_time =  randf_range(0.15, 0.25)
 	timer.wait_time = random_wait_time
 	timer.start()	
 	
@@ -30,8 +32,8 @@ func _process(delta):
 	
 	if timer.is_stopped():
 		return
-		
-	main_root.global_position = lerp(start_pos,target,1-timer.time_left / timer.wait_time)	
+	var new_target = start_pos + dir * 400
+	main_root.global_position = lerp(start_pos,new_target,1-timer.time_left / timer.wait_time)	
 
 
 func _on_timer_timeout():
@@ -854,7 +856,7 @@ position = Vector2(249, 356)
 script = SubResource("GDScript_diyhb")
 
 [node name="Timer" type="Timer" parent="Push"]
-wait_time = 0.25
+wait_time = 0.5
 
 [node name="Fade_in" type="Node" parent="."]
 script = SubResource("GDScript_3ng4g")
