@@ -24,11 +24,11 @@ script/source = "extends Node
 
 @onready var destructible_elements = $\"..\"
 
-func _on_area_3d_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
+func _on_area_3d_2_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
 	if area.name == \"foreuse_area\":
 	
 		_global_datas._forreuse_impact_origin = destructible_elements.global_position
-		_global_datas._forreuse_impact.emit()
+		_global_datas._forreuse_impact.emit()	
 "
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_ipksv"]
@@ -36,47 +36,42 @@ data = PackedVector3Array(-4.4745, -1, 0, -3.4146, 0.5434, -1.5436, -5.5085, 0.5
 
 [sub_resource type="GDScript" id="GDScript_thhg0"]
 script/source = "extends Node
-
-var life : int = 8
-var max_life : int = 8
+@export var portion_size_ratio : float = 4
+var portion_size : float
+var life : int = 100
 @onready var destructible_elements = $\"..\"
 
 var empty : bool = false
 
+
+func _ready():
+	portion_size = 1/portion_size_ratio
+	print(portion_size)
+	
 func _on_area_3d_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
 	
 	if area.name == \"foreuse_area\":
-		
-		_global_datas._forreuse_impact_origin = destructible_elements.global_position
-		_global_datas._forreuse_impact.emit()
-		
-		
+	
 		if empty:
 			return
 			
-		_global_datas._find_coins.emit()
-		
-		life -= 1
+		var random_hit = randi_range(5,25)	
+		life -= random_hit
+		check_fractions()
 		
 		if life <= 0:
-			delete_element()
-
-func delete_element():
-	
-	_global_datas._forreuse_impact_origin = destructible_elements.global_position
-	_global_datas._forreuse_impact.emit()
-
-	empty = true
-	
-	#destructible_elements.queue_free()
+			empty = true
+			#destructible_elements.queue_free()
 
 
 func check_fractions():
 	
-	if life < max_life:
-		print(\"FREE\")	
-
-	
+	for i in range(1, int(1 / portion_size)):
+		if life <= i * (portion_size * 100):
+			_global_datas._find_coins.emit()
+			portion_size_ratio -=1
+			portion_size = 1/portion_size_ratio
+			print(portion_size)
 "
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nx1q7"]
@@ -170,7 +165,7 @@ layers = 4
 mesh = SubResource("ArrayMesh_gecko")
 skeleton = NodePath("")
 
-[node name="Behaviour" type="Node" parent="Boat_underscene_02"]
+[node name="_push" type="Node" parent="Boat_underscene_02"]
 script = SubResource("GDScript_krued")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Boat_underscene_02"]
@@ -192,7 +187,10 @@ shape = SubResource("ConcavePolygonShape3D_ipksv")
 [node name="Destructible_elements" type="Node3D" parent="."]
 transform = Transform3D(0.358544, 0, 0, 0, 0.358544, 0, 0, 0, 0.358544, 0, -0.228681, 0)
 
-[node name="Behaviour" type="Node" parent="Destructible_elements"]
+[node name="_push" type="Node" parent="Destructible_elements"]
+script = SubResource("GDScript_krued")
+
+[node name="add_coins" type="Node" parent="Destructible_elements"]
 script = SubResource("GDScript_thhg0")
 
 [node name="Ice_msh_01" type="MeshInstance3D" parent="Destructible_elements"]
@@ -217,5 +215,6 @@ collision_mask = 2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.111654, 0.113841, 0)
 shape = SubResource("SphereShape3D_3r8ni")
 
-[connection signal="area_shape_entered" from="Boat_underscene_02/Area3D2" to="Boat_underscene_02/Behaviour" method="_on_area_3d_area_shape_entered"]
-[connection signal="area_shape_entered" from="Destructible_elements/Area3D2" to="Destructible_elements/Behaviour" method="_on_area_3d_area_shape_entered"]
+[connection signal="area_shape_entered" from="Boat_underscene_02/Area3D2" to="Boat_underscene_02/_push" method="_on_area_3d_area_shape_entered"]
+[connection signal="area_shape_entered" from="Destructible_elements/Area3D2" to="Destructible_elements/add_coins" method="_on_area_3d_area_shape_entered"]
+[connection signal="area_shape_entered" from="Destructible_elements/Area3D2" to="Destructible_elements/_push" method="_on_area_3d_2_area_shape_entered"]
