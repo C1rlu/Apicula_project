@@ -21,9 +21,12 @@
 [sub_resource type="GDScript" id="GDScript_gl82p"]
 script/source = "extends Node
 
+@export var fps_target : int = 60
 
 func _ready():
 	_global_datas._forreuse_impact_origin = Vector3.ZERO
+	Engine.set_max_fps(fps_target)
+	
 func _input(event):
 	
 	if event.is_action_pressed(\"Go_subscene_debug\"):
@@ -34,6 +37,8 @@ func _input(event):
 		
 	if event.is_action_pressed(\"Add_coins\"):
 		_global_datas._find_coins.emit()
+
+
 "
 
 [sub_resource type="GDScript" id="GDScript_xp6ow"]
@@ -136,6 +141,7 @@ script = ExtResource("1_64l51")
 
 [node name="DEBUG_STATE" type="Node" parent="00_GAME_MANAGERS"]
 script = SubResource("GDScript_gl82p")
+fps_target = 120
 
 [node name="Active_subscene" type="Node" parent="00_GAME_MANAGERS"]
 script = ExtResource("1_if5gv")
