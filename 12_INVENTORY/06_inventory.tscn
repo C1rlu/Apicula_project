@@ -139,6 +139,7 @@ var offset
 var size : float
 var my_origin_parent : Node
 
+
 func _ready():
 	size = control.scale.x
 	my_origin_parent = control.get_parent()
@@ -204,6 +205,8 @@ func _unselect_element():
 	else:
 		control.global_position.y = 1044	
 		RenderingServer.global_shader_parameter_set(\"isSubscene_value\", 0.05)
+		
+		
 	#IF OUT OF WINDOWS
 func _notification(what):
 	#if what == NOTIFICATION_WM_FOCUS_IN:
@@ -213,7 +216,7 @@ func _notification(what):
 func _on_area_2d_mouse_entered():
 
 	mouse_entered = true
-	var value = 2 as int 
+	var value = 0 as int 
 	Input.set_default_cursor_shape(value)
 
 
@@ -1715,76 +1718,6 @@ script = SubResource("GDScript_y5o0k")
 position = Vector2(-128.289, -0.00012207)
 shape = SubResource("RectangleShape2D_epdke")
 
-[node name="Journal_root" type="Control" parent="Control"]
-visible = false
-anchors_preset = 0
-mouse_filter = 2
-
-[node name="Journal" type="Node2D" parent="Control/Journal_root"]
-position = Vector2(133, 1084)
-rotation = -0.0941031
-scale = Vector2(0.7, 0.7)
-
-[node name="Take_object" type="Node" parent="Control/Journal_root/Journal"]
-script = ExtResource("3_yssyu")
-
-[node name="Apply_pos_anim" type="Node" parent="Control/Journal_root/Journal"]
-script = ExtResource("4_ueoox")
-
-[node name="Timer" type="Timer" parent="Control/Journal_root/Journal/Apply_pos_anim"]
-wait_time = 0.25
-one_shot = true
-
-[node name="shadow" type="ColorRect" parent="Control/Journal_root/Journal"]
-visible = false
-light_mask = 3
-material = SubResource("ShaderMaterial_icff5")
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -4.68054
-offset_top = 51.2438
-offset_right = 73.3195
-offset_bottom = 129.244
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(9.25537, 10.168)
-pivot_offset = Vector2(40, 40)
-mouse_filter = 2
-color = Color(0, 0, 0, 1)
-
-[node name="ColorRect3" type="ColorRect" parent="Control/Journal_root/Journal"]
-light_mask = 3
-offset_left = -281.0
-offset_top = -409.0
-offset_right = 719.0
-offset_bottom = 727.0
-scale = Vector2(0.70678, 0.718924)
-mouse_filter = 2
-color = Color(0.505882, 0.486275, 0.411765, 1)
-
-[node name="ColorRect4" type="ColorRect" parent="Control/Journal_root/Journal"]
-light_mask = 3
-offset_left = -274.57
-offset_top = -394.755
-offset_right = 734.185
-offset_bottom = 741.245
-scale = Vector2(0.685799, 0.697582)
-mouse_filter = 2
-color = Color(0.388235, 0.329412, 0.262745, 1)
-
-[node name="Area2D" type="Area2D" parent="Control/Journal_root/Journal"]
-position = Vector2(127, 0)
-
-[node name="Apply_pos_behind" type="Node" parent="Control/Journal_root/Journal/Area2D"]
-script = SubResource("GDScript_y5o0k")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Control/Journal_root/Journal/Area2D"]
-position = Vector2(-53.9833, -0.000244141)
-shape = SubResource("RectangleShape2D_epdke")
-
 [node name="Bougie_zone" type="Control" parent="Control"]
 anchors_preset = 0
 mouse_filter = 2
@@ -2033,11 +1966,6 @@ mouse_filter = 2
 [connection signal="mouse_entered" from="Control/Map_Parent/Map/Area2D" to="Control/Map_Parent/Map/Take_object" method="_on_area_2d_mouse_entered"]
 [connection signal="mouse_exited" from="Control/Map_Parent/Map/Area2D" to="Control/Map_Parent/Map/Take_object" method="_on_area_2d_mouse_exited"]
 [connection signal="move_behind" from="Control/Map_Parent/Map/Area2D/Apply_pos_behind" to="Control/Map_Parent/Map/Apply_pos_anim" method="_on_apply_pos_behind_move_behind"]
-[connection signal="pos_anim" from="Control/Journal_root/Journal/Take_object" to="Control/Journal_root/Journal/Apply_pos_anim" method="_on_take_object_pos_anim"]
-[connection signal="timeout" from="Control/Journal_root/Journal/Apply_pos_anim/Timer" to="Control/Journal_root/Journal/Apply_pos_anim" method="_on_timer_timeout"]
-[connection signal="mouse_entered" from="Control/Journal_root/Journal/Area2D" to="Control/Journal_root/Journal/Take_object" method="_on_area_2d_mouse_entered"]
-[connection signal="mouse_exited" from="Control/Journal_root/Journal/Area2D" to="Control/Journal_root/Journal/Take_object" method="_on_area_2d_mouse_exited"]
-[connection signal="move_behind" from="Control/Journal_root/Journal/Area2D/Apply_pos_behind" to="Control/Journal_root/Journal/Apply_pos_anim" method="_on_apply_pos_behind_move_behind"]
 [connection signal="pos_anim" from="Control/Bougie_zone/Bougie/Take_object" to="Control/Bougie_zone/Bougie/Apply_pos_anim" method="_on_take_object_pos_anim"]
 [connection signal="timeout" from="Control/Bougie_zone/Bougie/Apply_pos_anim/Timer" to="Control/Bougie_zone/Bougie/Apply_pos_anim" method="_on_timer_timeout"]
 [connection signal="area_shape_entered" from="Control/Bougie_zone/Bougie/Area2D" to="Control/Bougie_zone/Bougie/Burn_Paper" method="_on_area_2d_area_shape_entered"]
