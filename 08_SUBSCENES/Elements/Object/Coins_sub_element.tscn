@@ -1,0 +1,56 @@
+[gd_scene load_steps=5 format=3 uid="uid://cbot4dbq2r154"]
+
+[ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_elements_mat.tres" id="1_qj4jc"]
+
+[sub_resource type="GDScript" id="GDScript_0o12n"]
+script/source = "extends Node
+
+@onready var coins_sub_element = $\"..\"
+
+
+var pick_once : bool = true
+func _on_area_3d_input_event(camera, event, position, normal, shape_idx):
+	
+
+	if !_global_datas.Player_lock_click:
+		if !pick_once:
+			return
+		if Input.is_action_just_pressed(\"Click\"):
+			pick_once = false
+			_global_datas._find_coins.emit()
+			coins_sub_element.queue_free()		
+				
+func _on_area_3d_mouse_entered():
+	var value = 2 as int 
+	Input.set_default_cursor_shape(value)
+
+
+func _on_area_3d_mouse_exited():
+	var value = 0 as int
+	Input.set_default_cursor_shape(value)
+"
+
+[sub_resource type="SphereMesh" id="SphereMesh_1i8xr"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ywyw3"]
+radius = 0.249969
+
+[node name="Coins_sub_element" type="Node3D"]
+
+[node name="Pick_me" type="Node" parent="."]
+script = SubResource("GDScript_0o12n")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.325301, 0, 0, 0, 0.325301, 0, 0, 0, 0.325301, 0, 0, 0)
+layers = 4
+mesh = SubResource("SphereMesh_1i8xr")
+surface_material_override/0 = ExtResource("1_qj4jc")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("SphereShape3D_ywyw3")
+
+[connection signal="input_event" from="Area3D" to="Pick_me" method="_on_area_3d_input_event"]
+[connection signal="mouse_entered" from="Area3D" to="Pick_me" method="_on_area_3d_mouse_entered"]
+[connection signal="mouse_exited" from="Area3D" to="Pick_me" method="_on_area_3d_mouse_exited"]

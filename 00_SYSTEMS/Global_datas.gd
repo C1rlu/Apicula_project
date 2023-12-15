@@ -56,6 +56,8 @@ func _ready():
 signal mouse_raycast
 signal using_board_enable
 signal using_board_disable
+signal darker_color_world
+signal normal_color_world
 var mouseRaycastPosition : Vector3
 var mouseRayCast_active : bool
 var board_camera : Camera3D

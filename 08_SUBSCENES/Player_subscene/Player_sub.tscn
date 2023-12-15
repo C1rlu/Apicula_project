@@ -21,13 +21,14 @@ func _ready():
 	
  
 func _ini():
-	$\"../OmniLight3D\".omni_range = 2.5
+	#$\"../OmniLight3D\".omni_range = 2.5
 	iniPos.emit()
 func Splash():
 	$Timer.start()
 	
 func _ini_end_subscene():
-	$\"../OmniLight3D\".omni_range = 2.5
+	pass
+	#$\"../OmniLight3D\".omni_range = 2.5
 	
 func _on_timer_timeout():
 	_global_datas._end_ini_subscene.emit()
@@ -79,19 +80,23 @@ script/source = "extends Node
 @onready var omni_light_3d = $\"../OmniLight3D\"
 @onready var timer = $Timer
 
+@onready var omny_range : float 
 func _ready():
 	_global_datas._take_photo.connect(_take_photo)
-	
+	omny_range = omni_light_3d.omni_range
 func _take_photo():
 	timer.start()
-	omni_light_3d.omni_range = 2.5
+
 	
 	if timer.is_stopped():
 		return
 		
 
 func _process(delta):
-	var lerp_time = lerpf(2.5,3.8, timer.time_left / timer.wait_time)	
+	
+	if timer.is_stopped():
+		return
+	var lerp_time = lerpf(omny_range,3.8, timer.time_left / timer.wait_time)	
 	omni_light_3d.omni_range = lerp_time
 	
 

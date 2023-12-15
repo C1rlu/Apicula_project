@@ -16,6 +16,9 @@ func _ready():
 	_global_datas._active_sonar.connect(_Darker_mainScene)
 	_global_datas._disable_sonar.connect(_NormalColor_mainScene)
 	_global_datas._backFrom_subscene.connect(_Darker_mainScene)
+	_global_datas.darker_color_world.connect(_Darker_mainScene)
+	_global_datas.normal_color_world.connect(_NormalColor_mainScene)
+	
 	
 func _Darker_mainScene():
 	RenderingServer.global_shader_parameter_set("Dark_color", ColorRessource.Darker_Color )
@@ -26,7 +29,7 @@ func _Darker_mainScene():
 func _NormalColor_mainScene():
 	RenderingServer.global_shader_parameter_set("Dark_color", ColorRessource.MainColor)
 	RenderingServer.global_shader_parameter_set("isSubscene_value", 0.5)
-
+	
 	
 	
 func _process(_delta):
@@ -40,7 +43,7 @@ func _process(_delta):
 	var lerp_opacity = lerp(0.05,0.5,timer.time_left)
 	
 	RenderingServer.global_shader_parameter_set("isSubscene_value", lerp_opacity)
-	
+
 
 	
 	

@@ -149,12 +149,15 @@ func _process(_delta):
 	
 	var new_position = control.get_global_mouse_position() + offset
 	new_position.x = clamp(control.global_position.x,control.global_position.x,control.global_position.x)
-	new_position.y = clamp(new_position.y,1044,1785)
+	new_position.y = clamp(new_position.y,1010,1785)
 	control.global_position = new_position
+	
 
 	# Change darker color
-	var value = inverse_lerp(1044,1785,new_position.y)
+	var value = inverse_lerp(1010,1785,new_position.y)
 	var valueD = lerp(0.05,0.5,value)
+
+	
 
 	RenderingServer.global_shader_parameter_set(\"isSubscene_value\", valueD)
 		
@@ -195,25 +198,27 @@ func _unselect_element():
 	control.reparent(my_origin_parent)
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	#shadow.visible = false
+
 	
-	if control.global_position.y > 1200:
-		RenderingServer.global_shader_parameter_set(\"isSubscene_value\", 0.5)
-		control.global_position.y = 1785
-	else:
-		control.global_position.y = 1044	
-		RenderingServer.global_shader_parameter_set(\"isSubscene_value\", 0.05)
 	#IF OUT OF WINDOWS
 func _notification(what):
 	#if what == NOTIFICATION_WM_FOCUS_IN:
 	if what == NOTIFICATION_WM_MOUSE_EXIT:
-		_unselect_element()
+		click = false
+		_global_datas.Player_lock_click = false
+		_scale_change(size)
+		_global_datas.using_board_disable.emit()
+		control.reparent(my_origin_parent)
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		#shadow.visible = false
+			
 		
 func _on_area_2d_mouse_entered():
 
 	mouse_entered = true
 	var value = 2 as int 
 	Input.set_default_cursor_shape(value)
-
+	print(value)
 
 func _on_area_2d_mouse_exited():
 	mouse_entered = false
@@ -1607,13 +1612,12 @@ scale = Vector2(2, 2)
 color = Color(0.398438, 0.363281, 0.222656, 1)
 
 [node name="ColorRect4" type="ColorRect" parent="Control/Board/Board_all/Book"]
-material = SubResource("ShaderMaterial_ptao0")
-offset_left = -89.0
-offset_top = -337.0
-offset_right = 11.0
-offset_bottom = -257.0
-scale = Vector2(1.78756, 1.78756)
-color = Color(0.0585938, 0.140625, 0.144531, 1)
+visible = false
+offset_left = -652.0
+offset_top = -284.0
+offset_right = 665.0
+offset_bottom = 423.0
+color = Color(0.398438, 0.363281, 0.222656, 1)
 
 [node name="ColorRect" type="ColorRect" parent="Control/Board/Board_all/Book"]
 offset_left = -608.0

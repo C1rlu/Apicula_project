@@ -1,6 +1,6 @@
 extends Node
 
-@export var order_priority : int
+
 @export var margin : float
 @export var scale_in_hand = 1.10
 @export var scale_in_loupe = 2.0
@@ -140,6 +140,9 @@ func _on_area_2d_mouse_exited():
 	mouse_entered = false
 	var value = 0 as int 
 	Input.set_default_cursor_shape(value)
+
+
+
 
 
 

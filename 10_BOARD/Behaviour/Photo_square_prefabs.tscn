@@ -25,13 +25,13 @@ func _apply_photo_NPC():
 	_material.set_shader_parameter(\"Denoiser\" , 1.0)	
 "
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_fu3ha"]
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_l5qlk"]
 constant = 0.3
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_chif5"]
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_gv6jj"]
 constant = 0.475
 
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_hmvfx"]
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_b08nu"]
 size = Vector2(724.789, 654.559)
 expression = "const float DITHER_THRESHOLDS[16] ={
 		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
@@ -44,12 +44,12 @@ vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
 
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_5rthh"]
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_ii4gj"]
 
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_3snra"]
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_5etsi"]
 input_name = "color"
 
-[sub_resource type="VisualShader" id="VisualShader_vjfa4"]
+[sub_resource type="VisualShader" id="VisualShader_4lwo1"]
 code = "shader_type canvas_item;
 render_mode blend_mix;
 
@@ -99,11 +99,11 @@ void fragment() {
 graph_offset = Vector2(-555.827, 27.7819)
 mode = 1
 flags/light_only = false
-nodes/fragment/2/node = SubResource("VisualShaderNodeFloatConstant_fu3ha")
+nodes/fragment/2/node = SubResource("VisualShaderNodeFloatConstant_l5qlk")
 nodes/fragment/2/position = Vector2(-1080, 460)
-nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_chif5")
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_gv6jj")
 nodes/fragment/3/position = Vector2(-1000, 340)
-nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_hmvfx")
+nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_b08nu")
 nodes/fragment/4/position = Vector2(-660, 320)
 nodes/fragment/4/size = Vector2(724.789, 654.559)
 nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
@@ -118,14 +118,14 @@ nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
 vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/5/node = SubResource("VisualShaderNodeStep_5rthh")
+nodes/fragment/5/node = SubResource("VisualShaderNodeStep_ii4gj")
 nodes/fragment/5/position = Vector2(80, 140)
-nodes/fragment/6/node = SubResource("VisualShaderNodeInput_3snra")
+nodes/fragment/6/node = SubResource("VisualShaderNodeInput_5etsi")
 nodes/fragment/6/position = Vector2(-420, 160)
 nodes/fragment/connections = PackedInt32Array(2, 0, 4, 1, 3, 0, 4, 0, 6, 0, 5, 0, 4, 0, 5, 1, 5, 0, 0, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0na45"]
-shader = SubResource("VisualShader_vjfa4")
+shader = SubResource("VisualShader_4lwo1")
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_jbtm1"]
 constant = 0.16
@@ -578,7 +578,7 @@ func _move_behind():
 size = Vector2(82, 81.7143)
 
 [node name="Photo_Square_prefabs" type="Node2D"]
-scale = Vector2(4, 4)
+scale = Vector2(3, 3)
 
 [node name="Change_photo" type="Node" parent="."]
 script = SubResource("GDScript_6ohgl")
