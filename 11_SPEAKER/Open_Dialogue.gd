@@ -32,4 +32,4 @@ func close_dialogue():
 
 
 func _on_leave_button_pressed():
-	close_dialogue()
+	_global_datas._close_dialogue.emit()
