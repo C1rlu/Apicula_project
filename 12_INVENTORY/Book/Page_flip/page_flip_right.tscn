@@ -1,0 +1,67 @@
+[gd_scene load_steps=6 format=3 uid="uid://cgb4c1n0bj2at"]
+
+[ext_resource type="PackedScene" uid="uid://d1qrohq4a6bus" path="res://12_INVENTORY/Book/Page_flip/Page_flip_right.glb" id="1_75j24"]
+
+[sub_resource type="GDScript" id="GDScript_hjljc"]
+script/source = "extends Node
+
+@onready var animation_player = $\"../AnimationPlayer\"
+@onready var page = $\"../page\"
+
+func _turn_page():
+	page.visible = true
+	animation_player.play(\"Key_001Action\")	
+
+
+func _on_animation_player_animation_finished(anim_name):
+	page.visible = false
+"
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_weeqf"]
+parameter_name = "ColorParameter"
+
+[sub_resource type="VisualShader" id="VisualShader_03hmo"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded, shadows_disabled;
+
+uniform vec4 ColorParameter : source_color;
+
+
+
+void fragment() {
+// ColorParameter:2
+	vec4 n_out2p0 = ColorParameter;
+
+
+// Output:0
+	ALBEDO = vec3(n_out2p0.xyz);
+
+
+}
+"
+graph_offset = Vector2(-347.091, 0.363632)
+flags/unshaded = true
+flags/shadows_disabled = true
+nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_weeqf")
+nodes/fragment/2/position = Vector2(-20, 140)
+nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4uk4y"]
+render_priority = 0
+shader = SubResource("VisualShader_03hmo")
+shader_parameter/ColorParameter = Color(0.341176, 0.313726, 0.266667, 1)
+
+[node name="Page_flip_right" instance=ExtResource("1_75j24")]
+
+[node name="Anim" type="Node" parent="." index="0"]
+script = SubResource("GDScript_hjljc")
+
+[node name="page" parent="." index="1"]
+layers = 2
+cast_shadow = 0
+surface_material_override/0 = SubResource("ShaderMaterial_4uk4y")
+
+[node name="AnimationPlayer" parent="." index="2"]
+speed_scale = 2.0
+
+[connection signal="animation_finished" from="AnimationPlayer" to="Anim" method="_on_animation_player_animation_finished"]
