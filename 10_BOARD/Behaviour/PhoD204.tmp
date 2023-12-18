@@ -536,36 +536,19 @@ shader = SubResource("VisualShader_n63tb")
 shader_parameter/Denoiser = 1.45
 shader_parameter/Photo = ExtResource("4_a771i")
 
-[sub_resource type="GDScript" id="GDScript_0a7gw"]
+[sub_resource type="GDScript" id="GDScript_36rk5"]
 script/source = "extends Node2D
 
 
 @onready var pin : Array = get_children()
 
 
-var random_pin : int
-var lock_random = false
-
-func _ready():
-	_disable_all_pin()	
-	
 func _random_pin():
 	
-	# hide all first
-	_disable_all_pin()
 	
-	if !lock_random : 
-		random_pin = randi_range(0, pin.size()-1)
-		lock_random = true
-		
-	# show only random number index
-	pin[random_pin].visible = true
-		
-		
-func _disable_all_pin():
-
-	for element in pin:
-		element.visible = false		
+	var randomIn = randi_range(1, pin.size())
+	print(randomIn)
+	#for element in pin:
 "
 
 [sub_resource type="GDScript" id="GDScript_7y6yw"]
@@ -716,7 +699,7 @@ color = Color(0.45098, 0.396078, 0.278431, 1)
 
 [node name="Pin_book" type="Node2D" parent="."]
 position = Vector2(33.6667, -39.3333)
-script = SubResource("GDScript_0a7gw")
+script = SubResource("GDScript_36rk5")
 
 [node name="ColorRect3" type="ColorRect" parent="Pin_book"]
 offset_left = -70.3334
@@ -727,19 +710,19 @@ rotation = -0.453786
 color = Color(0.560784, 0.545098, 0.462745, 1)
 
 [node name="ColorRect4" type="ColorRect" parent="Pin_book"]
-offset_left = -17.6667
-offset_top = -7.33337
-offset_right = -10.6667
-offset_bottom = 3.66663
-rotation = 0.310835
+offset_left = -12.6667
+offset_top = 75.6666
+offset_right = -5.6667
+offset_bottom = 86.6666
+rotation = -0.453786
 color = Color(0.560784, 0.545098, 0.462745, 1)
 
 [node name="ColorRect6" type="ColorRect" parent="Pin_book"]
-offset_left = -61.3334
-offset_top = -4.00003
-offset_right = -54.3334
-offset_bottom = 6.99997
-rotation = -0.439679
+offset_left = -61.0
+offset_top = 74.0
+offset_right = -54.0
+offset_bottom = 85.0
+rotation = 0.541817
 color = Color(0.560784, 0.545098, 0.462745, 1)
 
 [node name="ColorRect5" type="ColorRect" parent="Pin_book"]
@@ -748,30 +731,6 @@ offset_top = -6.66669
 offset_right = 5.3333
 offset_bottom = 4.33331
 rotation = 0.372407
-color = Color(0.560784, 0.545098, 0.462745, 1)
-
-[node name="ColorRect7" type="ColorRect" parent="Pin_book"]
-offset_left = -24.0
-offset_top = -4.66669
-offset_right = -17.0
-offset_bottom = 6.33331
-rotation = 0.128587
-color = Color(0.560784, 0.545098, 0.462745, 1)
-
-[node name="ColorRect8" type="ColorRect" parent="Pin_book"]
-offset_left = -54.0
-offset_top = -6.66669
-offset_right = -47.0
-offset_bottom = 4.33331
-rotation = 0.128587
-color = Color(0.560784, 0.545098, 0.462745, 1)
-
-[node name="ColorRect9" type="ColorRect" parent="Pin_book"]
-offset_left = -15.6667
-offset_top = -5.66669
-offset_right = -8.6667
-offset_bottom = 5.33331
-rotation = -0.285518
 color = Color(0.560784, 0.545098, 0.462745, 1)
 
 [node name="Area2D" type="Area2D" parent="."]

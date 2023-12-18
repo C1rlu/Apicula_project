@@ -5,17 +5,14 @@ extends Node
 @export var scale_in_hand = 1.10
 @export var scale_in_loupe = 2.0
 @onready var control = $".."
-
 @export var go_bottom : bool
 @onready var select_parent = $"../../../Select_parent"
-
-
 @onready var area_2d = $"../Area2D"
-#@onready var shadow = $"../shadow"
 
-
+var Pin_book : Node2D
 
 var mouse_entered = false
+var in_book_zone = false
 var click = false
 var offset
 
@@ -29,6 +26,7 @@ func _ready():
 	size = control.scale.x
 	my_origin_parent = control.get_parent()
 	
+	Pin_book = get_node_or_null("../Pin_book")
 func _process(_delta):
 	
 	if !click:
@@ -50,9 +48,9 @@ func _input(event):
 		if Input.is_action_just_pressed("Click") && mouse_entered:
 			click = true
 			_global_datas.Player_lock_click = true
+			control.reparent(my_origin_parent)
 			_scale_change(size * scale_in_hand)
 			offset = control.transform.origin - control.get_global_mouse_position()
-			#shadow.visible = true
 			_global_datas.OnDrag_start_position = offset
 			
 			move_behind()
@@ -77,44 +75,48 @@ func _input(event):
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		
 		#TO DROP
-		if event is InputEventMouseButton:
+		if event is InputEventMouseButton :
 			if event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
-				_unselect_element()
-	
+				_unselect_element(in_book_zone,true)
+				
 				
 func _scale_change(value):
 	
 	control.set_scale(Vector2(value,value))
 
 
-func _unselect_element():
-	
+func _unselect_element(condition : bool, move_behind_c : bool):
 	click = false
 	_global_datas.Player_lock_click = false
 	_scale_change(size)
 	_global_datas.using_board_disable.emit()
-	control.reparent(my_origin_parent)
+	
+	if !condition:
+		control.reparent(my_origin_parent)
+		if Pin_book != null :Pin_book.visible = false		
+	else:
+		var pages = _global_datas.Book_pages[_global_datas.Book_page_index]
+		control.reparent(pages)		
+		if Pin_book != null :Pin_book.visible = true
+		Pin_book._random_pin()
+		
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	#shadow.visible = false
+
+	if !move_behind_c:
+		return
 	pos_anim.emit()
 	move_behind()
 	
-	
+		
 func _notification(what):
 	#if what == NOTIFICATION_WM_FOCUS_IN:
-	if what == NOTIFICATION_WM_MOUSE_EXIT:
-		click = false
-		_global_datas.Player_lock_click = false
-		_scale_change(size)
-		_global_datas.using_board_disable.emit()
-		control.reparent(my_origin_parent)
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-		#shadow.visible = false
-			
-		
-			
+	if click:
+		if what == NOTIFICATION_WM_MOUSE_EXIT:
+			_unselect_element(in_book_zone,false)
+	
 func move_behind():
 	
+
 	var behind = area_2d.get_overlapping_areas()
 	
 	if behind == null:
@@ -133,16 +135,18 @@ func move_behind():
 func _on_area_2d_mouse_entered():
 
 	mouse_entered = true
-	var value = 2 as int 
-	Input.set_default_cursor_shape(value)
+	
+	_global_datas.Cursor_mode.cursor_in()
+	
 
 func _on_area_2d_mouse_exited():
 	mouse_entered = false
-	var value = 0 as int 
-	Input.set_default_cursor_shape(value)
 
+	_global_datas.Cursor_mode.cursor_out()
 
-
+func _in_book_zone(condition : bool):
+	in_book_zone = condition
+	if Pin_book != null :Pin_book.visible = condition
 
 
 

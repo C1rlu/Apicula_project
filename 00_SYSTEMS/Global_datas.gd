@@ -68,6 +68,13 @@ var OnDrag_start_position : Vector2
 var Player_is_pod_zone : bool
 var Oxygene_amout : float
 
+var Cursor_mode : Node
+
+# BOOK PAGE
+var Book : Node2D
+var Book_page_index : int
+var Book_pages : Array
+
 #-----------------------------
 
 
@@ -76,7 +83,4 @@ var Npc_Dialogue : Npc_datas
 var Player_Rg : RigidBody3D
 
 signal _call_back
-
-
-
 signal  _update_npc_ini
