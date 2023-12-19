@@ -74,6 +74,8 @@ var Cursor_mode : Node
 var Book : Node2D
 var Book_page_index : int
 var Book_pages : Array
+var Book_group : Node2D
+signal lock_page
 
 #-----------------------------
 

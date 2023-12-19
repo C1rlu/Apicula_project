@@ -1,4 +1,4 @@
-[gd_scene load_steps=74 format=3 uid="uid://bba4phbllf3f8"]
+[gd_scene load_steps=76 format=3 uid="uid://bba4phbllf3f8"]
 
 [ext_resource type="Script" path="res://10_BOARD/Behaviour/Movable_paper.tres.gd" id="1_2ud6v"]
 [ext_resource type="Script" path="res://10_BOARD/Behaviour/Apply_pos_anim.gd" id="2_ry4qx"]
@@ -837,6 +837,38 @@ fill_to = Vector2(0.782051, 0.252137)
 shader = SubResource("VisualShader_nyabu")
 shader_parameter/Gradiant = SubResource("GradientTexture2D_4u4rv")
 
+[sub_resource type="GDScript" id="GDScript_0qwax"]
+script/source = "extends Node2D
+
+
+@onready var pin : Array = get_children()
+
+
+var random_pin : int
+var lock_random = false
+
+func _ready():
+	_disable_all_pin()	
+	
+func _random_pin():
+	
+	# hide all first
+	_disable_all_pin()
+	
+	if !lock_random : 
+		random_pin = randi_range(0, pin.size()-1)
+		lock_random = true
+		
+	# show only random number index
+	pin[random_pin].visible = true
+		
+		
+func _disable_all_pin():
+
+	for element in pin:
+		element.visible = false		
+"
+
 [sub_resource type="GDScript" id="GDScript_fyyax"]
 script/source = "extends Node
 
@@ -845,6 +877,18 @@ signal  move_behind
 
 func _move_behind():
 	move_behind.emit()
+"
+
+[sub_resource type="GDScript" id="GDScript_kitnq"]
+script/source = "extends Node
+
+@onready var take_object = $\"../../Take_object\"
+
+func _parent_to_book(value : bool):
+
+	take_object._in_book_zone(value)
+	
+
 "
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ox1q2"]
@@ -923,10 +967,49 @@ pivot_offset = Vector2(50, 50)
 mouse_filter = 2
 color = Color(0.372549, 0.341176, 0.207843, 1)
 
+[node name="Pin_book" type="Node2D" parent="."]
+position = Vector2(33.6667, -39.3333)
+script = SubResource("GDScript_0qwax")
+
+[node name="ColorRect3" type="ColorRect" parent="Pin_book"]
+offset_left = -54.6667
+offset_top = -38.6667
+offset_right = -33.6667
+offset_bottom = -4.66669
+rotation = -0.19199
+color = Color(0.560784, 0.545098, 0.462745, 1)
+
+[node name="ColorRect4" type="ColorRect" parent="Pin_book"]
+offset_left = -19.6667
+offset_top = -36.6667
+offset_right = 1.33331
+offset_bottom = -2.66669
+rotation = 0.255582
+color = Color(0.560784, 0.545098, 0.462745, 1)
+
+[node name="ColorRect5" type="ColorRect" parent="Pin_book"]
+offset_left = -37.6667
+offset_top = -42.6667
+offset_right = -16.6667
+offset_bottom = -8.66669
+rotation = 0.122938
+color = Color(0.560784, 0.545098, 0.462745, 1)
+
+[node name="ColorRect6" type="ColorRect" parent="Pin_book"]
+offset_left = -37.6667
+offset_top = -45.6667
+offset_right = -16.6667
+offset_bottom = -11.6667
+rotation = 0.0836047
+color = Color(0.560784, 0.545098, 0.462745, 1)
+
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="Apply_pos_behind" type="Node" parent="Area2D"]
 script = SubResource("GDScript_fyyax")
+
+[node name="parent_to_book" type="Node" parent="Area2D"]
+script = SubResource("GDScript_kitnq")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 visible = false

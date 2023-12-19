@@ -11,10 +11,13 @@ script/source = "extends Node
 func _turn_page():
 	page.visible = true
 	animation_player.play(\"Key_001Action\")	
-
+	_global_datas.Book_group.visible = false
 
 func _on_animation_player_animation_finished(anim_name):
 	page.visible = false
+	_global_datas.Book_group.visible = true	
+
+
 "
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_weeqf"]
@@ -57,6 +60,7 @@ shader_parameter/ColorParameter = Color(0.341176, 0.313726, 0.266667, 1)
 script = SubResource("GDScript_hjljc")
 
 [node name="page" parent="." index="1"]
+visible = false
 layers = 2
 cast_shadow = 0
 surface_material_override/0 = SubResource("ShaderMaterial_4uk4y")

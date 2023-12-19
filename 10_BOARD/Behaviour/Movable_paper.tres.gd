@@ -106,7 +106,7 @@ func _unselect_element(condition : bool, move_behind_c : bool):
 		return
 	pos_anim.emit()
 	move_behind()
-	
+	_global_datas.lock_page.emit()
 		
 func _notification(what):
 	#if what == NOTIFICATION_WM_FOCUS_IN:

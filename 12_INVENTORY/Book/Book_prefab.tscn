@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://dyfif7fbf51gx"]
+[gd_scene load_steps=28 format=3 uid="uid://dyfif7fbf51gx"]
 
 [ext_resource type="PackedScene" uid="uid://cgb4c1n0bj2at" path="res://12_INVENTORY/Book/Page_flip/page_flip_right.tscn" id="1_1pirv"]
 
@@ -155,11 +155,14 @@ script/source = "extends Node
 @onready var page_flip_right = $\"../SubViewport/Page_flip_right\"
 @onready var page_flip_left = $\"../SubViewport/Page_flip_left\"
 
+
+
 func _ready():
 	_global_datas.Book_page_index = 0
 	_global_datas.Book_pages = pages_all.get_children()
 	_open_book_by_index()
-
+	_global_datas.Book_group = pages_all
+	
 func _open_book_by_index():
 	_close_all_page()
 		
@@ -176,13 +179,15 @@ func _next_page():
 	if _global_datas.Book_page_index < _global_datas.Book_pages.size()-1:
 		_global_datas.Book_page_index += 1	
 		_open_book_by_index()	
-		page_flip_left.get_node(\"Anim\")._turn_page()
+		page_flip_right.get_node(\"Anim\")._turn_page()
+		
 func _previous_page():
 	
 	if _global_datas.Book_page_index > 0:
 		_global_datas.Book_page_index -= 1	
-		_open_book_by_index()	
-		page_flip_right.get_node(\"Anim\")._turn_page()
+		_open_book_by_index()
+		page_flip_left.get_node(\"Anim\")._turn_page()	
+		
 		
 func _on_button_next_pressed():
 	_next_page()
@@ -190,6 +195,41 @@ func _on_button_next_pressed():
 
 func _on_button_previous_pressed():
 	_previous_page()
+
+
+func _on_button_next_2_pressed():
+	if _global_datas.Player_lock_click:
+		return
+	_next_page()
+
+
+func _on_button_previous_page_pressed():
+	if _global_datas.Player_lock_click:
+		return
+	_previous_page()
+"
+
+[sub_resource type="GDScript" id="GDScript_3lo8f"]
+script/source = "extends Node
+
+@onready var timer = $Timer
+@onready var button_next_page = $\"../Button_Next_page\"
+@onready var button_previous_page = $\"../Button_Previous_page\"
+
+
+func _ready():
+	_global_datas.lock_page.connect(_start_lock_page)
+	
+func _start_lock_page():
+	timer.start()	
+	button_next_page.disabled = true
+	button_previous_page.disabled = true
+	
+	
+func _on_timer_timeout():
+
+	button_next_page.disabled = false
+	button_previous_page.disabled = false
 "
 
 [sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_uw2oe"]
@@ -413,142 +453,6 @@ width = 1024
 shader = SubResource("VisualShader_gjxlm")
 shader_parameter/Gradient = SubResource("GradientTexture1D_qa7kp")
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_k3lyo"]
-constant = 0.5
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_btkmr"]
-constant = 1.697
-
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_2dmac"]
-size = Vector2(724.789, 654.559)
-expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_eynuk"]
-input_name = "color"
-
-[sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_76nau"]
-parameter_name = "Gradient"
-
-[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_ya1dn"]
-source = 5
-
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_alce4"]
-
-[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_hr3dt"]
-operator = 2
-
-[sub_resource type="VisualShader" id="VisualShader_phimc"]
-code = "shader_type canvas_item;
-render_mode blend_mix;
-
-uniform sampler2D Gradient;
-
-
-
-void fragment() {
-// Input:5
-	vec4 n_out5p0 = COLOR;
-
-
-	vec4 n_out7p0;
-// Texture2D:7
-	n_out7p0 = texture(Gradient, UV);
-
-
-// FloatConstant:3
-	float n_out3p0 = 1.697000;
-
-
-// FloatConstant:2
-	float n_out2p0 = 0.500000;
-
-
-	float n_out4p0;
-// Expression:4
-	n_out4p0 = 0.0;
-	{
-		const float DITHER_THRESHOLDS[16] ={
-				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-			};
-			
-		vec2 uv = FRAGCOORD.xy * n_out2p0;
-		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-		n_out4p0 = n_out3p0 - DITHER_THRESHOLDS[index];
-	}
-
-
-// Step:8
-	float n_out8p0 = step(n_out7p0.x, n_out4p0);
-
-
-// VectorOp:9
-	vec3 n_out9p0 = vec3(n_out5p0.xyz) * vec3(n_out8p0);
-
-
-// Output:0
-	COLOR.rgb = n_out9p0;
-
-
-}
-"
-graph_offset = Vector2(-377.658, -180.719)
-mode = 1
-flags/light_only = false
-nodes/fragment/2/node = SubResource("VisualShaderNodeFloatConstant_k3lyo")
-nodes/fragment/2/position = Vector2(-1240, 420)
-nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_btkmr")
-nodes/fragment/3/position = Vector2(-1240, 280)
-nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_2dmac")
-nodes/fragment/4/position = Vector2(-960, 280)
-nodes/fragment/4/size = Vector2(724.789, 654.559)
-nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
-nodes/fragment/4/output_ports = "0,0,Dither_Node;"
-nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/5/node = SubResource("VisualShaderNodeInput_eynuk")
-nodes/fragment/5/position = Vector2(-480, -100)
-nodes/fragment/6/node = SubResource("VisualShaderNodeTexture2DParameter_76nau")
-nodes/fragment/6/position = Vector2(-1100, -100)
-nodes/fragment/7/node = SubResource("VisualShaderNodeTexture_ya1dn")
-nodes/fragment/7/position = Vector2(-600, 60)
-nodes/fragment/8/node = SubResource("VisualShaderNodeStep_alce4")
-nodes/fragment/8/position = Vector2(-115.218, 134.555)
-nodes/fragment/9/node = SubResource("VisualShaderNodeVectorOp_hr3dt")
-nodes/fragment/9/position = Vector2(140, -20)
-nodes/fragment/connections = PackedInt32Array(2, 0, 4, 1, 3, 0, 4, 0, 6, 0, 7, 2, 7, 0, 8, 0, 4, 0, 8, 1, 5, 0, 9, 0, 8, 0, 9, 1, 9, 0, 0, 0)
-
-[sub_resource type="Gradient" id="Gradient_p5edb"]
-offsets = PackedFloat32Array(0, 0.245675, 1)
-colors = PackedColorArray(0.830335, 0.830335, 0.830335, 1, 0, 0, 0, 1, 1, 1, 1, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_ruomu"]
-gradient = SubResource("Gradient_p5edb")
-width = 1024
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_g6ynw"]
-shader = SubResource("VisualShader_phimc")
-shader_parameter/Gradient = SubResource("GradientTexture1D_ruomu")
-
 [sub_resource type="ViewportTexture" id="ViewportTexture_sbgpn"]
 viewport_path = NodePath("SubViewport")
 
@@ -570,6 +474,12 @@ script = SubResource("GDScript_kbyc2")
 
 [node name="Pages_Behaviour" type="Node" parent="."]
 script = SubResource("GDScript_o0vua")
+
+[node name="WaitforTurn_page" type="Node" parent="."]
+script = SubResource("GDScript_3lo8f")
+
+[node name="Timer" type="Timer" parent="WaitforTurn_page"]
+wait_time = 0.1
 
 [node name="ColorRect3" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_ptao0")
@@ -631,26 +541,6 @@ offset_right = 25.0
 offset_bottom = 38.0
 theme_override_font_sizes/font_size = 25
 text = "I"
-
-[node name="Page_Right_turn" type="ColorRect" parent="."]
-visible = false
-material = SubResource("ShaderMaterial_g6ynw")
-offset_left = 3.0
-offset_top = -236.0
-offset_right = 612.0
-offset_bottom = 383.0
-mouse_filter = 2
-color = Color(0.341176, 0.313726, 0.266667, 1)
-
-[node name="PAGE_RENDER" type="TextureRect" parent="."]
-offset_left = -689.0
-offset_top = -278.0
-offset_right = 1231.0
-offset_bottom = 802.0
-scale = Vector2(0.73746, 0.664798)
-mouse_filter = 2
-texture = SubResource("ViewportTexture_sbgpn")
-expand_mode = 1
 
 [node name="Pages_all" type="Node2D" parent="."]
 
@@ -732,6 +622,16 @@ text = "6
 
 "
 
+[node name="PAGE_RENDER" type="TextureRect" parent="."]
+offset_left = -689.0
+offset_top = -278.0
+offset_right = 1231.0
+offset_bottom = 802.0
+scale = Vector2(0.73746, 0.664798)
+mouse_filter = 2
+texture = SubResource("ViewportTexture_sbgpn")
+expand_mode = 1
+
 [node name="Button_Next" type="Button" parent="."]
 offset_left = 560.0
 offset_top = -275.0
@@ -746,6 +646,17 @@ offset_top = -275.0
 offset_right = 545.0
 offset_bottom = -244.0
 text = "PREVIOUS"
+
+[node name="Button_Next_page" type="TextureButton" parent="."]
+offset_top = -238.0
+offset_right = 613.0
+offset_bottom = 382.0
+
+[node name="Button_Previous_page" type="TextureButton" parent="."]
+offset_left = -595.0
+offset_top = -238.0
+offset_right = -3.0
+offset_bottom = 382.0
 
 [node name="Area2D" type="Area2D" parent="."]
 
@@ -776,8 +687,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0291206)
 [node name="Page_flip_left" parent="SubViewport" instance=ExtResource("1_1pirv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0)
 
+[connection signal="timeout" from="WaitforTurn_page/Timer" to="WaitforTurn_page" method="_on_timer_timeout"]
 [connection signal="pressed" from="Button_Next" to="Pages_Behaviour" method="_on_button_next_pressed"]
 [connection signal="pressed" from="Button_Previous" to="Pages_Behaviour" method="_on_button_previous_pressed"]
+[connection signal="pressed" from="Button_Next_page" to="Pages_Behaviour" method="_on_button_next_2_pressed"]
+[connection signal="pressed" from="Button_Previous_page" to="Pages_Behaviour" method="_on_button_previous_page_pressed"]
 [connection signal="mouse_entered" from="Area2D" to="Slide" method="_on_area_2d_mouse_entered"]
 [connection signal="mouse_exited" from="Area2D" to="Slide" method="_on_area_2d_mouse_exited"]
 [connection signal="area_shape_entered" from="Inside_book_area" to="Parent_to_book" method="_on_inside_book_area_area_shape_entered"]
