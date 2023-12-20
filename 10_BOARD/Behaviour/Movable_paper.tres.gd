@@ -37,7 +37,7 @@ func _process(_delta):
 	new_position.y = clamp(new_position.y,margin,1080-margin)
 	control.global_position = new_position
 	
-
+	
 		
 func _input(event):
 	
@@ -95,8 +95,21 @@ func _unselect_element(condition : bool, move_behind_c : bool):
 		control.reparent(my_origin_parent)
 		if Pin_book != null :Pin_book.visible = false		
 	else:
+		
 		var pages = _global_datas.Book_pages[_global_datas.Book_page_index]
-		control.reparent(pages)		
+		
+		var mouse_position = control.get_global_mouse_position() + offset
+		if mouse_position.x > 960.0:
+			var side_right : Node2D = pages.get_node("right")
+			control.reparent(side_right)	
+			print(side_right)
+		else:
+			var side_left : Node2D = pages.get_node("left")
+			control.reparent(side_left)		
+			print(side_left)
+		
+		
+				
 		if Pin_book != null :Pin_book.visible = true
 		Pin_book._random_pin()
 		

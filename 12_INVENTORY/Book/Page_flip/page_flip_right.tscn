@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://cgb4c1n0bj2at"]
+[gd_scene load_steps=17 format=3 uid="uid://cgb4c1n0bj2at"]
 
 [ext_resource type="PackedScene" uid="uid://d1qrohq4a6bus" path="res://12_INVENTORY/Book/Page_flip/Page_flip_right.glb" id="1_75j24"]
 
@@ -11,23 +11,62 @@ script/source = "extends Node
 func _turn_page():
 	page.visible = true
 	animation_player.play(\"Key_001Action\")	
-	_global_datas.Book_group.visible = false
+	#_global_datas.Book_group.visible = false
 
 func _on_animation_player_animation_finished(anim_name):
 	page.visible = false
-	_global_datas.Book_group.visible = true	
-
+	#_global_datas.Book_group.visible = true	
+	_global_datas.flip_left_end.emit()
 
 "
 
+[sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_gar6r"]
+parameter_name = "Gradient"
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_65fpl"]
+input_name = "uv"
+
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_weeqf"]
 parameter_name = "ColorParameter"
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_b6xhj"]
+constant = 0.4
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_uj4bl"]
+constant = 0.389
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_tanwi"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_ofuf3"]
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_hnmu3"]
+parameter_name = "Darker"
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_0vocs"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
+op_type = 3
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_japam"]
+source = 5
 
 [sub_resource type="VisualShader" id="VisualShader_03hmo"]
 code = "shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded, shadows_disabled;
 
 uniform vec4 ColorParameter : source_color;
+uniform vec4 Darker : source_color;
+uniform sampler2D Gradient;
 
 
 
@@ -36,23 +75,112 @@ void fragment() {
 	vec4 n_out2p0 = ColorParameter;
 
 
+// ColorParameter:7
+	vec4 n_out7p0 = Darker;
+
+
+// Input:11
+	vec2 n_out11p0 = UV;
+
+
+	vec4 n_out9p0;
+// Texture2D:9
+	n_out9p0 = texture(Gradient, n_out11p0);
+
+
+// FloatConstant:4
+	float n_out4p0 = 0.389000;
+
+
+// FloatConstant:3
+	float n_out3p0 = 0.400000;
+
+
+	float n_out5p0;
+// Expression:5
+	n_out5p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out3p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out5p0 = n_out4p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Step:6
+	float n_out6p0 = step(n_out9p0.x, n_out5p0);
+
+
+// Mix:8
+	vec3 n_out8p0 = mix(vec3(n_out2p0.xyz), vec3(n_out7p0.xyz), vec3(n_out6p0));
+
+
 // Output:0
-	ALBEDO = vec3(n_out2p0.xyz);
+	ALBEDO = n_out8p0;
 
 
 }
 "
-graph_offset = Vector2(-347.091, 0.363632)
+graph_offset = Vector2(-1035.9, 85.2084)
 flags/unshaded = true
 flags/shadows_disabled = true
+nodes/fragment/0/position = Vector2(380, 240)
 nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_weeqf")
-nodes/fragment/2/position = Vector2(-20, 140)
-nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0)
+nodes/fragment/2/position = Vector2(-460, -20)
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_b6xhj")
+nodes/fragment/3/position = Vector2(-1600, 600)
+nodes/fragment/4/node = SubResource("VisualShaderNodeFloatConstant_uj4bl")
+nodes/fragment/4/position = Vector2(-1600, 420)
+nodes/fragment/5/node = SubResource("VisualShaderNodeExpression_tanwi")
+nodes/fragment/5/position = Vector2(-1200, 600)
+nodes/fragment/5/size = Vector2(724.789, 654.559)
+nodes/fragment/5/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/5/output_ports = "0,0,Dither_Node;"
+nodes/fragment/5/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/6/node = SubResource("VisualShaderNodeStep_ofuf3")
+nodes/fragment/6/position = Vector2(-120, 320)
+nodes/fragment/7/node = SubResource("VisualShaderNodeColorParameter_hnmu3")
+nodes/fragment/7/position = Vector2(-840, 140)
+nodes/fragment/8/node = SubResource("VisualShaderNodeMix_0vocs")
+nodes/fragment/8/position = Vector2(-14.5749, 83.0822)
+nodes/fragment/9/node = SubResource("VisualShaderNodeTexture_japam")
+nodes/fragment/9/position = Vector2(-1060, 300)
+nodes/fragment/10/node = SubResource("VisualShaderNodeTexture2DParameter_gar6r")
+nodes/fragment/10/position = Vector2(-1660, 80)
+nodes/fragment/11/node = SubResource("VisualShaderNodeInput_65fpl")
+nodes/fragment/11/position = Vector2(-1300, 120)
+nodes/fragment/connections = PackedInt32Array(3, 0, 5, 1, 4, 0, 5, 0, 5, 0, 6, 1, 2, 0, 8, 0, 7, 0, 8, 1, 10, 0, 9, 2, 9, 0, 6, 0, 6, 0, 8, 2, 8, 0, 0, 0, 11, 0, 9, 0)
+
+[sub_resource type="Gradient" id="Gradient_lpoqh"]
+offsets = PackedFloat32Array(0.552036, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_0y7vs"]
+gradient = SubResource("Gradient_lpoqh")
+fill_from = Vector2(0.5, 1)
+fill_to = Vector2(0.5, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4uk4y"]
 render_priority = 0
 shader = SubResource("VisualShader_03hmo")
 shader_parameter/ColorParameter = Color(0.341176, 0.313726, 0.266667, 1)
+shader_parameter/Darker = Color(0.156863, 0.141176, 0.113725, 1)
+shader_parameter/Gradient = SubResource("GradientTexture2D_0y7vs")
 
 [node name="Page_flip_right" instance=ExtResource("1_75j24")]
 

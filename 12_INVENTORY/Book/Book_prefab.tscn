@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://dyfif7fbf51gx"]
+[gd_scene load_steps=30 format=3 uid="uid://dyfif7fbf51gx"]
 
 [ext_resource type="PackedScene" uid="uid://cgb4c1n0bj2at" path="res://12_INVENTORY/Book/Page_flip/page_flip_right.tscn" id="1_1pirv"]
 
@@ -59,7 +59,7 @@ func _input(event):
 			_scale_change(size * scale_in_hand)
 			offset = control.transform.origin - control.get_global_mouse_position()
 			_global_datas.OnDrag_start_position = offset
-			pages_behaviour._open_book_by_index()			
+			pages_behaviour._show_new_pages()			
 	#TO ZOOM	
 	if click:
 		
@@ -95,7 +95,7 @@ func _unselect_element():
 		if !enable_it:
 			return  
 		RenderingServer.global_shader_parameter_set(\"isSubscene_value\", 0.5)
-		pages_behaviour._close_all_page()	
+		pages_behaviour._show_new_pages()	
 	else:
 		control.global_position.y = 1044	
 		if !enable_it:
@@ -155,58 +155,76 @@ script/source = "extends Node
 @onready var page_flip_right = $\"../SubViewport/Page_flip_right\"
 @onready var page_flip_left = $\"../SubViewport/Page_flip_left\"
 
+@onready var thickness_behaviour = $\"../Page_thickness/thickness_behaviour\"
 
 
 func _ready():
+	
+	_global_datas.flip_left_end.connect(_show_new_pages)
+
 	_global_datas.Book_page_index = 0
 	_global_datas.Book_pages = pages_all.get_children()
-	_open_book_by_index()
 	_global_datas.Book_group = pages_all
 	
+	_close_all_page()
+	_show_new_pages()
+	
+
 func _open_book_by_index():
 	_close_all_page()
 		
-	_global_datas.Book_pages[_global_datas.Book_page_index].visible = true
-		
-
+func _show_new_pages():
+	
+	_close_all_page()
+	_global_datas.Book_pages[_global_datas.Book_page_index].visible = true	
+	_show_fliping_page(\"right\",true)
+	_show_fliping_page(\"left\",true)
+	
+	
 func _close_all_page():
 
 	for pages in _global_datas.Book_pages:
 		pages.visible = false	
+		var side_l : Node2D = pages.get_node(\"left\")
+		var side_r : Node2D = pages.get_node(\"right\")
+		side_l.visible = false
+		side_r.visible = false
 		
 func _next_page():
-	
-	if _global_datas.Book_page_index < _global_datas.Book_pages.size()-1:
-		_global_datas.Book_page_index += 1	
-		_open_book_by_index()	
-		page_flip_right.get_node(\"Anim\")._turn_page()
 		
+	if _global_datas.Book_page_index < _global_datas.Book_pages.size()-1:
+		_show_fliping_page(\"right\",false)
+		_global_datas.Book_page_index += 1	
+		page_flip_right.get_node(\"Anim\")._turn_page()
+		_show_fliping_page(\"right\",true)
+		thickness_behaviour.update_page_thickness(true)
 func _previous_page():
 	
 	if _global_datas.Book_page_index > 0:
+		_show_fliping_page(\"left\",false)
 		_global_datas.Book_page_index -= 1	
-		_open_book_by_index()
 		page_flip_left.get_node(\"Anim\")._turn_page()	
-		
-		
-func _on_button_next_pressed():
-	_next_page()
+		_show_fliping_page(\"left\",true)
+		thickness_behaviour.update_page_thickness(false)
 
-
-func _on_button_previous_pressed():
-	_previous_page()
+func _show_fliping_page(value : String, show : bool):
+	var pages = _global_datas.Book_pages[_global_datas.Book_page_index]	
+	var side : Node2D = pages.get_node(value)
+	side.visible = show
+	
 
 
 func _on_button_next_2_pressed():
 	if _global_datas.Player_lock_click:
 		return
 	_next_page()
-
+	
 
 func _on_button_previous_page_pressed():
 	if _global_datas.Player_lock_click:
 		return
 	_previous_page()
+	
 "
 
 [sub_resource type="GDScript" id="GDScript_3lo8f"]
@@ -442,8 +460,8 @@ nodes/fragment/9/position = Vector2(140, -20)
 nodes/fragment/connections = PackedInt32Array(2, 0, 4, 1, 3, 0, 4, 0, 6, 0, 7, 2, 7, 0, 8, 0, 4, 0, 8, 1, 5, 0, 9, 0, 8, 0, 9, 1, 9, 0, 0, 0)
 
 [sub_resource type="Gradient" id="Gradient_bry6u"]
-offsets = PackedFloat32Array(0, 0.245675, 0.49827, 0.771626, 1)
-colors = PackedColorArray(0.830335, 0.830335, 0.830335, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1)
+offsets = PackedFloat32Array(0.245675, 0.49827, 0.771626)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_qa7kp"]
 gradient = SubResource("Gradient_bry6u")
@@ -452,6 +470,82 @@ width = 1024
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5alcy"]
 shader = SubResource("VisualShader_gjxlm")
 shader_parameter/Gradient = SubResource("GradientTexture1D_qa7kp")
+
+[sub_resource type="GDScript" id="GDScript_pixat"]
+script/source = "extends Node
+
+@onready var left = $\"../left\"
+@onready var right = $\"../right\"
+var left_thickness : Array
+var right_thickness : Array
+
+var left_thickness_index : int = 0
+var right_thickness_index : int = 6
+
+func _ready():
+	
+	left_thickness = left.get_children()
+	right_thickness = right.get_children()
+	
+	_close_all()
+
+	
+
+
+func update_right_flip():
+	print(\"right_thickness_index\",left_thickness_index)
+		
+	_show_thickness(left_thickness,left_thickness_index,true)
+	
+func update_left_flip():
+
+	print(\"left_thickness_index\",right_thickness_index)	
+	_show_thickness(right_thickness,right_thickness_index,true)
+	
+
+func _update_connect():
+	
+	if _global_datas.flip_left_end.is_connected(update_right_flip):
+		_global_datas.flip_left_end.disconnect(update_right_flip)
+	if _global_datas.flip_left_end.is_connected(update_left_flip):
+		_global_datas.flip_left_end.disconnect(update_left_flip)
+						
+func update_page_thickness(right_condition : bool):
+	
+	
+	
+	
+	if right_condition: 
+		_update_connect()
+		_show_thickness(right_thickness,right_thickness_index,false)
+		_global_datas.flip_left_end.connect(update_right_flip)
+		left_thickness_index +=1
+		right_thickness_index -=1
+			
+	else: 
+		_update_connect()
+		_show_thickness(left_thickness,left_thickness_index,false)
+		_global_datas.flip_left_end.connect(update_left_flip)
+		left_thickness_index -=1
+		right_thickness_index +=1
+		
+	
+	
+	
+func _close_all():
+	
+	for borders_left in left_thickness:
+		borders_left.visible = false	
+		
+	for borders_right in right_thickness:
+		borders_right.visible = false	
+
+func _show_thickness(list : Array, index : int, show : bool):
+	var thicknes = list[index-1]	
+	thicknes.visible = show
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jrkpn"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_sbgpn"]
 viewport_path = NodePath("SubViewport")
@@ -525,6 +619,101 @@ offset_bottom = 383.0
 mouse_filter = 2
 color = Color(0.0588235, 0.141176, 0.145098, 1)
 
+[node name="Page_thickness" type="Node2D" parent="."]
+position = Vector2(-3, -236)
+
+[node name="thickness_behaviour" type="Node" parent="Page_thickness"]
+script = SubResource("GDScript_pixat")
+
+[node name="left" type="Node2D" parent="Page_thickness"]
+
+[node name="01" type="ColorRect" parent="Page_thickness/left"]
+offset_left = -592.0
+offset_right = -590.0
+offset_bottom = 619.0
+mouse_filter = 2
+color = Color(0.0588235, 0.141176, 0.145098, 1)
+
+[node name="02" type="ColorRect" parent="Page_thickness/left"]
+offset_left = -589.0
+offset_right = -587.0
+offset_bottom = 619.0
+mouse_filter = 2
+color = Color(0.0588235, 0.141176, 0.145098, 1)
+
+[node name="03" type="ColorRect" parent="Page_thickness/left"]
+offset_left = -586.0
+offset_right = -584.0
+offset_bottom = 619.0
+mouse_filter = 2
+color = Color(0.0588235, 0.141176, 0.145098, 1)
+
+[node name="04" type="ColorRect" parent="Page_thickness/left"]
+offset_left = -583.0
+offset_right = -581.0
+offset_bottom = 619.0
+mouse_filter = 2
+color = Color(0.0588235, 0.141176, 0.145098, 1)
+
+[node name="05" type="ColorRect" parent="Page_thickness/left"]
+offset_left = -580.0
+offset_right = -578.0
+offset_bottom = 619.0
+mouse_filter = 2
+color = Color(0.0588235, 0.141176, 0.145098, 1)
+
+[node name="06" type="ColorRect" parent="Page_thickness/left"]
+offset_left = -580.0
+offset_right = -578.0
+offset_bottom = 619.0
+mouse_filter = 2
+color = Color(0.0588235, 0.141176, 0.145098, 1)
+
+[node name="right" type="Node2D" parent="Page_thickness"]
+position = Vector2(1192, 0)
+
+[node name="01" type="ColorRect" parent="Page_thickness/right"]
+offset_left = -580.0
+offset_right = -578.0
+offset_bottom = 619.0
+mouse_filter = 2
+color = Color(0.0588235, 0.141176, 0.145098, 1)
+
+[node name="02" type="ColorRect" parent="Page_thickness/right"]
+offset_left = -583.0
+offset_right = -581.0
+offset_bottom = 619.0
+mouse_filter = 2
+color = Color(0.0588235, 0.141176, 0.145098, 1)
+
+[node name="03" type="ColorRect" parent="Page_thickness/right"]
+offset_left = -586.0
+offset_right = -584.0
+offset_bottom = 619.0
+mouse_filter = 2
+color = Color(0.0588235, 0.141176, 0.145098, 1)
+
+[node name="04" type="ColorRect" parent="Page_thickness/right"]
+offset_left = -589.0
+offset_right = -587.0
+offset_bottom = 619.0
+mouse_filter = 2
+color = Color(0.0588235, 0.141176, 0.145098, 1)
+
+[node name="05" type="ColorRect" parent="Page_thickness/right"]
+offset_left = -592.0
+offset_right = -590.0
+offset_bottom = 619.0
+mouse_filter = 2
+color = Color(0.0588235, 0.141176, 0.145098, 1)
+
+[node name="06" type="ColorRect" parent="Page_thickness/right"]
+offset_left = -592.0
+offset_right = -590.0
+offset_bottom = 619.0
+mouse_filter = 2
+color = Color(0.0588235, 0.141176, 0.145098, 1)
+
 [node name="ColorRect6" type="ColorRect" parent="."]
 visible = false
 offset_left = -571.0
@@ -547,105 +736,186 @@ text = "I"
 [node name="Page_01" type="Node2D" parent="Pages_all"]
 position = Vector2(0, 421)
 
-[node name="Label" type="Label" parent="Pages_all/Page_01"]
+[node name="left" type="Node2D" parent="Pages_all/Page_01"]
+
+[node name="Label_left" type="Label" parent="Pages_all/Page_01/left"]
+offset_left = -321.0
+offset_top = -99.0
+offset_right = -264.0
+offset_bottom = 41.0
+theme_override_colors/font_color = Color(0.423529, 0.392157, 0.337255, 1)
+theme_override_font_sizes/font_size = 50
+text = "1"
+
+[node name="right" type="Node2D" parent="Pages_all/Page_01"]
+
+[node name="Label_right" type="Label" parent="Pages_all/Page_01/right"]
 offset_left = 241.0
-offset_top = -416.0
+offset_top = -99.0
 offset_right = 298.0
-offset_bottom = -276.0
-theme_override_font_sizes/font_size = 100
+offset_bottom = 41.0
+theme_override_colors/font_color = Color(0.423529, 0.392157, 0.337255, 1)
+theme_override_font_sizes/font_size = 50
 text = "1"
 
 [node name="Page_02" type="Node2D" parent="Pages_all"]
 visible = false
+material = SubResource("ShaderMaterial_jrkpn")
 position = Vector2(0, 421)
 
-[node name="Label2" type="Label" parent="Pages_all/Page_02"]
+[node name="left" type="Node2D" parent="Pages_all/Page_02"]
+
+[node name="Label_left" type="Label" parent="Pages_all/Page_02/left"]
+offset_left = -321.0
+offset_top = -99.0
+offset_right = -264.0
+offset_bottom = 181.0
+theme_override_colors/font_color = Color(0.423529, 0.392157, 0.337255, 1)
+theme_override_font_sizes/font_size = 50
+text = "2
+
+"
+
+[node name="right" type="Node2D" parent="Pages_all/Page_02"]
+position = Vector2(0, 266)
+
+[node name="Label_right" type="Label" parent="Pages_all/Page_02/right"]
 offset_left = 241.0
-offset_top = -416.0
+offset_top = -365.0
 offset_right = 298.0
-offset_bottom = -276.0
-theme_override_font_sizes/font_size = 100
-text = "2"
+offset_bottom = -221.0
+theme_override_colors/font_color = Color(0.423529, 0.392157, 0.337255, 1)
+theme_override_font_sizes/font_size = 50
+text = "2
+
+"
 
 [node name="Page_03" type="Node2D" parent="Pages_all"]
 visible = false
+material = SubResource("ShaderMaterial_jrkpn")
 position = Vector2(0, 421)
 
-[node name="Label3" type="Label" parent="Pages_all/Page_03"]
+[node name="left" type="Node2D" parent="Pages_all/Page_03"]
+
+[node name="Label_left" type="Label" parent="Pages_all/Page_03/left"]
+offset_left = -321.0
+offset_top = -101.0
+offset_right = -264.0
+offset_bottom = 39.0
+theme_override_colors/font_color = Color(0.423529, 0.392157, 0.337255, 1)
+theme_override_font_sizes/font_size = 50
+text = "3
+"
+
+[node name="right" type="Node2D" parent="Pages_all/Page_03"]
+
+[node name="Label_right" type="Label" parent="Pages_all/Page_03/right"]
 offset_left = 241.0
-offset_top = -416.0
+offset_top = -101.0
 offset_right = 298.0
-offset_bottom = -276.0
-theme_override_font_sizes/font_size = 100
+offset_bottom = 39.0
+theme_override_colors/font_color = Color(0.423529, 0.392157, 0.337255, 1)
+theme_override_font_sizes/font_size = 50
 text = "3
 "
 
 [node name="Page_04" type="Node2D" parent="Pages_all"]
 visible = false
+material = SubResource("ShaderMaterial_jrkpn")
 position = Vector2(0, 421)
 
-[node name="Label4" type="Label" parent="Pages_all/Page_04"]
-offset_left = 241.0
-offset_top = -416.0
-offset_right = 298.0
-offset_bottom = -276.0
-theme_override_font_sizes/font_size = 100
-text = "4
+[node name="left" type="Node2D" parent="Pages_all/Page_04"]
 
+[node name="Label_left" type="Label" parent="Pages_all/Page_04/left"]
+offset_left = -321.0
+offset_top = -101.0
+offset_right = -264.0
+offset_bottom = 39.0
+theme_override_colors/font_color = Color(0.423529, 0.392157, 0.337255, 1)
+theme_override_font_sizes/font_size = 50
+text = "4
+"
+
+[node name="right" type="Node2D" parent="Pages_all/Page_04"]
+
+[node name="Label_right" type="Label" parent="Pages_all/Page_04/right"]
+offset_left = 241.0
+offset_top = -101.0
+offset_right = 298.0
+offset_bottom = 39.0
+theme_override_colors/font_color = Color(0.423529, 0.392157, 0.337255, 1)
+theme_override_font_sizes/font_size = 50
+text = "4
 "
 
 [node name="Page_05" type="Node2D" parent="Pages_all"]
 visible = false
+material = SubResource("ShaderMaterial_jrkpn")
 position = Vector2(0, 421)
 
-[node name="Label5" type="Label" parent="Pages_all/Page_05"]
-offset_left = 241.0
-offset_top = -416.0
-offset_right = 298.0
-offset_bottom = -136.0
-theme_override_font_sizes/font_size = 100
-text = "5
+[node name="left" type="Node2D" parent="Pages_all/Page_05"]
 
+[node name="Label_left" type="Label" parent="Pages_all/Page_05/left"]
+offset_left = -321.0
+offset_top = -101.0
+offset_right = -264.0
+offset_bottom = 39.0
+theme_override_colors/font_color = Color(0.423529, 0.392157, 0.337255, 1)
+theme_override_font_sizes/font_size = 50
+text = "5
+"
+
+[node name="right" type="Node2D" parent="Pages_all/Page_05"]
+
+[node name="Label_right" type="Label" parent="Pages_all/Page_05/right"]
+offset_left = 241.0
+offset_top = -101.0
+offset_right = 298.0
+offset_bottom = 39.0
+theme_override_colors/font_color = Color(0.423529, 0.392157, 0.337255, 1)
+theme_override_font_sizes/font_size = 50
+text = "5
 "
 
 [node name="Page_06" type="Node2D" parent="Pages_all"]
 visible = false
+material = SubResource("ShaderMaterial_jrkpn")
 position = Vector2(0, 421)
 
-[node name="Label6" type="Label" parent="Pages_all/Page_06"]
-offset_left = 241.0
-offset_top = -416.0
-offset_right = 298.0
-offset_bottom = -136.0
-theme_override_font_sizes/font_size = 100
-text = "6
+[node name="left" type="Node2D" parent="Pages_all/Page_06"]
 
+[node name="Label_left" type="Label" parent="Pages_all/Page_06/left"]
+offset_left = -321.0
+offset_top = -101.0
+offset_right = -264.0
+offset_bottom = 39.0
+theme_override_colors/font_color = Color(0.423529, 0.392157, 0.337255, 1)
+theme_override_font_sizes/font_size = 50
+text = "6
+"
+
+[node name="right" type="Node2D" parent="Pages_all/Page_06"]
+
+[node name="Label_right" type="Label" parent="Pages_all/Page_06/right"]
+offset_left = 241.0
+offset_top = -101.0
+offset_right = 298.0
+offset_bottom = 39.0
+theme_override_colors/font_color = Color(0.423529, 0.392157, 0.337255, 1)
+theme_override_font_sizes/font_size = 50
+text = "6
 "
 
 [node name="PAGE_RENDER" type="TextureRect" parent="."]
-offset_left = -689.0
-offset_top = -278.0
-offset_right = 1231.0
-offset_bottom = 802.0
-scale = Vector2(0.73746, 0.664798)
+offset_left = -963.0
+offset_top = -492.0
+offset_right = 957.0
+offset_bottom = 588.0
+scale = Vector2(0.927261, 0.818379)
+pivot_offset = Vector2(960, 540)
 mouse_filter = 2
 texture = SubResource("ViewportTexture_sbgpn")
 expand_mode = 1
-
-[node name="Button_Next" type="Button" parent="."]
-offset_left = 560.0
-offset_top = -275.0
-offset_right = 609.0
-offset_bottom = -244.0
-shortcut_feedback = false
-text = "NEXT"
-
-[node name="Button_Previous" type="Button" parent="."]
-offset_left = 459.0
-offset_top = -275.0
-offset_right = 545.0
-offset_bottom = -244.0
-text = "PREVIOUS"
 
 [node name="Button_Next_page" type="TextureButton" parent="."]
 offset_top = -238.0
@@ -677,7 +947,7 @@ transparent_bg = true
 size = Vector2i(1920, 1080)
 
 [node name="Camera3D" type="Camera3D" parent="SubViewport"]
-transform = Transform3D(-4.37114e-08, -1, -4.37114e-08, 0, -4.37114e-08, 1, -1, 4.37114e-08, 1.91069e-15, 5.22349e-08, 7.264, -0.0920041)
+transform = Transform3D(-4.37114e-08, -1, -4.37114e-08, 0, -4.37114e-08, 1, -1, 4.37114e-08, 1.91069e-15, -0.163026, 8.80176, 0)
 cull_mask = 2
 fov = 25.0
 
@@ -688,8 +958,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0291206)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0)
 
 [connection signal="timeout" from="WaitforTurn_page/Timer" to="WaitforTurn_page" method="_on_timer_timeout"]
-[connection signal="pressed" from="Button_Next" to="Pages_Behaviour" method="_on_button_next_pressed"]
-[connection signal="pressed" from="Button_Previous" to="Pages_Behaviour" method="_on_button_previous_pressed"]
 [connection signal="pressed" from="Button_Next_page" to="Pages_Behaviour" method="_on_button_next_2_pressed"]
 [connection signal="pressed" from="Button_Previous_page" to="Pages_Behaviour" method="_on_button_previous_page_pressed"]
 [connection signal="mouse_entered" from="Area2D" to="Slide" method="_on_area_2d_mouse_entered"]
