@@ -1,4 +1,4 @@
-[gd_scene load_steps=86 format=3 uid="uid://bbp1ccoa6te1g"]
+[gd_scene load_steps=87 format=3 uid="uid://bbp1ccoa6te1g"]
 
 [ext_resource type="Script" path="res://11_SPEAKER/Open_Dialogue.gd" id="1_6gph5"]
 [ext_resource type="Script" path="res://09_NPC/NPC_DIVE_SELECTOR/Npc_loader.gd" id="2_gecf5"]
@@ -167,6 +167,19 @@ func _process(delta):
 	var lerp_time = lerpf(0.0,0.5, timer.time_left / timer.wait_time)	
 	material.set_shader_parameter(\"flash_opacity\",lerp_time)
 	
+"
+
+[sub_resource type="GDScript" id="GDScript_wf71c"]
+script/source = "extends Node
+
+@onready var dialogue_text = $\"../00_NPC_CREATOR/Npc_convas/Dialogue_box/Dialogue_text\"
+
+func _on_leave_button_text_pressed():
+	var words: String = dialogue_text.get_text()
+	_global_datas.instance_word_text._intance_words_note(words)	
+
+	
+
 "
 
 [sub_resource type="VisualShader" id="VisualShader_6uu1l"]
@@ -1054,6 +1067,9 @@ wait_time = 0.4
 [node name="Timer" type="Timer" parent="PHOTO_BEHAVIOUR"]
 wait_time = 0.5
 
+[node name="Instance_words" type="Node" parent="."]
+script = SubResource("GDScript_wf71c")
+
 [node name="00_NPC_CREATOR" type="Node" parent="."]
 script = ExtResource("3_u2fyv")
 Npc_all = Array[Resource("res://09_NPC/Npc_data.gd")]([ExtResource("4_y4ud3"), ExtResource("5_wppld"), ExtResource("6_6xaf4")])
@@ -1145,6 +1161,19 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_08hgk")
 theme_override_styles/hover = SubResource("StyleBoxFlat_h0dus")
 text = "Leave"
 
+[node name="Leave_button_text" type="Button" parent="00_NPC_CREATOR/Npc_convas/Dialogue_box"]
+offset_left = 720.0
+offset_top = 1029.0
+offset_right = 899.0
+offset_bottom = 1060.0
+mouse_default_cursor_shape = 2
+theme = SubResource("Theme_g7433")
+theme_override_colors/font_color = Color(0.8, 0.698039, 0.494118, 1)
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_08hgk")
+theme_override_styles/hover = SubResource("StyleBoxFlat_h0dus")
+text = "Take text"
+
 [node name="VBoxContainer" type="VBoxContainer" parent="00_NPC_CREATOR/Npc_convas/Dialogue_box"]
 material = ExtResource("7_mabi4")
 offset_left = 723.0
@@ -1234,3 +1263,4 @@ color = Color(0.784314, 0.709804, 0.513726, 1)
 [connection signal="timeout" from="PHOTO_BEHAVIOUR/Timer" to="PHOTO_BEHAVIOUR" method="_on_timer_timeout"]
 [connection signal="input_event" from="00_NPC_CREATOR/Npc_convas/Tools/Area2D" to="PHOTO_BEHAVIOUR" method="_on_area_2d_input_event"]
 [connection signal="pressed" from="00_NPC_CREATOR/Npc_convas/Dialogue_box/Leave_button" to="." method="_on_leave_button_pressed"]
+[connection signal="pressed" from="00_NPC_CREATOR/Npc_convas/Dialogue_box/Leave_button_text" to="Instance_words" method="_on_leave_button_text_pressed"]

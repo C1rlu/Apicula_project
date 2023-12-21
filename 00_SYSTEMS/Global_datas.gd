@@ -76,6 +76,10 @@ var Book_pages : Array
 var Book_group : Node2D
 signal lock_page
 signal flip_left_end
+
+
+#instance word text
+var instance_word_text : Node
 #-----------------------------
 
 
