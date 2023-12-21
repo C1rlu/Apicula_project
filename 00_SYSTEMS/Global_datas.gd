@@ -64,8 +64,6 @@ var board_camera : Camera3D
 var zoom_value : float
 var OnDrag_start_position : Vector2
 
-
-var Player_is_pod_zone : bool
 var Oxygene_amout : float
 
 var Cursor_mode : Node

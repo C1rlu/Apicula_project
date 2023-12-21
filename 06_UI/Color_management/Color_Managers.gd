@@ -24,27 +24,31 @@ func _Darker_mainScene():
 	RenderingServer.global_shader_parameter_set("Dark_color", ColorRessource.Darker_Color )
 	RenderingServer.global_shader_parameter_set("isSubscene_value", 0.05)
 	KeepInFocus.set_shader_parameter("stayGlobal",false)
-	timer.start()
-	
+	#timer.start()
+	print("DARKER COLOR")
 func _NormalColor_mainScene():
 	RenderingServer.global_shader_parameter_set("Dark_color", ColorRessource.MainColor)
 	RenderingServer.global_shader_parameter_set("isSubscene_value", 0.5)
-	
+	print("NORMAL COLOR")
 	
 	
 func _process(_delta):
 	
-	if Engine.is_editor_hint():
-		_NormalColor_mainScene()
 	
 	if timer.is_stopped():
 		return
+		
+		
+	#if Engine.is_editor_hint():
+		#_NormalColor_mainScene()
+	
+
 		
 	var lerp_opacity = lerp(0.05,0.5,timer.time_left)
 	
 	RenderingServer.global_shader_parameter_set("isSubscene_value", lerp_opacity)
 
-
+	print("COLOR CHANGE")
 	
 	
 

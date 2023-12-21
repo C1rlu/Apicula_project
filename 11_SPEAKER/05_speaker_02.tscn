@@ -1,4 +1,4 @@
-[gd_scene load_steps=87 format=3 uid="uid://bbp1ccoa6te1g"]
+[gd_scene load_steps=77 format=3 uid="uid://bbp1ccoa6te1g"]
 
 [ext_resource type="Script" path="res://11_SPEAKER/Open_Dialogue.gd" id="1_6gph5"]
 [ext_resource type="Script" path="res://09_NPC/NPC_DIVE_SELECTOR/Npc_loader.gd" id="2_gecf5"]
@@ -195,154 +195,6 @@ flags/light_only = false
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6s3bf"]
 shader = SubResource("VisualShader_6uu1l")
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_qj4hd"]
-constant = 0.4
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_qo38y"]
-constant = 1.0
-
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_yjlwt"]
-size = Vector2(724.789, 654.559)
-expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_nld75"]
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_j1cwg"]
-constant = 0.3
-
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_nmddu"]
-size = Vector2(513.781, 284.487)
-expression = "vec2 n_uv = UV -0.5;
-float d = length(n_uv);
-float c = smoothstep(r,r + feather,d);
-color = vec4(vec3(c),1.0);"
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_m8bbt"]
-constant = 0.228
-
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_opc4p"]
-input_name = "uv"
-
-[sub_resource type="VisualShader" id="VisualShader_u51sj"]
-code = "shader_type canvas_item;
-render_mode blend_mix;
-
-
-
-
-void fragment() {
-// Input:4
-	vec2 n_out4p0 = UV;
-
-
-// FloatConstant:16
-	float n_out16p0 = 0.300000;
-
-
-// FloatConstant:3
-	float n_out3p0 = 0.228000;
-
-
-	vec4 n_out2p0;
-// Expression:2
-	n_out2p0 = vec4(0.0, 0.0, 0.0, 0.0);
-	{
-		vec2 n_uv = n_out4p0 -0.5;
-		float d = length(n_uv);
-		float c = smoothstep(n_out16p0,n_out16p0 + n_out3p0,d);
-		n_out2p0 = vec4(vec3(c),1.0);
-	}
-
-
-// FloatConstant:13
-	float n_out13p0 = 1.000000;
-
-
-// FloatConstant:12
-	float n_out12p0 = 0.400000;
-
-
-	float n_out14p0;
-// Expression:14
-	n_out14p0 = 0.0;
-	{
-		const float DITHER_THRESHOLDS[16] ={
-				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-			};
-			
-		vec2 uv = FRAGCOORD.xy * n_out12p0;
-		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-		n_out14p0 = n_out13p0 - DITHER_THRESHOLDS[index];
-	}
-
-
-// Step:15
-	float n_out15p0 = step(n_out2p0.x, n_out14p0);
-
-
-// Output:0
-	COLOR.a = n_out15p0;
-
-
-}
-"
-graph_offset = Vector2(-725.797, -34.2469)
-mode = 1
-flags/light_only = false
-nodes/fragment/0/position = Vector2(1240, 520)
-nodes/fragment/2/node = SubResource("VisualShaderNodeExpression_nmddu")
-nodes/fragment/2/position = Vector2(-880, 140)
-nodes/fragment/2/size = Vector2(513.781, 284.487)
-nodes/fragment/2/input_ports = "0,3,UV;1,0,r;2,0,feather;"
-nodes/fragment/2/output_ports = "0,5,color;"
-nodes/fragment/2/expression = "vec2 n_uv = UV -0.5;
-float d = length(n_uv);
-float c = smoothstep(r,r + feather,d);
-color = vec4(vec3(c),1.0);"
-nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_m8bbt")
-nodes/fragment/3/position = Vector2(-1100, 440)
-nodes/fragment/4/node = SubResource("VisualShaderNodeInput_opc4p")
-nodes/fragment/4/position = Vector2(-1480, 140)
-nodes/fragment/12/node = SubResource("VisualShaderNodeFloatConstant_qj4hd")
-nodes/fragment/12/position = Vector2(-260, 1180)
-nodes/fragment/13/node = SubResource("VisualShaderNodeFloatConstant_qo38y")
-nodes/fragment/13/position = Vector2(-260, 1040)
-nodes/fragment/14/node = SubResource("VisualShaderNodeExpression_yjlwt")
-nodes/fragment/14/position = Vector2(40, 1160)
-nodes/fragment/14/size = Vector2(724.789, 654.559)
-nodes/fragment/14/input_ports = "0,0,In;1,0,Size;"
-nodes/fragment/14/output_ports = "0,0,Dither_Node;"
-nodes/fragment/14/expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/15/node = SubResource("VisualShaderNodeStep_nld75")
-nodes/fragment/15/position = Vector2(880, 780)
-nodes/fragment/16/node = SubResource("VisualShaderNodeFloatConstant_j1cwg")
-nodes/fragment/16/position = Vector2(-1480, 420)
-nodes/fragment/connections = PackedInt32Array(3, 0, 2, 2, 12, 0, 14, 1, 13, 0, 14, 0, 15, 0, 0, 1, 16, 0, 2, 1, 4, 0, 2, 0, 14, 0, 15, 1, 2, 0, 15, 0)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_v4jjy"]
-shader = SubResource("VisualShader_u51sj")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pykt4"]
 size = Vector2(1916, 1076)
@@ -550,7 +402,7 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-440.155, -23.3751)
+graph_offset = Vector2(735.459, 140.266)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(2020, 260)
@@ -614,7 +466,7 @@ nodes/fragment/57/node = SubResource("VisualShaderNodeMix_qnelr")
 nodes/fragment/57/position = Vector2(340, 400)
 nodes/fragment/58/node = SubResource("VisualShaderNodeStep_a6ror")
 nodes/fragment/58/position = Vector2(-54.1843, 604.979)
-nodes/fragment/connections = PackedInt32Array(39, 0, 40, 1, 47, 0, 52, 1, 48, 0, 52, 2, 51, 0, 52, 0, 49, 0, 51, 0, 52, 0, 53, 0, 54, 0, 56, 1, 55, 0, 56, 0, 56, 0, 40, 0, 2, 0, 3, 2, 53, 0, 39, 1, 40, 0, 33, 1, 29, 0, 31, 0, 38, 0, 42, 0, 42, 0, 39, 2, 31, 0, 0, 0, 3, 4, 31, 2, 3, 0, 31, 1, 57, 0, 33, 0, 53, 0, 58, 1, 56, 0, 58, 0, 33, 0, 0, 1, 3, 4, 57, 1, 40, 0, 57, 0)
+nodes/fragment/connections = PackedInt32Array(39, 0, 40, 1, 47, 0, 52, 1, 48, 0, 52, 2, 51, 0, 52, 0, 49, 0, 51, 0, 52, 0, 53, 0, 54, 0, 56, 1, 55, 0, 56, 0, 56, 0, 40, 0, 2, 0, 3, 2, 53, 0, 39, 1, 40, 0, 33, 1, 38, 0, 42, 0, 42, 0, 39, 2, 31, 0, 0, 0, 57, 0, 33, 0, 53, 0, 58, 1, 56, 0, 58, 0, 33, 0, 0, 1, 3, 4, 57, 1, 40, 0, 57, 0, 3, 0, 31, 1, 3, 4, 31, 2, 29, 0, 31, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_uo04r"]
 shader = SubResource("VisualShader_6tujj")
@@ -1045,8 +897,6 @@ script = ExtResource("2_iqwu8")
 [node name="Npc_loader" type="Node" parent="."]
 script = ExtResource("2_gecf5")
 
-[node name="Next_dialogue" type="Node" parent="."]
-
 [node name="Show_Hand" type="Node" parent="."]
 script = SubResource("GDScript_d4nqo")
 
@@ -1075,6 +925,7 @@ script = ExtResource("3_u2fyv")
 Npc_all = Array[Resource("res://09_NPC/Npc_data.gd")]([ExtResource("4_y4ud3"), ExtResource("5_wppld"), ExtResource("6_6xaf4")])
 
 [node name="Npc_convas" type="Control" parent="00_NPC_CREATOR"]
+visible = false
 texture_filter = 1
 texture_repeat = 2
 material = SubResource("ShaderMaterial_6s3bf")
@@ -1086,26 +937,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-
-[node name="Circle2" type="ColorRect" parent="00_NPC_CREATOR/Npc_convas"]
-visible = false
-material = SubResource("ShaderMaterial_v4jjy")
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -259.0
-offset_top = -239.0
-offset_right = 297.0
-offset_bottom = 317.0
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(1.82232, 1.82232)
-pivot_offset = Vector2(300, 300)
-mouse_filter = 2
-color = Color(0.0625, 0.140625, 0.140625, 1)
 
 [node name="Tools" type="Control" parent="00_NPC_CREATOR/Npc_convas"]
 layout_mode = 3
@@ -1128,10 +959,10 @@ shape = SubResource("RectangleShape2D_pykt4")
 script = ExtResource("9_n4i7c")
 
 [node name="Name_text" type="Label" parent="00_NPC_CREATOR/Npc_convas/Dialogue_box"]
-offset_left = 724.0
-offset_top = 789.0
-offset_right = 1244.0
-offset_bottom = 865.0
+offset_left = 726.0
+offset_top = 804.0
+offset_right = 1246.0
+offset_bottom = 880.0
 theme_override_colors/font_color = Color(0.796875, 0.695313, 0.492188, 1)
 theme_override_font_sizes/font_size = 25
 text = "Marc"
@@ -1139,19 +970,19 @@ autowrap_mode = 3
 
 [node name="Dialogue_text" type="Label" parent="00_NPC_CREATOR/Npc_convas/Dialogue_box"]
 offset_left = 723.0
-offset_top = 828.0
+offset_top = 846.0
 offset_right = 1243.0
-offset_bottom = 904.0
+offset_bottom = 922.0
 theme_override_colors/font_color = Color(0.662745, 0.835294, 0.784314, 1)
 theme_override_font_sizes/font_size = 25
 text = "-Lorem ipsum dolor sit ame consectetur adipiscing elit, sed do eiusmod tempor ?"
 autowrap_mode = 3
 
 [node name="Leave_button" type="Button" parent="00_NPC_CREATOR/Npc_convas/Dialogue_box"]
-offset_left = 1072.0
-offset_top = 1029.0
-offset_right = 1251.0
-offset_bottom = 1060.0
+offset_left = 1219.0
+offset_top = 1034.0
+offset_right = 1398.0
+offset_bottom = 1065.0
 mouse_default_cursor_shape = 2
 theme = SubResource("Theme_g7433")
 theme_override_colors/font_color = Color(0.8, 0.698039, 0.494118, 1)
@@ -1161,10 +992,10 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_h0dus")
 text = "Leave"
 
 [node name="Leave_button_text" type="Button" parent="00_NPC_CREATOR/Npc_convas/Dialogue_box"]
-offset_left = 1244.0
-offset_top = 841.0
-offset_right = 1288.0
-offset_bottom = 895.0
+offset_left = 1278.0
+offset_top = 856.0
+offset_right = 1322.0
+offset_bottom = 910.0
 mouse_default_cursor_shape = 2
 theme = SubResource("Theme_g7433")
 theme_override_colors/font_color = Color(0.8, 0.698039, 0.494118, 1)
@@ -1173,6 +1004,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_08hgk")
 theme_override_styles/hover = SubResource("StyleBoxFlat_h0dus")
 
 [node name="ColorRect" type="ColorRect" parent="00_NPC_CREATOR/Npc_convas/Dialogue_box/Leave_button_text"]
+layout_mode = 0
 offset_right = 44.0
 offset_bottom = 54.0
 mouse_filter = 2
@@ -1180,10 +1012,10 @@ color = Color(0.796875, 0.695313, 0.492188, 1)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="00_NPC_CREATOR/Npc_convas/Dialogue_box"]
 material = ExtResource("7_mabi4")
-offset_left = 723.0
-offset_top = 919.0
-offset_right = 1243.0
-offset_bottom = 1019.0
+offset_left = 726.0
+offset_top = 925.0
+offset_right = 905.0
+offset_bottom = 1012.0
 mouse_filter = 2
 theme_override_constants/separation = 25
 
@@ -1208,7 +1040,7 @@ stretch = true
 transparent_bg = true
 handle_input_locally = false
 size = Vector2i(500, 500)
-render_target_update_mode = 4
+render_target_update_mode = 0
 
 [node name="Camera3D" type="Camera3D" parent="00_NPC_CREATOR/Npc_convas/CAM_NPCS/SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.12, 5.735)

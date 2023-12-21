@@ -40,8 +40,7 @@ func _process(_delta):
 	
 		
 func _input(event):
-	
-	
+
 	#TO DRAG
 	if !_global_datas.Player_lock_click == true:
 		
@@ -102,11 +101,11 @@ func _unselect_element(condition : bool, move_behind_c : bool):
 		if mouse_position.x > 960.0:
 			var side_right : Node2D = pages.get_node("right")
 			control.reparent(side_right)	
-			print(side_right)
+			#print(side_right)
 		else:
 			var side_left : Node2D = pages.get_node("left")
 			control.reparent(side_left)		
-			print(side_left)
+			#print(side_left)
 		
 		
 				
