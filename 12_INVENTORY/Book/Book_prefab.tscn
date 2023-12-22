@@ -36,7 +36,7 @@ func _process(_delta):
 	
 	var new_position = control.get_global_mouse_position() + offset
 	new_position.x = clamp(control.global_position.x,control.global_position.x,control.global_position.x)
-	new_position.y = clamp(new_position.y,1044,1785)
+	new_position.y = clamp(new_position.y,1000,1785)
 	control.global_position = new_position
 
 
@@ -44,7 +44,7 @@ func _process(_delta):
 		return  
 		
 	# Change darker color
-	var value = inverse_lerp(1044,1785,new_position.y)
+	var value = inverse_lerp(1000,1785,new_position.y)
 	var valueD = lerp(0.05,0.5,value)
 	
 	RenderingServer.global_shader_parameter_set(\"isSubscene_value\", valueD)
@@ -99,7 +99,7 @@ func _unselect_element():
 		RenderingServer.global_shader_parameter_set(\"isSubscene_value\", 0.5)
 		pages_behaviour._show_new_pages()	
 	else:
-		control.global_position.y = 1044	
+		control.global_position.y = 1000	
 		if !enable_it:
 			return  
 		RenderingServer.global_shader_parameter_set(\"isSubscene_value\", 0.05)
@@ -253,26 +253,26 @@ func _on_timer_timeout():
 	button_previous_page.disabled = false
 "
 
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_uw2oe"]
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_mfjj5"]
 size = Vector2(513.781, 284.487)
 expression = "vec2 n_uv = UV -0.5;
 float d = length(n_uv);
 float c = smoothstep(r,r + feather,d);
 color = vec4(vec3(c),1.0);"
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_cb6v2"]
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_dha5o"]
 constant = 0.001
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_rm57r"]
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_or6xq"]
 constant = 0.49
 
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_tg0pr"]
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_b35rm"]
 input_name = "uv"
 
-[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_jcnbl"]
+[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_g2li8"]
 function = 31
 
-[sub_resource type="VisualShader" id="VisualShader_w36lr"]
+[sub_resource type="VisualShader" id="VisualShader_vkgi8"]
 code = "shader_type canvas_item;
 render_mode blend_mix;
 
@@ -316,7 +316,7 @@ void fragment() {
 graph_offset = Vector2(-561.73, -38.1816)
 mode = 1
 flags/light_only = false
-nodes/fragment/2/node = SubResource("VisualShaderNodeExpression_uw2oe")
+nodes/fragment/2/node = SubResource("VisualShaderNodeExpression_mfjj5")
 nodes/fragment/2/position = Vector2(-500, 240)
 nodes/fragment/2/size = Vector2(513.781, 284.487)
 nodes/fragment/2/input_ports = "0,3,UV;1,0,r;2,0,feather;"
@@ -325,18 +325,18 @@ nodes/fragment/2/expression = "vec2 n_uv = UV -0.5;
 float d = length(n_uv);
 float c = smoothstep(r,r + feather,d);
 color = vec4(vec3(c),1.0);"
-nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_cb6v2")
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_dha5o")
 nodes/fragment/3/position = Vector2(-940, 360)
-nodes/fragment/4/node = SubResource("VisualShaderNodeFloatConstant_rm57r")
+nodes/fragment/4/node = SubResource("VisualShaderNodeFloatConstant_or6xq")
 nodes/fragment/4/position = Vector2(-1040, 240)
-nodes/fragment/5/node = SubResource("VisualShaderNodeInput_tg0pr")
+nodes/fragment/5/node = SubResource("VisualShaderNodeInput_b35rm")
 nodes/fragment/5/position = Vector2(-860, 120)
-nodes/fragment/6/node = SubResource("VisualShaderNodeFloatFunc_jcnbl")
+nodes/fragment/6/node = SubResource("VisualShaderNodeFloatFunc_g2li8")
 nodes/fragment/6/position = Vector2(185.323, 258.128)
 nodes/fragment/connections = PackedInt32Array(3, 0, 2, 2, 4, 0, 2, 1, 5, 0, 2, 0, 2, 0, 6, 0, 6, 0, 0, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ptao0"]
-shader = SubResource("VisualShader_w36lr")
+shader = SubResource("VisualShader_vkgi8")
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_ridun"]
 constant = 0.5
@@ -554,7 +554,7 @@ func _show_thickness(list : Array, index : int, show : bool):
 viewport_path = NodePath("SubViewport")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1sju8"]
-size = Vector2(167, 63.5)
+size = Vector2(156, 76.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5xv1b"]
 size = Vector2(890, 456)
@@ -580,19 +580,20 @@ wait_time = 0.1
 
 [node name="ColorRect3" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_ptao0")
-offset_left = -100.0
-offset_top = -349.0
-offset_bottom = -269.0
+offset_left = -81.0
+offset_top = -358.0
+offset_right = -1.0
+offset_bottom = -278.0
 scale = Vector2(2, 2)
 mouse_filter = 2
-color = Color(0.398438, 0.363281, 0.222656, 1)
+color = Color(0.4, 0.364706, 0.223529, 1)
 
 [node name="ColorRect4" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_ptao0")
-offset_left = -89.0
-offset_top = -337.0
-offset_right = 11.0
-offset_bottom = -257.0
+offset_left = -72.0
+offset_top = -346.0
+offset_right = 8.00001
+offset_bottom = -266.0
 scale = Vector2(1.78756, 1.78756)
 mouse_filter = 2
 color = Color(0.0585938, 0.140625, 0.144531, 1)
@@ -973,7 +974,7 @@ offset_bottom = 382.0
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-position = Vector2(3.5, -316.25)
+position = Vector2(-2, -322.75)
 shape = SubResource("RectangleShape2D_1sju8")
 
 [node name="Inside_book_area" type="Area2D" parent="."]

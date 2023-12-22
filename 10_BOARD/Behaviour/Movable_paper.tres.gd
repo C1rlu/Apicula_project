@@ -6,7 +6,7 @@ extends Node
 @export var scale_in_loupe = 2.0
 @onready var control = $".."
 @export var go_bottom : bool
-@onready var select_parent = $"../../../Select_parent"
+
 @onready var area_2d = $"../Area2D"
 
 var Pin_book : Node2D
@@ -62,6 +62,7 @@ func _input(event):
 		if Input.is_action_just_pressed("Zoom_object"):
 			
 			_scale_change(size * scale_in_loupe)
+			var select_parent = _global_datas.In_Front_Node
 			control.reparent(select_parent)
 			control.move_to_front()
 			_global_datas.using_board_enable.emit()

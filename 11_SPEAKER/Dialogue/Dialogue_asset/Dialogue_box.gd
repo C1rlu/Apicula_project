@@ -5,8 +5,9 @@ extends Node2D
 var choice_buttons : Array[Button] = []
 @onready var text_node = $Dialogue_text
 
+@onready var v_box_container = $Dialogue_text/VBoxContainer
 
-@onready var v_box_container = $VBoxContainer
+
 
 var is_dialogue_done = false
 
@@ -17,7 +18,7 @@ func _ready():
 	
 func clear_dialogue_box():
 	text_node.text = ""
-	
+
 	for choice in choice_buttons:
 		v_box_container.remove_child(choice)
 	choice_buttons = []	
@@ -32,9 +33,9 @@ func add_choice(choice_text : String):
 	choice_buttons.push_back(button_obj)
 	button_obj.text = choice_text
 	button_obj.choice_selected.connect(_on_choice_selected)
-	
+	button_obj.move_to_front()
 	v_box_container.add_child(button_obj)
-	
+
 
 func _on_choice_selected(choice_index : int):
 	print(choice_index)

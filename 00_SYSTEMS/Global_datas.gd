@@ -31,6 +31,9 @@ signal  _open_dialogue
 signal  _close_dialogue
 signal _show_hand
 signal _hide_hand
+signal _hide_dialogue_box
+signal _show_dialogue_box
+
 #subsceneSignal
 
 var subbscene_playerPosition : Vector3
@@ -63,10 +66,9 @@ var mouseRayCast_active : bool
 var board_camera : Camera3D
 var zoom_value : float
 var OnDrag_start_position : Vector2
-
 var Oxygene_amout : float
-
 var Cursor_mode : Node
+var In_Front_Node : Node2D
 
 # BOOK PAGE
 var Book_page_index : int
