@@ -13,12 +13,12 @@ func move_a():
 	var translation = get_global_transform().origin
 	_global_datas.player_position = translation
 	
-	if _global_datas.Player_InBoard == true:
+	if _global_datas.Player_InBoard:
 		return
 	
-	if _global_datas.Player_InSubScene == true:
+	if _global_datas.Player_InSubScene:
 		return
-	if _global_datas.Player_InMenu == true:
+	if _global_datas.Player_InMenu:
 		return
 			
 	var forward_value = 0.0

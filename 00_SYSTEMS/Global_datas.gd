@@ -23,6 +23,8 @@ signal _active_sonar
 signal _disable_sonar
 signal  _open_board
 signal  _close_board
+signal _reseting_clock_active
+signal _reseting_clock_disable
 
 # dialogue signals
 signal in_dialogue_zone

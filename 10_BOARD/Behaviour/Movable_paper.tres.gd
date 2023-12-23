@@ -21,11 +21,11 @@ var size : float
 var my_origin_parent : Node
 
 signal pos_anim
-
+var last_position : Vector2
 func _ready():
 	size = control.scale.x
 	my_origin_parent = control.get_parent()
-	
+	last_position = control.transform.origin
 	Pin_book = get_node_or_null("../Pin_book")
 func _process(_delta):
 	
@@ -36,8 +36,7 @@ func _process(_delta):
 	new_position.x = clamp(new_position.x,margin,1920-margin)
 	new_position.y = clamp(new_position.y,margin,1080-margin)
 	control.global_position = new_position
-	
-	
+
 		
 func _input(event):
 
@@ -69,7 +68,7 @@ func _input(event):
 			Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 			
 		if Input.is_action_just_released("Zoom_object"):
-			_scale_change(size * scale_in_hand)
+			_scale_change(size)
 			control.reparent(my_origin_parent)
 			_global_datas.using_board_disable.emit()
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
@@ -129,7 +128,6 @@ func _notification(what):
 	
 func move_behind():
 	
-
 	var behind = area_2d.get_overlapping_areas()
 	
 	if behind == null:
@@ -143,8 +141,24 @@ func move_behind():
 		var c = a.get_node("Apply_pos_behind")
 		c._move_behind()
 		
+func _reset_active():
+	
+	last_position = control.transform.origin
+	_scale_change(size * scale_in_loupe)
+	var select_parent = _global_datas.In_Front_Node
+	control.reparent(select_parent)
+	var screen_center = Vector2(1920.0 / 2.0, 1080.0/ 2.0)
+	control.transform.origin = screen_center
+	control.move_to_front()
+
 			
-			
+func _reset_disable():
+	
+	_scale_change(size * scale_in_hand)
+	control.reparent(my_origin_parent)
+	control.transform.origin = last_position
+
+		
 func _on_area_2d_mouse_entered():
 
 	mouse_entered = true

@@ -23,13 +23,14 @@ func _on_area_exited(_area):
 	see_out.emit()
 	_global_datas._disable_sonar.emit()
 	can_click = false
-
+	_global_datas._reseting_clock_disable.emit()
+	
 func _on_area_3d_mouse_exited():
 	
 	var value : int = 0
 	_global_datas.cell_name	= \"null\"
 	Input.set_default_cursor_shape(value)
-
+	_global_datas._reseting_clock_disable.emit()
 func _on_area_3d_mouse_entered():
 	if !can_click:
 		return

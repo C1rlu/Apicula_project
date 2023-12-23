@@ -10,6 +10,7 @@ script/source = "extends Node
 
 @onready var color_rect = $\"../ColorRect5/Photo\"
 @onready var _material : Material = color_rect.get_material()
+@onready var text = $\"../text\"
 
 func _ready():
 	_apply_photo_NPC()
@@ -23,6 +24,7 @@ func _apply_photo_NPC():
 	
 	_material.set_shader_parameter(\"Photo\",imageN)
 	_material.set_shader_parameter(\"Denoiser\" , 1.0)	
+	text.text = _global_datas.Npc_Dialogue.name
 "
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_l5qlk"]
@@ -713,6 +715,17 @@ scale = Vector2(1.05, 1.05)
 pivot_offset = Vector2(40, 40)
 mouse_filter = 2
 color = Color(0.45098, 0.396078, 0.278431, 1)
+
+[node name="text" type="Label" parent="."]
+offset_left = -40.0
+offset_top = 29.0
+offset_right = 222.0
+offset_bottom = 67.0
+scale = Vector2(0.295642, 0.295642)
+theme_override_colors/font_color = Color(0.0234375, 0.144531, 0.160156, 1)
+theme_override_font_sizes/font_size = 25
+text = "Description"
+horizontal_alignment = 2
 
 [node name="Pin_book" type="Node2D" parent="."]
 position = Vector2(33.6667, -39.3333)

@@ -1,7 +1,6 @@
-[gd_scene load_steps=31 format=3 uid="uid://cb8k68mtsigvd"]
+[gd_scene load_steps=28 format=3 uid="uid://cb8k68mtsigvd"]
 
 [ext_resource type="Script" path="res://00_SYSTEMS/Global_datas.gd" id="1_64l51"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Subscene_behaviour.gd" id="1_if5gv"]
 [ext_resource type="Script" path="res://06_UI/Fps_counter.gd" id="1_smk2e"]
 [ext_resource type="Script" path="res://03_CAMERA/CameraFollow.gd" id="3_hnv77"]
 [ext_resource type="Script" path="res://06_UI/Color_management/Color_Managers.gd" id="3_r6ky2"]
@@ -11,8 +10,6 @@
 [ext_resource type="Shader" uid="uid://bqd3h43rhgah0" path="res://05_SHADER_TEST/Full_screen/Sonar_fullscreen_show.tres" id="7_8gi2l"]
 [ext_resource type="Script" path="res://06_UI/Back_call_manager.gd" id="7_l6yr5"]
 [ext_resource type="Script" path="res://00_SCENE/Mouse_mode.gd" id="8_m0sr0"]
-[ext_resource type="Material" uid="uid://c5bjyygfj5elu" path="res://06_UI/Circle_progress_dither_mat.tres" id="13_aibqx"]
-[ext_resource type="Texture2D" uid="uid://dafg2qvpi6wmk" path="res://06_UI/Loader_circle/Loader_circle.png" id="13_uirxy"]
 [ext_resource type="PackedScene" uid="uid://bwmu5iwushsl5" path="res://13_TOOLS_UI/07_screen_tools.tscn" id="18_akagp"]
 [ext_resource type="PackedScene" uid="uid://cnmptm7i0xxmj" path="res://00_SCENE/02_main_scenes.tscn" id="18_gvi4q"]
 [ext_resource type="PackedScene" uid="uid://bbp1ccoa6te1g" path="res://11_SPEAKER/05_speaker_02.tscn" id="18_l1ne5"]
@@ -156,12 +153,6 @@ fps_target = 120
 
 [node name="Resolution" type="Node" parent="00_GAME_MANAGERS"]
 script = SubResource("GDScript_j70qp")
-
-[node name="Active_subscene" type="Node" parent="00_GAME_MANAGERS"]
-script = ExtResource("1_if5gv")
-
-[node name="Timer" type="Timer" parent="00_GAME_MANAGERS/Active_subscene"]
-one_shot = true
 
 [node name="Color_Managers" type="Node" parent="00_GAME_MANAGERS"]
 script = ExtResource("3_r6ky2")
@@ -349,31 +340,6 @@ theme_override_colors/font_color = Color(0.188235, 0.188235, 0.188235, 1)
 theme_override_font_sizes/font_size = 40
 text = "..."
 
-[node name="TextureProgressBar" type="TextureProgressBar" parent="01_GAME_UI/MAIN_SCENE_UI"]
-visible = false
-material = ExtResource("13_aibqx")
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -35.0
-offset_top = -146.0
-offset_right = 477.0
-offset_bottom = 366.0
-grow_horizontal = 2
-grow_vertical = 0
-scale = Vector2(0.13417, 0.13417)
-mouse_filter = 2
-max_value = 1.0
-step = 0.025
-fill_mode = 4
-texture_under = ExtResource("13_uirxy")
-texture_progress = ExtResource("13_uirxy")
-tint_under = Color(0.207843, 0.368627, 0.376471, 1)
-tint_progress = Color(0.949219, 0.667969, 0.394531, 1)
-
 [node name="02_MAIN_SCENES" parent="." instance=ExtResource("18_gvi4q")]
 
 [node name="03_SUBSCENES" parent="." instance=ExtResource("19_cnotd")]
@@ -386,6 +352,5 @@ metadata/_edit_horizontal_guides_ = [542.0]
 
 [node name="07_SCREEN_TOOLS" parent="." instance=ExtResource("18_akagp")]
 
-[connection signal="timeout" from="00_GAME_MANAGERS/Active_subscene/Timer" to="00_GAME_MANAGERS/Active_subscene" method="_on_timer_timeout"]
 [connection signal="timeout" from="00_GAME_MANAGERS/Color_Managers/Timer" to="00_GAME_MANAGERS/Color_Managers" method="_on_timer_timeout"]
 [connection signal="pressed" from="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue/Button/ColorRect/Push_button" to="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue" method="_on_button_pressed"]

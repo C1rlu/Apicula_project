@@ -73,11 +73,13 @@ func _on_timer_timeout():
 script/source = "extends Node
 
 @onready var dialogue_text = $\"../00_NPC_CREATOR/Npc_convas/Dialogue_box/Dialogue_text\"
+@onready var dialogue_name = $\"../00_NPC_CREATOR/Npc_convas/Dialogue_box/Dialogue_name\"
 
 
 func _on_text_button_pressed():
 	var words: String = dialogue_text.get_text()
-	_global_datas.instance_word_text._intance_words_note(words)	
+	var name : String = dialogue_name.get_text()
+	_global_datas.instance_word_text._intance_words_note(words,name)	
 	
 
 "
@@ -377,7 +379,8 @@ script/source = "extends Button
 
 
 func _ready():
-	set_focus_mode(0)
+	var number : int = 0
+	set_focus_mode(number)
 
 
 "
@@ -390,7 +393,8 @@ script/source = "extends Button
 
 
 func _ready():
-	set_focus_mode(0)
+	var number : int = 0
+	set_focus_mode(number)
 
 
 "
@@ -423,6 +427,7 @@ script = ExtResource("3_u2fyv")
 Npc_all = Array[Resource("res://09_NPC/Npc_data.gd")]([ExtResource("4_y4ud3"), ExtResource("5_wppld"), ExtResource("6_6xaf4")])
 
 [node name="Npc_convas" type="Control" parent="00_NPC_CREATOR"]
+visible = false
 texture_filter = 1
 texture_repeat = 2
 material = SubResource("ShaderMaterial_6s3bf")
@@ -473,7 +478,7 @@ stretch = true
 transparent_bg = true
 handle_input_locally = false
 size = Vector2i(400, 400)
-render_target_update_mode = 4
+render_target_update_mode = 0
 
 [node name="Camera3D" type="Camera3D" parent="00_NPC_CREATOR/Npc_convas/CAM_NPCS/SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.12, 5.735)

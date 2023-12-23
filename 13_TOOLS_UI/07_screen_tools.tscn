@@ -1,5 +1,6 @@
-[gd_scene load_steps=93 format=3 uid="uid://bwmu5iwushsl5"]
+[gd_scene load_steps=80 format=3 uid="uid://bwmu5iwushsl5"]
 
+[ext_resource type="Material" uid="uid://blohbpbwcsu4f" path="res://05_SHADER_TEST/UI/Circle_tirette/Circle_inside_withDither_dots.tres" id="1_jnjg4"]
 [ext_resource type="Texture2D" uid="uid://ckdvhk12w3kkb" path="res://12_INVENTORY/Tools/tools_photo.png" id="1_pct16"]
 
 [sub_resource type="GDScript" id="GDScript_06avi"]
@@ -42,7 +43,13 @@ func _ready():
 
 	size = control.scale.x
 	my_origin_parent = control.get_parent()
+	_disable()
+	_global_datas._backFrom_subscene.connect(_disable)
+
+func _disable():
 	control.global_position.y = 0
+	_unselect_element()		
+	
 	
 func _process(_delta):
 	
@@ -387,7 +394,6 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-473.815, 709.751)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(1320, 520)
@@ -437,7 +443,7 @@ nodes/fragment/connections = PackedInt32Array(4, 0, 6, 0, 6, 0, 7, 0, 17, 0, 16,
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_y3o8d"]
 shader = SubResource("VisualShader_4r47a")
-shader_parameter/Circle = 1.0
+shader_parameter/Circle = 0.0
 
 [sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_eau44"]
 default_input_values = [0, 0.0, 1, 0.89]
@@ -1168,193 +1174,6 @@ nodes/fragment/connections = PackedInt32Array(3, 0, 2, 2, 4, 0, 2, 1, 5, 0, 2, 0
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ysnwg"]
 shader = SubResource("VisualShader_w36lr")
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_rmyhw"]
-constant = 0.497
-
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_1v7yf"]
-size = Vector2(724.789, 654.559)
-expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_3m7qa"]
-input_name = "color"
-
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_tpien"]
-
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_yc364"]
-size = Vector2(513.781, 284.487)
-expression = "vec2 n_uv = UV -0.5;
-float d = length(n_uv);
-float c = smoothstep(r,r + feather,d);
-color = vec4(vec3(c),1.0);"
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_hpshs"]
-constant = 0.001
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_3ms3q"]
-constant = 0.49
-
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_2cty1"]
-input_name = "uv"
-
-[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_2i5cb"]
-function = 31
-
-[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_kpsr2"]
-parameter_name = "Dots_color"
-
-[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_wugle"]
-default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
-op_type = 3
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_04p6f"]
-constant = 0.5
-
-[sub_resource type="VisualShader" id="VisualShader_jopc2"]
-code = "shader_type canvas_item;
-render_mode blend_mix;
-
-uniform vec4 Dots_color : source_color;
-
-
-
-void fragment() {
-// Input:12
-	vec4 n_out12p0 = COLOR;
-
-
-// ColorParameter:7
-	vec4 n_out7p0 = Dots_color;
-
-
-// FloatConstant:10
-	float n_out10p0 = 0.497000;
-
-
-// FloatConstant:9
-	float n_out9p0 = 0.500000;
-
-
-	float n_out11p0;
-// Expression:11
-	n_out11p0 = 0.0;
-	{
-		const float DITHER_THRESHOLDS[16] ={
-				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-			};
-			
-		vec2 uv = FRAGCOORD.xy * n_out9p0;
-		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-		n_out11p0 = n_out10p0 - DITHER_THRESHOLDS[index];
-	}
-
-
-// Step:13
-	float n_out13p0 = step(n_out7p0.x, n_out11p0);
-
-
-// Mix:8
-	vec3 n_out8p0 = mix(vec3(n_out12p0.xyz), vec3(n_out7p0.xyz), vec3(n_out13p0));
-
-
-// Input:5
-	vec2 n_out5p0 = UV;
-
-
-// FloatConstant:4
-	float n_out4p0 = 0.490000;
-
-
-// FloatConstant:3
-	float n_out3p0 = 0.001000;
-
-
-	vec4 n_out2p0;
-// Expression:2
-	n_out2p0 = vec4(0.0, 0.0, 0.0, 0.0);
-	{
-		vec2 n_uv = n_out5p0 -0.5;
-		float d = length(n_uv);
-		float c = smoothstep(n_out4p0,n_out4p0 + n_out3p0,d);
-		n_out2p0 = vec4(vec3(c),1.0);
-	}
-
-
-// FloatFunc:6
-	float n_out6p0 = 1.0 - n_out2p0.x;
-
-
-// Output:0
-	COLOR.rgb = n_out8p0;
-	COLOR.a = n_out6p0;
-
-
-}
-"
-graph_offset = Vector2(-3351.16, 514.063)
-mode = 1
-flags/light_only = false
-nodes/fragment/2/node = SubResource("VisualShaderNodeExpression_yc364")
-nodes/fragment/2/position = Vector2(-340, 960)
-nodes/fragment/2/size = Vector2(513.781, 284.487)
-nodes/fragment/2/input_ports = "0,3,UV;1,0,r;2,0,feather;"
-nodes/fragment/2/output_ports = "0,5,color;"
-nodes/fragment/2/expression = "vec2 n_uv = UV -0.5;
-float d = length(n_uv);
-float c = smoothstep(r,r + feather,d);
-color = vec4(vec3(c),1.0);"
-nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_hpshs")
-nodes/fragment/3/position = Vector2(-780, 1080)
-nodes/fragment/4/node = SubResource("VisualShaderNodeFloatConstant_3ms3q")
-nodes/fragment/4/position = Vector2(-880, 960)
-nodes/fragment/5/node = SubResource("VisualShaderNodeInput_2cty1")
-nodes/fragment/5/position = Vector2(-700, 840)
-nodes/fragment/6/node = SubResource("VisualShaderNodeFloatFunc_2i5cb")
-nodes/fragment/6/position = Vector2(185.323, 258.128)
-nodes/fragment/7/node = SubResource("VisualShaderNodeColorParameter_kpsr2")
-nodes/fragment/7/position = Vector2(-880, -120)
-nodes/fragment/8/node = SubResource("VisualShaderNodeMix_wugle")
-nodes/fragment/8/position = Vector2(92.2182, 22.0144)
-nodes/fragment/9/node = SubResource("VisualShaderNodeFloatConstant_04p6f")
-nodes/fragment/9/position = Vector2(-2000, 480)
-nodes/fragment/10/node = SubResource("VisualShaderNodeFloatConstant_rmyhw")
-nodes/fragment/10/position = Vector2(-1920, 360)
-nodes/fragment/11/node = SubResource("VisualShaderNodeExpression_1v7yf")
-nodes/fragment/11/position = Vector2(-1580, 340)
-nodes/fragment/11/size = Vector2(724.789, 654.559)
-nodes/fragment/11/input_ports = "0,0,In;1,0,Size;"
-nodes/fragment/11/output_ports = "0,0,Dither_Node;"
-nodes/fragment/11/expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/12/node = SubResource("VisualShaderNodeInput_3m7qa")
-nodes/fragment/12/position = Vector2(-280, -20)
-nodes/fragment/13/node = SubResource("VisualShaderNodeStep_tpien")
-nodes/fragment/13/position = Vector2(-420, 400)
-nodes/fragment/connections = PackedInt32Array(3, 0, 2, 2, 4, 0, 2, 1, 5, 0, 2, 0, 2, 0, 6, 0, 6, 0, 0, 1, 9, 0, 11, 1, 10, 0, 11, 0, 8, 0, 0, 0, 12, 0, 8, 0, 7, 0, 13, 0, 11, 0, 13, 1, 13, 0, 8, 2, 7, 0, 8, 1)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_lv2x7"]
-shader = SubResource("VisualShader_jopc2")
-shader_parameter/Dots_color = Color(0.4, 0.364706, 0.223529, 1)
-
 [sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_6w33a"]
 input_name = "texture"
 
@@ -1537,7 +1356,7 @@ mouse_filter = 2
 color = Color(0.4, 0.364706, 0.223529, 1)
 
 [node name="ColorRect7" type="ColorRect" parent="Photo_tools/Photo_tools/photo_UI_elements"]
-material = SubResource("ShaderMaterial_lv2x7")
+material = ExtResource("1_jnjg4")
 layout_mode = 0
 offset_left = -78.0
 offset_top = -75.0

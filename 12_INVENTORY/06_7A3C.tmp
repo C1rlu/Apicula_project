@@ -36,9 +36,6 @@ func _hide():
 	#bougie_zone.visible = false
 	board.visible = false
 func _show():
-	
-	if _global_datas.Player_InSubScene:
-		return
 	#bougie_zone.visible = true
 	board.visible = true
 "
@@ -695,19 +692,12 @@ size = Vector2(563.416, 817)
 [sub_resource type="GDScript" id="GDScript_xyojo"]
 script/source = "extends Node
 
-@onready var light_flare = $\"../light_flare\"
 
 
 func _ready():
-	_global_datas._go_Subscene.connect(_disable_bougie)
-	_global_datas._go_Mainscene.connect(_active_bougie)
+	pass
 	
 	
-func _active_bougie():
-	light_flare.visible = true
-	
-func _disable_bougie():
-	light_flare.visible = false
 "
 
 [sub_resource type="GDScript" id="GDScript_c27os"]
@@ -1427,7 +1417,6 @@ wait_time = 0.25
 one_shot = true
 
 [node name="light_m7" type="ColorRect" parent="Control/Bougie_zone/Bougie"]
-visible = false
 light_mask = 3
 material = SubResource("ShaderMaterial_5tl7k")
 anchors_preset = 8
@@ -1446,7 +1435,6 @@ mouse_filter = 2
 color = Color(0.0666667, 0.109804, 0.113725, 1)
 
 [node name="light_m6" type="ColorRect" parent="Control/Bougie_zone/Bougie"]
-visible = false
 light_mask = 3
 material = SubResource("ShaderMaterial_5tl7k")
 anchors_preset = 8
