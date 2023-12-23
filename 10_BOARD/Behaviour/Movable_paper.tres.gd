@@ -154,7 +154,7 @@ func _reset_active():
 			
 func _reset_disable():
 	
-	_scale_change(size * scale_in_hand)
+	_scale_change(size)
 	control.reparent(my_origin_parent)
 	control.transform.origin = last_position
 
