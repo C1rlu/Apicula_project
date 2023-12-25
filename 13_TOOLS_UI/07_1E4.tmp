@@ -1,4 +1,4 @@
-[gd_scene load_steps=99 format=3 uid="uid://bwmu5iwushsl5"]
+[gd_scene load_steps=96 format=3 uid="uid://bwmu5iwushsl5"]
 
 [ext_resource type="Material" uid="uid://blohbpbwcsu4f" path="res://05_SHADER_TEST/UI/Circle_tirette/Circle_inside_withDither_dots.tres" id="1_jnjg4"]
 [ext_resource type="Texture2D" uid="uid://ckdvhk12w3kkb" path="res://12_INVENTORY/Tools/tools_photo.png" id="1_pct16"]
@@ -8,27 +8,27 @@ script/source = "extends Node
 
 
 @onready var scanner_tools = $\"../Scanner_tools\"
-@onready var scanner_opacity = $\"../Scanner_opacity\"
 
 func _ready():
 	
+
+	_global_datas._go_Mainscene.connect(_hide)
 	_global_datas._end_ini_subscene.connect(_show)	
-	_global_datas._backFrom_subscene.connect(_hide)
-	_global_datas.active_scanner_button.connect(_activate)
-	_hide()
 	
-func _hide():
-	scanner_tools.visible = false
-	
-	scanner_opacity._set_scanner_opacity_value(0.0)
-	
-func _show():
-	scanner_tools.visible = true
-	
-func _activate(condition : bool):
-	scanner_tools.visible = condition
 
 	
+	
+func _hide():
+	scanner_tools.visible = false	
+func _show():
+	scanner_tools.visible = true
+
+
+
+
+func _on_slide_tool_activated(value):
+	#scanner_tools.visible = value
+	print(value)
 "
 
 [sub_resource type="GDScript" id="GDScript_oc56q"]
@@ -43,17 +43,17 @@ var offset
 var size : float
 var my_origin_parent : Node
 
-@onready var scanner_opacity = $\"../Scanner_opacity\"
-
+signal tool_activated(condition : bool)
 
 func _ready():
 
 	size = control.scale.x
 	my_origin_parent = control.get_parent()
-	_global_datas._backFrom_subscene.connect(_reset_tools_position)
-	
+	_disable()
+	_global_datas._backFrom_subscene.connect(_disable)
+	#tool_activated.emit(false)
 func _disable():
-	control.global_position.x = 1920
+	control.global_position.y = 0
 	_unselect_element()		
 	
 	
@@ -64,13 +64,15 @@ func _process(_delta):
 		return
 	
 	var new_position = control.get_global_mouse_position() + offset
-	new_position.y = clamp(control.global_position.y,control.global_position.y,control.global_position.y)
-	new_position.x = clamp(new_position.x,slider_y,1920)
+	new_position.x = clamp(control.global_position.x,control.global_position.x,control.global_position.x)
+	new_position.y = clamp(new_position.y,0,slider_y)
 	control.global_position = new_position
 
 
 	# Change darker color
-	scanner_opacity._set_scanner_opacity(slider_y,new_position.x)
+	#var value = inverse_lerp(0,slider_y,new_position.y)
+	#var valueD = lerp(0.0,0.75,value)
+	
 
 		
 func _input(event):
@@ -85,7 +87,7 @@ func _input(event):
 			_scale_change(size * scale_in_hand)
 			offset = control.transform.origin - control.get_global_mouse_position()
 			_global_datas.OnDrag_start_position = offset
-			_global_datas.active_photo_button.emit(false)
+			tool_activated.emit(false)
 	if click:
 		
 		#TO DROP
@@ -99,9 +101,7 @@ func _scale_change(value):
 	control.set_scale(Vector2(value,value))
 	
 
-func _reset_tools_position():	
-	control.global_position.x = 1920
-		
+	
 func _unselect_element():
 	
 	click = false
@@ -111,15 +111,13 @@ func _unselect_element():
 	control.reparent(my_origin_parent)
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
-	if control.global_position.x < 1200:
-		control.global_position.x = slider_y
-		scanner_opacity._set_scanner_opacity_value(1.0)
-		_global_datas.active_photo_button.emit(false)
-		
+	if control.global_position.y > slider_y/2.0:
+		control.global_position.y = slider_y	
+		tool_activated.emit(false)
+	
 	else:
-		control.global_position.x = 1920
-		scanner_opacity._set_scanner_opacity_value(0.0)
-		_global_datas.active_photo_button.emit(true)
+		control.global_position.y = 0
+		tool_activated.emit(true)
 
 	_global_datas.Cursor_mode.cursor_out()	
 	#IF OUT OF WINDOWS
@@ -127,8 +125,7 @@ func _unselect_element():
 func _notification(what):
 	#if what == NOTIFICATION_WM_FOCUS_IN:
 	if what == NOTIFICATION_WM_MOUSE_EXIT:
-		pass
-		#_unselect_element()
+		_unselect_element()
 		
 func _on_area_2d_mouse_entered():
 
@@ -142,24 +139,6 @@ func _on_area_2d_mouse_exited():
 	_global_datas.Cursor_mode.cursor_out()
 
 
-
-"
-
-[sub_resource type="GDScript" id="GDScript_2eyhw"]
-script/source = "extends Node
-
-
-func _set_scanner_opacity( slider_y : float, new_position : float):
-	
-	var value = inverse_lerp(1920,slider_y,new_position)
-	var valueD = lerp(0.0,1.0,value)
-	_global_datas.scanner_mat.set_shader_parameter(\"Circle\",valueD)	
-	_global_datas.scanner_mat_xray.set_shader_parameter(\"Circle\",valueD)
-
-func _set_scanner_opacity_value( value : float):
-	
-	_global_datas.scanner_mat.set_shader_parameter(\"Circle\",value)	
-	_global_datas.scanner_mat_xray.set_shader_parameter(\"Circle\",value)	
 
 "
 
@@ -500,6 +479,7 @@ void fragment() {
 
 }
 "
+graph_offset = Vector2(-418.769, 103.287)
 mode = 1
 flags/light_only = false
 nodes/fragment/2/node = SubResource("VisualShaderNodeExpression_tryt1")
@@ -689,35 +669,33 @@ shader = SubResource("VisualShader_01ohe")
 shader_parameter/Color = Color(0.4, 0.364706, 0.223529, 1)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3xj1s"]
-size = Vector2(162, 89)
+size = Vector2(375, 88)
 
 [sub_resource type="GDScript" id="GDScript_8dmon"]
 script/source = "extends Node
 @onready var photo_tools = $\"../Photo_tools\"
-@onready var vignette_opacity = $\"../Vignette_opacity\"
 
 
 func _ready():
 	
 	_global_datas._close_dialogue.connect(_hide)	
-
+	_global_datas._go_Mainscene.connect(_hide)
+	
 	_global_datas._show_dialogue_box.connect(_show)	
 	_global_datas._end_ini_subscene.connect(_show)	
 	
-	_global_datas._backFrom_subscene.connect(_hide)
-	_global_datas.active_photo_button.connect(_acivate)
+
 	
-	_hide()
 	
 func _hide():
 	photo_tools.visible = false	
-	vignette_opacity._set_vignette_opacity_value(0.0)
 func _show():
 	photo_tools.visible = true
-	
-func _acivate( condition : bool):
-	photo_tools.visible = condition
 
+
+func _on_slide_tool_activated(condition):
+	pass
+	#photo_tools.visible = condition
 "
 
 [sub_resource type="GDScript" id="GDScript_rihlu"]
@@ -732,14 +710,18 @@ var offset
 var size : float
 var my_origin_parent : Node
 
-@onready var vignette_opacity = $\"../Vignette_opacity\"
+signal tool_activated(value : bool)
 
+@onready var photo_effect_vignette = $\"../Photo_effect_vignette\"
+@onready var photo_effect_vignette_mat : Material = photo_effect_vignette.get_material()
 
 func _ready():
 
 	size = control.scale.x
 	my_origin_parent = control.get_parent()
-	_global_datas._backFrom_subscene.connect(_reset_tools_position)
+	_disable()
+	_global_datas._backFrom_subscene.connect(_disable)
+	
 func _disable():
 	control.global_position.y = 0
 	_unselect_element()		
@@ -758,7 +740,10 @@ func _process(_delta):
 
 
 	# Change darker color
-	vignette_opacity._set_vignette_opacity(slider_y,new_position.y)
+	var value = inverse_lerp(0,slider_y,new_position.y)
+	var valueD = lerp(0.0,0.75,value)
+	photo_effect_vignette_mat.set_shader_parameter(\"Circle\",valueD)
+
 		
 func _input(event):
 	
@@ -772,8 +757,7 @@ func _input(event):
 			_scale_change(size * scale_in_hand)
 			offset = control.transform.origin - control.get_global_mouse_position()
 			_global_datas.OnDrag_start_position = offset
-			_global_datas.active_scanner_button.emit(false)
-			
+			tool_activated.emit(false)
 			if _global_datas.Player_InDialogue:
 				_global_datas._hide_dialogue_box.emit()	
 
@@ -790,10 +774,6 @@ func _scale_change(value):
 	control.set_scale(Vector2(value,value))
 	
 
-func _reset_tools_position():
-	control.global_position.y = 0
-	
-	
 	
 func _unselect_element():
 	
@@ -807,20 +787,15 @@ func _unselect_element():
 	if control.global_position.y > slider_y/2.0:
 		control.global_position.y = slider_y
 		
-		vignette_opacity._set_vignette_opacity_value(0.75)
-		if _global_datas.Player_InSubScene:
-			_global_datas.active_scanner_button.emit(false)
-			
+		photo_effect_vignette_mat.set_shader_parameter(\"Circle\",0.75)
+		tool_activated.emit(true)
 		if _global_datas.Player_InDialogue:
 			_global_datas._hide_dialogue_box.emit()	
 		
 	else:
 		control.global_position.y = 0	
-		vignette_opacity._set_vignette_opacity_value(0.0)
-			
-		if _global_datas.Player_InSubScene:
-			_global_datas.active_scanner_button.emit(true)	
-		
+		photo_effect_vignette_mat.set_shader_parameter(\"Circle\",0.0)
+		tool_activated.emit(false)
 		if _global_datas.Player_InDialogue:
 			_global_datas._show_dialogue_box.emit()		
 			
@@ -833,8 +808,7 @@ func _unselect_element():
 func _notification(what):
 	#if what == NOTIFICATION_WM_FOCUS_IN:
 	if what == NOTIFICATION_WM_MOUSE_EXIT:
-		pass
-		#_unselect_element()
+		_unselect_element()
 		
 func _on_area_2d_mouse_entered():
 
@@ -847,28 +821,6 @@ func _on_area_2d_mouse_exited():
 	mouse_entered = false
 	_global_datas.Cursor_mode.cursor_out()
 
-
-
-"
-
-[sub_resource type="GDScript" id="GDScript_064xp"]
-script/source = "extends Node
-
-@onready var photo_effect_vignette = $\"../Photo_effect_vignette\"
-@onready var photo_effect_vignette_mat : Material = photo_effect_vignette.get_material()
-
-
-func _set_vignette_opacity( slider_y : float, new_position : float):
-	
-	var value = inverse_lerp(0,slider_y, new_position)
-	var valueD = lerp(0.0,0.75,value)
-	photo_effect_vignette_mat.set_shader_parameter(\"Circle\",valueD)
-
-func _set_vignette_opacity_value( value : float):
-	
-	if photo_effect_vignette_mat == null:
-		return
-	photo_effect_vignette_mat.set_shader_parameter(\"Circle\",value)	
 
 
 "
@@ -1119,7 +1071,6 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-759.348, 55.4352)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(1320, 520)
@@ -1584,9 +1535,6 @@ nodes/fragment/connections = PackedInt32Array(4, 0, 6, 0, 6, 0, 7, 0, 17, 0, 16,
 shader = SubResource("VisualShader_rj1p2")
 shader_parameter/flash_opacity = 0.5
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_xunxg"]
-size = Vector2(154, 160)
-
 [sub_resource type="CircleShape2D" id="CircleShape2D_mc43h"]
 radius = 357.972
 
@@ -1607,13 +1555,10 @@ script = SubResource("GDScript_06avi")
 
 [node name="Slide" type="Node" parent="Scanner_tools"]
 script = SubResource("GDScript_oc56q")
-slider_y = 430
-
-[node name="Scanner_opacity" type="Node" parent="Scanner_tools"]
-script = SubResource("GDScript_2eyhw")
+slider_y = 900
 
 [node name="Scanner_tools" type="Node2D" parent="Scanner_tools"]
-position = Vector2(1920, 540)
+position = Vector2(960, 0)
 
 [node name="Photo_circle3" type="ColorRect" parent="Scanner_tools/Scanner_tools"]
 material = SubResource("ShaderMaterial_bpvtm")
@@ -1622,19 +1567,19 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -412.0
-offset_top = -540.0
-offset_right = 1508.0
-offset_bottom = 540.0
+offset_left = -960.0
+offset_top = -901.0
+offset_right = 960.0
+offset_bottom = 179.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(0.231373, 0.623529, 0.647059, 1)
 
 [node name="ColorRect9" type="ColorRect" parent="Scanner_tools/Scanner_tools"]
-offset_left = -79.0
+offset_left = -196.0
 offset_top = -43.0
-offset_right = 1.0
+offset_right = -7.0
 offset_bottom = 1.0
 scale = Vector2(2, 2)
 mouse_filter = 2
@@ -1642,9 +1587,9 @@ color = Color(0.4, 0.364706, 0.223529, 1)
 
 [node name="ColorRect10" type="ColorRect" parent="Scanner_tools/Scanner_tools"]
 material = SubResource("ShaderMaterial_1dtom")
-offset_left = -53.0
+offset_left = -186.0
 offset_top = -39.0
-offset_right = 17.0
+offset_right = 15.0
 offset_bottom = 4.0
 scale = Vector2(1.78756, 1.78756)
 mouse_filter = 2
@@ -1652,10 +1597,10 @@ color = Color(0.0156863, 0.113725, 0.12549, 1)
 
 [node name="ColorRect11" type="ColorRect" parent="Scanner_tools/Scanner_tools"]
 material = SubResource("ShaderMaterial_ysnwg")
-offset_left = -74.0
-offset_top = -29.0
-offset_right = -40.0
-offset_bottom = 5.0
+offset_left = 90.0
+offset_top = 20.0
+offset_right = 124.0
+offset_bottom = 54.0
 scale = Vector2(1.78756, 1.78756)
 mouse_filter = 2
 color = Color(0.0156863, 0.113725, 0.12549, 1)
@@ -1671,7 +1616,7 @@ texture = ExtResource("1_pct16")
 position = Vector2(-195, 6)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Scanner_tools/Scanner_tools/Area2D2"]
-position = Vector2(195, -5.5)
+position = Vector2(188.5, -6)
 shape = SubResource("RectangleShape2D_3xj1s")
 
 [node name="Photo_tools" type="Node" parent="."]
@@ -1681,9 +1626,6 @@ script = SubResource("GDScript_8dmon")
 
 [node name="Slide" type="Node" parent="Photo_tools"]
 script = SubResource("GDScript_rihlu")
-
-[node name="Vignette_opacity" type="Node" parent="Photo_tools"]
-script = SubResource("GDScript_064xp")
 
 [node name="PHOTO_BEHAVIOUR" type="Node" parent="Photo_tools"]
 script = SubResource("GDScript_wren3")
@@ -1823,8 +1765,9 @@ texture = ExtResource("1_pct16")
 position = Vector2(1, 0)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Photo_tools/Photo_tools/photo_UI_elements/Area2D"]
-position = Vector2(-8, -6)
-shape = SubResource("RectangleShape2D_xunxg")
+visible = false
+position = Vector2(-5, -3)
+shape = SubResource("RectangleShape2D_3xj1s")
 
 [node name="Click_photo" type="Area2D" parent="Photo_tools/Photo_tools/photo_UI_elements"]
 position = Vector2(0, -292)
@@ -1837,8 +1780,10 @@ shape = SubResource("CircleShape2D_mc43h")
 [node name="Front_element" type="Node2D" parent="."]
 script = SubResource("GDScript_4ec3v")
 
+[connection signal="tool_activated" from="Scanner_tools/Slide" to="Photo_tools/Activation" method="_on_slide_tool_activated"]
 [connection signal="mouse_entered" from="Scanner_tools/Scanner_tools/Area2D2" to="Scanner_tools/Slide" method="_on_area_2d_mouse_entered"]
 [connection signal="mouse_exited" from="Scanner_tools/Scanner_tools/Area2D2" to="Scanner_tools/Slide" method="_on_area_2d_mouse_exited"]
+[connection signal="tool_activated" from="Photo_tools/Slide" to="Scanner_tools/Activation" method="_on_slide_tool_activated"]
 [connection signal="take_picture" from="Photo_tools/PHOTO_BEHAVIOUR" to="Photo_tools/PHOTO_BEHAVIOUR/Flash" method="_on_photo_behaviour_take_picture"]
 [connection signal="timeout" from="Photo_tools/PHOTO_BEHAVIOUR/Flash/Timer" to="Photo_tools/PHOTO_BEHAVIOUR/Flash" method="_on_timer_timeout"]
 [connection signal="timeout" from="Photo_tools/PHOTO_BEHAVIOUR/Timer" to="Photo_tools/PHOTO_BEHAVIOUR" method="_on_timer_timeout"]

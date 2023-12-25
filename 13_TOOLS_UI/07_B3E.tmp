@@ -111,7 +111,7 @@ func _unselect_element():
 	control.reparent(my_origin_parent)
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
-	if control.global_position.x < 1200:
+	if control.global_position.x < 1920/2.0:
 		control.global_position.x = slider_y
 		scanner_opacity._set_scanner_opacity_value(1.0)
 		_global_datas.active_photo_button.emit(false)
@@ -154,12 +154,12 @@ func _set_scanner_opacity( slider_y : float, new_position : float):
 	var value = inverse_lerp(1920,slider_y,new_position)
 	var valueD = lerp(0.0,1.0,value)
 	_global_datas.scanner_mat.set_shader_parameter(\"Circle\",valueD)	
-	_global_datas.scanner_mat_xray.set_shader_parameter(\"Circle\",valueD)
+
 
 func _set_scanner_opacity_value( value : float):
 	
 	_global_datas.scanner_mat.set_shader_parameter(\"Circle\",value)	
-	_global_datas.scanner_mat_xray.set_shader_parameter(\"Circle\",value)	
+
 
 "
 
@@ -694,7 +694,6 @@ size = Vector2(162, 89)
 [sub_resource type="GDScript" id="GDScript_8dmon"]
 script/source = "extends Node
 @onready var photo_tools = $\"../Photo_tools\"
-@onready var vignette_opacity = $\"../Vignette_opacity\"
 
 
 func _ready():
@@ -711,7 +710,7 @@ func _ready():
 	
 func _hide():
 	photo_tools.visible = false	
-	vignette_opacity._set_vignette_opacity_value(0.0)
+
 func _show():
 	photo_tools.visible = true
 	
@@ -808,19 +807,14 @@ func _unselect_element():
 		control.global_position.y = slider_y
 		
 		vignette_opacity._set_vignette_opacity_value(0.75)
-		if _global_datas.Player_InSubScene:
-			_global_datas.active_scanner_button.emit(false)
-			
+		_global_datas.active_scanner_button.emit(false)
 		if _global_datas.Player_InDialogue:
 			_global_datas._hide_dialogue_box.emit()	
 		
 	else:
 		control.global_position.y = 0	
 		vignette_opacity._set_vignette_opacity_value(0.0)
-			
-		if _global_datas.Player_InSubScene:
-			_global_datas.active_scanner_button.emit(true)	
-		
+		_global_datas.active_scanner_button.emit(true)
 		if _global_datas.Player_InDialogue:
 			_global_datas._show_dialogue_box.emit()		
 			
@@ -857,7 +851,6 @@ script/source = "extends Node
 @onready var photo_effect_vignette = $\"../Photo_effect_vignette\"
 @onready var photo_effect_vignette_mat : Material = photo_effect_vignette.get_material()
 
-
 func _set_vignette_opacity( slider_y : float, new_position : float):
 	
 	var value = inverse_lerp(0,slider_y, new_position)
@@ -866,8 +859,6 @@ func _set_vignette_opacity( slider_y : float, new_position : float):
 
 func _set_vignette_opacity_value( value : float):
 	
-	if photo_effect_vignette_mat == null:
-		return
 	photo_effect_vignette_mat.set_shader_parameter(\"Circle\",value)	
 
 

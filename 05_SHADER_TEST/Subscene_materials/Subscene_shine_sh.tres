@@ -1,4 +1,7 @@
-[gd_resource type="VisualShader" load_steps=11 format=3 uid="uid://drchaj5fcdan0"]
+[gd_resource type="VisualShader" load_steps=12 format=3 uid="uid://drchaj5fcdan0"]
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_nos7h"]
+parameter_name = "ColorParameter2"
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_v1duc"]
 noise_type = 0
@@ -42,66 +45,28 @@ parameter_name = "ColorParameter"
 
 [resource]
 code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, depth_test_disabled, unshaded;
 
-uniform vec4 ColorParameter : source_color;
-uniform sampler2D tex_lgt_23;
-
+uniform vec4 ColorParameter2 : source_color;
 
 
-void light() {
-// ColorParameter:30
-	vec4 n_out30p0 = ColorParameter;
 
-
-// Input:24
-	vec2 n_out24p0 = UV;
-
-
-// Texture2D:23
-	vec4 n_out23p0 = texture(tex_lgt_23, n_out24p0);
-
-
-// FloatConstant:26
-	float n_out26p0 = 0.000000;
-
-
-// FloatConstant:25
-	float n_out25p0 = 0.400000;
-
-
-	float n_out27p0;
-// Expression:27
-	n_out27p0 = 0.0;
-	{
-		const float DITHER_THRESHOLDS[16] ={
-				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-			};
-			
-		vec2 uv = FRAGCOORD.xy * n_out25p0;
-		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-		n_out27p0 = n_out26p0 - DITHER_THRESHOLDS[index];
-	}
-
-
-// Step:28
-	float n_out28p0 = step(n_out23p0.x, n_out27p0);
-
-
-// FloatFunc:29
-	float n_out29p0 = 1.0 - n_out28p0;
+void fragment() {
+// ColorParameter:2
+	vec4 n_out2p0 = ColorParameter2;
 
 
 // Output:0
-	DIFFUSE_LIGHT = vec3(n_out30p0.xyz);
-	ALPHA = n_out29p0;
+	ALBEDO = vec3(n_out2p0.xyz);
 
 
 }
 "
+flags/depth_test_disabled = true
+flags/unshaded = true
+nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_nos7h")
+nodes/fragment/2/position = Vector2(-140, 120)
+nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0)
 nodes/light/0/position = Vector2(840, 240)
 nodes/light/23/node = SubResource("VisualShaderNodeTexture_8783n")
 nodes/light/23/position = Vector2(-423.943, 558.883)
@@ -132,4 +97,4 @@ nodes/light/29/node = SubResource("VisualShaderNodeFloatFunc_h0qhu")
 nodes/light/29/position = Vector2(400, 560)
 nodes/light/30/node = SubResource("VisualShaderNodeColorParameter_b7q6p")
 nodes/light/30/position = Vector2(20, -60)
-nodes/light/connections = PackedInt32Array(25, 0, 27, 1, 26, 0, 27, 0, 27, 0, 28, 1, 23, 0, 28, 0, 28, 0, 29, 0, 30, 0, 0, 0, 29, 0, 0, 2, 24, 0, 23, 0)
+nodes/light/connections = PackedInt32Array(25, 0, 27, 1, 26, 0, 27, 0, 27, 0, 28, 1, 23, 0, 28, 0, 28, 0, 29, 0, 24, 0, 23, 0)

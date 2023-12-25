@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://cb8k68mtsigvd"]
+[gd_scene load_steps=27 format=3 uid="uid://cb8k68mtsigvd"]
 
 [ext_resource type="Script" path="res://00_SYSTEMS/Global_datas.gd" id="1_64l51"]
 [ext_resource type="Script" path="res://06_UI/Fps_counter.gd" id="1_smk2e"]
@@ -8,12 +8,11 @@
 [ext_resource type="Material" uid="uid://cndqni443mbf" path="res://00_PLAYER/Boat/Boat_mat.tres" id="5_aps83"]
 [ext_resource type="Shader" uid="uid://dxtkig2genofx" path="res://05_SHADER_TEST/Full_screen/FullScreen_sh.tres" id="6_63ifo"]
 [ext_resource type="Shader" uid="uid://bqd3h43rhgah0" path="res://05_SHADER_TEST/Full_screen/Sonar_fullscreen_show.tres" id="7_8gi2l"]
-[ext_resource type="Script" path="res://06_UI/Back_call_manager.gd" id="7_l6yr5"]
 [ext_resource type="Script" path="res://00_SCENE/Mouse_mode.gd" id="8_m0sr0"]
 [ext_resource type="PackedScene" uid="uid://bwmu5iwushsl5" path="res://13_TOOLS_UI/07_screen_tools.tscn" id="18_akagp"]
 [ext_resource type="PackedScene" uid="uid://cnmptm7i0xxmj" path="res://00_SCENE/02_main_scenes.tscn" id="18_gvi4q"]
 [ext_resource type="PackedScene" uid="uid://bbp1ccoa6te1g" path="res://11_SPEAKER/05_speaker_02.tscn" id="18_l1ne5"]
-[ext_resource type="PackedScene" uid="uid://nigmie4bbn6" path="res://00_SCENE/03_subscenes.tscn" id="19_cnotd"]
+[ext_resource type="PackedScene" uid="uid://nigmie4bbn6" path="res://08_SUBSCENES/03_subscenes.tscn" id="19_cnotd"]
 [ext_resource type="PackedScene" uid="uid://dmg5brvcww8lq" path="res://12_INVENTORY/06_inventory.tscn" id="19_v7nhs"]
 
 [sub_resource type="GDScript" id="GDScript_gl82p"]
@@ -29,9 +28,8 @@ func _input(event):
 	
 	if event.is_action_pressed(\"Go_subscene_debug\"):
 		_global_datas.cell_name = \"A1\"
+		_global_datas._reseting_clock_disable.emit()
 		_global_datas._go_Subscene.emit()
-		#_global_datas._start_ini_subscene.emit()
-		#_global_datas._splash.emit()
 		
 	if event.is_action_pressed(\"Add_coins\"):
 		_global_datas._find_coins.emit()
@@ -114,7 +112,7 @@ nodes/fragment/connections = PackedInt32Array(2, 0, 3, 2, 4, 0, 0, 0, 3, 0, 0, 1
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6q4t7"]
 shader = SubResource("VisualShader_aoud6")
-shader_parameter/ColorParameter = Color(0.407843, 0.729412, 0.639216, 1)
+shader_parameter/ColorParameter = Color(0.258824, 0.517647, 0.447059, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5m3rs"]
 shader = ExtResource("7_8gi2l")
@@ -162,9 +160,6 @@ KeepInFocus = ExtResource("5_aps83")
 [node name="Timer" type="Timer" parent="00_GAME_MANAGERS/Color_Managers"]
 wait_time = 0.523
 
-[node name="Back_call" type="Node" parent="00_GAME_MANAGERS"]
-script = ExtResource("7_l6yr5")
-
 [node name="Mouse_mode" type="Node" parent="00_GAME_MANAGERS"]
 script = ExtResource("8_m0sr0")
 
@@ -198,6 +193,7 @@ stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="01_GAME_UI/MAIN_SCENE_UI/MAIN_CAM_SCENE"]
 handle_input_locally = false
+mesh_lod_threshold = 0.0
 canvas_item_default_texture_filter = 0
 size = Vector2i(1920, 1080)
 render_target_update_mode = 4

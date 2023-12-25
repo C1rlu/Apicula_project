@@ -144,19 +144,22 @@ func move_behind():
 func _reset_active():
 	
 	last_position = control.transform.origin
-	_scale_change(size * scale_in_loupe)
+	
+	#var screen_center = Vector2(1920.0 / 2.0, 1080.0/ 2.0)
+	#control.transform.origin = screen_center
+	_scale_change(size * scale_in_hand)
 	var select_parent = _global_datas.In_Front_Node
 	control.reparent(select_parent)
-	var screen_center = Vector2(1920.0 / 2.0, 1080.0/ 2.0)
-	control.transform.origin = screen_center
 	control.move_to_front()
+	_global_datas.using_board_enable.emit()
 
 			
 func _reset_disable():
 	
 	_scale_change(size)
 	control.reparent(my_origin_parent)
-	control.transform.origin = last_position
+	_global_datas.using_board_disable.emit()
+
 
 		
 func _on_area_2d_mouse_entered():

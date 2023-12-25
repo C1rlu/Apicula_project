@@ -1,5 +1,6 @@
 extends Node
 
+
 var player_position : Vector3
 var cell_name : String
 
@@ -7,7 +8,6 @@ var Player_InBoard : bool
 var Player_InSubScene : bool
 var Player_InMenu : bool
 var Player_InDialogue : bool
-var Player_isDraging : bool
 var Player_lock_click : bool
 
 # menu signals
@@ -39,7 +39,6 @@ signal _show_dialogue_box
 #subsceneSignal
 
 var subbscene_playerPosition : Vector3
-signal _reset_oxygene
 signal _speedUp
 signal _speedDown
 signal _take_photo
@@ -58,13 +57,12 @@ func _ready():
 	
 	
 #board scene
-signal mouse_raycast
+
 signal using_board_enable
 signal using_board_disable
 signal darker_color_world
 signal normal_color_world
-var mouseRaycastPosition : Vector3
-var mouseRayCast_active : bool
+
 var board_camera : Camera3D
 var zoom_value : float
 var OnDrag_start_position : Vector2
@@ -79,15 +77,17 @@ var Book_group : Node2D
 signal lock_page
 signal flip_left_end
 
-
+#tools_ui
+signal active_photo_button(condition : bool)
+signal active_scanner_button(condition : bool)
+var scanner_mat : Material
+var scanner_mat_xray : Material
 #instance word text
 var instance_word_text : Node
 #-----------------------------
-
-
 # dialogue datas
 var Npc_Dialogue : Npc_datas
-var Player_Rg : RigidBody3D
 
-signal _call_back
-signal  _update_npc_ini
+
+
+

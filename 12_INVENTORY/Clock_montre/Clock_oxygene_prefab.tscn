@@ -83,6 +83,9 @@ func _ready():
 func _input(event):
 	#Active
 	
+	if _global_datas.Player_InSubScene:
+		return
+	
 	if click:
 		#TO Disable
 		if event is InputEventMouseButton:
@@ -100,12 +103,10 @@ func _input(event):
 	
 	
 func _active_reset():
-	print(\"RESET ACTIVE\")	
 	take_object._reset_active()
 	_start_clock()
 	
 func _disable_reset():
-	print(\"RESET DISABLED\")	
 	take_object._reset_disable()
 	_stop_clock()
 	click = false

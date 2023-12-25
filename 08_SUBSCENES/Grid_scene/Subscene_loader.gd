@@ -5,11 +5,13 @@ extends Node
 @onready var cam_raycast = $CAM_RAYCAST
 
 func _ready():
+	
 	_global_datas._go_Subscene.connect(_loadscene)
 	_global_datas._go_Subscene.connect(active_subscene)
 	_global_datas._go_Mainscene.connect(disable_subscene)
 	_global_datas.cell_name = "null"
 	cam_raycast.current = false
+	
 func _loadscene():	
 	#REMOVE PREVIOUS SCENE
 	for child in $LoadScene.get_children():
@@ -29,21 +31,15 @@ func _loadscene():
 func active_subscene():	
 
 	_global_datas.Player_InSubScene = true
-	#$SUBSCENES_CAM_SCENE.visible = _global_datas.Player_InSubScene
 	_global_datas._start_ini_subscene.emit()
 	_global_datas._splash.emit()
-	#$Oxy_UI.visible = true
+
 	cam_raycast.current = true
-	#$Oxy_UI_2.visible = true
 
-	
 func disable_subscene():
-
-	#$Oxy_UI.visible = false
-	#$Oxy_UI_2.visible = false
 	_global_datas.Player_InSubScene = false
 	cam_raycast.current = false
-	#$SUBSCENES_CAM_SCENE.visible = false
+
 	
 	
 

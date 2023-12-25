@@ -16,7 +16,7 @@ func _ready():
 	_global_datas._start_ini_subscene.connect(ini_Pos)
 	_global_datas._splash.connect(splash)
 	_global_datas._end_ini_subscene.connect(can_Move)
-	_global_datas.Player_Rg = self
+
 	
 func ini_Pos():
 	_canMove = false

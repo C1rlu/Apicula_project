@@ -1,6 +1,5 @@
 extends Node
 
-
 @export var disable_mouse = true
 
 func _ready():

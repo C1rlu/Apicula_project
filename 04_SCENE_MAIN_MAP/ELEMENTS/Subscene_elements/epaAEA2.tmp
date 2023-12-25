@@ -13,6 +13,19 @@ signal see_out
 var can_click : bool
 
 
+func _ready():
+	_global_datas._active_sonar.connect(can_click_now)
+
+
+func can_click_now():
+	
+	can_click = true
+	var value : int = 2	
+	Input.set_default_cursor_shape(value)		
+	_global_datas.cell_name	= scene_name
+	
+	
+		
 func _on_area_entered(_area):
 	_global_datas._active_sonar.emit()
 
