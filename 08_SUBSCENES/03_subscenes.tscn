@@ -1,10 +1,11 @@
-[gd_scene load_steps=149 format=3 uid="uid://nigmie4bbn6"]
+[gd_scene load_steps=150 format=3 uid="uid://nigmie4bbn6"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/Grid_scene/Subscene_loader.gd" id="1_7uoo0"]
 [ext_resource type="PackedScene" uid="uid://g7u8o55jrnyy" path="res://08_SUBSCENES/Player_subscene/Player_sub.tscn" id="2_ri8q1"]
+[ext_resource type="Texture2D" uid="uid://c7k0odb24eisn" path="res://05_SHADER_TEST/Full_screen/Dither_pattners/Blue_noise/HDR_LA_4.png" id="3_1nr84"]
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="3_2i3gt"]
-[ext_resource type="Texture2D" uid="uid://b2wyv8gs1cvkn" path="res://05_SHADER_TEST/Full_screen/Dither_pattners/blue_noise.png" id="3_3vbp4"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Cam_subscene_behaviour.gd" id="3_jsuc6"]
+[ext_resource type="Texture2D" uid="uid://djsjfq2xoap2l" path="res://05_SHADER_TEST/Full_screen/Dither_pattners/Blue_noise/HDR_LA_5.png" id="4_rblxm"]
 [ext_resource type="PackedScene" uid="uid://bdnl7k72gp6so" path="res://08_SUBSCENES/Grid_scene/A1.tscn" id="5_0e8gc"]
 
 [sub_resource type="GDScript" id="GDScript_yjydq"]
@@ -629,7 +630,7 @@ nodes/fragment/connections = PackedInt32Array(30, 0, 31, 0, 31, 0, 32, 0, 34, 0,
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_byemk"]
 shader = SubResource("VisualShader_pn65u")
 shader_parameter/Circle = 0.0
-shader_parameter/Noise = ExtResource("3_3vbp4")
+shader_parameter/Noise = ExtResource("3_1nr84")
 
 [sub_resource type="GDScript" id="GDScript_6jk87"]
 script/source = "extends SubViewportContainer
@@ -664,7 +665,7 @@ function = 31
 source = 5
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_bjust"]
-constant = 4.0
+constant = 6.0
 
 [sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_ef8t1"]
 input_name = "texture"
@@ -700,7 +701,7 @@ operator = 2
 function = 31
 
 [sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_ut3vq"]
-default_input_values = [0, 0.969, 1, 0.0]
+default_input_values = [0, 0.99, 1, 0.0]
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_68abs"]
 constant = 2.0
@@ -841,7 +842,7 @@ void fragment() {
 
 
 // FloatConstant:19
-	float n_out19p0 = 4.000000;
+	float n_out19p0 = 6.000000;
 
 
 // Input:29
@@ -918,7 +919,7 @@ void fragment() {
 
 
 // Step:32
-	float n_in32p0 = 0.96900;
+	float n_in32p0 = 0.99000;
 	float n_out32p0 = step(n_in32p0, n_out38p0.x);
 
 
@@ -938,7 +939,7 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-4017.17, 201.508)
+graph_offset = Vector2(-1281.65, 664.318)
 mode = 1
 flags/unshaded = true
 flags/light_only = false
@@ -1030,8 +1031,8 @@ nodes/fragment/connections = PackedInt32Array(2, 0, 3, 2, 6, 0, 7, 0, 7, 0, 8, 0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ognfo"]
 shader = SubResource("VisualShader_1rajd")
-shader_parameter/Circle = 0.0
-shader_parameter/Noise = ExtResource("3_3vbp4")
+shader_parameter/Circle = 1.0
+shader_parameter/Noise = ExtResource("4_rblxm")
 
 [sub_resource type="GDScript" id="GDScript_oxrkm"]
 script/source = "extends SubViewportContainer
@@ -1523,7 +1524,6 @@ cull_mask = 0
 script = SubResource("GDScript_5new5")
 
 [node name="SUBSCENES_CAM_SCENE" type="SubViewportContainer" parent="."]
-visible = false
 material = SubResource("ShaderMaterial_tsr6x")
 anchors_preset = 15
 anchor_right = 1.0
@@ -1536,7 +1536,7 @@ stretch = true
 [node name="SubViewport" type="SubViewport" parent="SUBSCENES_CAM_SCENE"]
 handle_input_locally = false
 size = Vector2i(1920, 1080)
-render_target_update_mode = 0
+render_target_update_mode = 4
 
 [node name="CAM_STATE_BOAT_root" type="Node3D" parent="SUBSCENES_CAM_SCENE/SubViewport" node_paths=PackedStringArray("Player_position")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 1.8)
@@ -1549,7 +1549,6 @@ cull_mask = 4
 current = true
 
 [node name="SUBSCENES_CAM_SCANNER" type="SubViewportContainer" parent="."]
-visible = false
 material = SubResource("ShaderMaterial_byemk")
 anchors_preset = 15
 anchor_right = 1.0
@@ -1564,7 +1563,7 @@ script = SubResource("GDScript_6jk87")
 transparent_bg = true
 handle_input_locally = false
 size = Vector2i(1920, 1080)
-render_target_update_mode = 0
+render_target_update_mode = 4
 
 [node name="CAM_STATE_BOAT_root" type="Node3D" parent="SUBSCENES_CAM_SCANNER/SubViewport" node_paths=PackedStringArray("Player_position")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 1.8)
@@ -1577,7 +1576,6 @@ cull_mask = 4
 current = true
 
 [node name="SUBSCENES_CAM_SCANNER_XRAY" type="SubViewportContainer" parent="."]
-visible = false
 material = SubResource("ShaderMaterial_ognfo")
 anchors_preset = 15
 anchor_right = 1.0
@@ -1592,7 +1590,7 @@ script = SubResource("GDScript_oxrkm")
 transparent_bg = true
 handle_input_locally = false
 size = Vector2i(1920, 1080)
-render_target_update_mode = 0
+render_target_update_mode = 4
 
 [node name="CAM_STATE_BOAT_root" type="Node3D" parent="SUBSCENES_CAM_SCANNER_XRAY/SubViewport" node_paths=PackedStringArray("Player_position")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 1.8)
