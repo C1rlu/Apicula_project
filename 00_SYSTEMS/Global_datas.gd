@@ -37,7 +37,8 @@ signal _hide_dialogue_box
 signal _show_dialogue_box
 
 #subsceneSignal
-
+var mouseRaycastPosition : Vector3
+signal get_raycastPosition
 var subbscene_playerPosition : Vector3
 signal _speedUp
 signal _speedDown
@@ -81,6 +82,7 @@ signal flip_left_end
 var clock_timer : Timer
 signal active_photo_button(condition : bool)
 signal active_scanner_button(condition : bool)
+signal active_mirror_switch(condition : bool)
 var scanner_mat : Material
 var scanner_mat_xray : Material
 #instance word text

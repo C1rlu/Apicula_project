@@ -167,19 +167,19 @@ func _on_timer_timeout():
 [sub_resource type="GDScript" id="GDScript_xw7ed"]
 script/source = "extends Node
 
-		
+@export var active_teleport = false		
 func _input(event):
 
-	#TO DRAG
-	if !_global_datas.Player_lock_click == true:
+	if !active_teleport:
+		return
 		
-		if Input.is_action_just_pressed(\"Click\"):
-
-			#_global_datas.Player_lock_click = true
-			var mouse_pos = get_viewport().get_mouse_position()
-			var mouse_pos3D = Vector3(mouse_pos.x,mouse_pos.y,0.0)
-			_global_datas._teleport_position.emit(mouse_pos3D)
-			print(mouse_pos)
+	if Input.is_action_just_pressed(\"Click\"):
+		
+		_global_datas.get_raycastPosition.emit()
+		var mouse_pos = _global_datas.mouseRaycastPosition
+		var mouse_pos3D = Vector3(mouse_pos.x,mouse_pos.y,0.0)
+		_global_datas._teleport_position.emit(mouse_pos3D)
+		print(\"TELEPORT\")
 "
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_icff5"]
@@ -1448,7 +1448,7 @@ func _ready():
 	_global_datas._go_Subscene.connect(_disable)
 	_global_datas._go_Mainscene.connect(_disable)
 
-
+	
 
 func _disable():
 	mirror_world = false
@@ -1468,10 +1468,12 @@ func _mirror_switch(condition : bool):
 		t = create_tween()	
 		t .tween_method(scanner_opacity._set_scanner_opacity_value,0.0,1.0,0.25).set_trans(Tween.TRANS_SINE)
 		_global_datas.clock_timer.paused = true
+		
 func _on_texture_button_pressed():
 	
 	mirror_world = !mirror_world
 	_mirror_switch(mirror_world)
+	_global_datas.active_mirror_switch.emit(true)
 "
 
 [sub_resource type="GDScript" id="GDScript_i6a5a"]

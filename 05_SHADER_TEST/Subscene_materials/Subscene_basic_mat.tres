@@ -9,7 +9,7 @@ global uniform vec4 Subscene_Darker_color : source_color;
 uniform float Distance_power = 0.25;
 global uniform vec4 Subscene_light_color : source_color;
 
-
+uniform float dither_mode_opacity = 1.0;
 
 void fragment() {
 // ColorParameter:2
@@ -125,10 +125,10 @@ void light() {
 // Mix:37
 	vec3 n_out37p0 = mix(n_out16p0, vec3(n_out25p0.xyz), vec3(n_out34p0));
 
-
+	vec3 check_dither_mode = mix( n_out37p0,vec3(n_out13p0.x,n_out13p0.x,n_out13p0.x), vec3(dither_mode_opacity,dither_mode_opacity,dither_mode_opacity));
 // Output:0
-	SPECULAR_LIGHT += n_out37p0;
-
+	SPECULAR_LIGHT += check_dither_mode;
+	
 
 }
 "
@@ -137,3 +137,4 @@ void light() {
 render_priority = 0
 shader = SubResource("Shader_tqjd6")
 shader_parameter/Distance_power = 0.5
+shader_parameter/dither_mode_opacity = 0.0

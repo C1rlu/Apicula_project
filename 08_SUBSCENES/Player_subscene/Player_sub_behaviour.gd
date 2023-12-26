@@ -26,7 +26,7 @@ func can_Move():
 	_canMove = true
 	
 func splash():
-	apply_central_force(Vector3.DOWN * 500)
+	apply_central_force(Vector3.DOWN * 600)
 	
 func _player_ResetPosition():
 	transform.origin = Vector3.ZERO
