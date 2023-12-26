@@ -85,7 +85,7 @@ func _input(event):
 			_scale_change(size * scale_in_hand)
 			offset = control.transform.origin - control.get_global_mouse_position()
 			_global_datas.OnDrag_start_position = offset
-			_global_datas.active_photo_button.emit(false)
+			#_global_datas.active_photo_button.emit(false)
 	if click:
 		
 		#TO DROP
@@ -114,12 +114,12 @@ func _unselect_element():
 	if control.global_position.x < 1200:
 		control.global_position.x = slider_y
 		scanner_opacity._set_scanner_opacity_value(1.0)
-		_global_datas.active_photo_button.emit(false)
+		#_global_datas.active_photo_button.emit(false)
 		
 	else:
 		control.global_position.x = 1920
 		scanner_opacity._set_scanner_opacity_value(0.0)
-		_global_datas.active_photo_button.emit(true)
+		#_global_datas.active_photo_button.emit(true)
 
 	_global_datas.Cursor_mode.cursor_out()	
 	#IF OUT OF WINDOWS
@@ -772,7 +772,7 @@ func _input(event):
 			_scale_change(size * scale_in_hand)
 			offset = control.transform.origin - control.get_global_mouse_position()
 			_global_datas.OnDrag_start_position = offset
-			_global_datas.active_scanner_button.emit(false)
+			#_global_datas.active_scanner_button.emit(false)
 			
 			if _global_datas.Player_InDialogue:
 				_global_datas._hide_dialogue_box.emit()	
@@ -808,8 +808,8 @@ func _unselect_element():
 		control.global_position.y = slider_y
 		
 		vignette_opacity._set_vignette_opacity_value(0.75)
-		if _global_datas.Player_InSubScene:
-			_global_datas.active_scanner_button.emit(false)
+		#if _global_datas.Player_InSubScene:
+			#_global_datas.active_scanner_button.emit(false)
 			
 		if _global_datas.Player_InDialogue:
 			_global_datas._hide_dialogue_box.emit()	
@@ -818,8 +818,8 @@ func _unselect_element():
 		control.global_position.y = 0	
 		vignette_opacity._set_vignette_opacity_value(0.0)
 			
-		if _global_datas.Player_InSubScene:
-			_global_datas.active_scanner_button.emit(true)	
+		#if _global_datas.Player_InSubScene:
+			#_global_datas.active_scanner_button.emit(true)	
 		
 		if _global_datas.Player_InDialogue:
 			_global_datas._show_dialogue_box.emit()		
@@ -1616,6 +1616,7 @@ script = SubResource("GDScript_2eyhw")
 position = Vector2(1920, 540)
 
 [node name="Photo_circle3" type="ColorRect" parent="Scanner_tools/Scanner_tools"]
+visible = false
 material = SubResource("ShaderMaterial_bpvtm")
 anchors_preset = 8
 anchor_left = 0.5
