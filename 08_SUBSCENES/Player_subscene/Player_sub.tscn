@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://g7u8o55jrnyy"]
+[gd_scene load_steps=52 format=3 uid="uid://g7u8o55jrnyy"]
 
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="1_n1vw4"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Player_sub_behaviour.gd" id="1_o2v73"]
@@ -167,6 +167,23 @@ tracks/0/keys = {
 _data = {
 "F_loop": SubResource("Animation_f8oxp")
 }
+
+[sub_resource type="GDScript" id="GDScript_l3a1b"]
+script/source = "extends Node
+
+
+@onready var player_sub = $\"..\"
+
+
+
+func _ready():
+	_global_datas._teleport_position.connect(_teleport)
+
+
+func _teleport(position : Vector3):
+	#player_sub.linear_velocity = 0.0
+	player_sub.transform.origin = position
+"
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_lp7h6"]
 radius = 0.158202
@@ -607,6 +624,9 @@ script = SubResource("GDScript_acsu0")
 libraries = {
 "": SubResource("AnimationLibrary_oqrpf")
 }
+
+[node name="Teleport" type="Node" parent="."]
+script = SubResource("GDScript_l3a1b")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.121499, 0)

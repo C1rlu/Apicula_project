@@ -47,7 +47,7 @@ signal _forreuse_on
 signal _forreuse_off
 signal _forreuse_impact
 signal _spawn_empty_oxygene
-
+signal _teleport_position(position : Vector3)
 
 var _forreuse_impact_origin : Vector3
 
@@ -60,8 +60,7 @@ func _ready():
 
 signal using_board_enable
 signal using_board_disable
-signal darker_color_world
-signal normal_color_world
+
 
 var board_camera : Camera3D
 var zoom_value : float
@@ -71,6 +70,7 @@ var Cursor_mode : Node
 var In_Front_Node : Node2D
 
 # BOOK PAGE
+signal  book_is_open(condition : bool)
 var Book_page_index : int
 var Book_pages : Array
 var Book_group : Node2D
@@ -78,6 +78,7 @@ signal lock_page
 signal flip_left_end
 
 #tools_ui
+var clock_timer : Timer
 signal active_photo_button(condition : bool)
 signal active_scanner_button(condition : bool)
 var scanner_mat : Material

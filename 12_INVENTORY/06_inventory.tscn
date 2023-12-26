@@ -1,4 +1,4 @@
-[gd_scene load_steps=177 format=3 uid="uid://dmg5brvcww8lq"]
+[gd_scene load_steps=178 format=3 uid="uid://dmg5brvcww8lq"]
 
 [ext_resource type="Script" path="res://12_INVENTORY/Change_cursor.gd" id="1_8ci41"]
 [ext_resource type="PackedScene" uid="uid://dyfif7fbf51gx" path="res://12_INVENTORY/Book/Book_prefab.tscn" id="1_mrfq4"]
@@ -25,6 +25,7 @@ func _ready():
 	_global_datas._active_sonar.connect(_hide)
 	_global_datas._disable_sonar.connect(_show)
 	_global_datas._go_Subscene.connect(_hide)
+	
 func _hide_2d_enventory():
 	control.visible = false
 	
@@ -161,6 +162,24 @@ func _on_timer_timeout():
 
 
 
+"
+
+[sub_resource type="GDScript" id="GDScript_xw7ed"]
+script/source = "extends Node
+
+		
+func _input(event):
+
+	#TO DRAG
+	if !_global_datas.Player_lock_click == true:
+		
+		if Input.is_action_just_pressed(\"Click\"):
+
+			#_global_datas.Player_lock_click = true
+			var mouse_pos = get_viewport().get_mouse_position()
+			var mouse_pos3D = Vector3(mouse_pos.x,mouse_pos.y,0.0)
+			_global_datas._teleport_position.emit(mouse_pos3D)
+			print(mouse_pos)
 "
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_icff5"]
@@ -1422,22 +1441,37 @@ script/source = "extends Node
 @onready var scanner_opacity = $\"../Scanner_opacity\"
 
 var mirror_world = false
-func _mirror_switch():
 
-	mirror_world =!mirror_world
+var t
 
-	if !mirror_world :
-		var t = create_tween()
+func _ready():
+	_global_datas._go_Subscene.connect(_disable)
+	_global_datas._go_Mainscene.connect(_disable)
+
+
+
+func _disable():
+	mirror_world = false
+	_mirror_switch(mirror_world)	
+	
+func _mirror_switch(condition : bool):
+	
+	if t:
+		t.kill()
+
+	if !condition :
+		t = create_tween()
 		t .tween_method(scanner_opacity._set_scanner_opacity_value,1.0,0.0,0.25).set_trans(Tween.TRANS_SINE)
-
+		_global_datas.clock_timer.paused = false
 	else:
 	
-		var t = create_tween()	
+		t = create_tween()	
 		t .tween_method(scanner_opacity._set_scanner_opacity_value,0.0,1.0,0.25).set_trans(Tween.TRANS_SINE)
-		
+		_global_datas.clock_timer.paused = true
 func _on_texture_button_pressed():
-	_mirror_switch()
-
+	
+	mirror_world = !mirror_world
+	_mirror_switch(mirror_world)
 "
 
 [sub_resource type="GDScript" id="GDScript_i6a5a"]
@@ -2108,6 +2142,9 @@ one_shot = true
 [node name="CHANGE_CURSOR" type="Node" parent="."]
 script = ExtResource("1_8ci41")
 
+[node name="TELEPORT" type="Node" parent="."]
+script = SubResource("GDScript_xw7ed")
+
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 15
@@ -2409,45 +2446,6 @@ rotation = -0.232413
 position = Vector2(247, 52)
 rotation = -0.185973
 
-[node name="Coins_group" type="Control" parent="Control"]
-anchors_preset = 0
-mouse_filter = 2
-
-[node name="instance_pos" type="Control" parent="Control/Coins_group"]
-anchors_preset = 0
-offset_left = 960.0
-offset_top = 1050.0
-offset_right = 960.0
-offset_bottom = 1050.0
-mouse_filter = 2
-
-[node name="Coins6" parent="Control/Coins_group" instance=ExtResource("5_6qspm")]
-position = Vector2(565, 63)
-
-[node name="Coins7" parent="Control/Coins_group" instance=ExtResource("5_6qspm")]
-position = Vector2(599, 61)
-
-[node name="Coins8" parent="Control/Coins_group" instance=ExtResource("5_6qspm")]
-position = Vector2(563, 74)
-
-[node name="Coins9" parent="Control/Coins_group" instance=ExtResource("5_6qspm")]
-position = Vector2(592, 87)
-
-[node name="Coins" parent="Control/Coins_group" instance=ExtResource("6_iwb8l")]
-position = Vector2(404, 127)
-
-[node name="Coins2" parent="Control/Coins_group" instance=ExtResource("6_iwb8l")]
-position = Vector2(467, 166)
-
-[node name="Coins3" parent="Control/Coins_group" instance=ExtResource("6_iwb8l")]
-position = Vector2(443, 162)
-
-[node name="Coins4" parent="Control/Coins_group" instance=ExtResource("6_iwb8l")]
-position = Vector2(443, 165)
-
-[node name="Coins5" parent="Control/Coins_group" instance=ExtResource("6_iwb8l")]
-position = Vector2(454, 162)
-
 [node name="Mirror_tools" type="Control" parent="Control"]
 anchors_preset = 0
 mouse_filter = 2
@@ -2536,6 +2534,45 @@ offset_top = -21.0
 offset_right = 49.0
 offset_bottom = 63.0
 script = SubResource("GDScript_i8nl0")
+
+[node name="Coins_group" type="Control" parent="Control"]
+anchors_preset = 0
+mouse_filter = 2
+
+[node name="instance_pos" type="Control" parent="Control/Coins_group"]
+anchors_preset = 0
+offset_left = 960.0
+offset_top = 1050.0
+offset_right = 960.0
+offset_bottom = 1050.0
+mouse_filter = 2
+
+[node name="Coins6" parent="Control/Coins_group" instance=ExtResource("5_6qspm")]
+position = Vector2(565, 63)
+
+[node name="Coins7" parent="Control/Coins_group" instance=ExtResource("5_6qspm")]
+position = Vector2(599, 61)
+
+[node name="Coins8" parent="Control/Coins_group" instance=ExtResource("5_6qspm")]
+position = Vector2(563, 74)
+
+[node name="Coins9" parent="Control/Coins_group" instance=ExtResource("5_6qspm")]
+position = Vector2(592, 87)
+
+[node name="Coins" parent="Control/Coins_group" instance=ExtResource("6_iwb8l")]
+position = Vector2(404, 127)
+
+[node name="Coins2" parent="Control/Coins_group" instance=ExtResource("6_iwb8l")]
+position = Vector2(467, 166)
+
+[node name="Coins3" parent="Control/Coins_group" instance=ExtResource("6_iwb8l")]
+position = Vector2(443, 162)
+
+[node name="Coins4" parent="Control/Coins_group" instance=ExtResource("6_iwb8l")]
+position = Vector2(443, 165)
+
+[node name="Coins5" parent="Control/Coins_group" instance=ExtResource("6_iwb8l")]
+position = Vector2(454, 162)
 
 [node name="Words_note" type="Control" parent="Control"]
 anchors_preset = 0

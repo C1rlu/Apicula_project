@@ -11,29 +11,13 @@ default_input_values = [2, true, 3, 5.48]
 
 [sub_resource type="VisualShader" id="VisualShader_e7xhs"]
 code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded, shadows_disabled;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx;
 
 
 
-
-void fragment() {
-// Fresnel:2
-	float n_in2p3 = 5.48000;
-	float n_out2p0 = pow(clamp(dot(NORMAL, VIEW), 0.0, 1.0), n_in2p3);
-
-
-// Output:0
-	ALBEDO = vec3(n_out2p0);
-
-
-}
 "
-graph_offset = Vector2(-402.329, -58.2365)
-flags/unshaded = true
-flags/shadows_disabled = true
 nodes/fragment/2/node = SubResource("VisualShaderNodeFresnel_r76vo")
 nodes/fragment/2/position = Vector2(-208.262, 89.9399)
-nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2ohun"]
 render_priority = 0
@@ -222,6 +206,32 @@ collision_mask = 2
 transform = Transform3D(0.851028, -0.27153, 0.0840946, 0.284255, 0.812932, -0.251769, -2.37995e-09, 0.265443, 0.857083, 1.09292, -12.7317, 0.284042)
 shape = SubResource("ConcavePolygonShape3D_ipksv")
 
+[node name="Boat_underscene_03" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.305131, -0.0973555, 0.0301516, 0.101918, 0.291472, -0.0902704, 2.31701e-09, 0.0951728, 0.307302, 0.293212, 0.637362, -0.191956)
+layers = 4096
+mesh = SubResource("ArrayMesh_gecko")
+skeleton = NodePath("")
+
+[node name="_push" type="Node" parent="Boat_underscene_03"]
+script = SubResource("GDScript_krued")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Boat_underscene_03"]
+visible = false
+collision_layer = 0
+collision_mask = 6
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Boat_underscene_03/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_ipksv")
+
+[node name="Area3D2" type="Area3D" parent="Boat_underscene_03"]
+transform = Transform3D(1.05711, 0.35309, -2.98194e-07, -0.337285, 1.00979, 0.329722, 0.104459, -0.312738, 1.06463, 3.34008, 13.1314, -4.39825)
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Boat_underscene_03/Area3D2"]
+transform = Transform3D(0.851028, -0.27153, 0.0840946, 0.284255, 0.812932, -0.251769, -2.37995e-09, 0.265443, 0.857083, 1.09292, -12.7317, 0.284042)
+shape = SubResource("ConcavePolygonShape3D_ipksv")
+
 [node name="Destructible_elements" type="Node3D" parent="."]
 transform = Transform3D(0.358544, 0, 0, 0, 0.358544, 0, 0, 0, 0.358544, 0, -0.228681, 0)
 
@@ -328,6 +338,7 @@ transform = Transform3D(0.215504, 0, 0, 0, 0.215504, 0, 0, 0, 0.215504, -0.01367
 transform = Transform3D(0.215504, 0, 0, 0, 0.215504, 0, 0, 0, 0.215504, 1.63953, -4.25734, 0.348941)
 
 [connection signal="area_shape_entered" from="Boat_underscene_02/Area3D2" to="Boat_underscene_02/_push" method="_on_area_3d_2_area_shape_entered"]
+[connection signal="area_shape_entered" from="Boat_underscene_03/Area3D2" to="Boat_underscene_03/_push" method="_on_area_3d_2_area_shape_entered"]
 [connection signal="area_shape_entered" from="Destructible_elements/Area3D2" to="Destructible_elements/_push" method="_on_area_3d_2_area_shape_entered"]
 [connection signal="area_shape_entered" from="Destructible_elements/Area3D2" to="Destructible_elements/add_coins" method="_on_area_3d_area_shape_entered"]
 [connection signal="area_shape_entered" from="Destructible_elements2/Area3D2" to="Destructible_elements2/_push" method="_on_area_3d_2_area_shape_entered"]

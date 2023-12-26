@@ -97,6 +97,10 @@ func _unselect_element(condition : bool, move_behind_c : bool):
 		
 		var pages = _global_datas.Book_pages[_global_datas.Book_page_index]
 		
+		if  pages.get_node_or_null("not_here") != null:
+		
+			return
+			
 		var mouse_position = control.get_global_mouse_position() + offset
 		if mouse_position.x > 960.0:
 			var side_right : Node2D = pages.get_node("right")
@@ -175,8 +179,15 @@ func _on_area_2d_mouse_exited():
 	_global_datas.Cursor_mode.cursor_out()
 
 func _in_book_zone(condition : bool):
+	
+	var pages = _global_datas.Book_pages[_global_datas.Book_page_index]
+		
+	if  pages.get_node_or_null("not_here") != null:
+		if Pin_book != null :Pin_book.visible = false
+		return
+	
 	in_book_zone = condition
 	if Pin_book != null :Pin_book.visible = condition
-
+	
 
 

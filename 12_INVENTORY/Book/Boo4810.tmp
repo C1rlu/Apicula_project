@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://dyfif7fbf51gx"]
+[gd_scene load_steps=31 format=3 uid="uid://dyfif7fbf51gx"]
 
 [ext_resource type="PackedScene" uid="uid://cgb4c1n0bj2at" path="res://12_INVENTORY/Book/Page_flip/page_flip_right.tscn" id="1_1pirv"]
 [ext_resource type="Material" uid="uid://blohbpbwcsu4f" path="res://05_SHADER_TEST/UI/Circle_tirette/Circle_inside_withDither_dots.tres" id="1_fo7hk"]
@@ -15,7 +15,6 @@ var offset
 var size : float
 var my_origin_parent : Node
 
-var book_is_open = false
 
 func _ready():
 
@@ -50,10 +49,7 @@ func _input(event):
 			offset = control.transform.origin - control.get_global_mouse_position()
 			_global_datas.OnDrag_start_position = offset
 			pages_behaviour._show_new_pages()	
-				
-			if !book_is_open:
-				book_is_open = true
-				_global_datas.book_is_open.emit(true)	
+		
 	#TO ZOOM	
 	if click:
 		
@@ -81,19 +77,16 @@ func _unselect_element():
 	if control.global_position.y > 1200:
 		control.global_position.y = 1785	
 		_global_datas.Player_InBoard = false
-	
-		
-		if book_is_open:
-			book_is_open = false
-			_global_datas.book_is_open.emit(false)	  
-		
+		_global_datas.book_is_open.emit(false)	  
+
 		pages_behaviour._show_new_pages()
 		
 	else:
 		control.global_position.y = 1000
 		_global_datas.Player_InBoard = true
 
-	
+		_global_datas.book_is_open.emit(true)	
+
 		
 		
 	_global_datas.Cursor_mode.cursor_out()	
@@ -540,35 +533,6 @@ func _show_thickness(list : Array, index : int, show : bool):
 	thicknes.visible = show
 "
 
-[sub_resource type="GDScript" id="GDScript_wjhcf"]
-script/source = "extends Button
-
-func _ready():
-	var number : int = 0
-	set_focus_mode(number)
-
-"
-
-[sub_resource type="GDScript" id="GDScript_jo6rw"]
-script/source = "extends Button
-
-func _ready():
-	var number : int = 0
-	set_focus_mode(number)
-"
-
-[sub_resource type="GDScript" id="GDScript_u3p26"]
-script/source = "extends Button
-
-func _ready():
-	var number : int = 0
-	set_focus_mode(number)
-
-
-func _on_pressed():
-	get_tree().quit()	
-"
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jrkpn"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_sbgpn"]
@@ -809,17 +773,6 @@ offset_bottom = 38.0
 theme_override_font_sizes/font_size = 25
 text = "I"
 
-[node name="Button_Next_page" type="TextureButton" parent="."]
-offset_top = -238.0
-offset_right = 613.0
-offset_bottom = 382.0
-
-[node name="Button_Previous_page" type="TextureButton" parent="."]
-offset_left = -595.0
-offset_top = -238.0
-offset_right = -3.0
-offset_bottom = 382.0
-
 [node name="Pages_all" type="Node2D" parent="."]
 
 [node name="Page_01" type="Node2D" parent="Pages_all"]
@@ -867,31 +820,6 @@ theme_override_font_sizes/font_size = 50
 text = "1"
 
 [node name="right" type="Node2D" parent="Pages_all/Page_01"]
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Pages_all/Page_01/right"]
-offset_left = 226.0
-offset_top = -470.0
-offset_right = 398.0
-offset_bottom = -300.0
-theme_override_constants/separation = 10
-
-[node name="Button" type="Button" parent="Pages_all/Page_01/right/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 30
-text = "NEW GAME"
-script = SubResource("GDScript_wjhcf")
-
-[node name="Button2" type="Button" parent="Pages_all/Page_01/right/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 30
-text = "OPTIONS"
-script = SubResource("GDScript_jo6rw")
-
-[node name="Button3" type="Button" parent="Pages_all/Page_01/right/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 30
-text = "EXIT "
-script = SubResource("GDScript_u3p26")
 
 [node name="Label_right" type="Label" parent="Pages_all/Page_01/right"]
 offset_left = 241.0
@@ -1089,6 +1017,17 @@ mouse_filter = 2
 texture = SubResource("ViewportTexture_sbgpn")
 expand_mode = 1
 
+[node name="Button_Next_page" type="TextureButton" parent="."]
+offset_top = -238.0
+offset_right = 613.0
+offset_bottom = 382.0
+
+[node name="Button_Previous_page" type="TextureButton" parent="."]
+offset_left = -595.0
+offset_top = -238.0
+offset_right = -3.0
+offset_bottom = 382.0
+
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
@@ -1120,7 +1059,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0)
 [connection signal="timeout" from="WaitforTurn_page/Timer" to="WaitforTurn_page" method="_on_timer_timeout"]
 [connection signal="pressed" from="Button_Next_page" to="Pages_Behaviour" method="_on_button_next_2_pressed"]
 [connection signal="pressed" from="Button_Previous_page" to="Pages_Behaviour" method="_on_button_previous_page_pressed"]
-[connection signal="pressed" from="Pages_all/Page_01/right/VBoxContainer/Button3" to="Pages_all/Page_01/right/VBoxContainer/Button3" method="_on_pressed"]
 [connection signal="mouse_entered" from="Area2D" to="Slide" method="_on_area_2d_mouse_entered"]
 [connection signal="mouse_exited" from="Area2D" to="Slide" method="_on_area_2d_mouse_exited"]
 [connection signal="area_shape_entered" from="Inside_book_area" to="Parent_to_book" method="_on_inside_book_area_area_shape_entered"]
