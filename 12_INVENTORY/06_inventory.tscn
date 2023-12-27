@@ -18,13 +18,13 @@ script/source = "extends Node
 @onready var board = $Control/Board
 
 func _ready():
+	pass
 
-
-	_global_datas._open_dialogue.connect(_hide)
-	_global_datas._close_dialogue.connect(_show)
-	_global_datas._active_sonar.connect(_hide)
-	_global_datas._disable_sonar.connect(_show)
-	_global_datas._go_Subscene.connect(_hide)
+	#_global_datas._open_dialogue.connect(_hide)
+	#_global_datas._close_dialogue.connect(_show)
+	#_global_datas._active_sonar.connect(_hide)
+	#_global_datas._disable_sonar.connect(_show)
+	#_global_datas._go_Subscene.connect(_hide)
 	
 func _hide_2d_enventory():
 	control.visible = false
@@ -1470,7 +1470,8 @@ func _mirror_switch(condition : bool):
 		_global_datas.clock_timer.paused = true
 		
 func _on_texture_button_pressed():
-	
+	if !_global_datas.Player_InSubScene:
+		return
 	mirror_world = !mirror_world
 	_mirror_switch(mirror_world)
 	_global_datas.active_mirror_switch.emit(true)
@@ -1979,33 +1980,33 @@ func _ready():
 	set_focus_mode(number)
 "
 
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_7nslp"]
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_v0atv"]
 input_name = "uv"
 
-[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_0ooyc"]
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_wu65v"]
 default_input_values = [1, Vector2(1.8, 1), 2, Vector2(0.5, 0)]
 function = 1
 
-[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_xikr4"]
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_uwtqq"]
 default_input_values = [1, Vector2(0, 1), 2, Vector2(0, 0)]
 
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_2yh42"]
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_r2a56"]
 size = Vector2(513.781, 284.487)
 expression = "vec2 n_uv = UV -0.5;
 float d = length(n_uv);
 float c = smoothstep(r,r + feather,d);
 color = vec4(vec3(c),1.0);"
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_qpvgs"]
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_h8my2"]
 constant = 1.372
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_25rqf"]
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_8kisr"]
 constant = 0.406
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_gafsx"]
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_cgsxd"]
 constant = 0.4
 
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_3q4xu"]
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_ovf53"]
 size = Vector2(724.789, 654.559)
 expression = "const float DITHER_THRESHOLDS[16] ={
 		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
@@ -2018,13 +2019,13 @@ vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
 
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_hokwf"]
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_5k3j8"]
 
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_3ht57"]
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_5t4o4"]
 parameter_name = "Opacity"
 default_value_enabled = true
 
-[sub_resource type="VisualShader" id="VisualShader_x0sux"]
+[sub_resource type="VisualShader" id="VisualShader_wndyb"]
 code = "shader_type canvas_item;
 render_mode blend_mix;
 
@@ -2072,9 +2073,9 @@ void fragment() {
 graph_offset = Vector2(-1245.45, -17.1)
 mode = 1
 flags/light_only = false
-nodes/fragment/2/node = SubResource("VisualShaderNodeFloatConstant_gafsx")
+nodes/fragment/2/node = SubResource("VisualShaderNodeFloatConstant_cgsxd")
 nodes/fragment/2/position = Vector2(-1600, 600)
-nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_3q4xu")
+nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_ovf53")
 nodes/fragment/4/position = Vector2(-1300, 500)
 nodes/fragment/4/size = Vector2(724.789, 654.559)
 nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
@@ -2089,17 +2090,17 @@ nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
 vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/5/node = SubResource("VisualShaderNodeStep_hokwf")
+nodes/fragment/5/node = SubResource("VisualShaderNodeStep_5k3j8")
 nodes/fragment/5/position = Vector2(-180, 240)
-nodes/fragment/9/node = SubResource("VisualShaderNodeFloatParameter_3ht57")
+nodes/fragment/9/node = SubResource("VisualShaderNodeFloatParameter_5t4o4")
 nodes/fragment/9/position = Vector2(-1980, 380)
-nodes/fragment/10/node = SubResource("VisualShaderNodeInput_7nslp")
+nodes/fragment/10/node = SubResource("VisualShaderNodeInput_v0atv")
 nodes/fragment/10/position = Vector2(-2820, -140)
-nodes/fragment/11/node = SubResource("VisualShaderNodeUVFunc_0ooyc")
+nodes/fragment/11/node = SubResource("VisualShaderNodeUVFunc_wu65v")
 nodes/fragment/11/position = Vector2(-2480, -200)
-nodes/fragment/12/node = SubResource("VisualShaderNodeUVFunc_xikr4")
+nodes/fragment/12/node = SubResource("VisualShaderNodeUVFunc_uwtqq")
 nodes/fragment/12/position = Vector2(-2240, -200)
-nodes/fragment/13/node = SubResource("VisualShaderNodeExpression_2yh42")
+nodes/fragment/13/node = SubResource("VisualShaderNodeExpression_r2a56")
 nodes/fragment/13/position = Vector2(-1980, 20)
 nodes/fragment/13/size = Vector2(513.781, 284.487)
 nodes/fragment/13/input_ports = "0,3,UV;1,0,r;2,0,feather;"
@@ -2108,14 +2109,14 @@ nodes/fragment/13/expression = "vec2 n_uv = UV -0.5;
 float d = length(n_uv);
 float c = smoothstep(r,r + feather,d);
 color = vec4(vec3(c),1.0);"
-nodes/fragment/14/node = SubResource("VisualShaderNodeFloatConstant_qpvgs")
+nodes/fragment/14/node = SubResource("VisualShaderNodeFloatConstant_h8my2")
 nodes/fragment/14/position = Vector2(-2520, 260)
-nodes/fragment/15/node = SubResource("VisualShaderNodeFloatConstant_25rqf")
+nodes/fragment/15/node = SubResource("VisualShaderNodeFloatConstant_8kisr")
 nodes/fragment/15/position = Vector2(-2460, 40)
 nodes/fragment/connections = PackedInt32Array(2, 0, 4, 1, 4, 0, 5, 1, 5, 0, 0, 1, 9, 0, 4, 0, 10, 0, 11, 0, 11, 0, 12, 0, 14, 0, 13, 2, 12, 0, 13, 0, 15, 0, 13, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2qpgv"]
-shader = SubResource("VisualShader_x0sux")
+shader = SubResource("VisualShader_wndyb")
 shader_parameter/Opacity = 0.0
 
 [node name="06_INVENTORY" type="Node"]
