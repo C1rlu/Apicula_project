@@ -1467,6 +1467,7 @@ func _mirror_switch(condition : bool):
 	
 		t = create_tween()	
 		t .tween_method(scanner_opacity._set_scanner_opacity_value,0.0,1.0,0.25).set_trans(Tween.TRANS_SINE)
+		
 		_global_datas.clock_timer.paused = true
 		
 func _on_texture_button_pressed():
@@ -1487,12 +1488,12 @@ func _set_scanner_opacity( slider_y : float, new_position : float):
 	var valueD = lerp(0.0,1.0,value)
 	_global_datas.scanner_mat.set_shader_parameter(\"Circle\",valueD)	
 	_global_datas.scanner_mat_xray.set_shader_parameter(\"Circle\",valueD)
-
+	_global_datas.scanner_mat_xray.set_shader_parameter(\"Circle\",valueD)	
 func _set_scanner_opacity_value( value : float):
 	
 	_global_datas.scanner_mat.set_shader_parameter(\"Circle\",value)	
 	_global_datas.scanner_mat_xray.set_shader_parameter(\"Circle\",value)	
-
+	RenderingServer.global_shader_parameter_set(\"Subscene_mirror_alpha\",value)
 "
 
 [sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_mlp01"]

@@ -1,0 +1,303 @@
+[gd_resource type="VisualShader" load_steps=27 format=3 uid="uid://cx243vj1gf8pv"]
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_vsiqd"]
+parameter_name = "Subscene_Darker_color"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeClamp" id="VisualShaderNodeClamp_byx46"]
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_yv3uh"]
+input_name = "light"
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_naukl"]
+input_name = "attenuation"
+
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_603yi"]
+operator = 2
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_lmf6q"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
+op_type = 3
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_ykhxl"]
+constant = 0.4
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_8e81t"]
+default_input_values = [0, 0.0, 1, 0.2]
+operator = 2
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_cls45"]
+input_name = "attenuation"
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_jvnaj"]
+default_input_values = [0, 0.0, 1, 1.0]
+operator = 2
+
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_wa0d8"]
+operator = 2
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_jokje"]
+constant = 1.156
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_76mnd"]
+input_name = "albedo"
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_j3k8k"]
+default_input_values = [0, 0.0, 1, 0.125, 2, 0.5]
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_plmkf"]
+parameter_name = "Distance_power"
+default_value_enabled = true
+default_value = 0.25
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_pq80c"]
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_a8whc"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
+op_type = 3
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_vbx87"]
+parameter_name = "Subscene_mirror_alpha"
+qualifier = 1
+default_value_enabled = true
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_d805k"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_fm7bo"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
+op_type = 3
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_pg40t"]
+input_name = "albedo"
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_t44me"]
+default_input_values = [0, 0.0, 1, 0.125, 2, 0.5]
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_78hyh"]
+parameter_name = "Distance_power2"
+default_value_enabled = true
+default_value = 0.25
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_asbju"]
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_c0wm8"]
+input_name = "normal"
+
+[sub_resource type="VisualShaderNodeDotProduct" id="VisualShaderNodeDotProduct_apd6j"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1.325, 4.3, 2.415)]
+
+[resource]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, shadows_disabled, debug_shadow_splits;
+
+global uniform vec4 Subscene_Darker_color : source_color;
+uniform float Distance_power = 0.25;
+uniform float Distance_power2 = 0.25;
+global uniform float Subscene_mirror_alpha = 0;
+
+
+
+void fragment() {
+// ColorParameter:2
+	vec4 n_out2p0 = Subscene_Darker_color;
+
+
+// Output:0
+	ALBEDO = vec3(n_out2p0.xyz);
+
+
+}
+
+void light() {
+// Input:31
+	vec3 n_out31p0 = ALBEDO;
+
+
+// FloatParameter:33
+	float n_out33p0 = Distance_power;
+
+
+// FloatConstant:3
+	float n_out3p0 = 1.156000;
+
+
+// FloatConstant:2
+	float n_out2p0 = 0.400000;
+
+
+	float n_out4p0;
+// Expression:4
+	n_out4p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out2p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out4p0 = n_out3p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Input:7
+	vec3 n_out7p0 = NORMAL;
+
+
+// Input:11
+	vec3 n_out11p0 = LIGHT;
+
+
+// DotProduct:8
+	float n_out8p0 = dot(n_out7p0, n_out11p0);
+
+
+// Clamp:10
+	float n_in10p1 = 0.00000;
+	float n_in10p2 = 1.00000;
+	float n_out10p0 = clamp(n_out8p0, n_in10p1, n_in10p2);
+
+
+// Input:27
+	float n_out27p0 = ATTENUATION;
+
+
+// FloatOp:28
+	float n_in28p1 = 1.00000;
+	float n_out28p0 = n_out27p0 * n_in28p1;
+
+
+// VectorOp:29
+	vec3 n_out29p0 = vec3(n_out10p0) * vec3(n_out28p0);
+
+
+// Step:6
+	float n_out6p0 = step(n_out4p0, n_out29p0.x);
+
+
+// Mix:32
+	float n_in32p0 = 0.00000;
+	float n_out32p0 = mix(n_in32p0, n_out33p0, n_out6p0);
+
+
+// Mix:16
+	vec3 n_in16p0 = vec3(0.00000, 0.00000, 0.00000);
+	vec3 n_out16p0 = mix(n_in16p0, n_out31p0, vec3(n_out32p0));
+
+
+// Input:44
+	vec3 n_out44p0 = ALBEDO;
+
+
+// FloatParameter:46
+	float n_out46p0 = Distance_power2;
+
+
+// Mix:45
+	float n_in45p0 = 0.00000;
+	float n_out45p0 = mix(n_in45p0, n_out46p0, n_out29p0.x);
+
+
+// Mix:43
+	vec3 n_in43p0 = vec3(0.00000, 0.00000, 0.00000);
+	vec3 n_out43p0 = mix(n_in43p0, n_out44p0, vec3(n_out45p0));
+
+
+// FloatParameter:39
+	float n_out39p0 = Subscene_mirror_alpha;
+
+
+// Mix:38
+	vec3 n_out38p0 = mix(n_out16p0, n_out43p0, vec3(n_out39p0));
+
+
+// Output:0
+	SPECULAR_LIGHT = n_out38p0;
+
+
+}
+"
+graph_offset = Vector2(-713.275, -107.696)
+flags/shadows_disabled = true
+flags/debug_shadow_splits = true
+nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_vsiqd")
+nodes/fragment/2/position = Vector2(-340, -100)
+nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0)
+nodes/light/0/position = Vector2(1060, 580)
+nodes/light/2/node = SubResource("VisualShaderNodeFloatConstant_ykhxl")
+nodes/light/2/position = Vector2(-2200, 940)
+nodes/light/3/node = SubResource("VisualShaderNodeFloatConstant_jokje")
+nodes/light/3/position = Vector2(-2200, 800)
+nodes/light/4/node = SubResource("VisualShaderNodeExpression_d805k")
+nodes/light/4/position = Vector2(-1920, 800)
+nodes/light/4/size = Vector2(724.789, 654.559)
+nodes/light/4/input_ports = "0,0,In;1,0,Size;"
+nodes/light/4/output_ports = "0,0,Dither_Node;"
+nodes/light/4/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/light/6/node = SubResource("VisualShaderNodeStep_asbju")
+nodes/light/6/position = Vector2(-1020, 320)
+nodes/light/7/node = SubResource("VisualShaderNodeInput_c0wm8")
+nodes/light/7/position = Vector2(-2900, 140)
+nodes/light/8/node = SubResource("VisualShaderNodeDotProduct_apd6j")
+nodes/light/8/position = Vector2(-2480, 260)
+nodes/light/10/node = SubResource("VisualShaderNodeClamp_byx46")
+nodes/light/10/position = Vector2(-2280, 140)
+nodes/light/11/node = SubResource("VisualShaderNodeInput_yv3uh")
+nodes/light/11/position = Vector2(-2900, 440)
+nodes/light/12/node = SubResource("VisualShaderNodeInput_naukl")
+nodes/light/12/position = Vector2(-2540, 560)
+nodes/light/13/node = SubResource("VisualShaderNodeVectorOp_603yi")
+nodes/light/13/position = Vector2(-1980, 420)
+nodes/light/16/node = SubResource("VisualShaderNodeMix_lmf6q")
+nodes/light/16/position = Vector2(-40, -20)
+nodes/light/26/node = SubResource("VisualShaderNodeFloatOp_8e81t")
+nodes/light/26/position = Vector2(-2160, 540)
+nodes/light/27/node = SubResource("VisualShaderNodeInput_cls45")
+nodes/light/27/position = Vector2(-2027.75, 245.994)
+nodes/light/28/node = SubResource("VisualShaderNodeFloatOp_jvnaj")
+nodes/light/28/position = Vector2(-1647.75, 225.994)
+nodes/light/29/node = SubResource("VisualShaderNodeVectorOp_wa0d8")
+nodes/light/29/position = Vector2(-1467.75, 105.994)
+nodes/light/31/node = SubResource("VisualShaderNodeInput_76mnd")
+nodes/light/31/position = Vector2(-460, -140)
+nodes/light/32/node = SubResource("VisualShaderNodeMix_j3k8k")
+nodes/light/32/position = Vector2(-180, 180)
+nodes/light/33/node = SubResource("VisualShaderNodeFloatParameter_plmkf")
+nodes/light/33/position = Vector2(-820, -20)
+nodes/light/34/node = SubResource("VisualShaderNodeStep_pq80c")
+nodes/light/34/position = Vector2(-1020, 520)
+nodes/light/38/node = SubResource("VisualShaderNodeMix_a8whc")
+nodes/light/38/position = Vector2(510.145, 895.325)
+nodes/light/39/node = SubResource("VisualShaderNodeFloatParameter_vbx87")
+nodes/light/39/position = Vector2(-100, 1140)
+nodes/light/43/node = SubResource("VisualShaderNodeMix_fm7bo")
+nodes/light/43/position = Vector2(-220, 900)
+nodes/light/44/node = SubResource("VisualShaderNodeInput_pg40t")
+nodes/light/44/position = Vector2(-640, 780)
+nodes/light/45/node = SubResource("VisualShaderNodeMix_t44me")
+nodes/light/45/position = Vector2(-360, 1100)
+nodes/light/46/node = SubResource("VisualShaderNodeFloatParameter_78hyh")
+nodes/light/46/position = Vector2(-1000, 900)
+nodes/light/connections = PackedInt32Array(10, 0, 13, 0, 2, 0, 4, 1, 3, 0, 4, 0, 12, 0, 26, 0, 26, 0, 13, 1, 10, 0, 29, 0, 32, 0, 16, 2, 33, 0, 32, 1, 6, 0, 32, 2, 27, 0, 28, 0, 28, 0, 29, 1, 8, 0, 10, 0, 7, 0, 8, 0, 29, 0, 6, 1, 31, 0, 16, 1, 13, 0, 34, 1, 11, 0, 8, 1, 4, 0, 34, 0, 4, 0, 6, 0, 39, 0, 38, 2, 38, 0, 0, 1, 16, 0, 38, 0, 45, 0, 43, 2, 46, 0, 45, 1, 44, 0, 43, 1, 29, 0, 45, 2, 43, 0, 38, 1)
