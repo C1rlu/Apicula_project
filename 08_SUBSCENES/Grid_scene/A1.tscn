@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://bdnl7k72gp6so"]
+[gd_scene load_steps=39 format=3 uid="uid://bdnl7k72gp6so"]
 
 [ext_resource type="PackedScene" uid="uid://bneebc6fpaysa" path="res://08_SUBSCENES/Elements/Ice/ice_msh_01.tscn" id="1_eihyl"]
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="1_xsylq"]
@@ -10,7 +10,7 @@
 parameter_name = "Subscene_Darker_color"
 qualifier = 1
 
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_ej866"]
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_u8eky"]
 parameter_name = "Subscene_mirror_alpha"
 qualifier = 1
 default_value_enabled = true
@@ -34,11 +34,6 @@ op_type = 3
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_um543"]
 constant = 0.4
-
-[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_v78mx"]
-parameter_name = "Subscene_light_color"
-qualifier = 1
-default_value = Color(0.401313, 0.399257, 0, 1)
 
 [sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_l0pl6"]
 default_input_values = [0, 0.0, 1, 0.07]
@@ -97,7 +92,7 @@ default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1.325, 4.3, 2.415)]
 
 [sub_resource type="VisualShader" id="VisualShader_smfdv"]
 code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, shadows_disabled, debug_shadow_splits;
+render_mode blend_mix, depth_draw_always, cull_back, diffuse_lambert, specular_schlick_ggx, shadows_disabled, debug_shadow_splits;
 
 global uniform vec4 Subscene_Darker_color : source_color;
 global uniform float Subscene_mirror_alpha = 0;
@@ -195,13 +190,14 @@ void light() {
 
 }
 "
-graph_offset = Vector2(-459.195, -43.6949)
+graph_offset = Vector2(-88.9558, -18.5838)
+modes/depth_draw = 1
 flags/shadows_disabled = true
 flags/debug_shadow_splits = true
 nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_jboo4")
 nodes/fragment/2/position = Vector2(-340, -100)
-nodes/fragment/3/node = SubResource("VisualShaderNodeFloatParameter_ej866")
-nodes/fragment/3/position = Vector2(-309.004, 114.571)
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatParameter_u8eky")
+nodes/fragment/3/position = Vector2(-180, 380)
 nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0, 3, 0, 0, 1)
 nodes/light/0/position = Vector2(1060, 580)
 nodes/light/2/node = SubResource("VisualShaderNodeFloatConstant_um543")
@@ -238,9 +234,7 @@ nodes/light/12/position = Vector2(-2540, 560)
 nodes/light/13/node = SubResource("VisualShaderNodeVectorOp_bt62e")
 nodes/light/13/position = Vector2(-1980, 420)
 nodes/light/16/node = SubResource("VisualShaderNodeMix_uewg1")
-nodes/light/16/position = Vector2(-40, -20)
-nodes/light/25/node = SubResource("VisualShaderNodeColorParameter_v78mx")
-nodes/light/25/position = Vector2(-540, 380)
+nodes/light/16/position = Vector2(40, 0)
 nodes/light/26/node = SubResource("VisualShaderNodeFloatOp_l0pl6")
 nodes/light/26/position = Vector2(-2160, 540)
 nodes/light/27/node = SubResource("VisualShaderNodeInput_wl4xr")
@@ -259,7 +253,7 @@ nodes/light/34/node = SubResource("VisualShaderNodeStep_v8kt8")
 nodes/light/34/position = Vector2(-1020, 520)
 nodes/light/37/node = SubResource("VisualShaderNodeMix_k64td")
 nodes/light/37/position = Vector2(440, 560)
-nodes/light/connections = PackedInt32Array(10, 0, 13, 0, 2, 0, 4, 1, 3, 0, 4, 0, 26, 0, 13, 1, 10, 0, 29, 0, 32, 0, 16, 2, 33, 0, 32, 1, 16, 0, 37, 0, 4, 0, 34, 0, 27, 0, 28, 0, 28, 0, 29, 1, 8, 0, 10, 0, 7, 0, 8, 0, 29, 0, 6, 1, 13, 0, 34, 1, 11, 0, 8, 1, 4, 0, 6, 0, 29, 0, 32, 2, 13, 0, 37, 2, 12, 0, 26, 0, 31, 0, 16, 1, 37, 0, 0, 1)
+nodes/light/connections = PackedInt32Array(10, 0, 13, 0, 2, 0, 4, 1, 3, 0, 4, 0, 26, 0, 13, 1, 10, 0, 29, 0, 33, 0, 32, 1, 16, 0, 37, 0, 4, 0, 34, 0, 27, 0, 28, 0, 28, 0, 29, 1, 8, 0, 10, 0, 7, 0, 8, 0, 29, 0, 6, 1, 13, 0, 34, 1, 11, 0, 8, 1, 4, 0, 6, 0, 29, 0, 32, 2, 13, 0, 37, 2, 12, 0, 26, 0, 37, 0, 0, 1, 31, 0, 16, 1, 32, 0, 16, 2)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0yi3o"]
 render_priority = 0
@@ -451,7 +445,6 @@ shape = SubResource("ConcavePolygonShape3D_ipksv")
 
 [node name="Boat_underscene_03" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.304171, -0.104365, -0.00894064, 0.097227, 0.291518, -0.0951641, 0.0389746, 0.0872762, 0.307175, -0.732639, 0.437073, -0.0489559)
-visible = false
 layers = 4
 mesh = SubResource("ArrayMesh_gecko")
 skeleton = NodePath("")
