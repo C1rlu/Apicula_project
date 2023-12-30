@@ -12,7 +12,9 @@ func _ready():
 	_global_datas.cell_name = "null"
 	cam_raycast.current = false
 	
-func _loadscene():	
+func _loadscene():
+	
+	
 	#REMOVE PREVIOUS SCENE
 	for child in $LoadScene.get_children():
 		child.free()
@@ -20,15 +22,22 @@ func _loadscene():
 	#LOAD NEW SCENE
 	var scene_name =  _global_datas.cell_name
 	var constant_string = "res://08_SUBSCENES/Grid_scene/" + scene_name + ".tscn"
-	var scene_resource = load(constant_string)
-	if scene_resource == null:
-		print("scene " + scene_name + " doesn't exist")
-		return
-	var instance_scene = scene_resource.instantiate()
-	$LoadScene.add_child(instance_scene)
 	
-	
-func active_subscene():	
+	# Check if the scene exists before loading
+	if ResourceLoader.exists(constant_string):
+		var scene_instance = load(constant_string)
+		if scene_instance:
+			var instance_scene = scene_instance.instantiate()
+			$LoadScene.add_child(instance_scene )			
+	else:
+		print("Scene does not exist: " + scene_name)
+		var constant_string_null = "res://08_SUBSCENES/Grid_scene/A2.tscn"
+		var scene_instance = load(constant_string_null)
+		var instance_scene = scene_instance.instantiate()
+		$LoadScene.add_child(instance_scene )
+		
+		
+func active_subscene():
 
 	_global_datas.Player_InSubScene = true
 	_global_datas._start_ini_subscene.emit()

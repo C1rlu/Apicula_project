@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://cb8k68mtsigvd"]
+[gd_scene load_steps=28 format=3 uid="uid://cb8k68mtsigvd"]
 
 [ext_resource type="Script" path="res://00_SYSTEMS/Global_datas.gd" id="1_64l51"]
 [ext_resource type="Script" path="res://06_UI/Fps_counter.gd" id="1_smk2e"]
@@ -22,7 +22,7 @@ script/source = "extends Node
 
 func _ready():
 	_global_datas._forreuse_impact_origin = Vector3.ZERO
-	Engine.set_max_fps(fps_target)
+	#Engine.set_max_fps(fps_target)
 	
 func _input(event):
 	
@@ -137,6 +137,17 @@ func _on_button_pressed():
 	if _global_datas.Npc_Dialogue == null:
 		return
 	_global_datas._open_dialogue.emit()
+"
+
+[sub_resource type="GDScript" id="GDScript_wxam5"]
+script/source = "extends Button
+
+
+
+
+
+func _on_pressed():
+	_global_datas._go_Subscene.emit()
 "
 
 [node name="Main" type="Node"]
@@ -333,6 +344,17 @@ theme_override_colors/font_color = Color(0.188235, 0.188235, 0.188235, 1)
 theme_override_font_sizes/font_size = 40
 text = "..."
 
+[node name="Dive_button" type="Button" parent="01_GAME_UI/MAIN_SCENE_UI"]
+layout_mode = 0
+offset_left = 1678.0
+offset_top = 1029.0
+offset_right = 1753.0
+offset_bottom = 1079.0
+theme_override_font_sizes/font_size = 30
+text = "DIVE
+"
+script = SubResource("GDScript_wxam5")
+
 [node name="02_MAIN_SCENES" parent="." instance=ExtResource("18_gvi4q")]
 
 [node name="03_SUBSCENES" parent="." instance=ExtResource("19_cnotd")]
@@ -346,3 +368,4 @@ metadata/_edit_horizontal_guides_ = [542.0]
 [node name="07_SCREEN_TOOLS" parent="." instance=ExtResource("18_akagp")]
 
 [connection signal="pressed" from="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue/Button/ColorRect/Push_button" to="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue" method="_on_button_pressed"]
+[connection signal="pressed" from="01_GAME_UI/MAIN_SCENE_UI/Dive_button" to="01_GAME_UI/MAIN_SCENE_UI/Dive_button" method="_on_pressed"]

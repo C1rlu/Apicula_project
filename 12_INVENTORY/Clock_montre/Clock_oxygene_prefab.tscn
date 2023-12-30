@@ -74,15 +74,20 @@ script/source = "extends Node
 var actual_max_angle : float = 90.0
 var actual_min_angle : float = 0.0
 var click : bool = false
+@export var active = false
 
 func _ready():
-	_global_datas._reseting_clock_active.connect(_active_reset)
-	_global_datas._reseting_clock_disable.connect(_disable_reset)
-	
+	#_global_datas._reseting_clock_active.connect(_active_reset)
+	#_global_datas._reseting_clock_disable.connect(_disable_reset)
+	pass
 	
 func _input(event):
 	#Active
-	
+
+	if  !active:
+		return
+		
+		
 	if _global_datas.Player_InSubScene:
 		return
 	
@@ -93,8 +98,8 @@ func _input(event):
 				_disable_reset()
 				
 	
-	if _global_datas.cell_name == \"null\":
-		return
+	#if _global_datas.cell_name == \"null\":
+		#return
 		
 	if Input.is_action_just_pressed(\"Click\"):
 		click = true

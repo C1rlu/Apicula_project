@@ -5,7 +5,7 @@ var columns_square_root
 
 func _ready():
 	_create_grid()
-	#_global_datas._go_Subscene.connect(_check_sceneIndex)
+	_global_datas._go_Subscene.connect(_check_sceneIndex)
 
 func _create_grid():
 	var used_cells = get_used_cells()
@@ -44,9 +44,10 @@ func find_nearest_cell_to_player():
 			nearest_cell = cell_data
 			_global_datas.cell_name = nearest_cell.cell_name
 			
+			
 func _check_sceneIndex():
 	find_nearest_cell_to_player()
-	print(_global_datas.cell_name)
+	
 
 	
 		

@@ -305,7 +305,7 @@ nodes/fragment/connections = PackedInt32Array(4, 0, 7, 1, 18, 0, 7, 0, 5, 0, 4, 
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tsr6x"]
 shader = SubResource("VisualShader_8isr1")
-shader_parameter/Opacity = 0.0
+shader_parameter/Opacity = 1.0
 
 [sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_dj8vr"]
 input_name = "texture"
@@ -526,7 +526,6 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-286.039, -323.504)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(1060, 200)
@@ -610,7 +609,7 @@ nodes/fragment/connections = PackedInt32Array(30, 0, 31, 0, 31, 0, 32, 0, 34, 0,
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_byemk"]
 shader = SubResource("VisualShader_pn65u")
-shader_parameter/Circle = 1.0
+shader_parameter/Circle = 0.0
 shader_parameter/Noise = ExtResource("3_ql8rn")
 
 [sub_resource type="GDScript" id="GDScript_6jk87"]
@@ -1981,6 +1980,7 @@ cull_mask = 0
 script = SubResource("GDScript_5new5")
 
 [node name="SUBSCENES_CAM_SCENE" type="SubViewportContainer" parent="."]
+visible = false
 material = SubResource("ShaderMaterial_tsr6x")
 anchors_preset = 15
 anchor_right = 1.0
@@ -1993,7 +1993,7 @@ stretch = true
 [node name="SubViewport" type="SubViewport" parent="SUBSCENES_CAM_SCENE"]
 handle_input_locally = false
 size = Vector2i(1920, 1080)
-render_target_update_mode = 4
+render_target_update_mode = 0
 
 [node name="CAM_STATE_BOAT_root" type="Node3D" parent="SUBSCENES_CAM_SCENE/SubViewport" node_paths=PackedStringArray("Player_position")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 1.8)
@@ -2006,6 +2006,7 @@ cull_mask = 4
 current = true
 
 [node name="SUBSCENES_CAM_SCANNER" type="SubViewportContainer" parent="."]
+visible = false
 material = SubResource("ShaderMaterial_byemk")
 anchors_preset = 15
 anchor_right = 1.0
@@ -2020,7 +2021,7 @@ script = SubResource("GDScript_6jk87")
 transparent_bg = true
 handle_input_locally = false
 size = Vector2i(1920, 1080)
-render_target_update_mode = 4
+render_target_update_mode = 0
 
 [node name="CAM_STATE_BOAT_root" type="Node3D" parent="SUBSCENES_CAM_SCANNER/SubViewport" node_paths=PackedStringArray("Player_position")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 1.8)
@@ -2173,6 +2174,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(0.0156863, 0.0705882, 0.0823529, 1)
+metadata/_edit_use_anchors_ = true
 
 [connection signal="input_event" from="Tools/Area2D" to="PIOCHE_BEHAVIOUR" method="_on_area_2d_input_event"]
 [connection signal="area_shape_entered" from="Surface_trigger" to="GO_SURFACE" method="_on_surface_trigger_area_shape_entered"]
