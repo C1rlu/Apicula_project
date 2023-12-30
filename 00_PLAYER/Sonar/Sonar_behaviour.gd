@@ -4,6 +4,7 @@ extends Node3D
 @onready var timer = $Timer
 @onready var _1 = $"01"
 @onready var _2 = $"02"
+@onready var collision_shape_3d = $Sonar_Aera/CollisionShape3D
 
 func _ready():
 	_global_datas._active_sonar.connect(active_sonar)
@@ -17,6 +18,7 @@ func active_sonar():
 	timer.start()
 	_1.visible = true
 	_2.visible = true
+	collision_shape_3d.disabled = false
 	
 func _process(_delta):
 
@@ -33,3 +35,4 @@ func _on_timer_timeout():
 	_1.visible = false
 	_2.visible = false
 	#_global_datas._disable_sonar.emit()
+	collision_shape_3d.disabled = true

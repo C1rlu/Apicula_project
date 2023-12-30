@@ -324,17 +324,15 @@ mesh = SubResource("SphereMesh_56jr0")
 skeleton = NodePath("../..")
 
 [node name="Sonar_Aera" type="Area3D" parent="Player_Boat/Sonar"]
-visible = false
 collision_layer = 2
 collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player_Boat/Sonar/Sonar_Aera"]
 transform = Transform3D(5.39371, 0, -1.42109e-14, 0, 5.39371, 0, 1.42109e-14, 0, 5.39371, 1.77636e-15, 0, -0.39557)
 shape = SubResource("SphereShape3D_x2n16")
+disabled = true
 
 [node name="Area3D" type="Area3D" parent="Player_Boat"]
-visible = false
-input_ray_pickable = false
 script = ExtResource("4_h4pmi")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player_Boat/Area3D"]
@@ -347,13 +345,6 @@ transform = Transform3D(57.2458, 0, 0, 0, 57.2458, 0, 0, 0, 57.2458, 0, 6.93092,
 mesh = SubResource("PlaneMesh_k8245")
 skeleton = NodePath("../../..")
 surface_material_override/0 = SubResource("ShaderMaterial_2pkhh")
-
-[node name="GridMap" parent="--DECOR--" instance=ExtResource("6_8jesf")]
-cell_size = Vector3(6, 1, 6)
-cell_scale = 3.0
-data = {
-"cells": PackedInt32Array(0, 0, 0, 0, 65535, 0, 0, 65534, 0, 0, 65533, 0, 1, 0, 0, 1, 65535, 0, 1, 65534, 0, 1, 65533, 0, 2, 0, 0, 2, 65535, 0, 2, 65534, 0, 2, 65533, 0, 3, 0, 0, 3, 65535, 0, 3, 65534, 0, 3, 65533, 0, 4, 0, 0, 4, 65535, 0, 4, 65534, 0, 4, 65533, 0)
-}
 
 [node name="SEA" type="StaticBody3D" parent="--DECOR--"]
 transform = Transform3D(4.4285, 0, 0, 0, 0.44285, 0, 0, 0, 4.4285, 0.739399, -0.436631, 1.21398)
@@ -372,6 +363,15 @@ skeleton = NodePath("../Sea_foam")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 layers = 2048
 mesh = SubResource("BoxMesh_wmrfd")
+
+[node name="GridMap" parent="--DECOR--" instance=ExtResource("6_8jesf")]
+visible = false
+cell_size = Vector3(6, 1, 6)
+cell_scale = 3.0
+data = {
+"cells": PackedInt32Array(0, 65535, 0, 0, 65534, 0, 0, 65533, 0, 1, 0, 0, 1, 65535, 0, 1, 65534, 0, 1, 65533, 0, 2, 0, 0, 2, 65535, 0, 2, 65534, 0, 2, 65533, 0, 3, 0, 0, 3, 65535, 0, 3, 65534, 0, 3, 65533, 0, 4, 0, 0, 4, 65534, 0, 4, 65533, 0, 0, 0, 0, 4, 65535, 0, 2, 4, 1, 3, 4, 1, 65535, 0, 0, 65535, 65535, 0, 65535, 65534, 0, 65535, 65533, 0, 65535, 1, 0, 0, 1, 0, 1, 1, 0, 2, 1, 0, 3, 1, 0, 4, 1, 0, 4, 2, 0, 3, 2, 0, 2, 2, 0, 1, 2, 0, 0, 2, 0, 65535, 2, 0, 65534, 2, 0, 65534, 1, 0, 65534, 0, 0, 65534, 65535, 0, 65534, 65534, 0, 65533, 65534, 0, 65533, 65533, 0, 65534, 65533, 0, 65533, 65535, 0, 65533, 0, 0, 65533, 1, 0, 65533, 2, 0, 5, 65533, 0, 5, 65534, 0, 5, 65535, 0, 5, 0, 0, 5, 1, 0, 0, 65532, 0)
+}
+metadata/_editor_floor_ = Vector3(0, 0, 0)
 
 [node name="WORLD_ELEMENTS" type="Node" parent="--DECOR--"]
 
@@ -521,9 +521,13 @@ shape = SubResource("SphereShape3D_jvty4")
 [node name="UNDER_WATER" type="Node" parent="--DECOR--"]
 
 [node name="EPAVE_ZONE" parent="--DECOR--/UNDER_WATER" instance=ExtResource("23_txlwt")]
+collision_layer = 2
+collision_mask = 2
 
 [node name="EPAVE_ZONE2" parent="--DECOR--/UNDER_WATER" instance=ExtResource("23_txlwt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.02417, 4.76837e-07, 1.87812)
+collision_layer = 2
+collision_mask = 2
 scene_name = "A2"
 
 [connection signal="timeout" from="Player_Boat/Sonar/Timer" to="Player_Boat/Sonar" method="_on_timer_timeout"]

@@ -15,7 +15,7 @@ func _input(event: InputEvent) -> void:
 	if _global_datas.Player_InSubScene:
 		return
 			
-	if event.is_action_pressed("Sonar_click"):
+	if event.is_action_pressed("Click"):
 		_global_datas._active_sonar.emit()
 	
 

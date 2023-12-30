@@ -10,35 +10,24 @@ script/source = "extends Area3D
 signal see_int
 signal see_out
 
-var can_click : bool
 
 
 func _on_area_entered(_area):
-	_global_datas._active_sonar.emit()
 
-	see_int.emit()
-	can_click = true
-	
-func _on_area_exited(_area):
-
-	see_out.emit()
-	_global_datas._disable_sonar.emit()
-	can_click = false
-	_global_datas._reseting_clock_disable.emit()
-	
-func _on_area_3d_mouse_exited():
-	
-	var value : int = 0
-	_global_datas.cell_name	= \"null\"
-	Input.set_default_cursor_shape(value)
-	_global_datas._reseting_clock_disable.emit()
-	
-func _on_area_3d_mouse_entered():
-	if !can_click:
+	if _area.name != \"Sonar_Aera\":
 		return
-	var value : int = 2	
-	Input.set_default_cursor_shape(value)		
-	_global_datas.cell_name	= scene_name
+	see_int.emit()
+
+	
+#func _on_area_exited(_area):
+
+	#if _area.name != \"Sonar_Aera\":
+		#return
+	#see_out.emit()
+
+
+
+	
 "
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_7qqy6"]
@@ -67,7 +56,7 @@ func _process(_delta):
 func _on_timer_timeout():
 	if !inZone:
 		return
-	$Timer.start()
+	#$Timer.start()
 
 
 func _on_epave_zone_see_int():
@@ -285,6 +274,8 @@ wait_time = 1.5
 one_shot = true
 
 [node name="Area3D" type="Area3D" parent="Epave_visuals"]
+collision_layer = 3
+collision_mask = 3
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Epave_visuals/Area3D"]
 transform = Transform3D(0.795507, 0.0940491, 0.598601, -0.108768, 0.993999, -0.0116258, -0.596102, -0.0558601, 0.800963, 0.0447328, -1.94244, -0.56343)
