@@ -11,14 +11,12 @@ func _ready():
 	_global_datas._go_Subscene.connect(_Darker_mainScene)
 	_global_datas._open_dialogue.connect(_Darker_mainScene)
 	_global_datas._close_dialogue.connect(_NormalColor_mainScene)
-	#_global_datas._active_sonar.connect(_NormalColor_mainScene)
-	#_global_datas._disable_sonar.connect(_NormalColor_mainScene)
 	_global_datas._backFrom_subscene.connect(_NormalColor_mainScene)
 
-	_global_datas.book_is_open.connect(book_is_open)
+	_global_datas.book_is_open.connect(_open)
 
 
-func book_is_open(condition : bool):
+func _open(condition : bool):
 	if condition:
 		_Darker_mainScene()
 	else:

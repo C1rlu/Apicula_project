@@ -20,6 +20,7 @@ func _ready():
 	_global_datas._end_ini_subscene.connect(_start_clock)
 	_global_datas._go_Mainscene.connect(_stop_clock)
 	_global_datas.clock_timer = timer
+	
 func _process(delta):
 	
 	if timer.is_stopped():
@@ -77,13 +78,17 @@ var click : bool = false
 @export var active = false
 
 func _ready():
-	#_global_datas._reseting_clock_active.connect(_active_reset)
-	#_global_datas._reseting_clock_disable.connect(_disable_reset)
-	pass
+	_global_datas._reseting_clock_active.connect(_active_reset)
+	_global_datas._reseting_clock_disable.connect(_disable_reset)
+
 	
 func _input(event):
 	#Active
 
+
+	if _global_datas.Player_lock_click:
+		return
+		
 	if  !active:
 		return
 		
@@ -98,8 +103,6 @@ func _input(event):
 				_disable_reset()
 				
 	
-	#if _global_datas.cell_name == \"null\":
-		#return
 		
 	if Input.is_action_just_pressed(\"Click\"):
 		click = true
@@ -115,7 +118,7 @@ func _disable_reset():
 	take_object._reset_disable()
 	_stop_clock()
 	click = false
-	
+
 	
 func _process(delta):
 	

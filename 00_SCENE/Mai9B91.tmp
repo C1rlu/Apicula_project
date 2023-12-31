@@ -56,21 +56,9 @@ script/source = "extends Node
 
 func _ready():
 	_global_datas.book_is_open.connect(_active)
-	_global_datas.in_dialogue_zone.connect(disable)
-	_global_datas.out_dialogue_zone.connect(active)
+	_global_datas._open_dialogue.connect(_active)
 
-
-
-func disable():
-	dive_button.visible = false		
-	
-func active():
-	dive_button.visible = true		
-		
 func _active(condition : bool):
-	
-	if _global_datas.Player_InDialogue_zone:
-		return
 	dive_button.visible = !condition
 "
 
@@ -252,6 +240,7 @@ void fragment() {
 
 }
 "
+graph_offset = Vector2(-498.428, 197.127)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(1180, 220)
@@ -335,23 +324,19 @@ script/source = "extends Node
 @onready var button = $Button
 
 func _ready():
-	_global_datas.in_dialogue_zone.connect(active_buton)
+	_global_datas.in_dialogue_zone.connect(disable_buton)
 	_global_datas.out_dialogue_zone.connect(disable_buton)
 	_global_datas._open_dialogue.connect(disable_buton)
 	
 
-func disable_buton():
-	button.visible = false
-	_global_datas.Player_InDialogue_zone = false
-	
-func active_buton():
-	button.visible = true
-	_global_datas.Player_InDialogue_zone = true
+func disable_buton(condition : bool):
+	button.visible = condition 
+
 func _on_button_pressed():
 	
 	if _global_datas.Npc_Dialogue == null:
 		return
-	_global_datas._open_dialogue.emit()
+	_global_datas._open_dialogue.emit(true)
 "
 
 [sub_resource type="GDScript" id="GDScript_wxam5"]

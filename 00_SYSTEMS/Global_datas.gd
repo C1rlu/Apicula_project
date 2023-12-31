@@ -1,4 +1,4 @@
-extends Node
+extends Node#
 
 
 var player_position : Vector3
@@ -8,6 +8,7 @@ var Player_InBoard : bool
 var Player_InSubScene : bool
 var Player_InMenu : bool
 var Player_InDialogue : bool
+var Player_InDialogue_zone : bool
 var Player_lock_click : bool
 
 # menu signals
@@ -31,6 +32,7 @@ signal in_dialogue_zone
 signal out_dialogue_zone
 signal  _open_dialogue
 signal  _close_dialogue
+
 signal _show_hand
 signal _hide_hand
 signal _hide_dialogue_box

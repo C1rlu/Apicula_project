@@ -20,11 +20,10 @@ script/source = "extends Node
 func _ready():
 	pass
 
-	#_global_datas._open_dialogue.connect(_hide)
-	#_global_datas._close_dialogue.connect(_show)
-	#_global_datas._active_sonar.connect(_hide)
-	#_global_datas._disable_sonar.connect(_show)
-	#_global_datas._go_Subscene.connect(_hide)
+	_global_datas._open_dialogue.connect(_hide)
+	_global_datas._close_dialogue.connect(_show)
+	_global_datas._go_Subscene.connect(_hide)
+	_global_datas._backFrom_subscene.connect(_show)
 	
 func _hide_2d_enventory():
 	control.visible = false
@@ -33,15 +32,13 @@ func _show_2d_enventory():
 	control.visible = true
 
 
+func _show():
+
+	board.visible = true
+
 func _hide():
 
 	board.visible = false
-func _show():
-	
-	if _global_datas.Player_InSubScene:
-		return
-
-	board.visible = true
 "
 
 [sub_resource type="GDScript" id="GDScript_qiikw"]
@@ -138,7 +135,7 @@ func _ready():
 
 	_global_datas.using_board_enable.connect(_enable_board_backdrop)
 	_global_datas.using_board_disable.connect(_disable_board_backdrop)
-
+	
 func _enable_board_backdrop():
 	backdrop.visible = true
 

@@ -3,7 +3,7 @@ extends Node
 @onready var loader_node = $"../00_NPC_CREATOR/Models/Loader"
 
 func _ready():
-	_global_datas._open_dialogue.connect(update_npc)
+	#_global_datas._open_dialogue.connect(update_npc)
 
 
 func update_npc():

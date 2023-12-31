@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://dox35loyf43ee"]
+
+[ext_resource type="PackedScene" uid="uid://dhreon2clvrlx" path="res://04_SCENE_MAIN_MAP/Grid/cells_msh.blend" id="1_lrrco"]
+
+[sub_resource type="VisualShader" id="VisualShader_pensp"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+
+
+
+"
+flags/unshaded = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h0q3v"]
+render_priority = 0
+shader = SubResource("VisualShader_pensp")
+
+[node name="cells_msh" instance=ExtResource("1_lrrco")]
+
+[node name="cells_msh" parent="." index="0"]
+layers = 64
+surface_material_override/0 = SubResource("ShaderMaterial_h0q3v")

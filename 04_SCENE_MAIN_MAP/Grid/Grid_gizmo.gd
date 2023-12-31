@@ -3,6 +3,10 @@ extends GridMap
 var cellList = []
 var columns_square_root
 
+@onready var visual_cells = $"../VISUAL_CELLS"
+var cell_prefabs = preload("res://04_SCENE_MAIN_MAP/Grid/cells_grid_library.tscn")
+
+
 func _ready():
 	_create_grid()
 	_global_datas._go_Subscene.connect(_check_sceneIndex)
@@ -26,6 +30,7 @@ func _create_grid():
 			 "cell_position": cellPos 
 		}
 		cellList.append(cell_data)
+		_instance_visual_cells(cellPos,cell_name)
 		
 	find_nearest_cell_to_player()	
 
@@ -49,7 +54,8 @@ func _check_sceneIndex():
 	find_nearest_cell_to_player()
 	
 
-	
-		
-	
-
+func _instance_visual_cells(position : Vector3, name : String):
+	var new_cell = cell_prefabs.instantiate()
+	visual_cells.add_child(new_cell)
+	new_cell.transform.origin = position
+	new_cell.get_node_or_null("Grid_name").text = name 

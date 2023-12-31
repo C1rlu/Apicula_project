@@ -1,7 +1,6 @@
-[gd_scene load_steps=54 format=3 uid="uid://cnmptm7i0xxmj"]
+[gd_scene load_steps=55 format=3 uid="uid://cnmptm7i0xxmj"]
 
 [ext_resource type="PackedScene" uid="uid://vpdvl0v7dubd" path="res://00_PLAYER/Player_boat.tscn" id="1_qltht"]
-[ext_resource type="Script" path="res://00_PLAYER/Sonar/Sonar_behaviour.gd" id="2_n8uar"]
 [ext_resource type="Shader" uid="uid://bduoqim3kfbs6" path="res://00_PLAYER/Sonar/Sonar_sh.tres" id="3_todel"]
 [ext_resource type="Script" path="res://00_PLAYER/Sonar/Click_to_Sonar.gd" id="4_h4pmi"]
 [ext_resource type="Shader" uid="uid://bxavm32wwtse2" path="res://05_SHADER_TEST/Clouds_sh.tres" id="5_83wu6"]
@@ -22,6 +21,54 @@
 [ext_resource type="Resource" uid="uid://l3coaeai3lx6" path="res://09_NPC/Npc_data/Baltazar_data.tres" id="19_qcquc"]
 [ext_resource type="Material" uid="uid://dgl2um0yp8e3c" path="res://05_SHADER_TEST/All_Materials/Building_mat.tres" id="20_24d3w"]
 [ext_resource type="PackedScene" uid="uid://dti7l20thp2rk" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Subscene_elements/epave_zone.tscn" id="23_txlwt"]
+
+[sub_resource type="GDScript" id="GDScript_0xo40"]
+script/source = "extends Node
+
+
+@export var _sonar_speed = 2.0
+
+@onready var _1 = $\"../01\"
+@onready var _2 = $\"../02\"
+@onready var collision_shape_3d = $\"../Sonar_Aera/CollisionShape3D\"
+@onready var sonar = $\"..\"
+
+var t
+var is_active = false
+func _ready():
+	_global_datas._active_sonar.connect(active_sonar)
+	sonar.scale = Vector3(0.1,0.1,0.1)
+	_1.visible = false
+	_2.visible = false
+	
+func active_sonar():
+	
+	if is_active:
+		return
+	is_active = true
+	_1.visible = true
+	_2.visible = true
+	collision_shape_3d.disabled = false
+	
+	if t:
+		t.kill()
+	t = create_tween()
+	
+	t .tween_method(_change_scale,0.0,5.0,1.0).set_trans(Tween.TRANS_SINE)	
+	
+	await create_tween().tween_interval(1.0).finished
+	_stop()
+
+func _change_scale(value : float):
+	sonar.scale = Vector3(value,value,value)
+	
+func _stop():
+	sonar.scale = Vector3(0.1,0.1,0.1)
+	_1.visible = false
+	_2.visible = false
+	collision_shape_3d.disabled = true	
+	is_active = false
+"
 
 [sub_resource type="VisualShaderNodeLinearSceneDepth" id="VisualShaderNodeLinearSceneDepth_38fsn"]
 
@@ -247,6 +294,10 @@ size = Vector3(30, 0, 30)
 material = ExtResource("7_4y8ld")
 size = Vector3(30, 0, 30)
 
+[sub_resource type="GDScript" id="GDScript_i66w8"]
+script/source = "extends Node
+"
+
 [sub_resource type="GDScript" id="GDScript_w8xnd"]
 script/source = "extends Area3D
 
@@ -289,11 +340,9 @@ omni_attenuation = 0.258817
 
 [node name="Sonar" type="Node3D" parent="Player_Boat"]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
-script = ExtResource("2_n8uar")
-_sonar_speed = 5.0
 
-[node name="Timer" type="Timer" parent="Player_Boat/Sonar"]
-one_shot = true
+[node name="Sonar_behaviour" type="Node" parent="Player_Boat/Sonar"]
+script = SubResource("GDScript_0xo40")
 
 [node name="01" type="Node3D" parent="Player_Boat/Sonar"]
 transform = Transform3D(5.52237, 0, 0, 0, 5.52237, 0, 0, 0, 5.52237, 0.049623, -0.743807, -0.269134)
@@ -364,14 +413,20 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 layers = 2048
 mesh = SubResource("BoxMesh_wmrfd")
 
-[node name="GridMap" parent="--DECOR--" instance=ExtResource("6_8jesf")]
+[node name="GRID_MAP" type="Node" parent="--DECOR--"]
+
+[node name="GridMap" parent="--DECOR--/GRID_MAP" instance=ExtResource("6_8jesf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.224, 0)
 visible = false
 cell_size = Vector3(6, 1, 6)
 cell_scale = 3.0
 data = {
-"cells": PackedInt32Array(0, 65535, 0, 0, 65534, 0, 0, 65533, 0, 1, 0, 0, 1, 65535, 0, 1, 65534, 0, 1, 65533, 0, 2, 0, 0, 2, 65535, 0, 2, 65534, 0, 2, 65533, 0, 3, 0, 0, 3, 65535, 0, 3, 65534, 0, 3, 65533, 0, 4, 0, 0, 4, 65534, 0, 4, 65533, 0, 0, 0, 0, 4, 65535, 0, 2, 4, 1, 3, 4, 1, 65535, 0, 0, 65535, 65535, 0, 65535, 65534, 0, 65535, 65533, 0, 65535, 1, 0, 0, 1, 0, 1, 1, 0, 2, 1, 0, 3, 1, 0, 4, 1, 0, 4, 2, 0, 3, 2, 0, 2, 2, 0, 1, 2, 0, 0, 2, 0, 65535, 2, 0, 65534, 2, 0, 65534, 1, 0, 65534, 0, 0, 65534, 65535, 0, 65534, 65534, 0, 65533, 65534, 0, 65533, 65533, 0, 65534, 65533, 0, 65533, 65535, 0, 65533, 0, 0, 65533, 1, 0, 65533, 2, 0, 5, 65533, 0, 5, 65534, 0, 5, 65535, 0, 5, 0, 0, 5, 1, 0, 0, 65532, 0)
+"cells": PackedInt32Array(0, 0, 0, 0, 65535, 0, 0, 65534, 0, 0, 65533, 0, 1, 0, 0, 1, 65535, 0, 1, 65534, 0, 1, 65533, 0, 2, 0, 0, 2, 65535, 0, 2, 65534, 0, 2, 65533, 0, 3, 0, 0, 3, 65535, 0, 3, 65534, 0, 3, 65533, 0, 4, 0, 0, 4, 65535, 0, 4, 65534, 0, 4, 65533, 0, 4, 1, 0, 3, 1, 0, 2, 1, 0, 1, 1, 0, 0, 1, 0, 65535, 1, 0, 65535, 0, 0, 65535, 65535, 0, 65535, 65534, 0, 65535, 65533, 0, 65534, 65533, 0, 65534, 65534, 0, 65534, 65535, 0, 65534, 0, 0, 65534, 1, 0, 4, 2, 0, 3, 2, 0, 2, 2, 0, 1, 2, 0, 0, 2, 0, 65535, 2, 0, 65534, 2, 0, 65533, 2, 0, 65533, 1, 0, 65533, 0, 0, 65533, 65535, 0, 65533, 65534, 0, 65533, 65533, 0)
 }
 metadata/_editor_floor_ = Vector3(0, 0, 0)
+
+[node name="VISUAL_CELLS" type="Node" parent="--DECOR--/GRID_MAP"]
+script = SubResource("GDScript_i66w8")
 
 [node name="WORLD_ELEMENTS" type="Node" parent="--DECOR--"]
 
@@ -528,9 +583,7 @@ collision_mask = 2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.02417, 4.76837e-07, 1.87812)
 collision_layer = 2
 collision_mask = 2
-scene_name = "A2"
 
-[connection signal="timeout" from="Player_Boat/Sonar/Timer" to="Player_Boat/Sonar" method="_on_timer_timeout"]
 [connection signal="mouse_entered" from="Player_Boat/Area3D" to="Player_Boat/Area3D" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="Player_Boat/Area3D" to="Player_Boat/Area3D" method="_on_mouse_exited"]
 [connection signal="area_entered" from="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA" to="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA" method="_on_area_entered"]
