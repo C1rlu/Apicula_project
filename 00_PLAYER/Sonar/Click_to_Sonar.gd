@@ -1,6 +1,7 @@
 extends Area3D
 
 var can_click = false
+@onready var on_over_mouse_3d_shape = $"../Sonar/On_OverMouse_3D_SHAPE"
 
 func _input(event: InputEvent) -> void:
 	
@@ -24,8 +25,10 @@ func _on_mouse_entered():
 	can_click = true
 	_global_datas.Cursor_mode.cursor_in()
 	_global_datas.Player_lock_click = true
+	on_over_mouse_3d_shape.visible = true
 func _on_mouse_exited():
 	print("Mouse exit")
 	can_click = false
 	_global_datas.Cursor_mode.cursor_out()
 	_global_datas.Player_lock_click = false
+	on_over_mouse_3d_shape.visible = false

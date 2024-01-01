@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=3 uid="uid://cnmptm7i0xxmj"]
+[gd_scene load_steps=64 format=3 uid="uid://cnmptm7i0xxmj"]
 
 [ext_resource type="PackedScene" uid="uid://vpdvl0v7dubd" path="res://00_PLAYER/Player_boat.tscn" id="1_qltht"]
 [ext_resource type="Shader" uid="uid://bduoqim3kfbs6" path="res://00_PLAYER/Sonar/Sonar_sh.tres" id="3_todel"]
@@ -35,6 +35,7 @@ script/source = "extends Node
 
 var t
 var is_active = false
+
 func _ready():
 	_global_datas._active_sonar.connect(active_sonar)
 	sonar.scale = Vector3(0.1,0.1,0.1)
@@ -45,6 +46,10 @@ func active_sonar():
 	
 	if is_active:
 		return
+		
+	# ENABLE GO SUB
+	_global_datas._reseting_clock_active.emit()
+		
 	is_active = true
 	_1.visible = true
 	_2.visible = true
@@ -56,6 +61,8 @@ func active_sonar():
 	
 	t .tween_method(_change_scale,0.0,5.0,1.0).set_trans(Tween.TRANS_SINE)	
 	
+	_global_datas._active_go_subscene_button.emit(false)
+	
 	await create_tween().tween_interval(1.0).finished
 	_stop()
 
@@ -63,12 +70,142 @@ func _change_scale(value : float):
 	sonar.scale = Vector3(value,value,value)
 	
 func _stop():
+	
 	sonar.scale = Vector3(0.1,0.1,0.1)
 	_1.visible = false
 	_2.visible = false
 	collision_shape_3d.disabled = true	
 	is_active = false
+	_global_datas._active_go_subscene_button.emit(true)
+
+
+# DISABLE GO SUB
+func _input(event):
+
+	#TO Disable
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
+			_global_datas._reseting_clock_disable.emit()
 "
+
+[sub_resource type="TorusMesh" id="TorusMesh_o3rdy"]
+inner_radius = 0.884
+outer_radius = 1.074
+rings = 32
+ring_segments = 16
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_8wfnm"]
+parameter_name = "Light_color_ui"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_4akwd"]
+constant = 0.4
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_01wla"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_8fwg5"]
+parameter_name = "Opacity"
+hint = 1
+default_value_enabled = true
+default_value = 1.0
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_b4w1v"]
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_hwjhi"]
+constant = 0.8
+
+[sub_resource type="VisualShader" id="VisualShader_o8auv"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+
+global uniform vec4 Light_color_ui : source_color;
+
+
+
+void fragment() {
+// ColorParameter:2
+	vec4 n_out2p0 = Light_color_ui;
+
+
+// FloatConstant:7
+	float n_out7p0 = 0.800000;
+
+
+// FloatConstant:3
+	float n_out3p0 = 0.400000;
+
+
+	float n_out4p0;
+// Expression:4
+	n_out4p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out3p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out4p0 = n_out7p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Step:6
+	float n_out6p0 = step(n_out2p0.x, n_out4p0);
+
+
+// Output:0
+	ALBEDO = vec3(n_out2p0.xyz);
+	ALPHA = n_out6p0;
+
+
+}
+"
+graph_offset = Vector2(-1803.42, 188.851)
+flags/unshaded = true
+nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_8wfnm")
+nodes/fragment/2/position = Vector2(-760, -40)
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_4akwd")
+nodes/fragment/3/position = Vector2(-1380, 520)
+nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_01wla")
+nodes/fragment/4/position = Vector2(-1200, 380)
+nodes/fragment/4/size = Vector2(724.789, 654.559)
+nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/4/output_ports = "0,0,Dither_Node;"
+nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/5/node = SubResource("VisualShaderNodeFloatParameter_8fwg5")
+nodes/fragment/5/position = Vector2(-1780, 400)
+nodes/fragment/6/node = SubResource("VisualShaderNodeStep_b4w1v")
+nodes/fragment/6/position = Vector2(-351.825, 215.819)
+nodes/fragment/7/node = SubResource("VisualShaderNodeFloatConstant_hwjhi")
+nodes/fragment/7/position = Vector2(-1440, 360)
+nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0, 3, 0, 4, 1, 4, 0, 6, 1, 2, 0, 6, 0, 6, 0, 0, 1, 7, 0, 4, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v75yl"]
+render_priority = 0
+shader = SubResource("VisualShader_o8auv")
 
 [sub_resource type="VisualShaderNodeLinearSceneDepth" id="VisualShaderNodeLinearSceneDepth_38fsn"]
 
@@ -343,6 +480,13 @@ transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
 
 [node name="Sonar_behaviour" type="Node" parent="Player_Boat/Sonar"]
 script = SubResource("GDScript_0xo40")
+
+[node name="On_OverMouse_3D_SHAPE" type="MeshInstance3D" parent="Player_Boat/Sonar"]
+transform = Transform3D(12.8483, 0, -2.27374e-13, 0, 1.20588, 0, 2.27374e-13, 0, 12.8483, 0, -1.55876, 0)
+visible = false
+mesh = SubResource("TorusMesh_o3rdy")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("ShaderMaterial_v75yl")
 
 [node name="01" type="Node3D" parent="Player_Boat/Sonar"]
 transform = Transform3D(5.52237, 0, 0, 0, 5.52237, 0, 0, 0, 5.52237, 0.049623, -0.743807, -0.269134)

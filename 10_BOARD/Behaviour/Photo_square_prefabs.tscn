@@ -11,6 +11,7 @@ script/source = "extends Node
 @onready var color_rect = $\"../ColorRect5/Photo\"
 @onready var _material : Material = color_rect.get_material()
 @onready var text = $\"../text\"
+var t 
 
 func _ready():
 	_apply_photo_NPC()
@@ -23,8 +24,23 @@ func _apply_photo_NPC():
 	var imageN = _global_datas.Npc_Dialogue.image
 	
 	_material.set_shader_parameter(\"Photo\",imageN)
-	_material.set_shader_parameter(\"Denoiser\" , 1.0)	
+	
 	text.text = _global_datas.Npc_Dialogue.name
+
+	_change_photo_shade()
+	
+func _change_photo_shade():
+	
+	
+
+	if t:
+		t.kill()
+	t = create_tween()
+	
+	t .tween_method(change_value,0.25,1.0,2.5).set_trans(Tween.TRANS_SINE)	
+	
+func change_value(value : float):
+	_material.set_shader_parameter(\"Denoiser\" , value)
 "
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_l5qlk"]

@@ -47,33 +47,6 @@ func _ready():
 	ProjectSettings.set_setting(\"display/window/size/height\",1080)   
 "
 
-[sub_resource type="GDScript" id="GDScript_lxvky"]
-script/source = "extends Node
-
-
-@onready var dive_button = $\"../../01_GAME_UI/MAIN_SCENE_UI/Dive_button\"
-
-
-func _ready():
-	_global_datas.book_is_open.connect(_active)
-	_global_datas.in_dialogue_zone.connect(disable)
-	_global_datas.out_dialogue_zone.connect(active)
-
-
-
-func disable():
-	dive_button.visible = false		
-	
-func active():
-	dive_button.visible = true		
-		
-func _active(condition : bool):
-	
-	if _global_datas.Player_InDialogue_zone:
-		return
-	dive_button.visible = !condition
-"
-
 [sub_resource type="GDScript" id="GDScript_xp6ow"]
 script/source = "extends Camera3D
 
@@ -356,6 +329,33 @@ func _on_button_pressed():
 	_global_datas._open_dialogue.emit()
 "
 
+[sub_resource type="GDScript" id="GDScript_ulo3x"]
+script/source = "extends Node
+
+@onready var dive_button = $Dive_button
+
+func _ready():
+	pass
+	#_global_datas.book_is_open.connect(_active)
+	#_global_datas.in_dialogue_zone.connect(disable)
+	#_global_datas.out_dialogue_zone.connect(active)
+	#_global_datas._active_go_subscene_button.connect(_active)
+
+
+func disable():
+	dive_button.visible = false		
+	
+func active():
+	dive_button.visible = true		
+		
+func _active(condition : bool):
+	
+	if _global_datas.Player_InDialogue_zone:
+		return
+	dive_button.visible = !condition
+
+"
+
 [sub_resource type="GDScript" id="GDScript_wxam5"]
 script/source = "extends Button
 
@@ -370,6 +370,11 @@ func _on_button_down():
 
 func _on_button_up():
 	_global_datas._reseting_clock_disable.emit()
+
+
+				
+	
+	
 "
 
 [node name="Main" type="Node"]
@@ -392,9 +397,6 @@ KeepInFocus = ExtResource("5_aps83")
 
 [node name="Mouse_mode" type="Node" parent="00_GAME_MANAGERS"]
 script = ExtResource("8_m0sr0")
-
-[node name="Active_dive" type="Node" parent="00_GAME_MANAGERS"]
-script = SubResource("GDScript_lxvky")
 
 [node name="01_GAME_UI" type="Node" parent="."]
 
@@ -599,12 +601,15 @@ theme_override_colors/font_color = Color(0.188235, 0.188235, 0.188235, 1)
 theme_override_font_sizes/font_size = 40
 text = "..."
 
-[node name="Dive_button" type="Button" parent="01_GAME_UI/MAIN_SCENE_UI"]
-layout_mode = 0
-offset_left = 1220.0
-offset_top = 1029.0
-offset_right = 1295.0
-offset_bottom = 1079.0
+[node name="Button_active_subscene" type="Node" parent="01_GAME_UI/MAIN_SCENE_UI"]
+script = SubResource("GDScript_ulo3x")
+
+[node name="Dive_button" type="Button" parent="01_GAME_UI/MAIN_SCENE_UI/Button_active_subscene"]
+visible = false
+offset_left = 872.0
+offset_top = 446.0
+offset_right = 947.0
+offset_bottom = 496.0
 theme_override_font_sizes/font_size = 30
 text = "DIVE
 "
@@ -623,5 +628,5 @@ metadata/_edit_horizontal_guides_ = [542.0]
 [node name="07_SCREEN_TOOLS" parent="." instance=ExtResource("18_akagp")]
 
 [connection signal="pressed" from="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue/Button/ColorRect/Push_button" to="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue" method="_on_button_pressed"]
-[connection signal="button_down" from="01_GAME_UI/MAIN_SCENE_UI/Dive_button" to="01_GAME_UI/MAIN_SCENE_UI/Dive_button" method="_on_button_down"]
-[connection signal="button_up" from="01_GAME_UI/MAIN_SCENE_UI/Dive_button" to="01_GAME_UI/MAIN_SCENE_UI/Dive_button" method="_on_button_up"]
+[connection signal="button_down" from="01_GAME_UI/MAIN_SCENE_UI/Button_active_subscene/Dive_button" to="01_GAME_UI/MAIN_SCENE_UI/Button_active_subscene/Dive_button" method="_on_button_down"]
+[connection signal="button_up" from="01_GAME_UI/MAIN_SCENE_UI/Button_active_subscene/Dive_button" to="01_GAME_UI/MAIN_SCENE_UI/Button_active_subscene/Dive_button" method="_on_button_up"]

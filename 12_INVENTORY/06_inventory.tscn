@@ -18,12 +18,13 @@ script/source = "extends Node
 @onready var board = $Control/Board
 
 func _ready():
-	pass
+
 
 	_global_datas._open_dialogue.connect(_hide)
 	_global_datas._close_dialogue.connect(_show)
 	_global_datas._go_Subscene.connect(_hide)
 	_global_datas._backFrom_subscene.connect(_show)
+	control.visible = true
 	
 func _hide_2d_enventory():
 	control.visible = false
@@ -1459,13 +1460,13 @@ func _mirror_switch(condition : bool):
 	if !condition :
 		t = create_tween()
 		t .tween_method(scanner_opacity._set_scanner_opacity_value,1.0,0.0,0.25).set_trans(Tween.TRANS_SINE)
-		_global_datas.clock_timer.paused = false
+		#_global_datas.clock_timer.paused = false
 	else:
 	
 		t = create_tween()	
 		t .tween_method(scanner_opacity._set_scanner_opacity_value,0.0,1.0,0.25).set_trans(Tween.TRANS_SINE)
 		
-		_global_datas.clock_timer.paused = true
+		#_global_datas.clock_timer.paused = true
 		
 func _on_texture_button_pressed():
 	if !_global_datas.Player_InSubScene:
@@ -2147,6 +2148,7 @@ script = ExtResource("1_8ci41")
 script = SubResource("GDScript_xw7ed")
 
 [node name="Control" type="Control" parent="."]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

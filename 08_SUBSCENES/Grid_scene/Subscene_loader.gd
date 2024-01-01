@@ -3,6 +3,7 @@ extends Node
 
 
 @onready var cam_raycast = $CAM_RAYCAST
+@onready var load_scene = $LoadScene
 
 func _ready():
 	
@@ -16,7 +17,7 @@ func _loadscene():
 	
 	
 	#REMOVE PREVIOUS SCENE
-	for child in $LoadScene.get_children():
+	for child in load_scene.get_children():
 		child.free()
 	
 	#LOAD NEW SCENE
