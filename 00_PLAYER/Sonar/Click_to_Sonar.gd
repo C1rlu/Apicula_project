@@ -5,8 +5,7 @@ var can_click = false
 
 func _input(event: InputEvent) -> void:
 	
-	if _global_datas.Npc_Dialogue != null:
-		return
+
 	if _global_datas.Player_InBoard:
 		return
 	if _global_datas.Player_InMenu:
