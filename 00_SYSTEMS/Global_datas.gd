@@ -27,6 +27,9 @@ signal  _close_board
 signal _reseting_clock_active
 signal _reseting_clock_disable
 signal _active_go_subscene_button(condition : bool)
+signal _active_world_grid(condition : bool)
+
+
 # dialogue signals
 signal in_dialogue_zone
 signal out_dialogue_zone

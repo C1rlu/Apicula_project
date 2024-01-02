@@ -19,14 +19,17 @@ var offset
 var size : float
 
 var my_origin_parent : Node
+var show_map
 
 signal pos_anim
+
 var last_position : Vector2
 func _ready():
 	size = control.scale.x
 	my_origin_parent = control.get_parent()
 	last_position = control.transform.origin
 	Pin_book = get_node_or_null("../Pin_book")
+	show_map = get_node_or_null("../Show_map_grid")
 func _process(_delta):
 	
 	if !click:
@@ -50,6 +53,10 @@ func _input(event):
 			_scale_change(size * scale_in_hand)
 			offset = control.transform.origin - control.get_global_mouse_position()
 			_global_datas.OnDrag_start_position = offset
+			
+			if show_map != null : _global_datas._active_world_grid.emit(true)
+				
+			
 			
 			move_behind()
 			
@@ -89,6 +96,8 @@ func _unselect_element(condition : bool, move_behind_c : bool):
 	_global_datas.Player_lock_click = false
 	_scale_change(size)
 	_global_datas.using_board_disable.emit()
+	
+	if show_map != null : _global_datas._active_world_grid.emit(false)
 	
 	if !condition:
 		control.reparent(my_origin_parent)
