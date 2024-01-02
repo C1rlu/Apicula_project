@@ -54,8 +54,8 @@ func _check_sceneIndex():
 	find_nearest_cell_to_player()
 	
 
-func _instance_visual_cells(position : Vector3, name : String):
+func _instance_visual_cells(_position : Vector3, _name : String):
 	var new_cell = cell_prefabs.instantiate()
 	visual_cells.add_child(new_cell)
-	new_cell.transform.origin = position
-	new_cell.get_node_or_null("Grid_name").text = name 
+	new_cell.transform.origin = _position
+	new_cell.get_node_or_null("Grid_name").text = _name 

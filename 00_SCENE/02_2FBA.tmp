@@ -1,4 +1,4 @@
-[gd_scene load_steps=68 format=3 uid="uid://cnmptm7i0xxmj"]
+[gd_scene load_steps=66 format=3 uid="uid://cnmptm7i0xxmj"]
 
 [ext_resource type="PackedScene" uid="uid://vpdvl0v7dubd" path="res://00_PLAYER/Player_boat.tscn" id="1_qltht"]
 [ext_resource type="Shader" uid="uid://bduoqim3kfbs6" path="res://00_PLAYER/Sonar/Sonar_sh.tres" id="3_todel"]
@@ -21,64 +21,6 @@
 [ext_resource type="Resource" uid="uid://l3coaeai3lx6" path="res://09_NPC/Npc_data/Baltazar_data.tres" id="19_qcquc"]
 [ext_resource type="Material" uid="uid://dgl2um0yp8e3c" path="res://05_SHADER_TEST/All_Materials/Building_mat.tres" id="20_24d3w"]
 [ext_resource type="PackedScene" uid="uid://dti7l20thp2rk" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Subscene_elements/epave_zone.tscn" id="23_txlwt"]
-
-[sub_resource type="GDScript" id="GDScript_rtxce"]
-script/source = "extends Node
-
-
-@onready var birds = $\"../Birds\"
-
-var t
-
-func _ready():
-	_global_datas._bird_is_comming.connect(_follow)
-	pass	
-func _follow():
-	
-	var pos = Vector3(_global_datas.player_position.x,birds.global_position.y,_global_datas.player_position.z + 11)
-	birds.global_position = pos 
-	birds.visible = true
-	
-	if t:
-		t.kill()
-	t = create_tween()
-	
-	t .tween_method(_change_value,0.0,0.01,5.0).set_trans(Tween.TRANS_SINE)	
-	await create_tween().tween_interval(5.0).finished
-	_end()
-	
-	
-
-func _change_value(value : float):
-	var target = Vector3(_global_datas.player_position.x,birds.global_position.y,_global_datas.player_position.z)
-	var distance = birds.global_position.distance_to(target)
-
-	var lerped_position = lerp(birds.global_position, target, value)
-	birds.global_position = lerped_position	
-	print(value)
-
-
-func _end():
-	birds.visible = false
-	
-	_global_datas._open_dialogue.emit()
-"
-
-[sub_resource type="SphereMesh" id="SphereMesh_i7on3"]
-
-[sub_resource type="VisualShader" id="VisualShader_2wnb7"]
-code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, depth_test_disabled, unshaded;
-
-
-
-"
-flags/depth_test_disabled = true
-flags/unshaded = true
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_purqc"]
-render_priority = 0
-shader = SubResource("VisualShader_2wnb7")
 
 [sub_resource type="GDScript" id="GDScript_0xo40"]
 script/source = "extends Node
@@ -427,33 +369,6 @@ material = SubResource("ShaderMaterial_kcje2")
 [sub_resource type="SphereShape3D" id="SphereShape3D_yt2xy"]
 radius = 0.990634
 
-[sub_resource type="GDScript" id="GDScript_i66w8"]
-script/source = "extends Node
-"
-
-[sub_resource type="GDScript" id="GDScript_w8xnd"]
-script/source = "extends Area3D
-
-@export var Npc_data : Npc_datas
-
-func _on_area_entered(_area):
-	_global_datas.Npc_Dialogue = Npc_data
-	_global_datas.in_dialogue_zone.emit()
-
-
-func _on_area_exited(_area):
-	_global_datas.Npc_Dialogue = null
-	_global_datas.out_dialogue_zone.emit()
-
-"
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_jvty4"]
-radius = 0.67208
-
-[sub_resource type="BoxMesh" id="BoxMesh_jmuil"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_ujnfl"]
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8p064"]
 render_priority = 0
 shader = ExtResource("5_83wu6")
@@ -514,21 +429,65 @@ size = Vector3(30, 0, 30)
 material = ExtResource("7_4y8ld")
 size = Vector3(30, 0, 30)
 
+[sub_resource type="GDScript" id="GDScript_rtxce"]
+script/source = "extends Node
+
+@onready var timer = $Timer
+@onready var birds = $\"../Birds\"
+
+var t
+func _ready():
+	_follow()
+	
+
+func _follow():
+
+	if t:
+		t.kill()
+	t = create_tween()
+	
+	t .tween_method(_change_value,0.0,1.0,5.0).set_trans(Tween.TRANS_SINE)	
+	#await create_tween().tween_interval(0.5).finished
+	#_hide()
+	
+	
+
+func _change_value(value : float):
+	
+	var lerped_position = lerp(birds.global_position,_global_datas.player_position, value)
+	birds.global_position = lerped_position	
+"
+
+[sub_resource type="SphereMesh" id="SphereMesh_i7on3"]
+
+[sub_resource type="GDScript" id="GDScript_i66w8"]
+script/source = "extends Node
+"
+
+[sub_resource type="GDScript" id="GDScript_w8xnd"]
+script/source = "extends Area3D
+
+@export var Npc_data : Npc_datas
+
+func _on_area_entered(_area):
+	_global_datas.Npc_Dialogue = Npc_data
+	_global_datas.in_dialogue_zone.emit()
+
+
+func _on_area_exited(_area):
+	_global_datas.Npc_Dialogue = null
+	_global_datas.out_dialogue_zone.emit()
+
+"
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_jvty4"]
+radius = 0.67208
+
+[sub_resource type="BoxMesh" id="BoxMesh_jmuil"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_ujnfl"]
+
 [node name="02_MAIN_SCENES" type="Node"]
-
-[node name="Birds_Manager" type="Node" parent="."]
-
-[node name="To_player" type="Node" parent="Birds_Manager"]
-script = SubResource("GDScript_rtxce")
-
-[node name="Birds" type="Node3D" parent="Birds_Manager"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.286, 0)
-visible = false
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Birds_Manager/Birds"]
-transform = Transform3D(0.334977, 0, 0, 0, 0.334977, 0, 0, 0, 0.334977, 0, 0, 0)
-mesh = SubResource("SphereMesh_i7on3")
-surface_material_override/0 = SubResource("ShaderMaterial_purqc")
 
 [node name="Player_Boat" parent="." instance=ExtResource("1_qltht")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.73433, 0, 0.35998)
@@ -602,6 +561,42 @@ script = ExtResource("4_h4pmi")
 shape = SubResource("SphereShape3D_yt2xy")
 
 [node name="--DECOR--" type="Node" parent="."]
+
+[node name="Clouds" type="MeshInstance3D" parent="--DECOR--"]
+transform = Transform3D(57.2458, 0, 0, 0, 57.2458, 0, 0, 0, 57.2458, 0, 6.93092, 0)
+mesh = SubResource("PlaneMesh_k8245")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("ShaderMaterial_2pkhh")
+
+[node name="SEA" type="StaticBody3D" parent="--DECOR--"]
+transform = Transform3D(4.4285, 0, 0, 0, 0.44285, 0, 0, 0, 4.4285, 0.739399, -0.436631, 1.21398)
+
+[node name="back_color" type="MeshInstance3D" parent="--DECOR--/SEA"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -34.098, 0)
+mesh = SubResource("PlaneMesh_7ftl5")
+
+[node name="Sea_collider" type="MeshInstance3D" parent="--DECOR--/SEA"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.067, 0)
+layers = 8
+mesh = SubResource("BoxMesh_hogrq")
+skeleton = NodePath("../Sea_foam")
+
+[node name="Sea_foam" type="MeshInstance3D" parent="--DECOR--/SEA"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+layers = 2048
+mesh = SubResource("BoxMesh_wmrfd")
+
+[node name="Birds_Manager" type="Node" parent="--DECOR--"]
+
+[node name="go_to_player" type="Node" parent="--DECOR--/Birds_Manager"]
+script = SubResource("GDScript_rtxce")
+
+[node name="Birds" type="Node3D" parent="--DECOR--/Birds_Manager"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.3914, 1.61623, -3.61098)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="--DECOR--/Birds_Manager/Birds"]
+transform = Transform3D(0.334977, 0, 0, 0, 0.334977, 0, 0, 0, 0.334977, 0, 0, 0)
+mesh = SubResource("SphereMesh_i7on3")
 
 [node name="GRID_MAP" type="Node" parent="--DECOR--"]
 
@@ -773,30 +768,6 @@ collision_mask = 2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.02417, 4.76837e-07, 1.87812)
 collision_layer = 2
 collision_mask = 2
-
-[node name="Clouds" type="MeshInstance3D" parent="--DECOR--"]
-transform = Transform3D(57.2458, 0, 0, 0, 57.2458, 0, 0, 0, 57.2458, 0, 6.93092, 0)
-mesh = SubResource("PlaneMesh_k8245")
-skeleton = NodePath("../../..")
-surface_material_override/0 = SubResource("ShaderMaterial_2pkhh")
-
-[node name="SEA" type="StaticBody3D" parent="--DECOR--"]
-transform = Transform3D(4.4285, 0, 0, 0, 0.44285, 0, 0, 0, 4.4285, 0.739399, -0.436631, 1.21398)
-
-[node name="back_color" type="MeshInstance3D" parent="--DECOR--/SEA"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -34.098, 0)
-mesh = SubResource("PlaneMesh_7ftl5")
-
-[node name="Sea_collider" type="MeshInstance3D" parent="--DECOR--/SEA"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.067, 0)
-layers = 8
-mesh = SubResource("BoxMesh_hogrq")
-skeleton = NodePath("../Sea_foam")
-
-[node name="Sea_foam" type="MeshInstance3D" parent="--DECOR--/SEA"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-layers = 2048
-mesh = SubResource("BoxMesh_wmrfd")
 
 [connection signal="mouse_entered" from="Player_Boat/Area3D" to="Player_Boat/Area3D" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="Player_Boat/Area3D" to="Player_Boat/Area3D" method="_on_mouse_exited"]

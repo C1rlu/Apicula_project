@@ -1,4 +1,4 @@
-[gd_scene load_steps=133 format=3 uid="uid://dmg5brvcww8lq"]
+[gd_scene load_steps=145 format=3 uid="uid://dmg5brvcww8lq"]
 
 [ext_resource type="Script" path="res://12_INVENTORY/Change_cursor.gd" id="1_8ci41"]
 [ext_resource type="PackedScene" uid="uid://dyfif7fbf51gx" path="res://12_INVENTORY/Book/Book_prefab.tscn" id="1_mrfq4"]
@@ -14,7 +14,6 @@
 script/source = "extends Node
 
 @onready var control = $Control
-@onready var bougie_zone = $Control/Bougie_zone/Bougie/light_flare
 @onready var board = $Control/Board
 
 func _ready():
@@ -183,10 +182,10 @@ func _input(event):
 [sub_resource type="GDScript" id="GDScript_xyojo"]
 script/source = "extends Node
 
-@onready var light_flare = $\"../light_flare\"
 @onready var light_f = $\"../Light_F\"
 @onready var light_b = $\"../Light_b\"
 
+@onready var gpu_particles_2d = $\"../GPUParticles2D\"
 
 func _ready():
 	_global_datas._go_Subscene.connect(_disable_bougie)
@@ -194,13 +193,15 @@ func _ready():
 	
 	
 func _active_bougie():
-	light_flare.visible = true
+
 	light_f.visible = true
 	light_b.visible = true
+	gpu_particles_2d.visible = true
 func _disable_bougie():
-	light_flare.visible = false
+
 	light_f.visible = false
 	light_b.visible = false
+	gpu_particles_2d.visible = false
 "
 
 [sub_resource type="GDScript" id="GDScript_c27os"]
@@ -865,7 +866,7 @@ shader_parameter/Intensity = 0.8
 [sub_resource type="Gradient" id="Gradient_8lwon"]
 interpolation_mode = 2
 offsets = PackedFloat32Array(0, 0.833333)
-colors = PackedColorArray(0.576792, 0.446841, 0.217726, 1, 0, 0, 0, 0)
+colors = PackedColorArray(0.692124, 0.542547, 0.281115, 1, 0, 0, 0, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_ahb4m"]
 gradient = SubResource("Gradient_8lwon")
@@ -873,6 +874,140 @@ width = 512
 height = 512
 fill = 1
 fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_bsycp"]
+constant = 0.4
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_30uk7"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_l3y3r"]
+input_name = "color"
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_kurnp"]
+default_input_values = [0, 0.505, 1, 0.0]
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_t8vby"]
+constant = 1.0
+
+[sub_resource type="VisualShader" id="VisualShader_5u71o"]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+
+
+
+void fragment() {
+// FloatConstant:7
+	float n_out7p0 = 1.000000;
+
+
+// FloatConstant:2
+	float n_out2p0 = 0.400000;
+
+
+	float n_out3p0;
+// Expression:3
+	n_out3p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out2p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out3p0 = n_out7p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Step:6
+	float n_in6p0 = 0.50500;
+	float n_out6p0 = step(n_in6p0, n_out3p0);
+
+
+// Output:0
+	COLOR.a = n_out6p0;
+
+
+}
+"
+graph_offset = Vector2(-505.703, -72.4036)
+mode = 1
+flags/light_only = false
+nodes/fragment/2/node = SubResource("VisualShaderNodeFloatConstant_bsycp")
+nodes/fragment/2/position = Vector2(-980, 560)
+nodes/fragment/3/node = SubResource("VisualShaderNodeExpression_30uk7")
+nodes/fragment/3/position = Vector2(-720, 420)
+nodes/fragment/3/size = Vector2(724.789, 654.559)
+nodes/fragment/3/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/3/output_ports = "0,0,Dither_Node;"
+nodes/fragment/3/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/5/node = SubResource("VisualShaderNodeInput_l3y3r")
+nodes/fragment/5/position = Vector2(-472.209, 62.207)
+nodes/fragment/6/node = SubResource("VisualShaderNodeStep_kurnp")
+nodes/fragment/6/position = Vector2(-51.8656, 54.1544)
+nodes/fragment/7/node = SubResource("VisualShaderNodeFloatConstant_t8vby")
+nodes/fragment/7/position = Vector2(-1000, 440)
+nodes/fragment/connections = PackedInt32Array(2, 0, 3, 1, 3, 0, 6, 1, 7, 0, 3, 0, 6, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fm4ww"]
+shader = SubResource("VisualShader_5u71o")
+
+[sub_resource type="Gradient" id="Gradient_lxymc"]
+offsets = PackedFloat32Array(0.133956, 1)
+colors = PackedColorArray(0.793396, 0.412387, 0.282001, 1, 0.901291, 0.775677, 0.524283, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_wfdju"]
+gradient = SubResource("Gradient_lxymc")
+
+[sub_resource type="Curve" id="Curve_lyj41"]
+_data = [Vector2(0.00568182, 0.4), 0.0, 0.0, 0, 0, Vector2(0.997159, 0.463158), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ysv26"]
+curve = SubResource("Curve_lyj41")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_hsdlg"]
+particle_flag_rotate_y = true
+direction = Vector3(0, 0, 0)
+gravity = Vector3(0, -100, 0)
+initial_velocity_max = 25.0
+angular_velocity_max = 0.1
+damping_min = 0.1
+damping_max = 0.25
+angle_min = -720.0
+angle_max = 720.0
+scale_min = 25.0
+scale_max = 35.0
+scale_curve = SubResource("CurveTexture_ysv26")
+color_ramp = SubResource("GradientTexture1D_wfdju")
+turbulence_noise_strength = 0.05
+turbulence_noise_scale = 1.12
+turbulence_noise_speed_random = 0.0
+turbulence_influence_min = 0.0
+turbulence_influence_max = 0.0
 
 [sub_resource type="GDScript" id="GDScript_7ecmk"]
 script/source = "extends Node
@@ -1629,7 +1764,6 @@ script = ExtResource("1_8ci41")
 script = SubResource("GDScript_xw7ed")
 
 [node name="Control" type="Control" parent="."]
-visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -1805,29 +1939,12 @@ scale = Vector2(-1.22615, -1.22615)
 mouse_filter = 2
 color = Color(0.176471, 0.176471, 0.176471, 1)
 
-[node name="light_flare" type="ColorRect" parent="Control/Bougie_zone/Bougie"]
-light_mask = 3
-material = SubResource("ShaderMaterial_5tl7k")
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 10.0
-offset_top = -25.0
-offset_right = 112.0
-offset_bottom = 77.0
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(-0.163306, -0.665895)
-mouse_filter = 2
-color = Color(0.861409, 0.741763, 0.332567, 1)
-
 [node name="Area2D" type="Area2D" parent="Control/Bougie_zone/Bougie"]
 position = Vector2(-40.9322, -27.0787)
 scale = Vector2(0.7, 0.7)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Control/Bougie_zone/Bougie/Area2D"]
+visible = false
 position = Vector2(57.8572, 39.2858)
 scale = Vector2(0.999998, 0.999998)
 shape = SubResource("RectangleShape2D_ygy0o")
@@ -1841,15 +1958,28 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -255.0
-offset_top = -324.0
-offset_right = 257.0
-offset_bottom = 188.0
+offset_left = -258.0
+offset_top = -305.0
+offset_right = 254.0
+offset_bottom = 207.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(0.173154, 0.352458)
+scale = Vector2(0.173154, 0.232457)
 pivot_offset = Vector2(256, 256)
 texture = SubResource("GradientTexture2D_ahb4m")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="Control/Bougie_zone/Bougie"]
+material = SubResource("ShaderMaterial_fm4ww")
+position = Vector2(1, -44)
+scale = Vector2(1.76852, 1.76852)
+amount = 3
+process_material = SubResource("ParticleProcessMaterial_hsdlg")
+lifetime = 0.5
+explosiveness = 0.01
+fixed_fps = 6
+interpolate = false
+fract_delta = false
+local_coords = true
 
 [node name="Photo_group" type="Control" parent="Control"]
 anchors_preset = 0

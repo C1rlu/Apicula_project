@@ -395,7 +395,6 @@ input_name = "color"
 [sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_d2fk7"]
 parameter_name = "Subscene_mirror_alpha"
 qualifier = 1
-default_value_enabled = true
 
 [sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_erg5y"]
 size = Vector2(634.014, 470.339)
@@ -451,7 +450,7 @@ code = "shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
 
 uniform sampler2D tex_frg_24;
-global uniform float Subscene_mirror_alpha = 0;
+global uniform float Subscene_mirror_alpha;
 
 
 
@@ -550,6 +549,7 @@ void fragment() {
 
 }
 "
+graph_offset = Vector2(-320.616, 250.829)
 flags/unshaded = true
 nodes/fragment/0/position = Vector2(780, 160)
 nodes/fragment/2/node = SubResource("VisualShaderNodeExpression_erg5y")
@@ -599,7 +599,7 @@ nodes/fragment/26/node = SubResource("VisualShaderNodeInput_x0mgy")
 nodes/fragment/26/position = Vector2(-20, 1460)
 nodes/fragment/27/node = SubResource("VisualShaderNodeMix_h6opy")
 nodes/fragment/27/position = Vector2(895.324, 959.374)
-nodes/fragment/connections = PackedInt32Array(3, 0, 2, 2, 15, 0, 0, 0, 4, 0, 2, 1, 2, 0, 10, 1, 16, 0, 10, 0, 17, 0, 16, 2, 18, 0, 16, 0, 19, 0, 20, 2, 10, 0, 20, 0, 21, 0, 23, 2, 22, 0, 23, 0, 24, 0, 25, 1, 23, 0, 25, 0, 26, 0, 24, 0, 25, 0, 27, 1, 20, 0, 0, 1, 27, 0, 20, 1)
+nodes/fragment/connections = PackedInt32Array(3, 0, 2, 2, 15, 0, 0, 0, 4, 0, 2, 1, 2, 0, 10, 1, 16, 0, 10, 0, 17, 0, 16, 2, 18, 0, 16, 0, 10, 0, 20, 0, 21, 0, 23, 2, 22, 0, 23, 0, 24, 0, 25, 1, 23, 0, 25, 0, 26, 0, 24, 0, 25, 0, 27, 1, 20, 0, 0, 1, 27, 0, 20, 1, 19, 0, 20, 2)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_auo33"]
 render_priority = 3
@@ -626,15 +626,12 @@ gravity = Vector3(0, 0, 0)
 initial_velocity_min = 0.05
 initial_velocity_max = 0.25
 angular_velocity_max = 0.1
-damping_min = 0.1
-damping_max = 0.25
 angle_min = -720.0
 angle_max = 720.0
 scale_min = 0.1
 scale_max = 0.15
 scale_curve = SubResource("CurveTexture_0vc74")
 color_ramp = SubResource("GradientTexture1D_o5w0s")
-turbulence_enabled = true
 turbulence_noise_strength = 0.05
 turbulence_noise_scale = 0.1
 turbulence_noise_speed_random = 0.0
@@ -781,9 +778,12 @@ transform = Transform3D(1, 0, 0, 0, 0.0390157, 0.999239, 0, -0.999239, 0.0390157
 layers = 4
 material_override = SubResource("ShaderMaterial_auo33")
 cast_shadow = 0
-amount = 25
+amount = 10
 lifetime = 2.5
 randomness = 0.14
+fixed_fps = 12
+interpolate = false
+fract_delta = false
 process_material = SubResource("ParticleProcessMaterial_snyp2")
 draw_pass_1 = ExtResource("4_6vpi7")
 
