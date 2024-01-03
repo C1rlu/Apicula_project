@@ -51,10 +51,10 @@ script/source = "extends Node
 
 
 func _ready():
-	_global_datas._find_coins.connect(_intance_coins)	
+	_global_datas._find_coins.connect(_intance_coins_bottom)	
 	
 
-func _intance_coins():
+func _intance_coins_onPosition():
 	
 	print(\"INSTANCE COINS\")
 	var new_node = coins_prefab.instantiate()
@@ -66,6 +66,17 @@ func _intance_coins():
 	new_node.rotation_degrees = random_angle
 	new_node.position = screen_position
 	new_node.get_node(\"Push\")._push()
+
+func _intance_coins_bottom():
+	
+	print(\"INSTANCE COINS\")
+	var new_node = coins_prefab.instantiate()
+	coins_group.add_child(new_node)
+
+	var random_angle = randf_range(-6.0, 6.0)
+	new_node.rotation_degrees = random_angle
+	new_node.position = instance_pos.global_position
+	new_node.get_node(\"Push\")._push_b()
 "
 
 [sub_resource type="GDScript" id="GDScript_om7tc"]
@@ -2092,13 +2103,13 @@ mouse_filter = 2
 [node name="instance_pos" type="Control" parent="Control/Coins_group"]
 anchors_preset = 0
 offset_left = 960.0
-offset_top = 1050.0
+offset_top = 1140.0
 offset_right = 960.0
-offset_bottom = 1050.0
+offset_bottom = 1140.0
 mouse_filter = 2
 
 [node name="Coins6" parent="Control/Coins_group" instance=ExtResource("5_6qspm")]
-position = Vector2(565, 63)
+position = Vector2(588, 128)
 
 [node name="Coins7" parent="Control/Coins_group" instance=ExtResource("5_6qspm")]
 position = Vector2(599, 61)

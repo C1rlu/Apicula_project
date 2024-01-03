@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://cbot4dbq2r154"]
+[gd_scene load_steps=6 format=3 uid="uid://cbot4dbq2r154"]
 
 [ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_elements_mat.tres" id="1_qj4jc"]
 
@@ -6,11 +6,13 @@
 script/source = "extends Node
 
 @onready var coins_sub_element = $\"..\"
-
+@export var is_active: bool = false
 
 var pick_once : bool = true
 func _on_area_3d_input_event(camera, event, position, normal, shape_idx):
 	
+	if !is_active:
+		return	
 
 	if !_global_datas.Player_lock_click:
 		if !pick_once:
@@ -21,19 +23,66 @@ func _on_area_3d_input_event(camera, event, position, normal, shape_idx):
 			coins_sub_element.queue_free()		
 				
 func _on_area_3d_mouse_entered():
+	if !is_active:
+		return	
 	var value = 2 as int 
 	Input.set_default_cursor_shape(value)
 
 
 func _on_area_3d_mouse_exited():
+	if !is_active:
+		return	
 	var value = 0 as int
 	Input.set_default_cursor_shape(value)
 "
 
-[sub_resource type="SphereMesh" id="SphereMesh_1i8xr"]
+[sub_resource type="PrismMesh" id="PrismMesh_vc2fk"]
+
+[sub_resource type="GDScript" id="GDScript_y6blf"]
+script/source = "extends Node
+
+@onready var coin = $\"../..\"
+var t
+
+func _ready():
+	_global_datas._forreuse_off.connect(_stop)
+	
+	
+func _follow():	
+	
+	if t:
+		t.kill()
+	t = create_tween()	
+	t .tween_method(_change_value,0.0,1.0,5.0).set_trans(Tween.TRANS_SINE)	
+
+	
+func _change_value(value : float):
+	
+	var player_position = Vector3(_global_datas.subbscene_playerPosition.x,_global_datas.subbscene_playerPosition.y + 0.1,_global_datas.subbscene_playerPosition.z)
+		
+	var lerped_position = lerp(coin.global_position, player_position, value)
+	coin.global_position = lerped_position	
+	
+	var distance = coin.global_position.distance_to(player_position ) 
+
+	if distance < 0.1:
+		_global_datas._find_coins.emit()
+		_stop()
+		_global_datas.Coins_aspirator_array.erase(self)
+		coin.queue_free()
+	
+	
+func _stop():
+	
+	if t:
+		t.kill()
+	
+func _take_coin():
+	_follow()
+"
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ywyw3"]
-radius = 0.249969
+radius = 0.0568297
 
 [node name="Coins_sub_element" type="Node3D"]
 
@@ -41,14 +90,20 @@ radius = 0.249969
 script = SubResource("GDScript_0o12n")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.325301, 0, 0, 0, 0.325301, 0, 0, 0, 0.325301, 0, 0, 0)
-layers = 4096
-mesh = SubResource("SphereMesh_1i8xr")
+transform = Transform3D(0.131364, 0, 0, 0, 0.131364, 0, 0, 0, -0.0367567, 0, 0, 0)
+layers = 4
+mesh = SubResource("PrismMesh_vc2fk")
 surface_material_override/0 = ExtResource("1_qj4jc")
 
 [node name="Area3D" type="Area3D" parent="."]
+collision_layer = 2
+collision_mask = 2
+
+[node name="Go_player" type="Node" parent="Area3D"]
+script = SubResource("GDScript_y6blf")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(3.94413, 0, 0, 0, 3.94413, 0, 0, 0, 3.94413, 0, 0, 0)
 shape = SubResource("SphereShape3D_ywyw3")
 
 [connection signal="input_event" from="Area3D" to="Pick_me" method="_on_area_3d_input_event"]

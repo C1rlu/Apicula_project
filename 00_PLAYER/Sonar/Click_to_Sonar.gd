@@ -23,14 +23,16 @@ func _on_mouse_entered():
 	if _global_datas.Player_lock_click:
 		return
 		
-
+	if _global_datas.Player_InSubScene:
+		return
+		
 	can_click = true
 	_global_datas.Cursor_mode.cursor_in()
 	_global_datas.Player_lock_click = true
 	on_over_mouse_3d_shape.visible = true
 	
 func _on_mouse_exited():
-
+	
 	can_click = false
 	_global_datas.Cursor_mode.cursor_out()
 	_global_datas.Player_lock_click = false

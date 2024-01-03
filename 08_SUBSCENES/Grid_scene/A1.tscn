@@ -290,8 +290,10 @@ func _enable_col(condition : bool):
 script/source = "extends Node
 
 @onready var destructible_elements = $\"..\"
-
+@export var _is_active = false
 func _on_area_3d_2_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
+	if !_is_active:
+		return
 	if area.name == \"foreuse_area\":
 	
 		_global_datas._forreuse_impact_origin = destructible_elements.global_position
@@ -495,7 +497,7 @@ transform = Transform3D(0.00839357, -0.622641, -0.00378231, 0.3399, 0.0138865, 0
 transform = Transform3D(0.00839357, -0.86876, -0.0122029, 0.3399, 0.0193756, 0.0315205, -0.0258444, -0.027307, 0.410593, 3.79209, 1.21748, -1.97513)
 
 [node name="Destructible_elements" type="Node3D" parent="."]
-transform = Transform3D(0.358544, 0, 0, 0, 0.358544, 0, 0, 0, 0.358544, 0, -0.228681, 0)
+transform = Transform3D(0.358544, 0, 0, 0, 0.358544, 0, 0, 0, 0.358544, 0.656373, -0.228681, 0)
 
 [node name="_push" type="Node" parent="Destructible_elements"]
 script = SubResource("GDScript_krued")
@@ -534,7 +536,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.111654, 0.113841, 0)
 shape = SubResource("SphereShape3D_3r8ni")
 
 [node name="Destructible_elements2" type="Node3D" parent="."]
-transform = Transform3D(-0.310508, 0, 0.179272, 0, 0.358544, 0, -0.179272, 0, -0.310508, 1.33422, -0.838132, 0)
+transform = Transform3D(-0.310508, 0, 0.179272, 0, 0.358544, 0, -0.179272, 0, -0.310508, 1.33467, -0.8345, -0.00129938)
 
 [node name="_push" type="Node" parent="Destructible_elements2"]
 script = SubResource("GDScript_krued")
@@ -582,19 +584,19 @@ transform = Transform3D(0.215504, 0, 0, 0, 0.215504, 0, 0, 0, 0.215504, 0.862362
 transform = Transform3D(0.215504, 0, 0, 0, 0.215504, 0, 0, 0, 0.215504, 0.566694, -4.64019, 0.339517)
 
 [node name="Coins_sub_element4" parent="." instance=ExtResource("5_0qg7o")]
-transform = Transform3D(0.215504, 0, 0, 0, 0.215504, 0, 0, 0, 0.215504, 0.0975233, -0.904615, 0.0896288)
+transform = Transform3D(0.215504, 0, 0, 0, 0.215504, 0, 0, 0, 0.215504, -0.215682, -0.620635, 0.0472032)
 
 [node name="Coins_sub_element5" parent="." instance=ExtResource("5_0qg7o")]
-transform = Transform3D(0.215504, 0, 0, 0, 0.215504, 0, 0, 0, 0.215504, -0.0558685, -0.215528, 0.0896288)
+transform = Transform3D(0.215504, 0, 0, 0, 0.215504, 0, 0, 0, 0.215504, -0.357284, -0.56981, 0.0912023)
 
 [node name="Coins_sub_element9" parent="." instance=ExtResource("5_0qg7o")]
-transform = Transform3D(0.215504, 0, 0, 0, 0.215504, 0, 0, 0, 0.215504, -0.0558685, 1.88134, 0.0896288)
+transform = Transform3D(0.215504, 0, 0, 0, 0.215504, 0, 0, 0, 0.215504, -0.457668, -0.572295, 0.0896288)
 
 [node name="Coins_sub_element7" parent="." instance=ExtResource("5_0qg7o")]
-transform = Transform3D(0.215504, 0, 0, 0, 0.215504, 0, 0, 0, 0.215504, -0.0501883, -0.275779, 0.0896288)
+transform = Transform3D(0.215504, 0, 0, 0, 0.215504, 0, 0, 0, 0.215504, -0.272882, -0.627833, 0.0896288)
 
 [node name="Coins_sub_element8" parent="." instance=ExtResource("5_0qg7o")]
-transform = Transform3D(0.215504, 0, 0, 0, 0.215504, 0, 0, 0, 0.215504, -0.0136739, -0.24834, 0.0115065)
+transform = Transform3D(0.215504, 0, 0, 0, 0.215504, 0, 0, 0, 0.215504, -0.288604, -0.579038, 0.0115065)
 
 [node name="Coins_sub_element6" parent="." instance=ExtResource("5_0qg7o")]
 transform = Transform3D(0.215504, 0, 0, 0, 0.215504, 0, 0, 0, 0.215504, 1.63953, -4.25734, 0.348941)

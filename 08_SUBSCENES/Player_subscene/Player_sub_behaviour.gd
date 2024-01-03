@@ -79,4 +79,4 @@ func _on_ini_subscene_ini_pos():
 func player_dir(_delta, angle,angle_x):
 	
 	var New_rotation = Vector3(angle_x,angle,0.0)
-	PlayerMesh.rotation_degrees = lerp(PlayerMesh.rotation_degrees,New_rotation,2.0 * _delta)
+	PlayerMesh.rotation_degrees = lerp(PlayerMesh.rotation_degrees,New_rotation,3.0 * _delta)
