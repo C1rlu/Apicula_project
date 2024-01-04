@@ -205,6 +205,7 @@ var is_active = true
 
 @onready var on_over_mouse_3d_shape = $\"../On_OverMouse_3D_SHAPE\"
 		
+@onready var grow_circle = $Grow_circle
 
 func _input(event: InputEvent):
 
@@ -212,7 +213,8 @@ func _input(event: InputEvent):
 		
 		_global_datas._forreuse_off.emit()	
 		_global_datas.Cursor_mode.cursor_in()
-	
+		grow_circle._normal_scale()
+		
 func _on_mouse_click_mouse_entered():
 	if _global_datas.Player_lock_click:
 		return
@@ -224,7 +226,7 @@ func _on_mouse_click_mouse_entered():
 		return
 	on_over_mouse_3d_shape.visible = true
 	_global_datas.Cursor_mode.cursor_in()
-
+	
 
 
 func _on_mouse_click_mouse_exited():
@@ -238,7 +240,7 @@ func _on_mouse_click_mouse_exited():
 
 	_global_datas._forreuse_off.emit()	
 	on_over_mouse_3d_shape.visible = false
-
+	grow_circle._normal_scale()
 
 func _on_mouse_click_input_event(camera, event, position, normal, shape_idx):
 			
@@ -254,6 +256,32 @@ func _on_mouse_click_input_event(camera, event, position, normal, shape_idx):
 		
 	if event.is_action_pressed(\"Pioche\"):
 		_global_datas._forreuse_on.emit()
+		grow_circle._grow()
+"
+
+[sub_resource type="GDScript" id="GDScript_tp34p"]
+script/source = "extends Node
+
+@onready var on_over_mouse_3d_shape = $\"../../On_OverMouse_3D_SHAPE\"
+
+
+@onready var scale = on_over_mouse_3d_shape.scale.x
+
+@export var is_active = false
+
+func _grow():
+	
+	if !is_active:
+		return
+	var n_scale = Vector3(scale + 0.05 , scale + 0.05, scale + 0.05 )
+	on_over_mouse_3d_shape.scale = n_scale	
+	
+func _normal_scale():
+	
+	if !is_active:
+		return
+	var n_scale = Vector3(scale , scale ,scale)
+	on_over_mouse_3d_shape.scale = n_scale	
 "
 
 [sub_resource type="TorusMesh" id="TorusMesh_ynfum"]
@@ -281,12 +309,6 @@ expression = "const float DITHER_THRESHOLDS[16] ={
 vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
-
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_8fwg5"]
-parameter_name = "Opacity"
-hint = 1
-default_value_enabled = true
-default_value = 1.0
 
 [sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_b4w1v"]
 
@@ -342,7 +364,7 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-736.047, -122.036)
+graph_offset = Vector2(-1221.91, 24.3697)
 flags/unshaded = true
 nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_8wfnm")
 nodes/fragment/2/position = Vector2(-760, -40)
@@ -363,8 +385,6 @@ nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
 vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/5/node = SubResource("VisualShaderNodeFloatParameter_8fwg5")
-nodes/fragment/5/position = Vector2(-1780, 400)
 nodes/fragment/6/node = SubResource("VisualShaderNodeStep_b4w1v")
 nodes/fragment/6/position = Vector2(-351.825, 215.819)
 nodes/fragment/7/node = SubResource("VisualShaderNodeFloatConstant_hwjhi")
@@ -570,9 +590,8 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_ielci")
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_d8v8o"]
-radius = 0.302264
-height = 0.659316
+[sub_resource type="SphereShape3D" id="SphereShape3D_1b8dy"]
+radius = 0.482909
 
 [sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_5j6tu"]
 
@@ -1098,6 +1117,7 @@ func _disable():
 [node name="Player_Sub" type="RigidBody3D"]
 collision_layer = 2
 collision_mask = 2
+input_ray_pickable = false
 axis_lock_linear_z = true
 axis_lock_angular_x = true
 axis_lock_angular_y = true
@@ -1144,8 +1164,13 @@ script = SubResource("GDScript_x0jee")
 [node name="PIOCHE_BEHAVIOUR" type="Node" parent="."]
 script = SubResource("GDScript_ab8rq")
 
+[node name="Grow_circle" type="Node" parent="PIOCHE_BEHAVIOUR"]
+script = SubResource("GDScript_tp34p")
+is_active = true
+
 [node name="On_OverMouse_3D_SHAPE" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.28591, -4.74878e-16, 0, 0, -1.17296e-09, -0.28591, 5.05969e-15, 0.0268341, -1.24975e-08, 1.59845e-15, 0.135357, -0.0903244)
+visible = false
 layers = 4
 mesh = SubResource("TorusMesh_ynfum")
 skeleton = NodePath("../..")
@@ -1153,6 +1178,7 @@ surface_material_override/0 = SubResource("ShaderMaterial_jnsp3")
 
 [node name="Mouse_Click" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.121499, 0)
+collision_priority = 10.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Mouse_Click"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -0.00695992)
@@ -1185,6 +1211,7 @@ transform = Transform3D(0.031873, 0, 0, 0, -1.39321e-09, -0.031873, 0, 0.031873,
 [node name="foreuse_area" type="Area3D" parent="CollisionShape3D/Foreuse"]
 collision_layer = 2
 collision_mask = 2
+input_ray_pickable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/Foreuse/foreuse_area"]
 transform = Transform3D(1, 0.000242185, -1.8731e-05, 1.90128e-05, -0.00117957, 0.999999, 0.000242163, -0.999999, -0.00117957, -0.000272214, -0.135497, 1.38493)
@@ -1243,8 +1270,8 @@ collision_mask = 2
 input_ray_pickable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/Area3D"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -1.49012e-08, 0.28515)
-shape = SubResource("CapsuleShape3D_d8v8o")
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -7.45058e-09, 0.16387)
+shape = SubResource("SphereShape3D_1b8dy")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.348655, 0.114098)

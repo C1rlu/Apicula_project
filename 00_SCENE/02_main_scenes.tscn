@@ -1,4 +1,4 @@
-[gd_scene load_steps=65 format=3 uid="uid://cnmptm7i0xxmj"]
+[gd_scene load_steps=66 format=3 uid="uid://cnmptm7i0xxmj"]
 
 [ext_resource type="PackedScene" uid="uid://vpdvl0v7dubd" path="res://00_PLAYER/Player_boat.tscn" id="1_qltht"]
 [ext_resource type="Shader" uid="uid://bduoqim3kfbs6" path="res://00_PLAYER/Sonar/Sonar_sh.tres" id="3_todel"]
@@ -417,6 +417,27 @@ material = SubResource("ShaderMaterial_kcje2")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_x2n16"]
 
+[sub_resource type="GDScript" id="GDScript_q85y0"]
+script/source = "extends Node
+@onready var collision_shape_3d = $\"../CollisionShape3D\"
+
+@onready var area_3d = $\"..\"
+
+
+
+func _ready():
+	_global_datas._go_Subscene.connect(_disable)
+	_global_datas._backFrom_subscene.connect(_active)
+	pass
+func _disable():
+	#collision_shape_3d.disabled = true
+	area_3d.input_ray_pickable = false
+func _active():
+	#collision_shape_3d.disabled = false
+	print(\"active\")
+	area_3d.input_ray_pickable = true
+"
+
 [sub_resource type="SphereShape3D" id="SphereShape3D_yt2xy"]
 radius = 0.990634
 
@@ -527,7 +548,8 @@ mesh = SubResource("SphereMesh_i7on3")
 surface_material_override/0 = SubResource("ShaderMaterial_purqc")
 
 [node name="Player_Boat" parent="." instance=ExtResource("1_qltht")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.73433, 0, 0.35998)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
+input_ray_pickable = false
 mass = 4.0
 move_speed = 5.0
 rotation_speed = 2.0
@@ -589,10 +611,12 @@ collision_mask = 2
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player_Boat/Sonar/Sonar_Aera"]
 transform = Transform3D(5.39371, 0, -1.42109e-14, 0, 5.39371, 0, 1.42109e-14, 0, 5.39371, 1.77636e-15, 0, -0.39557)
 shape = SubResource("SphereShape3D_x2n16")
-disabled = true
 
 [node name="Area3D" type="Area3D" parent="Player_Boat"]
 script = ExtResource("4_h4pmi")
+
+[node name="Enable_MouseClick" type="Node" parent="Player_Boat/Area3D"]
+script = SubResource("GDScript_q85y0")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player_Boat/Area3D"]
 shape = SubResource("SphereShape3D_yt2xy")

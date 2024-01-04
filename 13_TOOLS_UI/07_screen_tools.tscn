@@ -22,13 +22,14 @@ func _ready():
 	_hide()
 	
 func _hide():
-	photo_tools.visible = false	
+	#photo_tools.visible = false	
 	vignette_opacity._set_vignette_opacity_value(0.0)
 func _show():
-	photo_tools.visible = true
-	
+	#photo_tools.visible = true
+	pass
 func _acivate( condition : bool):
-	photo_tools.visible = condition
+	pass
+	#photo_tools.visible = condition
 
 "
 
@@ -226,7 +227,7 @@ func _in_speacker_photo(event : InputEvent):
 	if !_global_datas.Player_InDialogue:
 		return
 	
-	if event.is_action_released(\"Click\"):
+	if event.is_action_released(\"Photo\"):
 		timer.stop()
 
 		_global_datas.Player_lock_click = false
@@ -235,7 +236,7 @@ func _in_speacker_photo(event : InputEvent):
 	if _global_datas.Player_lock_click == true:
 		return
 			
-	if event.is_action_pressed(\"Click\"):
+	if event.is_action_pressed(\"Photo\"):
 	
 		photo_circle.visible = true
 		timer.start()
@@ -246,7 +247,7 @@ func _in_subscene_photo(event : InputEvent):
 	if !_global_datas.Player_InSubScene:
 		return
 	
-	if event.is_action_released(\"Click\"):
+	if event.is_action_released(\"Photo\"):
 		timer.stop()
 
 		_global_datas.Player_lock_click = false
@@ -255,7 +256,7 @@ func _in_subscene_photo(event : InputEvent):
 	if _global_datas.Player_lock_click == true:
 		return
 			
-	if event.is_action_pressed(\"Click\"):
+	if event.is_action_pressed(\"Photo\"):
 	
 		photo_circle.visible = true
 		timer.start()
@@ -1319,7 +1320,7 @@ mouse_filter = 2
 color = Color(0.0313726, 0.0941176, 0.0941176, 1)
 
 [node name="Photo_tools" type="Node2D" parent="Photo_tools"]
-position = Vector2(960, 0)
+position = Vector2(960, 900)
 
 [node name="photo_UI_elements" type="Control" parent="Photo_tools/Photo_tools"]
 layout_mode = 3
@@ -1369,6 +1370,7 @@ mouse_filter = 2
 color = Color(0.784314, 0.709804, 0.513726, 1)
 
 [node name="Photo_circle2" type="ColorRect" parent="Photo_tools/Photo_tools/photo_UI_elements"]
+visible = false
 material = SubResource("ShaderMaterial_bpvtm")
 layout_mode = 1
 anchors_preset = 8
@@ -1386,6 +1388,7 @@ mouse_filter = 2
 color = Color(0.231373, 0.623529, 0.647059, 1)
 
 [node name="ColorRect6" type="ColorRect" parent="Photo_tools/Photo_tools/photo_UI_elements"]
+visible = false
 material = SubResource("ShaderMaterial_ysnwg")
 layout_mode = 0
 offset_left = -87.0
@@ -1397,6 +1400,7 @@ mouse_filter = 2
 color = Color(0.4, 0.364706, 0.223529, 1)
 
 [node name="ColorRect7" type="ColorRect" parent="Photo_tools/Photo_tools/photo_UI_elements"]
+visible = false
 material = ExtResource("1_jnjg4")
 layout_mode = 0
 offset_left = -78.0
@@ -1408,6 +1412,7 @@ mouse_filter = 2
 color = Color(0.0156863, 0.113725, 0.12549, 1)
 
 [node name="ColorRect8" type="ColorRect" parent="Photo_tools/Photo_tools/photo_UI_elements"]
+visible = false
 material = SubResource("ShaderMaterial_ysnwg")
 layout_mode = 0
 offset_left = 12.0
@@ -1419,12 +1424,14 @@ mouse_filter = 2
 color = Color(0.0156863, 0.113725, 0.12549, 1)
 
 [node name="ToolsPhoto" type="Sprite2D" parent="Photo_tools/Photo_tools/photo_UI_elements"]
+visible = false
 material = SubResource("ShaderMaterial_scok3")
 position = Vector2(43, 49)
 scale = Vector2(0.046875, 0.046875)
 texture = ExtResource("1_pct16")
 
 [node name="Area2D" type="Area2D" parent="Photo_tools/Photo_tools/photo_UI_elements"]
+visible = false
 position = Vector2(1, 0)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Photo_tools/Photo_tools/photo_UI_elements/Area2D"]
@@ -1435,7 +1442,6 @@ shape = SubResource("RectangleShape2D_xunxg")
 position = Vector2(0, -292)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Photo_tools/Photo_tools/photo_UI_elements/Click_photo"]
-visible = false
 position = Vector2(1.5, -71)
 shape = SubResource("CircleShape2D_mc43h")
 

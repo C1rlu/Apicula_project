@@ -280,10 +280,14 @@ blend_shape_mode = 0
 script/source = "extends Node
 
 @onready var collision_shape_3d = $\"../StaticBody3D/CollisionShape3D\"
+@onready var collision_shape_3d_2 = $\"../Area3D2/CollisionShape3D2\"
 
 
 func _enable_col(condition : bool):
 	collision_shape_3d.disabled = condition
+	collision_shape_3d_2.disabled = condition
+	
+
 "
 
 [sub_resource type="GDScript" id="GDScript_krued"]
@@ -414,15 +418,18 @@ script = SubResource("GDScript_krued")
 transform = Transform3D(1, -1.76011e-08, 4.03116e-09, 3.19331e-08, 1, 2.98023e-08, 6.87994e-09, 0, 1, 0, 0, 0)
 collision_layer = 6
 collision_mask = 6
+input_ray_pickable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Mirror_elements/Boat_underscene_02/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_ipksv")
 disabled = true
 
 [node name="Area3D2" type="Area3D" parent="Mirror_elements/Boat_underscene_02"]
-transform = Transform3D(1.05711, 0.35309, -2.98194e-07, -0.337285, 1.00979, 0.329722, 0.104459, -0.312738, 1.06463, 3.34008, 13.1314, -4.39825)
+transform = Transform3D(1.05711, 0.35309, -2.94279e-07, -0.337285, 1.00979, 0.329722, 0.104459, -0.312738, 1.06463, 3.34008, 13.1314, -4.39825)
 collision_layer = 2
 collision_mask = 2
+input_ray_pickable = false
+monitoring = false
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="Mirror_elements/Boat_underscene_02/Area3D2"]
 transform = Transform3D(0.851028, -0.27153, 0.0840946, 0.284255, 0.812932, -0.251769, -2.37995e-09, 0.265443, 0.857083, 1.09292, -12.7317, 0.284042)
@@ -442,8 +449,9 @@ script = SubResource("GDScript_hexh7")
 script = SubResource("GDScript_krued")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Mirror_elements/Boat_underscene_03"]
-collision_layer = 6
-collision_mask = 6
+collision_layer = 2
+collision_mask = 2
+input_ray_pickable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Mirror_elements/Boat_underscene_03/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_ipksv")
@@ -451,14 +459,16 @@ disabled = true
 
 [node name="Area3D2" type="Area3D" parent="Mirror_elements/Boat_underscene_03"]
 transform = Transform3D(1.05711, 0.35309, -2.98194e-07, -0.337285, 1.00979, 0.329722, 0.104459, -0.312738, 1.06463, 3.34008, 13.1314, -4.39825)
-visible = false
 collision_layer = 2
 collision_mask = 2
+input_ray_pickable = false
+monitoring = false
+monitorable = false
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="Mirror_elements/Boat_underscene_03/Area3D2"]
 transform = Transform3D(0.851028, -0.27153, 0.0840946, 0.284255, 0.812932, -0.251769, -2.37995e-09, 0.265443, 0.857083, 1.09292, -12.7317, 0.284042)
-visible = false
 shape = SubResource("ConcavePolygonShape3D_ipksv")
+disabled = true
 
 [node name="Ice_msh_01" parent="." instance=ExtResource("1_eihyl")]
 transform = Transform3D(0.165735, -0.000445579, 0, 0.000445579, 0.165735, 0, 0, 0, 0.165736, -0.376, -1.172, 0)
