@@ -1,6 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://cbot4dbq2r154"]
+[gd_scene load_steps=7 format=3 uid="uid://cbot4dbq2r154"]
 
 [ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_elements_mat.tres" id="1_qj4jc"]
+[ext_resource type="Resource" uid="uid://c1n3dywxndqcw" path="res://08_SUBSCENES/Elements/Object/Loot_Coins.tres" id="2_q0nrp"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Elements/Object/Go_player.tres.gd" id="2_trv7g"]
 
 [sub_resource type="GDScript" id="GDScript_0o12n"]
 script/source = "extends Node
@@ -38,49 +40,6 @@ func _on_area_3d_mouse_exited():
 
 [sub_resource type="PrismMesh" id="PrismMesh_vc2fk"]
 
-[sub_resource type="GDScript" id="GDScript_y6blf"]
-script/source = "extends Node
-
-@onready var coin = $\"../..\"
-var t
-
-func _ready():
-	_global_datas._forreuse_off.connect(_stop)
-	
-	
-func _follow():	
-	
-	if t:
-		t.kill()
-	t = create_tween()	
-	t .tween_method(_change_value,0.0,1.0,5.0).set_trans(Tween.TRANS_SINE)	
-
-	
-func _change_value(value : float):
-	
-	var player_position = Vector3(_global_datas.subbscene_playerPosition.x,_global_datas.subbscene_playerPosition.y + 0.1,_global_datas.subbscene_playerPosition.z)
-		
-	var lerped_position = lerp(coin.global_position, player_position, value)
-	coin.global_position = lerped_position	
-	
-	var distance = coin.global_position.distance_to(player_position ) 
-
-	if distance < 0.1:
-		_global_datas._find_coins.emit()
-		_stop()
-		_global_datas.Coins_aspirator_array.erase(self)
-		coin.queue_free()
-	
-	
-func _stop():
-	
-	if t:
-		t.kill()
-	
-func _take_coin():
-	_follow()
-"
-
 [sub_resource type="SphereShape3D" id="SphereShape3D_ywyw3"]
 radius = 0.0568297
 
@@ -100,7 +59,8 @@ collision_layer = 2
 collision_mask = 2
 
 [node name="Go_player" type="Node" parent="Area3D"]
-script = SubResource("GDScript_y6blf")
+script = ExtResource("2_trv7g")
+Loot_type = ExtResource("2_q0nrp")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
 transform = Transform3D(3.94413, 0, 0, 0, 3.94413, 0, 0, 0, 3.94413, 0, 0, 0)

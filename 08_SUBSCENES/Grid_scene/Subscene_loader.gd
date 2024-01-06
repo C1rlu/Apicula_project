@@ -4,6 +4,7 @@ extends Node
 
 @onready var cam_raycast = $CAM_RAYCAST
 @onready var load_scene = $LoadScene
+@onready var mouse_raycast = $MOUSE_RAYCAST
 
 func _ready():
 	
@@ -12,6 +13,7 @@ func _ready():
 	_global_datas._go_Mainscene.connect(disable_subscene)
 	_global_datas.cell_name = "null"
 	cam_raycast.current = false
+	mouse_raycast.set_collision_layer(0)
 	
 func _loadscene():
 	
@@ -45,10 +47,11 @@ func active_subscene():
 	_global_datas._splash.emit()
 
 	cam_raycast.current = true
-
+	mouse_raycast.set_collision_layer(4) 
 func disable_subscene():
 	_global_datas.Player_InSubScene = false
 	cam_raycast.current = false
+	mouse_raycast.set_collision_layer(0) 
 
 	
 	

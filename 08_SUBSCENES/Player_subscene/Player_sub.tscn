@@ -1,4 +1,4 @@
-[gd_scene load_steps=89 format=3 uid="uid://g7u8o55jrnyy"]
+[gd_scene load_steps=91 format=3 uid="uid://g7u8o55jrnyy"]
 
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="1_n1vw4"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Player_sub_behaviour.gd" id="1_o2v73"]
@@ -7,6 +7,9 @@
 [ext_resource type="ArrayMesh" uid="uid://cm4cl6n84qj86" path="res://07_VFX/Boat_smoke/smoke_msh.obj" id="4_6vpi7"]
 [ext_resource type="PackedScene" uid="uid://bbqugqn5rlg3o" path="res://08_SUBSCENES/Player_subscene/Foreuse.tscn" id="4_djlha"]
 [ext_resource type="PackedScene" uid="uid://8sor7f2ga76h" path="res://08_SUBSCENES/Player_subscene/Pioche.tscn" id="4_uptil"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_c70j3"]
+bounce = 0.8
 
 [sub_resource type="GDScript" id="GDScript_lbkea"]
 script/source = "extends Node
@@ -122,7 +125,7 @@ func _ready():
 func _impact():
 	
 	var dir = (player_sub.global_position - _global_datas._forreuse_impact_origin).normalized()
-	var velocity : Vector3 = dir * 120
+	var velocity : Vector3 = dir * 150
 	
 	player_sub.apply_central_force(velocity)
 "
@@ -592,6 +595,9 @@ shadow_mesh = SubResource("ArrayMesh_ielci")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_1b8dy"]
 radius = 0.482909
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_s8io1"]
+radius = 0.207047
 
 [sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_5j6tu"]
 
@@ -1106,7 +1112,7 @@ script/source = "extends GPUParticles3D
 func _ready():
 	_global_datas._forreuse_on.connect(_active)
 	_global_datas._forreuse_off.connect(_disable)
-
+	self.emitting = false
 func _active():
 	self.emitting = true
 
@@ -1122,6 +1128,7 @@ axis_lock_linear_z = true
 axis_lock_angular_x = true
 axis_lock_angular_y = true
 axis_lock_angular_z = true
+physics_material_override = SubResource("PhysicsMaterial_c70j3")
 gravity_scale = 0.0
 script = ExtResource("1_o2v73")
 move_speed = 8.0
@@ -1272,6 +1279,15 @@ input_ray_pickable = false
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/Area3D"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -7.45058e-09, 0.16387)
 shape = SubResource("SphereShape3D_1b8dy")
+
+[node name="Player_push_zone" type="Area3D" parent="CollisionShape3D"]
+collision_layer = 2
+collision_mask = 2
+input_ray_pickable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/Player_push_zone"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("SphereShape3D_s8io1")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.348655, 0.114098)

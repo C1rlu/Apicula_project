@@ -6,17 +6,9 @@
 [sub_resource type="GDScript" id="GDScript_exrbt"]
 script/source = "extends Node
 
-@onready var ice_msh_01 = $\"..\"
 
-
-
-func _on_visible_on_screen_notifier_3d_screen_entered():
-	ice_msh_01.show()
-	print(\"SHOW\")
-
-func _on_visible_on_screen_notifier_3d_screen_exited():
-	ice_msh_01.hide()
-	print(\"hide\")
+func _process(delta):
+	print(\"VISIBLE\")
 "
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_lyai7"]
@@ -47,11 +39,7 @@ input_ray_pickable = false
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="Area3D2" index="0"]
 shape = SubResource("ConcavePolygonShape3D_lyai7")
 
-[node name="VisibleOnScreenNotifier3D" type="VisibleOnScreenNotifier3D" parent="." index="3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.522598, 0.731833, 0)
-visible = false
+[node name="VisibleOnScreenEnabler3D" type="VisibleOnScreenEnabler3D" parent="." index="3"]
 layers = 4
-aabb = AABB(-4.61388, -3.2937, -2.63732, 8.65355, 6.5874, 5.27463)
 
-[connection signal="screen_entered" from="VisibleOnScreenNotifier3D" to="Visibility" method="_on_visible_on_screen_notifier_3d_screen_entered"]
-[connection signal="screen_exited" from="VisibleOnScreenNotifier3D" to="Visibility" method="_on_visible_on_screen_notifier_3d_screen_exited"]
+[connection signal="visibility_changed" from="VisibleOnScreenEnabler3D" to="Visibility" method="_on_visible_on_screen_enabler_3d_visibility_changed"]

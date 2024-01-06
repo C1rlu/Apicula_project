@@ -48,13 +48,12 @@ var subbscene_playerPosition : Vector3
 signal _speedUp
 signal _speedDown
 signal _take_photo
-signal _find_coins
 signal _forreuse_on
 signal _forreuse_off
 signal _forreuse_impact
 signal _spawn_empty_oxygene
 signal _teleport_position(position : Vector3)
-
+signal _find_loot(type : Loot_Data)
 var _forreuse_impact_origin : Vector3
 
 func _ready():
@@ -89,7 +88,7 @@ signal active_photo_button(condition : bool)
 signal active_scanner_button(condition : bool)
 signal active_mirror_switch(condition : bool)
 var scanner_mat : Material
-var scanner_mat_xray : Material
+
 #instance word text
 var instance_word_text : Node
 #-----------------------------

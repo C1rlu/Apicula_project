@@ -22,8 +22,9 @@ func _ready():
 	_hide()
 	
 func _hide():
+	pass
 	#photo_tools.visible = false	
-	vignette_opacity._set_vignette_opacity_value(0.0)
+	#vignette_opacity._set_vignette_opacity_value(0.0)
 func _show():
 	#photo_tools.visible = true
 	pass
@@ -52,7 +53,7 @@ func _ready():
 
 	size = control.scale.x
 	my_origin_parent = control.get_parent()
-	_global_datas._backFrom_subscene.connect(_reset_tools_position)
+	#_global_datas._backFrom_subscene.connect(_reset_tools_position)
 func _disable():
 	control.global_position.y = 0
 	_unselect_element()		
@@ -200,14 +201,16 @@ signal take_picture
 
 func _input(event: InputEvent):
 	
+	
+	
 	if timer.is_stopped():
 		return
 	
-	if event.is_action_released(\"Click\"):
+	if event.is_action_released(\"Photo\"):
 		timer.stop()
 		_process_timer = false
 		photo_circle.visible = false
-		
+		_global_datas.Player_lock_click = false
 func _process(_delta):
 		
 	if !timer.is_stopped():
@@ -221,9 +224,13 @@ func _on_timer_timeout():
 	timer.stop()
 
 	photo_circle.visible = false
-	
+	_global_datas.Player_lock_click = false
 func _in_speacker_photo(event : InputEvent):
 	
+	
+	if _global_datas.Player_lock_click:
+		return
+		
 	if !_global_datas.Player_InDialogue:
 		return
 	
@@ -244,6 +251,9 @@ func _in_speacker_photo(event : InputEvent):
 
 func _in_subscene_photo(event : InputEvent):
 	
+	
+	if _global_datas.Player_lock_click:
+		return
 	if !_global_datas.Player_InSubScene:
 		return
 	
@@ -1298,7 +1308,7 @@ script = SubResource("GDScript_wren3")
 script = SubResource("GDScript_xsufx")
 
 [node name="Timer" type="Timer" parent="Photo_tools/PHOTO_BEHAVIOUR/Flash"]
-wait_time = 0.4
+wait_time = 0.5
 
 [node name="Timer" type="Timer" parent="Photo_tools/PHOTO_BEHAVIOUR"]
 wait_time = 0.5

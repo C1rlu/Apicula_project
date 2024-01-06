@@ -41,36 +41,22 @@ func _hide():
 	board.visible = false
 "
 
-[sub_resource type="GDScript" id="GDScript_qiikw"]
+[sub_resource type="GDScript" id="GDScript_huuan"]
 script/source = "extends Node
 
-@onready var coins_prefab = preload(\"res://12_INVENTORY/coins.tscn\")
-@onready var coins_group = $\"../Control/Coins_group\"
 
+@onready var coins_group = $\"../Control/Coins_group\"
 @onready var instance_pos = $\"../Control/Coins_group/instance_pos\"
 
 
 func _ready():
-	_global_datas._find_coins.connect(_intance_coins_bottom)	
+	_global_datas._find_loot.connect(_intance_loot_bottom)	
 	
 
-func _intance_coins_onPosition():
-	
-	print(\"INSTANCE COINS\")
-	var new_node = coins_prefab.instantiate()
-	coins_group.add_child(new_node)
-	
-	var screen_position = get_viewport().get_camera_3d().unproject_position(_global_datas._forreuse_impact_origin)
-	
-	var random_angle = randf_range(-6.0, 6.0)
-	new_node.rotation_degrees = random_angle
-	new_node.position = screen_position
-	new_node.get_node(\"Push\")._push()
 
-func _intance_coins_bottom():
+func _intance_loot_bottom(type : Loot_Data):
 	
-	print(\"INSTANCE COINS\")
-	var new_node = coins_prefab.instantiate()
+	var new_node = type.prefabs.instantiate()
 	coins_group.add_child(new_node)
 
 	var random_angle = randf_range(-6.0, 6.0)
@@ -1102,12 +1088,12 @@ func _set_scanner_opacity( slider_y : float, new_position : float):
 	var value = inverse_lerp(1920,slider_y,new_position)
 	var valueD = lerp(0.0,1.0,value)
 	_global_datas.scanner_mat.set_shader_parameter(\"Circle\",valueD)	
-	_global_datas.scanner_mat_xray.set_shader_parameter(\"Circle\",valueD)
-	_global_datas.scanner_mat_xray.set_shader_parameter(\"Circle\",valueD)	
+
+	
 func _set_scanner_opacity_value( value : float):
 	
 	_global_datas.scanner_mat.set_shader_parameter(\"Circle\",value)	
-	_global_datas.scanner_mat_xray.set_shader_parameter(\"Circle\",value)	
+
 	RenderingServer.global_shader_parameter_set(\"Subscene_mirror_alpha\",value)
 "
 
@@ -1749,8 +1735,8 @@ shader_parameter/Opacity = 0.0
 script = SubResource("GDScript_mh7vf")
 metadata/_edit_vertical_guides_ = [960.0]
 
-[node name="INSTANCE_COINS" type="Node" parent="."]
-script = SubResource("GDScript_qiikw")
+[node name="INSTANCE_LOOT" type="Node" parent="."]
+script = SubResource("GDScript_huuan")
 
 [node name="INSTANCE_PICTURES" type="Node" parent="."]
 script = SubResource("GDScript_om7tc")
@@ -2103,9 +2089,9 @@ mouse_filter = 2
 [node name="instance_pos" type="Control" parent="Control/Coins_group"]
 anchors_preset = 0
 offset_left = 960.0
-offset_top = 1140.0
+offset_top = 491.0
 offset_right = 960.0
-offset_bottom = 1140.0
+offset_bottom = 491.0
 mouse_filter = 2
 
 [node name="Coins6" parent="Control/Coins_group" instance=ExtResource("5_6qspm")]
