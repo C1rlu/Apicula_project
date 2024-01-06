@@ -17,6 +17,9 @@ func _ready():
 	_global_datas.book_is_open.connect(_open)
 	#_global_datas._active_world_grid.connect(_open)
 
+
+	#ACTIVE DITHER
+	RenderingServer.global_shader_parameter_set("active_Dither", true)
 	
 func _open(condition : bool):
 	if condition:

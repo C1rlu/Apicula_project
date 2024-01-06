@@ -1,6 +1,4 @@
-[gd_resource type="VisualShader" load_steps=33 format=3 uid="uid://p0i5v32kvdqt"]
-
-[ext_resource type="Texture2D" uid="uid://b2wyv8gs1cvkn" path="res://05_SHADER_TEST/Full_screen/Dither_pattners/blue_noise.png" id="1_q6c1q"]
+[gd_resource type="VisualShader" load_steps=30 format=3 uid="uid://p0i5v32kvdqt"]
 
 [sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_fbrv5"]
 default_input_values = [0, 0.0, 1, -0.001]
@@ -92,17 +90,11 @@ function = 31
 [sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_6lwoe"]
 function = 1
 
-[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_xvd20"]
-texture = ExtResource("1_q6c1q")
+[sub_resource type="VisualShaderNodeSwitch" id="VisualShaderNodeSwitch_30t81"]
 
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_8wff6"]
-input_name = "screen_uv"
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_q3ids"]
-constant = 2.5
-
-[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_43qj0"]
-function = 1
+[sub_resource type="VisualShaderNodeBooleanParameter" id="VisualShaderNodeBooleanParameter_21y1g"]
+parameter_name = "active_Dither"
+qualifier = 1
 
 [sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_iyxyn"]
 function = 31
@@ -129,6 +121,7 @@ code = "shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
 
 uniform vec4 Water_lighter_color : source_color;
+global uniform bool active_Dither;
 uniform sampler2D tex_frg_22;
 uniform sampler2D tex_frg_23;
 uniform sampler2D depth_tex_frg_13 : hint_depth_texture;
@@ -139,6 +132,10 @@ global uniform float isSubscene_value = 1;
 void fragment() {
 // ColorParameter:16
 	vec4 n_out16p0 = Water_lighter_color;
+
+
+// BooleanParameter:31
+	bool n_out31p0 = active_Dither;
 
 
 // FloatConstant:19
@@ -164,6 +161,12 @@ void fragment() {
 		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 		n_out20p0 = n_out19p0 - DITHER_THRESHOLDS[index];
 	}
+
+
+	float n_out30p0;
+// Switch:30
+	float n_in30p2 = 0.00000;
+	n_out30p0 = mix(n_in30p2, n_out20p0, float(n_out31p0));
 
 
 // FloatConstant:8
@@ -241,7 +244,7 @@ void fragment() {
 
 
 // Step:21
-	float n_out21p0 = step(n_out20p0, n_out4p0);
+	float n_out21p0 = step(n_out30p0, n_out4p0);
 
 
 // FloatParameter:27
@@ -339,13 +342,9 @@ nodes/fragment/28/node = SubResource("VisualShaderNodeMix_4o56y")
 nodes/fragment/28/position = Vector2(140, 580)
 nodes/fragment/29/node = SubResource("VisualShaderNodeFloatFunc_esw3a")
 nodes/fragment/29/position = Vector2(151.028, 797.466)
-nodes/fragment/30/node = SubResource("VisualShaderNodeTexture_xvd20")
-nodes/fragment/30/position = Vector2(-1080, 1560)
-nodes/fragment/31/node = SubResource("VisualShaderNodeInput_8wff6")
-nodes/fragment/31/position = Vector2(-1620, 1740)
-nodes/fragment/32/node = SubResource("VisualShaderNodeFloatConstant_q3ids")
-nodes/fragment/32/position = Vector2(-1480, 1940)
-nodes/fragment/33/node = SubResource("VisualShaderNodeUVFunc_43qj0")
-nodes/fragment/33/position = Vector2(-1300, 1920)
-nodes/fragment/connections = PackedInt32Array(7, 0, 3, 2, 8, 0, 11, 1, 10, 0, 11, 2, 8, 0, 3, 1, 17, 0, 10, 0, 17, 0, 7, 0, 18, 0, 20, 2, 19, 0, 20, 1, 3, 0, 22, 0, 4, 0, 21, 1, 22, 0, 12, 0, 11, 0, 23, 0, 23, 0, 12, 1, 12, 0, 14, 1, 14, 0, 24, 0, 12, 0, 24, 2, 13, 0, 14, 2, 5, 0, 15, 1, 24, 0, 6, 0, 6, 0, 4, 0, 21, 0, 28, 0, 27, 0, 29, 0, 29, 0, 28, 2, 28, 0, 5, 2, 15, 0, 0, 0, 16, 0, 5, 1, 33, 0, 30, 0, 31, 0, 33, 0, 32, 0, 33, 1, 20, 0, 21, 0, 9, 0, 17, 0)
+nodes/fragment/30/node = SubResource("VisualShaderNodeSwitch_30t81")
+nodes/fragment/30/position = Vector2(-380, 1040)
+nodes/fragment/31/node = SubResource("VisualShaderNodeBooleanParameter_21y1g")
+nodes/fragment/31/position = Vector2(-880, 1100)
+nodes/fragment/connections = PackedInt32Array(7, 0, 3, 2, 8, 0, 11, 1, 10, 0, 11, 2, 8, 0, 3, 1, 17, 0, 10, 0, 17, 0, 7, 0, 18, 0, 20, 2, 19, 0, 20, 1, 3, 0, 22, 0, 4, 0, 21, 1, 22, 0, 12, 0, 11, 0, 23, 0, 23, 0, 12, 1, 12, 0, 14, 1, 14, 0, 24, 0, 12, 0, 24, 2, 13, 0, 14, 2, 5, 0, 15, 1, 24, 0, 6, 0, 6, 0, 4, 0, 21, 0, 28, 0, 27, 0, 29, 0, 29, 0, 28, 2, 28, 0, 5, 2, 16, 0, 5, 1, 9, 0, 17, 0, 15, 0, 0, 0, 31, 0, 30, 0, 20, 0, 30, 1, 30, 0, 21, 0)
 nodes/light/0/position = Vector2(600, 260)

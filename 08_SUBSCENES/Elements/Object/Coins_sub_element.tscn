@@ -1,8 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://cbot4dbq2r154"]
+[gd_scene load_steps=8 format=3 uid="uid://cbot4dbq2r154"]
 
 [ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_elements_mat.tres" id="1_qj4jc"]
 [ext_resource type="Resource" uid="uid://c1n3dywxndqcw" path="res://08_SUBSCENES/Elements/Object/Loot_Coins.tres" id="2_q0nrp"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Elements/Object/Go_player.tres.gd" id="2_trv7g"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_fv1n3"]
+radius = 0.00837973
 
 [sub_resource type="GDScript" id="GDScript_0o12n"]
 script/source = "extends Node
@@ -41,31 +44,45 @@ func _on_area_3d_mouse_exited():
 [sub_resource type="PrismMesh" id="PrismMesh_vc2fk"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ywyw3"]
-radius = 0.0568297
+radius = 0.0125372
 
-[node name="Coins_sub_element" type="Node3D"]
+[node name="RigidBody3D" type="RigidBody3D"]
+collision_layer = 4
+collision_mask = 4
+axis_lock_linear_z = true
+mass = 0.25
+gravity_scale = 0.01
+freeze = true
+linear_damp = 0.25
+angular_damp = 2.5
 
-[node name="Pick_me" type="Node" parent="."]
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
+transform = Transform3D(3.94413, 0, 0, 0, 3.94413, 0, 0, 0, 3.94413, 0, 0, 0)
+shape = SubResource("SphereShape3D_fv1n3")
+
+[node name="Coins_sub_element" type="Node3D" parent="."]
+
+[node name="Pick_me" type="Node" parent="Coins_sub_element"]
 script = SubResource("GDScript_0o12n")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.131364, 0, 0, 0, 0.131364, 0, 0, 0, -0.0367567, 0, 0, 0)
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Coins_sub_element"]
+transform = Transform3D(0.0488827, 0, 0, 0, 0.0488827, 0, 0, 0, -0.0136777, 0, 0, 0)
 layers = 4
 mesh = SubResource("PrismMesh_vc2fk")
 surface_material_override/0 = ExtResource("1_qj4jc")
 
-[node name="Area3D" type="Area3D" parent="."]
+[node name="Area3D" type="Area3D" parent="Coins_sub_element"]
 collision_layer = 2
 collision_mask = 2
 
-[node name="Go_player" type="Node" parent="Area3D"]
+[node name="Go_player" type="Node" parent="Coins_sub_element/Area3D"]
 script = ExtResource("2_trv7g")
 Loot_type = ExtResource("2_q0nrp")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Coins_sub_element/Area3D"]
 transform = Transform3D(3.94413, 0, 0, 0, 3.94413, 0, 0, 0, 3.94413, 0, 0, 0)
 shape = SubResource("SphereShape3D_ywyw3")
 
-[connection signal="input_event" from="Area3D" to="Pick_me" method="_on_area_3d_input_event"]
-[connection signal="mouse_entered" from="Area3D" to="Pick_me" method="_on_area_3d_mouse_entered"]
-[connection signal="mouse_exited" from="Area3D" to="Pick_me" method="_on_area_3d_mouse_exited"]
+[connection signal="input_event" from="Coins_sub_element/Area3D" to="Coins_sub_element/Pick_me" method="_on_area_3d_input_event"]
+[connection signal="mouse_entered" from="Coins_sub_element/Area3D" to="Coins_sub_element/Pick_me" method="_on_area_3d_mouse_entered"]
+[connection signal="mouse_exited" from="Coins_sub_element/Area3D" to="Coins_sub_element/Pick_me" method="_on_area_3d_mouse_exited"]

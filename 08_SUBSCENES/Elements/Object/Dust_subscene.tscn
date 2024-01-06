@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://duf8yopqbb6g0"]
+[gd_scene load_steps=7 format=3 uid="uid://duf8yopqbb6g0"]
 
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="1_ptap6"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Elements/Object/Go_player.tres.gd" id="2_anp48"]
@@ -9,41 +9,58 @@
 [sub_resource type="SphereShape3D" id="SphereShape3D_8fql6"]
 radius = 0.025753
 
-[node name="Dust_subscene" type="Node3D"]
+[sub_resource type="SphereShape3D" id="SphereShape3D_33op3"]
+radius = 0.0436305
+
+[node name="RigidBody3D" type="RigidBody3D"]
+collision_layer = 4
+collision_mask = 4
+axis_lock_linear_z = true
+mass = 0.5
+gravity_scale = 0.01
+freeze = true
+linear_damp = 0.25
+angular_damp = 2.5
+
+[node name="Dust_subscene" type="Node3D" parent="."]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Dust_subscene"]
 transform = Transform3D(0.07618, 0, 0, 0, 0.07618, 0, 0, 0, 0.07618, -0.0385157, 0.0738879, -0.00904043)
 layers = 4
 mesh = SubResource("PrismMesh_5uuvs")
 surface_material_override/0 = ExtResource("1_ptap6")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Dust_subscene"]
 transform = Transform3D(0.00551357, -0.070714, -0.0181279, 0.0205768, 0.0189478, -0.0676542, 0.0700407, 0, 0.0213027, 0.0101435, 0.0714995, -0.0121692)
 layers = 4
 mesh = SubResource("PrismMesh_5uuvs")
 surface_material_override/0 = ExtResource("1_ptap6")
 
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Dust_subscene"]
 transform = Transform3D(0.0168109, -0.07184, 0.00937723, 0.0627393, 0.0192494, 0.0349963, -0.0362308, 1.25622e-09, 0.0649524, -0.0251999, 0.0252668, 0.038176)
 layers = 4
 mesh = SubResource("PrismMesh_5uuvs")
 surface_material_override/0 = ExtResource("1_ptap6")
 
-[node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Dust_subscene"]
 transform = Transform3D(0.00620927, -0.054222, -0.0617965, 0.0231732, 0.0606138, -0.0508562, 0.0788785, -0.0135391, 0.0198052, 0.0145362, 0.0330569, -0.00122105)
 layers = 4
 mesh = SubResource("PrismMesh_5uuvs")
 surface_material_override/0 = ExtResource("1_ptap6")
 
-[node name="Area3D" type="Area3D" parent="."]
+[node name="Area3D" type="Area3D" parent="Dust_subscene"]
 collision_layer = 2
 collision_mask = 2
 
-[node name="Go_player" type="Node" parent="Area3D"]
+[node name="Go_player" type="Node" parent="Dust_subscene/Area3D"]
 script = ExtResource("2_anp48")
 Loot_type = ExtResource("2_da0ko")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Dust_subscene/Area3D"]
 transform = Transform3D(3.94413, 0, 0, 0, 3.94413, 0, 0, 0, 3.94413, 0, 0, 0)
 shape = SubResource("SphereShape3D_8fql6")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0168102, 0)
+shape = SubResource("SphereShape3D_33op3")
