@@ -26,15 +26,20 @@ func _sonar():
 			
 	closest_element = _closest_element(_global_datas.Element_sub_zone_array,player_sub.position)
 	
-	closest_element._show_me_on_sonar()	
-	#print(closest_element)
+
+
 	
 func _closest_element(array, point):
 	
 	var closest_node = null
 	var closest_node_distance = 0.0
 	for element in array:
-		element._hide_me_on_sonar()
+
+		# fade in distance
+		var distance = player_sub.position.distance_to(element._position())
+		var lerp_opa = lerpf(0.4,0.0,distance)
+		element._change_opacity(lerp_opa)
+		
 		var current_node_distance = point.distance_to(element._position())
 		if closest_node == null or current_node_distance < closest_node_distance:
 			closest_node = element
@@ -44,11 +49,14 @@ func _closest_element(array, point):
 
 func _update_sonar_Alarm():
 	
+	
+	if closest_element == null:
+		return
+		
 	var distance = player_sub.position.distance_to(closest_element._position())
 	
 	var lerp = lerpf(0.05,1.0,distance/5)
 	timer_alarm.wait_time = lerp
-
 
 func _Alarm_pulse():
 	
@@ -56,8 +64,7 @@ func _Alarm_pulse():
 	$"../Render_mesh/Sonar/01".visible = pulse
 	$"../Render_mesh/Sonar/02".visible = !pulse
 		
-	
-	
+
 func _on_sonar_zone_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
 
 
@@ -84,8 +91,12 @@ func _on_sonar_zone_area_shape_exited(area_rid, area, area_shape_index, local_sh
 	# to stop the alarm
 	if _global_datas.Element_sub_zone_array.size() == 0:
 		timer_alarm.stop()	
+		$"../Render_mesh/Sonar/01".visible = true
+		$"../Render_mesh/Sonar/02".visible = false
 		
 func _on_timer_timeout():
+	
+	
 	_sonar()	
 	_update_sonar_Alarm()
 

@@ -1,10 +1,31 @@
-[gd_scene load_steps=7 format=3 uid="uid://duf8yopqbb6g0"]
+[gd_scene load_steps=8 format=3 uid="uid://duf8yopqbb6g0"]
 
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="1_ptap6"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Elements/Object/Go_player.tres.gd" id="2_anp48"]
 [ext_resource type="Resource" uid="uid://bgf8ybvice0ps" path="res://08_SUBSCENES/Elements/Object/Loot_dust.tres" id="2_da0ko"]
 
 [sub_resource type="PrismMesh" id="PrismMesh_5uuvs"]
+
+[sub_resource type="GDScript" id="GDScript_a0twv"]
+script/source = "extends Node
+
+@onready var material : Material = $\"../../../MeshInstance3D\".get_surface_override_material(0)
+@export var curve : CurveTexture
+var t
+
+func _active():
+	
+	if t:
+		t.kill()
+	t = create_tween()
+	
+	t .tween_method(_change_value,0.1,0.0,1.0).set_trans(Tween.TRANS_SINE)	
+
+
+
+func _change_value(value : float):
+	material.set_shader_parameter(\"Opacity\",value)
+"
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_8fql6"]
 radius = 0.025753
@@ -56,6 +77,9 @@ collision_mask = 4
 [node name="Go_player" type="Node" parent="Dust_subscene/Area3D"]
 script = ExtResource("2_anp48")
 Loot_type = ExtResource("2_da0ko")
+
+[node name="Opacity" type="Node" parent="Dust_subscene/Area3D/Go_player"]
+script = SubResource("GDScript_a0twv")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Dust_subscene/Area3D"]
 transform = Transform3D(3.94413, 0, 0, 0, 3.94413, 0, 0, 0, 3.94413, 0, 0, 0)
