@@ -3,15 +3,24 @@ extends Node
 @onready var dust_subscene = $"../.."
 @onready var coin  = $"../../.."
 @export var Loot_type : Loot_Data
+@onready var mesh_instance_3d = $"../../MeshInstance3D"
 
 var _follow = false
-
+var origin_scale : Vector3
 func _ready():
 	_global_datas._forreuse_off.connect(_stop)
-	
+	origin_scale = mesh_instance_3d.scale
 
-
+func _position():
 	
+	return coin.global_position
+
+func _show_me_on_sonar():
+	
+	mesh_instance_3d.scale = origin_scale * 2
+func _hide_me_on_sonar():
+	
+	mesh_instance_3d.scale = origin_scale 	
 func _process(delta):	
 	
 	if !_follow:

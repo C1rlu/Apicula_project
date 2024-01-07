@@ -11,6 +11,8 @@ var Player_InDialogue : bool
 var Player_InDialogue_zone : bool
 var Player_lock_click : bool
 var Coins_aspirator_array : Array
+var Element_sub_zone_array : Array
+
 # menu signals
 signal _go_Subscene
 signal _start_ini_subscene

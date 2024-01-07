@@ -1,8 +1,9 @@
-[gd_scene load_steps=93 format=3 uid="uid://g7u8o55jrnyy"]
+[gd_scene load_steps=94 format=3 uid="uid://g7u8o55jrnyy"]
 
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="1_n1vw4"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Player_sub_behaviour.gd" id="1_o2v73"]
 [ext_resource type="PackedScene" uid="uid://d32pm6ao6u7gq" path="res://08_SUBSCENES/POD/pod_prefabs.tscn" id="2_5t88l"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Sonar_zone/Sonar_detection.gd" id="2_75t1p"]
 [ext_resource type="Material" uid="uid://clw3a375133r3" path="res://05_SHADER_TEST/Subscene_materials/Light_yelow.tres" id="2_qbhbx"]
 [ext_resource type="ArrayMesh" uid="uid://cm4cl6n84qj86" path="res://07_VFX/Boat_smoke/smoke_msh.obj" id="4_6vpi7"]
 [ext_resource type="PackedScene" uid="uid://bbqugqn5rlg3o" path="res://08_SUBSCENES/Player_subscene/Foreuse.tscn" id="4_djlha"]
@@ -116,26 +117,6 @@ func _play_idle():
 
 "
 
-[sub_resource type="GDScript" id="GDScript_acsu0"]
-script/source = "extends Node
-
-@onready var player_sub = $\"../..\"
-
-
-
-func _ready():
-	_global_datas._forreuse_impact.connect(_impact)
-	
-	
-	
-func _impact():
-	
-	var dir = (player_sub.global_position - _global_datas._forreuse_impact_origin).normalized()
-	var velocity : Vector3 = dir * 150
-	
-	player_sub.apply_central_force(velocity)
-"
-
 [sub_resource type="Animation" id="Animation_f8oxp"]
 resource_name = "F_loop"
 length = 0.202
@@ -181,8 +162,6 @@ func _ready():
 	_global_datas._forreuse_on.connect(take_coin)
 	
 func take_coin():
-	
-
 	
 	for coin in _global_datas.Coins_aspirator_array:
 		coin._take_coin()	
@@ -596,6 +575,9 @@ radius = 0.297073
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_1b8dy"]
 radius = 0.482909
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_p8y7m"]
+radius = 2.61016
 
 [sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_5j6tu"]
 
@@ -1144,6 +1126,7 @@ one_shot = true
 
 [node name="Speed_Up" type="Node" parent="."]
 script = SubResource("GDScript_0rnti")
+canSpeedUp = true
 
 [node name="On_Take_photo_change" type="Node" parent="."]
 script = SubResource("GDScript_8qwgp")
@@ -1153,9 +1136,6 @@ wait_time = 0.4
 
 [node name="Tools" type="Node" parent="."]
 script = SubResource("GDScript_huu7c")
-
-[node name="Forreuse_impact_physic" type="Node" parent="Tools"]
-script = SubResource("GDScript_acsu0")
 
 [node name="anim_forreuse" type="Node" parent="Tools"]
 
@@ -1176,6 +1156,14 @@ script = SubResource("GDScript_ab8rq")
 [node name="Grow_circle" type="Node" parent="PIOCHE_BEHAVIOUR"]
 script = SubResource("GDScript_tp34p")
 is_active = true
+
+[node name="Sonar_Detection" type="Node" parent="."]
+script = ExtResource("2_75t1p")
+
+[node name="Timer" type="Timer" parent="Sonar_Detection"]
+wait_time = 0.5
+
+[node name="Timer_Alarm" type="Timer" parent="Sonar_Detection"]
 
 [node name="Render_mesh" type="Node3D" parent="."]
 
@@ -1256,8 +1244,15 @@ visible = false
 
 [node name="Sonar" type="Node3D" parent="Render_mesh"]
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="Render_mesh/Sonar"]
+[node name="01" type="MeshInstance3D" parent="Render_mesh/Sonar"]
 transform = Transform3D(-0.0233032, -2.03723e-09, 0, 2.03723e-09, -0.0233032, 0, 0, 0, 0.0233032, 0.0594117, 0.386483, -0.0899213)
+layers = 4
+mesh = SubResource("SphereMesh_gj0qo")
+skeleton = NodePath("../MeshInstance3D")
+
+[node name="02" type="MeshInstance3D" parent="Render_mesh/Sonar"]
+transform = Transform3D(-0.0423219, -3.69989e-09, 0, 3.69989e-09, -0.0423219, 0, 0, 0, 0.0423219, 0.0594117, 0.386483, -0.0899213)
+visible = false
 layers = 4
 mesh = SubResource("SphereMesh_gj0qo")
 skeleton = NodePath("../MeshInstance3D")
@@ -1286,13 +1281,22 @@ shape = SubResource("SphereShape3D_j5jpl")
 
 [node name="Magnet_zone" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.121499, 0)
-collision_layer = 2
-collision_mask = 2
+collision_layer = 4
+collision_mask = 4
 input_ray_pickable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Magnet_zone"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -7.45058e-09, 0.16387)
 shape = SubResource("SphereShape3D_1b8dy")
+
+[node name="Sonar_zone" type="Area3D" parent="."]
+collision_layer = 4
+collision_mask = 4
+input_ray_pickable = false
+
+[node name="Sonar_zone_col" type="CollisionShape3D" parent="Sonar_zone"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.151298, 0)
+shape = SubResource("SphereShape3D_p8y7m")
 
 [node name="Light" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.348655, 0.114098)
@@ -1330,8 +1334,12 @@ script = SubResource("GDScript_r51df")
 [connection signal="iniPos" from="Ini_subscene" to="." method="_on_ini_subscene_ini_pos"]
 [connection signal="timeout" from="Ini_subscene/Timer" to="Ini_subscene" method="_on_timer_timeout"]
 [connection signal="timeout" from="On_Take_photo_change/Timer" to="On_Take_photo_change" method="_on_timer_timeout"]
+[connection signal="timeout" from="Sonar_Detection/Timer" to="Sonar_Detection" method="_on_timer_timeout"]
+[connection signal="timeout" from="Sonar_Detection/Timer_Alarm" to="Sonar_Detection" method="_on_timer_alarm_timeout"]
 [connection signal="input_event" from="Mouse_Click" to="PIOCHE_BEHAVIOUR" method="_on_mouse_click_input_event"]
 [connection signal="mouse_entered" from="Mouse_Click" to="PIOCHE_BEHAVIOUR" method="_on_mouse_click_mouse_entered"]
 [connection signal="mouse_exited" from="Mouse_Click" to="PIOCHE_BEHAVIOUR" method="_on_mouse_click_mouse_exited"]
 [connection signal="area_shape_entered" from="Magnet_zone" to="Aspirator_coin" method="_on_area_3d_area_shape_entered"]
 [connection signal="area_shape_exited" from="Magnet_zone" to="Aspirator_coin" method="_on_area_3d_area_shape_exited"]
+[connection signal="area_shape_entered" from="Sonar_zone" to="Sonar_Detection" method="_on_sonar_zone_area_shape_entered"]
+[connection signal="area_shape_exited" from="Sonar_zone" to="Sonar_Detection" method="_on_sonar_zone_area_shape_exited"]
