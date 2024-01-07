@@ -68,13 +68,14 @@ func _ready():
 signal using_board_enable
 signal using_board_disable
 
-
 var board_camera : Camera3D
 var zoom_value : float
 var OnDrag_start_position : Vector2
 var Oxygene_amout : float
 var Cursor_mode : Node
 var In_Front_Node : Node2D
+var loot_from_subscene : Array
+
 
 # BOOK PAGE
 signal  book_is_open(condition : bool)

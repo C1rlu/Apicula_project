@@ -36,7 +36,7 @@ func push_to_player():
 	var actualPos = dust_subscene.global_position
 	var direction = target_pos - actualPos
 	direction  = direction .normalized()
-	var force = direction  * 0.01
+	var force = direction  * 0.025
 	
 	if coin is RigidBody3D:
 		print("RG RG RG ")

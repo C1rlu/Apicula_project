@@ -47,13 +47,34 @@ script/source = "extends Node
 
 @onready var coins_group = $\"../Control/Coins_group\"
 @onready var instance_pos = $\"../Control/Coins_group/instance_pos\"
+@onready var timer = $Timer
 
 
 func _ready():
-	_global_datas._find_loot.connect(_intance_loot_bottom)	
+	_global_datas._find_loot.connect(_add_inventory)	
+	_global_datas._backFrom_subscene.connect(start_timer)
+
+
+
+func clear_inventory():
+	_global_datas.loot_from_subscene.clear()	
+
+
+func start_timer():
+	if _global_datas.loot_from_subscene.size() > 0:	
+		timer.start()
+		
+func instance_loot():
 	
-
-
+	for element in _global_datas.loot_from_subscene:
+		_intance_loot_bottom(element)
+	clear_inventory()
+		
+		
+func _add_inventory(type : Loot_Data):
+	_global_datas.loot_from_subscene.append(type)
+	print(\"type\",\" is add in inventory\")
+	
 func _intance_loot_bottom(type : Loot_Data):
 	
 	var new_node = type.prefabs.instantiate()
@@ -63,6 +84,11 @@ func _intance_loot_bottom(type : Loot_Data):
 	new_node.rotation_degrees = random_angle
 	new_node.position = instance_pos.global_position
 	new_node.get_node(\"Push\")._push_b()
+	
+
+
+func _on_timer_timeout():
+	instance_loot()
 "
 
 [sub_resource type="GDScript" id="GDScript_om7tc"]
@@ -1738,6 +1764,9 @@ metadata/_edit_vertical_guides_ = [960.0]
 [node name="INSTANCE_LOOT" type="Node" parent="."]
 script = SubResource("GDScript_huuan")
 
+[node name="Timer" type="Timer" parent="INSTANCE_LOOT"]
+one_shot = true
+
 [node name="INSTANCE_PICTURES" type="Node" parent="."]
 script = SubResource("GDScript_om7tc")
 
@@ -2148,6 +2177,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.0156863, 0.0705882, 0.0823529, 1)
 
+[connection signal="timeout" from="INSTANCE_LOOT/Timer" to="INSTANCE_LOOT" method="_on_timer_timeout"]
 [connection signal="timeout" from="USING_BOOK/Timer" to="USING_BOOK" method="_on_timer_timeout"]
 [connection signal="timeout" from="USING_BOOK/Timer_out" to="USING_BOOK" method="_on_timer_out_timeout"]
 [connection signal="pos_anim" from="Control/Bougie_zone/Bougie/Take_object" to="Control/Bougie_zone/Bougie/Apply_pos_anim" method="_on_take_object_pos_anim"]
