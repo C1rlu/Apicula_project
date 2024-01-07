@@ -80,7 +80,7 @@ script/source = "extends Node
 func _ready():
 	_global_datas._end_ini_subscene.connect(_disable_main)
 	_global_datas._backFrom_subscene.connect(_active_main)
-
+	
 
 func _active_main():
 	main_scene_ui.visible = true
@@ -547,6 +547,33 @@ script = ExtResource("3_hnv77")
 [node name="CAM_STATE_BOAT" type="Camera3D" parent="01_GAME_UI/MAIN_SCENE_UI/MAIN_CAM_FOAM/SubViewport/CAM_STATE_BOAT_root"]
 transform = Transform3D(1, 0, 0, 0, 1, 5.96046e-08, 0, -2.98023e-08, 1, 0, 0, 0)
 cull_mask = 3072
+current = true
+fov = 10.2
+
+[node name="MAIN_CAM_UP_SKY" type="SubViewportContainer" parent="01_GAME_UI/MAIN_SCENE_UI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="01_GAME_UI/MAIN_SCENE_UI/MAIN_CAM_UP_SKY"]
+transparent_bg = true
+handle_input_locally = false
+canvas_item_default_texture_filter = 0
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="CAM_STATE_BOAT_root" type="Node3D" parent="01_GAME_UI/MAIN_SCENE_UI/MAIN_CAM_UP_SKY/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 0.882947, 0.469472, 0, -0.469472, 0.882947, 0, 16.056, 29.059)
+script = ExtResource("3_hnv77")
+
+[node name="CAM_STATE_BOAT" type="Camera3D" parent="01_GAME_UI/MAIN_SCENE_UI/MAIN_CAM_UP_SKY/SubViewport/CAM_STATE_BOAT_root"]
+transform = Transform3D(1, 0, 0, 0, 1, 5.96046e-08, 0, -2.98023e-08, 1, 0, 0, 0)
+cull_mask = 8192
 current = true
 fov = 10.2
 

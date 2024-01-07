@@ -18,8 +18,8 @@ script/source = "extends Node
 
 func _change_value(value : float):
 	
-	var clamp = clampf(value,0.0,0.7)
-	material.set_shader_parameter(\"Opacity\",value*2)
+	var clamp = clampf(value,0.0,0.4)
+	material.set_shader_parameter(\"Opacity\",clamp)
 "
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ywyw3"]
@@ -29,9 +29,8 @@ radius = 0.0125372
 collision_layer = 4
 collision_mask = 4
 input_ray_pickable = false
-axis_lock_linear_z = true
-mass = 0.5
-gravity_scale = 0.02
+mass = 0.25
+gravity_scale = 0.01
 freeze = true
 linear_damp = 0.25
 angular_damp = 2.5
@@ -44,7 +43,7 @@ shape = SubResource("SphereShape3D_fv1n3")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Coins_sub_element"]
 transform = Transform3D(0.0488827, 4.27346e-09, 0, -4.27346e-09, 0.0488827, 0, 0, 0, -0.0136777, 0, 0, 0)
-layers = 4
+layers = 4096
 mesh = SubResource("SphereMesh_crvbk")
 surface_material_override/0 = ExtResource("1_pkvpd")
 

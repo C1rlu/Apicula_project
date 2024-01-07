@@ -636,94 +636,9 @@ function = 31
 code = "shader_type canvas_item;
 render_mode blend_mix;
 
-uniform sampler2D Noise : repeat_enable;
 
 
-
-void fragment() {
-// ColorConstant:54
-	vec4 n_out54p0 = vec4(0.014307, 0.116367, 0.131475, 1.000000);
-
-
-// UVFunc:59
-	vec2 n_in59p1 = vec2(1.00000, 0.50000);
-	vec2 n_in59p2 = vec2(0.00000, 0.00000);
-	vec2 n_out59p0 = (UV - n_in59p2) * n_in59p1 + n_in59p2;
-
-
-// FloatConstant:57
-	float n_out57p0 = 5.000000;
-
-
-// Input:60
-	float n_out60p0 = TIME;
-
-
-// FloatOp:61
-	float n_in61p1 = 0.00100;
-	float n_out61p0 = n_out60p0 * n_in61p1;
-
-
-// FloatOp:62
-	float n_in62p1 = 0.10000;
-	float n_out62p0 = n_out61p0 * n_in62p1;
-
-
-// UVFunc:58
-	vec2 n_out58p0 = (n_out59p0 - vec2(n_out62p0)) * vec2(n_out57p0) + vec2(n_out62p0);
-
-
-	vec4 n_out42p0;
-// Texture2D:42
-	n_out42p0 = texture(Noise, n_out58p0);
-
-
-// Mix:48
-	float n_in48p1 = 0.06500;
-	float n_in48p2 = 0.26000;
-	float n_out48p0 = mix(n_out42p0.x, n_in48p1, n_in48p2);
-
-
-	vec4 n_out25p0;
-// Texture2D:25
-	n_out25p0 = texture(TEXTURE, UV);
-	float n_out25p4 = n_out25p0.a;
-
-
-// Step:43
-	float n_out43p0 = step(n_out48p0, n_out25p0.x);
-
-
-// Mix:53
-	vec3 n_in53p1 = vec3(1.00000, 1.00000, 1.00000);
-	vec3 n_out53p0 = mix(vec3(n_out54p0.xyz), n_in53p1, vec3(n_out43p0));
-
-
-// ColorConstant:56
-	vec4 n_out56p0 = vec4(0.992188, 0.847656, 0.621094, 1.000000);
-
-
-// Mix:52
-	vec3 n_out52p0 = mix(n_out53p0, vec3(n_out56p0.xyz), vec3(n_out43p0));
-
-
-// FloatFunc:64
-	float n_out64p0 = 1.0 - n_out25p4;
-
-
-// Step:35
-	float n_in35p1 = 0.00000;
-	float n_out35p0 = step(n_out64p0, n_in35p1);
-
-
-// Output:0
-	COLOR.rgb = n_out52p0;
-	COLOR.a = n_out35p0;
-
-
-}
 "
-graph_offset = Vector2(-514.444, 166.185)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(1060, 200)
@@ -786,11 +701,10 @@ nodes/fragment/63/node = SubResource("VisualShaderNodeColorConstant_4dg8b")
 nodes/fragment/63/position = Vector2(620, -720)
 nodes/fragment/64/node = SubResource("VisualShaderNodeFloatFunc_tupn6")
 nodes/fragment/64/position = Vector2(-457.052, 110.345)
-nodes/fragment/connections = PackedInt32Array(36, 0, 37, 1, 39, 0, 37, 0, 42, 0, 48, 0, 41, 0, 42, 2, 43, 0, 52, 2, 43, 0, 53, 2, 24, 0, 25, 2, 48, 0, 43, 0, 53, 0, 52, 0, 60, 0, 61, 0, 61, 0, 62, 0, 59, 0, 58, 0, 57, 0, 58, 1, 62, 0, 58, 2, 58, 0, 42, 0, 54, 0, 53, 0, 56, 0, 52, 1, 25, 0, 43, 1, 52, 0, 0, 0, 35, 0, 0, 1, 25, 4, 64, 0, 64, 0, 35, 0)
+nodes/fragment/connections = PackedInt32Array(36, 0, 37, 1, 39, 0, 37, 0, 42, 0, 48, 0, 41, 0, 42, 2, 43, 0, 52, 2, 43, 0, 53, 2, 24, 0, 25, 2, 48, 0, 43, 0, 53, 0, 52, 0, 60, 0, 61, 0, 61, 0, 62, 0, 59, 0, 58, 0, 57, 0, 58, 1, 62, 0, 58, 2, 58, 0, 42, 0, 54, 0, 53, 0, 56, 0, 52, 1, 25, 0, 43, 1, 25, 4, 64, 0, 64, 0, 35, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hj6up"]
 shader = SubResource("VisualShader_872im")
-shader_parameter/Noise = ExtResource("3_ql8rn")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_8q6wo"]
 material = ExtResource("3_2i3gt")
@@ -1245,6 +1159,12 @@ func _ready():
 	_global_datas.get_raycastPosition.connect(MouseRaycast)
 
 func MouseRaycast():
+	
+	if _global_datas.Player_lock_click:
+		return
+		
+		
+		
 	var mousePos = get_viewport().get_mouse_position()
 	var rayLengh = 1000.0
 	var from = Camera.project_ray_origin(mousePos)
@@ -1255,9 +1175,11 @@ func MouseRaycast():
 	rayQuery.to = to
 	rayQuery.collide_with_areas = true
 	rayQuery.collide_with_bodies = false
-	var result = space.intersect_ray(rayQuery)
-	_global_datas.mouseRaycastPosition = result.position
 
+	var result = space.intersect_ray(rayQuery)
+
+	_global_datas.mouseRaycastPosition = Vector3(result.position.x,result.position.y,0.0)
+	
 	
 "
 
@@ -1854,6 +1776,7 @@ cull_mask = 4
 current = true
 
 [node name="SUBSCENES_CAM_SCANNER_X" type="SubViewportContainer" parent="."]
+visible = false
 material = SubResource("ShaderMaterial_hj6up")
 anchors_preset = 15
 anchor_right = 1.0
@@ -1867,7 +1790,7 @@ stretch = true
 transparent_bg = true
 handle_input_locally = false
 size = Vector2i(1920, 1080)
-render_target_update_mode = 4
+render_target_update_mode = 0
 
 [node name="CAM_STATE_BOAT_root" type="Node3D" parent="SUBSCENES_CAM_SCANNER_X/SubViewport" node_paths=PackedStringArray("Player_position")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 1.8)

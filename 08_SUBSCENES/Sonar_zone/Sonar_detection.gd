@@ -63,7 +63,7 @@ func _Alarm_pulse():
 	pulse = !pulse
 	$"../Render_mesh/Sonar/01".visible = pulse
 	$"../Render_mesh/Sonar/02".visible = !pulse
-		
+
 
 func _on_sonar_zone_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
 

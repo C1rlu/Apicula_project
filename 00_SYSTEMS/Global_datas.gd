@@ -57,7 +57,7 @@ signal _spawn_empty_oxygene
 signal _teleport_position(position : Vector3)
 signal _find_loot(type : Loot_Data)
 var _forreuse_impact_origin : Vector3
-
+var _magnet_strenght : float
 func _ready():
 	_forreuse_impact_origin = Vector3.ZERO
 	
