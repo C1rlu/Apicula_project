@@ -1,4 +1,4 @@
-[gd_scene load_steps=109 format=3 uid="uid://g7u8o55jrnyy"]
+[gd_scene load_steps=110 format=3 uid="uid://g7u8o55jrnyy"]
 
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="1_n1vw4"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Player_sub_behaviour.gd" id="1_o2v73"]
@@ -728,23 +728,26 @@ Dither_Node = In - DITHER_THRESHOLDS[index];"
 [sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_isije"]
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_yrdax"]
-constant = 0.8
+constant = 0.1
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_ot4aw"]
+parameter_name = "ColorParameter"
 
 [sub_resource type="VisualShader" id="VisualShader_2viwc"]
 code = "shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
 
-global uniform vec4 Light_color_ui : source_color;
+uniform vec4 ColorParameter : source_color;
 
 
 
 void fragment() {
-// ColorParameter:2
-	vec4 n_out2p0 = Light_color_ui;
+// ColorParameter:8
+	vec4 n_out8p0 = ColorParameter;
 
 
 // FloatConstant:7
-	float n_out7p0 = 0.800000;
+	float n_out7p0 = 0.100000;
 
 
 // FloatConstant:3
@@ -769,16 +772,17 @@ void fragment() {
 
 
 // Step:6
-	float n_out6p0 = step(n_out2p0.x, n_out4p0);
+	float n_out6p0 = step(n_out8p0.x, n_out4p0);
 
 
 // Output:0
-	ALBEDO = vec3(n_out2p0.xyz);
+	ALBEDO = vec3(n_out8p0.xyz);
 	ALPHA = n_out6p0;
 
 
 }
 "
+graph_offset = Vector2(-1606.35, 253.539)
 flags/unshaded = true
 nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_45j1b")
 nodes/fragment/2/position = Vector2(-760, -40)
@@ -803,11 +807,14 @@ nodes/fragment/6/node = SubResource("VisualShaderNodeStep_isije")
 nodes/fragment/6/position = Vector2(-351.825, 215.819)
 nodes/fragment/7/node = SubResource("VisualShaderNodeFloatConstant_yrdax")
 nodes/fragment/7/position = Vector2(-1440, 360)
-nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0, 3, 0, 4, 1, 4, 0, 6, 1, 2, 0, 6, 0, 6, 0, 0, 1, 7, 0, 4, 0)
+nodes/fragment/8/node = SubResource("VisualShaderNodeColorParameter_ot4aw")
+nodes/fragment/8/position = Vector2(-100, 0)
+nodes/fragment/connections = PackedInt32Array(3, 0, 4, 1, 4, 0, 6, 1, 6, 0, 0, 1, 7, 0, 4, 0, 8, 0, 0, 0, 8, 0, 6, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_k4fog"]
 render_priority = 0
 shader = SubResource("VisualShader_2viwc")
+shader_parameter/ColorParameter = Color(0.203922, 0.701961, 0.776471, 1)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_j5jpl"]
 radius = 0.297073
