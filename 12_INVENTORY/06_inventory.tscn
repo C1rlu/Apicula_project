@@ -188,18 +188,48 @@ func _on_timer_timeout():
 script/source = "extends Node
 
 @export var active_teleport = false		
-func _input(event):
 
-	if !active_teleport:
+var index : int = 0
+@onready var timer = $Timer
+
+
+func _ready():
+	_global_datas._start_ini_subscene.connect(_reset_index)
+	_global_datas._backFrom_subscene.connect(_active_teleport)
+
+
+
+func _active_teleport():
+	timer.start()	
+	
+	for a in _global_datas.teleport_pos:
+		pass
+		#print(\"here all the tel position,\", a)
+
+func _reset_index():
+	index = 3
+	
+
+func _teleport_back_to_ship(index : int):
+
+
+	var position = _global_datas.teleport_pos[index]
+	_global_datas._teleport_position.emit(position)	
+
+	timer.start()
+	
+	
+func _on_timer_timeout():
+	
+	
+	if index == 0:
+		_global_datas._go_Mainscene.emit()
 		return
-		
-	if Input.is_action_just_pressed(\"Click\"):
-		
-		_global_datas.get_raycastPosition.emit()
-		var mouse_pos = _global_datas.mouseRaycastPosition
-		var mouse_pos3D = Vector3(mouse_pos.x,mouse_pos.y,0.0)
-		_global_datas._teleport_position.emit(mouse_pos3D)
-		print(\"TELEPORT\")
+	_teleport_back_to_ship(index)	
+	
+	index -= 1
+
+
 "
 
 [sub_resource type="GDScript" id="GDScript_xyojo"]
@@ -1789,6 +1819,8 @@ script = ExtResource("1_8ci41")
 [node name="TELEPORT" type="Node" parent="."]
 script = SubResource("GDScript_xw7ed")
 
+[node name="Timer" type="Timer" parent="TELEPORT"]
+
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 15
@@ -2180,6 +2212,7 @@ color = Color(0.0156863, 0.0705882, 0.0823529, 1)
 [connection signal="timeout" from="INSTANCE_LOOT/Timer" to="INSTANCE_LOOT" method="_on_timer_timeout"]
 [connection signal="timeout" from="USING_BOOK/Timer" to="USING_BOOK" method="_on_timer_timeout"]
 [connection signal="timeout" from="USING_BOOK/Timer_out" to="USING_BOOK" method="_on_timer_out_timeout"]
+[connection signal="timeout" from="TELEPORT/Timer" to="TELEPORT" method="_on_timer_timeout"]
 [connection signal="pos_anim" from="Control/Bougie_zone/Bougie/Take_object" to="Control/Bougie_zone/Bougie/Apply_pos_anim" method="_on_take_object_pos_anim"]
 [connection signal="timeout" from="Control/Bougie_zone/Bougie/Apply_pos_anim/Timer" to="Control/Bougie_zone/Bougie/Apply_pos_anim" method="_on_timer_timeout"]
 [connection signal="area_shape_entered" from="Control/Bougie_zone/Bougie/Area2D" to="Control/Bougie_zone/Bougie/Burn_Paper" method="_on_area_2d_area_shape_entered"]

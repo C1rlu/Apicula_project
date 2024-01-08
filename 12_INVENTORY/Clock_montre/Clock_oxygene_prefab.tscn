@@ -18,7 +18,6 @@ var actual_min_angle : float = 0.0
 func _ready():
 	
 	_global_datas._end_ini_subscene.connect(_start_clock)
-	_global_datas._go_Mainscene.connect(_stop_clock)
 	_global_datas.clock_timer = timer
 	
 func _process(delta):
@@ -36,6 +35,9 @@ func _update_clock():
 
 func _start_clock():
 	
+	
+	_global_datas.teleport_pos.clear()
+	
 	actual_max_angle = 90.0
 	actual_min_angle = 0.0
 	
@@ -46,16 +48,24 @@ func _stop_clock():
 	timer.stop()
 	clock_root.rotation_degrees = 0.0
 	
+func add_teleport_position():
+	
+	var subscene_position = _global_datas.subbscene_playerPosition
+	_global_datas.teleport_pos.append(subscene_position)
+	print(subscene_position)
 	
 func _increase_angle():
 	
 	actual_max_angle += 90.0
 	actual_min_angle += 90.0	
 	
+	add_teleport_position()
+	
 	if actual_max_angle > 360.0:
-		_global_datas._go_Mainscene.emit()
-		_global_datas._backFrom_subscene.emit()
 		
+		#_global_datas._go_Mainscene.emit()
+		_global_datas._backFrom_subscene.emit()
+		_stop_clock()
 	else:
 		timer.start()	
 		_global_datas._spawn_empty_oxygene.emit()	
@@ -1579,7 +1589,7 @@ script = SubResource("GDScript_uwuod")
 wait_time = 0.25
 
 [node name="Timer" type="Timer" parent="."]
-wait_time = 20.0
+wait_time = 5.0
 
 [node name="Take_object" type="Node" parent="."]
 script = ExtResource("1_hwa20")

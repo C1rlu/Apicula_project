@@ -91,7 +91,7 @@ signal active_photo_button(condition : bool)
 signal active_scanner_button(condition : bool)
 signal active_mirror_switch(condition : bool)
 var scanner_mat : Material
-
+var teleport_pos : Array
 #instance word text
 var instance_word_text : Node
 #-----------------------------
