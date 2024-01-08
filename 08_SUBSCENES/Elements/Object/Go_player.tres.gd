@@ -29,16 +29,16 @@ func _process(delta):
 	if !_follow:
 		return
 	
-	push_to_player()
+	push_to_player(delta)
 	
 	
-func push_to_player():
+func push_to_player(delta):
 
 	var target_pos =  Vector3(_global_datas.subbscene_playerPosition.x,_global_datas.subbscene_playerPosition.y + 0.1,_global_datas.subbscene_playerPosition.z)	
 	var actualPos = dust_subscene.global_position
 	var direction = target_pos - actualPos
 	direction  = direction .normalized()
-	var force = direction  * 0.05
+	var force = direction  *  20 * delta
 
 	
 	if coin is RigidBody3D:
