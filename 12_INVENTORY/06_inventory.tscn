@@ -195,16 +195,13 @@ var index : int = 0
 
 func _ready():
 	_global_datas._start_ini_subscene.connect(_reset_index)
-	_global_datas._backFrom_subscene.connect(_active_teleport)
+	#_global_datas._backFrom_subscene.connect(_active_teleport)
 
 
 
 func _active_teleport():
 	timer.start()	
-	
-	for a in _global_datas.teleport_pos:
-		pass
-		#print(\"here all the tel position,\", a)
+
 
 func _reset_index():
 	index = 3
@@ -1100,18 +1097,24 @@ script/source = "extends Node
 var mirror_world = false
 
 var t
+var _mirror_contact : bool = false
 
 func _ready():
 	_global_datas._go_Subscene.connect(_disable)
 	_global_datas._go_Mainscene.connect(_disable)
+	_global_datas.player_mirror_contact.connect(_mirror_condition)
 
-	
+func _mirror_condition(condition : bool):
+	_mirror_contact = condition	
 
 func _disable():
 	mirror_world = false
 	_mirror_switch(mirror_world)	
 	
 func _mirror_switch(condition : bool):
+	
+	
+	
 	
 	if t:
 		t.kill()
@@ -1130,6 +1133,10 @@ func _mirror_switch(condition : bool):
 func _on_texture_button_pressed():
 	if !_global_datas.Player_InSubScene:
 		return
+		
+	if !_mirror_contact:	
+		return
+		
 	mirror_world = !mirror_world
 	_mirror_switch(mirror_world)
 	_global_datas.active_mirror_switch.emit(mirror_world)

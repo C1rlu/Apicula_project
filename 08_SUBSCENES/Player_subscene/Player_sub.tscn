@@ -165,8 +165,9 @@ func _input(event: InputEvent):
 	if !_global_datas.Player_InSubScene:
 		return
 		
-	if event.is_action_released(\"Click\"):
-		_active_teleport()	
+	pass
+	#if event.is_action_released(\"Click\"):
+		#_active_teleport()	
 
 	
 
@@ -182,8 +183,8 @@ script/source = "extends Node
 
 
 func _ready():
-	
-	_global_datas._forreuse_on.connect(take_coin)
+	pass
+	#_global_datas._forreuse_on.connect(take_coin)
 	
 func take_coin():
 	
@@ -192,7 +193,7 @@ func take_coin():
 	
 func _on_area_3d_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
 
-	var coin = area.get_node_or_null(\"Go_player\")
+	var coin = area.get_node_or_null(\"Mirror\")
 	if coin:
 		_global_datas.Coins_aspirator_array.append(coin)
 
@@ -201,7 +202,7 @@ func _on_area_3d_area_shape_exited(area_rid, area, area_shape_index, local_shape
 	if area == null:
 		return
 		
-	var coin = area.get_node_or_null(\"Go_player\")
+	var coin = area.get_node_or_null(\"Mirror\")
 	if coin:
 		_global_datas.Coins_aspirator_array.erase(coin)
 "
@@ -729,7 +730,7 @@ Dither_Node = In - DITHER_THRESHOLDS[index];"
 [sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_isije"]
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_yrdax"]
-constant = 0.1
+constant = 0.792
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_ot4aw"]
 parameter_name = "ColorParameter"
@@ -738,17 +739,17 @@ parameter_name = "ColorParameter"
 code = "shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
 
-uniform vec4 ColorParameter : source_color;
+global uniform vec4 Light_color_ui : source_color;
 
 
 
 void fragment() {
-// ColorParameter:8
-	vec4 n_out8p0 = ColorParameter;
+// ColorParameter:2
+	vec4 n_out2p0 = Light_color_ui;
 
 
 // FloatConstant:7
-	float n_out7p0 = 0.100000;
+	float n_out7p0 = 0.792000;
 
 
 // FloatConstant:3
@@ -773,19 +774,20 @@ void fragment() {
 
 
 // Step:6
-	float n_out6p0 = step(n_out8p0.x, n_out4p0);
+	float n_out6p0 = step(n_out2p0.x, n_out4p0);
 
 
 // Output:0
-	ALBEDO = vec3(n_out8p0.xyz);
+	ALBEDO = vec3(n_out2p0.xyz);
 	ALPHA = n_out6p0;
 
 
 }
 "
+graph_offset = Vector2(-2907.4, 532.762)
 flags/unshaded = true
 nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_45j1b")
-nodes/fragment/2/position = Vector2(-760, -40)
+nodes/fragment/2/position = Vector2(-720, -200)
 nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_5suy6")
 nodes/fragment/3/position = Vector2(-1380, 520)
 nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_uy3ni")
@@ -809,12 +811,11 @@ nodes/fragment/7/node = SubResource("VisualShaderNodeFloatConstant_yrdax")
 nodes/fragment/7/position = Vector2(-1440, 360)
 nodes/fragment/8/node = SubResource("VisualShaderNodeColorParameter_ot4aw")
 nodes/fragment/8/position = Vector2(-100, 0)
-nodes/fragment/connections = PackedInt32Array(3, 0, 4, 1, 4, 0, 6, 1, 6, 0, 0, 1, 7, 0, 4, 0, 8, 0, 0, 0, 8, 0, 6, 0)
+nodes/fragment/connections = PackedInt32Array(3, 0, 4, 1, 4, 0, 6, 1, 6, 0, 0, 1, 7, 0, 4, 0, 2, 0, 0, 0, 2, 0, 6, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_k4fog"]
 render_priority = 0
 shader = SubResource("VisualShader_2viwc")
-shader_parameter/ColorParameter = Color(0.188235, 0.701961, 0.780392, 1)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_j5jpl"]
 radius = 0.297073
@@ -1446,6 +1447,7 @@ transform = Transform3D(0.031873, 0, 0, 0, -1.39321e-09, -0.031873, 0, 0.031873,
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Render_mesh/Anim/Foreuse"]
 transform = Transform3D(1.48266, 0, 0, 0, 1.48266, 0, 0, 0, 1.48266, 0.0119857, 3.37921, 0.0105829)
+visible = false
 layers = 4
 mesh = SubResource("TorusMesh_rxd66")
 surface_material_override/0 = ExtResource("1_n1vw4")
@@ -1535,7 +1537,7 @@ transform = Transform3D(-5.62588e-08, 1.2039, 0.455109, 3.55271e-15, 0.455109, -
 visible = false
 
 [node name="On_OverMouse_3D_SHAPE" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.308122, -5.11771e-16, 0, 0, -1.26409e-09, -0.308122, 5.45278e-15, 0.0289188, -1.34684e-08, 1.59845e-15, 0.135357, -0.0903244)
+transform = Transform3D(0.308122, -5.11771e-16, 0, 0, -1.26409e-09, -0.308122, 5.45278e-15, 0.0289188, -1.34684e-08, 1.59845e-15, 0.15666, -0.0903244)
 visible = false
 layers = 4
 mesh = SubResource("TorusMesh_ynfum")

@@ -44,7 +44,15 @@ func _closest_element(array, point):
 		if closest_node == null or current_node_distance < closest_node_distance:
 			closest_node = element
 			closest_node_distance = current_node_distance
+			
 	
+			# NEAR CLOSEST ACTIVE MIRROR
+			var distance_closest = player_sub.position.distance_to(closest_node._position())
+			if distance_closest < 0.25:
+				_global_datas.player_mirror_contact.emit(true)
+			else :
+				_global_datas.player_mirror_contact.emit(false)
+			
 	return closest_node
 
 func _update_sonar_Alarm():
@@ -68,12 +76,12 @@ func _Alarm_pulse():
 func _on_sonar_zone_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
 
 
-	var element = area.get_node_or_null("Go_player")
+	var element = area.get_node_or_null("Mirror")
 	if element:
 		_global_datas.Element_sub_zone_array.append(element)
 
 		# to stop the alarm
-	if _global_datas.Element_sub_zone_array.size() > 1:
+	if _global_datas.Element_sub_zone_array.size() > 0:
 		if timer_alarm.is_stopped():	
 			timer_alarm.start()
 
@@ -84,7 +92,7 @@ func _on_sonar_zone_area_shape_exited(area_rid, area, area_shape_index, local_sh
 	if area == null:
 		return
 	
-	var element = area.get_node_or_null("Go_player")
+	var element = area.get_node_or_null("Mirror")
 	if element:
 		_global_datas.Element_sub_zone_array.erase(element)	
 		
@@ -95,7 +103,6 @@ func _on_sonar_zone_area_shape_exited(area_rid, area, area_shape_index, local_sh
 		$"../Render_mesh/Sonar/02".visible = false
 		
 func _on_timer_timeout():
-	
 	
 	_sonar()	
 	_update_sonar_Alarm()

@@ -1,10 +1,42 @@
-[gd_scene load_steps=33 format=3 uid="uid://bdnl7k72gp6so"]
+[gd_scene load_steps=36 format=3 uid="uid://bdnl7k72gp6so"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/Grid_scene/Mirror_elements.gd" id="1_agkx2"]
 [ext_resource type="PackedScene" uid="uid://bneebc6fpaysa" path="res://08_SUBSCENES/Elements/Ice/ice_msh_01.tscn" id="1_eihyl"]
+[ext_resource type="Material" uid="uid://ca5hr6jiqhjq1" path="res://05_SHADER_TEST/Subscene_materials/element_subscene_sonar_mat.tres" id="1_ty7gw"]
 [ext_resource type="PackedScene" uid="uid://chipng023vh22" path="res://08_SUBSCENES/Elements/Ice/ice_msh_01_far.tscn" id="2_jg4dq"]
-[ext_resource type="PackedScene" uid="uid://duf8yopqbb6g0" path="res://08_SUBSCENES/Elements/Object/Dust_subscene.tscn" id="2_l1n2m"]
-[ext_resource type="PackedScene" uid="uid://cbot4dbq2r154" path="res://08_SUBSCENES/Elements/Object/Coins_sub_element.tscn" id="5_0qg7o"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_ic6q1"]
+
+[sub_resource type="GDScript" id="GDScript_uj8ey"]
+script/source = "extends Node
+
+
+@onready var mirror_prefabs = $\"..\"
+@onready var opacity = $\"../../Mirror_prefabs2/Mirror/Opacity\"
+
+func _position():
+	
+	return mirror_prefabs.global_position
+
+
+func _change_opacity(value : float):
+	opacity._change_value(value )
+"
+
+[sub_resource type="GDScript" id="GDScript_k5jev"]
+script/source = "extends Node
+
+@onready var material : Material = $\"../../../Mirror_prefabs2/MeshInstance3D\".get_surface_override_material(0)
+
+
+func _change_value(value : float):
+	
+	var clamp = clampf(value,0.0,0.7)
+	material.set_shader_parameter(\"Opacity\",value*2)
+"
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_we1hc"]
+radius = 0.107249
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_jboo4"]
 parameter_name = "Subscene_Darker_color"
@@ -297,52 +329,52 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.15111, 0)
 
 [node name="Lootable" type="Node" parent="."]
 
-[node name="Coins_sub_element2" parent="Lootable" instance=ExtResource("5_0qg7o")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.762405, -5.81153, 0)
-
-[node name="Coins_sub_element10" parent="Lootable" instance=ExtResource("5_0qg7o")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.718694, -5.82333, 0)
-
-[node name="Coins_sub_element11" parent="Lootable" instance=ExtResource("5_0qg7o")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.829381, -5.8068, 0)
-
-[node name="Coins_sub_element3" parent="Lootable" instance=ExtResource("5_0qg7o")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.67255, -5.83081, 0)
-
-[node name="Coins_sub_element4" parent="Lootable" instance=ExtResource("5_0qg7o")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.292271, -1.71436, 0)
-
-[node name="Coins_sub_element5" parent="Lootable" instance=ExtResource("5_0qg7o")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.357284, -1.67967, 0)
-
-[node name="Coins_sub_element9" parent="Lootable" instance=ExtResource("5_0qg7o")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.759216, -1.28715, 0)
-
-[node name="Coins_sub_element7" parent="Lootable" instance=ExtResource("5_0qg7o")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.856035, -1.25307, 0)
-
-[node name="Coins_sub_element8" parent="Lootable" instance=ExtResource("5_0qg7o")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.52749, -1.00307, 0)
-
-[node name="Coins_sub_element6" parent="Lootable" instance=ExtResource("5_0qg7o")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.64, -5.76167, 0)
-
-[node name="RigidBody3D" parent="Lootable" instance=ExtResource("2_l1n2m")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.182025, -1.78769, 0)
-
-[node name="RigidBody3D2" parent="Lootable" instance=ExtResource("2_l1n2m")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.332239, -1.70863, 0)
-
-[node name="RigidBody3D3" parent="Lootable" instance=ExtResource("2_l1n2m")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.409121, -1.69781, 0)
-
-[node name="RigidBody3D4" parent="Lootable" instance=ExtResource("2_l1n2m")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.483457, -1.72241, 0)
-
-[node name="RigidBody3D5" parent="Lootable" instance=ExtResource("2_l1n2m")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.450521, -1.69561, 0)
-
 [node name="Static" type="Node" parent="."]
+
+[node name="Mirror_vortex" type="Node" parent="Static"]
+
+[node name="Mirror_prefabs" type="Area3D" parent="Static/Mirror_vortex"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.123556, -5.46284, 0)
+collision_layer = 4
+collision_mask = 4
+input_ray_pickable = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Static/Mirror_vortex/Mirror_prefabs"]
+transform = Transform3D(0.0768515, 0, 0, 0, 0.0768515, 0, 0, 0, 0.0768515, 0, 0, 0)
+layers = 4096
+mesh = SubResource("SphereMesh_ic6q1")
+skeleton = NodePath("../../Mirror_prefabs2")
+surface_material_override/0 = ExtResource("1_ty7gw")
+
+[node name="Mirror" type="Node" parent="Static/Mirror_vortex/Mirror_prefabs"]
+script = SubResource("GDScript_uj8ey")
+
+[node name="Opacity" type="Node" parent="Static/Mirror_vortex/Mirror_prefabs/Mirror"]
+script = SubResource("GDScript_k5jev")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Static/Mirror_vortex/Mirror_prefabs"]
+shape = SubResource("SphereShape3D_we1hc")
+
+[node name="Mirror_prefabs2" type="Area3D" parent="Static/Mirror_vortex"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.25209, -5.54036, 0)
+collision_layer = 4
+collision_mask = 4
+input_ray_pickable = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Static/Mirror_vortex/Mirror_prefabs2"]
+transform = Transform3D(0.077, 0, 0, 0, 0.077, 0, 0, 0, 0.077, 0, 0, 0)
+layers = 4096
+mesh = SubResource("SphereMesh_ic6q1")
+surface_material_override/0 = ExtResource("1_ty7gw")
+
+[node name="Mirror" type="Node" parent="Static/Mirror_vortex/Mirror_prefabs2"]
+script = SubResource("GDScript_uj8ey")
+
+[node name="Opacity" type="Node" parent="Static/Mirror_vortex/Mirror_prefabs2/Mirror"]
+script = SubResource("GDScript_k5jev")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Static/Mirror_vortex/Mirror_prefabs2"]
+shape = SubResource("SphereShape3D_we1hc")
 
 [node name="Mirror_elements" type="Node" parent="Static"]
 script = ExtResource("1_agkx2")

@@ -58,9 +58,9 @@ signal _teleport_position(position : Vector3)
 signal _find_loot(type : Loot_Data)
 var _forreuse_impact_origin : Vector3
 var _magnet_strenght : float
+
 func _ready():
 	_forreuse_impact_origin = Vector3.ZERO
-	
 	
 	
 #board scene
@@ -90,6 +90,8 @@ var clock_timer : Timer
 signal active_photo_button(condition : bool)
 signal active_scanner_button(condition : bool)
 signal active_mirror_switch(condition : bool)
+signal player_mirror_contact(condition : bool)
+
 var scanner_mat : Material
 var teleport_pos : Array
 #instance word text
