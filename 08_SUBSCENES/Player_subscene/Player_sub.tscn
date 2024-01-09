@@ -50,6 +50,7 @@ func _on_timer_timeout():
 script/source = "extends Node
 
 @export var canSpeedUp : bool = false
+@onready var player_sub = $\"..\"
 
 
 func _input(event: InputEvent):
@@ -57,10 +58,10 @@ func _input(event: InputEvent):
 	if !canSpeedUp:
 		return
 	if event.is_action_pressed(\"Speed_up\"):
-		_global_datas._speedUp.emit()
+		player_sub._speedUp()
 		
 	if event.is_action_released(\"Speed_up\"):
-		_global_datas._speedDown.emit()
+		player_sub._speedDown()
 		
 
 "
@@ -222,7 +223,7 @@ func _input(event: InputEvent):
 		
 		_global_datas._forreuse_off.emit()	
 		_global_datas.Cursor_mode.cursor_in()
-	
+		
 		
 func _on_mouse_click_mouse_entered():
 	if _global_datas.Player_lock_click:
@@ -235,7 +236,7 @@ func _on_mouse_click_mouse_entered():
 		return
 	on_over_mouse_3d_shape.visible = true
 	_global_datas.Cursor_mode.cursor_in()
-	
+
 
 
 func _on_mouse_click_mouse_exited():
@@ -263,9 +264,9 @@ func _on_mouse_click_input_event(camera, event, position, normal, shape_idx):
 	if !is_active:
 		return		
 		
-	if event.is_action_pressed(\"Pioche\"):
+	if event.is_action_pressed(\"Click\"):
 		_global_datas._forreuse_on.emit()
-	
+		_global_datas._click_mirror_switch.emit()
 "
 
 [sub_resource type="GDScript" id="GDScript_tp34p"]
@@ -784,7 +785,6 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-2907.4, 532.762)
 flags/unshaded = true
 nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_45j1b")
 nodes/fragment/2/position = Vector2(-720, -200)

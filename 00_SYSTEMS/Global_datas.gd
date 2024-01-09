@@ -47,8 +47,7 @@ signal _bird_is_comming
 var mouseRaycastPosition : Vector3
 signal get_raycastPosition
 var subbscene_playerPosition : Vector3
-signal _speedUp
-signal _speedDown
+
 signal _take_photo
 signal _forreuse_on
 signal _forreuse_off
@@ -90,6 +89,7 @@ var clock_timer : Timer
 signal active_photo_button(condition : bool)
 signal active_scanner_button(condition : bool)
 signal active_mirror_switch(condition : bool)
+signal _click_mirror_switch 
 signal player_mirror_contact(condition : bool)
 
 var scanner_mat : Material

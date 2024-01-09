@@ -1103,19 +1103,34 @@ func _ready():
 	_global_datas._go_Subscene.connect(_disable)
 	_global_datas._go_Mainscene.connect(_disable)
 	_global_datas.player_mirror_contact.connect(_mirror_condition)
+	_global_datas._click_mirror_switch.connect(_switch_mirror)
+	
+func _switch_mirror():
+	
+	if !_global_datas.Player_InSubScene:
+		return
+		
+	if !_mirror_contact:	
+		return
+		
+	mirror_world = !mirror_world
+	_mirror_switch(mirror_world)
+	_global_datas.active_mirror_switch.emit(mirror_world)
+
+
 
 func _mirror_condition(condition : bool):
+
 	_mirror_contact = condition	
+
+	
 
 func _disable():
 	mirror_world = false
 	_mirror_switch(mirror_world)	
 	
 func _mirror_switch(condition : bool):
-	
-	
-	
-	
+		
 	if t:
 		t.kill()
 
@@ -1129,6 +1144,9 @@ func _mirror_switch(condition : bool):
 		t .tween_method(scanner_opacity._set_scanner_opacity_value,0.0,1.0,0.25).set_trans(Tween.TRANS_SINE)
 		
 		#_global_datas.clock_timer.paused = true
+		
+		
+		
 		
 func _on_texture_button_pressed():
 	if !_global_datas.Player_InSubScene:
@@ -2165,6 +2183,9 @@ mouse_filter = 2
 [node name="Coins6" parent="Control/Coins_group" instance=ExtResource("5_6qspm")]
 position = Vector2(588, 128)
 
+[node name="Coins" parent="Control/Coins_group" instance=ExtResource("6_iwb8l")]
+position = Vector2(517, 104)
+
 [node name="Coins7" parent="Control/Coins_group" instance=ExtResource("5_6qspm")]
 position = Vector2(599, 61)
 
@@ -2172,21 +2193,23 @@ position = Vector2(599, 61)
 position = Vector2(563, 74)
 
 [node name="Coins9" parent="Control/Coins_group" instance=ExtResource("5_6qspm")]
+visible = false
 position = Vector2(592, 87)
 
-[node name="Coins" parent="Control/Coins_group" instance=ExtResource("6_iwb8l")]
-position = Vector2(404, 127)
-
 [node name="Coins2" parent="Control/Coins_group" instance=ExtResource("6_iwb8l")]
+visible = false
 position = Vector2(467, 166)
 
 [node name="Coins3" parent="Control/Coins_group" instance=ExtResource("6_iwb8l")]
+visible = false
 position = Vector2(443, 162)
 
 [node name="Coins4" parent="Control/Coins_group" instance=ExtResource("6_iwb8l")]
+visible = false
 position = Vector2(443, 165)
 
 [node name="Coins5" parent="Control/Coins_group" instance=ExtResource("6_iwb8l")]
+visible = false
 position = Vector2(454, 162)
 
 [node name="Words_note" type="Control" parent="Control"]
