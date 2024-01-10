@@ -184,8 +184,7 @@ script/source = "extends Node
 
 
 func _ready():
-	pass
-	#_global_datas._forreuse_on.connect(take_coin)
+	_global_datas._forreuse_on.connect(take_coin)
 	
 func take_coin():
 	
@@ -194,7 +193,7 @@ func take_coin():
 	
 func _on_area_3d_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
 
-	var coin = area.get_node_or_null(\"Mirror\")
+	var coin = area.get_node_or_null(\"Go_player\")
 	if coin:
 		_global_datas.Coins_aspirator_array.append(coin)
 
@@ -203,7 +202,7 @@ func _on_area_3d_area_shape_exited(area_rid, area, area_shape_index, local_shape
 	if area == null:
 		return
 		
-	var coin = area.get_node_or_null(\"Mirror\")
+	var coin = area.get_node_or_null(\"Go_player\")
 	if coin:
 		_global_datas.Coins_aspirator_array.erase(coin)
 "
@@ -219,8 +218,8 @@ var is_active = true
 		
 func _input(event: InputEvent):
 
-	if event.is_action_released(\"Pioche\"):
-		
+	if event.is_action_released(\"Click\"):
+
 		_global_datas._forreuse_off.emit()	
 		_global_datas.Cursor_mode.cursor_in()
 		
@@ -259,14 +258,13 @@ func _on_mouse_click_input_event(camera, event, position, normal, shape_idx):
 	
 	if _global_datas.Player_lock_click == true:
 		return
-	
-	
+
 	if !is_active:
 		return		
 		
 	if event.is_action_pressed(\"Click\"):
 		_global_datas._forreuse_on.emit()
-		_global_datas._click_mirror_switch.emit()
+		#_global_datas._click_mirror_switch.emit()
 "
 
 [sub_resource type="GDScript" id="GDScript_tp34p"]

@@ -7,10 +7,7 @@ extends Node
 @onready var material : Material = mesh_instance_3d.get_surface_override_material(0)
 var _follow = false
 
-
 @onready var _opacity = $Opacity
-
-
 
 
 func _ready():
@@ -38,7 +35,7 @@ func push_to_player(delta):
 	var actualPos = dust_subscene.global_position
 	var direction = target_pos - actualPos
 	direction  = direction .normalized()
-	var force = direction  *  20 * delta
+	var force = direction  *  50 * delta
 
 	
 	if coin is RigidBody3D:
@@ -55,10 +52,11 @@ func check_contact(player_position : Vector3, position : Vector3):
 
 		
 	if distance < 0.1:
-		_global_datas._find_loot.emit(Loot_type)
+		pass
+		#_global_datas._find_loot.emit(Loot_type)
 
-		_global_datas.Coins_aspirator_array.erase(self)
-		coin.queue_free()	
+		#_global_datas.Coins_aspirator_array.erase(self)
+		#coin.queue_free()	
 	
 func _stop():
 	_follow = false	

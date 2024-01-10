@@ -199,6 +199,36 @@ var _process_timer = false
 signal take_picture
 
 
+
+func _ready():
+	_global_datas._forreuse_on.connect(_active)
+	_global_datas._forreuse_off.connect(_disable)
+
+
+func _active():
+	
+	if _global_datas.Player_lock_click:
+		return
+	if !_global_datas.Player_InSubScene:
+		return
+
+	_global_datas.Player_lock_click = false
+	photo_circle.visible = false
+		
+	if _global_datas.Player_lock_click == true:
+		return
+			
+	photo_circle.visible = true
+	timer.start()
+	_global_datas.Player_lock_click = true		
+	
+func _disable():
+	
+	timer.stop()
+	_process_timer = false
+	photo_circle.visible = false
+	_global_datas.Player_lock_click = false
+
 func _input(event: InputEvent):
 	
 	
@@ -211,6 +241,9 @@ func _input(event: InputEvent):
 		_process_timer = false
 		photo_circle.visible = false
 		_global_datas.Player_lock_click = false
+		
+		
+		
 func _process(_delta):
 		
 	if !timer.is_stopped():
@@ -225,6 +258,9 @@ func _on_timer_timeout():
 
 	photo_circle.visible = false
 	_global_datas.Player_lock_click = false
+	
+	
+	
 func _in_speacker_photo(event : InputEvent):
 	
 	
@@ -273,8 +309,9 @@ func _in_subscene_photo(event : InputEvent):
 		_global_datas.Player_lock_click = true		
 
 func _on_click_photo_input_event(viewport, event, shape_idx):
-	_in_subscene_photo(event)		
-	_in_speacker_photo(event)
+	pass
+	#_in_subscene_photo(event)		
+	#_in_speacker_photo(event)
 
 "
 

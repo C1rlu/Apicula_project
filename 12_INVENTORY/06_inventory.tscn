@@ -1104,6 +1104,7 @@ func _ready():
 	_global_datas._go_Mainscene.connect(_disable)
 	_global_datas.player_mirror_contact.connect(_mirror_condition)
 	_global_datas._click_mirror_switch.connect(_switch_mirror)
+	_global_datas._take_photo.connect(_switch_mirror)
 	
 func _switch_mirror():
 	
@@ -1137,13 +1138,13 @@ func _mirror_switch(condition : bool):
 	if !condition :
 		t = create_tween()
 		t .tween_method(scanner_opacity._set_scanner_opacity_value,1.0,0.0,0.25).set_trans(Tween.TRANS_SINE)
-		#_global_datas.clock_timer.paused = false
+		_global_datas.clock_timer.paused = false
 	else:
 	
 		t = create_tween()	
 		t .tween_method(scanner_opacity._set_scanner_opacity_value,0.0,1.0,0.25).set_trans(Tween.TRANS_SINE)
 		
-		#_global_datas.clock_timer.paused = true
+		_global_datas.clock_timer.paused = true
 		
 		
 		

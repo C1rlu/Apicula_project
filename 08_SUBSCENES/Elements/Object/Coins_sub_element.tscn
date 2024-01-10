@@ -13,8 +13,15 @@ radius = 0.00837973
 script/source = "extends Node
 
 @onready var material : Material = $\"../../../MeshInstance3D\".get_surface_override_material(0)
+var t
 
-
+func _active():
+	
+	if t:
+		t.kill()
+	t = create_tween()
+	
+	t .tween_method(_change_value,0.1,0.0,1.0).set_trans(Tween.TRANS_SINE)	
 
 func _change_value(value : float):
 	
@@ -31,9 +38,9 @@ collision_mask = 4
 input_ray_pickable = false
 axis_lock_linear_z = true
 mass = 0.5
-gravity_scale = 0.02
+gravity_scale = 0.01
 freeze = true
-linear_damp = 0.25
+linear_damp = 2.0
 angular_damp = 2.5
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
