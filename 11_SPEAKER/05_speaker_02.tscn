@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=3 uid="uid://bbp1ccoa6te1g"]
+[gd_scene load_steps=74 format=3 uid="uid://bbp1ccoa6te1g"]
 
 [ext_resource type="Script" path="res://11_SPEAKER/Open_Dialogue.gd" id="1_6gph5"]
 [ext_resource type="Script" path="res://09_NPC/NPC_DIVE_SELECTOR/Npc_loader.gd" id="2_gecf5"]
@@ -82,6 +82,28 @@ func _on_text_button_pressed():
 	_global_datas.instance_word_text._intance_words_note(words,name_words)	
 	
 
+"
+
+[sub_resource type="GDScript" id="GDScript_1uk6q"]
+script/source = "extends Node
+@onready var photo_circle = $\"../00_NPC_CREATOR/Npc_convas/Photo_circle\"
+
+func _on_button_button_down():
+
+	_global_datas._take_Npc_photo.emit(true)
+
+	
+func _on_button_button_up():
+	_global_datas._take_Npc_photo.emit(false)
+
+
+func _on_button_mouse_entered():
+
+	photo_circle.visible = true
+
+func _on_button_mouse_exited():
+
+	photo_circle.visible = false
 "
 
 [sub_resource type="GDScript" id="GDScript_6qc5w"]
@@ -534,6 +556,251 @@ func _ready():
 
 "
 
+[sub_resource type="GDScript" id="GDScript_3pnnn"]
+script/source = "extends TextureButton
+
+
+func _ready():
+	var number : int = 0
+	set_focus_mode(number)
+"
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_tuxv5"]
+default_input_values = [0, 0.0, 1, 0.89]
+operator = 2
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_gq0pq"]
+default_input_values = [0, 0.0, 1, 1.96, 2, 0.775]
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_or6ml"]
+constant = 0.4
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_eo7n2"]
+constant = 1.858
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_nv23y"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_hcvx3"]
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_bod2e"]
+constant = 0.3
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_kehj3"]
+parameter_name = "Circle"
+default_value_enabled = true
+default_value = 0.4
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_yyypt"]
+size = Vector2(513.781, 284.487)
+expression = "vec2 n_uv = UV -0.5;
+float d = length(n_uv);
+float c = smoothstep(r,r + feather,d);
+color = vec4(vec3(c),1.0);"
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_h3uoc"]
+constant = 0.001
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_41vp0"]
+input_name = "uv"
+
+[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_drebl"]
+function = 31
+
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_7vjsl"]
+default_input_values = [1, Vector2(1.8, 1), 2, Vector2(0.5, 0)]
+function = 1
+
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_8mju3"]
+default_input_values = [1, Vector2(0, 1), 2, Vector2(0, 0)]
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_r6hxh"]
+size = Vector2(513.781, 284.487)
+expression = "vec2 n_uv = UV -0.5;
+float d = length(n_uv);
+float c = smoothstep(r,r + feather,d);
+color = vec4(vec3(c),1.0);"
+
+[sub_resource type="VisualShader" id="VisualShader_xpv8j"]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+uniform float Circle = 0.40000000596046;
+
+
+
+void fragment() {
+// FloatConstant:13
+	float n_out13p0 = 1.858000;
+
+
+// FloatConstant:12
+	float n_out12p0 = 0.400000;
+
+
+	float n_out14p0;
+// Expression:14
+	n_out14p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out12p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out14p0 = n_out13p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Input:4
+	vec2 n_out4p0 = UV;
+
+
+// UVFunc:6
+	vec2 n_in6p1 = vec2(1.80000, 1.00000);
+	vec2 n_in6p2 = vec2(0.50000, 0.00000);
+	vec2 n_out6p0 = (n_out4p0 - n_in6p2) * n_in6p1 + n_in6p2;
+
+
+// UVFunc:7
+	vec2 n_in7p1 = vec2(0.00000, 1.00000);
+	vec2 n_in7p2 = vec2(0.00000, 0.00000);
+	vec2 n_out7p0 = n_in7p2 * n_in7p1 + n_out6p0;
+
+
+// FloatParameter:17
+	float n_out17p0 = Circle;
+
+
+// FloatConstant:3
+	float n_out3p0 = 0.001000;
+
+
+	vec4 n_out2p0;
+// Expression:2
+	n_out2p0 = vec4(0.0, 0.0, 0.0, 0.0);
+	{
+		vec2 n_uv = n_out7p0 -0.5;
+		float d = length(n_uv);
+		float c = smoothstep(n_out17p0,n_out17p0 + n_out3p0,d);
+		n_out2p0 = vec4(vec3(c),1.0);
+	}
+
+
+// FloatFunc:5
+	float n_out5p0 = 1.0 - n_out2p0.x;
+
+
+// FloatOp:10
+	float n_in10p1 = 0.89000;
+	float n_out10p0 = n_out17p0 * n_in10p1;
+
+
+	vec4 n_out9p0;
+// Expression:9
+	n_out9p0 = vec4(0.0, 0.0, 0.0, 0.0);
+	{
+		vec2 n_uv = n_out7p0 -0.5;
+		float d = length(n_uv);
+		float c = smoothstep(n_out10p0,n_out10p0 + n_out3p0,d);
+		n_out9p0 = vec4(vec3(c),1.0);
+	}
+
+
+// Mix:11
+	float n_in11p0 = 0.00000;
+	float n_out11p0 = mix(n_in11p0, n_out5p0, n_out9p0.x);
+
+
+// Step:15
+	float n_out15p0 = step(n_out14p0, n_out11p0);
+
+
+// Output:0
+	COLOR.a = n_out15p0;
+
+
+}
+"
+mode = 1
+flags/light_only = false
+nodes/fragment/0/position = Vector2(1240, 520)
+nodes/fragment/2/node = SubResource("VisualShaderNodeExpression_yyypt")
+nodes/fragment/2/position = Vector2(-540, 20)
+nodes/fragment/2/size = Vector2(513.781, 284.487)
+nodes/fragment/2/input_ports = "0,3,UV;1,0,r;2,0,feather;"
+nodes/fragment/2/output_ports = "0,5,color;"
+nodes/fragment/2/expression = "vec2 n_uv = UV -0.5;
+float d = length(n_uv);
+float c = smoothstep(r,r + feather,d);
+color = vec4(vec3(c),1.0);"
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_h3uoc")
+nodes/fragment/3/position = Vector2(-820, 380)
+nodes/fragment/4/node = SubResource("VisualShaderNodeInput_41vp0")
+nodes/fragment/4/position = Vector2(-2300, -60)
+nodes/fragment/5/node = SubResource("VisualShaderNodeFloatFunc_drebl")
+nodes/fragment/5/position = Vector2(60, 40)
+nodes/fragment/6/node = SubResource("VisualShaderNodeUVFunc_7vjsl")
+nodes/fragment/6/position = Vector2(-1960, -120)
+nodes/fragment/7/node = SubResource("VisualShaderNodeUVFunc_8mju3")
+nodes/fragment/7/position = Vector2(-1720, -120)
+nodes/fragment/9/node = SubResource("VisualShaderNodeExpression_r6hxh")
+nodes/fragment/9/position = Vector2(-655.858, 530.852)
+nodes/fragment/9/size = Vector2(513.781, 284.487)
+nodes/fragment/9/input_ports = "0,3,UV;1,0,r;2,0,feather;"
+nodes/fragment/9/output_ports = "0,5,color;"
+nodes/fragment/9/expression = "vec2 n_uv = UV -0.5;
+float d = length(n_uv);
+float c = smoothstep(r,r + feather,d);
+color = vec4(vec3(c),1.0);"
+nodes/fragment/10/node = SubResource("VisualShaderNodeFloatOp_tuxv5")
+nodes/fragment/10/position = Vector2(-1160, 640)
+nodes/fragment/11/node = SubResource("VisualShaderNodeMix_gq0pq")
+nodes/fragment/11/position = Vector2(460, 580)
+nodes/fragment/12/node = SubResource("VisualShaderNodeFloatConstant_or6ml")
+nodes/fragment/12/position = Vector2(-260, 1180)
+nodes/fragment/13/node = SubResource("VisualShaderNodeFloatConstant_eo7n2")
+nodes/fragment/13/position = Vector2(-260, 1040)
+nodes/fragment/14/node = SubResource("VisualShaderNodeExpression_nv23y")
+nodes/fragment/14/position = Vector2(40, 1160)
+nodes/fragment/14/size = Vector2(724.789, 654.559)
+nodes/fragment/14/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/14/output_ports = "0,0,Dither_Node;"
+nodes/fragment/14/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/15/node = SubResource("VisualShaderNodeStep_hcvx3")
+nodes/fragment/15/position = Vector2(880, 780)
+nodes/fragment/16/node = SubResource("VisualShaderNodeFloatConstant_bod2e")
+nodes/fragment/16/position = Vector2(-1660, 280)
+nodes/fragment/17/node = SubResource("VisualShaderNodeFloatParameter_kehj3")
+nodes/fragment/17/position = Vector2(-1809.95, 419.028)
+nodes/fragment/connections = PackedInt32Array(3, 0, 2, 2, 2, 0, 5, 0, 4, 0, 6, 0, 6, 0, 7, 0, 7, 0, 2, 0, 7, 0, 9, 0, 3, 0, 9, 2, 10, 0, 9, 1, 9, 0, 11, 2, 5, 0, 11, 1, 12, 0, 14, 1, 13, 0, 14, 0, 11, 0, 15, 1, 14, 0, 15, 0, 15, 0, 0, 1, 17, 0, 2, 1, 17, 0, 10, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dfnb2"]
+shader = SubResource("VisualShader_xpv8j")
+shader_parameter/Circle = 0.165
+
 [node name="05_SPEAKER" type="Node"]
 script = ExtResource("1_6gph5")
 
@@ -556,6 +823,9 @@ script = SubResource("GDScript_ktgfg")
 
 [node name="Instance_words" type="Node" parent="."]
 script = SubResource("GDScript_wf71c")
+
+[node name="Take_Npc_photo" type="Node" parent="."]
+script = SubResource("GDScript_1uk6q")
 
 [node name="00_NPC_CREATOR" type="Node" parent="."]
 script = ExtResource("3_u2fyv")
@@ -673,12 +943,13 @@ offset_left = 689.0
 offset_top = 778.0
 offset_right = 1207.0
 offset_bottom = 854.0
-theme_override_colors/font_color = Color(0.662745, 0.835294, 0.784314, 1)
+theme_override_colors/font_color = Color(0.682353, 0.92549, 0.847059, 1)
 theme_override_font_sizes/font_size = 25
 text = "dddddddddddddddddddddddddddddddddddddddddddddd"
 autowrap_mode = 3
 
 [node name="Button_text" type="Button" parent="00_NPC_CREATOR/Npc_convas/Dialogue_box/Dialogue_text"]
+visible = false
 clip_contents = true
 layout_mode = 1
 anchors_preset = 15
@@ -708,6 +979,32 @@ offset_bottom = 165.0
 grow_vertical = 0
 mouse_filter = 2
 theme_override_constants/separation = 10
+
+[node name="Button" type="TextureButton" parent="00_NPC_CREATOR/Npc_convas"]
+layout_mode = 0
+offset_left = 756.0
+offset_top = 337.0
+offset_right = 1156.0
+offset_bottom = 737.0
+script = SubResource("GDScript_3pnnn")
+
+[node name="Photo_circle" type="ColorRect" parent="00_NPC_CREATOR/Npc_convas"]
+visible = false
+material = SubResource("ShaderMaterial_dfnb2")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -960.0
+offset_top = -541.0
+offset_right = 960.0
+offset_bottom = 539.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.980392, 0.866667, 0.584314, 1)
 
 [node name="NPC_light" type="OmniLight3D" parent="00_NPC_CREATOR"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 18.002, 3.57)
@@ -742,3 +1039,7 @@ visible = false
 [connection signal="timeout" from="00_NPC_CREATOR/Entrance_animation/Timer" to="00_NPC_CREATOR/Entrance_animation" method="_on_timer_timeout"]
 [connection signal="pressed" from="00_NPC_CREATOR/Npc_convas/Dialogue_box/Leave_button" to="." method="_on_leave_button_pressed"]
 [connection signal="pressed" from="00_NPC_CREATOR/Npc_convas/Dialogue_box/Dialogue_text/Button_text" to="Instance_words" method="_on_text_button_pressed"]
+[connection signal="button_down" from="00_NPC_CREATOR/Npc_convas/Button" to="Take_Npc_photo" method="_on_button_button_down"]
+[connection signal="button_up" from="00_NPC_CREATOR/Npc_convas/Button" to="Take_Npc_photo" method="_on_button_button_up"]
+[connection signal="mouse_entered" from="00_NPC_CREATOR/Npc_convas/Button" to="Take_Npc_photo" method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="00_NPC_CREATOR/Npc_convas/Button" to="Take_Npc_photo" method="_on_button_mouse_exited"]

@@ -1,169 +1,7 @@
-[gd_scene load_steps=81 format=3 uid="uid://bwmu5iwushsl5"]
+[gd_scene load_steps=77 format=3 uid="uid://bwmu5iwushsl5"]
 
 [ext_resource type="Material" uid="uid://blohbpbwcsu4f" path="res://05_SHADER_TEST/UI/Circle_tirette/Circle_inside_withDither_dots.tres" id="1_jnjg4"]
 [ext_resource type="Texture2D" uid="uid://ckdvhk12w3kkb" path="res://12_INVENTORY/Tools/tools_photo.png" id="1_pct16"]
-
-[sub_resource type="GDScript" id="GDScript_8dmon"]
-script/source = "extends Node
-@onready var photo_tools = $\"../Photo_tools\"
-@onready var vignette_opacity = $\"../Vignette_opacity\"
-
-
-func _ready():
-	
-	_global_datas._close_dialogue.connect(_hide)	
-
-	_global_datas._show_dialogue_box.connect(_show)	
-	_global_datas._end_ini_subscene.connect(_show)	
-	
-	_global_datas._backFrom_subscene.connect(_hide)
-	_global_datas.active_photo_button.connect(_acivate)
-	
-	_hide()
-	
-func _hide():
-	pass
-	#photo_tools.visible = false	
-	#vignette_opacity._set_vignette_opacity_value(0.0)
-func _show():
-	#photo_tools.visible = true
-	pass
-func _acivate( condition : bool):
-	pass
-	#photo_tools.visible = condition
-
-"
-
-[sub_resource type="GDScript" id="GDScript_rihlu"]
-script/source = "extends Node
-
-@export var scale_in_hand = 1.10
-@onready var control = $\"../Photo_tools\"
-@export var slider_y : int = 900
-var mouse_entered = false
-var click = false
-var offset
-var size : float
-var my_origin_parent : Node
-
-@onready var vignette_opacity = $\"../Vignette_opacity\"
-
-
-func _ready():
-
-	size = control.scale.x
-	my_origin_parent = control.get_parent()
-	#_global_datas._backFrom_subscene.connect(_reset_tools_position)
-func _disable():
-	control.global_position.y = 0
-	_unselect_element()		
-	
-	
-func _process(_delta):
-	
-	
-	if !click:
-		return
-	
-	var new_position = control.get_global_mouse_position() + offset
-	new_position.x = clamp(control.global_position.x,control.global_position.x,control.global_position.x)
-	new_position.y = clamp(new_position.y,0,slider_y)
-	control.global_position = new_position
-
-
-	# Change darker color
-	vignette_opacity._set_vignette_opacity(slider_y,new_position.y)
-		
-func _input(event):
-	
-	
-	#TO DRAG
-	if !_global_datas.Player_lock_click == true:
-		
-		if Input.is_action_just_pressed(\"Click\") && mouse_entered:
-			click = true
-			_global_datas.Player_lock_click = true
-			_scale_change(size * scale_in_hand)
-			offset = control.transform.origin - control.get_global_mouse_position()
-			_global_datas.OnDrag_start_position = offset
-			#_global_datas.active_scanner_button.emit(false)
-			
-			if _global_datas.Player_InDialogue:
-				_global_datas._hide_dialogue_box.emit()	
-
-	if click:
-		
-		#TO DROP
-		if event is InputEventMouseButton:
-			if event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
-				_unselect_element()
-	
-				
-func _scale_change(value):
-	
-	control.set_scale(Vector2(value,value))
-	
-
-func _reset_tools_position():
-	control.global_position.y = 0
-	
-	
-	
-func _unselect_element():
-	
-	click = false
-	_global_datas.Player_lock_click = false
-	_scale_change(size)
-	_global_datas.using_board_disable.emit()
-	control.reparent(my_origin_parent)
-	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-
-	if control.global_position.y > slider_y/2.0:
-		control.global_position.y = slider_y
-		
-		vignette_opacity._set_vignette_opacity_value(0.75)
-		#if _global_datas.Player_InSubScene:
-			#_global_datas.active_scanner_button.emit(false)
-			
-		if _global_datas.Player_InDialogue:
-			_global_datas._hide_dialogue_box.emit()	
-		
-	else:
-		control.global_position.y = 0	
-		vignette_opacity._set_vignette_opacity_value(0.0)
-			
-		#if _global_datas.Player_InSubScene:
-			#_global_datas.active_scanner_button.emit(true)	
-		
-		if _global_datas.Player_InDialogue:
-			_global_datas._show_dialogue_box.emit()		
-			
-
-	_global_datas.Cursor_mode.cursor_out()	
-	#IF OUT OF WINDOWS
-
-
-	
-func _notification(what):
-	#if what == NOTIFICATION_WM_FOCUS_IN:
-	if what == NOTIFICATION_WM_MOUSE_EXIT:
-		pass
-		#_unselect_element()
-		
-func _on_area_2d_mouse_entered():
-
-	
-	mouse_entered = true
-	_global_datas.Cursor_mode.cursor_in()
-	
-
-func _on_area_2d_mouse_exited():
-	mouse_entered = false
-	_global_datas.Cursor_mode.cursor_out()
-
-
-
-"
 
 [sub_resource type="GDScript" id="GDScript_064xp"]
 script/source = "extends Node
@@ -198,18 +36,22 @@ var _process_timer = false
 
 signal take_picture
 
-
-
 func _ready():
 	_global_datas._forreuse_on.connect(_active)
 	_global_datas._forreuse_off.connect(_disable)
-
+	
+	_global_datas._take_Npc_photo.connect(func(condition: bool):
+		
+		if condition:
+			_active()	
+		else:
+			_disable()	
+	)
+	
 
 func _active():
 	
 	if _global_datas.Player_lock_click:
-		return
-	if !_global_datas.Player_InSubScene:
 		return
 
 	_global_datas.Player_lock_click = false
@@ -229,20 +71,6 @@ func _disable():
 	photo_circle.visible = false
 	_global_datas.Player_lock_click = false
 
-func _input(event: InputEvent):
-	
-	
-	
-	if timer.is_stopped():
-		return
-	
-	if event.is_action_released(\"Photo\"):
-		timer.stop()
-		_process_timer = false
-		photo_circle.visible = false
-		_global_datas.Player_lock_click = false
-		
-		
 		
 func _process(_delta):
 		
@@ -252,7 +80,7 @@ func _process(_delta):
 		circle_material.set_shader_parameter(\"Circle\",lerp_time)		
 
 func _on_timer_timeout():
-	print(\"TAKE PHOTO\")
+
 	take_picture.emit()
 	timer.stop()
 
@@ -260,59 +88,6 @@ func _on_timer_timeout():
 	_global_datas.Player_lock_click = false
 	
 	
-	
-func _in_speacker_photo(event : InputEvent):
-	
-	
-	if _global_datas.Player_lock_click:
-		return
-		
-	if !_global_datas.Player_InDialogue:
-		return
-	
-	if event.is_action_released(\"Photo\"):
-		timer.stop()
-
-		_global_datas.Player_lock_click = false
-		photo_circle.visible = false
-		
-	if _global_datas.Player_lock_click == true:
-		return
-			
-	if event.is_action_pressed(\"Photo\"):
-	
-		photo_circle.visible = true
-		timer.start()
-		_global_datas.Player_lock_click = true		
-
-func _in_subscene_photo(event : InputEvent):
-	
-	
-	if _global_datas.Player_lock_click:
-		return
-	if !_global_datas.Player_InSubScene:
-		return
-	
-	if event.is_action_released(\"Photo\"):
-		timer.stop()
-
-		_global_datas.Player_lock_click = false
-		photo_circle.visible = false
-		
-	if _global_datas.Player_lock_click == true:
-		return
-			
-	if event.is_action_pressed(\"Photo\"):
-	
-		photo_circle.visible = true
-		timer.start()
-		_global_datas.Player_lock_click = true		
-
-func _on_click_photo_input_event(viewport, event, shape_idx):
-	pass
-	#_in_subscene_photo(event)		
-	#_in_speacker_photo(event)
-
 "
 
 [sub_resource type="GDScript" id="GDScript_xsufx"]
@@ -531,20 +306,20 @@ nodes/fragment/connections = PackedInt32Array(4, 0, 6, 0, 6, 0, 7, 0, 17, 0, 16,
 shader = SubResource("VisualShader_4r47a")
 shader_parameter/Circle = 0.0
 
-[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_7n6u5"]
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_3fsgw"]
 default_input_values = [0, 0.0, 1, 0.89]
 operator = 2
 
-[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_gdgls"]
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_4nev5"]
 default_input_values = [0, 0.0, 1, 1.96, 2, 0.775]
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_e4nuk"]
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_1hdci"]
 constant = 0.4
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_ye8r6"]
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_5uwdi"]
 constant = 1.858
 
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_mjftj"]
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_r11jv"]
 size = Vector2(724.789, 654.559)
 expression = "const float DITHER_THRESHOLDS[16] ={
 		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
@@ -557,47 +332,47 @@ vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
 
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_vih1f"]
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_w2srk"]
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_f0n8e"]
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_hqcf5"]
 constant = 0.3
 
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_1gbav"]
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_dry0a"]
 parameter_name = "Circle"
 default_value_enabled = true
 default_value = 0.4
 
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_8dtgs"]
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_xxmqf"]
 size = Vector2(513.781, 284.487)
 expression = "vec2 n_uv = UV -0.5;
 float d = length(n_uv);
 float c = smoothstep(r,r + feather,d);
 color = vec4(vec3(c),1.0);"
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_8bfsi"]
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_b7rst"]
 constant = 0.001
 
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_6c8g2"]
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_oh3yf"]
 input_name = "uv"
 
-[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_utcol"]
+[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_kwfdw"]
 function = 31
 
-[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_sjwws"]
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_y28cs"]
 default_input_values = [1, Vector2(1.8, 1), 2, Vector2(0.5, 0)]
 function = 1
 
-[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_xfqf3"]
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_a47ty"]
 default_input_values = [1, Vector2(0, 1), 2, Vector2(0, 0)]
 
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_odabx"]
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_cyftf"]
 size = Vector2(513.781, 284.487)
 expression = "vec2 n_uv = UV -0.5;
 float d = length(n_uv);
 float c = smoothstep(r,r + feather,d);
 color = vec4(vec3(c),1.0);"
 
-[sub_resource type="VisualShader" id="VisualShader_wrj1p"]
+[sub_resource type="VisualShader" id="VisualShader_t1ch2"]
 code = "shader_type canvas_item;
 render_mode blend_mix;
 
@@ -704,7 +479,7 @@ void fragment() {
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(1240, 520)
-nodes/fragment/2/node = SubResource("VisualShaderNodeExpression_8dtgs")
+nodes/fragment/2/node = SubResource("VisualShaderNodeExpression_xxmqf")
 nodes/fragment/2/position = Vector2(-540, 20)
 nodes/fragment/2/size = Vector2(513.781, 284.487)
 nodes/fragment/2/input_ports = "0,3,UV;1,0,r;2,0,feather;"
@@ -713,17 +488,17 @@ nodes/fragment/2/expression = "vec2 n_uv = UV -0.5;
 float d = length(n_uv);
 float c = smoothstep(r,r + feather,d);
 color = vec4(vec3(c),1.0);"
-nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_8bfsi")
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_b7rst")
 nodes/fragment/3/position = Vector2(-820, 380)
-nodes/fragment/4/node = SubResource("VisualShaderNodeInput_6c8g2")
+nodes/fragment/4/node = SubResource("VisualShaderNodeInput_oh3yf")
 nodes/fragment/4/position = Vector2(-2300, -60)
-nodes/fragment/5/node = SubResource("VisualShaderNodeFloatFunc_utcol")
+nodes/fragment/5/node = SubResource("VisualShaderNodeFloatFunc_kwfdw")
 nodes/fragment/5/position = Vector2(60, 40)
-nodes/fragment/6/node = SubResource("VisualShaderNodeUVFunc_sjwws")
+nodes/fragment/6/node = SubResource("VisualShaderNodeUVFunc_y28cs")
 nodes/fragment/6/position = Vector2(-1960, -120)
-nodes/fragment/7/node = SubResource("VisualShaderNodeUVFunc_xfqf3")
+nodes/fragment/7/node = SubResource("VisualShaderNodeUVFunc_a47ty")
 nodes/fragment/7/position = Vector2(-1720, -120)
-nodes/fragment/9/node = SubResource("VisualShaderNodeExpression_odabx")
+nodes/fragment/9/node = SubResource("VisualShaderNodeExpression_cyftf")
 nodes/fragment/9/position = Vector2(-655.858, 530.852)
 nodes/fragment/9/size = Vector2(513.781, 284.487)
 nodes/fragment/9/input_ports = "0,3,UV;1,0,r;2,0,feather;"
@@ -732,15 +507,15 @@ nodes/fragment/9/expression = "vec2 n_uv = UV -0.5;
 float d = length(n_uv);
 float c = smoothstep(r,r + feather,d);
 color = vec4(vec3(c),1.0);"
-nodes/fragment/10/node = SubResource("VisualShaderNodeFloatOp_7n6u5")
+nodes/fragment/10/node = SubResource("VisualShaderNodeFloatOp_3fsgw")
 nodes/fragment/10/position = Vector2(-1160, 640)
-nodes/fragment/11/node = SubResource("VisualShaderNodeMix_gdgls")
+nodes/fragment/11/node = SubResource("VisualShaderNodeMix_4nev5")
 nodes/fragment/11/position = Vector2(460, 580)
-nodes/fragment/12/node = SubResource("VisualShaderNodeFloatConstant_e4nuk")
+nodes/fragment/12/node = SubResource("VisualShaderNodeFloatConstant_1hdci")
 nodes/fragment/12/position = Vector2(-260, 1180)
-nodes/fragment/13/node = SubResource("VisualShaderNodeFloatConstant_ye8r6")
+nodes/fragment/13/node = SubResource("VisualShaderNodeFloatConstant_5uwdi")
 nodes/fragment/13/position = Vector2(-260, 1040)
-nodes/fragment/14/node = SubResource("VisualShaderNodeExpression_mjftj")
+nodes/fragment/14/node = SubResource("VisualShaderNodeExpression_r11jv")
 nodes/fragment/14/position = Vector2(40, 1160)
 nodes/fragment/14/size = Vector2(724.789, 654.559)
 nodes/fragment/14/input_ports = "0,0,In;1,0,Size;"
@@ -755,16 +530,16 @@ nodes/fragment/14/expression = "const float DITHER_THRESHOLDS[16] ={
 vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/15/node = SubResource("VisualShaderNodeStep_vih1f")
+nodes/fragment/15/node = SubResource("VisualShaderNodeStep_w2srk")
 nodes/fragment/15/position = Vector2(880, 780)
-nodes/fragment/16/node = SubResource("VisualShaderNodeFloatConstant_f0n8e")
+nodes/fragment/16/node = SubResource("VisualShaderNodeFloatConstant_hqcf5")
 nodes/fragment/16/position = Vector2(-1660, 280)
-nodes/fragment/17/node = SubResource("VisualShaderNodeFloatParameter_1gbav")
+nodes/fragment/17/node = SubResource("VisualShaderNodeFloatParameter_dry0a")
 nodes/fragment/17/position = Vector2(-1809.95, 419.028)
 nodes/fragment/connections = PackedInt32Array(3, 0, 2, 2, 2, 0, 5, 0, 4, 0, 6, 0, 6, 0, 7, 0, 7, 0, 2, 0, 7, 0, 9, 0, 3, 0, 9, 2, 10, 0, 9, 1, 9, 0, 11, 2, 5, 0, 11, 1, 12, 0, 14, 1, 13, 0, 14, 0, 11, 0, 15, 1, 14, 0, 15, 0, 15, 0, 0, 1, 17, 0, 2, 1, 17, 0, 10, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pppui"]
-shader = SubResource("VisualShader_wrj1p")
+shader = SubResource("VisualShader_t1ch2")
 shader_parameter/Circle = 0.195
 
 [sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_7uaq6"]
@@ -1311,12 +1086,6 @@ nodes/fragment/connections = PackedInt32Array(2, 0, 3, 2, 3, 4, 0, 1, 4, 0, 0, 0
 shader = SubResource("VisualShader_0virv")
 shader_parameter/Color = Color(0.4, 0.364706, 0.223529, 1)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_xunxg"]
-size = Vector2(154, 160)
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_mc43h"]
-radius = 357.972
-
 [sub_resource type="GDScript" id="GDScript_4ec3v"]
 script/source = "extends Node2D
 
@@ -1328,12 +1097,6 @@ func _ready():
 [node name="07_SCREEN_TOOLS" type="Node"]
 
 [node name="Photo_tools" type="Node" parent="."]
-
-[node name="Activation" type="Node" parent="Photo_tools"]
-script = SubResource("GDScript_8dmon")
-
-[node name="Slide" type="Node" parent="Photo_tools"]
-script = SubResource("GDScript_rihlu")
 
 [node name="Vignette_opacity" type="Node" parent="Photo_tools"]
 script = SubResource("GDScript_064xp")
@@ -1477,27 +1240,9 @@ position = Vector2(43, 49)
 scale = Vector2(0.046875, 0.046875)
 texture = ExtResource("1_pct16")
 
-[node name="Area2D" type="Area2D" parent="Photo_tools/Photo_tools/photo_UI_elements"]
-visible = false
-position = Vector2(1, 0)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Photo_tools/Photo_tools/photo_UI_elements/Area2D"]
-position = Vector2(-8, -6)
-shape = SubResource("RectangleShape2D_xunxg")
-
-[node name="Click_photo" type="Area2D" parent="Photo_tools/Photo_tools/photo_UI_elements"]
-position = Vector2(0, -292)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Photo_tools/Photo_tools/photo_UI_elements/Click_photo"]
-position = Vector2(1.5, -71)
-shape = SubResource("CircleShape2D_mc43h")
-
 [node name="Front_element" type="Node2D" parent="."]
 script = SubResource("GDScript_4ec3v")
 
 [connection signal="take_picture" from="Photo_tools/PHOTO_BEHAVIOUR" to="Photo_tools/PHOTO_BEHAVIOUR/Flash" method="_on_photo_behaviour_take_picture"]
 [connection signal="timeout" from="Photo_tools/PHOTO_BEHAVIOUR/Flash/Timer" to="Photo_tools/PHOTO_BEHAVIOUR/Flash" method="_on_timer_timeout"]
 [connection signal="timeout" from="Photo_tools/PHOTO_BEHAVIOUR/Timer" to="Photo_tools/PHOTO_BEHAVIOUR" method="_on_timer_timeout"]
-[connection signal="mouse_entered" from="Photo_tools/Photo_tools/photo_UI_elements/Area2D" to="Photo_tools/Slide" method="_on_area_2d_mouse_entered"]
-[connection signal="mouse_exited" from="Photo_tools/Photo_tools/photo_UI_elements/Area2D" to="Photo_tools/Slide" method="_on_area_2d_mouse_exited"]
-[connection signal="input_event" from="Photo_tools/Photo_tools/photo_UI_elements/Click_photo" to="Photo_tools/PHOTO_BEHAVIOUR" method="_on_click_photo_input_event"]

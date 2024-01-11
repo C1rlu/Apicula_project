@@ -96,13 +96,20 @@ script/source = "extends Node
 
 @onready var photo_prefab = preload(\"res://10_BOARD/Behaviour/Photo_square_prefabs.tscn\")
 @onready var photo_group = $\"../Control/Photo_group\"
-
+var _mirror_contact : bool = false
 
 func _ready():
 	_global_datas._take_photo.connect(_intance_photo)	
 	
+	_global_datas.player_mirror_contact.connect(func(condition):
+		_mirror_contact = condition
+	)
+	
 func _intance_photo():
-	print(\"INSTANCE PHOTO\")
+
+	if _mirror_contact:
+		return
+
 	var new_node = photo_prefab.instantiate()
 	photo_group.add_child(new_node)
 	
@@ -2124,6 +2131,7 @@ mouse_filter = 2
 color = Color(0.231373, 0.623529, 0.647059, 1)
 
 [node name="ColorRect9" type="ColorRect" parent="Control/Mirror_tools/Mirror_tools"]
+visible = false
 offset_left = -79.0
 offset_top = -43.0
 offset_right = 1.0
@@ -2133,6 +2141,7 @@ mouse_filter = 2
 color = Color(0.4, 0.364706, 0.223529, 1)
 
 [node name="ColorRect10" type="ColorRect" parent="Control/Mirror_tools/Mirror_tools"]
+visible = false
 material = SubResource("ShaderMaterial_in4e2")
 offset_left = -53.0
 offset_top = -39.0
@@ -2143,6 +2152,7 @@ mouse_filter = 2
 color = Color(0.0156863, 0.113725, 0.12549, 1)
 
 [node name="ColorRect11" type="ColorRect" parent="Control/Mirror_tools/Mirror_tools"]
+visible = false
 material = SubResource("ShaderMaterial_hr3yh")
 offset_left = -25.0
 offset_top = -5.0
@@ -2153,6 +2163,7 @@ mouse_filter = 2
 color = Color(0.0156863, 0.113725, 0.12549, 1)
 
 [node name="Area2D" type="Area2D" parent="Control/Mirror_tools/Mirror_tools"]
+visible = false
 position = Vector2(-195, 6)
 
 [node name="Apply_pos_behind" type="Node" parent="Control/Mirror_tools/Mirror_tools/Area2D"]

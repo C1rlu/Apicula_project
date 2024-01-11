@@ -10,6 +10,7 @@ func _input(event: InputEvent) -> void:
 		return
 	if _global_datas.Player_InMenu:
 		return		
+		
 	if !can_click:
 		return
 	if _global_datas.Player_InSubScene:
@@ -20,6 +21,10 @@ func _input(event: InputEvent) -> void:
 		
 
 func _on_mouse_entered():
+	
+	if _global_datas.Player_InDialogue_zone:
+		return
+	
 	if _global_datas.Player_lock_click:
 		return
 		
