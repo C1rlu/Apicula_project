@@ -1,6 +1,6 @@
 extends Node#
 
-
+var Main_Camera : Camera3D
 var player_position : Vector3
 var cell_name : String
 
@@ -21,6 +21,7 @@ signal _backFrom_subscene
 signal  _splash
 
 # scene signals
+
 signal _go_Mainscene
 signal _active_sonar
 signal _disable_sonar
@@ -30,7 +31,7 @@ signal _reseting_clock_active
 signal _reseting_clock_disable
 signal _active_go_subscene_button(condition : bool)
 signal _active_world_grid(condition : bool)
-
+signal _boat_contact(dir : Vector2,strenght : float)
 
 # dialogue signals
 signal in_dialogue_zone
