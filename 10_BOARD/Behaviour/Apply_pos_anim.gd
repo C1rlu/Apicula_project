@@ -22,7 +22,10 @@ func _contact_anim(pos : Vector2, strenght : float):
 		t.kill()
 	t = create_tween()
 	
-	dir = main_root.global_position + pos * (strenght * 15)
+	#dir = main_root.global_position + pos * (strenght * 15)
+	var random_x = randf_range(-5.0, 5.0)
+	var random_y = randf_range(-5.0, 5.0)
+	dir = main_root.global_position + Vector2(random_x,random_y)
 	start_pos = main_root.global_position
 	
 	var randomWaitTime = randf_range(0.1, 0.25)

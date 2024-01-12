@@ -21,7 +21,7 @@ var size : float
 var my_origin_parent : Node
 var show_map
 
-signal pos_anim
+var kill_on_pos : bool = false 
 
 var last_position : Vector2
 func _ready():
@@ -97,6 +97,12 @@ func _unselect_element(condition : bool, move_behind_c : bool):
 	_scale_change(size)
 	_global_datas.using_board_disable.emit()
 	
+	# KILL IF BOUGIE ON IT 
+	if kill_on_pos:
+		var burn_it = area_2d.get_node_or_null("I_Burn")
+		if burn_it != null:
+			burn_it._destroy()	
+				
 	if show_map != null : _global_datas._active_world_grid.emit(false)
 	
 	if !condition:
@@ -129,9 +135,13 @@ func _unselect_element(condition : bool, move_behind_c : bool):
 
 	if !move_behind_c:
 		return
-	pos_anim.emit()
+	
+	
 	move_behind()
 	_global_datas.lock_page.emit()
+	
+	
+	
 		
 func _notification(what):
 	#if what == NOTIFICATION_WM_FOCUS_IN:

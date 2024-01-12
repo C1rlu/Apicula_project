@@ -1877,6 +1877,7 @@ anchors_preset = 0
 mouse_filter = 2
 
 [node name="Map" parent="Control/Map_Parent" instance=ExtResource("3_fbqjn")]
+position = Vector2(1918, 3.99996)
 
 [node name="Bougie_zone" type="Control" parent="Control"]
 anchors_preset = 0
@@ -1896,10 +1897,6 @@ script = ExtResource("3_yssyu")
 
 [node name="Apply_pos_anim" type="Node" parent="Control/Bougie_zone/Bougie"]
 script = ExtResource("4_ueoox")
-
-[node name="Timer" type="Timer" parent="Control/Bougie_zone/Bougie/Apply_pos_anim"]
-wait_time = 0.25
-one_shot = true
 
 [node name="Light_b" type="TextureRect" parent="Control/Bougie_zone/Bougie"]
 texture_filter = 1
@@ -2109,10 +2106,6 @@ script = ExtResource("3_yssyu")
 [node name="Apply_pos_anim" type="Node" parent="Control/Mirror_tools/Mirror_tools"]
 script = ExtResource("4_ueoox")
 
-[node name="Timer" type="Timer" parent="Control/Mirror_tools/Mirror_tools/Apply_pos_anim"]
-wait_time = 0.25
-one_shot = true
-
 [node name="Photo_circle3" type="ColorRect" parent="Control/Mirror_tools/Mirror_tools"]
 visible = false
 material = SubResource("ShaderMaterial_5gumq")
@@ -2255,14 +2248,10 @@ color = Color(0.0156863, 0.0705882, 0.0823529, 1)
 [connection signal="timeout" from="USING_BOOK/Timer" to="USING_BOOK" method="_on_timer_timeout"]
 [connection signal="timeout" from="USING_BOOK/Timer_out" to="USING_BOOK" method="_on_timer_out_timeout"]
 [connection signal="timeout" from="TELEPORT/Timer" to="TELEPORT" method="_on_timer_timeout"]
-[connection signal="pos_anim" from="Control/Bougie_zone/Bougie/Take_object" to="Control/Bougie_zone/Bougie/Apply_pos_anim" method="_on_take_object_pos_anim"]
-[connection signal="timeout" from="Control/Bougie_zone/Bougie/Apply_pos_anim/Timer" to="Control/Bougie_zone/Bougie/Apply_pos_anim" method="_on_timer_timeout"]
 [connection signal="area_shape_entered" from="Control/Bougie_zone/Bougie/Area2D" to="Control/Bougie_zone/Bougie/Burn_Paper" method="_on_area_2d_area_shape_entered"]
 [connection signal="area_shape_exited" from="Control/Bougie_zone/Bougie/Area2D" to="Control/Bougie_zone/Bougie/Burn_Paper" method="_on_area_2d_area_shape_exited"]
 [connection signal="mouse_entered" from="Control/Bougie_zone/Bougie/Area2D" to="Control/Bougie_zone/Bougie/Take_object" method="_on_area_2d_mouse_entered"]
 [connection signal="mouse_exited" from="Control/Bougie_zone/Bougie/Area2D" to="Control/Bougie_zone/Bougie/Take_object" method="_on_area_2d_mouse_exited"]
-[connection signal="pos_anim" from="Control/Mirror_tools/Mirror_tools/Take_object" to="Control/Mirror_tools/Mirror_tools/Apply_pos_anim" method="_on_take_object_pos_anim"]
-[connection signal="timeout" from="Control/Mirror_tools/Mirror_tools/Apply_pos_anim/Timer" to="Control/Mirror_tools/Mirror_tools/Apply_pos_anim" method="_on_timer_timeout"]
 [connection signal="mouse_entered" from="Control/Mirror_tools/Mirror_tools/Area2D" to="Control/Mirror_tools/Mirror_tools/Take_object" method="_on_area_2d_mouse_entered"]
 [connection signal="mouse_exited" from="Control/Mirror_tools/Mirror_tools/Area2D" to="Control/Mirror_tools/Mirror_tools/Take_object" method="_on_area_2d_mouse_exited"]
 [connection signal="move_behind" from="Control/Mirror_tools/Mirror_tools/Area2D/Apply_pos_behind" to="Control/Mirror_tools/Mirror_tools/Apply_pos_anim" method="_on_apply_pos_behind_move_behind"]
