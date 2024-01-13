@@ -103,6 +103,8 @@ var instance_word_text : Node
 # dialogue datas
 var Npc_Dialogue : Npc_datas
 
+#--- NOTES
 
+signal _call_note
 
 
