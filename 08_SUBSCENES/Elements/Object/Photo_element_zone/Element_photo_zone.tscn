@@ -1,0 +1,124 @@
+[gd_scene load_steps=7 format=3 uid="uid://dsxxkrrojuufd"]
+
+[ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="1_u0005"]
+[ext_resource type="Material" uid="uid://cn332nru0mo53" path="res://05_SHADER_TEST/Subscene_materials/MouseOver_element.tres" id="2_8xbum"]
+
+[sub_resource type="GDScript" id="GDScript_sg1xi"]
+script/source = "extends Node
+
+@onready var render = $\"../Render\"
+@onready var clic_to_photo = $\"../Clic_to_Photo\"
+
+
+# HERE I ACTIVE THE CLICK PHOTO IF PLAYER IS NEAR ENOUGH
+
+
+func _active_me(condition : bool):
+
+	clic_to_photo._active(condition)
+
+
+func _on_element_photo_prefabs_2_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
+	
+	var player = area.get_node_or_null(\"Player_photoActive\")
+	if player:
+		_active_me(true)	
+
+
+func _on_element_photo_prefabs_2_area_shape_exited(area_rid, area, area_shape_index, local_shape_index):
+	
+	var player = area.get_node_or_null(\"Player_photoActive\")
+	if player:
+		_active_me(false)		
+"
+
+[sub_resource type="GDScript" id="GDScript_a6n46"]
+script/source = "extends Node
+
+
+var _is_active : bool = false
+@onready var photo_me_effect = $\"../photo_me_effect\"
+
+
+## ACTIVE CLICK --------------------
+
+func _active(condition : bool):
+	
+	_is_active = condition
+	#photo_me_effect.visible = condition
+	
+	if !_is_active:
+		_global_datas.Cursor_mode.cursor_out()	
+	
+			
+func _on_element_photo_prefabs_3_mouse_entered():
+	if !_is_active:
+		return
+	_global_datas.Cursor_mode.cursor_in()
+
+
+func _on_element_photo_prefabs_3_mouse_exited():
+	if !_is_active:
+		return
+	_global_datas.Cursor_mode.cursor_out()
+
+	
+## CLICK TO PHOTO INPUT --------------------
+
+
+
+
+func _on_element_photo_prefabs_3_input_event(camera, event, position, normal, shape_idx):
+	
+	if !_global_datas.Player_InSubScene:
+		return
+	
+	if _global_datas.Player_lock_click == true:
+		return
+
+	if !_is_active:
+		return		
+		
+	if event.is_action_pressed(\"Click\"):
+		_global_datas._forreuse_on.emit()
+		
+
+"
+
+[sub_resource type="TorusMesh" id="TorusMesh_5h5pd"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_we1hc"]
+radius = 0.219733
+
+[node name="Element_photo_prefabs3" type="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.350665, -1.1246, -2.38419e-07)
+collision_layer = 4
+collision_mask = 4
+
+[node name="Active_photo_Clic" type="Node" parent="."]
+script = SubResource("GDScript_sg1xi")
+
+[node name="Clic_to_Photo" type="Node" parent="."]
+script = SubResource("GDScript_a6n46")
+
+[node name="Render" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.215744, 0, 0, 0, 0.0934202, -0.194469, 0, 0.194469, 0.0934202, 0, 0, 0)
+layers = 4
+mesh = SubResource("TorusMesh_5h5pd")
+surface_material_override/0 = ExtResource("1_u0005")
+
+[node name="photo_me_effect" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.237253, 0, 0, 0, 0.122421, -0.213857, 0, 0.254839, 0.102734, 0, 0, 0)
+visible = false
+layers = 4
+mesh = SubResource("TorusMesh_5h5pd")
+surface_material_override/0 = ExtResource("2_8xbum")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_we1hc")
+
+[connection signal="area_shape_entered" from="." to="Active_photo_Clic" method="_on_element_photo_prefabs_2_area_shape_entered"]
+[connection signal="area_shape_exited" from="." to="Active_photo_Clic" method="_on_element_photo_prefabs_2_area_shape_exited"]
+[connection signal="input_event" from="." to="Clic_to_Photo" method="_on_element_photo_prefabs_3_input_event"]
+[connection signal="mouse_entered" from="." to="Clic_to_Photo" method="_on_element_photo_prefabs_3_mouse_entered"]
+[connection signal="mouse_exited" from="." to="Clic_to_Photo" method="_on_element_photo_prefabs_3_mouse_exited"]

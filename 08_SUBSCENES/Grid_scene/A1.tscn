@@ -1,9 +1,10 @@
-[gd_scene load_steps=36 format=3 uid="uid://bdnl7k72gp6so"]
+[gd_scene load_steps=37 format=3 uid="uid://bdnl7k72gp6so"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/Grid_scene/Mirror_elements.gd" id="1_agkx2"]
 [ext_resource type="PackedScene" uid="uid://bneebc6fpaysa" path="res://08_SUBSCENES/Elements/Ice/ice_msh_01.tscn" id="1_eihyl"]
 [ext_resource type="Material" uid="uid://ca5hr6jiqhjq1" path="res://05_SHADER_TEST/Subscene_materials/element_subscene_sonar_mat.tres" id="1_ty7gw"]
 [ext_resource type="PackedScene" uid="uid://chipng023vh22" path="res://08_SUBSCENES/Elements/Ice/ice_msh_01_far.tscn" id="2_jg4dq"]
+[ext_resource type="PackedScene" uid="uid://dsxxkrrojuufd" path="res://08_SUBSCENES/Elements/Object/Photo_element_zone/Element_photo_zone.tscn" id="2_pht0v"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_ic6q1"]
 
@@ -31,12 +32,12 @@ script/source = "extends Node
 
 func _change_value(value : float):
 	
-	var clamp = clampf(value,0.0,0.7)
+	#var clamp = clampf(value,0.0,0.7)
 	material.set_shader_parameter(\"Opacity\",value*2)
 "
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_we1hc"]
-radius = 0.107249
+radius = 0.219733
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_jboo4"]
 parameter_name = "Subscene_Darker_color"
@@ -375,6 +376,11 @@ script = SubResource("GDScript_k5jev")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Static/Mirror_vortex/Mirror_prefabs2"]
 shape = SubResource("SphereShape3D_we1hc")
+
+[node name="Element_photo_zone" parent="Static/Mirror_vortex" instance=ExtResource("2_pht0v")]
+
+[node name="Element_photo_zone2" parent="Static/Mirror_vortex" instance=ExtResource("2_pht0v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.948512, -0.666421, -2.38419e-07)
 
 [node name="Mirror_elements" type="Node" parent="Static"]
 script = ExtResource("1_agkx2")

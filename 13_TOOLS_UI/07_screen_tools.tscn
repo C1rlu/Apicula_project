@@ -66,6 +66,7 @@ var _process_timer = false
 
 
 signal take_picture
+@onready var photo_tools = $\"../Photo_tools\"
 
 func _ready():
 	_global_datas._forreuse_on.connect(_active)
@@ -91,9 +92,13 @@ func _active():
 	if _global_datas.Player_lock_click == true:
 		return
 			
+		
 	photo_circle.visible = true
 	timer.start()
 	_global_datas.Player_lock_click = true		
+	
+	_change_effect_position()
+	
 	
 func _disable():
 	
@@ -119,6 +124,10 @@ func _on_timer_timeout():
 	_global_datas.Player_lock_click = false
 	
 	
+func _change_effect_position():
+	var p_pos = get_viewport().get_mouse_position()
+	photo_tools.position = p_pos
+	_global_datas._photo_position = p_pos
 "
 
 [sub_resource type="GDScript" id="GDScript_xsufx"]
@@ -797,7 +806,7 @@ mouse_filter = 2
 color = Color(0.0313726, 0.0941176, 0.0941176, 1)
 
 [node name="Photo_tools" type="Node2D" parent="Photo_tools"]
-position = Vector2(960, 900)
+position = Vector2(960, 540)
 
 [node name="photo_UI_elements" type="Control" parent="Photo_tools/Photo_tools"]
 layout_mode = 3
@@ -821,9 +830,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -960.0
-offset_top = -903.0
+offset_top = -533.0
 offset_right = 960.0
-offset_bottom = 177.0
+offset_bottom = 547.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -838,9 +847,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -960.0
-offset_top = -914.0
+offset_top = -544.0
 offset_right = 960.0
-offset_bottom = 166.0
+offset_bottom = 536.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2

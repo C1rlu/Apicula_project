@@ -221,8 +221,7 @@ func _input(event: InputEvent):
 	if event.is_action_released(\"Click\"):
 
 		_global_datas._forreuse_off.emit()	
-		_global_datas.Cursor_mode.cursor_in()
-		
+
 		
 func _on_mouse_click_mouse_entered():
 	if _global_datas.Player_lock_click:
@@ -273,7 +272,7 @@ script/source = "extends Node
 @onready var on_over_mouse_3d_shape = $\"../../On_OverMouse_3D_SHAPE\"
 
 
-@onready var scale = on_over_mouse_3d_shape.scale.x
+@onready var n_scale = on_over_mouse_3d_shape.scale.x
 
 
 
@@ -285,17 +284,17 @@ func _ready():
 
 func _grow():
 	
-	_change_scale(scale * 1.2)
+	_change_scale(n_scale * 1.2)
 
 	
 func _normal_scale():
 	
-	_change_scale(scale)
+	_change_scale(n_scale)
 	
 	
-func _change_scale(scale : float):
-	var n_scale = Vector3(scale , scale ,scale)
-	on_over_mouse_3d_shape.scale = n_scale		
+func _change_scale(_scale : float):
+	var a_scale = Vector3(_scale , _scale ,_scale)
+	on_over_mouse_3d_shape.scale = a_scale		
 
 
 "
@@ -1368,7 +1367,7 @@ script = ExtResource("1_o2v73")
 move_speed = 8.0
 startPos = Vector3(0, 1, 0)
 
-[node name="Main_collider" type="CollisionShape3D" parent="."]
+[node name="Player_sub_collider" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.121499, 0)
 shape = SubResource("CapsuleShape3D_lp7h6")
 
@@ -1428,14 +1427,14 @@ transform = Transform3D(-2.81695e-09, -0.114378, 0, 0.0644443, -4.99964e-09, 0, 
 transform = Transform3D(0.477894, -7.10543e-15, 0, 4.44089e-15, 0.477894, 0, 0, 0, 0.477894, 0, 0, 0.236441)
 layers = 4
 mesh = SubResource("BoxMesh_4k8qy")
-skeleton = NodePath("../../../Main_collider")
+skeleton = NodePath("../../../Player_sub_collider")
 surface_material_override/0 = ExtResource("2_qbhbx")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="Render_mesh/Photographe"]
 transform = Transform3D(0.690044, 0, 0, 0, 0.690044, 0, 0, 0, 0.690044, 0, 0, 0)
 layers = 4
 mesh = SubResource("BoxMesh_8junt")
-skeleton = NodePath("../../../Main_collider")
+skeleton = NodePath("../../../Player_sub_collider")
 surface_material_override/0 = ExtResource("1_n1vw4")
 
 [node name="Anim" type="Node3D" parent="Render_mesh"]
@@ -1545,10 +1544,12 @@ surface_material_override/0 = SubResource("ShaderMaterial_k4fog")
 
 [node name="Mouse_Click" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.121499, 0)
+visible = false
 collision_priority = 10.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Mouse_Click"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -0.00695992)
+visible = false
 shape = SubResource("SphereShape3D_j5jpl")
 
 [node name="Magnet_zone" type="Area3D" parent="."]
@@ -1556,6 +1557,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.121499, 0)
 collision_layer = 4
 collision_mask = 4
 input_ray_pickable = false
+
+[node name="Player_photoActive" type="Node" parent="Magnet_zone"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Magnet_zone"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -7.45058e-09, 0.16387)

@@ -63,8 +63,8 @@ func _update_sonar_Alarm():
 		
 	var distance = player_sub.position.distance_to(closest_element._position())
 	
-	var lerp = lerpf(0.05,1.0,distance/5)
-	timer_alarm.wait_time = lerp
+	var _lerp = lerpf(0.05,1.0,distance/5)
+	timer_alarm.wait_time = _lerp
 
 func _Alarm_pulse():
 	

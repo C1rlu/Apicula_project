@@ -52,6 +52,7 @@ signal get_raycastPosition
 var subbscene_playerPosition : Vector3
 
 signal _take_photo
+var _photo_position : Vector2
 signal _forreuse_on
 signal _forreuse_off
 signal _forreuse_impact
@@ -59,11 +60,10 @@ signal _spawn_empty_oxygene
 signal _teleport_position(position : Vector3)
 signal _find_loot(type : Loot_Data)
 var _forreuse_impact_origin : Vector3
-var _magnet_strenght : float
 
 func _ready():
 	_forreuse_impact_origin = Vector3.ZERO
-	
+	_photo_position = Vector2.ZERO
 	
 #board scene
 
