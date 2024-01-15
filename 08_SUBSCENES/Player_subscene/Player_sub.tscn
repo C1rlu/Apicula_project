@@ -218,6 +218,10 @@ var is_active = true
 		
 func _input(event: InputEvent):
 
+	if event.is_action_pressed(\"Click\"):
+		_global_datas._forreuse_on.emit()
+
+
 	if event.is_action_released(\"Click\"):
 
 		_global_datas._forreuse_off.emit()	
@@ -275,9 +279,6 @@ script/source = "extends Node
 
 @onready var n_scale = on_over_mouse_3d_shape.scale.x
 
-
-
-var t
 
 func _ready():
 	_global_datas._forreuse_on.connect(_grow)
@@ -1545,6 +1546,7 @@ surface_material_override/0 = SubResource("ShaderMaterial_k4fog")
 
 [node name="Mouse_Click" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.121499, 0)
+visible = false
 collision_priority = 10.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Mouse_Click"]

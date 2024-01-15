@@ -1326,6 +1326,7 @@ script/source = "extends Node
 @onready var photo_circle = $\"../Photo_circle\"
 
 @onready var material : Material = photo_circle.get_material()
+@onready var switch_mirror_fx = $\"..\"
 
 var t
 var is_round = true
@@ -1337,6 +1338,11 @@ func _start_effect(condition):
 	photo_circle.visible = true
 	is_round = !is_round
 	material.set_shader_parameter(\"Round_noise\",is_round)
+	
+	var n_position = get_viewport().get_mouse_position()
+	
+	switch_mirror_fx.position = n_position
+	
 	if t:
 		t.kill()
 	t = create_tween()
@@ -1657,27 +1663,27 @@ script/source = "extends Node
 @onready var can_click_here_root = $Can_click_here_root
 var _is_active : bool = false
 
-var _active_position : Vector3
-
 func _ready():
-	_global_datas._click_ui_selector.connect(_set_position)
+
 	can_click_here_root.visible = false
 	
-func _set_position(condition : bool, _position : Vector3):
+	_global_datas._go_Subscene.connect(func active():
+		_is_active = true	
+		can_click_here_root.visible = true	
+	)	
 	
-	_active_position = _position	
-	can_click_here_root.visible = condition
-	_is_active = condition
-
+	_global_datas._backFrom_subscene.connect(func disable():
+		_is_active = false		
+		can_click_here_root.visible = false		
+	)
 	
 func _process(delta):
 	
 	if !_is_active:
 		return	
-		
-	var camera = _global_datas.Subscene_Camera	
-	var screen_position = camera.unproject_position(_active_position)
-	can_click_here_root.position = screen_position
+	
+	var mouse_position = get_viewport().get_mouse_position()
+	can_click_here_root.position = mouse_position
 	
 "
 
@@ -2141,7 +2147,7 @@ stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="SUBSCENES_CAM_SCENE"]
 handle_input_locally = false
-size = Vector2i(1920, 1080)
+size = Vector2i(1280, 720)
 render_target_update_mode = 0
 
 [node name="CAM_STATE_BOAT_root" type="Node3D" parent="SUBSCENES_CAM_SCENE/SubViewport" node_paths=PackedStringArray("Player_position")]
@@ -2168,7 +2174,7 @@ script = SubResource("GDScript_6jk87")
 [node name="SubViewport" type="SubViewport" parent="SUBSCENES_CAM_SCANNER"]
 transparent_bg = true
 handle_input_locally = false
-size = Vector2i(1920, 1080)
+size = Vector2i(1280, 720)
 render_target_update_mode = 0
 
 [node name="CAM_STATE_BOAT_root" type="Node3D" parent="SUBSCENES_CAM_SCANNER/SubViewport" node_paths=PackedStringArray("Player_position")]
@@ -2194,7 +2200,7 @@ stretch = true
 [node name="SubViewport" type="SubViewport" parent="SUBSCENES_CAM_SCANNER_X"]
 transparent_bg = true
 handle_input_locally = false
-size = Vector2i(1920, 1080)
+size = Vector2i(1280, 720)
 render_target_update_mode = 0
 
 [node name="CAM_STATE_BOAT_root" type="Node3D" parent="SUBSCENES_CAM_SCANNER_X/SubViewport" node_paths=PackedStringArray("Player_position")]
@@ -2264,23 +2270,21 @@ script = SubResource("GDScript_2wlt5")
 shape = SubResource("BoxShape3D_yhyn7")
 
 [node name="SWITCH_MIRROR_FX" type="Node2D" parent="."]
-position = Vector2(958, 909)
 
 [node name="Switch_effect" type="Node" parent="SWITCH_MIRROR_FX"]
 script = SubResource("GDScript_qqsny")
 
 [node name="Photo_circle" type="ColorRect" parent="SWITCH_MIRROR_FX"]
-visible = false
 material = SubResource("ShaderMaterial_77tah")
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -960.0
-offset_top = -903.0
-offset_right = 960.0
-offset_bottom = 177.0
+offset_left = -943.0
+offset_top = -556.0
+offset_right = 977.0
+offset_bottom = 524.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2

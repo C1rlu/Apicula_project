@@ -49,11 +49,14 @@ script/source = "extends Node
 
 var _is_active : bool = false
 
+@onready var collision_shape_3d = $\"../../CollisionShape3D\"
 
 
 ## ACTIVE CLICK --------------------
 
 func _active(condition : bool):
+	
+	return
 	
 	_is_active = condition
 	
@@ -70,7 +73,7 @@ func _active(condition : bool):
 		if distance < 50:
 			_global_datas._click_ui_selector.emit(true,root.global_position)	
 		
-		print(distance)
+		#print(distance)
 		
 		
 func _on_mirror_prefabs_mouse_entered():
@@ -100,10 +103,15 @@ func _on_mirror_prefabs_input_event(camera, event, position, normal, shape_idx):
 		return		
 		
 	if event.is_action_pressed(\"Click\"):
-		
-
+	
 		_global_datas._click_mirror_switch.emit()
-		
+		collision_shape_3d.disabled = true
+
+	
+func _input(event: InputEvent):
+
+	if event.is_action_released(\"Click\"):
+		collision_shape_3d.disabled = false
 "
 
 [sub_resource type="GDScript" id="GDScript_uj8ey"]

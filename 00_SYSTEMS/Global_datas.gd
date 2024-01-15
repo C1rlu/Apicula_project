@@ -95,7 +95,7 @@ signal active_scanner_button(condition : bool)
 signal active_mirror_switch(condition : bool)
 signal _click_mirror_switch 
 signal player_mirror_contact(condition : bool)
-signal _click_ui_selector(condition : bool, world_position : Vector3)
+
 
 var scanner_mat : Material
 var teleport_pos : Array
