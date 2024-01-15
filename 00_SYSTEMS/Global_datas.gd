@@ -1,6 +1,7 @@
 extends Node#
 
 var Main_Camera : Camera3D
+var Subscene_Camera : Camera3D
 var player_position : Vector3
 var cell_name : String
 
@@ -94,6 +95,7 @@ signal active_scanner_button(condition : bool)
 signal active_mirror_switch(condition : bool)
 signal _click_mirror_switch 
 signal player_mirror_contact(condition : bool)
+signal _click_ui_selector(condition : bool, world_position : Vector3)
 
 var scanner_mat : Material
 var teleport_pos : Array
@@ -102,9 +104,5 @@ var instance_word_text : Node
 #-----------------------------
 # dialogue datas
 var Npc_Dialogue : Npc_datas
-
-#--- NOTES
-
-signal _call_note
 
 

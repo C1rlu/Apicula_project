@@ -1,12 +1,110 @@
-[gd_scene load_steps=37 format=3 uid="uid://bdnl7k72gp6so"]
+[gd_scene load_steps=44 format=3 uid="uid://bdnl7k72gp6so"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/Grid_scene/Mirror_elements.gd" id="1_agkx2"]
 [ext_resource type="PackedScene" uid="uid://bneebc6fpaysa" path="res://08_SUBSCENES/Elements/Ice/ice_msh_01.tscn" id="1_eihyl"]
 [ext_resource type="Material" uid="uid://ca5hr6jiqhjq1" path="res://05_SHADER_TEST/Subscene_materials/element_subscene_sonar_mat.tres" id="1_ty7gw"]
 [ext_resource type="PackedScene" uid="uid://chipng023vh22" path="res://08_SUBSCENES/Elements/Ice/ice_msh_01_far.tscn" id="2_jg4dq"]
 [ext_resource type="PackedScene" uid="uid://dsxxkrrojuufd" path="res://08_SUBSCENES/Elements/Object/Photo_element_zone/Element_photo_zone.tscn" id="2_pht0v"]
+[ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_elements_mat.tres" id="2_rq6da"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_ic6q1"]
+
+[sub_resource type="GDScript" id="GDScript_i86bt"]
+script/source = "extends Node
+
+
+@onready var clic_to_mirror = $Clic_to_mirror
+@onready var gpu_particles_3d : GPUParticles3D = $\"../GPUParticles3D\"
+
+# HERE I ACTIVE THE CLICK PHOTO IF PLAYER IS NEAR ENOUGH
+
+
+
+func _active_me(condition : bool):
+
+	clic_to_mirror._active(condition)
+	gpu_particles_3d.emitting = condition
+
+	
+func _on_mirror_prefabs_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
+	
+	var player = area.get_node_or_null(\"Player_photoActive\")
+	if player:
+		_active_me(true)	
+		#check if mouse is inside shape
+		
+
+func _on_mirror_prefabs_area_shape_exited(area_rid, area, area_shape_index, local_shape_index):
+
+	var player = area.get_node_or_null(\"Player_photoActive\")
+	if player:
+		_active_me(false)		
+	
+"
+
+[sub_resource type="GDScript" id="GDScript_lmjvv"]
+script/source = "extends Node
+
+@onready var root = $\"../..\"
+
+var _is_active : bool = false
+
+
+
+## ACTIVE CLICK --------------------
+
+func _active(condition : bool):
+	
+	_is_active = condition
+	
+	if !condition:
+		_global_datas._click_ui_selector.emit(false,Vector3.ZERO)
+	else:
+		
+		# check if mouse is alredy in zone
+		var camera = _global_datas.Subscene_Camera	
+		var root_screen_position = camera.unproject_position(root.global_position)
+		var mouse_position = get_viewport().get_mouse_position()
+		var distance = mouse_position.distance_to(root_screen_position)
+		
+		if distance < 50:
+			_global_datas._click_ui_selector.emit(true,root.global_position)	
+		
+		print(distance)
+		
+		
+func _on_mirror_prefabs_mouse_entered():
+	
+	if _global_datas.Player_lock_click:
+		return
+	
+	if !_is_active:
+		return
+	_global_datas._click_ui_selector.emit(true,root.global_position)
+
+
+func _on_mirror_prefabs_mouse_exited():
+	
+	if _is_active:
+		_global_datas._click_ui_selector.emit(false,Vector3.ZERO)
+	
+## CLICK TO PHOTO INPUT --------------------
+
+
+func _on_mirror_prefabs_input_event(camera, event, position, normal, shape_idx):
+	
+	if !_global_datas.Player_InSubScene:
+		return
+	
+	if !_is_active:
+		return		
+		
+	if event.is_action_pressed(\"Click\"):
+		
+
+		_global_datas._click_mirror_switch.emit()
+		
+"
 
 [sub_resource type="GDScript" id="GDScript_uj8ey"]
 script/source = "extends Node
@@ -37,7 +135,30 @@ func _change_value(value : float):
 "
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_we1hc"]
-radius = 0.219733
+radius = 0.155206
+
+[sub_resource type="Curve" id="Curve_12bes"]
+_data = [Vector2(0, 0.315789), 0.0, 0.0, 0, 0, Vector2(0.541176, 0.631579), 0.0, 0.0, 0, 0, Vector2(0.997059, 0.410526), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_32gfk"]
+curve = SubResource("Curve_12bes")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_80b6w"]
+emission_shape = 1
+emission_sphere_radius = 0.3
+direction = Vector3(1, 0.23, 0)
+spread = 82.58
+gravity = Vector3(0, 0.305, 0)
+initial_velocity_min = 0.01
+initial_velocity_max = 0.01
+scale_curve = SubResource("CurveTexture_32gfk")
+
+[sub_resource type="SphereMesh" id="SphereMesh_cpk6g"]
+radius = 0.025
+height = 0.05
+radial_segments = 4
+rings = 4
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_jboo4"]
 parameter_name = "Subscene_Darker_color"
@@ -335,10 +456,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.15111, 0)
 [node name="Mirror_vortex" type="Node" parent="Static"]
 
 [node name="Mirror_prefabs" type="Area3D" parent="Static/Mirror_vortex"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.123556, -5.46284, 0)
-collision_layer = 4
-collision_mask = 4
-input_ray_pickable = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.444128, -5.30668, 0)
+collision_layer = 6
+collision_mask = 6
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Static/Mirror_vortex/Mirror_prefabs"]
 transform = Transform3D(0.0768515, 0, 0, 0, 0.0768515, 0, 0, 0, 0.0768515, 0, 0, 0)
@@ -346,6 +466,12 @@ layers = 4096
 mesh = SubResource("SphereMesh_ic6q1")
 skeleton = NodePath("../../Mirror_prefabs2")
 surface_material_override/0 = ExtResource("1_ty7gw")
+
+[node name="Active_Mirror_Clic" type="Node" parent="Static/Mirror_vortex/Mirror_prefabs"]
+script = SubResource("GDScript_i86bt")
+
+[node name="Clic_to_mirror" type="Node" parent="Static/Mirror_vortex/Mirror_prefabs/Active_Mirror_Clic"]
+script = SubResource("GDScript_lmjvv")
 
 [node name="Mirror" type="Node" parent="Static/Mirror_vortex/Mirror_prefabs"]
 script = SubResource("GDScript_uj8ey")
@@ -355,6 +481,63 @@ script = SubResource("GDScript_k5jev")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Static/Mirror_vortex/Mirror_prefabs"]
 shape = SubResource("SphereShape3D_we1hc")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="Static/Mirror_vortex/Mirror_prefabs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.146686, 0)
+layers = 4096
+material_override = ExtResource("2_rq6da")
+emitting = false
+amount = 5
+lifetime = 0.5
+speed_scale = 0.5
+fixed_fps = 6
+interpolate = false
+fract_delta = false
+visibility_aabb = AABB(-0.5, -0.5, -0.5, 1, 1, 1)
+process_material = SubResource("ParticleProcessMaterial_80b6w")
+draw_pass_1 = SubResource("SphereMesh_cpk6g")
+
+[node name="Mirror_prefabs3" type="Area3D" parent="Static/Mirror_vortex"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.444128, -0.47566, 0)
+collision_layer = 6
+collision_mask = 6
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Static/Mirror_vortex/Mirror_prefabs3"]
+transform = Transform3D(0.0768515, 0, 0, 0, 0.0768515, 0, 0, 0, 0.0768515, 0, 0, 0)
+layers = 4096
+mesh = SubResource("SphereMesh_ic6q1")
+skeleton = NodePath("../../Mirror_prefabs2")
+surface_material_override/0 = ExtResource("1_ty7gw")
+
+[node name="Active_Mirror_Clic" type="Node" parent="Static/Mirror_vortex/Mirror_prefabs3"]
+script = SubResource("GDScript_i86bt")
+
+[node name="Clic_to_mirror" type="Node" parent="Static/Mirror_vortex/Mirror_prefabs3/Active_Mirror_Clic"]
+script = SubResource("GDScript_lmjvv")
+
+[node name="Mirror" type="Node" parent="Static/Mirror_vortex/Mirror_prefabs3"]
+script = SubResource("GDScript_uj8ey")
+
+[node name="Opacity" type="Node" parent="Static/Mirror_vortex/Mirror_prefabs3/Mirror"]
+script = SubResource("GDScript_k5jev")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Static/Mirror_vortex/Mirror_prefabs3"]
+shape = SubResource("SphereShape3D_we1hc")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="Static/Mirror_vortex/Mirror_prefabs3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.146686, 0)
+layers = 4096
+material_override = ExtResource("2_rq6da")
+emitting = false
+amount = 5
+lifetime = 0.5
+speed_scale = 0.5
+fixed_fps = 6
+interpolate = false
+fract_delta = false
+visibility_aabb = AABB(-0.5, -0.5, -0.5, 1, 1, 1)
+process_material = SubResource("ParticleProcessMaterial_80b6w")
+draw_pass_1 = SubResource("SphereMesh_cpk6g")
 
 [node name="Mirror_prefabs2" type="Area3D" parent="Static/Mirror_vortex"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.25209, -5.54036, 0)
@@ -378,9 +561,10 @@ script = SubResource("GDScript_k5jev")
 shape = SubResource("SphereShape3D_we1hc")
 
 [node name="Element_photo_zone" parent="Static/Mirror_vortex" instance=ExtResource("2_pht0v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.308978, -1.70684, 0)
 
 [node name="Element_photo_zone2" parent="Static/Mirror_vortex" instance=ExtResource("2_pht0v")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.948512, -0.666421, -2.38419e-07)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0677, -1.11846, -2.38419e-07)
 
 [node name="Mirror_elements" type="Node" parent="Static"]
 script = ExtResource("1_agkx2")
@@ -462,3 +646,14 @@ transform = Transform3D(0.00839357, -0.622641, -0.00378231, 0.3399, 0.0138865, 0
 
 [node name="Ice_msh_11_far4" parent="Static" instance=ExtResource("2_jg4dq")]
 transform = Transform3D(0.00839357, -0.86876, -0.0122029, 0.3399, 0.0193756, 0.0315205, -0.0258444, -0.027307, 0.410593, 3.79209, 0.0663699, -1.97513)
+
+[connection signal="area_shape_entered" from="Static/Mirror_vortex/Mirror_prefabs" to="Static/Mirror_vortex/Mirror_prefabs/Active_Mirror_Clic" method="_on_mirror_prefabs_area_shape_entered"]
+[connection signal="area_shape_exited" from="Static/Mirror_vortex/Mirror_prefabs" to="Static/Mirror_vortex/Mirror_prefabs/Active_Mirror_Clic" method="_on_mirror_prefabs_area_shape_exited"]
+[connection signal="input_event" from="Static/Mirror_vortex/Mirror_prefabs" to="Static/Mirror_vortex/Mirror_prefabs/Active_Mirror_Clic/Clic_to_mirror" method="_on_mirror_prefabs_input_event"]
+[connection signal="mouse_entered" from="Static/Mirror_vortex/Mirror_prefabs" to="Static/Mirror_vortex/Mirror_prefabs/Active_Mirror_Clic/Clic_to_mirror" method="_on_mirror_prefabs_mouse_entered"]
+[connection signal="mouse_exited" from="Static/Mirror_vortex/Mirror_prefabs" to="Static/Mirror_vortex/Mirror_prefabs/Active_Mirror_Clic/Clic_to_mirror" method="_on_mirror_prefabs_mouse_exited"]
+[connection signal="area_shape_entered" from="Static/Mirror_vortex/Mirror_prefabs3" to="Static/Mirror_vortex/Mirror_prefabs3/Active_Mirror_Clic" method="_on_mirror_prefabs_area_shape_entered"]
+[connection signal="area_shape_exited" from="Static/Mirror_vortex/Mirror_prefabs3" to="Static/Mirror_vortex/Mirror_prefabs3/Active_Mirror_Clic" method="_on_mirror_prefabs_area_shape_exited"]
+[connection signal="input_event" from="Static/Mirror_vortex/Mirror_prefabs3" to="Static/Mirror_vortex/Mirror_prefabs3/Active_Mirror_Clic/Clic_to_mirror" method="_on_mirror_prefabs_input_event"]
+[connection signal="mouse_entered" from="Static/Mirror_vortex/Mirror_prefabs3" to="Static/Mirror_vortex/Mirror_prefabs3/Active_Mirror_Clic/Clic_to_mirror" method="_on_mirror_prefabs_mouse_entered"]
+[connection signal="mouse_exited" from="Static/Mirror_vortex/Mirror_prefabs3" to="Static/Mirror_vortex/Mirror_prefabs3/Active_Mirror_Clic/Clic_to_mirror" method="_on_mirror_prefabs_mouse_exited"]

@@ -1,38 +1,4 @@
-[gd_scene load_steps=48 format=3 uid="uid://bwmu5iwushsl5"]
-
-[sub_resource type="GDScript" id="GDScript_tx1xt"]
-script/source = "extends Node
-
-@onready var photo_circle = $\"../Photo_tools/Photo_tools/photo_UI_elements/Photo_FX/Photo_circle\"
-@onready var circle_material : Material = photo_circle.get_material()
-
-var t
-func _ready():
-	_global_datas._call_note.connect(_call_note)
-	
-func _call_note():
-	print(\"Call note\")
-	_expand_effect()
-	
-	
-func _expand_effect():
-	
-	photo_circle.visible = true
-	
-	if t:
-		t.kill()
-	t = create_tween()
-	
-	t .tween_method(set_shader_value,0.0,1.0,0.25).set_trans(Tween.TRANS_SINE)	
-
-	await create_tween().tween_interval(0.25).finished
-	photo_circle.visible = false
-	
-
-func set_shader_value(value):
-	var lerp_time = lerp(0.0,1.0, value)	
-	circle_material.set_shader_parameter(\"Circle\",lerp_time)	
-"
+[gd_scene load_steps=47 format=3 uid="uid://bwmu5iwushsl5"]
 
 [sub_resource type="GDScript" id="GDScript_064xp"]
 script/source = "extends Node
@@ -768,9 +734,6 @@ func _ready():
 "
 
 [node name="07_SCREEN_TOOLS" type="Node"]
-
-[node name="Call_note_tools" type="Node" parent="."]
-script = SubResource("GDScript_tx1xt")
 
 [node name="Photo_tools" type="Node" parent="."]
 
