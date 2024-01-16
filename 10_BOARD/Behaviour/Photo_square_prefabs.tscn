@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=3 uid="uid://dr7pcue70x0dt"]
+[gd_scene load_steps=53 format=3 uid="uid://dr7pcue70x0dt"]
 
 [ext_resource type="Script" path="res://10_BOARD/Behaviour/Movable_paper.tres.gd" id="1_h5skt"]
 [ext_resource type="Script" path="res://10_BOARD/Behaviour/Apply_pos_anim.gd" id="2_jaqpo"]
@@ -18,7 +18,7 @@ var is_denoise = false
 
 func _ready():
 	_apply_photo_NPC()
-	_global_datas._backFrom_subscene.connect(_change_photo_shade)
+	#_global_datas._backFrom_subscene.connect(_change_photo_shade)
 	
 func _apply_photo_NPC():
 	
@@ -31,9 +31,13 @@ func _apply_photo_NPC():
 	
 	text.text = _global_datas.Npc_Dialogue.name
 
-	_change_photo_shade()
+	
 	
 func _change_photo_shade():
+	
+	
+	if _global_datas.Player_InSubScene:
+		return
 	
 	if is_denoise:
 		return
@@ -44,10 +48,37 @@ func _change_photo_shade():
 		t.kill()
 	t = create_tween()
 	
-	t .tween_method(change_value,1.94,1.0,2.5).set_trans(Tween.TRANS_SINE)	
+	t .tween_method(change_value,1.7,1.0,1.5).set_trans(Tween.TRANS_SINE)	
 	
 func change_value(value : float):
 	_material.set_shader_parameter(\"Denoiser\" , value)
+"
+
+[sub_resource type="GDScript" id="GDScript_7ab2k"]
+script/source = "extends Node
+
+@onready var change_photo = $\"../Change_photo\"
+
+var actual_value : float = 1.94
+
+var active = false
+
+func _change_value():
+	actual_value -= 0.1
+	actual_value = clampf(actual_value,1.0,1.94)
+	change_photo.change_value(actual_value)	
+
+
+func _on_area_2d_area_entered(area):
+	
+	if !active:
+		return
+	if !area:
+		return
+		
+	var coin_contact = area.get_node_or_null(\"Contact_coin\")
+	if coin_contact:
+		_change_value()
 "
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_l5qlk"]
@@ -558,7 +589,7 @@ nodes/fragment/connections = PackedInt32Array(3, 0, 5, 1, 17, 0, 18, 2, 2, 0, 7,
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_idu35"]
 resource_local_to_scene = true
 shader = SubResource("VisualShader_n63tb")
-shader_parameter/Denoiser = 1.94
+shader_parameter/Denoiser = 1.7
 shader_parameter/Photo = ExtResource("4_a771i")
 
 [sub_resource type="GDScript" id="GDScript_0a7gw"]
@@ -662,6 +693,9 @@ script = ExtResource("1_h5skt")
 
 [node name="Apply_pos_anim" type="Node" parent="."]
 script = ExtResource("2_jaqpo")
+
+[node name="Coin_contact_show_me" type="Node" parent="."]
+script = SubResource("GDScript_7ab2k")
 
 [node name="shadow" type="ColorRect" parent="."]
 light_mask = 3
@@ -827,6 +861,7 @@ visible = false
 position = Vector2(-0.142859, -5.72205e-06)
 shape = SubResource("RectangleShape2D_p5bvn")
 
+[connection signal="area_entered" from="Area2D" to="Coin_contact_show_me" method="_on_area_2d_area_entered"]
 [connection signal="mouse_entered" from="Area2D" to="Take_object" method="_on_area_2d_mouse_entered"]
 [connection signal="mouse_exited" from="Area2D" to="Take_object" method="_on_area_2d_mouse_exited"]
 [connection signal="move_behind" from="Area2D/Apply_pos_behind" to="Apply_pos_anim" method="_on_apply_pos_behind_move_behind"]

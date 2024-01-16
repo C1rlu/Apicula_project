@@ -179,14 +179,16 @@ var t
 func _ready():
 	
 	_global_datas._take_photo.connect(_flash_mirror)
-
+	_global_datas.closet_mirror_distance = 2.5
 
 func _flash_mirror():
 
+	# remove time On Photo
+	_global_datas.clock_timer.wait_time += 5.0
+
+
 	var distance_close_mirror = _global_datas.closet_mirror_distance
 	
-	if !distance_close_mirror:
-		return
 		
 	var lerp_distance = inverse_lerp(2.5,0.0,distance_close_mirror)	
 	var lerp_value  = lerpf(0.09,0.0,lerp_distance)
@@ -1222,7 +1224,6 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(535.122, 477.547)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(1440, 660)

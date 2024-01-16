@@ -100,7 +100,7 @@ script/source = "extends Node
 
 func _ready():
 	_global_datas._instance_photo.connect(_intance_photo)
-
+	_global_datas._take_photo.connect(_take_npc_photo)
 func _intance_photo():
 
 
@@ -112,6 +112,13 @@ func _intance_photo():
 	var random_angle = randf_range(-6.0, 6.0)
 	new_node.rotation_degrees = random_angle
 	new_node.position = _global_datas._photo_position
+	
+func _take_npc_photo():
+	
+	if _global_datas.Player_InSubScene:
+		return
+	
+	_global_datas._instance_photo.emit()		
 	
 "
 
@@ -1465,6 +1472,7 @@ position = Vector2(247, 52)
 rotation = -0.185973
 
 [node name="Coins_group" type="Control" parent="Control"]
+visible = false
 anchors_preset = 0
 mouse_filter = 2
 
@@ -1479,38 +1487,11 @@ mouse_filter = 2
 
 [node name="Coins6" parent="Control/Coins_group" instance=ExtResource("5_6qspm")]
 visible = false
-position = Vector2(771, 118)
+position = Vector2(731, 23)
 
 [node name="Coins" parent="Control/Coins_group" instance=ExtResource("6_iwb8l")]
 visible = false
-position = Vector2(727, 144)
-
-[node name="Coins7" parent="Control/Coins_group" instance=ExtResource("5_6qspm")]
-visible = false
-position = Vector2(1809, 559)
-
-[node name="Coins8" parent="Control/Coins_group" instance=ExtResource("5_6qspm")]
-visible = false
-position = Vector2(1773, 572)
-
-[node name="Coins9" parent="Control/Coins_group" instance=ExtResource("5_6qspm")]
-visible = false
-position = Vector2(592, 87)
-
-[node name="Coins2" parent="Control/Coins_group" instance=ExtResource("6_iwb8l")]
-visible = false
-position = Vector2(467, 166)
-
-[node name="Coins3" parent="Control/Coins_group" instance=ExtResource("6_iwb8l")]
-visible = false
-position = Vector2(443, 162)
-
-[node name="Coins4" parent="Control/Coins_group" instance=ExtResource("6_iwb8l")]
-visible = false
-position = Vector2(443, 165)
-
-[node name="Coins5" parent="Control/Coins_group" instance=ExtResource("6_iwb8l")]
-position = Vector2(683, 65)
+position = Vector2(799, 73)
 
 [node name="Words_note" type="Control" parent="Control"]
 anchors_preset = 0

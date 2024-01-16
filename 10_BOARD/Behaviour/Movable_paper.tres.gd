@@ -24,12 +24,16 @@ var show_map
 var kill_on_pos : bool = false 
 
 var last_position : Vector2
+
+var change_photo 
+
 func _ready():
 	size = control.scale.x
 	my_origin_parent = control.get_parent()
 	last_position = control.transform.origin
 	Pin_book = get_node_or_null("../Pin_book")
 	show_map = get_node_or_null("../Show_map_grid")
+	change_photo = get_node_or_null("../Change_photo")
 	
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 func _process(_delta):
@@ -67,14 +71,17 @@ func _input(event):
 			
 	#TO ZOOM	
 	if click:
-		if Input.is_action_just_pressed("Zoom_object"):
-			
+		
+		if Input.is_action_just_pressed("Zoom_object"):	
 			_scale_change(size * scale_in_loupe)
 			var select_parent = _global_datas.In_Front_Node
 			control.reparent(select_parent)
 			control.move_to_front()
 			_global_datas.using_board_enable.emit()
-			Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+			Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)	
+			if change_photo:
+				change_photo._change_photo_shade()
+			
 			
 		if Input.is_action_just_released("Zoom_object"):
 			_scale_change(size)

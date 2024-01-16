@@ -6,17 +6,18 @@ var can_click = false
 func _input(event: InputEvent) -> void:
 	
 
-	if _global_datas.Player_InBoard:
-		return
-	if _global_datas.Player_InMenu:
-		return		
-		
+
 	if !can_click:
 		return
 	if _global_datas.Player_InSubScene:
 		return
 			
 	if event.is_action_pressed("Click"):
+		if _global_datas.Player_InDialogue:
+			_global_datas._close_dialogue.emit()	
+		
+		if _global_datas.Player_InBoard:
+			return		
 		_global_datas._active_sonar.emit()
 		
 
