@@ -13,8 +13,12 @@ script/source = "extends Node
 @onready var text = $\"../text\"
 var t 
 
+var is_denoise = false
+
+
 func _ready():
 	_apply_photo_NPC()
+	_global_datas._backFrom_subscene.connect(_change_photo_shade)
 	
 func _apply_photo_NPC():
 	
@@ -31,13 +35,16 @@ func _apply_photo_NPC():
 	
 func _change_photo_shade():
 	
-	
+	if is_denoise:
+		return
 
+	is_denoise = true
+	
 	if t:
 		t.kill()
 	t = create_tween()
 	
-	t .tween_method(change_value,0.25,1.0,2.5).set_trans(Tween.TRANS_SINE)	
+	t .tween_method(change_value,1.94,1.0,2.5).set_trans(Tween.TRANS_SINE)	
 	
 func change_value(value : float):
 	_material.set_shader_parameter(\"Denoiser\" , value)
@@ -551,7 +558,7 @@ nodes/fragment/connections = PackedInt32Array(3, 0, 5, 1, 17, 0, 18, 2, 2, 0, 7,
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_idu35"]
 resource_local_to_scene = true
 shader = SubResource("VisualShader_n63tb")
-shader_parameter/Denoiser = 1.45
+shader_parameter/Denoiser = 1.94
 shader_parameter/Photo = ExtResource("4_a771i")
 
 [sub_resource type="GDScript" id="GDScript_0a7gw"]

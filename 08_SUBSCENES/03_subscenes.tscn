@@ -1,4 +1,4 @@
-[gd_scene load_steps=191 format=3 uid="uid://nigmie4bbn6"]
+[gd_scene load_steps=192 format=3 uid="uid://nigmie4bbn6"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/Grid_scene/Subscene_loader.gd" id="1_7uoo0"]
 [ext_resource type="PackedScene" uid="uid://g7u8o55jrnyy" path="res://08_SUBSCENES/Player_subscene/Player_sub.tscn" id="2_ri8q1"]
@@ -573,7 +573,6 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-563.29, -300.487)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(1320, 40)
@@ -813,7 +812,6 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-745.88, -635.219)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(1080, -340)
@@ -1049,7 +1047,7 @@ func _on_area_2d_mouse_exited():
 "
 
 [sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_7b8fw"]
-default_input_values = [0, 0.0, 1, 0.99]
+default_input_values = [0, 0.0, 1, 0.98]
 operator = 2
 
 [sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_7rnno"]
@@ -1080,6 +1078,9 @@ Dither_Node = In - DITHER_THRESHOLDS[index];"
 parameter_name = "Circle"
 default_value_enabled = true
 default_value = 0.4
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_8yrq4"]
+default_input_values = [0, 0.0, 1, 1.0, 2, 0.385]
 
 [sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_606hf"]
 size = Vector2(513.781, 284.487)
@@ -1185,7 +1186,7 @@ void fragment() {
 
 
 // FloatOp:10
-	float n_in10p1 = 0.99000;
+	float n_in10p1 = 0.98000;
 	float n_out10p0 = n_out17p0 * n_in10p1;
 
 
@@ -1209,12 +1210,19 @@ void fragment() {
 	float n_out15p0 = step(n_out14p0, n_out11p0);
 
 
+// Mix:18
+	float n_in18p0 = 0.00000;
+	float n_in18p2 = 0.38500;
+	float n_out18p0 = mix(n_in18p0, n_out15p0, n_in18p2);
+
+
 // Output:0
-	COLOR.a = n_out15p0;
+	COLOR.a = n_out18p0;
 
 
 }
 "
+graph_offset = Vector2(535.122, 477.547)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(1440, 660)
@@ -1273,7 +1281,9 @@ nodes/fragment/15/node = SubResource("VisualShaderNodeStep_ekord")
 nodes/fragment/15/position = Vector2(960, 780)
 nodes/fragment/17/node = SubResource("VisualShaderNodeFloatParameter_0y1m0")
 nodes/fragment/17/position = Vector2(-1809.95, 419.028)
-nodes/fragment/connections = PackedInt32Array(3, 0, 2, 2, 2, 0, 5, 0, 4, 0, 6, 0, 6, 0, 7, 0, 7, 0, 2, 0, 7, 0, 9, 0, 3, 0, 9, 2, 10, 0, 9, 1, 9, 0, 11, 2, 5, 0, 11, 1, 12, 0, 14, 1, 13, 0, 14, 0, 14, 0, 15, 0, 17, 0, 2, 1, 17, 0, 10, 0, 11, 0, 15, 1, 15, 0, 0, 1)
+nodes/fragment/18/node = SubResource("VisualShaderNodeMix_8yrq4")
+nodes/fragment/18/position = Vector2(1240.67, 959.719)
+nodes/fragment/connections = PackedInt32Array(3, 0, 2, 2, 2, 0, 5, 0, 4, 0, 6, 0, 6, 0, 7, 0, 7, 0, 2, 0, 7, 0, 9, 0, 3, 0, 9, 2, 10, 0, 9, 1, 9, 0, 11, 2, 5, 0, 11, 1, 12, 0, 14, 1, 13, 0, 14, 0, 14, 0, 15, 0, 17, 0, 2, 1, 17, 0, 10, 0, 11, 0, 15, 1, 18, 0, 0, 1, 15, 0, 18, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pwtxg"]
 shader = SubResource("VisualShader_wd4dj")
