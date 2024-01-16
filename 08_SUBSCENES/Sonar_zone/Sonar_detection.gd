@@ -44,13 +44,8 @@ func _closest_element(array, point):
 		if closest_node == null or current_node_distance < closest_node_distance:
 			closest_node = element
 			closest_node_distance = current_node_distance
-
-			# NEAR CLOSEST ACTIVE MIRROR
-			#var distance_closest = player_sub.position.distance_to(closest_node._position())
-			#if distance_closest < 0.25:
-				#_global_datas.player_mirror_contact.emit(true)
-			#else :
-				#_global_datas.player_mirror_contact.emit(false)
+			_global_datas.closet_mirror_distance = current_node_distance
+		
 			
 	return closest_node
 

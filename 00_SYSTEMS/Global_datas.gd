@@ -53,6 +53,7 @@ signal get_raycastPosition
 var subbscene_playerPosition : Vector3
 
 signal _take_photo
+signal _instance_photo # here we could define photo type
 var _photo_position : Vector2
 signal _forreuse_on
 signal _forreuse_off
@@ -78,7 +79,7 @@ var Oxygene_amout : float
 var Cursor_mode : Node
 var In_Front_Node : Node2D
 var loot_from_subscene : Array
-
+var closet_mirror_distance : float 
 
 # BOOK PAGE
 signal  book_is_open(condition : bool)

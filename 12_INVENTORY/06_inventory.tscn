@@ -96,19 +96,14 @@ script/source = "extends Node
 
 @onready var photo_prefab = preload(\"res://10_BOARD/Behaviour/Photo_square_prefabs.tscn\")
 @onready var photo_group = $\"../Control/Photo_group\"
-var _mirror_contact : bool = false
+
 
 func _ready():
-	_global_datas._take_photo.connect(_intance_photo)	
-	
-	_global_datas.player_mirror_contact.connect(func(condition):
-		_mirror_contact = condition
-	)
-	
+	_global_datas._instance_photo.connect(_intance_photo)
+
 func _intance_photo():
 
-	if _mirror_contact:
-		return
+
 
 	var new_node = photo_prefab.instantiate()
 	photo_group.add_child(new_node)

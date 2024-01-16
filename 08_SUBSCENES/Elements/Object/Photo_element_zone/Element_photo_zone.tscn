@@ -1,23 +1,17 @@
-[gd_scene load_steps=13 format=3 uid="uid://dsxxkrrojuufd"]
+[gd_scene load_steps=40 format=3 uid="uid://dsxxkrrojuufd"]
 
-[ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="1_u0005"]
-[ext_resource type="Material" uid="uid://cn332nru0mo53" path="res://05_SHADER_TEST/Subscene_materials/MouseOver_element.tres" id="2_8xbum"]
 [ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_elements_mat.tres" id="3_s56vg"]
 
 [sub_resource type="GDScript" id="GDScript_sg1xi"]
 script/source = "extends Node
 
-@onready var render = $\"../Render\"
-@onready var clic_to_photo = $\"../Clic_to_Photo\"
 @onready var gpu_particles_3d : GPUParticles3D = $\"../GPUParticles3D\"
 
 
 # HERE I ACTIVE THE CLICK PHOTO IF PLAYER IS NEAR ENOUGH
 
-
 func _active_me(condition : bool):
 
-	clic_to_photo._active(condition)
 	gpu_particles_3d.emitting = condition
 	
 func _on_element_photo_prefabs_2_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
@@ -34,88 +28,360 @@ func _on_element_photo_prefabs_2_area_shape_exited(area_rid, area, area_shape_in
 		_active_me(false)		
 "
 
-[sub_resource type="GDScript" id="GDScript_a6n46"]
-script/source = "extends Node
-
-
-var _is_active : bool = false
-@onready var photo_me_effect = $\"../photo_me_effect\"
-
-@onready var root = $\"..\"
-@onready var collision_shape_3d = $\"../CollisionShape3D\"
-
-
-## ACTIVE CLICK --------------------
-
-func _active(condition : bool):
-	
-	return
-	
-	_is_active = condition
-
-	if !condition:
-		_global_datas._click_ui_selector.emit(false,Vector3.ZERO)
-		
-	else:
-		# check if mouse is alredy in zone
-		var camera = _global_datas.Subscene_Camera	
-		var root_screen_position = camera.unproject_position(root.global_position)
-		var mouse_position = get_viewport().get_mouse_position()
-		var distance = mouse_position.distance_to(root_screen_position)
-	
-		if distance < 50:
-			_global_datas._click_ui_selector.emit(true,root.global_position)	
-		
-		#print(distance)
-
-			
-func _on_element_photo_prefabs_3_mouse_entered():
-	if !_is_active:
-		return
-	#_global_datas._click_ui_selector.emit(true,root.global_position)
-
-
-func _on_element_photo_prefabs_3_mouse_exited():
-	
-	if !_is_active:
-		return
-	#_global_datas._click_ui_selector.emit(false,Vector3.ZERO)
-	
-## CLICK TO PHOTO INPUT --------------------
-
-
-
-
-func _on_element_photo_prefabs_3_input_event(camera, event, position, normal, shape_idx):
-	
-	if !_global_datas.Player_InSubScene:
-		return
-	
-	if _global_datas.Player_lock_click == true:
-		return
-
-	if !_is_active:
-		return		
-		
-	if event.is_action_pressed(\"Click\"):
-		_global_datas._forreuse_on.emit()
-		collision_shape_3d.disabled = true
-		
-	
-func _input(event: InputEvent):
-
-
-	if event.is_action_released(\"Click\"):
-
-		collision_shape_3d.disabled = false
-"
-
 [sub_resource type="TorusMesh" id="TorusMesh_5h5pd"]
 
-[sub_resource type="SphereMesh" id="SphereMesh_645dk"]
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_cxc1e"]
+parameter_name = "Subscene_Darker_color"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeClamp" id="VisualShaderNodeClamp_5gvdi"]
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_oqjhm"]
+input_name = "light"
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_4ce82"]
+input_name = "attenuation"
+
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_3rcuw"]
+operator = 2
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_1l01u"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
+op_type = 3
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_h8q36"]
+constant = 0.4
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_xggo6"]
+parameter_name = "Subscene_light_color"
+qualifier = 1
+default_value = Color(0.401313, 0.399257, 0, 1)
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_22uy6"]
+default_input_values = [0, 0.0, 1, 0.665]
+operator = 2
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_bnonp"]
+input_name = "attenuation"
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_jidhq"]
+default_input_values = [0, 0.0, 1, 1.0]
+operator = 2
+
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_l7q3i"]
+operator = 2
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_xfdno"]
+constant = 1.156
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_aeoi6"]
+input_name = "albedo"
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_gwvmo"]
+default_input_values = [0, 0.0, 1, 0.125, 2, 0.5]
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_n15h1"]
+parameter_name = "Distance_power"
+default_value_enabled = true
+default_value = 0.25
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_ucwid"]
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_ticp4"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
+op_type = 3
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_7vqf3"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
+op_type = 3
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_gismn"]
+parameter_name = "Subscene_mirror_alpha"
+qualifier = 1
+default_value_enabled = true
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_s133l"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_por6j"]
+input_name = "attenuation"
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_fgqld"]
+default_input_values = [0, 0.0, 1, 0.03]
+operator = 2
+
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_32db3"]
+operator = 2
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_52u4l"]
+parameter_name = "Distance_light"
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_ht4g5"]
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_keqv8"]
+input_name = "normal"
+
+[sub_resource type="VisualShaderNodeDotProduct" id="VisualShaderNodeDotProduct_vu6da"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1.325, 4.3, 2.415)]
+
+[sub_resource type="VisualShader" id="VisualShader_jsnsu"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, shadows_disabled, debug_shadow_splits;
+
+global uniform vec4 Subscene_Darker_color : source_color;
+uniform float Distance_power = 0.25;
+global uniform vec4 Subscene_light_color : source_color;
+uniform float Distance_light;
+global uniform float Subscene_mirror_alpha = 0;
+
+
+
+void fragment() {
+// ColorParameter:2
+	vec4 n_out2p0 = Subscene_Darker_color;
+
+
+// Output:0
+	ALBEDO = vec3(n_out2p0.xyz);
+
+
+}
+
+void light() {
+// Input:31
+	vec3 n_out31p0 = ALBEDO;
+
+
+// FloatParameter:33
+	float n_out33p0 = Distance_power;
+
+
+// FloatConstant:3
+	float n_out3p0 = 1.156000;
+
+
+// FloatConstant:2
+	float n_out2p0 = 0.400000;
+
+
+	float n_out4p0;
+// Expression:4
+	n_out4p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out2p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out4p0 = n_out3p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Input:7
+	vec3 n_out7p0 = NORMAL;
+
+
+// Input:11
+	vec3 n_out11p0 = LIGHT;
+
+
+// DotProduct:8
+	float n_out8p0 = dot(n_out7p0, n_out11p0);
+
+
+// Clamp:10
+	float n_in10p1 = 0.00000;
+	float n_in10p2 = 1.00000;
+	float n_out10p0 = clamp(n_out8p0, n_in10p1, n_in10p2);
+
+
+// Input:27
+	float n_out27p0 = ATTENUATION;
+
+
+// FloatOp:28
+	float n_in28p1 = 1.00000;
+	float n_out28p0 = n_out27p0 * n_in28p1;
+
+
+// VectorOp:29
+	vec3 n_out29p0 = vec3(n_out10p0) * vec3(n_out28p0);
+
+
+// Step:6
+	float n_out6p0 = step(n_out4p0, n_out29p0.x);
+
+
+// Mix:32
+	float n_in32p0 = 0.00000;
+	float n_out32p0 = mix(n_in32p0, n_out33p0, n_out6p0);
+
+
+// Mix:16
+	vec3 n_in16p0 = vec3(0.00000, 0.00000, 0.00000);
+	vec3 n_out16p0 = mix(n_in16p0, n_out31p0, vec3(n_out32p0));
+
+
+// ColorParameter:25
+	vec4 n_out25p0 = Subscene_light_color;
+
+
+// Input:12
+	float n_out12p0 = ATTENUATION;
+
+
+// FloatParameter:43
+	float n_out43p0 = Distance_light;
+
+
+// FloatOp:26
+	float n_out26p0 = n_out12p0 * n_out43p0;
+
+
+// VectorOp:13
+	vec3 n_out13p0 = vec3(n_out10p0) * vec3(n_out26p0);
+
+
+// Step:34
+	float n_out34p0 = step(n_out4p0, n_out13p0.x);
+
+
+// Mix:37
+	vec3 n_out37p0 = mix(n_out16p0, vec3(n_out25p0.xyz), vec3(n_out34p0));
+
+
+// Input:40
+	float n_out40p0 = ATTENUATION;
+
+
+// FloatOp:41
+	float n_in41p1 = 0.03000;
+	float n_out41p0 = n_out40p0 * n_in41p1;
+
+
+// VectorOp:42
+	vec3 n_out42p0 = vec3(n_out10p0) * vec3(n_out41p0);
+
+
+// FloatParameter:39
+	float n_out39p0 = Subscene_mirror_alpha;
+
+
+// Mix:38
+	vec3 n_out38p0 = mix(n_out37p0, n_out42p0, vec3(n_out39p0));
+
+
+// Output:0
+	SPECULAR_LIGHT = n_out38p0;
+
+
+}
+"
+graph_offset = Vector2(-362.525, 176.588)
+flags/shadows_disabled = true
+flags/debug_shadow_splits = true
+nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_cxc1e")
+nodes/fragment/2/position = Vector2(-340, -100)
+nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0)
+nodes/light/0/position = Vector2(1060, 580)
+nodes/light/2/node = SubResource("VisualShaderNodeFloatConstant_h8q36")
+nodes/light/2/position = Vector2(-2200, 940)
+nodes/light/3/node = SubResource("VisualShaderNodeFloatConstant_xfdno")
+nodes/light/3/position = Vector2(-2200, 800)
+nodes/light/4/node = SubResource("VisualShaderNodeExpression_s133l")
+nodes/light/4/position = Vector2(-1920, 800)
+nodes/light/4/size = Vector2(724.789, 654.559)
+nodes/light/4/input_ports = "0,0,In;1,0,Size;"
+nodes/light/4/output_ports = "0,0,Dither_Node;"
+nodes/light/4/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/light/6/node = SubResource("VisualShaderNodeStep_ht4g5")
+nodes/light/6/position = Vector2(-1020, 320)
+nodes/light/7/node = SubResource("VisualShaderNodeInput_keqv8")
+nodes/light/7/position = Vector2(-2900, 140)
+nodes/light/8/node = SubResource("VisualShaderNodeDotProduct_vu6da")
+nodes/light/8/position = Vector2(-2480, 260)
+nodes/light/10/node = SubResource("VisualShaderNodeClamp_5gvdi")
+nodes/light/10/position = Vector2(-2280, 140)
+nodes/light/11/node = SubResource("VisualShaderNodeInput_oqjhm")
+nodes/light/11/position = Vector2(-2900, 440)
+nodes/light/12/node = SubResource("VisualShaderNodeInput_4ce82")
+nodes/light/12/position = Vector2(-2540, 560)
+nodes/light/13/node = SubResource("VisualShaderNodeVectorOp_3rcuw")
+nodes/light/13/position = Vector2(-1980, 420)
+nodes/light/16/node = SubResource("VisualShaderNodeMix_1l01u")
+nodes/light/16/position = Vector2(-40, -20)
+nodes/light/25/node = SubResource("VisualShaderNodeColorParameter_xggo6")
+nodes/light/25/position = Vector2(-540, 380)
+nodes/light/26/node = SubResource("VisualShaderNodeFloatOp_22uy6")
+nodes/light/26/position = Vector2(-2160, 540)
+nodes/light/27/node = SubResource("VisualShaderNodeInput_bnonp")
+nodes/light/27/position = Vector2(-2027.75, 245.994)
+nodes/light/28/node = SubResource("VisualShaderNodeFloatOp_jidhq")
+nodes/light/28/position = Vector2(-1647.75, 225.994)
+nodes/light/29/node = SubResource("VisualShaderNodeVectorOp_l7q3i")
+nodes/light/29/position = Vector2(-1467.75, 105.994)
+nodes/light/31/node = SubResource("VisualShaderNodeInput_aeoi6")
+nodes/light/31/position = Vector2(-460, -140)
+nodes/light/32/node = SubResource("VisualShaderNodeMix_gwvmo")
+nodes/light/32/position = Vector2(-180, 180)
+nodes/light/33/node = SubResource("VisualShaderNodeFloatParameter_n15h1")
+nodes/light/33/position = Vector2(-820, -20)
+nodes/light/34/node = SubResource("VisualShaderNodeStep_ucwid")
+nodes/light/34/position = Vector2(-1020, 520)
+nodes/light/37/node = SubResource("VisualShaderNodeMix_ticp4")
+nodes/light/37/position = Vector2(440, 560)
+nodes/light/38/node = SubResource("VisualShaderNodeMix_7vqf3")
+nodes/light/38/position = Vector2(510.145, 895.325)
+nodes/light/39/node = SubResource("VisualShaderNodeFloatParameter_gismn")
+nodes/light/39/position = Vector2(60, 1040)
+nodes/light/40/node = SubResource("VisualShaderNodeInput_por6j")
+nodes/light/40/position = Vector2(-1071.22, 1056.26)
+nodes/light/41/node = SubResource("VisualShaderNodeFloatOp_fgqld")
+nodes/light/41/position = Vector2(-691.216, 1036.26)
+nodes/light/42/node = SubResource("VisualShaderNodeVectorOp_32db3")
+nodes/light/42/position = Vector2(-511.216, 916.257)
+nodes/light/43/node = SubResource("VisualShaderNodeFloatParameter_52u4l")
+nodes/light/43/position = Vector2(-2460, 660)
+nodes/light/connections = PackedInt32Array(10, 0, 13, 0, 2, 0, 4, 1, 3, 0, 4, 0, 12, 0, 26, 0, 26, 0, 13, 1, 10, 0, 29, 0, 32, 0, 16, 2, 33, 0, 32, 1, 6, 0, 32, 2, 25, 0, 37, 1, 16, 0, 37, 0, 34, 0, 37, 2, 27, 0, 28, 0, 28, 0, 29, 1, 8, 0, 10, 0, 7, 0, 8, 0, 29, 0, 6, 1, 31, 0, 16, 1, 13, 0, 34, 1, 11, 0, 8, 1, 4, 0, 34, 0, 4, 0, 6, 0, 39, 0, 38, 2, 38, 0, 0, 1, 37, 0, 38, 0, 40, 0, 41, 0, 41, 0, 42, 1, 10, 0, 42, 0, 42, 0, 38, 1, 43, 0, 26, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ye2wp"]
+resource_local_to_scene = true
+render_priority = 0
+shader = SubResource("VisualShader_jsnsu")
+shader_parameter/Distance_power = 0.25
+shader_parameter/Distance_light = 0.2
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_we1hc"]
 radius = 0.219733
+
+[sub_resource type="GDScript" id="GDScript_bfvq3"]
+script/source = "extends Node
+
+@export var loot_data_type : Loot_Data
+"
 
 [sub_resource type="Curve" id="Curve_885g0"]
 _data = [Vector2(0, 0.315789), 0.0, 0.0, 0, 0, Vector2(0.541176, 0.631579), 0.0, 0.0, 0, 0, Vector2(0.997059, 0.410526), 0.0, 0.0, 0, 0]
@@ -132,8 +398,6 @@ spread = 82.58
 gravity = Vector3(0, 0.305, 0)
 initial_velocity_min = 0.01
 initial_velocity_max = 0.01
-scale_min = 2.0
-scale_max = 2.0
 scale_curve = SubResource("CurveTexture_pac3n")
 
 [sub_resource type="SphereMesh" id="SphereMesh_mc174"]
@@ -149,28 +413,28 @@ collision_mask = 4
 [node name="Active_photo_Clic" type="Node" parent="."]
 script = SubResource("GDScript_sg1xi")
 
-[node name="Clic_to_Photo" type="Node" parent="."]
-script = SubResource("GDScript_a6n46")
-
 [node name="Render" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.215744, 0, 0, 0, -9.43048e-09, -0.215744, 0, 0.215744, -9.43048e-09, 0, 0, 0)
 layers = 4
 mesh = SubResource("TorusMesh_5h5pd")
-surface_material_override/0 = ExtResource("1_u0005")
+surface_material_override/0 = SubResource("ShaderMaterial_ye2wp")
 
-[node name="photo_me_effect" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.538536, 0, 0, 0, 0.233193, -0.485429, 0, 0.485429, 0.233193, 0, 0, 0)
-visible = false
-layers = 4096
-mesh = SubResource("SphereMesh_645dk")
-surface_material_override/0 = ExtResource("2_8xbum")
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_we1hc")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+collision_layer = 2
+collision_mask = 2
+
+[node name="Photo_data" type="Node" parent="StaticBody3D"]
+script = SubResource("GDScript_bfvq3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
 shape = SubResource("SphereShape3D_we1hc")
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.146686, 0)
-layers = 4096
+layers = 4
 material_override = ExtResource("3_s56vg")
 emitting = false
 amount = 5
@@ -185,6 +449,3 @@ draw_pass_1 = SubResource("SphereMesh_mc174")
 
 [connection signal="area_shape_entered" from="." to="Active_photo_Clic" method="_on_element_photo_prefabs_2_area_shape_entered"]
 [connection signal="area_shape_exited" from="." to="Active_photo_Clic" method="_on_element_photo_prefabs_2_area_shape_exited"]
-[connection signal="input_event" from="." to="Clic_to_Photo" method="_on_element_photo_prefabs_3_input_event"]
-[connection signal="mouse_entered" from="." to="Clic_to_Photo" method="_on_element_photo_prefabs_3_mouse_entered"]
-[connection signal="mouse_exited" from="." to="Clic_to_Photo" method="_on_element_photo_prefabs_3_mouse_exited"]

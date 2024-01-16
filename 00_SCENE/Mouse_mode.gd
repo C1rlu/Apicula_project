@@ -3,7 +3,7 @@ extends Node
 @export var disable_mouse = true
 
 func _ready():
-	
+
 	if disable_mouse:
 		return
 		

@@ -74,7 +74,7 @@ script/source = "extends Node
 
 @onready var omny_range : float 
 func _ready():
-	_global_datas._take_photo.connect(_take_photo)
+	#_global_datas._take_photo.connect(_take_photo)
 	omny_range = omni_light_3d.omni_range
 func _take_photo():
 	timer.start()
@@ -216,15 +216,6 @@ var is_active = true
 
 @onready var on_over_mouse_3d_shape = $\"../On_OverMouse_3D_SHAPE\"
 		
-func _input(event: InputEvent):
-
-	if event.is_action_pressed(\"Click\"):
-		_global_datas._forreuse_on.emit()
-
-
-	if event.is_action_released(\"Click\"):
-
-		_global_datas._forreuse_off.emit()	
 
 		
 func _on_mouse_click_mouse_entered():
@@ -1406,10 +1397,10 @@ script = SubResource("GDScript_l3a1b")
 [node name="Aspirator_coin" type="Node" parent="."]
 script = SubResource("GDScript_x0jee")
 
-[node name="PIOCHE_BEHAVIOUR" type="Node" parent="."]
+[node name="PLAYER_CIRCLE" type="Node" parent="."]
 script = SubResource("GDScript_ab8rq")
 
-[node name="Grow_circle" type="Node" parent="PIOCHE_BEHAVIOUR"]
+[node name="Grow_circle" type="Node" parent="PLAYER_CIRCLE"]
 script = SubResource("GDScript_tp34p")
 
 [node name="Sonar_Detection" type="Node" parent="."]
@@ -1613,9 +1604,9 @@ script = SubResource("GDScript_r51df")
 [connection signal="timeout" from="On_Take_photo_change/Timer" to="On_Take_photo_change" method="_on_timer_timeout"]
 [connection signal="timeout" from="Sonar_Detection/Timer" to="Sonar_Detection" method="_on_timer_timeout"]
 [connection signal="timeout" from="Sonar_Detection/Timer_Alarm" to="Sonar_Detection" method="_on_timer_alarm_timeout"]
-[connection signal="input_event" from="Mouse_Click" to="PIOCHE_BEHAVIOUR" method="_on_mouse_click_input_event"]
-[connection signal="mouse_entered" from="Mouse_Click" to="PIOCHE_BEHAVIOUR" method="_on_mouse_click_mouse_entered"]
-[connection signal="mouse_exited" from="Mouse_Click" to="PIOCHE_BEHAVIOUR" method="_on_mouse_click_mouse_exited"]
+[connection signal="input_event" from="Mouse_Click" to="PLAYER_CIRCLE" method="_on_mouse_click_input_event"]
+[connection signal="mouse_entered" from="Mouse_Click" to="PLAYER_CIRCLE" method="_on_mouse_click_mouse_entered"]
+[connection signal="mouse_exited" from="Mouse_Click" to="PLAYER_CIRCLE" method="_on_mouse_click_mouse_exited"]
 [connection signal="area_shape_entered" from="Magnet_zone" to="Aspirator_coin" method="_on_area_3d_area_shape_entered"]
 [connection signal="area_shape_exited" from="Magnet_zone" to="Aspirator_coin" method="_on_area_3d_area_shape_exited"]
 [connection signal="area_shape_entered" from="Sonar_zone" to="Sonar_Detection" method="_on_sonar_zone_area_shape_entered"]

@@ -1,0 +1,133 @@
+[gd_scene load_steps=12 format=3 uid="uid://dym7sjmq33hdc"]
+
+[ext_resource type="Material" uid="uid://ca5hr6jiqhjq1" path="res://05_SHADER_TEST/Subscene_materials/element_subscene_sonar_mat.tres" id="1_oejn8"]
+[ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_elements_mat.tres" id="2_bwy60"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_ic6q1"]
+
+[sub_resource type="GDScript" id="GDScript_i86bt"]
+script/source = "extends Node
+
+
+@onready var gpu_particles_3d : GPUParticles3D = $\"../GPUParticles3D\"
+
+# HERE I ACTIVE THE CLICK PHOTO IF PLAYER IS NEAR ENOUGH
+
+
+
+func _active_me(condition : bool):
+
+	gpu_particles_3d.emitting = condition
+
+	
+func _on_mirror_prefabs_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
+	
+	var player = area.get_node_or_null(\"Player_photoActive\")
+	if player:
+		_active_me(true)	
+		#check if mouse is inside shape
+		
+
+func _on_mirror_prefabs_area_shape_exited(area_rid, area, area_shape_index, local_shape_index):
+
+	var player = area.get_node_or_null(\"Player_photoActive\")
+	if player:
+		_active_me(false)		
+	
+"
+
+[sub_resource type="GDScript" id="GDScript_uj8ey"]
+script/source = "extends Node
+
+
+@onready var mirror_prefabs = $\"..\"
+@onready var opacity = $Opacity
+
+func _position():
+	
+	return mirror_prefabs.global_position
+
+
+func _change_opacity(value : float):
+	opacity._change_value(value )
+"
+
+[sub_resource type="GDScript" id="GDScript_k5jev"]
+script/source = "extends Node
+
+@onready var material : Material = $\"../../MeshInstance3D\".get_surface_override_material(0)
+
+
+func _change_value(value : float):
+	
+	#var clamp = clampf(value,0.0,0.7)
+	material.set_shader_parameter(\"Opacity\",value*2)
+"
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_we1hc"]
+radius = 0.155206
+
+[sub_resource type="Curve" id="Curve_12bes"]
+_data = [Vector2(0, 0.315789), 0.0, 0.0, 0, 0, Vector2(0.541176, 0.631579), 0.0, 0.0, 0, 0, Vector2(0.997059, 0.410526), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_32gfk"]
+curve = SubResource("Curve_12bes")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_80b6w"]
+emission_shape = 1
+emission_sphere_radius = 0.3
+direction = Vector3(1, 0.23, 0)
+spread = 82.58
+gravity = Vector3(0, 0.305, 0)
+initial_velocity_min = 0.01
+initial_velocity_max = 0.01
+scale_curve = SubResource("CurveTexture_32gfk")
+
+[sub_resource type="SphereMesh" id="SphereMesh_cpk6g"]
+radius = 0.025
+height = 0.05
+radial_segments = 4
+rings = 4
+
+[node name="Mirror_prefabs" type="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.444128, -0.47566, 0)
+collision_layer = 6
+collision_mask = 6
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.0768515, 0, 0, 0, 0.0768515, 0, 0, 0, 0.0768515, 0, 0, 0)
+layers = 4096
+mesh = SubResource("SphereMesh_ic6q1")
+skeleton = NodePath("")
+surface_material_override/0 = ExtResource("1_oejn8")
+
+[node name="Active_Mirror_Clic" type="Node" parent="."]
+script = SubResource("GDScript_i86bt")
+
+[node name="Mirror" type="Node" parent="."]
+script = SubResource("GDScript_uj8ey")
+
+[node name="Opacity" type="Node" parent="Mirror"]
+script = SubResource("GDScript_k5jev")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_we1hc")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.146686, 0)
+layers = 4096
+material_override = ExtResource("2_bwy60")
+emitting = false
+amount = 5
+lifetime = 0.5
+speed_scale = 0.5
+fixed_fps = 6
+interpolate = false
+fract_delta = false
+visibility_aabb = AABB(-0.5, -0.5, -0.5, 1, 1, 1)
+process_material = SubResource("ParticleProcessMaterial_80b6w")
+draw_pass_1 = SubResource("SphereMesh_cpk6g")
+
+[connection signal="area_shape_entered" from="." to="Active_Mirror_Clic" method="_on_mirror_prefabs_area_shape_entered"]
+[connection signal="area_shape_exited" from="." to="Active_Mirror_Clic" method="_on_mirror_prefabs_area_shape_exited"]

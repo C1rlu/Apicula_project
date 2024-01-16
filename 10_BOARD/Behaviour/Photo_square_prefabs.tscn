@@ -594,12 +594,18 @@ script/source = "extends Node
 
 
 func _destroy(): 
+	
+	if _global_datas.Player_InSubScene:
+		return
+		
 	print(\"PHOTO DETROYED\")
 	photo_square_prefabs.queue_free()
 	
 func _in_zone():
 	
-	
+	if _global_datas.Player_InSubScene:
+		return
+		
 	var a = Color(1.0, 0.25, 0.25, 0.5)
 	photo_square_prefabs.set_modulate(a)
 	take_object.kill_on_pos = true
