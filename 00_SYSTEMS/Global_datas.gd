@@ -46,7 +46,7 @@ signal _hide_dialogue_box
 signal _show_dialogue_box
 signal _bird_is_comming
 signal _take_Npc_photo(condition : bool)
-
+signal _show_object_legend(condtion : bool, text : String)
 #subsceneSignal
 var mouseRaycastPosition : Vector3
 signal get_raycastPosition
@@ -61,16 +61,12 @@ signal _forreuse_impact
 signal _spawn_empty_oxygene
 signal _teleport_position(position : Vector3)
 signal _find_loot(type : Loot_Data)
-var _forreuse_impact_origin : Vector3
 
 func _ready():
-	_forreuse_impact_origin = Vector3.ZERO
 	_photo_position = Vector2.ZERO
 	
 #board scene
 
-signal using_board_enable
-signal using_board_disable
 
 var board_camera : Camera3D
 var zoom_value : float

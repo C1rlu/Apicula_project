@@ -77,8 +77,10 @@ func _input(event):
 			var select_parent = _global_datas.In_Front_Node
 			control.reparent(select_parent)
 			control.move_to_front()
-			_global_datas.using_board_enable.emit()
 			Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)	
+			
+			_global_datas._show_object_legend.emit(true,"Object as no legend yet")
+			
 			if change_photo:
 				change_photo._change_photo_shade()
 			
@@ -86,9 +88,10 @@ func _input(event):
 		if Input.is_action_just_released("Zoom_object"):
 			_scale_change(size)
 			control.reparent(my_origin_parent)
-			_global_datas.using_board_disable.emit()
-			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+			_global_datas._show_object_legend.emit(false,"")
+			
 		#TO DROP
 		if event is InputEventMouseButton :
 			if event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
@@ -104,8 +107,8 @@ func _unselect_element(condition : bool, move_behind_c : bool):
 	click = false
 	_global_datas.Player_lock_click = false
 	_scale_change(size)
-	_global_datas.using_board_disable.emit()
 	
+	_global_datas._show_object_legend.emit(false,"")
 	# KILL IF BOUGIE ON IT 
 	if kill_on_pos:
 		var burn_it = area_2d.get_node_or_null("I_Burn")
@@ -183,15 +186,13 @@ func _reset_active():
 	var select_parent = _global_datas.In_Front_Node
 	control.reparent(select_parent)
 	control.move_to_front()
-	_global_datas.using_board_enable.emit()
+	_global_datas._show_object_legend.emit(false,"")
 
 			
 func _reset_disable():
 	
 	_scale_change(size)
 	control.reparent(my_origin_parent)
-	_global_datas.using_board_disable.emit()
-
 
 		
 func _on_area_2d_mouse_entered():
