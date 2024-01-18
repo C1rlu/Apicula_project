@@ -1,7 +1,8 @@
-[gd_scene load_steps=34 format=3 uid="uid://dyfif7fbf51gx"]
+[gd_scene load_steps=35 format=3 uid="uid://dyfif7fbf51gx"]
 
 [ext_resource type="PackedScene" uid="uid://cgb4c1n0bj2at" path="res://12_INVENTORY/Book/Page_flip/page_flip_right.tscn" id="1_1pirv"]
 [ext_resource type="Material" uid="uid://blohbpbwcsu4f" path="res://05_SHADER_TEST/UI/Circle_tirette/Circle_inside_withDither_dots.tres" id="1_fo7hk"]
+[ext_resource type="PackedScene" uid="uid://b8ack6t2c7mm2" path="res://12_INVENTORY/Book/Quest_prefab/Quest_note.tscn" id="2_chy1a"]
 
 [sub_resource type="GDScript" id="GDScript_ia7iy"]
 script/source = "extends Node
@@ -826,39 +827,12 @@ offset_bottom = 382.0
 [node name="Pages_all" type="Node2D" parent="."]
 
 [node name="Page_01" type="Node2D" parent="Pages_all"]
+visible = false
 position = Vector2(0, 421)
 
 [node name="not_here" type="Node" parent="Pages_all/Page_01"]
 
 [node name="left" type="Node2D" parent="Pages_all/Page_01"]
-
-[node name="Quest_01" type="Node2D" parent="Pages_all/Page_01/left"]
-position = Vector2(-537, -625)
-rotation = -0.201687
-
-[node name="Objectif" type="ColorRect" parent="Pages_all/Page_01/left/Quest_01"]
-offset_left = 47.3839
-offset_top = 17.8539
-offset_right = 375.384
-offset_bottom = 204.854
-rotation = 0.131154
-color = Color(0.517647, 0.482353, 0.419608, 1)
-
-[node name="text" type="Label" parent="Pages_all/Page_01/left/Quest_01/Objectif"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.368627, 0.341176, 0.290196, 1)
-theme_override_font_sizes/font_size = 30
-text = "Dive for the Apicula
-"
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 1
-clip_text = true
 
 [node name="Label_left" type="Label" parent="Pages_all/Page_01/left"]
 offset_left = -321.0
@@ -873,9 +847,9 @@ text = "1"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Pages_all/Page_01/right"]
 offset_left = 226.0
-offset_top = -470.0
+offset_top = -460.0
 offset_right = 398.0
-offset_bottom = -300.0
+offset_bottom = -290.0
 theme_override_constants/separation = 10
 
 [node name="Button" type="Button" parent="Pages_all/Page_01/right/VBoxContainer"]
@@ -906,38 +880,15 @@ theme_override_font_sizes/font_size = 50
 text = "1"
 
 [node name="Page_02" type="Node2D" parent="Pages_all"]
-visible = false
 material = SubResource("ShaderMaterial_jrkpn")
 position = Vector2(0, 421)
 
 [node name="left" type="Node2D" parent="Pages_all/Page_02"]
 
-[node name="Quest_02" type="Node2D" parent="Pages_all/Page_02/left"]
-position = Vector2(-537, -625)
-rotation = -0.201687
-
-[node name="Objectif" type="ColorRect" parent="Pages_all/Page_02/left/Quest_02"]
-offset_left = -21.0188
-offset_top = 7.95074
-offset_right = 306.981
-offset_bottom = 194.951
-color = Color(0.517647, 0.482353, 0.419608, 1)
-
-[node name="text" type="Label" parent="Pages_all/Page_02/left/Quest_02/Objectif"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.368627, 0.341176, 0.290196, 1)
-theme_override_font_sizes/font_size = 30
-text = "Find the apicula
-"
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 1
-clip_text = true
+[node name="Quest_02" parent="Pages_all/Page_02/left" instance=ExtResource("2_chy1a")]
+position = Vector2(-563, -640)
+rotation = -0.152289
+quest_name = "Open Maurice's chest"
 
 [node name="Label_left" type="Label" parent="Pages_all/Page_02/left"]
 offset_left = -321.0

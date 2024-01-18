@@ -61,7 +61,7 @@ signal _forreuse_impact
 signal _spawn_empty_oxygene
 signal _teleport_position(position : Vector3)
 signal _find_loot(type : Loot_Data)
-
+signal _subscene_fail
 func _ready():
 	_photo_position = Vector2.ZERO
 	
@@ -71,11 +71,12 @@ func _ready():
 var board_camera : Camera3D
 var zoom_value : float
 var OnDrag_start_position : Vector2
-var Oxygene_amout : float
 var Cursor_mode : Node
 var In_Front_Node : Node2D
 var loot_from_subscene : Array
 var closet_mirror_distance : float 
+var clock_time_consume : float
+
 
 # BOOK PAGE
 signal  book_is_open(condition : bool)

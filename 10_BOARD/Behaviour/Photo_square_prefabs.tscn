@@ -1,4 +1,4 @@
-[gd_scene load_steps=61 format=3 uid="uid://dr7pcue70x0dt"]
+[gd_scene load_steps=70 format=3 uid="uid://dr7pcue70x0dt"]
 
 [ext_resource type="Script" path="res://10_BOARD/Behaviour/Movable_paper.tres.gd" id="1_h5skt"]
 [ext_resource type="Script" path="res://10_BOARD/Behaviour/Apply_pos_anim.gd" id="2_jaqpo"]
@@ -7,6 +7,7 @@
 [sub_resource type="GDScript" id="GDScript_6ohgl"]
 script/source = "extends Node
 
+@onready var root = $\"..\"
 
 @onready var color_rect = $\"../ColorRect5/Photo\"
 @onready var _material : Material = color_rect.get_material()
@@ -23,7 +24,16 @@ func _ready():
 	_global_datas._backFrom_subscene.connect(_change_photo_shade)
 	_change_photo_shade()
 	
+	_global_datas._subscene_fail.connect(_remove_photo)
 
+func _remove_photo():
+	
+	if is_denoise:
+		return
+	root.queue_free()	
+	
+	
+	
 func _apply_photo_NPC():
 	
 	if _global_datas.Npc_Dialogue == null:
@@ -94,17 +104,11 @@ script/source = "extends Node
 
 @export var _legend : String
 
-
-var r_in: int
-func _ready():
-	r_in = randi_range(0,1000)
-
-
 func set_legend(legend : String):
 	_legend = legend	
-	print(legend)
+
 func get_legend():
-	return _legend + str(r_in)
+	return _legend
 "
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_l5qlk"]
@@ -336,10 +340,10 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-2494.81, 1251.52)
+graph_offset = Vector2(-622.908, -165.014)
 mode = 1
 flags/light_only = false
-nodes/fragment/0/position = Vector2(1060, 180)
+nodes/fragment/0/position = Vector2(1160, 200)
 nodes/fragment/2/node = SubResource("VisualShaderNodeInput_5dr0r")
 nodes/fragment/2/position = Vector2(-360, 100)
 nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_k4u8l")
@@ -379,7 +383,7 @@ nodes/fragment/13/node = SubResource("VisualShaderNodeUVFunc_a3x28")
 nodes/fragment/13/position = Vector2(-664.982, 376.977)
 nodes/fragment/14/node = SubResource("VisualShaderNodeFloatParameter_xq2ka")
 nodes/fragment/14/position = Vector2(-1260, 120)
-nodes/fragment/connections = PackedInt32Array(3, 0, 5, 1, 4, 0, 5, 0, 2, 0, 6, 0, 2, 0, 7, 0, 8, 0, 7, 1, 6, 0, 7, 2, 2, 0, 9, 0, 7, 0, 9, 1, 9, 0, 0, 0, 10, 0, 9, 2, 11, 0, 12, 2, 13, 0, 12, 0, 14, 0, 13, 1, 5, 0, 6, 1)
+nodes/fragment/connections = PackedInt32Array(3, 0, 5, 1, 4, 0, 5, 0, 2, 0, 6, 0, 2, 0, 7, 0, 8, 0, 7, 1, 6, 0, 7, 2, 2, 0, 9, 0, 7, 0, 9, 1, 10, 0, 9, 2, 11, 0, 12, 2, 13, 0, 12, 0, 14, 0, 13, 1, 5, 0, 6, 1, 9, 0, 0, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_b0g2v"]
 shader = SubResource("VisualShader_gpyxh")
@@ -661,6 +665,119 @@ shader = SubResource("VisualShader_n63tb")
 shader_parameter/Denoiser = 1.5
 shader_parameter/Photo = ExtResource("4_a771i")
 
+[sub_resource type="Gradient" id="Gradient_l6wlh"]
+offsets = PackedFloat32Array(0.088, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_m6tid"]
+gradient = SubResource("Gradient_l6wlh")
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_fqa7o"]
+texture = SubResource("GradientTexture2D_m6tid")
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_lp4nv"]
+constant = 0.4
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_q5g5v"]
+constant = 0.359
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_wh6q8"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_3gxbg"]
+
+[sub_resource type="VisualShader" id="VisualShader_jh6cd"]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+uniform sampler2D tex_frg_15;
+
+
+
+void fragment() {
+// Texture2D:15
+	vec4 n_out15p0 = texture(tex_frg_15, UV);
+
+
+// FloatConstant:17
+	float n_out17p0 = 0.359000;
+
+
+// FloatConstant:16
+	float n_out16p0 = 0.400000;
+
+
+	float n_out18p0;
+// Expression:18
+	n_out18p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out16p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out18p0 = n_out17p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Step:19
+	float n_out19p0 = step(n_out15p0.x, n_out18p0);
+
+
+// Output:0
+	COLOR.a = n_out19p0;
+
+
+}
+"
+graph_offset = Vector2(-479.482, -237.835)
+mode = 1
+flags/light_only = false
+nodes/fragment/0/position = Vector2(1060, 180)
+nodes/fragment/15/node = SubResource("VisualShaderNodeTexture_fqa7o")
+nodes/fragment/15/position = Vector2(260, 180)
+nodes/fragment/16/node = SubResource("VisualShaderNodeFloatConstant_lp4nv")
+nodes/fragment/16/position = Vector2(-220, 520)
+nodes/fragment/17/node = SubResource("VisualShaderNodeFloatConstant_q5g5v")
+nodes/fragment/17/position = Vector2(-220, 380)
+nodes/fragment/18/node = SubResource("VisualShaderNodeExpression_wh6q8")
+nodes/fragment/18/position = Vector2(100, 480)
+nodes/fragment/18/size = Vector2(724.789, 654.559)
+nodes/fragment/18/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/18/output_ports = "0,0,Dither_Node;"
+nodes/fragment/18/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/19/node = SubResource("VisualShaderNodeStep_3gxbg")
+nodes/fragment/19/position = Vector2(760, 180)
+nodes/fragment/connections = PackedInt32Array(16, 0, 18, 1, 17, 0, 18, 0, 18, 0, 19, 1, 19, 0, 0, 1, 15, 0, 19, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g87al"]
+shader = SubResource("VisualShader_jh6cd")
+
 [sub_resource type="GDScript" id="GDScript_0a7gw"]
 script/source = "extends Node2D
 
@@ -697,6 +814,8 @@ func _disable_all_pin():
 script/source = "extends Node
 @onready var photo_square_prefabs = $\"../..\"
 
+@onready var burn = $\"../../BURN\"
+
 @onready var take_object = $\"../../Take_object\"
 
 
@@ -712,16 +831,13 @@ func _in_zone():
 	
 	if _global_datas.Player_InSubScene:
 		return
-		
-	var a = Color(1.0, 0.25, 0.25, 0.5)
-	photo_square_prefabs.set_modulate(a)
+	
+	burn.visible = true
 	take_object.kill_on_pos = true
 
 func _out_zone():
 
-
-	var a = Color(1.0, 1.0, 1.0, 1.0)
-	photo_square_prefabs.set_modulate(a)
+	burn.visible = false
 	take_object.kill_on_pos = false
 
 "
@@ -790,25 +906,6 @@ mouse_filter = 2
 color = Color(0.0117647, 0.0941176, 0.105882, 1)
 script = SubResource("GDScript_jy18g")
 
-[node name="BURN" type="ColorRect" parent="."]
-light_mask = 3
-material = SubResource("ShaderMaterial_b0g2v")
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -40.0
-offset_top = -40.0
-offset_right = 40.0
-offset_bottom = 40.0
-grow_horizontal = 2
-grow_vertical = 2
-pivot_offset = Vector2(40, 40)
-mouse_filter = 2
-color = Color(1, 0.529412, 0.494118, 1)
-metadata/_edit_use_anchors_ = true
-
 [node name="ColorRect5" type="ColorRect" parent="."]
 light_mask = 3
 material = SubResource("ShaderMaterial_b0g2v")
@@ -859,6 +956,26 @@ theme_override_colors/font_color = Color(0.0234375, 0.144531, 0.160156, 1)
 theme_override_font_sizes/font_size = 25
 text = "Description"
 horizontal_alignment = 2
+
+[node name="BURN" type="ColorRect" parent="."]
+visible = false
+light_mask = 3
+material = SubResource("ShaderMaterial_g87al")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -40.0
+offset_right = 40.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(40, 40)
+mouse_filter = 2
+color = Color(1, 0.831373, 0.568627, 1)
+metadata/_edit_use_anchors_ = true
 
 [node name="Pin_book" type="Node2D" parent="."]
 position = Vector2(33.6667, -39.3333)

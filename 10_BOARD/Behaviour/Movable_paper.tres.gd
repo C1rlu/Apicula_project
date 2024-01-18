@@ -187,24 +187,6 @@ func move_behind():
 		var c = a.get_node("Apply_pos_behind")
 		c._move_behind()
 		
-func _reset_active():
-	
-	last_position = control.transform.origin
-	
-	#var screen_center = Vector2(1920.0 / 2.0, 1080.0/ 2.0)
-	#control.transform.origin = screen_center
-	_scale_change(size * scale_in_hand)
-	var select_parent = _global_datas.In_Front_Node
-	control.reparent(select_parent)
-	control.move_to_front()
-	_global_datas._show_object_legend.emit(false,"")
-
-			
-func _reset_disable():
-	
-	_scale_change(size)
-	control.reparent(my_origin_parent)
-
 		
 func _on_area_2d_mouse_entered():
 

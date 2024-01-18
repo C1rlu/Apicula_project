@@ -70,31 +70,25 @@ func _input(event: InputEvent):
 script/source = "extends Node
 
 @onready var omni_light_3d = $\"../Light\"
-@onready var timer = $Timer
-
 @onready var omny_range : float 
+
+var t
+
 func _ready():
-	#_global_datas._take_photo.connect(_take_photo)
+	_global_datas._take_photo.connect(_take_photo)
 	omny_range = omni_light_3d.omni_range
+	
 func _take_photo():
-	timer.start()
 
+	if t:
+		t.kill()
+	t = create_tween()
 	
-	if timer.is_stopped():
-		return
-		
+	t .tween_method(set_shader_value,3.8,omny_range,1.0)
 
-func _process(delta):
-	
-	if timer.is_stopped():
-		return
-	var lerp_time = lerpf(omny_range,3.8, timer.time_left / timer.wait_time)	
-	omni_light_3d.omni_range = lerp_time
-	
+func set_shader_value(value):
+	omni_light_3d.omni_range = value
 
-
-func _on_timer_timeout():
-	timer.stop()
 "
 
 [sub_resource type="GDScript" id="GDScript_huu7c"]
@@ -1091,10 +1085,6 @@ input_name = "color"
 
 [sub_resource type="VisualShaderNodeFresnel" id="VisualShaderNodeFresnel_n8g51"]
 
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_w5tx8"]
-parameter_name = "Subscene_mirror_alpha"
-qualifier = 1
-
 [sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_qcvki"]
 size = Vector2(634.014, 470.339)
 expression = "const float DITHER_THRESHOLDS[16] ={
@@ -1109,6 +1099,7 @@ int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
 
 [sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_eu884"]
+default_input_values = [0, 0.0, 1, 1.0, 2, 0.0]
 
 [sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_8ngkw"]
 output_port_for_preview = 0
@@ -1132,11 +1123,15 @@ input_name = "uv"
 [sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_e1lr8"]
 default_input_values = [0, 0.0, 1, 1.0, 2, 0.07]
 
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_mu65f"]
+parameter_name = "Subscene_mirror_alpha"
+qualifier = 1
+
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_xdbd5"]
 constant = 0.4
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_aionr"]
-constant = 0.3
+constant = 0.25
 
 [sub_resource type="VisualShader" id="VisualShader_ju2ks"]
 code = "shader_type spatial;
@@ -1167,7 +1162,7 @@ void fragment() {
 
 
 // FloatConstant:4
-	float n_out4p0 = 0.300000;
+	float n_out4p0 = 0.250000;
 
 
 // FloatConstant:3
@@ -1227,12 +1222,12 @@ void fragment() {
 	float n_out27p0 = mix(n_in27p0, n_out25p0, n_in27p2);
 
 
-// FloatParameter:19
-	float n_out19p0 = Subscene_mirror_alpha;
+// FloatParameter:28
+	float n_out28p0 = Subscene_mirror_alpha;
 
 
 // Mix:20
-	float n_out20p0 = mix(n_out10p0, n_out27p0, n_out19p0);
+	float n_out20p0 = mix(n_out10p0, n_out27p0, n_out28p0);
 
 
 // Output:0
@@ -1242,7 +1237,7 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-429.982, -47.0598)
+graph_offset = Vector2(-96.85, 182.189)
 flags/unshaded = true
 nodes/fragment/0/position = Vector2(780, 160)
 nodes/fragment/2/node = SubResource("VisualShaderNodeExpression_qcvki")
@@ -1274,8 +1269,6 @@ nodes/fragment/17/node = SubResource("VisualShaderNodeInput_myo4a")
 nodes/fragment/17/position = Vector2(-840, 420)
 nodes/fragment/18/node = SubResource("VisualShaderNodeFresnel_n8g51")
 nodes/fragment/18/position = Vector2(-520, 100)
-nodes/fragment/19/node = SubResource("VisualShaderNodeFloatParameter_w5tx8")
-nodes/fragment/19/position = Vector2(20, 740)
 nodes/fragment/20/node = SubResource("VisualShaderNodeMix_eu884")
 nodes/fragment/20/position = Vector2(300, 460)
 nodes/fragment/21/node = SubResource("VisualShaderNodeInput_8ngkw")
@@ -1292,25 +1285,24 @@ nodes/fragment/26/node = SubResource("VisualShaderNodeInput_oqftf")
 nodes/fragment/26/position = Vector2(-20, 1460)
 nodes/fragment/27/node = SubResource("VisualShaderNodeMix_e1lr8")
 nodes/fragment/27/position = Vector2(895.324, 959.374)
-nodes/fragment/connections = PackedInt32Array(3, 0, 2, 2, 4, 0, 2, 1, 2, 0, 10, 1, 16, 0, 10, 0, 17, 0, 16, 2, 18, 0, 16, 0, 21, 0, 23, 2, 22, 0, 23, 0, 24, 0, 25, 1, 23, 0, 25, 0, 26, 0, 24, 0, 25, 0, 27, 1, 27, 0, 20, 1, 19, 0, 20, 2, 10, 0, 20, 0, 20, 0, 0, 1, 15, 0, 0, 0)
+nodes/fragment/28/node = SubResource("VisualShaderNodeFloatParameter_mu65f")
+nodes/fragment/28/position = Vector2(-140, 660)
+nodes/fragment/connections = PackedInt32Array(3, 0, 2, 2, 4, 0, 2, 1, 16, 0, 10, 0, 17, 0, 16, 2, 18, 0, 16, 0, 21, 0, 23, 2, 22, 0, 23, 0, 24, 0, 25, 1, 23, 0, 25, 0, 26, 0, 24, 0, 25, 0, 27, 1, 10, 0, 20, 0, 27, 0, 20, 1, 15, 0, 0, 0, 2, 0, 10, 1, 20, 0, 0, 1, 28, 0, 20, 2)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_iwyne"]
 render_priority = 3
 shader = SubResource("VisualShader_ju2ks")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_pay5l"]
-lifetime_randomness = 0.5
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ievqw"]
+lifetime_randomness = 0.25
 emission_shape = 1
-emission_sphere_radius = 0.2
+emission_sphere_radius = 0.1
 particle_flag_rotate_y = true
-direction = Vector3(0, 0.78, 0)
-spread = 0.0
+direction = Vector3(0, 0, 0)
+spread = 180.0
 gravity = Vector3(0, 0, 0)
-initial_velocity_min = 0.2
-initial_velocity_max = 1.0
-angular_velocity_max = 0.1
-angle_min = -720.0
-angle_max = 720.0
+initial_velocity_min = 0.1
+initial_velocity_max = 0.25
 scale_min = 0.1
 scale_max = 0.15
 scale_curve = SubResource("CurveTexture_0vc74")
@@ -1374,11 +1366,8 @@ one_shot = true
 script = SubResource("GDScript_0rnti")
 canSpeedUp = true
 
-[node name="On_Take_photo_change" type="Node" parent="."]
+[node name="Photo_Flash" type="Node" parent="."]
 script = SubResource("GDScript_8qwgp")
-
-[node name="Timer" type="Timer" parent="On_Take_photo_change"]
-wait_time = 0.4
 
 [node name="Tools" type="Node" parent="."]
 script = SubResource("GDScript_huu7c")
@@ -1585,23 +1574,19 @@ process_material = SubResource("ParticleProcessMaterial_snyp2")
 draw_pass_1 = ExtResource("4_6vpi7")
 
 [node name="Fx_aspirator" type="GPUParticles3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.0390157, 0.999239, 0, -0.999239, 0.0390157, 0.00288114, 0.0848317, 0.841322)
+transform = Transform3D(1, 0, 0, 0, 0.0390157, 0.999239, 0, -0.999239, 0.0390157, 0.00288114, 0.165212, 0.66015)
 layers = 4
 material_override = SubResource("ShaderMaterial_iwyne")
 cast_shadow = 0
-emitting = false
-amount = 25
-lifetime = 2.0
-one_shot = true
+amount = 20
 randomness = 0.14
 local_coords = true
-process_material = SubResource("ParticleProcessMaterial_pay5l")
+process_material = SubResource("ParticleProcessMaterial_ievqw")
 draw_pass_1 = ExtResource("4_6vpi7")
 script = SubResource("GDScript_r51df")
 
 [connection signal="iniPos" from="Ini_subscene" to="." method="_on_ini_subscene_ini_pos"]
 [connection signal="timeout" from="Ini_subscene/Timer" to="Ini_subscene" method="_on_timer_timeout"]
-[connection signal="timeout" from="On_Take_photo_change/Timer" to="On_Take_photo_change" method="_on_timer_timeout"]
 [connection signal="timeout" from="Sonar_Detection/Timer" to="Sonar_Detection" method="_on_timer_timeout"]
 [connection signal="timeout" from="Sonar_Detection/Timer_Alarm" to="Sonar_Detection" method="_on_timer_alarm_timeout"]
 [connection signal="input_event" from="Mouse_Click" to="PLAYER_CIRCLE" method="_on_mouse_click_input_event"]

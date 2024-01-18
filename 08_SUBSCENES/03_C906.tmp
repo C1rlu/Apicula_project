@@ -1,4 +1,4 @@
-[gd_scene load_steps=214 format=3 uid="uid://nigmie4bbn6"]
+[gd_scene load_steps=208 format=3 uid="uid://nigmie4bbn6"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/Grid_scene/Subscene_loader.gd" id="1_7uoo0"]
 [ext_resource type="PackedScene" uid="uid://g7u8o55jrnyy" path="res://08_SUBSCENES/Player_subscene/Player_sub.tscn" id="2_ri8q1"]
@@ -125,13 +125,13 @@ func _mirror_switch(condition : bool):
 	if !condition :
 		t = create_tween()
 		t .tween_method(scanner_opacity._set_scanner_opacity_value,1.0,0.0,0.25).set_trans(Tween.TRANS_SINE)
-
+		_global_datas.clock_timer.paused = false
 	else:
 	
 		t = create_tween()	
 		t .tween_method(scanner_opacity._set_scanner_opacity_value,0.0,1.0,0.25).set_trans(Tween.TRANS_SINE)
 		
-
+		_global_datas.clock_timer.paused = true
 		
 "
 
@@ -169,8 +169,7 @@ func _flash_mirror():
 
 	var distance_close_mirror = _global_datas.closet_mirror_distance
 	
-	_global_datas.clock_time_consume -= 3.0
-	
+	_global_datas.clock_timer.wait_time -= 2.0
 		
 	var lerp_distance = inverse_lerp(2.5,0.0,distance_close_mirror)	
 	var lerp_value  = lerpf(0.09,0.0,lerp_distance)
@@ -1064,7 +1063,7 @@ func _ready():
 	_global_datas._go_Subscene.connect(func active():
 		_is_active = true	
 		can_click_here_root.visible = true	
-		photo_zone.visible = true
+		#photo_zone.visible = true
 		collision_shape_2d.disabled = false
 		
 		#ray_cast_cam = _global_datas.Subscene_Camera
@@ -1073,7 +1072,7 @@ func _ready():
 	_global_datas._backFrom_subscene.connect(func disable():
 		_is_active = false		
 		can_click_here_root.visible = false	
-		photo_zone.visible = false	
+		#photo_zone.visible = false	
 		collision_shape_2d.disabled = true
 		#ray_cast_cam = _global_datas.Main_Camera
 	)
@@ -1240,6 +1239,9 @@ parameter_name = "Circle"
 default_value_enabled = true
 default_value = 0.4
 
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_8yrq4"]
+default_input_values = [0, 0.0, 1, 1.0, 2, 0.385]
+
 [sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_606hf"]
 size = Vector2(513.781, 284.487)
 expression = "vec2 n_uv = UV -0.5;
@@ -1247,31 +1249,8 @@ float d = length(n_uv);
 float c = smoothstep(r,r + feather,d);
 color = vec4(vec3(c),1.0);"
 
-[sub_resource type="Gradient" id="Gradient_cch78"]
-offsets = PackedFloat32Array(0.573333, 0.634667)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_u38we"]
-gradient = SubResource("Gradient_cch78")
-fill = 2
-fill_from = Vector2(0.5, 0.5)
-
-[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_3qn3s"]
-texture = SubResource("GradientTexture2D_u38we")
-
-[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_upu80"]
-function = 1
-
-[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_a46mf"]
-default_input_values = [1, Vector2(1.8, 1), 2, Vector2(0.5, 0)]
-function = 1
-
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_66uya"]
 constant = 0.001
-
-[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_1jna0"]
-default_input_values = [0, 0.0, 1, 1.0, 2, 0.0]
-
-[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_6ukq5"]
 
 [sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_hwwje"]
 input_name = "uv"
@@ -1298,7 +1277,6 @@ code = "shader_type canvas_item;
 render_mode blend_mix;
 
 uniform float Circle = 0.40000000596046;
-uniform sampler2D tex_frg_25;
 
 
 
@@ -1388,47 +1366,25 @@ void fragment() {
 	float n_out11p0 = mix(n_in11p0, n_out5p0, n_out9p0.x);
 
 
-// UVFunc:29
-	vec2 n_in29p1 = vec2(1.80000, 1.00000);
-	vec2 n_in29p2 = vec2(0.50000, 0.00000);
-	vec2 n_out29p0 = (UV - n_in29p2) * n_in29p1 + n_in29p2;
-
-
-// UVFunc:28
-	vec2 n_in28p1 = vec2(1.00000, 1.00000);
-	vec2 n_in28p2 = vec2(0.00000, 0.00000);
-	vec2 n_out28p0 = (n_out29p0 - n_in28p2) * n_in28p1 + n_in28p2;
-
-
-// Texture2D:25
-	vec4 n_out25p0 = texture(tex_frg_25, n_out28p0);
-
-
-// Mix:30
-	float n_in30p0 = 0.00000;
-	float n_out30p0 = mix(n_in30p0, n_out11p0, n_out25p0.x);
-
-
 // Step:15
-	float n_out15p0 = step(n_out14p0, n_out30p0);
+	float n_out15p0 = step(n_out14p0, n_out11p0);
 
 
-// Mix:31
-	float n_in31p0 = 0.00000;
-	float n_in31p2 = 0.50000;
-	float n_out31p0 = mix(n_in31p0, n_out15p0, n_in31p2);
+// Mix:18
+	float n_in18p0 = 0.00000;
+	float n_in18p2 = 0.38500;
+	float n_out18p0 = mix(n_in18p0, n_out15p0, n_in18p2);
 
 
 // Output:0
-	COLOR.a = n_out31p0;
+	COLOR.a = n_out18p0;
 
 
 }
 "
-graph_offset = Vector2(513.871, 388.052)
 mode = 1
 flags/light_only = false
-nodes/fragment/0/position = Vector2(1660, 720)
+nodes/fragment/0/position = Vector2(1440, 660)
 nodes/fragment/2/node = SubResource("VisualShaderNodeExpression_606hf")
 nodes/fragment/2/position = Vector2(-540, 20)
 nodes/fragment/2/size = Vector2(513.781, 284.487)
@@ -1481,20 +1437,12 @@ vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
 nodes/fragment/15/node = SubResource("VisualShaderNodeStep_ekord")
-nodes/fragment/15/position = Vector2(1240, 700)
+nodes/fragment/15/position = Vector2(960, 780)
 nodes/fragment/17/node = SubResource("VisualShaderNodeFloatParameter_0y1m0")
 nodes/fragment/17/position = Vector2(-1809.95, 419.028)
-nodes/fragment/25/node = SubResource("VisualShaderNodeTexture_3qn3s")
-nodes/fragment/25/position = Vector2(1060, 1140)
-nodes/fragment/28/node = SubResource("VisualShaderNodeUVFunc_upu80")
-nodes/fragment/28/position = Vector2(1040, 1420)
-nodes/fragment/29/node = SubResource("VisualShaderNodeUVFunc_a46mf")
-nodes/fragment/29/position = Vector2(840, 1680)
-nodes/fragment/30/node = SubResource("VisualShaderNodeMix_1jna0")
-nodes/fragment/30/position = Vector2(1120, 920)
-nodes/fragment/31/node = SubResource("VisualShaderNodeMix_6ukq5")
-nodes/fragment/31/position = Vector2(1549.06, 984.189)
-nodes/fragment/connections = PackedInt32Array(3, 0, 2, 2, 2, 0, 5, 0, 4, 0, 6, 0, 6, 0, 7, 0, 7, 0, 2, 0, 7, 0, 9, 0, 3, 0, 9, 2, 10, 0, 9, 1, 9, 0, 11, 2, 5, 0, 11, 1, 12, 0, 14, 1, 13, 0, 14, 0, 14, 0, 15, 0, 17, 0, 2, 1, 17, 0, 10, 0, 28, 0, 25, 0, 29, 0, 28, 0, 25, 0, 30, 2, 11, 0, 30, 1, 30, 0, 15, 1, 31, 0, 0, 1, 15, 0, 31, 1)
+nodes/fragment/18/node = SubResource("VisualShaderNodeMix_8yrq4")
+nodes/fragment/18/position = Vector2(1240.67, 959.719)
+nodes/fragment/connections = PackedInt32Array(3, 0, 2, 2, 2, 0, 5, 0, 4, 0, 6, 0, 6, 0, 7, 0, 7, 0, 2, 0, 7, 0, 9, 0, 3, 0, 9, 2, 10, 0, 9, 1, 9, 0, 11, 2, 5, 0, 11, 1, 12, 0, 14, 1, 13, 0, 14, 0, 14, 0, 15, 0, 17, 0, 2, 1, 17, 0, 10, 0, 11, 0, 15, 1, 18, 0, 0, 1, 15, 0, 18, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_801qf"]
 shader = SubResource("VisualShader_wd4dj")
@@ -2792,7 +2740,6 @@ color = Color(0.321569, 0.52549, 0.54902, 1)
 position = Vector2(960, 540)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Can_clic_here_behaviour/Area2D"]
-visible = false
 shape = SubResource("CircleShape2D_8oi7d")
 disabled = true
 
@@ -2800,7 +2747,6 @@ disabled = true
 position = Vector2(960, 540)
 
 [node name="Can_click_here" type="ColorRect" parent="Can_clic_here_behaviour/Can_click_here_root"]
-visible = false
 material = SubResource("ShaderMaterial_lv7ts")
 anchors_preset = 8
 anchor_left = 0.5

@@ -1,8 +1,20 @@
-[gd_scene load_steps=50 format=3 uid="uid://bjy34o0nbhbc3"]
+[gd_scene load_steps=51 format=3 uid="uid://bjy34o0nbhbc3"]
 
 [ext_resource type="Script" path="res://10_BOARD/Behaviour/Movable_paper.tres.gd" id="1_4v3k2"]
 [ext_resource type="Script" path="res://10_BOARD/Behaviour/Apply_pos_anim.gd" id="2_linhc"]
 [ext_resource type="Texture2D" uid="uid://kaln43e5c5my" path="res://10_BOARD/Map/Map_board_test.png" id="3_gbywh"]
+
+[sub_resource type="GDScript" id="GDScript_vq4md"]
+script/source = "extends Node
+
+@export var _legend : String
+
+func set_legend(legend : String):
+	_legend = legend	
+
+func get_legend():
+	return _legend
+"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_icff5"]
 
@@ -544,6 +556,10 @@ script = ExtResource("1_4v3k2")
 script = ExtResource("2_linhc")
 
 [node name="Show_map_grid" type="Node" parent="."]
+
+[node name="Legend" type="Node" parent="."]
+script = SubResource("GDScript_vq4md")
+_legend = "Never travel without a map"
 
 [node name="shadow" type="ColorRect" parent="."]
 visible = false

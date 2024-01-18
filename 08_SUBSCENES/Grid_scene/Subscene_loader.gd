@@ -17,7 +17,6 @@ func _ready():
 	
 func _loadscene():
 	
-	
 	#REMOVE PREVIOUS SCENE
 	for child in load_scene.get_children():
 		child.free()
