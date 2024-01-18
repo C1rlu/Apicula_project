@@ -15,15 +15,11 @@ var t
 
 var is_denoise = false
 
-var legend
+
 func _ready():
-	
-	legend = get_node_or_null(\"../Legend\")
 	_apply_photo_NPC()
 	_global_datas._backFrom_subscene.connect(_change_photo_shade)
 	_change_photo_shade()
-	
-
 func _apply_photo_NPC():
 	
 	if _global_datas.Npc_Dialogue == null:
@@ -33,13 +29,9 @@ func _apply_photo_NPC():
 	
 	_material.set_shader_parameter(\"Photo\",imageN)
 	
-	
 	text.text = _global_datas.Npc_Dialogue.name
+
 	
-	# SET LEGEND NODE
-	if legend:
-		var legend_text = _global_datas.Npc_Dialogue.name	
-		legend.set_legend(legend_text)
 	
 func _change_photo_shade():
 	
@@ -99,10 +91,6 @@ var r_in: int
 func _ready():
 	r_in = randi_range(0,1000)
 
-
-func set_legend(legend : String):
-	_legend = legend	
-	print(legend)
 func get_legend():
 	return _legend + str(r_in)
 "
@@ -849,7 +837,6 @@ mouse_filter = 2
 color = Color(0.45098, 0.396078, 0.278431, 1)
 
 [node name="text" type="Label" parent="."]
-visible = false
 offset_left = -40.0
 offset_top = 29.0
 offset_right = 222.0

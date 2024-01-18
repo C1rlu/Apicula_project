@@ -26,6 +26,8 @@ var kill_on_pos : bool = false
 var last_position : Vector2
 
 var change_photo 
+var legend
+
 
 func _ready():
 	size = control.scale.x
@@ -34,6 +36,10 @@ func _ready():
 	Pin_book = get_node_or_null("../Pin_book")
 	show_map = get_node_or_null("../Show_map_grid")
 	change_photo = get_node_or_null("../Change_photo")
+	
+	
+	legend = get_node_or_null("../Legend")
+	
 	
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 func _process(_delta):
@@ -79,8 +85,13 @@ func _input(event):
 			control.move_to_front()
 			Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)	
 			
-			_global_datas._show_object_legend.emit(true,"Object as no legend yet")
-			
+			if legend:
+				var legend_text = legend.get_legend()
+				_global_datas._show_object_legend.emit(true,legend_text)
+			else:
+				var legend_text = "please add a legend node to this item"
+				_global_datas._show_object_legend.emit(true,legend_text)
+				
 			if change_photo:
 				change_photo._change_photo_shade()
 			
