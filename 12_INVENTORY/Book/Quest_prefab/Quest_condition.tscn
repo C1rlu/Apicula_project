@@ -1,9 +1,24 @@
-[gd_scene format=3 uid="uid://c7ri5dq5c72lr"]
+[gd_scene load_steps=2 format=3 uid="uid://c7ri5dq5c72lr"]
+
+[sub_resource type="GDScript" id="GDScript_peswq"]
+script/source = "extends Node
+@onready var condition_text = $\"../condition_text\"
+
+
+func _set_condition(_text : String):
+	
+	condition_text.text = _text	
+"
 
 [node name="condition" type="ColorRect"]
-custom_minimum_size = Vector2(150, 35)
+custom_minimum_size = Vector2(300, 40)
+offset_right = 300.0
+offset_bottom = 40.0
 mouse_filter = 2
 color = Color(0.517647, 0.482353, 0.419608, 1)
+
+[node name="set_condition" type="Node" parent="."]
+script = SubResource("GDScript_peswq")
 
 [node name="condition_text" type="Label" parent="."]
 clip_contents = true
@@ -14,9 +29,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.243137, 0.223529, 0.188235, 1)
-theme_override_font_sizes/font_size = 20
-text = "Find the apicula
-"
+theme_override_font_sizes/font_size = 25
+text = "Condition quest "
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 1

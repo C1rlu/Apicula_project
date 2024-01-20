@@ -1,13 +1,14 @@
 extends Node
 
-@onready var elements : Array = get_children()
+@export var elements_mesh : Array [MeshInstance3D]
 
 func _ready():
 	_global_datas.active_mirror_switch.connect(_active_mirror_Elements)
 
 
 func _active_mirror_Elements(condition : bool):
-	for element in elements:
+	for element in elements_mesh:
 		element.visible = condition
-		element.get_node("Disable_col")._enable_col(!condition)
-	
+		var col = element.get_node_or_null("StaticBody3D/CollisionShape3D")
+		if col:
+			col.disabled = !condition

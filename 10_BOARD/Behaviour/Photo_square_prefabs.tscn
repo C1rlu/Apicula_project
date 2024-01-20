@@ -666,8 +666,8 @@ shader_parameter/Denoiser = 1.5
 shader_parameter/Photo = ExtResource("4_a771i")
 
 [sub_resource type="Gradient" id="Gradient_l6wlh"]
-offsets = PackedFloat32Array(0.088, 1)
-colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+offsets = PackedFloat32Array(0, 0.064, 0.202667, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.456, 0.456, 0.456, 1, 0.31959, 0.31959, 0.31959, 1, 0, 0, 0, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_m6tid"]
 gradient = SubResource("Gradient_l6wlh")
@@ -679,9 +679,6 @@ texture = SubResource("GradientTexture2D_m6tid")
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_lp4nv"]
 constant = 0.4
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_q5g5v"]
-constant = 0.359
 
 [sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_wh6q8"]
 size = Vector2(724.789, 654.559)
@@ -698,11 +695,15 @@ Dither_Node = In - DITHER_THRESHOLDS[index];"
 
 [sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_3gxbg"]
 
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_gs1mi"]
+parameter_name = "Opacity"
+
 [sub_resource type="VisualShader" id="VisualShader_jh6cd"]
 code = "shader_type canvas_item;
 render_mode blend_mix;
 
 uniform sampler2D tex_frg_15;
+uniform float Opacity;
 
 
 
@@ -711,8 +712,8 @@ void fragment() {
 	vec4 n_out15p0 = texture(tex_frg_15, UV);
 
 
-// FloatConstant:17
-	float n_out17p0 = 0.359000;
+// FloatParameter:20
+	float n_out20p0 = Opacity;
 
 
 // FloatConstant:16
@@ -732,7 +733,7 @@ void fragment() {
 			
 		vec2 uv = FRAGCOORD.xy * n_out16p0;
 		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-		n_out18p0 = n_out17p0 - DITHER_THRESHOLDS[index];
+		n_out18p0 = n_out20p0 - DITHER_THRESHOLDS[index];
 	}
 
 
@@ -746,7 +747,7 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-479.482, -237.835)
+graph_offset = Vector2(-567.79, 89.0975)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(1060, 180)
@@ -754,8 +755,6 @@ nodes/fragment/15/node = SubResource("VisualShaderNodeTexture_fqa7o")
 nodes/fragment/15/position = Vector2(260, 180)
 nodes/fragment/16/node = SubResource("VisualShaderNodeFloatConstant_lp4nv")
 nodes/fragment/16/position = Vector2(-220, 520)
-nodes/fragment/17/node = SubResource("VisualShaderNodeFloatConstant_q5g5v")
-nodes/fragment/17/position = Vector2(-220, 380)
 nodes/fragment/18/node = SubResource("VisualShaderNodeExpression_wh6q8")
 nodes/fragment/18/position = Vector2(100, 480)
 nodes/fragment/18/size = Vector2(724.789, 654.559)
@@ -773,10 +772,14 @@ int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
 nodes/fragment/19/node = SubResource("VisualShaderNodeStep_3gxbg")
 nodes/fragment/19/position = Vector2(760, 180)
-nodes/fragment/connections = PackedInt32Array(16, 0, 18, 1, 17, 0, 18, 0, 18, 0, 19, 1, 19, 0, 0, 1, 15, 0, 19, 0)
+nodes/fragment/20/node = SubResource("VisualShaderNodeFloatParameter_gs1mi")
+nodes/fragment/20/position = Vector2(-540, 300)
+nodes/fragment/connections = PackedInt32Array(16, 0, 18, 1, 18, 0, 19, 1, 19, 0, 0, 1, 15, 0, 19, 0, 20, 0, 18, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_g87al"]
+resource_local_to_scene = true
 shader = SubResource("VisualShader_jh6cd")
+shader_parameter/Opacity = 0.25
 
 [sub_resource type="GDScript" id="GDScript_0a7gw"]
 script/source = "extends Node2D
@@ -815,10 +818,10 @@ script/source = "extends Node
 @onready var photo_square_prefabs = $\"../..\"
 
 @onready var burn = $\"../../BURN\"
-
 @onready var take_object = $\"../../Take_object\"
 
 
+var t 
 func _destroy(): 
 	
 	if _global_datas.Player_InSubScene:
@@ -832,13 +835,23 @@ func _in_zone():
 	if _global_datas.Player_InSubScene:
 		return
 	
-	burn.visible = true
+	_fade_in()
 	take_object.kill_on_pos = true
 
 func _out_zone():
 
-	burn.visible = false
+	_fade_out()
 	take_object.kill_on_pos = false
+
+func _fade_in():
+	
+	burn.visible = true
+		
+func _fade_out():
+		
+	burn.visible = false
+	
+
 
 "
 

@@ -30,8 +30,9 @@ func _loadscene():
 		var scene_instance = load(constant_string)
 		if scene_instance:
 			var instance_scene = scene_instance.instantiate()
-			$LoadScene.add_child(instance_scene )			
-	else:
+			$LoadScene.add_child(instance_scene )	
+					
+	else:	
 		print("Scene does not exist: " + scene_name)
 		var constant_string_null = "res://08_SUBSCENES/Grid_scene/A2.tscn"
 		var scene_instance = load(constant_string_null)

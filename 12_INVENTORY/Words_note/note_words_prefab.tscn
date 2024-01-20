@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://dk6s0mpgbt4lb"]
+[gd_scene load_steps=19 format=3 uid="uid://dk6s0mpgbt4lb"]
 
 [ext_resource type="Script" path="res://10_BOARD/Behaviour/Movable_paper.tres.gd" id="1_pvcyt"]
 [ext_resource type="Script" path="res://10_BOARD/Behaviour/Apply_pos_anim.gd" id="2_pk3do"]
@@ -18,8 +18,8 @@ expand_margin_bottom = 12.0
 anti_aliasing = false
 
 [sub_resource type="Gradient" id="Gradient_l6wlh"]
-offsets = PackedFloat32Array(0.088, 1)
-colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+offsets = PackedFloat32Array(0, 0.0373333, 0.122667, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.622807, 0.622807, 0.622807, 1, 0.41923, 0.41923, 0.41923, 1, 0, 0, 0, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_m6tid"]
 gradient = SubResource("Gradient_l6wlh")
@@ -50,11 +50,15 @@ Dither_Node = In - DITHER_THRESHOLDS[index];"
 
 [sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_gsj1q"]
 
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_g32pu"]
+parameter_name = "Opacity"
+
 [sub_resource type="VisualShader" id="VisualShader_tavpc"]
 code = "shader_type canvas_item;
 render_mode blend_mix;
 
 uniform sampler2D tex_frg_2;
+uniform float Opacity;
 
 
 
@@ -63,8 +67,8 @@ void fragment() {
 	vec4 n_out2p0 = texture(tex_frg_2, UV);
 
 
-// FloatConstant:4
-	float n_out4p0 = 0.359000;
+// FloatParameter:8
+	float n_out8p0 = Opacity;
 
 
 // FloatConstant:3
@@ -84,7 +88,7 @@ void fragment() {
 			
 		vec2 uv = FRAGCOORD.xy * n_out3p0;
 		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-		n_out5p0 = n_out4p0 - DITHER_THRESHOLDS[index];
+		n_out5p0 = n_out8p0 - DITHER_THRESHOLDS[index];
 	}
 
 
@@ -98,18 +102,18 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-96.2909, -101.006)
+graph_offset = Vector2(-897.304, -134.537)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(1080, 100)
 nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_cse6h")
-nodes/fragment/2/position = Vector2(131.227, 50.1993)
+nodes/fragment/2/position = Vector2(60, -200)
 nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_mm61j")
-nodes/fragment/3/position = Vector2(-348.773, 390.199)
+nodes/fragment/3/position = Vector2(-1180, 380)
 nodes/fragment/4/node = SubResource("VisualShaderNodeFloatConstant_hpf3b")
-nodes/fragment/4/position = Vector2(-348.773, 250.199)
+nodes/fragment/4/position = Vector2(-1180, 240)
 nodes/fragment/5/node = SubResource("VisualShaderNodeExpression_s8ner")
-nodes/fragment/5/position = Vector2(-28.7734, 350.199)
+nodes/fragment/5/position = Vector2(-860, 340)
 nodes/fragment/5/size = Vector2(724.789, 654.559)
 nodes/fragment/5/input_ports = "0,0,In;1,0,Size;"
 nodes/fragment/5/output_ports = "0,0,Dither_Node;"
@@ -125,10 +129,13 @@ int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
 nodes/fragment/6/node = SubResource("VisualShaderNodeStep_gsj1q")
 nodes/fragment/6/position = Vector2(631.227, 50.1993)
-nodes/fragment/connections = PackedInt32Array(3, 0, 5, 1, 4, 0, 5, 0, 5, 0, 6, 1, 2, 0, 6, 0, 6, 0, 0, 1)
+nodes/fragment/8/node = SubResource("VisualShaderNodeFloatParameter_g32pu")
+nodes/fragment/8/position = Vector2(-1360, 40)
+nodes/fragment/connections = PackedInt32Array(3, 0, 5, 1, 5, 0, 6, 1, 2, 0, 6, 0, 6, 0, 0, 1, 8, 0, 5, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_s7pk5"]
 shader = SubResource("VisualShader_tavpc")
+shader_parameter/Opacity = 0.25
 
 [sub_resource type="GDScript" id="GDScript_nre2o"]
 script/source = "extends Node2D
@@ -167,11 +174,11 @@ script/source = "extends Node
 @onready var photo_square_prefabs = $\"../..\"
 
 @onready var burn = $\"../../text/BURN\"
-
 @onready var take_object = $\"../../Take_object\"
 
-
+var t 
 func _destroy(): 
+	
 	
 	if _global_datas.Player_InSubScene:
 		return
@@ -181,17 +188,27 @@ func _destroy():
 	
 func _in_zone():
 	
+
 	if _global_datas.Player_InSubScene:
 		return
 	
-	burn.visible = true
+	_fade_in()
 	take_object.kill_on_pos = true
 
 func _out_zone():
 
-	burn.visible = false
+	_fade_out()
 	take_object.kill_on_pos = false
 
+func _fade_in():
+	
+	burn.visible = true
+	
+	
+func _fade_out():
+		
+	burn.visible = false
+	
 "
 
 [sub_resource type="GDScript" id="GDScript_dkpc7"]
