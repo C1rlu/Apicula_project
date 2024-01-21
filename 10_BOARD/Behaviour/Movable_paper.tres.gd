@@ -27,7 +27,7 @@ var last_position : Vector2
 
 var change_photo 
 var legend
-
+var not_in_book
 
 func _ready():
 	size = control.scale.x
@@ -36,7 +36,7 @@ func _ready():
 	Pin_book = get_node_or_null("../Pin_book")
 	show_map = get_node_or_null("../Show_map_grid")
 	change_photo = get_node_or_null("../Change_photo")
-	
+	not_in_book = get_node_or_null("../Not_in_book")
 	
 	legend = get_node_or_null("../Legend")
 	
@@ -53,7 +53,7 @@ func _process(_delta):
 	control.global_position = new_position
 	
 
-	#print(_check_book_position())	
+	_check_book_position()
 			
 func _input(event):
 
@@ -153,6 +153,11 @@ func _unselect_element(condition : bool, move_behind_c : bool):
 	
 func _check_book_position():
 	
+	if not_in_book:
+		return
+	
+	if !_global_datas.Player_InBoard:
+		return
 	var page_position : String = "oustide"
 	var pages = _global_datas.Book_pages[_global_datas.Book_page_index]
 		
@@ -160,15 +165,19 @@ func _check_book_position():
 		return
 	var _position = control.get_global_mouse_position()
 	if _position.x > 960.0 and _position.x < 1690 and _position.y > 360:
-		var side_right : Node2D = pages.get_node("right")
-		#control.reparent(side_right)	 
 		page_position = "right"
+		if Pin_book:
+			Pin_book.visible = true
+			Pin_book._random_pin()	
 	elif _position.x < 960.0 and _position.x > 200 and _position.y > 360 :
-		var side_left : Node2D = pages.get_node("left")
-		#control.reparent(side_left)	
-		page_position = "left"			
+		page_position = "left"
+		if Pin_book:
+			Pin_book.visible = true
+			Pin_book._random_pin()	
 	else:
 		page_position = "outside"
+		if Pin_book:
+			Pin_book.visible = false
 					
 	return page_position
 		
@@ -206,20 +215,5 @@ func _on_area_2d_mouse_exited():
 
 	_global_datas.Cursor_mode.cursor_out()
 
-
-
-func _in_book_zone(condition : bool):
-	
-	return
-	
-	var pages = _global_datas.Book_pages[_global_datas.Book_page_index]
-		
-	if  pages.get_node_or_null("not_here") != null:
-		if Pin_book != null :Pin_book.visible = false
-		return
-	
-	in_book_zone = condition
-	if Pin_book != null :Pin_book.visible = condition
-	
 
 

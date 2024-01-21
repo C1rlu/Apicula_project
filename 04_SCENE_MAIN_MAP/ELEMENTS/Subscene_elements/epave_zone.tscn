@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://dti7l20thp2rk"]
+[gd_scene load_steps=24 format=3 uid="uid://dti7l20thp2rk"]
 
 [ext_resource type="Shader" uid="uid://jjqliete2f27" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Subscene_elements/Subscene_element_sh.tres" id="1_4eijp"]
 
@@ -21,6 +21,42 @@ func _on_area_entered(_area):
 	
 "
 
+[sub_resource type="GDScript" id="GDScript_ulh83"]
+script/source = "extends Node
+
+var _enable_in_game = false
+var _active : bool = false
+var _mouse_entered : bool = false
+
+func _input(event):
+	
+	if !_enable_in_game:
+		return
+	if Input.is_action_just_pressed(\"Click\") && _mouse_entered:
+		var observation = \"the scanner detect a boat shape here\"
+		var zone = _global_datas.cell_name
+		_global_datas.instance_word_text._intance_words_note(observation,zone)
+		print(\"working\")
+
+func _on_area_3d_mouse_entered():
+	if !_enable_in_game:
+		return
+	if _active:
+		_global_datas.Cursor_mode.cursor_in()
+		_mouse_entered = true
+		print(\"IN\")
+
+
+func _on_area_3d_mouse_exited():
+	if !_enable_in_game:
+		return
+	_global_datas.Cursor_mode.cursor_out()
+	_mouse_entered = false
+	print(\"OUT\")
+	
+
+"
+
 [sub_resource type="SphereShape3D" id="SphereShape3D_7qqy6"]
 radius = 0.67208
 
@@ -29,10 +65,13 @@ script/source = "extends Node
 
 @onready var mesh = $\"../mesh\"
 @onready var material : Material = mesh.get_surface_override_material(0)
+@onready var take_scanner_note = $\"../../Take_scanner_note\"
 
 var t
 
 func _show():
+	
+	take_scanner_note._active = true
 	
 	if t:
 		t.kill()
@@ -49,7 +88,8 @@ func _hide():
 	t = create_tween()
 	
 	t .tween_method(change_value,1.0,0.0,6.0).set_trans(Tween.TRANS_SINE)	
-	
+	await create_tween().tween_interval(6.0).finished
+	take_scanner_note._active = false
 func change_value(value : float):
 	material.set_shader_parameter(\"Distance\",value)
 	
@@ -252,6 +292,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.70167, 0, 1.01103)
 input_ray_pickable = false
 script = SubResource("GDScript_kppkw")
 
+[node name="Take_scanner_note" type="Node" parent="."]
+script = SubResource("GDScript_ulh83")
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_7qqy6")
 
@@ -261,11 +304,12 @@ shape = SubResource("SphereShape3D_7qqy6")
 script = SubResource("GDScript_pgyt6")
 
 [node name="Area3D" type="Area3D" parent="Epave_visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.174718, -1.90181, -0.403885)
 collision_layer = 3
 collision_mask = 3
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Epave_visuals/Area3D"]
-transform = Transform3D(0.795507, 0.0940491, 0.598601, -0.108768, 0.993999, -0.0116258, -0.596102, -0.0558601, 0.800963, 0.0447328, -1.94244, -0.56343)
+transform = Transform3D(0.795507, 0.0940491, 0.598601, -0.108768, 0.993999, -0.0116258, -0.596102, -0.0558601, 0.800963, 0, 0, 0)
 shape = SubResource("BoxShape3D_sc5sg")
 
 [node name="mesh" type="MeshInstance3D" parent="Epave_visuals"]
@@ -276,3 +320,5 @@ surface_material_override/0 = SubResource("ShaderMaterial_yfs1e")
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
 [connection signal="see_int" from="." to="Epave_visuals/Fade_out" method="_on_epave_zone_see_int"]
+[connection signal="mouse_entered" from="Epave_visuals/Area3D" to="Take_scanner_note" method="_on_area_3d_mouse_entered"]
+[connection signal="mouse_exited" from="Epave_visuals/Area3D" to="Take_scanner_note" method="_on_area_3d_mouse_exited"]

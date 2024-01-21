@@ -58,7 +58,7 @@ func _input(event):
 				book_is_open = true
 				if !_global_datas.Player_InDialogue:
 					_global_datas.book_is_open.emit(true)	
-			
+				
 	#TO ZOOM	
 	if click:
 		
@@ -86,13 +86,12 @@ func _unselect_element():
 	if control.global_position.y > 1200:
 		control.global_position.y = 1785	
 		_global_datas.Player_InBoard = false
-	
+
 		
 		if book_is_open:
 			book_is_open = false
 			if !_global_datas.Player_InDialogue:
 				_global_datas.book_is_open.emit(false)	  
-		
 		pages_behaviour._show_new_pages()
 		
 	else:
@@ -1209,6 +1208,7 @@ script = SubResource("GDScript_iyjg7")
 [node name="Pages_all" type="Node2D" parent="."]
 
 [node name="Page_01" type="Node2D" parent="Pages_all"]
+visible = false
 position = Vector2(0, 421)
 
 [node name="not_here" type="Node" parent="Pages_all/Page_01"]
@@ -1216,11 +1216,10 @@ position = Vector2(0, 421)
 [node name="left" type="Node2D" parent="Pages_all/Page_01"]
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Pages_all/Page_01/left"]
-visible = false
-offset_left = -413.0
-offset_top = -616.0
-offset_right = -241.0
-offset_bottom = -446.0
+offset_left = 238.0
+offset_top = -461.0
+offset_right = 410.0
+offset_bottom = -291.0
 mouse_filter = 2
 theme_override_constants/separation = 10
 
@@ -1358,11 +1357,16 @@ text = "3
 "
 
 [node name="Page_04" type="Node2D" parent="Pages_all"]
-visible = false
 material = SubResource("ShaderMaterial_jrkpn")
 position = Vector2(0, 421)
 
 [node name="left" type="Node2D" parent="Pages_all/Page_04"]
+
+[node name="Quest_Note_prefab" parent="Pages_all/Page_04/left" instance=ExtResource("2_chy1a")]
+position = Vector2(-555, -688)
+rotation = 0.0550088
+quest_name = "Found otis"
+quest_conditon = Array[String](["Who is otis ? "])
 
 [node name="Label_left" type="Label" parent="Pages_all/Page_04/left"]
 offset_left = -321.0

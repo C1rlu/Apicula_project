@@ -23,6 +23,8 @@ func _input(event: InputEvent) -> void:
 
 func _on_mouse_entered():
 	
+	if _global_datas.Player_InBoard:
+		return
 	if _global_datas.Player_InDialogue_zone:
 		return
 	
