@@ -43,16 +43,18 @@ func _ready():
 	
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 func _process(_delta):
-	
+
 	if !click:
-		return
+		return	
 		
 	var new_position = control.get_global_mouse_position() + offset
 	new_position.x = clamp(new_position.x,margin,1920-margin)
 	new_position.y = clamp(new_position.y,margin,1080-margin)
 	control.global_position = new_position
+	
 
-		
+	#print(_check_book_position())	
+			
 func _input(event):
 
 	#TO DRAG
@@ -68,8 +70,7 @@ func _input(event):
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 			if show_map != null : _global_datas._active_world_grid.emit(true)
 				
-			
-			
+		
 			move_behind()
 			
 			if !go_bottom:
@@ -128,31 +129,18 @@ func _unselect_element(condition : bool, move_behind_c : bool):
 				
 	if show_map != null : _global_datas._active_world_grid.emit(false)
 	
-	if !condition:
-		control.reparent(my_origin_parent)
-		if Pin_book != null :Pin_book.visible = false		
-	else:
-		
-		var pages = _global_datas.Book_pages[_global_datas.Book_page_index]
-		
-		if  pages.get_node_or_null("not_here") != null:
-		
-			return
+	
+	var page_position = _check_book_position()
+	if page_position =="outside":
+		return
+	var pages = _global_datas.Book_pages[_global_datas.Book_page_index]
+	if page_position  == "right":
+		var side_right : Node2D = pages.get_node("right")
+		control.reparent(side_right)	
 			
-		var mouse_position = control.get_global_mouse_position() + offset
-		if mouse_position.x > 960.0:
-			var side_right : Node2D = pages.get_node("right")
-			control.reparent(side_right)	
-			#print(side_right)
-		else:
-			var side_left : Node2D = pages.get_node("left")
-			control.reparent(side_left)		
-			#print(side_left)
-		
-		
-				
-		if Pin_book != null :Pin_book.visible = true
-		Pin_book._random_pin()
+	if page_position  == "left":		
+		var side_left : Node2D = pages.get_node("left")
+		control.reparent(side_left)			
 		
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
@@ -163,8 +151,26 @@ func _unselect_element(condition : bool, move_behind_c : bool):
 	move_behind()
 	_global_datas.lock_page.emit()
 	
+func _check_book_position():
 	
-	
+	var page_position : String = "oustide"
+	var pages = _global_datas.Book_pages[_global_datas.Book_page_index]
+		
+	if  pages.get_node_or_null("not_here") != null:	
+		return
+	var _position = control.get_global_mouse_position()
+	if _position.x > 960.0 and _position.x < 1690 and _position.y > 360:
+		var side_right : Node2D = pages.get_node("right")
+		#control.reparent(side_right)	 
+		page_position = "right"
+	elif _position.x < 960.0 and _position.x > 200 and _position.y > 360 :
+		var side_left : Node2D = pages.get_node("left")
+		#control.reparent(side_left)	
+		page_position = "left"			
+	else:
+		page_position = "outside"
+					
+	return page_position
 		
 func _notification(what):
 	#if what == NOTIFICATION_WM_FOCUS_IN:
@@ -200,7 +206,11 @@ func _on_area_2d_mouse_exited():
 
 	_global_datas.Cursor_mode.cursor_out()
 
+
+
 func _in_book_zone(condition : bool):
+	
+	return
 	
 	var pages = _global_datas.Book_pages[_global_datas.Book_page_index]
 		
