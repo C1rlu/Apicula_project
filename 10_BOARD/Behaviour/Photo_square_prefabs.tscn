@@ -822,16 +822,25 @@ script/source = "extends Node
 
 
 var t 
+var _active
+
+func _ready():
+	_global_datas._show_object_legend.connect(_zoom)
+
+func _zoom(condition,value):
+	
+		_active = condition
+	
 func _destroy(): 
 	
 	if _global_datas.Player_InSubScene:
 		return
-		
-	print(\"PHOTO DETROYED\")
 	photo_square_prefabs.queue_free()
 	
 func _in_zone():
 	
+	if _active:
+		return
 	if _global_datas.Player_InSubScene:
 		return
 	

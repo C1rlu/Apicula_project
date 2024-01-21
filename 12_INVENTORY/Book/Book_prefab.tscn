@@ -1,8 +1,10 @@
-[gd_scene load_steps=35 format=3 uid="uid://dyfif7fbf51gx"]
+[gd_scene load_steps=61 format=3 uid="uid://dyfif7fbf51gx"]
 
 [ext_resource type="PackedScene" uid="uid://cgb4c1n0bj2at" path="res://12_INVENTORY/Book/Page_flip/page_flip_right.tscn" id="1_1pirv"]
 [ext_resource type="Material" uid="uid://blohbpbwcsu4f" path="res://05_SHADER_TEST/UI/Circle_tirette/Circle_inside_withDither_dots.tres" id="1_fo7hk"]
 [ext_resource type="PackedScene" uid="uid://b8ack6t2c7mm2" path="res://12_INVENTORY/Book/Quest_prefab/Quest_note.tscn" id="2_chy1a"]
+[ext_resource type="Material" uid="uid://dmi6np7l0110b" path="res://05_SHADER_TEST/Book/Book_flip_corner_button_mat.tres" id="2_f4xjm"]
+[ext_resource type="Texture2D" uid="uid://ch5fu7wcqx25i" path="res://12_INVENTORY/Book/Quest_img/TheMirrors.png" id="3_nrhts"]
 
 [sub_resource type="GDScript" id="GDScript_ia7iy"]
 script/source = "extends Node
@@ -544,6 +546,45 @@ func _show_thickness(list : Array, index : int, show : bool):
 	thicknes.visible = show
 "
 
+[sub_resource type="Gradient" id="Gradient_lkg84"]
+colors = PackedColorArray(0, 0, 0, 1, 0.423651, 0.423651, 0.423651, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_knv3b"]
+gradient = SubResource("Gradient_lkg84")
+width = 128
+height = 128
+fill_from = Vector2(0.662393, 0.602564)
+fill_to = Vector2(0.786325, 0.717949)
+
+[sub_resource type="GDScript" id="GDScript_wy54x"]
+script/source = "extends TextureButton
+
+
+func _ready():
+	var number : int = 0
+	set_focus_mode(number)
+
+
+"
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_hb13m"]
+gradient = SubResource("Gradient_lkg84")
+width = 128
+height = 128
+fill_from = Vector2(0.324786, 0.598291)
+fill_to = Vector2(0.17094, 0.764957)
+
+[sub_resource type="GDScript" id="GDScript_iyjg7"]
+script/source = "extends TextureButton
+
+
+func _ready():
+	var number : int = 0
+	set_focus_mode(number)
+
+
+"
+
 [sub_resource type="GDScript" id="GDScript_wjhcf"]
 script/source = "extends Button
 
@@ -574,6 +615,341 @@ func _on_pressed():
 "
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jrkpn"]
+
+[sub_resource type="GDScript" id="GDScript_7l308"]
+script/source = "extends Node
+
+
+@export var margin : float
+@export var scale_in_hand = 1.10
+@export var scale_in_loupe = 2.0
+@onready var control = $\"..\"
+
+@onready var area_2d = $\"../Area2D\"
+
+var mouse_entered = false
+var click = false
+var offset
+
+var size : float
+
+var my_origin_parent : Node
+var last_position : Vector2
+
+var legend
+
+
+func _ready():
+	size = control.scale.x
+	my_origin_parent = control.get_parent()
+	last_position = control.transform.origin
+
+	legend = get_node_or_null(\"../Legend\")
+
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	
+func _process(_delta):
+	
+	if !click:
+		return
+
+	var new_position = control.get_global_mouse_position() 
+	new_position.x = clamp(new_position.x,margin,1920-margin)
+	new_position.y = clamp(new_position.y,margin,1080-margin)
+	control.global_position = new_position
+	
+		
+func _input(event):
+
+	#TO DRAG
+	if !_global_datas.Player_lock_click == true:
+		
+		if Input.is_action_just_pressed(\"Click\") && mouse_entered:
+			click = true
+			_global_datas.Player_lock_click = true
+			_scale_change(size * scale_in_hand)
+			#offset = control.transform.origin - control.get_global_mouse_position()
+			offset = Vector2.ZERO
+			
+			var select_parent = _global_datas.In_Front_Node
+			control.reparent(select_parent)
+			control.move_to_front()
+			
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+			
+
+	#TO ZOOM	
+	if click:
+		
+		if Input.is_action_just_pressed(\"Zoom_object\"):	
+			_scale_change(size * scale_in_loupe)
+			var select_parent = _global_datas.In_Front_Node
+			control.reparent(select_parent)
+			control.move_to_front()
+			Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)	
+			
+			if legend:
+				var legend_text = legend.get_legend()
+				_global_datas._show_object_legend.emit(true,legend_text)
+			else:
+				var legend_text = \"please add a legend node to this item\"
+				_global_datas._show_object_legend.emit(true,legend_text)
+				
+		if Input.is_action_just_released(\"Zoom_object\"):
+			_scale_change(size)
+			var select_parent = _global_datas.In_Front_Node
+			control.reparent(select_parent)
+			control.move_to_front()
+			
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+			_global_datas._show_object_legend.emit(false,\"\")
+			
+		#TO DROP
+		if event is InputEventMouseButton :
+			if event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
+				_unselect_element()
+				
+				
+func _scale_change(value):
+	
+	control.set_scale(Vector2(value,value))
+
+
+func _unselect_element():
+	click = false
+	_global_datas.Player_lock_click = false
+	_scale_change(size)
+	
+	_global_datas._show_object_legend.emit(false,\"\")
+
+	control.reparent(my_origin_parent)
+	control.position = last_position
+	my_origin_parent.move_child(control,0)
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+
+	_global_datas.lock_page.emit()
+	
+	
+	
+		
+func _notification(what):
+	#if what == NOTIFICATION_WM_FOCUS_IN:
+	if click:
+		if what == NOTIFICATION_WM_MOUSE_EXIT:
+			_unselect_element()
+	
+		
+func _on_area_2d_mouse_entered():
+
+	mouse_entered = true
+	
+	_global_datas.Cursor_mode.cursor_in()
+	
+
+func _on_area_2d_mouse_exited():
+	mouse_entered = false
+
+	_global_datas.Cursor_mode.cursor_out()
+
+
+
+
+"
+
+[sub_resource type="GDScript" id="GDScript_4tgap"]
+script/source = "extends Node
+
+@export var _legend : String
+
+func set_legend(legend : String):
+	_legend = legend	
+
+func get_legend():
+	return _legend 
+"
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_v6e6e"]
+constant = 0.4
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_68fsn"]
+constant = 0.989
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_bqbxq"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_xsjlw"]
+parameter_name = "Color2"
+default_value_enabled = true
+default_value = Color(0.470642, 0.389814, 0.0971986, 1)
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_dhckv"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
+op_type = 3
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_11xm4"]
+parameter_name = "ColorParameter"
+
+[sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_p8cr1"]
+parameter_name = "Noise"
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_ac3w6"]
+source = 5
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_dnqwo"]
+default_input_values = [0, 0.0, 1, 1.0, 2, 1.155]
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_ruxuk"]
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_5q2be"]
+input_name = "texture"
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_q77yb"]
+source = 5
+
+[sub_resource type="VisualShader" id="VisualShader_2lvdu"]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+uniform vec4 ColorParameter : source_color;
+uniform vec4 Color2 : source_color = vec4(0.470642, 0.389814, 0.097199, 1.000000);
+uniform sampler2D Noise;
+
+
+
+void fragment() {
+// ColorParameter:29
+	vec4 n_out29p0 = ColorParameter;
+
+
+// ColorParameter:13
+	vec4 n_out13p0 = Color2;
+
+
+// FloatConstant:11
+	float n_out11p0 = 0.989000;
+
+
+// FloatConstant:10
+	float n_out10p0 = 0.400000;
+
+
+	float n_out12p0;
+// Expression:12
+	n_out12p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out10p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out12p0 = n_out11p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+	vec4 n_out32p0;
+// Texture2D:32
+	n_out32p0 = texture(Noise, UV);
+
+
+// Step:34
+	float n_out34p0 = step(n_out12p0, n_out32p0.x);
+
+
+	vec4 n_out9p0;
+// Texture2D:9
+	n_out9p0 = texture(TEXTURE, UV);
+
+
+// Mix:33
+	float n_in33p2 = 1.15500;
+	float n_out33p0 = mix(n_out34p0, n_out9p0.x, n_in33p2);
+
+
+// Mix:28
+	vec3 n_out28p0 = mix(vec3(n_out29p0.xyz), vec3(n_out13p0.xyz), vec3(n_out33p0));
+
+
+// Output:0
+	COLOR.rgb = n_out28p0;
+
+
+}
+"
+graph_offset = Vector2(587.12, 45.1535)
+mode = 1
+flags/light_only = false
+nodes/fragment/0/position = Vector2(1820, 100)
+nodes/fragment/8/node = SubResource("VisualShaderNodeInput_5q2be")
+nodes/fragment/8/position = Vector2(-420, -300)
+nodes/fragment/9/node = SubResource("VisualShaderNodeTexture_q77yb")
+nodes/fragment/9/position = Vector2(-120, -360)
+nodes/fragment/10/node = SubResource("VisualShaderNodeFloatConstant_v6e6e")
+nodes/fragment/10/position = Vector2(-560, 20)
+nodes/fragment/11/node = SubResource("VisualShaderNodeFloatConstant_68fsn")
+nodes/fragment/11/position = Vector2(-560, -120)
+nodes/fragment/12/node = SubResource("VisualShaderNodeExpression_bqbxq")
+nodes/fragment/12/position = Vector2(-320, -80)
+nodes/fragment/12/size = Vector2(724.789, 654.559)
+nodes/fragment/12/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/12/output_ports = "0,0,Dither_Node;"
+nodes/fragment/12/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/13/node = SubResource("VisualShaderNodeColorParameter_xsjlw")
+nodes/fragment/13/position = Vector2(1020, -340)
+nodes/fragment/28/node = SubResource("VisualShaderNodeMix_dhckv")
+nodes/fragment/28/position = Vector2(1496.8, -32.3737)
+nodes/fragment/29/node = SubResource("VisualShaderNodeColorParameter_11xm4")
+nodes/fragment/29/position = Vector2(1380, -280)
+nodes/fragment/31/node = SubResource("VisualShaderNodeTexture2DParameter_p8cr1")
+nodes/fragment/31/position = Vector2(420, 560)
+nodes/fragment/32/node = SubResource("VisualShaderNodeTexture_ac3w6")
+nodes/fragment/32/position = Vector2(880, 400)
+nodes/fragment/33/node = SubResource("VisualShaderNodeMix_dnqwo")
+nodes/fragment/33/position = Vector2(1260, 120)
+nodes/fragment/34/node = SubResource("VisualShaderNodeStep_ruxuk")
+nodes/fragment/34/position = Vector2(922.397, -15.5859)
+nodes/fragment/connections = PackedInt32Array(8, 0, 9, 2, 10, 0, 12, 1, 11, 0, 12, 0, 29, 0, 28, 0, 31, 0, 32, 2, 13, 0, 28, 1, 28, 0, 0, 0, 33, 0, 28, 2, 12, 0, 34, 0, 32, 0, 34, 1, 34, 0, 33, 0, 9, 0, 33, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_v2814"]
+frequency = 0.0001
+fractal_octaves = 10
+fractal_gain = 0.63
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_6drbn"]
+generate_mipmaps = false
+seamless = true
+noise = SubResource("FastNoiseLite_v2814")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3cf7f"]
+shader = SubResource("VisualShader_2lvdu")
+shader_parameter/ColorParameter = Color(0.521569, 0.486275, 0.423529, 1)
+shader_parameter/Color2 = Color(0.0862745, 0.188235, 0.192157, 1)
+shader_parameter/Noise = SubResource("NoiseTexture2D_6drbn")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_r0chx"]
+size = Vector2(417, 503)
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_sbgpn"]
 viewport_path = NodePath("SubViewport")
@@ -814,15 +1190,22 @@ theme_override_font_sizes/font_size = 25
 text = "I"
 
 [node name="Button_Next_page" type="TextureButton" parent="."]
-offset_top = -238.0
-offset_right = 613.0
-offset_bottom = 382.0
+material = ExtResource("2_f4xjm")
+offset_left = 465.0
+offset_top = 255.0
+offset_right = 593.0
+offset_bottom = 383.0
+texture_normal = SubResource("GradientTexture2D_knv3b")
+script = SubResource("GDScript_wy54x")
 
 [node name="Button_Previous_page" type="TextureButton" parent="."]
-offset_left = -595.0
-offset_top = -238.0
-offset_right = -3.0
-offset_bottom = 382.0
+material = ExtResource("2_f4xjm")
+offset_left = -578.0
+offset_top = 255.0
+offset_right = -450.0
+offset_bottom = 383.0
+texture_normal = SubResource("GradientTexture2D_hb13m")
+script = SubResource("GDScript_iyjg7")
 
 [node name="Pages_all" type="Node2D" parent="."]
 
@@ -923,10 +1306,34 @@ position = Vector2(0, 421)
 
 [node name="left" type="Node2D" parent="Pages_all/Page_03"]
 
+[node name="Illustration" type="Node2D" parent="Pages_all/Page_03/left"]
+position = Vector2(-301, -354)
+
+[node name="Take_object_OnPage" type="Node" parent="Pages_all/Page_03/left/Illustration"]
+script = SubResource("GDScript_7l308")
+scale_in_loupe = 1.5
+
+[node name="Legend" type="Node" parent="Pages_all/Page_03/left/Illustration"]
+script = SubResource("GDScript_4tgap")
+_legend = "A paper from talking about \"Mirrors\""
+
+[node name="TheMirrors" type="Sprite2D" parent="Pages_all/Page_03/left/Illustration"]
+material = SubResource("ShaderMaterial_3cf7f")
+position = Vector2(8, 0)
+scale = Vector2(0.337097, 0.337097)
+texture = ExtResource("3_nrhts")
+
+[node name="Area2D" type="Area2D" parent="Pages_all/Page_03/left/Illustration"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Pages_all/Page_03/left/Illustration/Area2D"]
+visible = false
+position = Vector2(2.5, -1.50006)
+shape = SubResource("RectangleShape2D_r0chx")
+
 [node name="Quest_03" parent="Pages_all/Page_03/left" instance=ExtResource("2_chy1a")]
-position = Vector2(-494, -672)
-rotation = 0.234428
-quest_name = "The Trame  "
+position = Vector2(-543, -680)
+rotation = -0.0659935
+quest_name = "The Mirrors"
 quest_conditon = Array[String]([])
 
 [node name="Label_left" type="Label" parent="Pages_all/Page_03/left"]
@@ -1039,10 +1446,10 @@ text = "6
 "
 
 [node name="PAGE_RENDER" type="TextureRect" parent="."]
-offset_left = -963.0
-offset_top = -517.0
-offset_right = 957.0
-offset_bottom = 563.0
+offset_left = -960.0
+offset_top = -515.0
+offset_right = 960.0
+offset_bottom = 565.0
 scale = Vector2(0.927, 0.883)
 pivot_offset = Vector2(960, 540)
 mouse_filter = 2
@@ -1052,12 +1459,14 @@ expand_mode = 1
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+visible = false
 position = Vector2(-2, -318.5)
 shape = SubResource("RectangleShape2D_1sju8")
 
 [node name="Inside_book_area" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Inside_book_area"]
+visible = false
 position = Vector2(9, 77)
 shape = SubResource("RectangleShape2D_5xv1b")
 
@@ -1080,6 +1489,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0)
 [connection signal="pressed" from="Button_Next_page" to="Pages_Behaviour" method="_on_button_next_2_pressed"]
 [connection signal="pressed" from="Button_Previous_page" to="Pages_Behaviour" method="_on_button_previous_page_pressed"]
 [connection signal="pressed" from="Pages_all/Page_01/right/VBoxContainer/Button3" to="Pages_all/Page_01/right/VBoxContainer/Button3" method="_on_pressed"]
+[connection signal="mouse_entered" from="Pages_all/Page_03/left/Illustration/Area2D" to="Pages_all/Page_03/left/Illustration/Take_object_OnPage" method="_on_area_2d_mouse_entered"]
+[connection signal="mouse_exited" from="Pages_all/Page_03/left/Illustration/Area2D" to="Pages_all/Page_03/left/Illustration/Take_object_OnPage" method="_on_area_2d_mouse_exited"]
 [connection signal="mouse_entered" from="Area2D" to="Slide" method="_on_area_2d_mouse_entered"]
 [connection signal="mouse_exited" from="Area2D" to="Slide" method="_on_area_2d_mouse_exited"]
 [connection signal="area_shape_entered" from="Inside_book_area" to="Parent_to_book" method="_on_inside_book_area_area_shape_entered"]

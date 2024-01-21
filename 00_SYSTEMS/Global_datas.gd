@@ -57,8 +57,6 @@ signal _instance_photo # here we could define photo type
 var _photo_position : Vector2
 signal _forreuse_on
 signal _forreuse_off
-signal _forreuse_impact
-signal _spawn_empty_oxygene
 signal _teleport_position(position : Vector3)
 signal _find_loot(type : Loot_Data)
 signal _subscene_fail
