@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://cb8k68mtsigvd"]
+[gd_scene load_steps=16 format=3 uid="uid://cb8k68mtsigvd"]
 
 [ext_resource type="Script" path="res://00_SYSTEMS/Global_datas.gd" id="1_64l51"]
 [ext_resource type="Script" path="res://06_UI/Color_management/Color_Managers.gd" id="3_r6ky2"]
@@ -11,6 +11,25 @@
 [ext_resource type="PackedScene" uid="uid://bbp1ccoa6te1g" path="res://11_SPEAKER/05_speaker_02.tscn" id="18_l1ne5"]
 [ext_resource type="PackedScene" uid="uid://nigmie4bbn6" path="res://08_SUBSCENES/03_subscenes.tscn" id="19_cnotd"]
 [ext_resource type="PackedScene" uid="uid://dmg5brvcww8lq" path="res://12_INVENTORY/06_inventory.tscn" id="19_v7nhs"]
+
+[sub_resource type="GDScript" id="GDScript_7v3dw"]
+script/source = "extends Node
+
+@export var active_prologue_demo : bool = false
+
+
+func _ready():
+	
+	$Timer.start()	
+
+func _on_timer_timeout():
+	if active_prologue_demo:
+		_global_datas.active_prologue_demo.emit()
+		_global_datas.player_active_tools.emit(false)
+	else:
+		_global_datas.player_active_tools.emit(true)	
+		
+"
 
 [sub_resource type="GDScript" id="GDScript_gl82p"]
 script/source = "extends Node
@@ -31,7 +50,9 @@ func _input(event):
 	if event.is_action_pressed(\"Add_coins\"):
 		_global_datas._find_coins.emit()
 
-
+	if event.is_action_pressed(\"Demo\"):
+		_global_datas.active_prologue_demo.emit()
+		_global_datas.player_active_tools.emit(false)
 "
 
 [sub_resource type="GDScript" id="GDScript_j70qp"]
@@ -72,6 +93,15 @@ metadata/_edit_horizontal_guides_ = [-31.0]
 [node name="01_GAME_MANAGERS" type="Node" parent="."]
 script = ExtResource("1_64l51")
 
+[node name="GAME_STATES" type="Node" parent="01_GAME_MANAGERS"]
+
+[node name="Prologue_demo" type="Node" parent="01_GAME_MANAGERS/GAME_STATES"]
+script = SubResource("GDScript_7v3dw")
+
+[node name="Timer" type="Timer" parent="01_GAME_MANAGERS/GAME_STATES/Prologue_demo"]
+wait_time = 0.1
+one_shot = true
+
 [node name="DEBUG_STATE" type="Node" parent="01_GAME_MANAGERS"]
 script = SubResource("GDScript_gl82p")
 fps_target = 120
@@ -106,3 +136,5 @@ metadata/_edit_horizontal_guides_ = [542.0]
 [node name="06_INVENTORY" parent="." instance=ExtResource("19_v7nhs")]
 
 [node name="07_SCREEN_TOOLS" parent="." instance=ExtResource("18_akagp")]
+
+[connection signal="timeout" from="01_GAME_MANAGERS/GAME_STATES/Prologue_demo/Timer" to="01_GAME_MANAGERS/GAME_STATES/Prologue_demo" method="_on_timer_timeout"]

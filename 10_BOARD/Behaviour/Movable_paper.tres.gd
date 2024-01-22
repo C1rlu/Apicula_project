@@ -29,6 +29,8 @@ var change_photo
 var legend
 var not_in_book
 
+@export var object_center_marge : Vector2
+
 func _ready():
 	size = control.scale.x
 	my_origin_parent = control.get_parent()
@@ -39,7 +41,7 @@ func _ready():
 	not_in_book = get_node_or_null("../Not_in_book")
 	
 	legend = get_node_or_null("../Legend")
-	
+
 	
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 func _process(_delta):
@@ -52,7 +54,6 @@ func _process(_delta):
 	new_position.y = clamp(new_position.y,margin,1080-margin)
 	control.global_position = new_position
 	
-
 	_check_book_position()
 			
 func _input(event):
@@ -163,13 +164,15 @@ func _check_book_position():
 		
 	if  pages.get_node_or_null("not_here") != null:	
 		return
-	var _position = control.get_global_mouse_position()
-	if _position.x > 960.0 and _position.x < 1690 and _position.y > 360:
+		
+	var _position = control.global_position
+	print(_position)
+	if _position.x > 960.0 and _position.x < 1580 - object_center_marge.x and _position.y > 360:
 		page_position = "right"
 		if Pin_book:
 			Pin_book.visible = true
 			Pin_book._random_pin()	
-	elif _position.x < 960.0 and _position.x > 200 and _position.y > 360 :
+	elif _position.x < 960.0 and _position.x > 330 + object_center_marge.x and _position.y > 360 :
 		page_position = "left"
 		if Pin_book:
 			Pin_book.visible = true

@@ -24,6 +24,9 @@ func _ready():
 	_global_datas._open_dialogue.connect(_inDialogue)
 	_global_datas.in_dialogue_zone.connect(_outDialogue)
 	
+
+
+	
 func _physics_process(_delta):
 	
 	var playerPosition = _global_datas.player_position

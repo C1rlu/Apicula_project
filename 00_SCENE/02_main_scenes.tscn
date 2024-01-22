@@ -1,7 +1,8 @@
-[gd_scene load_steps=97 format=3 uid="uid://cnmptm7i0xxmj"]
+[gd_scene load_steps=99 format=3 uid="uid://cnmptm7i0xxmj"]
 
 [ext_resource type="PackedScene" uid="uid://vpdvl0v7dubd" path="res://00_PLAYER/Player_boat.tscn" id="1_qltht"]
 [ext_resource type="Script" path="res://06_UI/Fps_counter.gd" id="1_s74e5"]
+[ext_resource type="Resource" uid="uid://ppxk5i543dfn" path="res://09_NPC/Npc_data/Mr_Birds_data.tres" id="1_trgwt"]
 [ext_resource type="Script" path="res://03_CAMERA/CameraFollow.gd" id="2_6q1sg"]
 [ext_resource type="Shader" uid="uid://dxtkig2genofx" path="res://05_SHADER_TEST/Full_screen/FullScreen_sh.tres" id="3_e0mrt"]
 [ext_resource type="Shader" uid="uid://bduoqim3kfbs6" path="res://00_PLAYER/Sonar/Sonar_sh.tres" id="3_todel"]
@@ -24,6 +25,24 @@
 [ext_resource type="Resource" uid="uid://l3coaeai3lx6" path="res://09_NPC/Npc_data/Baltazar_data.tres" id="19_qcquc"]
 [ext_resource type="Material" uid="uid://dgl2um0yp8e3c" path="res://05_SHADER_TEST/All_Materials/Building_mat.tres" id="20_24d3w"]
 [ext_resource type="PackedScene" uid="uid://dti7l20thp2rk" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Subscene_elements/epave_zone.tscn" id="23_txlwt"]
+
+[sub_resource type="GDScript" id="GDScript_ueh7h"]
+script/source = "extends Node
+
+@onready var player_boat = $\"../../Player_Boat\"
+@export var Bird_start_dialogue : Npc_datas
+@export var prologue_position : Vector3
+
+func _ready():
+	_global_datas.active_prologue_demo.connect(_state_change)
+	
+	
+func _state_change():
+	player_boat.position = prologue_position
+	_global_datas.Npc_Dialogue = Bird_start_dialogue
+	_global_datas._bird_is_comming.emit()
+	
+"
 
 [sub_resource type="GDScript" id="GDScript_8cfdp"]
 script/source = "extends Node
@@ -400,17 +419,13 @@ script/source = "extends Node
 @onready var birds = $\"../Birds\"
 
 var t
-var is_active = false
+
 func _ready():
 	_global_datas._bird_is_comming.connect(_follow)
 
 
 func _follow():
 	
-	if is_active:
-		return
-	
-	is_active = true
 	var pos = Vector3(_global_datas.player_position.x,birds.global_position.y,_global_datas.player_position.z + 11)
 	birds.global_position = pos 
 	birds.visible = true
@@ -471,16 +486,18 @@ script/source = "extends Node
 
 var t
 var is_active = false
+var lock_tools = false
 
 func _ready():
 	_global_datas._active_sonar.connect(active_sonar)
 	sonar.scale = Vector3(0.1,0.1,0.1)
 	_1.visible = false
 	_2.visible = false
+
 	
 func active_sonar():
 	
-	
+
 	
 	if is_active:
 		return
@@ -807,9 +824,8 @@ script/source = "extends Node
 func _ready():
 	_global_datas._go_Subscene.connect(_disable)
 	_global_datas._backFrom_subscene.connect(_active)
-	pass
+	
 func _disable():
-
 	area_3d.input_ray_pickable = false
 func _active():
 
@@ -911,6 +927,13 @@ material = ExtResource("7_4y8ld")
 size = Vector3(30, 0, 30)
 
 [node name="02_MAIN_SCENES" type="Node"]
+
+[node name="GAME_STATE" type="Node" parent="."]
+
+[node name="Prologue" type="Node" parent="GAME_STATE"]
+script = SubResource("GDScript_ueh7h")
+Bird_start_dialogue = ExtResource("1_trgwt")
+prologue_position = Vector3(-21, 0, 7)
 
 [node name="01_GAME_UI" type="Node" parent="."]
 script = SubResource("GDScript_8cfdp")
@@ -1063,6 +1086,7 @@ fov = 10.2
 
 [node name="Button_active_Dialogue" type="Node" parent="01_GAME_UI/MAIN_SCENE_UI"]
 script = SubResource("GDScript_hpjin")
+Birds_data = ExtResource("1_trgwt")
 
 [node name="Button" type="Control" parent="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue"]
 visible = false
@@ -1336,13 +1360,25 @@ transform = Transform3D(-0.273803, 0, 2.84997e-08, 0, 0.386791, 0, -1.54109e-08,
 transform = Transform3D(-0.529492, 0, 2.98023e-08, 0, 0.529492, 0, -2.98023e-08, 0, -0.529492, 6.28434, -0.228083, 1.37311)
 
 [node name="IceBerg_11" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("15_bqwbg")]
-transform = Transform3D(-0.137043, 0, -0.51145, 0, 0.529492, 0, 0.51145, 0, -0.137043, -5.98852, -0.228083, 0.594712)
+transform = Transform3D(-0.137043, 0, -0.51145, 0, 0.529492, 0, 0.51145, 0, -0.137043, -6.63411, -0.228083, 0.421727)
+
+[node name="IceBerg_12" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("15_bqwbg")]
+transform = Transform3D(-0.300319, 0, -1.1208, 0, 1.16034, 0, 1.1208, 0, -0.300319, -9.47565, -0.207551, -0.339665)
 
 [node name="Banquise_02" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("17_4pwgg")]
 transform = Transform3D(-0.624077, 0, -0.734248, 0, 0.963635, 0, 0.734248, 0, -0.624077, -3.98623, -0.21875, -1.53876)
 
+[node name="Banquise_07" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("17_4pwgg")]
+transform = Transform3D(-2.07321, 0, 0.021965, 0, 2.07333, 0, -0.021965, 0, -2.07321, -7.3006, -0.21875, 7.09551)
+
+[node name="Banquise_03" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("17_4pwgg")]
+transform = Transform3D(-3.44011, 0, -1.42649, 0, 3.72414, 0, 1.42649, 0, -3.44011, -15.8757, -0.21875, 0.720535)
+
+[node name="Banquise_06" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("17_4pwgg")]
+transform = Transform3D(3.347, 0, -1.63302, 0, 3.72414, 0, 1.63302, 0, 3.347, -9.5005, -0.21875, 10.6072)
+
 [node name="Banquise_04" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("17_4pwgg")]
-transform = Transform3D(0.999525, 0, 0.0308178, 0, 1, 0, -0.0308178, 0, 0.999525, -3.36898, -0.215396, 0.231105)
+transform = Transform3D(0.999525, 0, 0.0308178, 0, 1, 0, -0.0308178, 0, 0.999525, -4.61812, -0.215396, -0.382779)
 
 [node name="Banquise_05" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("17_4pwgg")]
 transform = Transform3D(-0.522002, 0, 0.559075, 0, 0.764886, 0, -0.559075, 0, -0.522002, -2.36794, -0.216037, -5.03695)

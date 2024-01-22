@@ -3,9 +3,18 @@ extends Area3D
 var can_click = false
 @onready var on_over_mouse_3d_shape = $"../Sonar/On_OverMouse_3D_SHAPE"
 
+
+var lock_tools = false
+func _ready():
+	_global_datas.player_active_tools.connect(_unlock)
+	
+func _unlock(condition):
+	lock_tools = condition	
+
 func _input(event: InputEvent) -> void:
 	
-
+	if !lock_tools:
+		return
 
 	if !can_click:
 		return
@@ -13,8 +22,8 @@ func _input(event: InputEvent) -> void:
 		return
 			
 	if event.is_action_pressed("Click"):
-		if _global_datas.Player_InDialogue:
-			_global_datas._close_dialogue.emit()	
+		#if _global_datas.Player_InDialogue:
+			#_global_datas._close_dialogue.emit()	
 		
 		if _global_datas.Player_InBoard:
 			return		
@@ -22,6 +31,9 @@ func _input(event: InputEvent) -> void:
 		
 
 func _on_mouse_entered():
+	
+	if !lock_tools:
+		return
 	
 	if _global_datas.Player_InBoard:
 		return

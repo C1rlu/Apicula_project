@@ -665,22 +665,22 @@ shader = SubResource("VisualShader_n63tb")
 shader_parameter/Denoiser = 1.5
 shader_parameter/Photo = ExtResource("4_a771i")
 
-[sub_resource type="Gradient" id="Gradient_l6wlh"]
+[sub_resource type="Gradient" id="Gradient_j2p33"]
 offsets = PackedFloat32Array(0, 0.064, 0.202667, 1)
 colors = PackedColorArray(1, 1, 1, 1, 0.456, 0.456, 0.456, 1, 0.31959, 0.31959, 0.31959, 1, 0, 0, 0, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_m6tid"]
-gradient = SubResource("Gradient_l6wlh")
+gradient = SubResource("Gradient_j2p33")
 fill = 2
 fill_from = Vector2(0.5, 0.5)
 
-[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_fqa7o"]
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_x573l"]
 texture = SubResource("GradientTexture2D_m6tid")
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_lp4nv"]
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_oawhm"]
 constant = 0.4
 
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_wh6q8"]
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_tmpts"]
 size = Vector2(724.789, 654.559)
 expression = "const float DITHER_THRESHOLDS[16] ={
 		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
@@ -693,12 +693,12 @@ vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
 
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_3gxbg"]
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_q0xo0"]
 
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_gs1mi"]
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_ub5hs"]
 parameter_name = "Opacity"
 
-[sub_resource type="VisualShader" id="VisualShader_jh6cd"]
+[sub_resource type="VisualShader" id="VisualShader_h4umo"]
 code = "shader_type canvas_item;
 render_mode blend_mix;
 
@@ -751,11 +751,11 @@ graph_offset = Vector2(-567.79, 89.0975)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(1060, 180)
-nodes/fragment/15/node = SubResource("VisualShaderNodeTexture_fqa7o")
+nodes/fragment/15/node = SubResource("VisualShaderNodeTexture_x573l")
 nodes/fragment/15/position = Vector2(260, 180)
-nodes/fragment/16/node = SubResource("VisualShaderNodeFloatConstant_lp4nv")
+nodes/fragment/16/node = SubResource("VisualShaderNodeFloatConstant_oawhm")
 nodes/fragment/16/position = Vector2(-220, 520)
-nodes/fragment/18/node = SubResource("VisualShaderNodeExpression_wh6q8")
+nodes/fragment/18/node = SubResource("VisualShaderNodeExpression_tmpts")
 nodes/fragment/18/position = Vector2(100, 480)
 nodes/fragment/18/size = Vector2(724.789, 654.559)
 nodes/fragment/18/input_ports = "0,0,In;1,0,Size;"
@@ -770,15 +770,15 @@ nodes/fragment/18/expression = "const float DITHER_THRESHOLDS[16] ={
 vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/19/node = SubResource("VisualShaderNodeStep_3gxbg")
+nodes/fragment/19/node = SubResource("VisualShaderNodeStep_q0xo0")
 nodes/fragment/19/position = Vector2(760, 180)
-nodes/fragment/20/node = SubResource("VisualShaderNodeFloatParameter_gs1mi")
+nodes/fragment/20/node = SubResource("VisualShaderNodeFloatParameter_ub5hs")
 nodes/fragment/20/position = Vector2(-540, 300)
 nodes/fragment/connections = PackedInt32Array(16, 0, 18, 1, 18, 0, 19, 1, 19, 0, 0, 1, 15, 0, 19, 0, 20, 0, 18, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_g87al"]
 resource_local_to_scene = true
-shader = SubResource("VisualShader_jh6cd")
+shader = SubResource("VisualShader_h4umo")
 shader_parameter/Opacity = 0.25
 
 [sub_resource type="GDScript" id="GDScript_0a7gw"]
@@ -885,6 +885,7 @@ script = SubResource("GDScript_6ohgl")
 
 [node name="Take_object" type="Node" parent="."]
 script = ExtResource("1_h5skt")
+object_center_marge = Vector2(40, 40)
 
 [node name="Apply_pos_anim" type="Node" parent="."]
 script = ExtResource("2_jaqpo")

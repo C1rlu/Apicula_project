@@ -45,6 +45,7 @@ signal _hide_hand
 signal _hide_dialogue_box
 signal _show_dialogue_box
 signal _bird_is_comming
+signal _bird_give_letter
 signal _take_Npc_photo(condition : bool)
 signal _show_object_legend(condtion : bool, text : String)
 #subsceneSignal
@@ -101,4 +102,8 @@ var instance_word_text : Node
 # dialogue datas
 var Npc_Dialogue : Npc_datas
 
+#-------------------- GAME STATE ------------------
 
+signal active_prologue_demo
+signal player_active_tools(condition : bool)# to active sonar, dive and clock ect, after the lighthouse
+signal player_received_ui_tool(_name : String)
