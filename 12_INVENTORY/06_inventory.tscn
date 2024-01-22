@@ -89,6 +89,8 @@ script/source = "extends Node
 
 
 @export var tools_list : Array[Node2D]
+@export var bougie_start_pos : Vector2
+@export var map_start_pos : Vector2
 
 func _ready():
 	
@@ -106,6 +108,9 @@ func _active_this_ui_tool(_name : String):
 			if e.name == \"bougie\":
 				var active = e.get_node_or_null(\"Active_bougie\")
 				active.enable_burning_tool(true)
+				e.position = bougie_start_pos
+			if e.name == \"Map\":
+				e.position = map_start_pos
 "
 
 [sub_resource type="GDScript" id="GDScript_huuan"]
@@ -200,7 +205,7 @@ script/source = "extends Node
 
 func _ready():
 	_global_datas.instance_word_text = self
-	_global_datas._bird_give_letter.connect(_intance_letter)
+	_global_datas._give_letter.connect(_intance_letter)
 	
 func _intance_words_note(value : String, name_words : String):
 	
@@ -219,7 +224,7 @@ func _intance_words_note(value : String, name_words : String):
 	var text_name : Label = text.get_node(\"name\")
 	text_name.text = name_words
 	
-func _intance_letter():
+func _intance_letter(_words : String, _from: String):
 	
 	var new_node = 	letter_prefab.instantiate()
 	words_note.add_child(new_node)
@@ -229,6 +234,8 @@ func _intance_letter():
 	
 	new_node.rotation_degrees = random_angle
 	new_node.position = screen_center
+	var text = new_node.get_node_or_null(\"Update_words\")
+	text._update_words(_words,_from)
 "
 
 [sub_resource type="GDScript" id="GDScript_xw7ed"]
@@ -524,6 +531,8 @@ script = SubResource("GDScript_5js7i")
 [node name="ACTIVE_UI_TOOLS" type="Node" parent="GAME_STATE/Prologue" node_paths=PackedStringArray("tools_list")]
 script = SubResource("GDScript_venie")
 tools_list = [NodePath("../../../Control/Board/Board_all/Book"), NodePath("../../../Control/Bougie_zone/bougie"), NodePath("../../../Control/Clock_Parent/clock"), NodePath("../../../Control/Map_Parent/Map")]
+bougie_start_pos = Vector2(1150, 666)
+map_start_pos = Vector2(1442, 666)
 
 [node name="INSTANCE_LOOT" type="Node" parent="."]
 script = SubResource("GDScript_huuan")
@@ -559,6 +568,7 @@ anchors_preset = 0
 mouse_filter = 2
 
 [node name="Board_all" type="Node2D" parent="Control/Board"]
+visible = false
 position = Vector2(960, 1080)
 
 [node name="Book" parent="Control/Board/Board_all" instance=ExtResource("1_mrfq4")]

@@ -55,7 +55,7 @@ func _process(_delta):
 	control.global_position = new_position
 	
 	_check_book_position()
-			
+
 func _input(event):
 
 	#TO DRAG
