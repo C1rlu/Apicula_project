@@ -173,7 +173,7 @@ func _check_book_position():
 		return
 		
 	var _position = control.global_position
-	print(_position)
+
 	if _position.x > 960.0 and _position.x < 1580 - object_center_marge.x and _position.y > 360:
 		page_position = "right"
 		if Pin_book:

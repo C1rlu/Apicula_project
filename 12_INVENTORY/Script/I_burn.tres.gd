@@ -62,7 +62,7 @@ func _check_burning_position():
 	var bougie_position = _global_datas.bougie_node.position
 	var this_position = root.position + burn_zone_offset
 	distance = this_position.distance_to(bougie_position)
-	print(distance)
+
 	if distance < 150.0:
 		_in_zone()
 	

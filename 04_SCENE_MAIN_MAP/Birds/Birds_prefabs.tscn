@@ -1,61 +1,23 @@
-[gd_scene load_steps=5 format=3 uid="uid://cp1aidnp626l4"]
+[gd_scene load_steps=7 format=3 uid="uid://cp1aidnp626l4"]
 
-[sub_resource type="GDScript" id="GDScript_v4elf"]
-script/source = "extends Node
+[ext_resource type="Script" path="res://04_SCENE_MAIN_MAP/Birds/Anim_start.gd" id="1_ec7gc"]
 
-@onready var birds = $\"..\"
-var target : Vector3
-var t
+[sub_resource type="Animation" id="Animation_h2vkr"]
+resource_name = "Fly"
+length = 10.0
+loop_mode = 1
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 1, -0.817755, 2.5, 1, -0.984385, 1, 0.144922, 5, 1, 0.142178, 1, 1.04668, 8, 1, 0.807597, 1, -0.0719811, 10, 1, 0, 1, -0.817755)
 
-
-func _ready():
-	_start_random_direction()
-	
-func _start_random_direction():
-	
-	var p_position = _global_datas.player_position
-	var start_pos = Vector3(p_position.x,birds.position.y,p_position.z)
-	var from_up = randf()
-
-	if from_up > 0.5:		
-			var random_start_x = randf_range(-5,5)
-			var random_start_y = randf_range(8,10)
-			birds.position = start_pos + Vector3(random_start_x,0.0,random_start_y)
-
-			var random_center_x = randf_range(-1.5,1.5)
-			var random_center_y = randf_range(-1.5,1.5)
-			var random_p = Vector3(p_position.x + random_center_x,p_position.y,p_position.z + random_center_y )
-			var dir = (birds.position  + random_p - p_position)
-			target = p_position + -dir *2
-	else:
-			var random_start_x = randf_range(-10,10)
-			var random_start_y = randf_range(-6,-12)
-			birds.position = start_pos + Vector3(random_start_x,0.0,random_start_y)	
-	
-			var random_center_x = randf_range(-1.5,1.5)
-			var random_center_y = randf_range(-1.5,1.5)
-			var random_p = Vector3(p_position.x + random_center_x,p_position.y,p_position.z + random_center_y )
-			var dir = (birds.position + random_p - p_position)
-			target = p_position + -dir *2
-			
-
-	_fly()
-	
-func _fly():
-	
-	if t:
-		t.kill()
-	t = create_tween()
-	
-	t.tween_property(birds,\"position\", target, 5.5)
-	await create_tween().tween_interval(5.0).finished
-	_end()
-
-
-func _end():
-	_start_random_direction()
-
-"
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_yjd1d"]
+_data = {
+"Fly": SubResource("Animation_h2vkr")
+}
 
 [sub_resource type="SphereMesh" id="SphereMesh_i7on3"]
 
@@ -76,11 +38,21 @@ shader = SubResource("VisualShader_2wnb7")
 [node name="Birds" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.286, 0)
 
-[node name="Birds_mouvement" type="Node" parent="."]
-script = SubResource("GDScript_v4elf")
+[node name="Anim" type="Node" parent="."]
+script = ExtResource("1_ec7gc")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.147382, 0, 0, 0, 0.147382, 0, 0, 0, 0.147382, 0, 0, 0)
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Anim"]
+root_node = NodePath("../../Bird_root")
+libraries = {
+"": SubResource("AnimationLibrary_yjd1d")
+}
+
+[node name="Bird_root" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.954686, 1, 0.115879)
+
+[node name="Bird_render" type="MeshInstance3D" parent="Bird_root"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
 layers = 8192
 mesh = SubResource("SphereMesh_i7on3")
+skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("ShaderMaterial_purqc")
