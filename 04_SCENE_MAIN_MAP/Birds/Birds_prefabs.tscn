@@ -1,0 +1,86 @@
+[gd_scene load_steps=5 format=3 uid="uid://cp1aidnp626l4"]
+
+[sub_resource type="GDScript" id="GDScript_v4elf"]
+script/source = "extends Node
+
+@onready var birds = $\"..\"
+var target : Vector3
+var t
+
+
+func _ready():
+	_start_random_direction()
+	
+func _start_random_direction():
+	
+	var p_position = _global_datas.player_position
+	var start_pos = Vector3(p_position.x,birds.position.y,p_position.z)
+	var from_up = randf()
+
+	if from_up > 0.5:		
+			var random_start_x = randf_range(-5,5)
+			var random_start_y = randf_range(8,10)
+			birds.position = start_pos + Vector3(random_start_x,0.0,random_start_y)
+
+			var random_center_x = randf_range(-1.5,1.5)
+			var random_center_y = randf_range(-1.5,1.5)
+			var random_p = Vector3(p_position.x + random_center_x,p_position.y,p_position.z + random_center_y )
+			var dir = (birds.position  + random_p - p_position)
+			target = p_position + -dir *2
+	else:
+			var random_start_x = randf_range(-10,10)
+			var random_start_y = randf_range(-6,-12)
+			birds.position = start_pos + Vector3(random_start_x,0.0,random_start_y)	
+	
+			var random_center_x = randf_range(-1.5,1.5)
+			var random_center_y = randf_range(-1.5,1.5)
+			var random_p = Vector3(p_position.x + random_center_x,p_position.y,p_position.z + random_center_y )
+			var dir = (birds.position + random_p - p_position)
+			target = p_position + -dir *2
+			
+
+	_fly()
+	
+func _fly():
+	
+	if t:
+		t.kill()
+	t = create_tween()
+	
+	t.tween_property(birds,\"position\", target, 5.5)
+	await create_tween().tween_interval(5.0).finished
+	_end()
+
+
+func _end():
+	_start_random_direction()
+
+"
+
+[sub_resource type="SphereMesh" id="SphereMesh_i7on3"]
+
+[sub_resource type="VisualShader" id="VisualShader_2wnb7"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, depth_test_disabled, unshaded;
+
+
+
+"
+flags/depth_test_disabled = true
+flags/unshaded = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_purqc"]
+render_priority = 0
+shader = SubResource("VisualShader_2wnb7")
+
+[node name="Birds" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.286, 0)
+
+[node name="Birds_mouvement" type="Node" parent="."]
+script = SubResource("GDScript_v4elf")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.147382, 0, 0, 0, 0.147382, 0, 0, 0, 0.147382, 0, 0, 0)
+layers = 8192
+mesh = SubResource("SphereMesh_i7on3")
+surface_material_override/0 = SubResource("ShaderMaterial_purqc")

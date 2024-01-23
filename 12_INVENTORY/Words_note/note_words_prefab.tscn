@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://10_BOARD/Behaviour/Movable_paper.tres.gd" id="1_pvcyt"]
 [ext_resource type="Script" path="res://10_BOARD/Behaviour/Apply_pos_anim.gd" id="2_pk3do"]
+[ext_resource type="Script" path="res://12_INVENTORY/Script/I_burn.tres.gd" id="3_3djxy"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6vqdw"]
 content_margin_bottom = 5.0
@@ -169,48 +170,6 @@ func _disable_all_pin():
 		element.visible = false		
 "
 
-[sub_resource type="GDScript" id="GDScript_7y4gi"]
-script/source = "extends Node
-@onready var photo_square_prefabs = $\"../..\"
-
-@onready var burn = $\"../../text/BURN\"
-@onready var take_object = $\"../../Take_object\"
-
-var t 
-func _destroy(): 
-	
-	
-	if _global_datas.Player_InSubScene:
-		return
-		
-	print(\"PHOTO DETROYED\")
-	photo_square_prefabs.queue_free()
-	
-func _in_zone():
-	
-
-	if _global_datas.Player_InSubScene:
-		return
-	
-	_fade_in()
-	take_object.kill_on_pos = true
-
-func _out_zone():
-
-	_fade_out()
-	take_object.kill_on_pos = false
-
-func _fade_in():
-	
-	burn.visible = true
-	
-	
-func _fade_out():
-		
-	burn.visible = false
-	
-"
-
 [sub_resource type="GDScript" id="GDScript_4xv5n"]
 script/source = "extends Node
 
@@ -231,6 +190,11 @@ script = ExtResource("1_pvcyt")
 
 [node name="Apply_pos_anim" type="Node" parent="."]
 script = ExtResource("2_pk3do")
+
+[node name="I_Burn" type="Node" parent="." node_paths=PackedStringArray("burn")]
+script = ExtResource("3_3djxy")
+burn = NodePath("../text/BURN")
+burn_zone_offset = Vector2(100, 100)
 
 [node name="text" type="Label" parent="."]
 offset_right = 200.0
@@ -309,9 +273,6 @@ color = Color(0.560784, 0.545098, 0.462745, 1)
 
 [node name="Area2D" type="Area2D" parent="."]
 position = Vector2(127, 0)
-
-[node name="I_Burn" type="Node" parent="Area2D"]
-script = SubResource("GDScript_7y4gi")
 
 [node name="Apply_pos_behind" type="Node" parent="Area2D"]
 script = SubResource("GDScript_4xv5n")

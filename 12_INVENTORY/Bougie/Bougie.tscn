@@ -1,10 +1,11 @@
-[gd_scene load_steps=78 format=3 uid="uid://dky4f05drqbp8"]
+[gd_scene load_steps=77 format=3 uid="uid://dky4f05drqbp8"]
 
 [ext_resource type="Script" path="res://10_BOARD/Behaviour/Movable_paper.tres.gd" id="1_owydc"]
 [ext_resource type="Script" path="res://10_BOARD/Behaviour/Apply_pos_anim.gd" id="2_3l48a"]
 
 [sub_resource type="GDScript" id="GDScript_xyojo"]
 script/source = "extends Node
+@onready var bougie = $\"..\"
 
 @onready var light_f = $\"../Light_F\"
 @onready var light_b = $\"../Light_b\"
@@ -17,7 +18,7 @@ func _ready():
 	_global_datas._go_Mainscene.connect(_active_bougie)
 	
 	_global_datas.player_active_tools.connect(enable_burning_tool)
-
+	_global_datas.bougie_node = bougie
 func _active_bougie():
 
 	light_f.visible = true
@@ -31,33 +32,6 @@ func _disable_bougie():
 
 func enable_burning_tool(condition):
 	collision_shape_2d.disabled = !condition
-
-"
-
-[sub_resource type="GDScript" id="GDScript_c27os"]
-script/source = "extends Node
-
-
-
-
-func _on_area_2d_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
-	if area.get_node_or_null(\"I_Burn\") == null:
-		return
-	var i_burn = area.get_node(\"I_Burn\")
-	
-	
-	i_burn._in_zone()
-	
-
-func _on_area_2d_area_shape_exited(area_rid, area, area_shape_index, local_shape_index):
-	if !_global_datas.Player_lock_click:
-		return
-	if area.get_node_or_null(\"I_Burn\") == null:
-		return
-	var i_burn = area.get_node(\"I_Burn\")	
-	i_burn._out_zone()
-
-
 
 "
 
@@ -860,9 +834,6 @@ script = SubResource("GDScript_xyojo")
 [node name="Take_object" type="Node" parent="."]
 script = ExtResource("1_owydc")
 
-[node name="Burn_Paper" type="Node" parent="."]
-script = SubResource("GDScript_c27os")
-
 [node name="Apply_pos_anim" type="Node" parent="."]
 script = ExtResource("2_3l48a")
 
@@ -1043,7 +1014,5 @@ interpolate = false
 fract_delta = false
 local_coords = true
 
-[connection signal="area_shape_entered" from="Area2D" to="Burn_Paper" method="_on_area_2d_area_shape_entered"]
-[connection signal="area_shape_exited" from="Area2D" to="Burn_Paper" method="_on_area_2d_area_shape_exited"]
 [connection signal="mouse_entered" from="Area2D" to="Take_object" method="_on_area_2d_mouse_entered"]
 [connection signal="mouse_exited" from="Area2D" to="Take_object" method="_on_area_2d_mouse_exited"]

@@ -28,7 +28,7 @@ var last_position : Vector2
 var change_photo 
 var legend
 var not_in_book
-
+var i_burn
 @export var object_center_marge : Vector2
 
 func _ready():
@@ -39,7 +39,7 @@ func _ready():
 	show_map = get_node_or_null("../Show_map_grid")
 	change_photo = get_node_or_null("../Change_photo")
 	not_in_book = get_node_or_null("../Not_in_book")
-	
+	i_burn = get_node_or_null("../I_Burn")
 	legend = get_node_or_null("../Legend")
 
 	
@@ -68,9 +68,12 @@ func _input(event):
 			_scale_change(size * scale_in_hand)
 			offset = control.transform.origin - control.get_global_mouse_position()
 			_global_datas.OnDrag_start_position = offset
+			
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 			if show_map != null : _global_datas._active_world_grid.emit(true)
-				
+			
+			if i_burn:
+				i_burn._is_dragging = true	
 		
 			move_behind()
 			
@@ -123,10 +126,13 @@ func _unselect_element(condition : bool, move_behind_c : bool):
 	
 	_global_datas._show_object_legend.emit(false,"")
 	# KILL IF BOUGIE ON IT 
-	if kill_on_pos:
-		var burn_it = area_2d.get_node_or_null("I_Burn")
-		if burn_it != null:
-			burn_it._destroy()	
+		
+	if i_burn:
+		i_burn._is_dragging = false
+		if kill_on_pos:
+			i_burn._destroy()	
+	
+
 				
 	if show_map != null : _global_datas._active_world_grid.emit(false)
 	
@@ -143,6 +149,7 @@ func _unselect_element(condition : bool, move_behind_c : bool):
 		var side_left : Node2D = pages.get_node("left")
 		control.reparent(side_left)			
 		
+	
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 	if !move_behind_c:

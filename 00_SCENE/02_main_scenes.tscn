@@ -1,4 +1,4 @@
-[gd_scene load_steps=99 format=3 uid="uid://cnmptm7i0xxmj"]
+[gd_scene load_steps=97 format=3 uid="uid://cnmptm7i0xxmj"]
 
 [ext_resource type="PackedScene" uid="uid://vpdvl0v7dubd" path="res://00_PLAYER/Player_boat.tscn" id="1_qltht"]
 [ext_resource type="Script" path="res://06_UI/Fps_counter.gd" id="1_s74e5"]
@@ -11,6 +11,7 @@
 [ext_resource type="Shader" uid="uid://bxavm32wwtse2" path="res://05_SHADER_TEST/Clouds_sh.tres" id="5_83wu6"]
 [ext_resource type="PackedScene" uid="uid://crxoyweriianl" path="res://04_SCENE_MAIN_MAP/Grid/grid_map.tscn" id="6_8jesf"]
 [ext_resource type="Material" uid="uid://ctnqf5d3uj1g7" path="res://05_SHADER_TEST/All_Materials/new_standard_material_3d.tres" id="6_vcmny"]
+[ext_resource type="PackedScene" uid="uid://cp1aidnp626l4" path="res://04_SCENE_MAIN_MAP/Birds/Birds_prefabs.tscn" id="6_xjsp1"]
 [ext_resource type="Material" uid="uid://b64juw612xqpu" path="res://05_SHADER_TEST/Sea_sh/Sea_mat.tres" id="7_4y8ld"]
 [ext_resource type="PackedScene" uid="uid://dla1534gcagbl" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Pine/pine_prefabs.tscn" id="10_c6r5x"]
 [ext_resource type="PackedScene" uid="uid://cjp6vd8eetmyf" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Iceberg/ice_berg_03.tscn" id="10_h0nl5"]
@@ -30,7 +31,6 @@
 script/source = "extends Node
 
 @onready var player_boat = $\"../../Player_Boat\"
-@export var Bird_start_dialogue : Npc_datas
 @export var prologue_position : Vector3
 
 
@@ -40,8 +40,7 @@ func _ready():
 	
 func _state_change():
 	player_boat.position = prologue_position
-	_global_datas.Npc_Dialogue = Bird_start_dialogue
-	_global_datas._bird_is_comming.emit()
+	#_global_datas._bird_is_comming.emit()
 	
 
 "
@@ -417,13 +416,14 @@ func _on_button_up():
 [sub_resource type="GDScript" id="GDScript_rtxce"]
 script/source = "extends Node
 
-
+@export var Bird_start_dialogue : Npc_datas
 @onready var birds = $\"../Birds\"
 
 var t
 
 func _ready():
-	_global_datas._bird_is_comming.connect(_follow)
+	pass
+	#_global_datas._bird_is_comming.connect(_follow)
 
 
 func _follow():
@@ -453,25 +453,9 @@ func _change_value(value : float):
 
 func _end():
 	birds.visible = false
-
+	_global_datas.Npc_Dialogue = Bird_start_dialogue
 	_global_datas._open_dialogue.emit()
 "
-
-[sub_resource type="SphereMesh" id="SphereMesh_i7on3"]
-
-[sub_resource type="VisualShader" id="VisualShader_2wnb7"]
-code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, depth_test_disabled, unshaded;
-
-
-
-"
-flags/depth_test_disabled = true
-flags/unshaded = true
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_purqc"]
-render_priority = 0
-shader = SubResource("VisualShader_2wnb7")
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ituqr"]
 bounce = 500.0
@@ -934,7 +918,6 @@ size = Vector3(30, 0, 30)
 
 [node name="Prologue" type="Node" parent="GAME_STATE"]
 script = SubResource("GDScript_ueh7h")
-Bird_start_dialogue = ExtResource("1_trgwt")
 prologue_position = Vector3(-21, 0, 7)
 
 [node name="01_GAME_UI" type="Node" parent="."]
@@ -1168,16 +1151,21 @@ script = SubResource("GDScript_k6bx5")
 
 [node name="To_player" type="Node" parent="Birds_Manager"]
 script = SubResource("GDScript_rtxce")
+Bird_start_dialogue = ExtResource("1_trgwt")
 
-[node name="Birds" type="Node3D" parent="Birds_Manager"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.286, 0)
-visible = false
+[node name="Birds" parent="Birds_Manager" instance=ExtResource("6_xjsp1")]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Birds_Manager/Birds"]
-transform = Transform3D(0.334977, 0, 0, 0, 0.334977, 0, 0, 0, 0.334977, 0, 0, 0)
-layers = 8192
-mesh = SubResource("SphereMesh_i7on3")
-surface_material_override/0 = SubResource("ShaderMaterial_purqc")
+[node name="Birds2" parent="Birds_Manager" instance=ExtResource("6_xjsp1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.593839, 0.286, 1.22142)
+
+[node name="Birds3" parent="Birds_Manager" instance=ExtResource("6_xjsp1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.652063, 0.286, -1.01115)
+
+[node name="Birds4" parent="Birds_Manager" instance=ExtResource("6_xjsp1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.73593, 0.286, 0.0407153)
+
+[node name="Birds5" parent="Birds_Manager" instance=ExtResource("6_xjsp1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.457, 0.286, 6.144)
 
 [node name="Player_Boat" parent="." instance=ExtResource("1_qltht")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)

@@ -1,7 +1,8 @@
-[gd_scene load_steps=17 format=3 uid="uid://cjgga2j23u4wl"]
+[gd_scene load_steps=24 format=3 uid="uid://cjgga2j23u4wl"]
 
 [ext_resource type="Script" path="res://10_BOARD/Behaviour/Movable_paper.tres.gd" id="1_lq0r8"]
 [ext_resource type="Script" path="res://10_BOARD/Behaviour/Apply_pos_anim.gd" id="2_6a7ya"]
+[ext_resource type="Script" path="res://12_INVENTORY/Script/I_burn.tres.gd" id="3_5tkdk"]
 
 [sub_resource type="GDScript" id="GDScript_w53jh"]
 script/source = "extends Node
@@ -25,6 +26,108 @@ func set_legend(legend : String):
 func get_legend():
 	return _legend 
 "
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_l5qlk"]
+constant = 0.3
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_gv6jj"]
+constant = 0.475
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_b08nu"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_ii4gj"]
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_5etsi"]
+input_name = "color"
+
+[sub_resource type="VisualShader" id="VisualShader_4lwo1"]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+
+
+
+void fragment() {
+// Input:6
+	vec4 n_out6p0 = COLOR;
+
+
+// FloatConstant:3
+	float n_out3p0 = 0.475000;
+
+
+// FloatConstant:2
+	float n_out2p0 = 0.300000;
+
+
+	float n_out4p0;
+// Expression:4
+	n_out4p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out2p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out4p0 = n_out3p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Step:5
+	float n_out5p0 = step(n_out6p0.x, n_out4p0);
+
+
+// Output:0
+	COLOR.a = n_out5p0;
+
+
+}
+"
+graph_offset = Vector2(-555.827, 27.7819)
+mode = 1
+flags/light_only = false
+nodes/fragment/2/node = SubResource("VisualShaderNodeFloatConstant_l5qlk")
+nodes/fragment/2/position = Vector2(-1080, 460)
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_gv6jj")
+nodes/fragment/3/position = Vector2(-1000, 340)
+nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_b08nu")
+nodes/fragment/4/position = Vector2(-660, 320)
+nodes/fragment/4/size = Vector2(724.789, 654.559)
+nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/4/output_ports = "0,0,Dither_Node;"
+nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/5/node = SubResource("VisualShaderNodeStep_ii4gj")
+nodes/fragment/5/position = Vector2(80, 140)
+nodes/fragment/6/node = SubResource("VisualShaderNodeInput_5etsi")
+nodes/fragment/6/position = Vector2(-420, 160)
+nodes/fragment/connections = PackedInt32Array(2, 0, 4, 1, 3, 0, 4, 0, 6, 0, 5, 0, 4, 0, 5, 1, 5, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_aaxwl"]
+shader = SubResource("VisualShader_4lwo1")
 
 [sub_resource type="Gradient" id="Gradient_l6wlh"]
 offsets = PackedFloat32Array(0, 0.064, 0.202667, 1)
@@ -142,58 +245,6 @@ resource_local_to_scene = true
 shader = SubResource("VisualShader_jh6cd")
 shader_parameter/Opacity = 0.25
 
-[sub_resource type="GDScript" id="GDScript_to2gn"]
-script/source = "extends Node
-@onready var photo_square_prefabs = $\"../..\"
-
-@onready var burn = $\"../../BURN\"
-@onready var take_object = $\"../../Take_object\"
-
-
-var t 
-var _active
-signal burn_signal
-func _ready():
-	_global_datas._show_object_legend.connect(_zoom)
-
-func _zoom(condition,value):
-	
-		_active = condition
-	
-func _destroy(): 
-	
-	if _global_datas.Player_InSubScene:
-		return
-	burn_signal.emit()	
-	photo_square_prefabs.queue_free()
-	
-func _in_zone():
-	
-	if _active:
-		return
-	if _global_datas.Player_InSubScene:
-		return
-	
-	_fade_in()
-	take_object.kill_on_pos = true
-
-func _out_zone():
-
-	_fade_out()
-	take_object.kill_on_pos = false
-
-func _fade_in():
-	
-	burn.visible = true
-		
-func _fade_out():
-		
-	burn.visible = false
-	
-
-
-"
-
 [sub_resource type="GDScript" id="GDScript_axg7a"]
 script/source = "extends Node
 
@@ -223,6 +274,29 @@ script = ExtResource("2_6a7ya")
 
 [node name="Legend" type="Node" parent="."]
 script = SubResource("GDScript_pvnvf")
+
+[node name="I_Burn" type="Node" parent="." node_paths=PackedStringArray("burn")]
+script = ExtResource("3_5tkdk")
+burn = NodePath("../BURN")
+
+[node name="shadow" type="ColorRect" parent="."]
+light_mask = 3
+material = SubResource("ShaderMaterial_aaxwl")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -113.0
+offset_top = -193.0
+offset_right = 134.0
+offset_bottom = 218.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.990485, 0.990485)
+pivot_offset = Vector2(40, 40)
+mouse_filter = 2
+color = Color(0.0117647, 0.0941176, 0.105882, 1)
 
 [node name="ColorRect" type="ColorRect" parent="."]
 offset_left = -108.0
@@ -276,9 +350,6 @@ vertical_alignment = 1
 autowrap_mode = 3
 
 [node name="Area2D" type="Area2D" parent="."]
-
-[node name="I_Burn" type="Node" parent="Area2D"]
-script = SubResource("GDScript_to2gn")
 
 [node name="Apply_pos_behind" type="Node" parent="Area2D"]
 script = SubResource("GDScript_axg7a")

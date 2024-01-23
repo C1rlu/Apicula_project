@@ -75,7 +75,7 @@ var In_Front_Node : Node2D
 var loot_from_subscene : Array
 var closet_mirror_distance : float 
 var clock_time_consume : float
-
+var bougie_node : Node2D
 
 # BOOK PAGE
 signal  book_is_open(condition : bool)
