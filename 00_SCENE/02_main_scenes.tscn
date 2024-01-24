@@ -793,14 +793,23 @@ func _hide():
 			hide_this.visible = false
 
 func _show():
+	
 	if _active:
 		if hide_this:
 			hide_this.visible = true	
 			
+		if Npc_data.name == \"MrBird\":
+			queue_free()
+
+				
 func _on_area_entered(_area):
 	_active = true
 	_global_datas.Npc_Dialogue = Npc_data
-	_global_datas.in_dialogue_zone.emit()
+	
+	if Npc_data.name == \"MrBird\":
+		_global_datas._open_dialogue.emit()
+	else :
+		_global_datas.in_dialogue_zone.emit()
 	
 
 func _on_area_exited(_area):
