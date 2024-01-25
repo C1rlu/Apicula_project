@@ -1,0 +1,48 @@
+[gd_scene load_steps=5 format=3 uid="uid://fwy6er08uyv7"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_5gsp3"]
+viewport_path = NodePath("SubViewport2")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_e5f8x"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_28mdf"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_66eit"]
+
+[node name="Node" type="Node"]
+
+[node name="SubViewport" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(1920, 1080)
+
+[node name="Camera3D" type="Camera3D" parent="SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.910835)
+cull_mask = 1014785
+
+[node name="SubViewport2" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(1920, 1080)
+
+[node name="Camera3D" type="Camera3D" parent="SubViewport2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.910835)
+cull_mask = 1032190
+
+[node name="TextureRect2" type="TextureRect" parent="."]
+offset_right = 1920.0
+offset_bottom = 1080.0
+texture = SubResource("ViewportTexture_5gsp3")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_right = 1920.0
+offset_bottom = 1080.0
+texture = SubResource("ViewportTexture_e5f8x")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+mesh = SubResource("CylinderMesh_28mdf")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.414598, 0, 0, 0, 1.92271, 0.522766, 0, -2.33292)
+layers = 2
+mesh = SubResource("BoxMesh_66eit")

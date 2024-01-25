@@ -1,14 +1,15 @@
-[gd_scene load_steps=94 format=3 uid="uid://cnmptm7i0xxmj"]
+[gd_scene load_steps=79 format=3 uid="uid://cnmptm7i0xxmj"]
 
 [ext_resource type="PackedScene" uid="uid://vpdvl0v7dubd" path="res://00_PLAYER/Player_boat.tscn" id="1_qltht"]
 [ext_resource type="Script" path="res://06_UI/Fps_counter.gd" id="1_s74e5"]
 [ext_resource type="Resource" uid="uid://ppxk5i543dfn" path="res://09_NPC/Npc_data/Mr_Birds_data.tres" id="1_trgwt"]
 [ext_resource type="Script" path="res://03_CAMERA/CameraFollow.gd" id="2_6q1sg"]
-[ext_resource type="Shader" uid="uid://dxtkig2genofx" path="res://05_SHADER_TEST/Full_screen/FullScreen_sh.tres" id="3_e0mrt"]
+[ext_resource type="Material" uid="uid://cfd7rt53ee7jp" path="res://05_SHADER_TEST/Full_screen/Foam_dither_viewport.tres" id="3_qcxor"]
 [ext_resource type="Shader" uid="uid://bduoqim3kfbs6" path="res://00_PLAYER/Sonar/Sonar_sh.tres" id="3_todel"]
 [ext_resource type="Script" path="res://00_PLAYER/Sonar/Click_to_Sonar.gd" id="4_h4pmi"]
-[ext_resource type="Shader" uid="uid://bqd3h43rhgah0" path="res://05_SHADER_TEST/Full_screen/Sonar_fullscreen_show.tres" id="4_k4fba"]
+[ext_resource type="Material" uid="uid://ua1gnqwbe2bj" path="res://05_SHADER_TEST/Full_screen/Sonar_dither_viewport.tres" id="4_qh7in"]
 [ext_resource type="Shader" uid="uid://bxavm32wwtse2" path="res://05_SHADER_TEST/Clouds_sh.tres" id="5_83wu6"]
+[ext_resource type="Material" uid="uid://chlrh834uha8l" path="res://05_SHADER_TEST/Full_screen/Grid_dither_viewport.tres" id="5_jwi16"]
 [ext_resource type="PackedScene" uid="uid://crxoyweriianl" path="res://04_SCENE_MAIN_MAP/Grid/grid_map.tscn" id="6_8jesf"]
 [ext_resource type="Material" uid="uid://ctnqf5d3uj1g7" path="res://05_SHADER_TEST/All_Materials/new_standard_material_3d.tres" id="6_vcmny"]
 [ext_resource type="Material" uid="uid://b64juw612xqpu" path="res://05_SHADER_TEST/Sea_sh/Sea_mat.tres" id="7_4y8ld"]
@@ -71,220 +72,24 @@ func _ready():
 
 "
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_r2wvf"]
-shader = ExtResource("3_e0mrt")
+[sub_resource type="ViewportTexture" id="ViewportTexture_4bor2"]
+viewport_path = NodePath("01_GAME_UI/MAIN_SCENE_UI/MAIN_Viewport")
 
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_fjoeh"]
-input_name = "texture"
+[sub_resource type="ViewportTexture" id="ViewportTexture_ga4wp"]
+viewport_path = NodePath("01_GAME_UI/MAIN_SCENE_UI/FOAM_Viewport")
 
-[sub_resource type="CameraTexture" id="CameraTexture_hytm8"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_im2rn"]
+viewport_path = NodePath("01_GAME_UI/MAIN_SCENE_UI/SONAR_Viewport")
 
-[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_mfhxu"]
-expanded_output_ports = [0]
-source = 5
-texture = SubResource("CameraTexture_hytm8")
+[sub_resource type="ViewportTexture" id="ViewportTexture_flm00"]
+viewport_path = NodePath("01_GAME_UI/MAIN_SCENE_UI/GRID_Viewport")
 
-[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_l1rpc"]
-parameter_name = "ColorParameter"
-
-[sub_resource type="VisualShader" id="VisualShader_aoud6"]
-code = "shader_type canvas_item;
-render_mode blend_mix;
-
-uniform vec4 ColorParameter : source_color;
-
-
-
-void fragment() {
-// ColorParameter:4
-	vec4 n_out4p0 = ColorParameter;
-
-
-	vec4 n_out3p0;
-// Texture2D:3
-	n_out3p0 = texture(TEXTURE, UV);
-
-
-// Output:0
-	COLOR.rgb = vec3(n_out4p0.xyz);
-	COLOR.a = n_out3p0.x;
-
-
-}
-"
-mode = 1
-flags/light_only = false
-nodes/fragment/2/node = SubResource("VisualShaderNodeInput_fjoeh")
-nodes/fragment/2/position = Vector2(-1380, 240)
-nodes/fragment/3/node = SubResource("VisualShaderNodeTexture_mfhxu")
-nodes/fragment/3/position = Vector2(-760, 260)
-nodes/fragment/4/node = SubResource("VisualShaderNodeColorParameter_l1rpc")
-nodes/fragment/4/position = Vector2(-200.659, 38.1564)
-nodes/fragment/connections = PackedInt32Array(2, 0, 3, 2, 4, 0, 0, 0, 3, 0, 0, 1)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_jnhug"]
-shader = SubResource("VisualShader_aoud6")
-shader_parameter/ColorParameter = Color(0.258824, 0.517647, 0.447059, 1)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8qqqb"]
-shader = ExtResource("4_k4fba")
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_2kyyb"]
-constant = 0.4
-
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_t8i4y"]
-size = Vector2(724.789, 654.559)
-expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_4t2ee"]
-
-[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_dswi2"]
-parameter_name = "Light_color_ui"
-qualifier = 1
-
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_nohfx"]
-parameter_name = "Opacity"
-hint = 1
-max = 0.25
-default_value_enabled = true
-default_value = 0.25
-
-[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_0prmo"]
-function = 31
-
-[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_bij8e"]
-parameter_name = "ColorParameter"
-
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_eu5tk"]
-input_name = "texture"
-
-[sub_resource type="CameraTexture" id="CameraTexture_m8qfv"]
-
-[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_qulw0"]
-expanded_output_ports = [0]
-source = 5
-texture = SubResource("CameraTexture_m8qfv")
-
-[sub_resource type="VisualShaderNodeVectorCompose" id="VisualShaderNodeVectorCompose_78mur"]
-
-[sub_resource type="VisualShader" id="VisualShader_wsvub"]
-resource_local_to_scene = true
-code = "shader_type canvas_item;
-render_mode blend_mix;
-
-uniform vec4 ColorParameter : source_color;
-uniform float Opacity : hint_range(0, 0.25) = 0.25;
-
-
-
-void fragment() {
-// ColorParameter:18
-	vec4 n_out18p0 = ColorParameter;
-
-
-	vec4 n_out3p0;
-// Texture2D:3
-	n_out3p0 = texture(TEXTURE, UV);
-	float n_out3p1 = n_out3p0.r;
-
-
-// FloatFunc:17
-	float n_out17p0 = 1.0 - n_out3p0.x;
-
-
-// FloatParameter:16
-	float n_out16p0 = Opacity;
-
-
-// FloatConstant:11
-	float n_out11p0 = 0.400000;
-
-
-	float n_out12p0;
-// Expression:12
-	n_out12p0 = 0.0;
-	{
-		const float DITHER_THRESHOLDS[16] ={
-				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-			};
-			
-		vec2 uv = FRAGCOORD.xy * n_out11p0;
-		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-		n_out12p0 = n_out16p0 - DITHER_THRESHOLDS[index];
-	}
-
-
-// Step:13
-	float n_out13p0 = step(n_out17p0, n_out12p0);
-
-
-// Output:0
-	COLOR.rgb = vec3(n_out18p0.xyz);
-	COLOR.a = n_out13p0;
-
-
-}
-"
-mode = 1
-flags/light_only = false
-nodes/fragment/0/position = Vector2(1180, 220)
-nodes/fragment/2/node = SubResource("VisualShaderNodeInput_eu5tk")
-nodes/fragment/2/position = Vector2(-880, 320)
-nodes/fragment/3/node = SubResource("VisualShaderNodeTexture_qulw0")
-nodes/fragment/3/position = Vector2(-500, 480)
-nodes/fragment/4/node = SubResource("VisualShaderNodeVectorCompose_78mur")
-nodes/fragment/4/position = Vector2(-140, 600)
-nodes/fragment/11/node = SubResource("VisualShaderNodeFloatConstant_2kyyb")
-nodes/fragment/11/position = Vector2(-320, 940)
-nodes/fragment/12/node = SubResource("VisualShaderNodeExpression_t8i4y")
-nodes/fragment/12/position = Vector2(-60, 800)
-nodes/fragment/12/size = Vector2(724.789, 654.559)
-nodes/fragment/12/input_ports = "0,0,In;1,0,Size;"
-nodes/fragment/12/output_ports = "0,0,Dither_Node;"
-nodes/fragment/12/expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/13/node = SubResource("VisualShaderNodeStep_4t2ee")
-nodes/fragment/13/position = Vector2(680, 640)
-nodes/fragment/14/node = SubResource("VisualShaderNodeColorParameter_dswi2")
-nodes/fragment/14/position = Vector2(480, 100)
-nodes/fragment/16/node = SubResource("VisualShaderNodeFloatParameter_nohfx")
-nodes/fragment/16/position = Vector2(-720, 860)
-nodes/fragment/17/node = SubResource("VisualShaderNodeFloatFunc_0prmo")
-nodes/fragment/17/position = Vector2(507.704, 519.425)
-nodes/fragment/18/node = SubResource("VisualShaderNodeColorParameter_bij8e")
-nodes/fragment/18/position = Vector2(615.109, -7.31136)
-nodes/fragment/connections = PackedInt32Array(2, 0, 3, 2, 3, 1, 4, 0, 3, 1, 4, 1, 3, 1, 4, 2, 12, 0, 13, 1, 16, 0, 12, 0, 11, 0, 12, 1, 13, 0, 0, 1, 3, 0, 17, 0, 17, 0, 13, 0, 18, 0, 0, 0)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2ukys"]
-shader = SubResource("VisualShader_wsvub")
-shader_parameter/ColorParameter = Color(0.230469, 0.460938, 0.421875, 1)
-shader_parameter/Opacity = 0.25
-
-[sub_resource type="GDScript" id="GDScript_k5k7h"]
-script/source = "extends SubViewportContainer
+[sub_resource type="GDScript" id="GDScript_08g8g"]
+script/source = "extends TextureRect
 @onready var sonar_grid = $\".\"
-
 @onready var opacity : Material = sonar_grid.get_material()
+
+
 var t
 
 func _ready():
@@ -324,6 +129,9 @@ func _hide():
 func change_value(value : float):
 	opacity.set_shader_parameter(\"Opacity\",value)
 "
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_th8ki"]
+viewport_path = NodePath("01_GAME_UI/MAIN_SCENE_UI/SKY_Viewport")
 
 [sub_resource type="GDScript" id="GDScript_hpjin"]
 script/source = "extends Node
@@ -914,9 +722,65 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
+[node name="MAIN_Viewport" type="SubViewport" parent="01_GAME_UI/MAIN_SCENE_UI"]
+handle_input_locally = false
+mesh_lod_threshold = 0.0
+canvas_item_default_texture_filter = 0
+size = Vector2i(1920, 1080)
+
+[node name="CAM_STATE_MAIN" type="Camera3D" parent="01_GAME_UI/MAIN_SCENE_UI/MAIN_Viewport"]
+transform = Transform3D(1, 0, 0, 0, 0.882947, 0.469472, 0, -0.469472, 0.882947, 0, 16.056, 29.059)
+cull_mask = 17
+current = true
+fov = 10.2
+
+[node name="FOAM_Viewport" type="SubViewport" parent="01_GAME_UI/MAIN_SCENE_UI"]
+handle_input_locally = false
+canvas_item_default_texture_filter = 0
+size = Vector2i(1920, 1080)
+
+[node name="CAM_STATE_FOAM" type="Camera3D" parent="01_GAME_UI/MAIN_SCENE_UI/FOAM_Viewport"]
+transform = Transform3D(1, 0, 0, 0, 0.882947, 0.469472, 0, -0.469472, 0.882947, 0, 16.056, 29.059)
+cull_mask = 3072
+fov = 10.2
+
+[node name="SONAR_Viewport" type="SubViewport" parent="01_GAME_UI/MAIN_SCENE_UI"]
+handle_input_locally = false
+scaling_3d_scale = 0.9
+canvas_item_default_texture_filter = 0
+size = Vector2i(1920, 1080)
+
+[node name="CAM_STATE_SONAR" type="Camera3D" parent="01_GAME_UI/MAIN_SCENE_UI/SONAR_Viewport"]
+transform = Transform3D(1, 0, 0, 0, 0.882947, 0.469472, 0, -0.469472, 0.882947, 0, 16.056, 29.059)
+cull_mask = 24
+fov = 10.2
+
+[node name="GRID_Viewport" type="SubViewport" parent="01_GAME_UI/MAIN_SCENE_UI"]
+transparent_bg = true
+handle_input_locally = false
+canvas_item_default_texture_filter = 0
+size = Vector2i(1920, 1080)
+
+[node name="CAM_STATE_GRID" type="Camera3D" parent="01_GAME_UI/MAIN_SCENE_UI/GRID_Viewport"]
+transform = Transform3D(1, 0, 0, 0, 0.882947, 0.469472, 0, -0.469472, 0.882947, 0, 16.056, 29.059)
+cull_mask = 65
+current = true
+fov = 10.2
+
+[node name="SKY_Viewport" type="SubViewport" parent="01_GAME_UI/MAIN_SCENE_UI"]
+transparent_bg = true
+handle_input_locally = false
+canvas_item_default_texture_filter = 0
+size = Vector2i(1920, 1080)
+
+[node name="CAM_STATE_SKY" type="Camera3D" parent="01_GAME_UI/MAIN_SCENE_UI/SKY_Viewport"]
+transform = Transform3D(1, 0, 0, 0, 0.882947, 0.469472, 0, -0.469472, 0.882947, 0, 16.056, 29.059)
+cull_mask = 8192
+fov = 10.2
+
 [node name="All_Cam_Move" type="Node" parent="01_GAME_UI/MAIN_SCENE_UI" node_paths=PackedStringArray("_all_cam_array")]
 script = ExtResource("2_6q1sg")
-_all_cam_array = [NodePath("../CAM_MAIN_RAYCAST"), NodePath("../MAIN_CAM_SCENE/SubViewport/CAM_STATE_BOAT"), NodePath("../MAIN_CAM_FOAM/SubViewport/CAM_STATE_BOAT"), NodePath("../MAIN_CAM_UP_SKY/SubViewport/CAM_STATE_BOAT"), NodePath("../SONAR_CAM/SubViewport/CAM_STATE_BOAT"), NodePath("../SONAR_GRID/SubViewport/CAM_STATE_BOAT")]
+_all_cam_array = [NodePath("../CAM_MAIN_RAYCAST"), NodePath("../FOAM_Viewport/CAM_STATE_FOAM"), NodePath("../SKY_Viewport/CAM_STATE_SKY"), NodePath("../SONAR_Viewport/CAM_STATE_SONAR"), NodePath("../GRID_Viewport/CAM_STATE_GRID"), NodePath("../MAIN_Viewport/CAM_STATE_MAIN")]
 
 [node name="CAM_MAIN_RAYCAST" type="Camera3D" parent="01_GAME_UI/MAIN_SCENE_UI"]
 transform = Transform3D(1, 0, 0, 0, 0.882947, 0.469472, 0, -0.469472, 0.882947, 0, 16.056, 29.059)
@@ -925,122 +789,39 @@ current = true
 fov = 10.2
 script = SubResource("GDScript_12o72")
 
-[node name="MAIN_CAM_SCENE" type="SubViewportContainer" parent="01_GAME_UI/MAIN_SCENE_UI"]
-material = SubResource("ShaderMaterial_r2wvf")
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-stretch = true
+[node name="MAIN" type="TextureRect" parent="01_GAME_UI/MAIN_SCENE_UI"]
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+texture = SubResource("ViewportTexture_4bor2")
 
-[node name="SubViewport" type="SubViewport" parent="01_GAME_UI/MAIN_SCENE_UI/MAIN_CAM_SCENE"]
-handle_input_locally = false
-mesh_lod_threshold = 0.0
-canvas_item_default_texture_filter = 0
-size = Vector2i(1920, 1080)
-render_target_update_mode = 4
+[node name="FOAM" type="TextureRect" parent="01_GAME_UI/MAIN_SCENE_UI"]
+material = ExtResource("3_qcxor")
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = SubResource("ViewportTexture_ga4wp")
 
-[node name="CAM_STATE_BOAT" type="Camera3D" parent="01_GAME_UI/MAIN_SCENE_UI/MAIN_CAM_SCENE/SubViewport"]
-transform = Transform3D(1, 0, 0, 0, 0.882947, 0.469472, 0, -0.469472, 0.882947, 0, 16.056, 29.059)
-cull_mask = 17
-current = true
-fov = 10.2
+[node name="SONAR" type="TextureRect" parent="01_GAME_UI/MAIN_SCENE_UI"]
+material = ExtResource("4_qh7in")
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+texture = SubResource("ViewportTexture_im2rn")
 
-[node name="MAIN_CAM_FOAM" type="SubViewportContainer" parent="01_GAME_UI/MAIN_SCENE_UI"]
-material = SubResource("ShaderMaterial_jnhug")
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-stretch = true
+[node name="GRID" type="TextureRect" parent="01_GAME_UI/MAIN_SCENE_UI"]
+material = ExtResource("5_jwi16")
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+texture = SubResource("ViewportTexture_flm00")
+script = SubResource("GDScript_08g8g")
 
-[node name="SubViewport" type="SubViewport" parent="01_GAME_UI/MAIN_SCENE_UI/MAIN_CAM_FOAM"]
-handle_input_locally = false
-canvas_item_default_texture_filter = 0
-size = Vector2i(1920, 1080)
-render_target_update_mode = 4
-
-[node name="CAM_STATE_BOAT" type="Camera3D" parent="01_GAME_UI/MAIN_SCENE_UI/MAIN_CAM_FOAM/SubViewport"]
-transform = Transform3D(1, 0, 0, 0, 0.882947, 0.469472, 0, -0.469472, 0.882947, 0, 16.056, 29.059)
-cull_mask = 3072
-fov = 10.2
-
-[node name="MAIN_CAM_UP_SKY" type="SubViewportContainer" parent="01_GAME_UI/MAIN_SCENE_UI"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-stretch = true
-
-[node name="SubViewport" type="SubViewport" parent="01_GAME_UI/MAIN_SCENE_UI/MAIN_CAM_UP_SKY"]
-transparent_bg = true
-handle_input_locally = false
-canvas_item_default_texture_filter = 0
-size = Vector2i(1920, 1080)
-render_target_update_mode = 4
-
-[node name="CAM_STATE_BOAT" type="Camera3D" parent="01_GAME_UI/MAIN_SCENE_UI/MAIN_CAM_UP_SKY/SubViewport"]
-transform = Transform3D(1, 0, 0, 0, 0.882947, 0.469472, 0, -0.469472, 0.882947, 0, 16.056, 29.059)
-cull_mask = 8192
-fov = 10.2
-
-[node name="SONAR_CAM" type="SubViewportContainer" parent="01_GAME_UI/MAIN_SCENE_UI"]
-material = SubResource("ShaderMaterial_8qqqb")
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-stretch = true
-
-[node name="SubViewport" type="SubViewport" parent="01_GAME_UI/MAIN_SCENE_UI/SONAR_CAM"]
-handle_input_locally = false
-scaling_3d_scale = 0.9
-canvas_item_default_texture_filter = 0
-size = Vector2i(1920, 1080)
-render_target_update_mode = 4
-
-[node name="CAM_STATE_BOAT" type="Camera3D" parent="01_GAME_UI/MAIN_SCENE_UI/SONAR_CAM/SubViewport"]
-transform = Transform3D(1, 0, 0, 0, 0.882947, 0.469472, 0, -0.469472, 0.882947, 0, 16.056, 29.059)
-cull_mask = 24
-fov = 10.2
-
-[node name="SONAR_GRID" type="SubViewportContainer" parent="01_GAME_UI/MAIN_SCENE_UI"]
-material = SubResource("ShaderMaterial_2ukys")
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-stretch = true
-script = SubResource("GDScript_k5k7h")
-
-[node name="SubViewport" type="SubViewport" parent="01_GAME_UI/MAIN_SCENE_UI/SONAR_GRID"]
-transparent_bg = true
-handle_input_locally = false
-scaling_3d_scale = 0.9
-canvas_item_default_texture_filter = 0
-size = Vector2i(1920, 1080)
-render_target_update_mode = 4
-
-[node name="CAM_STATE_BOAT" type="Camera3D" parent="01_GAME_UI/MAIN_SCENE_UI/SONAR_GRID/SubViewport"]
-transform = Transform3D(1, 0, 0, 0, 0.882947, 0.469472, 0, -0.469472, 0.882947, 0, 16.056, 29.059)
-cull_mask = 65
-current = true
-fov = 10.2
+[node name="SKY" type="TextureRect" parent="01_GAME_UI/MAIN_SCENE_UI"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = SubResource("ViewportTexture_th8ki")
 
 [node name="Button_active_Dialogue" type="Node" parent="01_GAME_UI/MAIN_SCENE_UI"]
 script = SubResource("GDScript_hpjin")
@@ -1146,6 +927,7 @@ script = SubResource("GDScript_0xo40")
 
 [node name="On_OverMouse_3D_SHAPE" type="MeshInstance3D" parent="Player_Boat/Sonar"]
 transform = Transform3D(12.8483, 0, -2.27374e-13, 0, 1.20588, 0, 2.27374e-13, 0, 12.8483, 0, -1.55876, 0)
+visible = false
 mesh = SubResource("TorusMesh_o3rdy")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("ShaderMaterial_v75yl")

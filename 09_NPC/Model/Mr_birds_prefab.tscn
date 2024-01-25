@@ -1,28 +1,47 @@
-[gd_scene load_steps=4 format=3 uid="uid://d2b7ysl6sho71"]
+[gd_scene load_steps=5 format=3 uid="uid://d2b7ysl6sho71"]
 
 [ext_resource type="PackedScene" uid="uid://d0ir7wge4gdsx" path="res://09_NPC/Model/Mr_Birds.blend" id="1_ppkfp"]
 [ext_resource type="Material" uid="uid://bb47xs7crha0s" path="res://05_SHADER_TEST/Npc_Shader/Npc_lighter.tres" id="2_0c73w"]
 [ext_resource type="Material" uid="uid://cje3d31ux7y1p" path="res://05_SHADER_TEST/Npc_Shader/Npc_medium.tres" id="4_brc6i"]
 
-[node name="Mr_Birds" instance=ExtResource("1_ppkfp")]
-transform = Transform3D(-0.385129, -0.00538236, -0.0604273, -0.000515263, 0.388617, -0.0313308, 0.0606643, -0.0308693, -0.38389, 0.32327, 6.79545, -0.514466)
+[sub_resource type="BoxMesh" id="BoxMesh_6iale"]
 
-[node name="body" parent="." index="0"]
+[node name="Mr_Birds" instance=ExtResource("1_ppkfp")]
+transform = Transform3D(-0.321662, -0.0182267, -0.219559, -0.000678273, 0.388622, -0.0312678, 0.220313, -0.025415, -0.320657, 0.858, 6.795, -0.514)
+
+[node name="NPC_light" type="OmniLight3D" parent="." index="0"]
+transform = Transform3D(2.56491, -1.49012e-08, -5.96046e-08, 1.49012e-08, 2.5649, 1.49012e-08, 0, 2.98023e-08, 2.56491, 2.47093, 16.7447, -12.0663)
+layers = 32
+shadow_bias = 0.0
+shadow_normal_bias = 0.0
+shadow_transmittance_bias = 0.21
+shadow_blur = 6.76
+omni_range = 16.972
+omni_attenuation = 0.0915056
+
+[node name="body" parent="." index="1"]
 layers = 32
 surface_material_override/0 = ExtResource("2_0c73w")
 
-[node name="bec" parent="." index="1"]
+[node name="bec" parent="." index="2"]
+transform = Transform3D(1, 0, -1.49012e-08, 9.31323e-10, 1, 7.45058e-09, 1.49012e-08, 0, 1, 0, 0.748978, 1.19209e-07)
 layers = 32
 surface_material_override/0 = ExtResource("4_brc6i")
 
-[node name="Darker" parent="." index="2"]
+[node name="Darker" parent="." index="3"]
 layers = 32
 surface_material_override/0 = ExtResource("4_brc6i")
 
-[node name="eyes" parent="." index="3"]
+[node name="eyes" parent="." index="4"]
 layers = 32
 surface_material_override/0 = ExtResource("4_brc6i")
 
-[node name="foot" parent="." index="4"]
+[node name="foot" parent="." index="5"]
 layers = 32
 surface_material_override/0 = ExtResource("4_brc6i")
+
+[node name="Letter" type="MeshInstance3D" parent="." index="6"]
+transform = Transform3D(3.2806, 1.09454, -0.00555321, -1.94202, 1.84454, 0.00463594, 0.307518, -0.0279368, 0.0885184, 5.64749, 9.79621, 0.104716)
+layers = 32
+material_override = ExtResource("2_0c73w")
+mesh = SubResource("BoxMesh_6iale")

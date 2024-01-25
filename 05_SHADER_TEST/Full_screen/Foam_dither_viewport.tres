@@ -1,0 +1,52 @@
+[gd_resource type="ShaderMaterial" load_steps=6 format=3 uid="uid://cfd7rt53ee7jp"]
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_fjoeh"]
+input_name = "texture"
+
+[sub_resource type="CameraTexture" id="CameraTexture_hytm8"]
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_mfhxu"]
+expanded_output_ports = [0]
+source = 5
+texture = SubResource("CameraTexture_hytm8")
+
+[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_wx8qy"]
+constant = Color(0.258824, 0.517647, 0.447059, 1)
+
+[sub_resource type="VisualShader" id="VisualShader_aoud6"]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+
+
+
+void fragment() {
+// ColorConstant:5
+	vec4 n_out5p0 = vec4(0.258824, 0.517647, 0.447059, 1.000000);
+
+
+	vec4 n_out3p0;
+// Texture2D:3
+	n_out3p0 = texture(TEXTURE, UV);
+
+
+// Output:0
+	COLOR.rgb = vec3(n_out5p0.xyz);
+	COLOR.a = n_out3p0.x;
+
+
+}
+"
+graph_offset = Vector2(-348.644, -35.6373)
+mode = 1
+flags/light_only = false
+nodes/fragment/2/node = SubResource("VisualShaderNodeInput_fjoeh")
+nodes/fragment/2/position = Vector2(-1380, 240)
+nodes/fragment/3/node = SubResource("VisualShaderNodeTexture_mfhxu")
+nodes/fragment/3/position = Vector2(-760, 260)
+nodes/fragment/5/node = SubResource("VisualShaderNodeColorConstant_wx8qy")
+nodes/fragment/5/position = Vector2(80, 60)
+nodes/fragment/connections = PackedInt32Array(2, 0, 3, 2, 3, 0, 0, 1, 5, 0, 0, 0)
+
+[resource]
+shader = SubResource("VisualShader_aoud6")
