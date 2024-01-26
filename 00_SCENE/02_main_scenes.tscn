@@ -72,17 +72,17 @@ func _ready():
 
 "
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_4bor2"]
-viewport_path = NodePath("01_GAME_UI/MAIN_SCENE_UI/MAIN_Viewport")
+[sub_resource type="ViewportTexture" id="ViewportTexture_4iosc"]
+viewport_path = NodePath("01_GAME_UI/MAIN_SCENE_UI/Viewports/MAIN_Viewport")
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_ga4wp"]
-viewport_path = NodePath("01_GAME_UI/MAIN_SCENE_UI/FOAM_Viewport")
+[sub_resource type="ViewportTexture" id="ViewportTexture_y37a4"]
+viewport_path = NodePath("01_GAME_UI/MAIN_SCENE_UI/Viewports/FOAM_Viewport")
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_im2rn"]
-viewport_path = NodePath("01_GAME_UI/MAIN_SCENE_UI/SONAR_Viewport")
+[sub_resource type="ViewportTexture" id="ViewportTexture_vtvr5"]
+viewport_path = NodePath("01_GAME_UI/MAIN_SCENE_UI/Viewports/SONAR_Viewport")
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_flm00"]
-viewport_path = NodePath("01_GAME_UI/MAIN_SCENE_UI/GRID_Viewport")
+[sub_resource type="ViewportTexture" id="ViewportTexture_tsb8l"]
+viewport_path = NodePath("01_GAME_UI/MAIN_SCENE_UI/Viewports/GRID_Viewport")
 
 [sub_resource type="GDScript" id="GDScript_08g8g"]
 script/source = "extends TextureRect
@@ -130,8 +130,8 @@ func change_value(value : float):
 	opacity.set_shader_parameter(\"Opacity\",value)
 "
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_th8ki"]
-viewport_path = NodePath("01_GAME_UI/MAIN_SCENE_UI/SKY_Viewport")
+[sub_resource type="ViewportTexture" id="ViewportTexture_dm76q"]
+viewport_path = NodePath("01_GAME_UI/MAIN_SCENE_UI/Viewports/SKY_Viewport")
 
 [sub_resource type="GDScript" id="GDScript_hpjin"]
 script/source = "extends Node
@@ -722,65 +722,9 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="MAIN_Viewport" type="SubViewport" parent="01_GAME_UI/MAIN_SCENE_UI"]
-handle_input_locally = false
-mesh_lod_threshold = 0.0
-canvas_item_default_texture_filter = 0
-size = Vector2i(1920, 1080)
-
-[node name="CAM_STATE_MAIN" type="Camera3D" parent="01_GAME_UI/MAIN_SCENE_UI/MAIN_Viewport"]
-transform = Transform3D(1, 0, 0, 0, 0.882947, 0.469472, 0, -0.469472, 0.882947, 0, 16.056, 29.059)
-cull_mask = 17
-current = true
-fov = 10.2
-
-[node name="FOAM_Viewport" type="SubViewport" parent="01_GAME_UI/MAIN_SCENE_UI"]
-handle_input_locally = false
-canvas_item_default_texture_filter = 0
-size = Vector2i(1920, 1080)
-
-[node name="CAM_STATE_FOAM" type="Camera3D" parent="01_GAME_UI/MAIN_SCENE_UI/FOAM_Viewport"]
-transform = Transform3D(1, 0, 0, 0, 0.882947, 0.469472, 0, -0.469472, 0.882947, 0, 16.056, 29.059)
-cull_mask = 3072
-fov = 10.2
-
-[node name="SONAR_Viewport" type="SubViewport" parent="01_GAME_UI/MAIN_SCENE_UI"]
-handle_input_locally = false
-scaling_3d_scale = 0.9
-canvas_item_default_texture_filter = 0
-size = Vector2i(1920, 1080)
-
-[node name="CAM_STATE_SONAR" type="Camera3D" parent="01_GAME_UI/MAIN_SCENE_UI/SONAR_Viewport"]
-transform = Transform3D(1, 0, 0, 0, 0.882947, 0.469472, 0, -0.469472, 0.882947, 0, 16.056, 29.059)
-cull_mask = 24
-fov = 10.2
-
-[node name="GRID_Viewport" type="SubViewport" parent="01_GAME_UI/MAIN_SCENE_UI"]
-transparent_bg = true
-handle_input_locally = false
-canvas_item_default_texture_filter = 0
-size = Vector2i(1920, 1080)
-
-[node name="CAM_STATE_GRID" type="Camera3D" parent="01_GAME_UI/MAIN_SCENE_UI/GRID_Viewport"]
-transform = Transform3D(1, 0, 0, 0, 0.882947, 0.469472, 0, -0.469472, 0.882947, 0, 16.056, 29.059)
-cull_mask = 65
-current = true
-fov = 10.2
-
-[node name="SKY_Viewport" type="SubViewport" parent="01_GAME_UI/MAIN_SCENE_UI"]
-transparent_bg = true
-handle_input_locally = false
-canvas_item_default_texture_filter = 0
-size = Vector2i(1920, 1080)
-
-[node name="CAM_STATE_SKY" type="Camera3D" parent="01_GAME_UI/MAIN_SCENE_UI/SKY_Viewport"]
-transform = Transform3D(1, 0, 0, 0, 0.882947, 0.469472, 0, -0.469472, 0.882947, 0, 16.056, 29.059)
-cull_mask = 8192
-fov = 10.2
-
 [node name="All_Cam_Move" type="Node" parent="01_GAME_UI/MAIN_SCENE_UI" node_paths=PackedStringArray("_all_cam_array")]
 script = ExtResource("2_6q1sg")
-_all_cam_array = [NodePath("../CAM_MAIN_RAYCAST"), NodePath("../FOAM_Viewport/CAM_STATE_FOAM"), NodePath("../SKY_Viewport/CAM_STATE_SKY"), NodePath("../SONAR_Viewport/CAM_STATE_SONAR"), NodePath("../GRID_Viewport/CAM_STATE_GRID"), NodePath("../MAIN_Viewport/CAM_STATE_MAIN")]
+_all_cam_array = [NodePath("../CAM_MAIN_RAYCAST"), NodePath("../Viewports/MAIN_Viewport/CAM_STATE_MAIN"), NodePath("../Viewports/FOAM_Viewport/CAM_STATE_FOAM"), NodePath("../Viewports/SONAR_Viewport/CAM_STATE_SONAR"), NodePath("../Viewports/GRID_Viewport/CAM_STATE_GRID"), NodePath("../Viewports/SKY_Viewport/CAM_STATE_SKY")]
 
 [node name="CAM_MAIN_RAYCAST" type="Camera3D" parent="01_GAME_UI/MAIN_SCENE_UI"]
 transform = Transform3D(1, 0, 0, 0, 0.882947, 0.469472, 0, -0.469472, 0.882947, 0, 16.056, 29.059)
@@ -789,39 +733,112 @@ current = true
 fov = 10.2
 script = SubResource("GDScript_12o72")
 
-[node name="MAIN" type="TextureRect" parent="01_GAME_UI/MAIN_SCENE_UI"]
-layout_mode = 0
-offset_right = 1920.0
-offset_bottom = 1080.0
-texture = SubResource("ViewportTexture_4bor2")
+[node name="Viewports" type="Node" parent="01_GAME_UI/MAIN_SCENE_UI"]
 
-[node name="FOAM" type="TextureRect" parent="01_GAME_UI/MAIN_SCENE_UI"]
+[node name="MAIN_Viewport" type="SubViewport" parent="01_GAME_UI/MAIN_SCENE_UI/Viewports"]
+handle_input_locally = false
+mesh_lod_threshold = 0.0
+canvas_item_default_texture_filter = 0
+size = Vector2i(1920, 1080)
+
+[node name="CAM_STATE_MAIN" type="Camera3D" parent="01_GAME_UI/MAIN_SCENE_UI/Viewports/MAIN_Viewport"]
+transform = Transform3D(1, 0, 0, 0, 0.882947, 0.469472, 0, -0.469472, 0.882947, 0, 16.056, 29.059)
+cull_mask = 17
+current = true
+fov = 10.2
+
+[node name="FOAM_Viewport" type="SubViewport" parent="01_GAME_UI/MAIN_SCENE_UI/Viewports"]
+handle_input_locally = false
+canvas_item_default_texture_filter = 0
+size = Vector2i(1920, 1080)
+
+[node name="CAM_STATE_FOAM" type="Camera3D" parent="01_GAME_UI/MAIN_SCENE_UI/Viewports/FOAM_Viewport"]
+transform = Transform3D(1, 0, 0, 0, 0.882947, 0.469472, 0, -0.469472, 0.882947, 0, 16.056, 29.059)
+cull_mask = 3072
+fov = 10.2
+
+[node name="SONAR_Viewport" type="SubViewport" parent="01_GAME_UI/MAIN_SCENE_UI/Viewports"]
+handle_input_locally = false
+scaling_3d_scale = 0.9
+canvas_item_default_texture_filter = 0
+size = Vector2i(1920, 1080)
+
+[node name="CAM_STATE_SONAR" type="Camera3D" parent="01_GAME_UI/MAIN_SCENE_UI/Viewports/SONAR_Viewport"]
+transform = Transform3D(1, 0, 0, 0, 0.882947, 0.469472, 0, -0.469472, 0.882947, 0, 16.056, 29.059)
+cull_mask = 24
+fov = 10.2
+
+[node name="GRID_Viewport" type="SubViewport" parent="01_GAME_UI/MAIN_SCENE_UI/Viewports"]
+transparent_bg = true
+handle_input_locally = false
+canvas_item_default_texture_filter = 0
+size = Vector2i(1920, 1080)
+
+[node name="CAM_STATE_GRID" type="Camera3D" parent="01_GAME_UI/MAIN_SCENE_UI/Viewports/GRID_Viewport"]
+transform = Transform3D(1, 0, 0, 0, 0.882947, 0.469472, 0, -0.469472, 0.882947, 0, 16.056, 29.059)
+cull_mask = 65
+current = true
+fov = 10.2
+
+[node name="SKY_Viewport" type="SubViewport" parent="01_GAME_UI/MAIN_SCENE_UI/Viewports"]
+transparent_bg = true
+handle_input_locally = false
+canvas_item_default_texture_filter = 0
+size = Vector2i(1920, 1080)
+
+[node name="CAM_STATE_SKY" type="Camera3D" parent="01_GAME_UI/MAIN_SCENE_UI/Viewports/SKY_Viewport"]
+transform = Transform3D(1, 0, 0, 0, 0.882947, 0.469472, 0, -0.469472, 0.882947, 0, 16.056, 29.059)
+cull_mask = 8192
+fov = 10.2
+
+[node name="MAIN" type="TextureRect" parent="01_GAME_UI/MAIN_SCENE_UI/Viewports"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("ViewportTexture_4iosc")
+
+[node name="FOAM" type="TextureRect" parent="01_GAME_UI/MAIN_SCENE_UI/Viewports"]
 material = ExtResource("3_qcxor")
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-texture = SubResource("ViewportTexture_ga4wp")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("ViewportTexture_y37a4")
 
-[node name="SONAR" type="TextureRect" parent="01_GAME_UI/MAIN_SCENE_UI"]
+[node name="SONAR" type="TextureRect" parent="01_GAME_UI/MAIN_SCENE_UI/Viewports"]
 material = ExtResource("4_qh7in")
-layout_mode = 0
-offset_right = 1920.0
-offset_bottom = 1080.0
-texture = SubResource("ViewportTexture_im2rn")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("ViewportTexture_vtvr5")
 
-[node name="GRID" type="TextureRect" parent="01_GAME_UI/MAIN_SCENE_UI"]
+[node name="GRID" type="TextureRect" parent="01_GAME_UI/MAIN_SCENE_UI/Viewports"]
 material = ExtResource("5_jwi16")
-layout_mode = 0
-offset_right = 1920.0
-offset_bottom = 1080.0
-texture = SubResource("ViewportTexture_flm00")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("ViewportTexture_tsb8l")
 script = SubResource("GDScript_08g8g")
 
-[node name="SKY" type="TextureRect" parent="01_GAME_UI/MAIN_SCENE_UI"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-texture = SubResource("ViewportTexture_th8ki")
+[node name="SKY" type="TextureRect" parent="01_GAME_UI/MAIN_SCENE_UI/Viewports"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("ViewportTexture_dm76q")
 
 [node name="Button_active_Dialogue" type="Node" parent="01_GAME_UI/MAIN_SCENE_UI"]
 script = SubResource("GDScript_hpjin")
