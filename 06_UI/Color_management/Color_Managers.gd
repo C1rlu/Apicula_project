@@ -1,4 +1,3 @@
-@tool
 extends Node
 
 @export var ColorRessource : ColorData
@@ -13,10 +12,7 @@ func _ready():
 	_global_datas._open_dialogue.connect(_Darker_mainScene)
 	_global_datas._close_dialogue.connect(_NormalColor_mainScene)
 	_global_datas._backFrom_subscene.connect(_NormalColor_mainScene)
-	#_global_datas._active_sonar.connect(_NormalColor_mainScene)
 	_global_datas.book_is_open.connect(_open)
-	#_global_datas._active_world_grid.connect(_open)
-
 
 	#ACTIVE DITHER
 	RenderingServer.global_shader_parameter_set("active_Dither", true)

@@ -12,14 +12,14 @@ var canMove = false
 
 func _ready():
 	var playerPosition = _global_datas.subbscene_playerPosition
-	offset = self.transform.origin - playerPosition
-	active_target = offset
+	offset = _all_cam_array[0].transform.origin - playerPosition
+	active_target = offset + basePos
 	
 	# global move
 	_global_datas._start_ini_subscene.connect(cant_move)
 	_global_datas._end_ini_subscene.connect(can_move)
 	
-	basePos = active_target 
+
 	
 	
 func _physics_process(_delta):
@@ -28,7 +28,7 @@ func _physics_process(_delta):
 		return
 	var playerPosition = _global_datas.subbscene_playerPosition	
 	for cam in _all_cam_array:
-		cam.transform.origin = lerp(cam.transform.origin, playerPosition + active_target, smooth_speed * _delta)	
+		cam.transform.origin = lerp(cam.transform.origin, playerPosition +  active_target, smooth_speed * _delta)	
 
 	
 
@@ -38,5 +38,5 @@ func can_move():
 	
 func cant_move():
 	canMove = false
-	self.position = active_target 
+
 

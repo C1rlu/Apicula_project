@@ -2,7 +2,7 @@ extends Node
 
 
 
-@onready var cam_raycast = $CAM_RAYCAST
+@onready var cam_raycast = $Viewport/CAM_RAYCAST
 @onready var load_scene = $LoadScene
 @onready var mouse_raycast = $MOUSE_RAYCAST
 

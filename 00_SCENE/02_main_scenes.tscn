@@ -1,9 +1,9 @@
-[gd_scene load_steps=79 format=3 uid="uid://cnmptm7i0xxmj"]
+[gd_scene load_steps=77 format=3 uid="uid://cnmptm7i0xxmj"]
 
 [ext_resource type="PackedScene" uid="uid://vpdvl0v7dubd" path="res://00_PLAYER/Player_boat.tscn" id="1_qltht"]
 [ext_resource type="Script" path="res://06_UI/Fps_counter.gd" id="1_s74e5"]
 [ext_resource type="Resource" uid="uid://ppxk5i543dfn" path="res://09_NPC/Npc_data/Mr_Birds_data.tres" id="1_trgwt"]
-[ext_resource type="Script" path="res://03_CAMERA/CameraFollow_subscene.gd" id="2_xct4q"]
+[ext_resource type="Script" path="res://03_CAMERA/CameraFollow.gd" id="2_7lb1x"]
 [ext_resource type="Material" uid="uid://cfd7rt53ee7jp" path="res://05_SHADER_TEST/Full_screen/Foam_dither_viewport.tres" id="3_qcxor"]
 [ext_resource type="Shader" uid="uid://bduoqim3kfbs6" path="res://00_PLAYER/Sonar/Sonar_sh.tres" id="3_todel"]
 [ext_resource type="Script" path="res://00_PLAYER/Sonar/Click_to_Sonar.gd" id="4_h4pmi"]
@@ -165,54 +165,6 @@ func _on_button_pressed():
 	if _global_datas.Npc_Dialogue == null:
 		return
 	_global_datas._open_dialogue.emit()
-"
-
-[sub_resource type="GDScript" id="GDScript_xjyo8"]
-script/source = "extends Node
-
-@onready var dive_button = $Dive_button
-
-func _ready():
-	pass
-	#_global_datas.book_is_open.connect(_active)
-	#_global_datas.in_dialogue_zone.connect(disable)
-	#_global_datas.out_dialogue_zone.connect(active)
-	#_global_datas._active_go_subscene_button.connect(_active)
-
-
-func disable():
-	dive_button.visible = false		
-	
-func active():
-	dive_button.visible = true		
-		
-func _active(condition : bool):
-	
-	if _global_datas.Player_InDialogue_zone:
-		return
-	dive_button.visible = !condition
-
-"
-
-[sub_resource type="GDScript" id="GDScript_k6bx5"]
-script/source = "extends Button
-
-func _ready():
-	var number : int = 0
-	set_focus_mode(number)
-
-
-func _on_button_down():
-	_global_datas._reseting_clock_active.emit()
-
-
-func _on_button_up():
-	_global_datas._reseting_clock_disable.emit()
-
-
-				
-	
-	
 "
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ituqr"]
@@ -723,7 +675,7 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="All_Cam_Move" type="Node" parent="01_GAME_UI/MAIN_SCENE_UI" node_paths=PackedStringArray("_all_cam_array")]
-script = ExtResource("2_xct4q")
+script = ExtResource("2_7lb1x")
 _all_cam_array = [NodePath("../CAM_MAIN_RAYCAST"), NodePath("../Viewports/MAIN_Viewport/CAM_STATE_MAIN"), NodePath("../Viewports/FOAM_Viewport/CAM_STATE_FOAM"), NodePath("../Viewports/SONAR_Viewport/CAM_STATE_SONAR"), NodePath("../Viewports/GRID_Viewport/CAM_STATE_GRID"), NodePath("../Viewports/SKY_Viewport/CAM_STATE_SKY")]
 
 [node name="CAM_MAIN_RAYCAST" type="Camera3D" parent="01_GAME_UI/MAIN_SCENE_UI"]
@@ -904,20 +856,6 @@ theme_override_colors/font_color = Color(0.188235, 0.188235, 0.188235, 1)
 theme_override_font_sizes/font_size = 40
 text = "..."
 
-[node name="Button_active_subscene" type="Node" parent="01_GAME_UI/MAIN_SCENE_UI"]
-script = SubResource("GDScript_xjyo8")
-
-[node name="Dive_button" type="Button" parent="01_GAME_UI/MAIN_SCENE_UI/Button_active_subscene"]
-visible = false
-offset_left = 872.0
-offset_top = 446.0
-offset_right = 947.0
-offset_bottom = 496.0
-theme_override_font_sizes/font_size = 30
-text = "DIVE
-"
-script = SubResource("GDScript_k6bx5")
-
 [node name="Player_Boat" parent="." instance=ExtResource("1_qltht")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
 input_ray_pickable = false
@@ -929,7 +867,6 @@ rotation_speed = 2.0
 
 [node name="OmniLight3D2" type="OmniLight3D" parent="Player_Boat"]
 transform = Transform3D(1, -3.55271e-15, 0, 2.11758e-22, 0.342545, 0.939501, 0, -0.939501, 0.342545, 0.130404, 3.19906, -0.0379682)
-layers = 3081
 light_indirect_energy = 0.0
 light_volumetric_fog_energy = 0.0
 light_specular = 0.0
@@ -1196,27 +1133,26 @@ mesh = SubResource("PlaneMesh_k8245")
 skeleton = NodePath("../../..")
 surface_material_override/0 = SubResource("ShaderMaterial_2pkhh")
 
-[node name="SEA" type="StaticBody3D" parent="--DECOR--"]
-transform = Transform3D(4.4285, 0, 0, 0, 0.44285, 0, 0, 0, 4.4285, 0.739399, -0.436631, 1.21398)
+[node name="SEA" type="Node" parent="--DECOR--"]
 
 [node name="back_color" type="MeshInstance3D" parent="--DECOR--/SEA"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -34.098, 0)
+transform = Transform3D(4.4285, 0, 0, 0, 0.44285, 0, 0, 0, 4.4285, 0.739399, -15.5369, 1.21398)
 mesh = SubResource("PlaneMesh_7ftl5")
+skeleton = NodePath("")
 
 [node name="Sea_collider" type="MeshInstance3D" parent="--DECOR--/SEA"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.067, 0)
+transform = Transform3D(4.4285, 0, 0, 0, 0.44285, 0, 0, 0, 4.4285, 0.739399, -0.40696, 1.21398)
 layers = 8
 mesh = SubResource("BoxMesh_hogrq")
 skeleton = NodePath("../Sea_foam")
 
 [node name="Sea_foam" type="MeshInstance3D" parent="--DECOR--/SEA"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+transform = Transform3D(4.4285, 0, 0, 0, 0.44285, 0, 0, 0, 4.4285, 0.739399, -0.215206, 1.21398)
 layers = 2048
 mesh = SubResource("BoxMesh_wmrfd")
+skeleton = NodePath("")
 
 [connection signal="pressed" from="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue/Button/ColorRect/Push_button" to="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue" method="_on_button_pressed"]
-[connection signal="button_down" from="01_GAME_UI/MAIN_SCENE_UI/Button_active_subscene/Dive_button" to="01_GAME_UI/MAIN_SCENE_UI/Button_active_subscene/Dive_button" method="_on_button_down"]
-[connection signal="button_up" from="01_GAME_UI/MAIN_SCENE_UI/Button_active_subscene/Dive_button" to="01_GAME_UI/MAIN_SCENE_UI/Button_active_subscene/Dive_button" method="_on_button_up"]
 [connection signal="mouse_entered" from="Player_Boat/Area3D" to="Player_Boat/Area3D" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="Player_Boat/Area3D" to="Player_Boat/Area3D" method="_on_mouse_exited"]
 [connection signal="area_entered" from="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA" to="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA" method="_on_area_entered"]

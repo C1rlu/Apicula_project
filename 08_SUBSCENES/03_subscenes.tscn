@@ -1,4 +1,4 @@
-[gd_scene load_steps=141 format=3 uid="uid://nigmie4bbn6"]
+[gd_scene load_steps=140 format=3 uid="uid://nigmie4bbn6"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/Grid_scene/Subscene_loader.gd" id="1_7uoo0"]
 [ext_resource type="PackedScene" uid="uid://g7u8o55jrnyy" path="res://08_SUBSCENES/Player_subscene/Player_sub.tscn" id="2_ri8q1"]
@@ -7,20 +7,18 @@
 [ext_resource type="Material" uid="uid://b1iqs8p4it3ni" path="res://05_SHADER_TEST/Full_screen/Subscene_screen/Scanner_subscene_dither.tres" id="3_rto3a"]
 [ext_resource type="Material" uid="uid://dbu2q4lhlk8w5" path="res://05_SHADER_TEST/Full_screen/Subscene_screen/Main_subscene_dither.tres" id="3_w42nb"]
 [ext_resource type="Material" uid="uid://b7ffjkgpmtkc6" path="res://05_SHADER_TEST/Full_screen/Subscene_screen/Scanner_x_subscene_dither.tres" id="4_bkck3"]
-[ext_resource type="PackedScene" uid="uid://bdnl7k72gp6so" path="res://08_SUBSCENES/Grid_scene/A1.tscn" id="5_0e8gc"]
 [ext_resource type="Material" uid="uid://bbl1kq4krq2pg" path="res://05_SHADER_TEST/Full_screen/Subscene_screen/Fx_subscene_dither.tres" id="5_i7six"]
 [ext_resource type="Texture2D" uid="uid://d31xi5f7tan5w" path="res://05_SHADER_TEST/Full_screen/Dither_pattners/Blue_noise/HDR_LA_7.png" id="8_yirv7"]
 
 [sub_resource type="GDScript" id="GDScript_yjydq"]
 script/source = "extends Node
 
-@onready var subscenes_cam_scene = $\"../Main\"
+@onready var subscenes_cam_scene = $\"../Viewport/Main\"
 
 @onready var material : Material = subscenes_cam_scene.get_material()
-@onready var subscenes_cam_scanner = $\"../Scanner\"
-@onready var subscenes_cam_scanner_x = $\"../Scanner_x\"
-@onready var subscenes_cam_fx = $\"../Fx\"
-
+@onready var subscenes_cam_scanner = $\"../Viewport/Scanner\"
+@onready var subscenes_cam_scanner_x = $\"../Viewport/Scanner_x\"
+@onready var subscenes_cam_fx = $\"../Viewport/Fx\"
 
 var t
 
@@ -144,7 +142,7 @@ func _set_scanner_opacity_value( value : float):
 
 [sub_resource type="GDScript" id="GDScript_nvaxv"]
 script/source = "extends Node
-@onready var subscenes_cam_scanner_x = $\"../Scanner_x\"
+@onready var subscenes_cam_scanner_x = $\"../Viewport/Scanner_x\"
 @onready var material : Material = subscenes_cam_scanner_x.get_material()
 
 var t
@@ -177,18 +175,11 @@ func _set_opacity_value( value : float):
 
 "
 
-[sub_resource type="GDScript" id="GDScript_5new5"]
-script/source = "extends Camera3D
-
-func _ready():
-	_global_datas.Subscene_Camera = self
-"
-
 [sub_resource type="ViewportTexture" id="ViewportTexture_gasoh"]
-viewport_path = NodePath("Main_SubViewport")
+viewport_path = NodePath("Viewport/Main_SubViewport")
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_6enrc"]
-viewport_path = NodePath("Scanner_SubViewport")
+viewport_path = NodePath("Viewport/Scanner_SubViewport")
 
 [sub_resource type="GDScript" id="GDScript_k733y"]
 script/source = "extends TextureRect
@@ -200,10 +191,17 @@ func _ready():
 "
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_dqppn"]
-viewport_path = NodePath("Scanner_x_SubViewport")
+viewport_path = NodePath("Viewport/Scanner_x_SubViewport")
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_ebnrs"]
-viewport_path = NodePath("FX_SubViewport")
+viewport_path = NodePath("Viewport/FX_SubViewport")
+
+[sub_resource type="GDScript" id="GDScript_5new5"]
+script/source = "extends Camera3D
+
+func _ready():
+	_global_datas.Subscene_Camera = self
+"
 
 [sub_resource type="GDScript" id="GDScript_hp4r3"]
 script/source = "extends Node
@@ -1250,7 +1248,7 @@ size = Vector3(2.03379, 0.029557, 10.4284)
 [sub_resource type="GDScript" id="GDScript_2wlt5"]
 script/source = "extends Area3D
 
-@onready var Camera = $\"../CAM_RAYCAST\"
+@onready var Camera = $\"../Viewport/CAM_RAYCAST\"
 
 func _ready():
 	_global_datas.get_raycastPosition.connect(MouseRaycast)
@@ -1819,52 +1817,49 @@ script = SubResource("GDScript_opp2i")
 [node name="SEE_MIRROR_FLASH" type="Node" parent="."]
 script = SubResource("GDScript_nvaxv")
 
-[node name="All_cam_follow" type="Node" parent="." node_paths=PackedStringArray("_all_cam_array")]
+[node name="Viewport" type="Node" parent="."]
+
+[node name="All_cam_follow" type="Node" parent="Viewport" node_paths=PackedStringArray("_all_cam_array")]
 script = ExtResource("2_tc6o2")
 _all_cam_array = [NodePath("../CAM_RAYCAST"), NodePath("../Main_SubViewport/CAM_STATE_BOAT"), NodePath("../Scanner_SubViewport/CAM_STATE_BOAT"), NodePath("../Scanner_x_SubViewport/CAM_STATE_BOAT"), NodePath("../FX_SubViewport/CAM_STATE_BOAT")]
-basePos = Vector3(0, 0.6, 2.7)
+basePos = Vector3(0, -0.35, 0)
 
-[node name="CAM_RAYCAST" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 2)
-cull_mask = 0
-script = SubResource("GDScript_5new5")
-
-[node name="Main_SubViewport" type="SubViewport" parent="."]
+[node name="Main_SubViewport" type="SubViewport" parent="Viewport"]
 handle_input_locally = false
 size = Vector2i(1920, 1080)
 
-[node name="CAM_STATE_BOAT" type="Camera3D" parent="Main_SubViewport"]
+[node name="CAM_STATE_BOAT" type="Camera3D" parent="Viewport/Main_SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 1.8)
 cull_mask = 4
 
-[node name="Scanner_SubViewport" type="SubViewport" parent="."]
+[node name="Scanner_SubViewport" type="SubViewport" parent="Viewport"]
 transparent_bg = true
 handle_input_locally = false
 size = Vector2i(1920, 1080)
 
-[node name="CAM_STATE_BOAT" type="Camera3D" parent="Scanner_SubViewport"]
+[node name="CAM_STATE_BOAT" type="Camera3D" parent="Viewport/Scanner_SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 1.8)
 cull_mask = 4
 
-[node name="Scanner_x_SubViewport" type="SubViewport" parent="."]
+[node name="Scanner_x_SubViewport" type="SubViewport" parent="Viewport"]
 transparent_bg = true
 handle_input_locally = false
 size = Vector2i(1920, 1080)
 
-[node name="CAM_STATE_BOAT" type="Camera3D" parent="Scanner_x_SubViewport"]
+[node name="CAM_STATE_BOAT" type="Camera3D" parent="Viewport/Scanner_x_SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 1.8)
 cull_mask = 4100
 
-[node name="FX_SubViewport" type="SubViewport" parent="."]
+[node name="FX_SubViewport" type="SubViewport" parent="Viewport"]
 transparent_bg = true
 handle_input_locally = false
 size = Vector2i(1920, 1080)
 
-[node name="CAM_STATE_BOAT" type="Camera3D" parent="FX_SubViewport"]
+[node name="CAM_STATE_BOAT" type="Camera3D" parent="Viewport/FX_SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 1.8)
 cull_mask = 16384
 
-[node name="Main" type="TextureRect" parent="."]
+[node name="Main" type="TextureRect" parent="Viewport"]
 visible = false
 material = ExtResource("3_w42nb")
 anchors_preset = 15
@@ -1874,7 +1869,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("ViewportTexture_gasoh")
 
-[node name="Scanner" type="TextureRect" parent="."]
+[node name="Scanner" type="TextureRect" parent="Viewport"]
 visible = false
 material = ExtResource("3_rto3a")
 anchors_preset = 15
@@ -1885,7 +1880,7 @@ grow_vertical = 2
 texture = SubResource("ViewportTexture_6enrc")
 script = SubResource("GDScript_k733y")
 
-[node name="Scanner_x" type="TextureRect" parent="."]
+[node name="Scanner_x" type="TextureRect" parent="Viewport"]
 visible = false
 material = ExtResource("4_bkck3")
 anchors_preset = 15
@@ -1895,7 +1890,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("ViewportTexture_dqppn")
 
-[node name="Fx" type="TextureRect" parent="."]
+[node name="Fx" type="TextureRect" parent="Viewport"]
 visible = false
 material = ExtResource("5_i7six")
 anchors_preset = 15
@@ -1904,6 +1899,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("ViewportTexture_ebnrs")
+
+[node name="CAM_RAYCAST" type="Camera3D" parent="Viewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 2)
+cull_mask = 0
+script = SubResource("GDScript_5new5")
 
 [node name="Can_clic_here_behaviour" type="Node" parent="."]
 script = SubResource("GDScript_hp4r3")
@@ -2008,8 +2008,6 @@ input_ray_pickable = false
 shape = SubResource("BoxShape3D_qfjre")
 
 [node name="LoadScene" type="Node" parent="."]
-
-[node name="A1" parent="LoadScene" instance=ExtResource("5_0e8gc")]
 
 [node name="MOUSE_RAYCAST" type="Area3D" parent="."]
 collision_layer = 0
