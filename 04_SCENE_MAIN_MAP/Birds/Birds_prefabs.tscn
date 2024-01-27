@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://cp1aidnp626l4"]
+[gd_scene load_steps=8 format=3 uid="uid://cp1aidnp626l4"]
 
 [ext_resource type="Script" path="res://04_SCENE_MAIN_MAP/Birds/Anim_start.gd" id="1_ec7gc"]
+[ext_resource type="PackedScene" uid="uid://i3jl14mfw4um" path="res://04_SCENE_MAIN_MAP/Birds/Birds_prefabs_scene.tscn" id="2_jhkjp"]
 
 [sub_resource type="Animation" id="Animation_h2vkr"]
 resource_name = "Fly"
@@ -13,6 +14,13 @@ tracks/0/path = NodePath(".")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = PackedFloat32Array(0, 1, 0, 1, -0.817755, 2.5, 1, -0.984385, 1, 0.144922, 5, 1, 0.142178, 1, 1.04668, 8, 1, 0.807597, 1, -0.0719811, 10, 1, 0, 1, -0.817755)
+tracks/1/type = "rotation_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 0
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, 0, 0.954451, 0, -0.298366, 2.5, 1, 0, 0.954451, 0, -0.298366, 2.5001, 1, 0, -0.487448, 0, 0.873152, 2.5002, 1, 0, -0.218833, 0, 0.975762, 5, 1, 0, 0.459589, 0, 0.888132, 8, 1, 0, 0.955634, 0, 0.294556)
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_yjd1d"]
 _data = {
@@ -48,10 +56,14 @@ libraries = {
 }
 
 [node name="Bird_root" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.954686, 1, 0.115879)
+transform = Transform3D(-0.821955, 0, -0.569552, 0, 1, 0, 0.569552, 0, -0.821955, 0, 1, -0.817755)
+
+[node name="Far_birds" parent="Bird_root" instance=ExtResource("2_jhkjp")]
+transform = Transform3D(0.0563447, 0, 0, 0, 0.0563447, 0, 0, 0, 0.0563447, 0, 0, 0)
 
 [node name="Bird_render" type="MeshInstance3D" parent="Bird_root"]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
+visible = false
 layers = 8192
 mesh = SubResource("SphereMesh_i7on3")
 skeleton = NodePath("../..")
