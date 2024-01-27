@@ -21,25 +21,20 @@ height = 0.26304
 [sub_resource type="GDScript" id="GDScript_lbkea"]
 script/source = "extends Node
 
+@onready var timer = $Timer
 
 signal iniPos
 
 func _ready():
 	_global_datas._start_ini_subscene.connect(_ini)
-	_global_datas._splash.connect(Splash)
-	_global_datas._end_ini_subscene.connect(_ini_end_subscene)
-	
- 
+
+
 func _ini():
 
 	iniPos.emit()
-func Splash():
-	$Timer.start()
-	
-func _ini_end_subscene():
-	pass
+	timer.start()
 
-	
+
 func _on_timer_timeout():
 	_global_datas._end_ini_subscene.emit()
 	
@@ -1585,7 +1580,6 @@ process_material = SubResource("ParticleProcessMaterial_ievqw")
 draw_pass_1 = ExtResource("4_6vpi7")
 script = SubResource("GDScript_r51df")
 
-[connection signal="iniPos" from="Ini_subscene" to="." method="_on_ini_subscene_ini_pos"]
 [connection signal="timeout" from="Ini_subscene/Timer" to="Ini_subscene" method="_on_timer_timeout"]
 [connection signal="timeout" from="Sonar_Detection/Timer" to="Sonar_Detection" method="_on_timer_timeout"]
 [connection signal="timeout" from="Sonar_Detection/Timer_Alarm" to="Sonar_Detection" method="_on_timer_alarm_timeout"]

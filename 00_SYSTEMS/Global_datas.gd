@@ -19,7 +19,7 @@ signal _go_Subscene
 signal _start_ini_subscene
 signal _end_ini_subscene
 signal _backFrom_subscene
-signal  _splash
+
 
 # scene signals
 

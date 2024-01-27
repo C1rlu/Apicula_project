@@ -44,7 +44,7 @@ func active_subscene():
 
 	_global_datas.Player_InSubScene = true
 	_global_datas._start_ini_subscene.emit()
-	_global_datas._splash.emit()
+
 
 	cam_raycast.current = true
 	mouse_raycast.set_collision_layer(4) 

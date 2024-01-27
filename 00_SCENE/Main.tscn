@@ -35,10 +35,12 @@ func _on_timer_timeout():
 [sub_resource type="GDScript" id="GDScript_gl82p"]
 script/source = "extends Node
 
+@export var lock_fps = false
 @export var fps_target : int = 60
 
 func _ready():
-	Engine.set_max_fps(fps_target)
+	if lock_fps:
+		Engine.set_max_fps(fps_target)
 	
 func _input(event):
 	
@@ -46,9 +48,7 @@ func _input(event):
 		_global_datas.cell_name = \"A1\"
 		_global_datas._reseting_clock_disable.emit()
 		_global_datas._go_Subscene.emit()
-		
-	if event.is_action_pressed(\"Add_coins\"):
-		_global_datas._find_coins.emit()
+	
 
 	if event.is_action_pressed(\"Demo\"):
 		_global_datas.active_prologue_demo.emit()

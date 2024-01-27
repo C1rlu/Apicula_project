@@ -4,7 +4,6 @@ extends RigidBody3D
 @export var maxSpeed = 10.0
 
 @export var startPos : Vector3
-@export var endPos : Vector3
 
 var _canMove = false
 
@@ -14,22 +13,22 @@ var _canMove = false
 func _ready():
 
 	_global_datas._start_ini_subscene.connect(ini_Pos)
-	_global_datas._splash.connect(splash)
 	_global_datas._end_ini_subscene.connect(can_Move)
-
-	
+	_global_datas._backFrom_subscene.connect(cant_Move)
+		
 func ini_Pos():
-	_canMove = false
+	_canMove = true
 	transform.origin = startPos
-
+	PlayerMesh.rotation_degrees = Vector3.ZERO
+	splash()
+	
 func can_Move():
 	_canMove = true
-	
+func cant_Move():
+	_canMove = false
 func splash():
 	apply_central_force(Vector3.DOWN * 600)
 	
-func _player_ResetPosition():
-	transform.origin = Vector3.ZERO
 
 func _speedUp():
 	move_speed += 5
@@ -39,13 +38,16 @@ func _speedDown():
 func _physics_process(_delta):
 	
 	
+	if _global_datas.Player_InSubScene:
+		_global_datas.subbscene_playerPosition = transform.origin	
+	
+	
 	if !_canMove:
 		return
 			
 	if _global_datas.Player_InBoard:
 		return
-	if !_global_datas.Player_InSubScene:
-		return
+	
 		
 	if Input.is_action_pressed(("move_forward")):
 		var goingUp = transform.basis.y
@@ -71,11 +73,7 @@ func _physics_process(_delta):
 		linear_velocity = current_velocity
 
 
-	_global_datas.subbscene_playerPosition = transform.origin	
-
-func _on_ini_subscene_ini_pos():
-	_player_ResetPosition()
-
+	
 func player_dir(_delta, angle,angle_x):
 	
 	var New_rotation = Vector3(angle_x,angle,0.0)
