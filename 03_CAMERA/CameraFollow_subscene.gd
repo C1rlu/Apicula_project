@@ -37,9 +37,9 @@ func  reset_position():
 		
 func can_move():
 	canMove = true
-	
+	reset_position()
 	
 func cant_move():
 	canMove = false
-	reset_position()
+
 
