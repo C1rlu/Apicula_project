@@ -1,9 +1,7 @@
-[gd_scene load_steps=12 format=3 uid="uid://dym7sjmq33hdc"]
+[gd_scene load_steps=10 format=3 uid="uid://dym7sjmq33hdc"]
 
 [ext_resource type="Material" uid="uid://ca5hr6jiqhjq1" path="res://05_SHADER_TEST/Subscene_materials/element_subscene_sonar_mat.tres" id="1_oejn8"]
 [ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_elements_mat.tres" id="2_bwy60"]
-
-[sub_resource type="SphereMesh" id="SphereMesh_ic6q1"]
 
 [sub_resource type="GDScript" id="GDScript_i86bt"]
 script/source = "extends Node
@@ -36,33 +34,7 @@ func _on_mirror_prefabs_area_shape_exited(area_rid, area, area_shape_index, loca
 	
 "
 
-[sub_resource type="GDScript" id="GDScript_uj8ey"]
-script/source = "extends Node
-
-
-@onready var mirror_prefabs = $\"..\"
-@onready var opacity = $Opacity
-
-func _position():
-	
-	return mirror_prefabs.global_position
-
-
-func _change_opacity(value : float):
-	opacity._change_value(value )
-"
-
-[sub_resource type="GDScript" id="GDScript_k5jev"]
-script/source = "extends Node
-
-@onready var material : Material = $\"../../MeshInstance3D\".get_surface_override_material(0)
-
-
-func _change_value(value : float):
-	
-	#var clamp = clampf(value,0.0,0.7)
-	material.set_shader_parameter(\"Opacity\",value*2)
-"
+[sub_resource type="SphereMesh" id="SphereMesh_ic6q1"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_we1hc"]
 radius = 0.155206
@@ -95,6 +67,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.444128, -0.47566, 0)
 collision_layer = 6
 collision_mask = 6
 
+[node name="Active_Mirror_Clic" type="Node" parent="."]
+script = SubResource("GDScript_i86bt")
+
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.0768515, 0, 0, 0, 0.0768515, 0, 0, 0, 0.0768515, 0, 0, 0)
 layers = 4096
@@ -102,14 +77,7 @@ mesh = SubResource("SphereMesh_ic6q1")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("1_oejn8")
 
-[node name="Active_Mirror_Clic" type="Node" parent="."]
-script = SubResource("GDScript_i86bt")
-
 [node name="Mirror" type="Node" parent="."]
-script = SubResource("GDScript_uj8ey")
-
-[node name="Opacity" type="Node" parent="Mirror"]
-script = SubResource("GDScript_k5jev")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_we1hc")

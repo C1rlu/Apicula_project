@@ -150,22 +150,21 @@ var t
 func _ready():
 	
 	_global_datas._take_photo.connect(_flash_mirror)
-	_global_datas.closet_mirror_distance = 2.5
 
 func _flash_mirror():
 
-	var distance_close_mirror = _global_datas.closet_mirror_distance
-	
+	#var distance_close_mirror = _global_datas.closet_mirror_distance
+	#var distance_close_mirror = 0.5
 	_global_datas.clock_time_consume -= 3.0
 	
 		
-	var lerp_distance = inverse_lerp(2.5,0.0,distance_close_mirror)	
-	var lerp_value  = lerpf(0.09,0.0,lerp_distance)
+	#var lerp_distance = inverse_lerp(2.5,0.0,distance_close_mirror)	
+	#var lerp_value  = lerpf(0.09,0.0,lerp_distance)
 	#print(lerp_value)
 	if t:
 		t.kill()
 	t = create_tween()
-	t .tween_method(_set_opacity_value,lerp_value,0.5,2.0)
+	t .tween_method(_set_opacity_value,0.04,0.5,2.0)
 	
 	
 func _set_opacity_value( value : float):

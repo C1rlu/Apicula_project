@@ -1,13 +1,16 @@
 extends Node
 
+
+@export var active_sonar = false
 @onready var player_sub = $".."
 @onready var timer = $Timer
 @onready var timer_alarm = $Timer_Alarm
 var closest_element 
 var pulse = false
 func _ready():
-	_global_datas._go_Subscene.connect(_start_sonar)
-	_global_datas._backFrom_subscene.connect(_stop_sonar)
+	if active_sonar:
+		_global_datas._go_Subscene.connect(_start_sonar)
+		_global_datas._backFrom_subscene.connect(_stop_sonar)
 
 func _start_sonar():
 	timer.start()	
@@ -69,7 +72,8 @@ func _Alarm_pulse():
 
 func _on_sonar_zone_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
 
-
+	if !active_sonar:
+		return
 	var element = area.get_node_or_null("Mirror")
 	if element:
 		_global_datas.Element_sub_zone_array.append(element)
@@ -82,7 +86,8 @@ func _on_sonar_zone_area_shape_entered(area_rid, area, area_shape_index, local_s
 	
 func _on_sonar_zone_area_shape_exited(area_rid, area, area_shape_index, local_shape_index):
 	
-
+	if !active_sonar:
+		return
 	if area == null:
 		return
 	
