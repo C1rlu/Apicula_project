@@ -51,6 +51,7 @@ func _fade_out():
 
 func _process(delta):
 	
+	return
 	if _is_dragging:
 		_check_burning_position()
 		
