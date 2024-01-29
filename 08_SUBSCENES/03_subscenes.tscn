@@ -272,16 +272,20 @@ func _input(event:InputEvent):
 	
 func _check_target():
 	
+	
+	if !_global_datas.Player_InSubScene:
+		return
+	
 	_global_datas._forreuse_off.emit()
 	# here to get the photo data or object by raycast on the 3d element
 	var ray_position = raycast_from_mouse()
 		
 	if ray_position != null:
 		print(ray_position.collider)
-		var photo_data = ray_position.collider.get_node_or_null(\"Photo_data\")
-		if photo_data:
-			print(photo_data)
-			_global_datas._instance_photo.emit()			
+		var photo_data_node = ray_position.collider.get_node_or_null(\"Photo_data\")
+		if photo_data_node:
+			var photo_data_rs : PhotoData = photo_data_node.get_PhotoData()
+			_global_datas._instance_photo.emit(photo_data_rs)			
 			
 		var mirror_data = ray_position.collider.get_node_or_null(\"Mirror\")
 		if mirror_data:

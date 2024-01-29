@@ -10,4 +10,4 @@ class_name Npc_datas
 @export var Dialogue_start_index : int
 @export var Dialogue_starts : Array[String]
  
-@export var photo_done : bool = false
+

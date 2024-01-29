@@ -93,16 +93,17 @@ var _active : bool
 func _ready():
 	
 	_global_datas.player_active_tools.connect(_active_photo)
+	_global_datas._take_photo.connect(_photo_done)
 	
 func _active_photo(condition):
 	_active = condition
 
-
+func _photo_done():
+	photo_circle.visible = false
 func _on_button_button_down():
 	
-	if _global_datas.Npc_Dialogue.photo_done:
+	if check_photo_exist():
 		return
-	
 	if !_active:
 		return
 	_global_datas._take_Npc_photo.emit(true)
@@ -116,7 +117,7 @@ func _on_button_button_up():
 
 func _on_button_mouse_entered():
 	
-	if _global_datas.Npc_Dialogue.photo_done:
+	if check_photo_exist():
 		return
 	
 	if !_active:
@@ -125,12 +126,18 @@ func _on_button_mouse_entered():
 
 func _on_button_mouse_exited():
 	
-	if _global_datas.Npc_Dialogue.photo_done:
-		return
-	
+
 	if !_active:
 		return
 	photo_circle.visible = false
+
+
+func check_photo_exist():
+	var npc_photo = _global_datas.Npc_Dialogue.photo_data
+	
+	for photo in _global_datas.photo_archives:
+		if photo == npc_photo:
+			return true 	
 "
 
 [sub_resource type="GDScript" id="GDScript_6qc5w"]

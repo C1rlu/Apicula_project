@@ -39,6 +39,7 @@ signal in_dialogue_zone
 signal out_dialogue_zone
 signal  _open_dialogue
 signal  _close_dialogue
+var photo_archives : Array[PhotoData] #list of photo data took in game
 
 signal _show_hand
 signal _hide_hand
@@ -48,13 +49,17 @@ signal _bird_is_comming
 signal _give_letter(_words : String, _from : String)
 signal _take_Npc_photo(condition : bool)
 signal _show_object_legend(condtion : bool, text : String)
+
+
+
 #subsceneSignal
 var mouseRaycastPosition : Vector3
 signal get_raycastPosition
 var subbscene_playerPosition : Vector3
 
 signal _take_photo
-signal _instance_photo # here we could define photo type
+signal _instance_photo(photoData : PhotoData)
+signal _photo_flash
 var _photo_position : Vector2
 signal _forreuse_on
 signal _forreuse_off

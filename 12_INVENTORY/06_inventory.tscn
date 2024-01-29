@@ -172,12 +172,24 @@ script/source = "extends Node
 
 func _ready():
 	_global_datas._instance_photo.connect(_intance_photo)
-	_global_datas._take_photo.connect(_take_npc_photo)
-func _intance_photo():
+	_global_datas._take_photo.connect(_check_npc_photo)
 
-
-
+func _check_npc_photo():
+	
+	if _global_datas.Npc_Dialogue != null:
+		var photodata = _global_datas.Npc_Dialogue.photo_data
+		_intance_photo(photodata)			
+		
+			
+func _intance_photo(photo_Data : PhotoData):
+	
+	if check_photo_exist(photo_Data):
+		return
+	_global_datas._photo_flash.emit()
 	var new_node = photo_prefab.instantiate()
+	var changePhoto = new_node.get_node_or_null(\"Change_photo\")
+	if  changePhoto:
+		changePhoto._apply_photo(photo_Data)	
 	photo_group.add_child(new_node)
 	
 	#var screen_center = Vector2(1920.0 / 2.0, 1080.0/ 2.0)
@@ -185,13 +197,15 @@ func _intance_photo():
 	new_node.rotation_degrees = random_angle
 	new_node.position = _global_datas._photo_position
 	
-func _take_npc_photo():
+	#ada photo in global archive
+	_global_datas.photo_archives.append(photo_Data)
+
+func check_photo_exist(photo_Data):
 	
-	if _global_datas.Player_InSubScene:
-		return
-	
-	_global_datas._instance_photo.emit()		
-	_global_datas.Npc_Dialogue.photo_done = true
+	for photo in _global_datas.photo_archives:
+		if photo == photo_Data:
+			return true 	
+
 "
 
 [sub_resource type="GDScript" id="GDScript_wd62i"]
@@ -555,7 +569,6 @@ script = SubResource("GDScript_xw7ed")
 [node name="Timer" type="Timer" parent="TELEPORT"]
 
 [node name="Control" type="Control" parent="."]
-visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

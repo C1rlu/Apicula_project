@@ -10,48 +10,38 @@ script/source = "extends Node
 
 @onready var root = $\"..\"
 
-@onready var color_rect = $\"../ColorRect5/Photo\"
-@onready var _material : Material = color_rect.get_material()
-@onready var text = $\"../text\"
 var t 
 
 var is_denoise = false
 
-var legend
 func _ready():
-	
-	legend = get_node_or_null(\"../Legend\")
-	_apply_photo_NPC()
 	_global_datas._backFrom_subscene.connect(_change_photo_shade)
-	_change_photo_shade()
-	
 	_global_datas._subscene_fail.connect(_remove_photo)
-
+	
+	
 func _remove_photo():
 	
 	if is_denoise:
 		return
 	root.queue_free()	
 	
-	
-	
-func _apply_photo_NPC():
-	
-	if _global_datas.Npc_Dialogue == null:
-		return
+
 		
-	var imageN = _global_datas.Npc_Dialogue.image
+func _apply_photo(photo_data : PhotoData):
 	
+	var color_rect = $\"../ColorRect5/Photo\"
+	var _material : Material = color_rect.get_material()
+	var imageN : Texture2D = photo_data.image
 	_material.set_shader_parameter(\"Photo\",imageN)
 	
+	var text = $\"../text\"
+	text.text = photo_data.name
 	
-	text.text = _global_datas.Npc_Dialogue.name
-	
-	# SET LEGEND NODE
-	if legend:
-		var legend_text = _global_datas.Npc_Dialogue.name	
-		legend.set_legend(legend_text)
-	
+	var legend = $\"../Legend\"
+	var legend_text = photo_data.legend
+	legend.set_legend(legend_text)
+		
+			
 func _change_photo_shade():
 	
 	
@@ -70,6 +60,8 @@ func _change_photo_shade():
 	t .tween_method(change_value,1.5,1,1.5).set_trans(Tween.TRANS_SINE)	
 	
 func change_value(value : float):
+	var color_rect = $\"../ColorRect5/Photo\"
+	var _material : Material = color_rect.get_material()
 	_material.set_shader_parameter(\"Denoiser\" , value)
 "
 
@@ -573,7 +565,7 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-1142.45, 143.821)
+graph_offset = Vector2(-1446.47, 3.5986)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(1220, 340)
