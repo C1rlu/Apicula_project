@@ -50,10 +50,10 @@ func _fade_out():
 	
 
 func _process(delta):
-	
+	pass
 	return
-	if _is_dragging:
-		_check_burning_position()
+	#if _is_dragging:
+		#_check_burning_position()
 		
 	
 	
