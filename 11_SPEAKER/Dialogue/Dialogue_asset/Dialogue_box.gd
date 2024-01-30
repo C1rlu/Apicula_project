@@ -7,14 +7,10 @@ var choice_buttons : Array[Button] = []
 
 @onready var v_box_container = $Dialogue_text/VBoxContainer
 
-
+signal type_text
 
 var is_dialogue_done = false
 
-func _ready():
-
-	pass
-	
 	
 func clear_dialogue_box():
 	text_node.text = ""
@@ -24,7 +20,7 @@ func clear_dialogue_box():
 	choice_buttons = []	
 func add_text(text : String):
 	text_node.text  = text
-
+	type_text.emit()
 
 func add_choice(choice_text : String):
 	var button_obj: ChoiceButton = choice_button_scn.instantiate()
@@ -35,8 +31,14 @@ func add_choice(choice_text : String):
 	button_obj.choice_selected.connect(_on_choice_selected)
 	button_obj.move_to_front()
 	v_box_container.add_child(button_obj)
+	button_obj.visible = false
 
 
+func show_all_responce():
+	var choice = v_box_container.get_children()
+	for c in choice:
+		c.visible = true
+	
 func _on_choice_selected(choice_index : int):
 	print(choice_index)
 	if !is_dialogue_done:
@@ -44,6 +46,5 @@ func _on_choice_selected(choice_index : int):
 	else:
 		clear_dialogue_box()	
 
-
-
-
+func _on_dialogue_typing_text_type_done():
+	show_all_responce()

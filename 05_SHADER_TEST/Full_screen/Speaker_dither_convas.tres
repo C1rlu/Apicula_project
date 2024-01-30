@@ -1,0 +1,116 @@
+[gd_resource type="VisualShader" load_steps=7 format=3 uid="uid://i5hkaugkylpm"]
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_ynf00"]
+constant = 0.3
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_rkq38"]
+size = Vector2(634.014, 470.339)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_h33ml"]
+input_name = "texture"
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_wqbse"]
+expanded_output_ports = [0]
+source = 5
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_iwpdp"]
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_nkodq"]
+parameter_name = "Opacity"
+hint = 1
+min = 1.0
+max = 2.0
+default_value_enabled = true
+default_value = 1.0
+
+[resource]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+uniform float Opacity : hint_range(1, 2) = 1;
+
+
+
+void fragment() {
+	vec4 n_out63p0;
+// Texture2D:63
+	n_out63p0 = texture(TEXTURE, UV);
+	float n_out63p4 = n_out63p0.a;
+
+
+// FloatParameter:65
+	float n_out65p0 = Opacity;
+
+
+// FloatConstant:59
+	float n_out59p0 = 0.300000;
+
+
+	float n_out61p0;
+// Expression:61
+	n_out61p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out59p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out61p0 = n_out65p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Step:64
+	float n_out64p0 = step(n_out61p0, n_out63p4);
+
+
+// Output:0
+	COLOR.rgb = vec3(n_out63p0.xyz);
+	COLOR.a = n_out64p0;
+
+
+}
+"
+graph_offset = Vector2(-272.182, -12.346)
+mode = 1
+flags/light_only = false
+nodes/fragment/0/position = Vector2(2220, 300)
+nodes/fragment/59/node = SubResource("VisualShaderNodeFloatConstant_ynf00")
+nodes/fragment/59/position = Vector2(700, 1180)
+nodes/fragment/61/node = SubResource("VisualShaderNodeExpression_rkq38")
+nodes/fragment/61/position = Vector2(980, 1060)
+nodes/fragment/61/size = Vector2(634.014, 470.339)
+nodes/fragment/61/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/61/output_ports = "0,0,Dither_Node;"
+nodes/fragment/61/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/62/node = SubResource("VisualShaderNodeInput_h33ml")
+nodes/fragment/62/position = Vector2(1260, 460)
+nodes/fragment/63/node = SubResource("VisualShaderNodeTexture_wqbse")
+nodes/fragment/63/position = Vector2(1600, 480)
+nodes/fragment/64/node = SubResource("VisualShaderNodeStep_iwpdp")
+nodes/fragment/64/position = Vector2(2020, 740)
+nodes/fragment/65/node = SubResource("VisualShaderNodeFloatParameter_nkodq")
+nodes/fragment/65/position = Vector2(400, 900)
+nodes/fragment/connections = PackedInt32Array(59, 0, 61, 1, 62, 0, 63, 2, 61, 0, 64, 0, 63, 4, 64, 1, 64, 0, 0, 1, 63, 0, 0, 0, 65, 0, 61, 0)
