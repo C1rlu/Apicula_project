@@ -7,8 +7,6 @@ var choice_buttons : Array[Button] = []
 
 @onready var v_box_container = $Dialogue_text/VBoxContainer
 
-signal type_text
-
 var is_dialogue_done = false
 
 	
@@ -20,8 +18,8 @@ func clear_dialogue_box():
 	choice_buttons = []	
 func add_text(text : String):
 	text_node.text  = text
-	type_text.emit()
-
+	var text_count = text.length()
+	_global_datas._type_text.emit(text_count)
 func add_choice(choice_text : String):
 	var button_obj: ChoiceButton = choice_button_scn.instantiate()
 	button_obj.choice_index = choice_buttons.size()
@@ -40,7 +38,7 @@ func show_all_responce():
 		c.visible = true
 	
 func _on_choice_selected(choice_index : int):
-	print(choice_index)
+	
 	if !is_dialogue_done:
 		($"../../../Dialogue/EzDialogue" as EzDialogue).next(choice_index)	
 	else:
@@ -48,3 +46,5 @@ func _on_choice_selected(choice_index : int):
 
 func _on_dialogue_typing_text_type_done():
 	show_all_responce()
+
+

@@ -39,6 +39,7 @@ signal in_dialogue_zone
 signal out_dialogue_zone
 signal  _open_dialogue
 signal  _close_dialogue
+signal _type_text(count : int)
 var photo_archives : Array[PhotoData] #list of photo data took in game
 
 signal _show_hand
