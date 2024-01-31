@@ -29,18 +29,19 @@ func _open_dialogue():
 	_global_datas.Player_InMenu = true
 	dialogue.visible = true
 	name_text.text = _global_datas.Npc_Dialogue.name
-	#_global_datas._call_back.connect(close_dialogue)
+
 	$Random_FaceChanger/Timer.start()				
 	dialogue_name.text = _global_datas.Npc_Dialogue.name
 
 	
 func _close_dialogue():
+	_global_datas._take_photo.emit()
 	_global_datas.in_dialogue_zone.emit()
 	dialogue.visible =  false
 	_global_datas.Player_InDialogue = false
 	_global_datas.Player_InMenu = false
 	
-	#_global_datas._call_back.disconnect(close_dialogue)
+
 	$Random_FaceChanger/Timer.stop()
 
 
