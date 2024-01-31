@@ -25,6 +25,7 @@ func _open_dialogue():
 	var _dialogue_start = _global_datas.Npc_Dialogue.Dialogue_starts[index]
 	($EzDialogue as EzDialogue).start_dialogue(dialogue, state, _dialogue_start)
 
+	
 func _on_ez_dialogue_dialogue_generated(response):
 
 	dialogue_box.clear_dialogue_box()
@@ -37,7 +38,7 @@ func _on_ez_dialogue_dialogue_generated(response):
 		dialogue_box.add_choice(choice)
 		
 		
-					
+						
 func _on_ez_dialogue_custom_signal_received(value):
 	
 	var params = value.split(",")
