@@ -6,13 +6,14 @@ extends Node
 @onready var dialogue_box = $"00_NPC_CREATOR/Npc_convas/Dialogue_box"
 
 @onready var dialogue_name = $"00_NPC_CREATOR/Npc_convas/Dialogue_box/Dialogue_name"
+@onready var npc_convas = $"00_NPC_CREATOR/Npc_convas"
 
 func _ready():
 	_global_datas._open_dialogue.connect(_open_dialogue)
 	_global_datas._close_dialogue.connect(_close_dialogue)
 	_global_datas._show_dialogue_box.connect(_show_dialogue_box)
 	_global_datas._hide_dialogue_box.connect(_hide_dialogue_box)
-
+	npc_convas.visible = false
 func _hide_dialogue_box():
 	dialogue_box.visible = false	
 	
@@ -35,7 +36,7 @@ func _open_dialogue():
 
 	
 func _close_dialogue():
-	_global_datas._take_photo.emit()
+
 	_global_datas.in_dialogue_zone.emit()
 	dialogue.visible =  false
 	_global_datas.Player_InDialogue = false

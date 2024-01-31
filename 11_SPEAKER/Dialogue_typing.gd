@@ -2,6 +2,7 @@ extends Node
 
 @onready var dialogue_text : Label = $"../../00_NPC_CREATOR/Npc_convas/Dialogue_box/Dialogue_text"
 
+
 var t
 
 signal text_type_done
@@ -13,7 +14,7 @@ func _ready():
 func type_text(count : int):
 	
 	dialogue_text.visible_ratio = 0.0
-	var speed = 0.025 * count
+	var speed = 0.05 * count
 	#var clamp_speed = clamp(1.0,2.0,speed)
 	#print( speed," for ", count ," letter")
 	_is_typing = true
@@ -28,7 +29,7 @@ func type_text(count : int):
 	
 func change_ration(value : float):
 	dialogue_text.visible_ratio = value
-
+	
 
 func _input(event):
 	

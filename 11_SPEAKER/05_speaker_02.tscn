@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=3 uid="uid://bbp1ccoa6te1g"]
+[gd_scene load_steps=48 format=3 uid="uid://bbp1ccoa6te1g"]
 
 [ext_resource type="Script" path="res://11_SPEAKER/Open_Dialogue.gd" id="1_6gph5"]
 [ext_resource type="Script" path="res://09_NPC/NPC_DIVE_SELECTOR/Npc_loader.gd" id="2_gecf5"]
@@ -84,42 +84,6 @@ func _on_text_button_pressed():
 	_global_datas.instance_word_text._intance_words_note(words,name_words)	
 	
 
-"
-
-[sub_resource type="GDScript" id="GDScript_1uk6q"]
-script/source = "extends Node
-
-var _active : bool
-func _ready():
-	
-	_global_datas.player_active_tools.connect(_active_photo)
-	
-func _active_photo(condition):
-	_active = condition
-	
-func _on_button_button_down():
-	
-	if check_photo_exist():
-		return
-	if !_active:
-		return
-	_global_datas._take_Npc_photo.emit(true)
-
-	
-func _on_button_button_up():
-	if !_active:
-		return
-	_global_datas._take_Npc_photo.emit(false)
-
-
-
-
-func check_photo_exist():
-	var npc_photo = _global_datas.Npc_Dialogue.photo_data
-	
-	for photo in _global_datas.photo_archives:
-		if photo == npc_photo:
-			return true 	
 "
 
 [sub_resource type="GDScript" id="GDScript_6qc5w"]
@@ -469,9 +433,6 @@ script = SubResource("GDScript_ktgfg")
 [node name="Instance_words" type="Node" parent="."]
 script = SubResource("GDScript_wf71c")
 
-[node name="Take_Npc_photo" type="Node" parent="."]
-script = SubResource("GDScript_1uk6q")
-
 [node name="00_NPC_CREATOR" type="Node" parent="."]
 script = ExtResource("3_u2fyv")
 Npc_all = Array[Resource("res://09_NPC/Npc_data.gd")]([ExtResource("4_y4ud3"), ExtResource("5_wppld"), ExtResource("6_6xaf4")])
@@ -491,7 +452,6 @@ wait_time = 0.6
 one_shot = true
 
 [node name="Npc_convas" type="Control" parent="00_NPC_CREATOR"]
-visible = false
 texture_filter = 1
 texture_repeat = 2
 material = SubResource("ShaderMaterial_6s3bf")
@@ -542,9 +502,10 @@ texture = SubResource("ViewportTexture_ah4ff")
 script = ExtResource("9_n4i7c")
 
 [node name="Leave_button" type="Button" parent="00_NPC_CREATOR/Npc_convas/Dialogue_box"]
-offset_left = 1122.0
+visible = false
+offset_left = 1071.0
 offset_top = 1027.0
-offset_right = 1195.0
+offset_right = 1144.0
 offset_bottom = 1058.0
 mouse_default_cursor_shape = 2
 theme = SubResource("Theme_g7433")

@@ -194,11 +194,15 @@ func _intance_photo(photo_Data : PhotoData):
 		changePhoto._apply_photo(photo_Data)	
 	photo_group.add_child(new_node)
 	
-	#var screen_center = Vector2(1920.0 / 2.0, 1080.0/ 2.0)
+
 	var random_angle = randf_range(-3.0, 3.0)
 	new_node.rotation_degrees = random_angle
-	new_node.position = _global_datas._photo_position
-	
+	if _global_datas.Npc_Dialogue != null:
+		var screen_center = Vector2(1920.0 / 2.0, 1080.0/ 2.0)
+		new_node.position = screen_center
+	else:
+		new_node.position = _global_datas._photo_position
+		
 	#ada photo in global archive
 	_global_datas.photo_archives.append(photo_Data)
 

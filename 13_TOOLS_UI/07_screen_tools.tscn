@@ -96,9 +96,16 @@ func _on_timer_timeout():
 	
 	
 func _change_effect_position():
-	var p_pos = get_viewport().get_mouse_position()
-	photo_tools.position = p_pos
-	_global_datas._photo_position = p_pos
+	
+	if _global_datas.Npc_Dialogue != null:
+		var screen_center = Vector2(1920.0 / 2.0, 1080.0/ 2.0)
+		_global_datas._photo_position = screen_center
+	else:
+		var p_pos = get_viewport().get_mouse_position()
+		photo_tools.position = p_pos
+		_global_datas._photo_position = p_pos
+		
+	
 "
 
 [sub_resource type="GDScript" id="GDScript_xsufx"]
