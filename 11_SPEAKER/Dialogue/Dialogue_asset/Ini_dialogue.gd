@@ -9,9 +9,10 @@ signal up_dialogue_index
 	"hand_signal" : _global_datas._show_hand,
 	"hide_hand_signal" : _global_datas._hide_hand,
 	"give_letter" : _global_datas._give_letter,	
+	"take_note":_global_datas._take_note,
 	"give_tool" : _global_datas.player_received_ui_tool,
 	"up_dialogue_index" : up_dialogue_index
-	
+
 }
 
 func _ready():
@@ -56,7 +57,12 @@ func _on_ez_dialogue_custom_signal_received(value):
 				var _words = params[2]
 				var _from = params[3]	
 				state[variable_name].emit(_words,_from)
-		
+				
+		if variable_name == "take_note":
+				var _words = params[2]
+				var _from = params[3]	
+				state[variable_name].emit(_words,_from)
+				
 		if variable_name == "up_dialogue_index":
 			up_dialogue_index.emit()	
 	
