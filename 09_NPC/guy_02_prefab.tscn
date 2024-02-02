@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://kfeia6x8pslm"]
+[gd_scene load_steps=7 format=3 uid="uid://kfeia6x8pslm"]
 
 [ext_resource type="PackedScene" uid="uid://ho4mjnsgcks7" path="res://09_NPC/Model/Guy_02.blend" id="1_gnuht"]
+[ext_resource type="Script" path="res://09_NPC/Light_on.gd" id="2_8tarw"]
 [ext_resource type="Material" uid="uid://bb47xs7crha0s" path="res://05_SHADER_TEST/Npc_Shader/Npc_lighter.tres" id="3_6wfbx"]
 [ext_resource type="Material" uid="uid://cje3d31ux7y1p" path="res://05_SHADER_TEST/Npc_Shader/Npc_medium.tres" id="4_5v3t7"]
 
@@ -41,7 +42,10 @@ blend_shape_mode = 0
 [node name="Guy_02" instance=ExtResource("1_gnuht")]
 transform = Transform3D(-1.92243e-07, 0, -4.398, 0, 4.398, 0, 4.398, 0, -1.92243e-07, 0.091, 9.398, -2.226)
 
-[node name="NPC_light" type="OmniLight3D" parent="." index="0"]
+[node name="Light_on" type="Node" parent="." index="0"]
+script = ExtResource("2_8tarw")
+
+[node name="NPC_light" type="OmniLight3D" parent="." index="1"]
 transform = Transform3D(0.227376, 0, 1.77636e-15, 0, 0.227376, 0, -1.77636e-15, 0, 0.227376, 1.3046, 1.89337, 0.110528)
 layers = 32
 shadow_bias = 0.0
@@ -51,23 +55,23 @@ shadow_blur = 6.76
 omni_range = 16.972
 omni_attenuation = 0.0915056
 
-[node name="Body_01" parent="." index="1"]
+[node name="Body_01" parent="." index="2"]
 layers = 32
 surface_material_override/0 = ExtResource("4_5v3t7")
 
-[node name="Lighter" parent="." index="2"]
+[node name="Lighter" parent="." index="3"]
 transform = Transform3D(1, 0, 3.55271e-15, 0, 1, 0, -3.55271e-15, 0, 1, 0, 0.0613568, 0)
 layers = 32
 mesh = SubResource("ArrayMesh_wpt7e")
 
-[node name="Darker" parent="." index="3"]
+[node name="Darker" parent="." index="4"]
 transform = Transform3D(0.951057, 0.309017, 3.55271e-15, -0.309017, 0.951057, 0, -3.55271e-15, 0, 1, 0.483252, 0.182914, 0)
 layers = 32
 mesh = SubResource("ArrayMesh_8o81y")
 
-[node name="Hair" parent="." index="4"]
+[node name="Hair" parent="." index="5"]
 layers = 32
 surface_material_override/0 = ExtResource("4_5v3t7")
 
-[node name="Sun" parent="." index="5"]
+[node name="Sun" parent="." index="6"]
 visible = false

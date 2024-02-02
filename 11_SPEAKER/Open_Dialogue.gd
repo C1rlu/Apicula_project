@@ -6,6 +6,8 @@ extends Node
 @onready var dialogue_box = $"00_NPC_CREATOR/Npc_convas/Dialogue_box"
 
 @onready var dialogue_name = $"00_NPC_CREATOR/Npc_convas/Dialogue_box/Dialogue_name"
+@onready var dialogue_name_show = $"00_NPC_CREATOR/Npc_convas/Dialogue_box/Dialogue_name/ColorRect/Dialogue_name_show"
+
 @onready var npc_convas = $"00_NPC_CREATOR/Npc_convas"
 
 func _ready():
@@ -28,13 +30,15 @@ func _open_dialogue():
 		return
 	_global_datas.Player_InDialogue = true
 	_global_datas.Player_InMenu = true
+	
 	dialogue.visible = true
 	name_text.text = _global_datas.Npc_Dialogue.name
 
 	$Random_FaceChanger/Timer.start()				
 	dialogue_name.text = _global_datas.Npc_Dialogue.name
+	dialogue_name_show.text = _global_datas.Npc_Dialogue.name
 
-	
+				
 func _close_dialogue():
 
 	_global_datas.in_dialogue_zone.emit()

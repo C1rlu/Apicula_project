@@ -48,7 +48,7 @@ signal _hide_dialogue_box
 signal _show_dialogue_box
 signal _bird_is_comming
 signal _give_letter(_words : String, _from : String)
-signal _take_note(_words : String, _from : String)
+signal _take_note(note_name : String)
 signal _take_Npc_photo(condition : bool)
 signal _show_object_legend(condtion : bool, text : String)
 

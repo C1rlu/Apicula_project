@@ -97,6 +97,7 @@ script/source = "extends Node
 @onready var timer = $Timer
 
 @export var active_npc_entrance : bool = false
+@onready var photo_button = $\"../Npc_convas/PhotoButton\"
 
 func _ready():
 	if !active_npc_entrance:
@@ -116,6 +117,25 @@ func _process(delta):
 	
 	var lerp_time = lerp(1.0,2.0,(timer.time_left / timer.wait_time ))
 	_material.set_shader_parameter(\"Opacity\",lerp_time)
+
+func check_photo_exist(photo_Data):
+	
+	for photo in _global_datas.photo_archives:
+		if photo == photo_Data:
+			return true 		
+			
+			
+func _on_timer_timeout():
+	
+	if _global_datas.Npc_Dialogue != null:
+		var photo_Data = _global_datas.Npc_Dialogue.photo_data
+		if check_photo_exist(photo_Data):
+			_global_datas._show_dialogue_box.emit()	
+			photo_button.visible = false
+		else:
+			photo_button.visible = true	
+			
+			
 "
 
 [sub_resource type="GDScript" id="GDScript_hx3ow"]
@@ -126,7 +146,9 @@ script/source = "extends Node
 @onready var loader = $\"../Models/Loader\"
 
 @export var active_npc_entrance : bool = false
+
 func _ready():
+	
 	if !active_npc_entrance:
 		return
 	_global_datas._open_dialogue.connect(_start)
@@ -134,7 +156,6 @@ func _ready():
 func _start():
 	
 	timer.start()
-	#loader.transform.origin.y = -8.0
 	_global_datas._hide_dialogue_box.emit()
 	
 func _process(delta):
@@ -142,12 +163,8 @@ func _process(delta):
 	if timer.is_stopped():
 		return	
 	
-	#loader.transform.origin.y = lerp(0.0,-8.0,(timer.time_left / timer.wait_time ))
 	loader.rotation_degrees.z = lerp(0.0,-60.0,(timer.time_left / timer.wait_time ))
 
-func _on_timer_timeout():
-	#loader.transform.origin.y = 0.0
-	_global_datas._show_dialogue_box.emit()
 "
 
 [sub_resource type="VisualShader" id="VisualShader_6uu1l"]
@@ -772,10 +789,9 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("ViewportTexture_ah4ff")
 
-[node name="Dialogue_box" type="Node2D" parent="00_NPC_CREATOR/Npc_convas"]
-script = ExtResource("9_n4i7c")
-
-[node name="PhotoButton" parent="00_NPC_CREATOR/Npc_convas/Dialogue_box" instance=ExtResource("12_8wltn")]
+[node name="PhotoButton" parent="00_NPC_CREATOR/Npc_convas" instance=ExtResource("12_8wltn")]
+visible = false
+layout_mode = 0
 offset_left = 768.0
 offset_top = 335.0
 offset_right = 1277.0
@@ -784,7 +800,7 @@ scale = Vector2(0.808397, 0.808397)
 mouse_default_cursor_shape = 2
 texture_normal = null
 
-[node name="Photo_circle" type="ColorRect" parent="00_NPC_CREATOR/Npc_convas/Dialogue_box/PhotoButton"]
+[node name="Photo_circle" type="ColorRect" parent="00_NPC_CREATOR/Npc_convas/PhotoButton"]
 visible = false
 material = SubResource("ShaderMaterial_7cuyu")
 layout_mode = 1
@@ -803,6 +819,9 @@ scale = Vector2(1.2, 1.204)
 mouse_filter = 2
 color = Color(0.988235, 0.901961, 0.694118, 1)
 
+[node name="Dialogue_box" type="Node2D" parent="00_NPC_CREATOR/Npc_convas"]
+script = ExtResource("9_n4i7c")
+
 [node name="Leave_button" type="Button" parent="00_NPC_CREATOR/Npc_convas/Dialogue_box"]
 visible = false
 offset_left = 1071.0
@@ -820,7 +839,6 @@ alignment = 0
 script = SubResource("GDScript_pev46")
 
 [node name="Dialogue_name" type="Label" parent="00_NPC_CREATOR/Npc_convas/Dialogue_box"]
-z_index = 1
 layout_direction = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -840,7 +858,6 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="ColorRect" type="ColorRect" parent="00_NPC_CREATOR/Npc_convas/Dialogue_box/Dialogue_name"]
-z_index = -1
 layout_direction = 2
 layout_mode = 1
 anchors_preset = 15
@@ -850,6 +867,26 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(0.0625, 0.140625, 0.140625, 1)
+
+[node name="Dialogue_name_show" type="Label" parent="00_NPC_CREATOR/Npc_convas/Dialogue_box/Dialogue_name/ColorRect"]
+layout_direction = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -75.0
+offset_top = -22.5
+offset_right = 75.0
+offset_bottom = 22.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.764706, 0.752941, 0.584314, 1)
+theme_override_font_sizes/font_size = 30
+text = "Mr Bird"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Dialogue_text" type="Label" parent="00_NPC_CREATOR/Npc_convas/Dialogue_box"]
 offset_left = 712.0
@@ -917,8 +954,8 @@ visible = false
 [connection signal="end_of_dialogue_reached" from="Dialogue/EzDialogue" to="Dialogue" method="_on_ez_dialogue_end_of_dialogue_reached"]
 [connection signal="text_type_done" from="Dialogue/Dialogue_typing" to="00_NPC_CREATOR/Npc_convas/Dialogue_box" method="_on_dialogue_typing_text_type_done"]
 [connection signal="timeout" from="Random_FaceChanger/Timer" to="Random_FaceChanger" method="_on_timer_timeout"]
-[connection signal="timeout" from="00_NPC_CREATOR/Fade_in/Timer" to="00_NPC_CREATOR/Entrance_animation" method="_on_timer_timeout"]
+[connection signal="timeout" from="00_NPC_CREATOR/Fade_in/Timer" to="00_NPC_CREATOR/Fade_in" method="_on_timer_timeout"]
 [connection signal="timeout" from="00_NPC_CREATOR/Entrance_animation/Timer" to="00_NPC_CREATOR/Entrance_animation" method="_on_timer_timeout"]
-[connection signal="mouse_entered" from="00_NPC_CREATOR/Npc_convas/Dialogue_box/PhotoButton" to="00_NPC_CREATOR/Npc_convas/Dialogue_box/PhotoButton" method="_on_mouse_entered"]
-[connection signal="mouse_exited" from="00_NPC_CREATOR/Npc_convas/Dialogue_box/PhotoButton" to="00_NPC_CREATOR/Npc_convas/Dialogue_box/PhotoButton" method="_on_mouse_exited"]
+[connection signal="mouse_entered" from="00_NPC_CREATOR/Npc_convas/PhotoButton" to="00_NPC_CREATOR/Npc_convas/PhotoButton" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="00_NPC_CREATOR/Npc_convas/PhotoButton" to="00_NPC_CREATOR/Npc_convas/PhotoButton" method="_on_mouse_exited"]
 [connection signal="pressed" from="00_NPC_CREATOR/Npc_convas/Dialogue_box/Leave_button" to="." method="_on_leave_button_pressed"]

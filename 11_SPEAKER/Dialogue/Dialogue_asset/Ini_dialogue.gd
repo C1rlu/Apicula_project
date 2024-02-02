@@ -25,8 +25,8 @@ func _open_dialogue():
 	var index = _global_datas.Npc_Dialogue.Dialogue_start_index
 	var _dialogue_start = _global_datas.Npc_Dialogue.Dialogue_starts[index]
 	($EzDialogue as EzDialogue).start_dialogue(dialogue, state, _dialogue_start)
-
 	
+				
 func _on_ez_dialogue_dialogue_generated(response):
 
 	dialogue_box.clear_dialogue_box()
@@ -59,17 +59,15 @@ func _on_ez_dialogue_custom_signal_received(value):
 				state[variable_name].emit(_words,_from)
 				
 		if variable_name == "take_note":
-				var _words = params[2]
-				var _from = params[3]	
-				state[variable_name].emit(_words,_from)
+				var _note_name = params[2]
+				state[variable_name].emit(_note_name)
 				
 		if variable_name == "up_dialogue_index":
 			up_dialogue_index.emit()	
 	
 
 func _on_ez_dialogue_end_of_dialogue_reached():
-	dialogue_box.is_dialogue_done = true
-	_global_datas._take_photo.emit()		
+	dialogue_box.is_dialogue_done = true	
 	_global_datas._close_dialogue.emit()
 	
 

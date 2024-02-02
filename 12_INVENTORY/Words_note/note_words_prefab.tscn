@@ -1,22 +1,15 @@
-[gd_scene load_steps=18 format=3 uid="uid://dk6s0mpgbt4lb"]
+[gd_scene load_steps=19 format=3 uid="uid://dk6s0mpgbt4lb"]
 
 [ext_resource type="Script" path="res://10_BOARD/Behaviour/Movable_paper.tres.gd" id="1_pvcyt"]
 [ext_resource type="Script" path="res://10_BOARD/Behaviour/Apply_pos_anim.gd" id="2_pk3do"]
 [ext_resource type="Script" path="res://12_INVENTORY/Script/I_burn.tres.gd" id="3_3djxy"]
+[ext_resource type="Script" path="res://12_INVENTORY/Words_note/Note_text.gd" id="4_gmiin"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6vqdw"]
-content_margin_bottom = 5.0
-bg_color = Color(0.0235294, 0.145098, 0.160784, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.441406, 0.425781, 0.355469, 1)
-expand_margin_left = 12.0
-expand_margin_top = 12.0
-expand_margin_right = 12.0
-expand_margin_bottom = 12.0
-anti_aliasing = false
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xq6d6"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 15.0
 
 [sub_resource type="Gradient" id="Gradient_l6wlh"]
 offsets = PackedFloat32Array(0, 0.0373333, 0.122667, 1)
@@ -181,7 +174,7 @@ func _move_behind():
 "
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fyvcn"]
-size = Vector2(215, 102)
+size = Vector2(199, 99)
 
 [node name="Note_words_prefab" type="Node2D"]
 
@@ -193,50 +186,72 @@ script = ExtResource("2_pk3do")
 
 [node name="I_Burn" type="Node" parent="." node_paths=PackedStringArray("burn")]
 script = ExtResource("3_3djxy")
-burn = NodePath("../text/BURN")
+burn = NodePath("../text_size/ColorRect/BURN")
 burn_zone_offset = Vector2(100, 100)
 
-[node name="text" type="Label" parent="."]
-offset_right = 200.0
-offset_bottom = 54.0
-theme_override_colors/font_color = Color(0.443137, 0.427451, 0.356863, 1)
+[node name="Note_text" type="Node" parent="."]
+script = ExtResource("4_gmiin")
+
+[node name="text_size" type="Label" parent="."]
+offset_right = 250.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(0.301961, 0.278431, 0.235294, 1)
 theme_override_font_sizes/font_size = 15
-theme_override_styles/normal = SubResource("StyleBoxFlat_6vqdw")
-text = "\"lorempsumdariusnafruisdddddaadadadddddddddg\" "
+theme_override_styles/normal = SubResource("StyleBoxEmpty_xq6d6")
+text = "\"Please,set a note\""
 horizontal_alignment = 1
-autowrap_mode = 1
+autowrap_mode = 3
 
-[node name="name" type="Label" parent="text"]
-clip_contents = true
+[node name="ColorRect" type="ColorRect" parent="text_size"]
 layout_mode = 1
-offset_left = 4.0
-offset_top = 46.0
-offset_right = 207.0
-offset_bottom = 71.0
-theme_override_colors/font_color = Color(0.313726, 0.478431, 0.501961, 1)
-theme_override_font_sizes/font_size = 15
-text = "Albert"
-horizontal_alignment = 2
-vertical_alignment = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.519531, 0.484375, 0.421875, 1)
 
-[node name="BURN" type="ColorRect" parent="text"]
+[node name="BURN" type="ColorRect" parent="text_size/ColorRect"]
 visible = false
 light_mask = 3
 material = SubResource("ShaderMaterial_s7pk5")
 layout_mode = 1
-anchors_preset = -1
-anchor_left = -0.06
-anchor_top = -0.210526
-anchor_right = 1.07
-anchor_bottom = 1.22807
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(1, 0.831373, 0.568627, 1)
 metadata/_edit_use_anchors_ = true
 
+[node name="text_on" type="Label" parent="text_size/ColorRect"]
+offset_right = 250.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(0.301961, 0.278431, 0.235294, 1)
+theme_override_font_sizes/font_size = 15
+theme_override_styles/normal = SubResource("StyleBoxEmpty_xq6d6")
+text = "\"Please,set a note\""
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="name" type="Label" parent="text_size"]
+layout_mode = 2
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -25.0
+offset_right = -1.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.231373, 0.215686, 0.180392, 1)
+theme_override_font_sizes/font_size = 15
+text = "Albert"
+horizontal_alignment = 2
+vertical_alignment = 3
+
 [node name="Pin_book" type="Node2D" parent="."]
-position = Vector2(19, -39.3333)
+position = Vector2(19, -26)
 script = SubResource("GDScript_nre2o")
 
 [node name="ColorRect3" type="ColorRect" parent="Pin_book"]
@@ -279,7 +294,7 @@ script = SubResource("GDScript_4xv5n")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 visible = false
-position = Vector2(-18.5, 52)
+position = Vector2(-26.5, 50.5)
 shape = SubResource("RectangleShape2D_fyvcn")
 
 [connection signal="mouse_entered" from="Area2D" to="Take_object" method="_on_area_2d_mouse_entered"]

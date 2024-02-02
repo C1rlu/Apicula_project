@@ -226,7 +226,7 @@ script/source = "extends Node
 func _ready():
 	_global_datas._give_letter.connect(_intance_letter)
 	_global_datas._take_note.connect(_intance_words_note)
-func _intance_words_note(value : String, name_words : String):
+func _intance_words_note(note_name : String):
 	
 	print(\"INSTANCE NOTE\")
 	var new_node = words_note_prefab.instantiate()
@@ -236,13 +236,20 @@ func _intance_words_note(value : String, name_words : String):
 	var random_angle = randf_range(-6.0, 6.0)
 	new_node.rotation_degrees = random_angle
 	new_node.position = screen_center
-	# change text
-	var text : Label = new_node.get_node(\"text\")
-	text.text = \"'\"+value+\"'\"
-	# change owner ,ame text
-	var text_name : Label = text.get_node(\"name\")
-	text_name.text = name_words
+
+	var note_data_link = \"res://12_INVENTORY/Words_note/\" + note_name  + \".tres\"
 	
+	if ResourceLoader.exists(note_data_link):
+		var note_data : Note_Data = load(note_data_link)
+		# change text
+		var Note_text = new_node.get_node(\"Note_text\")
+		Note_text.set_note(note_data.note_text,note_data.from)
+
+	else : 
+		var Note_text = new_node.get_node(\"Note_text\")
+		Note_text.set_note(\"please,set a note data\",\"ulric\")
+		
+		
 func _intance_letter(_words : String, _from: String):
 	
 	var new_node = 	letter_prefab.instantiate()

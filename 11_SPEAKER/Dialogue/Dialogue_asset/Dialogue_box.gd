@@ -5,7 +5,7 @@ var choice_buttons : Array[Button] = []
 @onready var text_node = $Dialogue_text
 
 @onready var v_box_container = $Dialogue_text/VBoxContainer
-@onready var photo_button = $PhotoButton
+
 
 
 var is_dialogue_done = false
@@ -40,17 +40,6 @@ func show_all_responce():
 	for c in choice:
 		c.visible = true
 	
-	if _global_datas.Npc_Dialogue != null:
-		var photo_Data = _global_datas.Npc_Dialogue.photo_data
-		if !check_photo_exist(photo_Data):
-			photo_button.visible = true
-	
-func check_photo_exist(photo_Data):
-	
-	for photo in _global_datas.photo_archives:
-		if photo == photo_Data:
-			return true 		
-
 	
 func _on_choice_selected(choice_index : int):
 	
