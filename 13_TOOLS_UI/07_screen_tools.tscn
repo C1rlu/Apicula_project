@@ -82,8 +82,24 @@ func _process(_delta):
 	if !timer.is_stopped():
 		
 		var lerp_time = lerp(0.0,0.4, timer.time_left / timer.wait_time)	
-		circle_material.set_shader_parameter(\"Circle\",lerp_time)		
+		change_circle_size(lerp_time)		
 		_change_effect_position()
+		
+		
+		
+func change_circle_size(time : float):
+	
+	var circle_size = 0.0
+	if time > 0.13:
+		circle_size = 0.13	
+	if time > 0.26:
+		circle_size = 0.26
+	if time > 0.35:
+		circle_size = 0.35	
+		
+	circle_material.set_shader_parameter(\"Circle\",time)	
+	
+			
 func _on_timer_timeout():
 
 	_global_datas._take_photo.emit()
@@ -700,7 +716,6 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-857.175, 1605.96)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(1240, 520)
@@ -908,7 +923,7 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-2432.75, 1071.17)
+graph_offset = Vector2(-504.335, 351.544)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(1320, 520)
@@ -978,8 +993,12 @@ func _update_text(condition : bool, _text : String):
 		_enable_board_backdrop()
 		_global_datas._hide_dialogue_box.emit()
 	else:
-		_disable_board_backdrop()	
-		_global_datas._show_dialogue_box.emit()
+		_disable_board_backdrop()
+		
+		if _global_datas.Npc_Dialogue != null:
+			var photo_Data = _global_datas.Npc_Dialogue.photo_data
+			if check_photo_exist(photo_Data):	
+				_global_datas._show_dialogue_box.emit()
 		
 func _enable_board_backdrop():
 	
@@ -1002,6 +1021,11 @@ func _value_change(value : float):
 	material_n.set_shader_parameter(\"Opacity\",value)		
 	actual_value = value
 
+func check_photo_exist(photo_Data):
+	
+	for photo in _global_datas.photo_archives:
+		if photo == photo_Data:
+			return true
 "
 
 [sub_resource type="GDScript" id="GDScript_cnn2b"]
