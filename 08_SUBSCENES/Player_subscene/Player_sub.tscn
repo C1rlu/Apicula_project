@@ -1,4 +1,4 @@
-[gd_scene load_steps=74 format=3 uid="uid://g7u8o55jrnyy"]
+[gd_scene load_steps=70 format=3 uid="uid://g7u8o55jrnyy"]
 
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="1_n1vw4"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Player_sub_behaviour.gd" id="1_o2v73"]
@@ -86,49 +86,6 @@ func set_shader_value(value):
 
 "
 
-[sub_resource type="GDScript" id="GDScript_huu7c"]
-script/source = "extends Node
-
-
-@onready var animation_player = $anim_forreuse/AnimationPlayer
-
-
-
-func _ready():
-	_global_datas._forreuse_on.connect(_play_forreuse)	
-	_global_datas._forreuse_off.connect(_play_idle)
-
-
-func _play_forreuse():
-	animation_player.play(\"F_loop\")
-
-func _play_idle():
-	animation_player.stop()
-
-"
-
-[sub_resource type="Animation" id="Animation_f8oxp"]
-resource_name = "F_loop"
-length = 0.9115
-loop_mode = 2
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../../Render_mesh/Anim/Foreuse:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.7, 0.9),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector3(0.0252781, 0.0220478, 0.0420953), Vector3(0.0252781, 0.0220478, 0.105071), Vector3(0.0252781, 0.0220478, 0.0420953)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_oqrpf"]
-_data = {
-"F_loop": SubResource("Animation_f8oxp")
-}
-
 [sub_resource type="GDScript" id="GDScript_l3a1b"]
 script/source = "extends Node
 
@@ -175,8 +132,8 @@ func _active_teleport():
 material = ExtResource("8_wvhjt")
 
 [sub_resource type="TorusMesh" id="TorusMesh_ljaqx"]
-inner_radius = 1.829
-outer_radius = 1.724
+inner_radius = 2.204
+outer_radius = 2.08
 rings = 32
 ring_segments = 16
 
@@ -307,7 +264,7 @@ Dither_Node = In - DITHER_THRESHOLDS[index];"
 [sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_da32g"]
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_50n6f"]
-constant = 1.046
+constant = 0.814
 
 [sub_resource type="VisualShader" id="VisualShader_jxk1w"]
 code = "shader_type spatial;
@@ -323,7 +280,7 @@ void fragment() {
 
 
 // FloatConstant:7
-	float n_out7p0 = 1.046000;
+	float n_out7p0 = 0.814000;
 
 
 // FloatConstant:3
@@ -358,6 +315,7 @@ void fragment() {
 
 }
 "
+graph_offset = Vector2(-2592.23, 392.193)
 flags/unshaded = true
 nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_ar8u6")
 nodes/fragment/2/position = Vector2(-760, -40)
@@ -382,7 +340,7 @@ nodes/fragment/6/node = SubResource("VisualShaderNodeStep_da32g")
 nodes/fragment/6/position = Vector2(-351.825, 215.819)
 nodes/fragment/7/node = SubResource("VisualShaderNodeFloatConstant_50n6f")
 nodes/fragment/7/position = Vector2(-1440, 360)
-nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0, 3, 0, 4, 1, 4, 0, 6, 1, 2, 0, 6, 0, 6, 0, 0, 1, 7, 0, 4, 0)
+nodes/fragment/connections = PackedInt32Array(3, 0, 4, 1, 4, 0, 6, 1, 6, 0, 0, 1, 7, 0, 4, 0, 2, 0, 6, 0, 2, 0, 0, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_t28it"]
 render_priority = 0
@@ -575,9 +533,6 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_ielci")
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_1b8dy"]
-radius = 0.694997
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_g1ic5"]
 radius = 0.244171
@@ -873,17 +828,6 @@ canSpeedUp = true
 [node name="Photo_Flash" type="Node" parent="."]
 script = SubResource("GDScript_8qwgp")
 
-[node name="Tools" type="Node" parent="."]
-script = SubResource("GDScript_huu7c")
-
-[node name="anim_forreuse" type="Node" parent="Tools"]
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Tools/anim_forreuse"]
-libraries = {
-"": SubResource("AnimationLibrary_oqrpf")
-}
-speed_scale = 4.0
-
 [node name="Teleport" type="Node" parent="."]
 script = SubResource("GDScript_l3a1b")
 
@@ -909,11 +853,8 @@ mesh = SubResource("BoxMesh_8junt")
 skeleton = NodePath("../../../Player_sub_collider")
 surface_material_override/0 = ExtResource("1_n1vw4")
 
-[node name="Anim" type="Node3D" parent="Render_mesh"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.117856, 0)
-
-[node name="Foreuse" parent="Render_mesh/Anim" instance=ExtResource("4_djlha")]
-transform = Transform3D(0.031873, 0, 0, 0, -1.39321e-09, -0.031873, 0, 0.031873, -1.39321e-09, 0.0252781, 0.0220478, 0.0420953)
+[node name="Foreuse" parent="Render_mesh" instance=ExtResource("4_djlha")]
+transform = Transform3D(0.031873, 0, 0, 0, -1.39321e-09, -0.031873, 0, 0.031873, -1.39321e-09, 0.0252781, 0.139904, 0.0420953)
 
 [node name="Sonar" type="Node3D" parent="Render_mesh"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00877953, -0.0123595, -0.0143354)
@@ -994,20 +935,11 @@ layers = 4
 mesh = SubResource("ArrayMesh_a357q")
 skeleton = NodePath("")
 
-[node name="Player_collide_zone" type="Area3D" parent="."]
-collision_layer = 4
-collision_mask = 4
-input_ray_pickable = false
-
-[node name="Player_photoActive" type="Node" parent="Player_collide_zone"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Player_collide_zone"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.162179, 0)
-shape = SubResource("SphereShape3D_1b8dy")
-
 [node name="Mouse_Over_And_ZoneCollide" type="Area3D" parent="."]
 collision_layer = 4
 collision_mask = 4
+
+[node name="Player_photoActive" type="Node" parent="Mouse_Over_And_ZoneCollide"]
 
 [node name="On_OverMouse_3D_SHAPE" type="MeshInstance3D" parent="Mouse_Over_And_ZoneCollide"]
 transform = Transform3D(0.145683, -2.41971e-16, -1.77427e-14, -1.77427e-14, -5.97672e-10, -0.145683, 2.57812e-15, 0.0136731, -6.36801e-09, 0, 0.136106, 0)
@@ -1040,7 +972,5 @@ process_material = SubResource("ParticleProcessMaterial_snyp2")
 draw_pass_1 = ExtResource("4_6vpi7")
 
 [connection signal="timeout" from="Ini_subscene/Timer" to="Ini_subscene" method="_on_timer_timeout"]
-[connection signal="area_shape_entered" from="Mouse_Over_And_ZoneCollide" to="Flash_inputs" method="_on_mouse_over_and_zone_collide_area_shape_entered"]
-[connection signal="area_shape_exited" from="Mouse_Over_And_ZoneCollide" to="Flash_inputs" method="_on_mouse_over_and_zone_collide_area_shape_exited"]
 [connection signal="mouse_entered" from="Mouse_Over_And_ZoneCollide" to="Flash_inputs" method="_on_mouse_over_mouse_entered"]
 [connection signal="mouse_exited" from="Mouse_Over_And_ZoneCollide" to="Flash_inputs" method="_on_mouse_over_mouse_exited"]

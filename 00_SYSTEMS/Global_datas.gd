@@ -60,14 +60,10 @@ var subbscene_playerPosition : Vector3
 signal _take_photo
 signal _instance_photo(photoData : PhotoData)
 signal _photo_flash
-var _photo_position : Vector2
-signal _forreuse_on
-signal _forreuse_off
 signal _teleport_position(position : Vector3)
 signal _find_loot(type : Loot_Data)
 signal _subscene_fail
-func _ready():
-	_photo_position = Vector2.ZERO
+
 	
 #board scene
 

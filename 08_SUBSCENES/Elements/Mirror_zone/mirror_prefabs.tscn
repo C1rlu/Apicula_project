@@ -9,7 +9,7 @@ script/source = "extends Node
 @onready var mesh_instance_3d = $\"../MeshInstance3D\"
 
 var enable : bool = true
-var _in_zone = false
+var _in_zone = true
 
 func _ready():
 	_global_datas._take_photo.connect(_emit_particule_once)
@@ -71,7 +71,6 @@ script = SubResource("GDScript_i86bt")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.154354, 0, 0, 0, 0.154354, 0, 0, 0, 0.154354, 0, 0, 0)
-visible = false
 layers = 4096
 mesh = SubResource("SphereMesh_ic6q1")
 skeleton = NodePath("")
@@ -92,6 +91,3 @@ one_shot = true
 fixed_fps = 12
 process_material = SubResource("ParticleProcessMaterial_vlpxx")
 draw_pass_1 = SubResource("SphereMesh_h135x")
-
-[connection signal="area_shape_entered" from="." to="Active_Mirror_Clic" method="_on_mirror_prefabs_area_shape_entered"]
-[connection signal="area_shape_exited" from="." to="Active_Mirror_Clic" method="_on_mirror_prefabs_area_shape_exited"]
