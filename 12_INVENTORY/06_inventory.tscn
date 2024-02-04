@@ -118,49 +118,22 @@ script/source = "extends Node
 
 
 @onready var coins_group = $\"../Control/Coins_group\"
-@onready var instance_pos = $\"../Control/Coins_group/instance_pos\"
-@onready var timer = $Timer
-
 
 func _ready():
-	_global_datas._find_loot.connect(_add_inventory)	
-	_global_datas._backFrom_subscene.connect(start_timer)
+	_global_datas._find_loot.connect(_intance_loot_bottom)	
 
-
-
-func clear_inventory():
-	_global_datas.loot_from_subscene.clear()	
-
-
-func start_timer():
-	if _global_datas.loot_from_subscene.size() > 0:	
-		timer.start()
-		
-func instance_loot():
-	
-	for element in _global_datas.loot_from_subscene:
-		_intance_loot_bottom(element)
-	clear_inventory()
-		
-		
-func _add_inventory(type : Loot_Data):
-	_global_datas.loot_from_subscene.append(type)
-	print(\"type\",\" is add in inventory\")
-	
 func _intance_loot_bottom(type : Loot_Data):
 	
 	var new_node = type.prefabs.instantiate()
 	coins_group.add_child(new_node)
-
+	
+	var screen_center = Vector2(1920.0 / 2.0, 1080.0/ 2.0)
+	new_node.position = screen_center
+	
 	var random_angle = randf_range(-6.0, 6.0)
 	new_node.rotation_degrees = random_angle
-	new_node.position = instance_pos.global_position
-	new_node.get_node(\"Push\")._push_b()
+
 	
-
-
-func _on_timer_timeout():
-	instance_loot()
 "
 
 [sub_resource type="GDScript" id="GDScript_om7tc"]
@@ -197,11 +170,14 @@ func _intance_photo(photo_Data : PhotoData):
 
 	var random_angle = randf_range(-3.0, 3.0)
 	new_node.rotation_degrees = random_angle
-	if _global_datas.Npc_Dialogue != null:
-		var screen_center = Vector2(1920.0 / 2.0, 1080.0/ 2.0)
-		new_node.position = screen_center
-	else:
-		new_node.position = _global_datas._photo_position
+	
+	var screen_center = Vector2(1920.0 / 2.0, 1080.0/ 2.0)
+	new_node.position = screen_center
+	#if _global_datas.Npc_Dialogue != null:
+		#var screen_center = Vector2(1920.0 / 2.0, 1080.0/ 2.0)
+		#new_node.position = screen_center
+	#else:
+		#new_node.position = _global_datas._photo_position
 		
 	#ada photo in global archive
 	_global_datas.photo_archives.append(photo_Data)
@@ -563,9 +539,6 @@ map_start_pos = Vector2(1442, 666)
 [node name="INSTANCE_LOOT" type="Node" parent="."]
 script = SubResource("GDScript_huuan")
 
-[node name="Timer" type="Timer" parent="INSTANCE_LOOT"]
-one_shot = true
-
 [node name="INSTANCE_PICTURES" type="Node" parent="."]
 script = SubResource("GDScript_om7tc")
 
@@ -746,7 +719,6 @@ mouse_filter = 2
 position = Vector2(1767, 294)
 rotation = 0.0698132
 
-[connection signal="timeout" from="INSTANCE_LOOT/Timer" to="INSTANCE_LOOT" method="_on_timer_timeout"]
 [connection signal="timeout" from="TELEPORT/Timer" to="TELEPORT" method="_on_timer_timeout"]
 [connection signal="mouse_entered" from="Control/Paper_info/Illustration/Area2D" to="Control/Paper_info/Illustration/Take_object" method="_on_area_2d_mouse_entered"]
 [connection signal="mouse_exited" from="Control/Paper_info/Illustration/Area2D" to="Control/Paper_info/Illustration/Take_object" method="_on_area_2d_mouse_exited"]

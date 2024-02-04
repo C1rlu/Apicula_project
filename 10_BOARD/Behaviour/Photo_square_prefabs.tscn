@@ -11,14 +11,15 @@ script/source = "extends Node
 @onready var root = $\"..\"
 
 var t 
-
 var is_denoise = false
 
+
 func _ready():
-	_global_datas._backFrom_subscene.connect(_change_photo_shade)
+	#_global_datas._backFrom_subscene.connect(_change_photo_shade)
 	_global_datas._subscene_fail.connect(_remove_photo)
 	_change_photo_shade()
-	
+
+
 func _remove_photo():
 	
 	if is_denoise:
@@ -40,13 +41,9 @@ func _apply_photo(photo_data : PhotoData):
 	var legend = $\"../Legend\"
 	var legend_text = photo_data.legend
 	legend.set_legend(legend_text)
-		
+	
 			
 func _change_photo_shade():
-	
-	
-	if _global_datas.Player_InSubScene:
-		return
 	
 	if is_denoise:
 		return

@@ -79,7 +79,6 @@ var zoom_value : float
 var OnDrag_start_position : Vector2
 var Cursor_mode : Node
 var In_Front_Node : Node2D
-var loot_from_subscene : Array
 var clock_time_consume : float
 var bougie_node : Node2D
 

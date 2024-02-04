@@ -1,39 +1,37 @@
-[gd_scene load_steps=10 format=3 uid="uid://dym7sjmq33hdc"]
+[gd_scene load_steps=9 format=3 uid="uid://dym7sjmq33hdc"]
 
-[ext_resource type="Script" path="res://08_SUBSCENES/Elements/Mirror_zone/Flash_vfx.gd" id="1_w7y5j"]
 [ext_resource type="Material" uid="uid://goq7y1lqdpxa" path="res://05_SHADER_TEST/Subscene_materials/element_subscene_x_ray_VFX_LIGHT.tres" id="3_cb240"]
 
 [sub_resource type="GDScript" id="GDScript_i86bt"]
 script/source = "extends Node
 
+@onready var mirror_particule : GPUParticles3D = $\"../Mirror_Particule\"
+@onready var mesh_instance_3d = $\"../MeshInstance3D\"
 
-@onready var gpu_particles_3d : GPUParticles3D = $\"../Mirror_Particule\"
+var enable : bool = true
+var _in_zone = false
 
-# HERE I ACTIVE THE CLICK PHOTO IF PLAYER IS NEAR ENOUGH
+func _ready():
+	_global_datas._take_photo.connect(_emit_particule_once)
 
-
-
-func _active_me(condition : bool):
-
-	gpu_particles_3d.emitting = condition
-
+func _emit_particule_once():
 	
-func _on_mirror_prefabs_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
-	
-	var player = area.get_node_or_null(\"Player_photoActive\")
-	if player:
-		pass
-		#_active_me(true)	
-		#check if mouse is inside shape
+	if !_in_zone:
+		return
 		
+	if enable:
+		mirror_particule.emitting = true
 
-func _on_mirror_prefabs_area_shape_exited(area_rid, area, area_shape_index, local_shape_index):
 
-	var player = area.get_node_or_null(\"Player_photoActive\")
-	if player:
-		pass
-		#_active_me(false)		
 	
+func _on_mirror_prefabs_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):	
+	if area.get_node_or_null(\"Player_photoActive\"):
+		_in_zone = true	
+		mesh_instance_3d.visible = _in_zone
+func _on_mirror_prefabs_area_shape_exited(area_rid, area, area_shape_index, local_shape_index):
+	if area.get_node_or_null(\"Player_photoActive\"):
+		_in_zone = false
+		mesh_instance_3d.visible = _in_zone
 "
 
 [sub_resource type="SphereMesh" id="SphereMesh_ic6q1"]
@@ -45,7 +43,7 @@ radius = 0.155206
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.995134, 0.156627), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_2bqv5"]
+[sub_resource type="CurveTexture" id="CurveTexture_lhet1"]
 curve = SubResource("Curve_s07qd")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_vlpxx"]
@@ -57,7 +55,7 @@ radial_velocity_max = 0.5
 gravity = Vector3(0, 0, 0)
 scale_min = 0.25
 scale_max = 0.25
-scale_curve = SubResource("CurveTexture_2bqv5")
+scale_curve = SubResource("CurveTexture_lhet1")
 
 [sub_resource type="SphereMesh" id="SphereMesh_h135x"]
 
@@ -66,14 +64,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.444128, -0.47566, 0)
 collision_layer = 6
 collision_mask = 6
 
-[node name="Flash_vfx" type="Node" parent="."]
-script = ExtResource("1_w7y5j")
-
 [node name="Active_Mirror_Clic" type="Node" parent="."]
 script = SubResource("GDScript_i86bt")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.154354, 0, 0, 0, 0.154354, 0, 0, 0, 0.154354, 0, 0, 0)
+visible = false
 layers = 4096
 mesh = SubResource("SphereMesh_ic6q1")
 skeleton = NodePath("")
