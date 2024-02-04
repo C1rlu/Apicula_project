@@ -26,8 +26,6 @@ signal _backFrom_subscene
 signal _go_Mainscene
 signal _active_sonar
 signal _disable_sonar
-signal  _open_board
-signal  _close_board
 signal _reseting_clock_active
 signal _reseting_clock_disable
 signal _active_go_subscene_button(condition : bool)

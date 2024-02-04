@@ -11,9 +11,16 @@ script/source = "extends Node
 
 func get_lootable():
 	
-	root.queue_free()
+	#root.queue_free()
 	return 	root.loot_data
 	
+
+
+func _on_coins_sub_element_mouse_entered():
+	_global_datas.Cursor_mode.cursor_in()	
+
+func _on_coins_sub_element_mouse_exited():
+	_global_datas.Cursor_mode.cursor_out()		
 "
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ywyw3"]
@@ -40,3 +47,6 @@ layers = 4
 mesh = SubResource("SphereMesh_crvbk")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("3_kbl4f")
+
+[connection signal="mouse_entered" from="." to="Lootable" method="_on_coins_sub_element_mouse_entered"]
+[connection signal="mouse_exited" from="." to="Lootable" method="_on_coins_sub_element_mouse_exited"]
