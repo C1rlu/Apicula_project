@@ -1,4 +1,4 @@
-[gd_scene load_steps=71 format=3 uid="uid://g7u8o55jrnyy"]
+[gd_scene load_steps=72 format=3 uid="uid://g7u8o55jrnyy"]
 
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="1_n1vw4"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Player_sub_behaviour.gd" id="1_o2v73"]
@@ -534,14 +534,17 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_ielci")
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_g1ic5"]
+radius = 0.34261
+
 [sub_resource type="TorusMesh" id="TorusMesh_vtx34"]
 inner_radius = 2.454
 outer_radius = 2.08
 rings = 32
 ring_segments = 16
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_g1ic5"]
-radius = 0.424179
+[sub_resource type="SphereShape3D" id="SphereShape3D_tiyw3"]
+radius = 0.170791
 
 [sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_5j6tu"]
 
@@ -941,13 +944,20 @@ layers = 4
 mesh = SubResource("ArrayMesh_a357q")
 skeleton = NodePath("")
 
-[node name="Mouse_Over_And_ZoneCollide" type="Area3D" parent="."]
-collision_layer = 6
-collision_mask = 6
+[node name="ZoneCollide" type="Area3D" parent="."]
+collision_layer = 4
+collision_mask = 4
+input_ray_pickable = false
 
-[node name="Player_photoActive" type="Node" parent="Mouse_Over_And_ZoneCollide"]
+[node name="Player_photoActive" type="Node" parent="ZoneCollide"]
 
-[node name="On_OverMouse_3D_SHAPE_out" type="MeshInstance3D" parent="Mouse_Over_And_ZoneCollide"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ZoneCollide"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.138627, 0)
+shape = SubResource("SphereShape3D_g1ic5")
+
+[node name="On_Click" type="Area3D" parent="."]
+
+[node name="On_OverMouse_3D_SHAPE_out" type="MeshInstance3D" parent="On_Click"]
 transform = Transform3D(0.145683, -2.41971e-16, -1.77427e-14, -1.77427e-14, -5.97672e-10, -0.145683, 2.57812e-15, 0.0136731, -6.36801e-09, 0, 0.136106, 0)
 visible = false
 layers = 4
@@ -955,7 +965,7 @@ mesh = SubResource("TorusMesh_ljaqx")
 skeleton = NodePath("../../..")
 surface_material_override/0 = SubResource("ShaderMaterial_t28it")
 
-[node name="On_OverMouse_3D_SHAPE_in" type="MeshInstance3D" parent="Mouse_Over_And_ZoneCollide"]
+[node name="On_OverMouse_3D_SHAPE_in" type="MeshInstance3D" parent="On_Click"]
 transform = Transform3D(0.155103, -2.57618e-16, -1.889e-14, -1.889e-14, -6.3632e-10, -0.155103, 2.74483e-15, 0.0145572, -6.77979e-09, 0, 0.136106, 0)
 visible = false
 layers = 4
@@ -963,9 +973,9 @@ mesh = SubResource("TorusMesh_vtx34")
 skeleton = NodePath("../../..")
 surface_material_override/0 = SubResource("ShaderMaterial_t28it")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Mouse_Over_And_ZoneCollide"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="On_Click"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.138627, 0)
-shape = SubResource("SphereShape3D_g1ic5")
+shape = SubResource("SphereShape3D_tiyw3")
 
 [node name="Light" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.348655, 0.114098)
@@ -986,5 +996,5 @@ process_material = SubResource("ParticleProcessMaterial_snyp2")
 draw_pass_1 = ExtResource("4_6vpi7")
 
 [connection signal="timeout" from="Ini_subscene/Timer" to="Ini_subscene" method="_on_timer_timeout"]
-[connection signal="mouse_entered" from="Mouse_Over_And_ZoneCollide" to="Flash_inputs" method="_on_mouse_over_mouse_entered"]
-[connection signal="mouse_exited" from="Mouse_Over_And_ZoneCollide" to="Flash_inputs" method="_on_mouse_over_mouse_exited"]
+[connection signal="mouse_entered" from="On_Click" to="Flash_inputs" method="_on_mouse_over_mouse_entered"]
+[connection signal="mouse_exited" from="On_Click" to="Flash_inputs" method="_on_mouse_over_mouse_exited"]

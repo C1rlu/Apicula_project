@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://dmg5brvcww8lq"]
+[gd_scene load_steps=38 format=3 uid="uid://dmg5brvcww8lq"]
 
 [ext_resource type="Script" path="res://12_INVENTORY/Change_cursor.gd" id="1_8ci41"]
 [ext_resource type="PackedScene" uid="uid://dyfif7fbf51gx" path="res://12_INVENTORY/Book/Book_prefab.tscn" id="1_mrfq4"]
@@ -238,51 +238,6 @@ func _intance_letter(_words : String, _from: String):
 	new_node.position = screen_center
 	var text = new_node.get_node_or_null(\"Update_words\")
 	text._update_words(_words,_from)
-"
-
-[sub_resource type="GDScript" id="GDScript_xw7ed"]
-script/source = "extends Node
-
-@export var active_teleport = false		
-
-var index : int = 0
-@onready var timer = $Timer
-
-
-func _ready():
-	_global_datas._start_ini_subscene.connect(_reset_index)
-	#_global_datas._backFrom_subscene.connect(_active_teleport)
-
-
-
-func _active_teleport():
-	timer.start()	
-
-
-func _reset_index():
-	index = 3
-	
-
-func _teleport_back_to_ship(_index : int):
-
-
-	var position = _global_datas.teleport_pos[index]
-	_global_datas._teleport_position.emit(position)	
-
-	timer.start()
-	
-	
-func _on_timer_timeout():
-	
-	
-	if index == 0:
-		_global_datas._go_Mainscene.emit()
-		return
-	_teleport_back_to_ship(index)	
-	
-	index -= 1
-
-
 "
 
 [sub_resource type="GDScript" id="GDScript_pvnvf"]
@@ -548,11 +503,6 @@ script = SubResource("GDScript_wd62i")
 [node name="CHANGE_CURSOR" type="Node" parent="."]
 script = ExtResource("1_8ci41")
 
-[node name="TELEPORT" type="Node" parent="."]
-script = SubResource("GDScript_xw7ed")
-
-[node name="Timer" type="Timer" parent="TELEPORT"]
-
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 15
@@ -719,7 +669,6 @@ mouse_filter = 2
 position = Vector2(1767, 294)
 rotation = 0.0698132
 
-[connection signal="timeout" from="TELEPORT/Timer" to="TELEPORT" method="_on_timer_timeout"]
 [connection signal="mouse_entered" from="Control/Paper_info/Illustration/Area2D" to="Control/Paper_info/Illustration/Take_object" method="_on_area_2d_mouse_entered"]
 [connection signal="mouse_exited" from="Control/Paper_info/Illustration/Area2D" to="Control/Paper_info/Illustration/Take_object" method="_on_area_2d_mouse_exited"]
 [connection signal="move_behind" from="Control/Paper_info/Illustration/Area2D/Apply_pos_behind" to="Control/Paper_info/Illustration/Apply_pos_anim" method="_on_apply_pos_behind_move_behind"]
