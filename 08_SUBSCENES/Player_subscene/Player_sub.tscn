@@ -1,4 +1,4 @@
-[gd_scene load_steps=70 format=3 uid="uid://g7u8o55jrnyy"]
+[gd_scene load_steps=71 format=3 uid="uid://g7u8o55jrnyy"]
 
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="1_n1vw4"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Player_sub_behaviour.gd" id="1_o2v73"]
@@ -534,8 +534,14 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_ielci")
 
+[sub_resource type="TorusMesh" id="TorusMesh_vtx34"]
+inner_radius = 2.454
+outer_radius = 2.08
+rings = 32
+ring_segments = 16
+
 [sub_resource type="SphereShape3D" id="SphereShape3D_g1ic5"]
-radius = 0.244171
+radius = 0.424179
 
 [sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_5j6tu"]
 
@@ -936,16 +942,24 @@ mesh = SubResource("ArrayMesh_a357q")
 skeleton = NodePath("")
 
 [node name="Mouse_Over_And_ZoneCollide" type="Area3D" parent="."]
-collision_layer = 4
-collision_mask = 4
+collision_layer = 6
+collision_mask = 6
 
 [node name="Player_photoActive" type="Node" parent="Mouse_Over_And_ZoneCollide"]
 
-[node name="On_OverMouse_3D_SHAPE" type="MeshInstance3D" parent="Mouse_Over_And_ZoneCollide"]
+[node name="On_OverMouse_3D_SHAPE_out" type="MeshInstance3D" parent="Mouse_Over_And_ZoneCollide"]
 transform = Transform3D(0.145683, -2.41971e-16, -1.77427e-14, -1.77427e-14, -5.97672e-10, -0.145683, 2.57812e-15, 0.0136731, -6.36801e-09, 0, 0.136106, 0)
 visible = false
 layers = 4
 mesh = SubResource("TorusMesh_ljaqx")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("ShaderMaterial_t28it")
+
+[node name="On_OverMouse_3D_SHAPE_in" type="MeshInstance3D" parent="Mouse_Over_And_ZoneCollide"]
+transform = Transform3D(0.155103, -2.57618e-16, -1.889e-14, -1.889e-14, -6.3632e-10, -0.155103, 2.74483e-15, 0.0145572, -6.77979e-09, 0, 0.136106, 0)
+visible = false
+layers = 4
+mesh = SubResource("TorusMesh_vtx34")
 skeleton = NodePath("../../..")
 surface_material_override/0 = SubResource("ShaderMaterial_t28it")
 
