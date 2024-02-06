@@ -5,7 +5,7 @@ var Subscene_Camera : Camera3D
 var player_position : Vector3
 var cell_name : String
 
-var Player_InBoard : bool
+var Player_In_Inventory : bool
 var Player_InSubScene : bool
 var Player_InMenu : bool
 var Player_InDialogue : bool
@@ -64,10 +64,10 @@ signal _teleport_position(position : Vector3)
 signal _find_loot(type : Loot_Data)
 signal _subscene_fail
 
-	
+
 #board scene
 
-
+signal open_inventory(condition : bool)
 var board_camera : Camera3D
 var zoom_value : float
 var OnDrag_start_position : Vector2

@@ -26,7 +26,7 @@ func _input(event: InputEvent) -> void:
 		
 	if event.is_action_pressed("Click"):
 	
-		if _global_datas.Player_InBoard:
+		if _global_datas.Player_In_Inventory:
 			return		
 		_global_datas._active_sonar.emit()
 		
@@ -38,7 +38,7 @@ func _on_mouse_entered():
 		return
 	if _global_datas.Player_InDialogue:
 		return	
-	if _global_datas.Player_InBoard:
+	if _global_datas.Player_In_Inventory:
 		return
 	if _global_datas.Player_InDialogue_zone:
 		return

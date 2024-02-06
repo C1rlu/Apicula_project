@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://dmg5brvcww8lq"]
+[gd_scene load_steps=40 format=3 uid="uid://dmg5brvcww8lq"]
 
 [ext_resource type="Script" path="res://12_INVENTORY/Change_cursor.gd" id="1_8ci41"]
 [ext_resource type="PackedScene" uid="uid://dyfif7fbf51gx" path="res://12_INVENTORY/Book/Book_prefab.tscn" id="1_mrfq4"]
@@ -11,50 +11,41 @@
 [ext_resource type="PackedScene" uid="uid://bba4phbllf3f8" path="res://12_INVENTORY/coins.tscn" id="6_iwb8l"]
 [ext_resource type="PackedScene" uid="uid://dky4f05drqbp8" path="res://12_INVENTORY/Bougie/Bougie.tscn" id="7_12ygw"]
 [ext_resource type="PackedScene" uid="uid://clc3sbquuu1us" path="res://12_INVENTORY/Clock_montre/Clock_oxygene_prefab.tscn" id="7_ci51x"]
+[ext_resource type="Script" path="res://12_INVENTORY/Cam_Inventory.gd" id="12_5v04f"]
 
 [sub_resource type="GDScript" id="GDScript_mh7vf"]
 script/source = "extends Node
+@onready var render = $Render
 
-@onready var control = $Control
-@onready var board = $Control/Board
-
+@onready var control = $SubViewport/Inventory_2d
 func _ready():
 
+	_global_datas.open_inventory.connect(open_inventory)
 
-	_global_datas._open_dialogue.connect(_hide)
-	_global_datas._close_dialogue.connect(_show)
-	_global_datas._go_Subscene.connect(_hide)
-	_global_datas._backFrom_subscene.connect(_show)
-	control.visible = true
+func open_inventory(condition : bool):	
+	control.visible = condition
+	render.visible = condition
+	_global_datas.Player_InMenu = condition
+	_global_datas.Player_In_Inventory = condition
 	
-func _hide_2d_enventory():
-	control.visible = false
-	
-func _show_2d_enventory():
-	control.visible = true
 
 
-func _show():
-
-	board.visible = true
-
-func _hide():
-
-	board.visible = false
 "
 
 [sub_resource type="GDScript" id="GDScript_5js7i"]
 script/source = "extends Node
 
-@onready var book = $\"../../Control/Board/Board_all/Book\"
+@onready var inventory_2d = $\"../../SubViewport/Inventory_2d\"
+@onready var book = $\"../../Book\"
 
-@onready var map = $\"../../Control/Map_Parent/Map\"
-@onready var illustration = $\"../../Control/Paper_info/Illustration\"
-@onready var coins_group = $\"../../Control/Coins_group\"
-@onready var clock = $\"../../Control/Clock_Parent/clock\"
 
-@onready var photo_group = $\"../../Control/Photo_group\"
-@onready var bougie = $\"../../Control/Bougie_zone/bougie\"
+@onready var map = $\"../../SubViewport/Inventory_2d/Map_Parent/Map\"
+@onready var illustration = $\"../../SubViewport/Inventory_2d/Paper_info/Illustration\"
+@onready var coins_group = $\"../../SubViewport/Inventory_2d/Coins_group\"
+@onready var clock = $\"../../Clock_Parent/clock\"
+
+@onready var photo_group =$\"../../SubViewport/Inventory_2d/Photo_group\"
+@onready var bougie = $\"../../Bougie_zone/bougie\"
 
 
 func _ready():	
@@ -117,7 +108,7 @@ func _active_this_ui_tool(_name : String):
 script/source = "extends Node
 
 
-@onready var coins_group = $\"../Control/Coins_group\"
+@onready var coins_group = $\"../SubViewport/Inventory_2d/Coins_group\"
 
 func _ready():
 	_global_datas._find_loot.connect(_intance_loot_bottom)	
@@ -140,7 +131,7 @@ func _intance_loot_bottom(type : Loot_Data):
 script/source = "extends Node
 
 @onready var photo_prefab = preload(\"res://10_BOARD/Behaviour/Photo_square_prefabs.tscn\")
-@onready var photo_group = $\"../Control/Photo_group\"
+@onready var photo_group = $\"../SubViewport/Inventory_2d/Photo_group\"
 
 
 func _ready():
@@ -194,7 +185,7 @@ func check_photo_exist(photo_Data):
 script/source = "extends Node
 
 @onready var words_note_prefab = preload(\"res://12_INVENTORY/Words_note/note_words_prefab.tscn\")
-@onready var words_note = $\"../Control/Words_note\"
+@onready var words_note = $\"../SubViewport/Inventory_2d/Words_note\"
 
 
 @onready var letter_prefab = preload(\"res://12_INVENTORY/Letter/Start_note.tscn\")
@@ -239,6 +230,9 @@ func _intance_letter(_words : String, _from: String):
 	var text = new_node.get_node_or_null(\"Update_words\")
 	text._update_words(_words,_from)
 "
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_q6cvl"]
+viewport_path = NodePath("SubViewport")
 
 [sub_resource type="GDScript" id="GDScript_pvnvf"]
 script/source = "extends Node
@@ -487,7 +481,7 @@ script = SubResource("GDScript_5js7i")
 
 [node name="ACTIVE_UI_TOOLS" type="Node" parent="GAME_STATE/Prologue" node_paths=PackedStringArray("tools_list")]
 script = SubResource("GDScript_venie")
-tools_list = [NodePath("../../../Control/Board/Board_all/Book"), NodePath("../../../Control/Bougie_zone/bougie"), NodePath("../../../Control/Clock_Parent/clock"), NodePath("../../../Control/Map_Parent/Map")]
+tools_list = [NodePath("../../../Book"), NodePath("../../../Bougie_zone/bougie"), NodePath("../../../Clock_Parent/clock"), NodePath("../../../SubViewport/Inventory_2d/Map_Parent/Map")]
 bougie_start_pos = Vector2(1150, 666)
 map_start_pos = Vector2(1442, 666)
 
@@ -503,7 +497,28 @@ script = SubResource("GDScript_wd62i")
 [node name="CHANGE_CURSOR" type="Node" parent="."]
 script = ExtResource("1_8ci41")
 
-[node name="Control" type="Control" parent="."]
+[node name="Render" type="TextureRect" parent="."]
+offset_right = 1920.0
+offset_bottom = 1080.0
+mouse_filter = 2
+texture = SubResource("ViewportTexture_q6cvl")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+handle_input_locally = false
+size = Vector2i(1920, 1080)
+
+[node name="Cam_Inventory" type="Camera2D" parent="SubViewport"]
+position = Vector2(960, 540)
+limit_left = 0
+limit_top = 0
+limit_right = 1920
+limit_bottom = 1080
+limit_smoothed = true
+position_smoothing_enabled = true
+script = ExtResource("12_5v04f")
+move_speed = 1000.0
+
+[node name="Inventory_2d" type="Control" parent="SubViewport"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -512,55 +527,60 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Board" type="Control" parent="Control"]
+[node name="ColorRect" type="ColorRect" parent="SubViewport/Inventory_2d"]
+layout_mode = 0
+offset_left = -1180.0
+offset_top = -1164.0
+offset_right = 3137.0
+offset_bottom = 2136.0
+mouse_filter = 2
+color = Color(0.0588235, 0.141176, 0.145098, 1)
+
+[node name="Map_Parent" type="Control" parent="SubViewport/Inventory_2d"]
 anchors_preset = 0
 mouse_filter = 2
 
-[node name="Board_all" type="Node2D" parent="Control/Board"]
+[node name="Map" parent="SubViewport/Inventory_2d/Map_Parent" instance=ExtResource("3_fbqjn")]
+position = Vector2(969, 521.009)
+scale = Vector2(1.48086, 1.48086)
+
+[node name="Board" type="Control" parent="SubViewport/Inventory_2d"]
+anchors_preset = 0
+mouse_filter = 2
+
+[node name="Board_all" type="Node2D" parent="SubViewport/Inventory_2d/Board"]
 position = Vector2(960, 1080)
 
-[node name="Book" parent="Control/Board/Board_all" instance=ExtResource("1_mrfq4")]
-position = Vector2(0, -391)
-scale = Vector2(1.1, 1.1)
-
-[node name="Map_Parent" type="Control" parent="Control"]
+[node name="Paper_info" type="Control" parent="SubViewport/Inventory_2d"]
 anchors_preset = 0
 mouse_filter = 2
 
-[node name="Map" parent="Control/Map_Parent" instance=ExtResource("3_fbqjn")]
-position = Vector2(1904, 6.00001)
-rotation = 0.0941491
-
-[node name="Paper_info" type="Control" parent="Control"]
-anchors_preset = 0
-mouse_filter = 2
-
-[node name="Illustration" type="Node2D" parent="Control/Paper_info"]
+[node name="Illustration" type="Node2D" parent="SubViewport/Inventory_2d/Paper_info"]
 position = Vector2(16, 144)
 
-[node name="Take_object" type="Node" parent="Control/Paper_info/Illustration"]
+[node name="Take_object" type="Node" parent="SubViewport/Inventory_2d/Paper_info/Illustration"]
 script = ExtResource("3_yssyu")
 object_center_marge = Vector2(153, 190)
 
-[node name="Apply_pos_anim" type="Node" parent="Control/Paper_info/Illustration"]
+[node name="Apply_pos_anim" type="Node" parent="SubViewport/Inventory_2d/Paper_info/Illustration"]
 script = ExtResource("4_ueoox")
 
-[node name="Legend" type="Node" parent="Control/Paper_info/Illustration"]
+[node name="Legend" type="Node" parent="SubViewport/Inventory_2d/Paper_info/Illustration"]
 script = SubResource("GDScript_pvnvf")
 _legend = "A sketch with \"Mirrors\" as tittle"
 
-[node name="TheMirrors" type="Sprite2D" parent="Control/Paper_info/Illustration"]
+[node name="TheMirrors" type="Sprite2D" parent="SubViewport/Inventory_2d/Paper_info/Illustration"]
 material = SubResource("ShaderMaterial_xrbty")
 position = Vector2(8, 0)
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("4_xu54d")
 
-[node name="Pin_book" type="Node2D" parent="Control/Paper_info/Illustration"]
+[node name="Pin_book" type="Node2D" parent="SubViewport/Inventory_2d/Paper_info/Illustration"]
 position = Vector2(79, -183)
 scale = Vector2(2, 2)
 script = SubResource("GDScript_bgfws")
 
-[node name="ColorRect3" type="ColorRect" parent="Control/Paper_info/Illustration/Pin_book"]
+[node name="ColorRect3" type="ColorRect" parent="SubViewport/Inventory_2d/Paper_info/Illustration/Pin_book"]
 offset_left = -74.0
 offset_top = -6.0
 offset_right = -65.0
@@ -568,7 +588,7 @@ offset_bottom = 8.0
 rotation = -0.453786
 color = Color(0.560784, 0.545098, 0.462745, 1)
 
-[node name="ColorRect4" type="ColorRect" parent="Control/Paper_info/Illustration/Pin_book"]
+[node name="ColorRect4" type="ColorRect" parent="SubViewport/Inventory_2d/Paper_info/Illustration/Pin_book"]
 offset_left = -50.0
 offset_top = -10.5
 offset_right = -41.0
@@ -576,7 +596,7 @@ offset_bottom = 3.5
 rotation = 0.153398
 color = Color(0.560784, 0.545098, 0.462745, 1)
 
-[node name="ColorRect5" type="ColorRect" parent="Control/Paper_info/Illustration/Pin_book"]
+[node name="ColorRect5" type="ColorRect" parent="SubViewport/Inventory_2d/Paper_info/Illustration/Pin_book"]
 offset_left = 19.5
 offset_top = -8.5
 offset_right = 28.5
@@ -584,7 +604,7 @@ offset_bottom = 5.5
 rotation = 0.136955
 color = Color(0.560784, 0.545098, 0.462745, 1)
 
-[node name="ColorRect6" type="ColorRect" parent="Control/Paper_info/Illustration/Pin_book"]
+[node name="ColorRect6" type="ColorRect" parent="SubViewport/Inventory_2d/Paper_info/Illustration/Pin_book"]
 offset_left = -23.5
 offset_top = -10.0
 offset_right = -14.5
@@ -592,7 +612,7 @@ offset_bottom = 4.0
 rotation = 0.136955
 color = Color(0.560784, 0.545098, 0.462745, 1)
 
-[node name="ColorRect7" type="ColorRect" parent="Control/Paper_info/Illustration/Pin_book"]
+[node name="ColorRect7" type="ColorRect" parent="SubViewport/Inventory_2d/Paper_info/Illustration/Pin_book"]
 offset_left = -80.0
 offset_top = -10.5
 offset_right = -71.0
@@ -600,7 +620,7 @@ offset_bottom = 3.5
 rotation = 0.136955
 color = Color(0.560784, 0.545098, 0.462745, 1)
 
-[node name="ColorRect8" type="ColorRect" parent="Control/Paper_info/Illustration/Pin_book"]
+[node name="ColorRect8" type="ColorRect" parent="SubViewport/Inventory_2d/Paper_info/Illustration/Pin_book"]
 offset_left = -40.5
 offset_top = -11.5
 offset_right = -31.5
@@ -608,46 +628,40 @@ offset_bottom = 2.5
 rotation = 0.136955
 color = Color(0.560784, 0.545098, 0.462745, 1)
 
-[node name="Area2D" type="Area2D" parent="Control/Paper_info/Illustration"]
+[node name="Area2D" type="Area2D" parent="SubViewport/Inventory_2d/Paper_info/Illustration"]
 
-[node name="Apply_pos_behind" type="Node" parent="Control/Paper_info/Illustration/Area2D"]
+[node name="Apply_pos_behind" type="Node" parent="SubViewport/Inventory_2d/Paper_info/Illustration/Area2D"]
 script = SubResource("GDScript_axg7a")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Control/Paper_info/Illustration/Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SubViewport/Inventory_2d/Paper_info/Illustration/Area2D"]
 visible = false
 position = Vector2(7.5, 1.5)
 shape = SubResource("RectangleShape2D_34v14")
 
-[node name="Bougie_zone" type="Control" parent="Control"]
-anchors_preset = 0
-mouse_filter = 2
-
-[node name="bougie" parent="Control/Bougie_zone" instance=ExtResource("7_12ygw")]
-
-[node name="Photo_group" type="Control" parent="Control"]
+[node name="Photo_group" type="Control" parent="SubViewport/Inventory_2d"]
 anchors_preset = 0
 
-[node name="PaperSquare_prefabs" parent="Control/Photo_group" instance=ExtResource("2_3xfr3")]
+[node name="PaperSquare_prefabs" parent="SubViewport/Inventory_2d/Photo_group" instance=ExtResource("2_3xfr3")]
 position = Vector2(143, 16)
 rotation = 0.0523599
 
-[node name="PaperSquare_prefabs3" parent="Control/Photo_group" instance=ExtResource("2_3xfr3")]
+[node name="PaperSquare_prefabs3" parent="SubViewport/Inventory_2d/Photo_group" instance=ExtResource("2_3xfr3")]
 position = Vector2(175, 142)
 rotation = -0.0523599
 
-[node name="PaperSquare_prefabs2" parent="Control/Photo_group" instance=ExtResource("2_3xfr3")]
+[node name="PaperSquare_prefabs2" parent="SubViewport/Inventory_2d/Photo_group" instance=ExtResource("2_3xfr3")]
 position = Vector2(247, 52)
 rotation = 0.0523599
 
-[node name="Words_note" type="Control" parent="Control"]
+[node name="Words_note" type="Control" parent="SubViewport/Inventory_2d"]
 anchors_preset = 0
 mouse_filter = 2
 
-[node name="Coins_group" type="Control" parent="Control"]
+[node name="Coins_group" type="Control" parent="SubViewport/Inventory_2d"]
 anchors_preset = 0
 mouse_filter = 2
 
-[node name="instance_pos" type="Control" parent="Control/Coins_group"]
+[node name="instance_pos" type="Control" parent="SubViewport/Inventory_2d/Coins_group"]
 anchors_preset = 0
 offset_left = 960.0
 offset_top = 491.0
@@ -655,20 +669,43 @@ offset_right = 960.0
 offset_bottom = 491.0
 mouse_filter = 2
 
-[node name="Coins6" parent="Control/Coins_group" instance=ExtResource("5_6qspm")]
+[node name="Coins6" parent="SubViewport/Inventory_2d/Coins_group" instance=ExtResource("5_6qspm")]
 position = Vector2(313, 83)
 
-[node name="Coins" parent="Control/Coins_group" instance=ExtResource("6_iwb8l")]
+[node name="Coins" parent="SubViewport/Inventory_2d/Coins_group" instance=ExtResource("6_iwb8l")]
 position = Vector2(381, 133)
 
-[node name="Clock_Parent" type="Control" parent="Control"]
+[node name="Clock_Parent" type="Control" parent="."]
+layout_mode = 3
 anchors_preset = 0
 mouse_filter = 2
 
-[node name="clock" parent="Control/Clock_Parent" instance=ExtResource("7_ci51x")]
-position = Vector2(1767, 294)
+[node name="clock" parent="Clock_Parent" instance=ExtResource("7_ci51x")]
+position = Vector2(1684, 525)
 rotation = 0.0698132
 
-[connection signal="mouse_entered" from="Control/Paper_info/Illustration/Area2D" to="Control/Paper_info/Illustration/Take_object" method="_on_area_2d_mouse_entered"]
-[connection signal="mouse_exited" from="Control/Paper_info/Illustration/Area2D" to="Control/Paper_info/Illustration/Take_object" method="_on_area_2d_mouse_exited"]
-[connection signal="move_behind" from="Control/Paper_info/Illustration/Area2D/Apply_pos_behind" to="Control/Paper_info/Illustration/Apply_pos_anim" method="_on_apply_pos_behind_move_behind"]
+[node name="Bougie_zone" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 338.0
+offset_top = -12.0
+offset_right = 338.0
+offset_bottom = -12.0
+mouse_filter = 2
+
+[node name="bougie" parent="Bougie_zone" instance=ExtResource("7_12ygw")]
+position = Vector2(1192, 588)
+
+[node name="PaperSquare_prefabs4" parent="." instance=ExtResource("2_3xfr3")]
+position = Vector2(335, 558)
+rotation = 0.0523599
+scale = Vector2(3, 3)
+
+[node name="Book" parent="." instance=ExtResource("1_mrfq4")]
+position = Vector2(1639, 831)
+rotation = -0.122091
+scale = Vector2(0.7, 0.7)
+
+[connection signal="mouse_entered" from="SubViewport/Inventory_2d/Paper_info/Illustration/Area2D" to="SubViewport/Inventory_2d/Paper_info/Illustration/Take_object" method="_on_area_2d_mouse_entered"]
+[connection signal="mouse_exited" from="SubViewport/Inventory_2d/Paper_info/Illustration/Area2D" to="SubViewport/Inventory_2d/Paper_info/Illustration/Take_object" method="_on_area_2d_mouse_exited"]
+[connection signal="move_behind" from="SubViewport/Inventory_2d/Paper_info/Illustration/Area2D/Apply_pos_behind" to="SubViewport/Inventory_2d/Paper_info/Illustration/Apply_pos_anim" method="_on_apply_pos_behind_move_behind"]

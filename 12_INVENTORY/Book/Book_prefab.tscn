@@ -19,16 +19,18 @@ var size : float
 var my_origin_parent : Node
 
 var book_is_open = false
-
+var disable_slide : bool = true
 func _ready():
-
+	if disable_slide:
+		return
 	size = control.scale.x
 	my_origin_parent = control.get_parent()
 	control.global_position.y = 1785
 	
 func _process(_delta):
 	
-	
+	if disable_slide:
+		return
 	if !click:
 		return
 	
@@ -42,7 +44,8 @@ func _process(_delta):
 		
 func _input(event):
 	
-	
+	if disable_slide:
+		return
 	#TO DRAG
 	if !_global_datas.Player_lock_click == true:
 		
@@ -73,7 +76,8 @@ func _scale_change(value):
 	control.set_scale(Vector2(value,value))
 	
 func _unselect_element():
-	
+	if disable_slide:
+		return
 	click = false
 	_global_datas.Player_lock_click = false
 	_scale_change(size)
@@ -85,7 +89,7 @@ func _unselect_element():
 	
 	if control.global_position.y > 1200:
 		control.global_position.y = 1785	
-		_global_datas.Player_InBoard = false
+		
 
 		
 		if book_is_open:
@@ -96,7 +100,7 @@ func _unselect_element():
 		
 	else:
 		control.global_position.y = 1000
-		_global_datas.Player_InBoard = true
+	
 
 	
 		
@@ -105,18 +109,23 @@ func _unselect_element():
 	#IF OUT OF WINDOWS
 	
 func _notification(what):
+	if disable_slide:
+		return
 	#if what == NOTIFICATION_WM_FOCUS_IN:
 	if what == NOTIFICATION_WM_MOUSE_EXIT:
 		_unselect_element()
 		
 func _on_area_2d_mouse_entered():
 
-	
+	if disable_slide:
+		return
 	mouse_entered = true
 	_global_datas.Cursor_mode.cursor_in()
 	
 
 func _on_area_2d_mouse_exited():
+	if disable_slide:
+		return
 	mouse_entered = false
 	_global_datas.Cursor_mode.cursor_out()
 
@@ -978,6 +987,7 @@ script = SubResource("GDScript_3lo8f")
 wait_time = 0.05
 
 [node name="ColorRect3" type="ColorRect" parent="."]
+visible = false
 material = SubResource("ShaderMaterial_ptao0")
 offset_left = -81.0
 offset_top = -354.0
@@ -988,6 +998,7 @@ mouse_filter = 2
 color = Color(0.4, 0.364706, 0.223529, 1)
 
 [node name="ColorRect4" type="ColorRect" parent="."]
+visible = false
 material = ExtResource("1_fo7hk")
 offset_left = -72.0
 offset_top = -344.0
@@ -1006,6 +1017,7 @@ mouse_filter = 2
 color = Color(0.0588235, 0.141176, 0.145098, 1)
 
 [node name="ColorRect7" type="ColorRect" parent="."]
+visible = false
 material = SubResource("ShaderMaterial_ptao0")
 offset_left = 21.0
 offset_top = -361.0

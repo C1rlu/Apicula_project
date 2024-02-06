@@ -49,13 +49,18 @@ script/source = "extends Node
 
 @onready var main_scene_ui = $MAIN_SCENE_UI
 
-
+@export var all_renders : Array[TextureRect]
 
 func _ready():
 	_global_datas._end_ini_subscene.connect(_disable_main)
 	_global_datas._backFrom_subscene.connect(_active_main)
-	
+	_global_datas.open_inventory.connect(active_main)
 
+
+func active_main(conditon : bool):
+	for t in all_renders:
+		t.visible = !conditon
+	
 func _active_main():
 	main_scene_ui.visible = true
 	
@@ -653,8 +658,9 @@ size = Vector3(30, 0, 30)
 script = SubResource("GDScript_ueh7h")
 prologue_position = Vector3(-21, 0, 7)
 
-[node name="01_GAME_UI" type="Node" parent="."]
+[node name="01_GAME_UI" type="Node" parent="." node_paths=PackedStringArray("all_renders")]
 script = SubResource("GDScript_8cfdp")
+all_renders = [NodePath("MAIN_SCENE_UI/Viewports/MAIN"), NodePath("MAIN_SCENE_UI/Viewports/FOAM"), NodePath("MAIN_SCENE_UI/Viewports/SONAR"), NodePath("MAIN_SCENE_UI/Viewports/GRID"), NodePath("MAIN_SCENE_UI/Viewports/SKY")]
 
 [node name="FPS_COUNTER" type="Label" parent="01_GAME_UI"]
 z_index = 1

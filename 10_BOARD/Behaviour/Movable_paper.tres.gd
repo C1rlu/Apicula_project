@@ -61,7 +61,7 @@ func _process(_delta):
 	new_position.y = clamp(new_position.y,margin,1080-margin)
 	control.global_position = new_position
 	
-	_check_book_position()
+	#_check_book_position()
 
 func _input(event):
 
@@ -179,7 +179,7 @@ func _check_book_position():
 	if not_in_book:
 		return
 	
-	if !_global_datas.Player_InBoard:
+	if !_global_datas.Player_In_Inventory:
 		return
 	var page_position : String = "oustide"
 	var pages = _global_datas.Book_pages[_global_datas.Book_page_index]

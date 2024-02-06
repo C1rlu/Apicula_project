@@ -13,7 +13,7 @@ func move_a():
 	var translation = get_global_transform().origin
 	_global_datas.player_position = translation
 	
-	if _global_datas.Player_InBoard:
+	if _global_datas.Player_In_Inventory:
 		return
 	
 	if _global_datas.Player_InSubScene:

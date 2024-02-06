@@ -1,7 +1,17 @@
-[gd_scene load_steps=100 format=3 uid="uid://bwmu5iwushsl5"]
+[gd_scene load_steps=101 format=3 uid="uid://bwmu5iwushsl5"]
 
 [ext_resource type="Texture2D" uid="uid://d31xi5f7tan5w" path="res://05_SHADER_TEST/Full_screen/Dither_pattners/Blue_noise/HDR_LA_7.png" id="1_2l1ih"]
 [ext_resource type="FastNoiseLite" uid="uid://bcwy28tydkj4w" path="res://05_SHADER_TEST/Subscene_materials/Flash_noise.tres" id="2_rp5e3"]
+
+[sub_resource type="GDScript" id="GDScript_yhfpo"]
+script/source = "extends Node
+
+var is_open : bool = false
+func _on_open_inventory_button_pressed():
+	
+	is_open =!is_open
+	_global_datas.open_inventory.emit(is_open)
+"
 
 [sub_resource type="GDScript" id="GDScript_b8tm5"]
 script/source = "extends Node
@@ -1192,6 +1202,9 @@ shader_parameter/flash_opacity = 0.5
 
 [node name="07_SCREEN_TOOLS" type="Node"]
 
+[node name="Open_Inventory" type="Node" parent="."]
+script = SubResource("GDScript_yhfpo")
+
 [node name="Description" type="Node2D" parent="."]
 position = Vector2(989, 752)
 
@@ -1342,3 +1355,13 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(0.784314, 0.709804, 0.513726, 1)
+
+[node name="Open_Inventory_Button" type="Button" parent="."]
+offset_left = 1778.0
+offset_top = 89.0
+offset_right = 1920.0
+offset_bottom = 120.0
+text = "Open inventory
+"
+
+[connection signal="pressed" from="Open_Inventory_Button" to="Open_Inventory" method="_on_open_inventory_button_pressed"]
