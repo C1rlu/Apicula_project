@@ -1,9 +1,7 @@
-[gd_scene load_steps=68 format=3 uid="uid://dr7pcue70x0dt"]
+[gd_scene load_steps=53 format=3 uid="uid://dr7pcue70x0dt"]
 
-[ext_resource type="Script" path="res://10_BOARD/Behaviour/Movable_paper.tres.gd" id="1_h5skt"]
-[ext_resource type="Script" path="res://10_BOARD/Behaviour/Apply_pos_anim.gd" id="2_jaqpo"]
-[ext_resource type="Script" path="res://12_INVENTORY/Script/I_burn.tres.gd" id="3_udy6m"]
-[ext_resource type="Texture2D" uid="uid://cvgf4l4anpjfx" path="res://12_INVENTORY/Photo/PhotoTest_01 .jpg" id="4_a771i"]
+[ext_resource type="Script" path="res://12_INVENTORY/Behaviour/Movable_paper.tres.gd" id="1_hutrl"]
+[ext_resource type="Texture2D" uid="uid://cvgf4l4anpjfx" path="res://12_INVENTORY/Photo/PhotoTest_01 .jpg" id="4_5je6e"]
 
 [sub_resource type="GDScript" id="GDScript_6ohgl"]
 script/source = "extends Node
@@ -60,33 +58,6 @@ func change_value(value : float):
 	var color_rect = $\"../ColorRect5/Photo\"
 	var _material : Material = color_rect.get_material()
 	_material.set_shader_parameter(\"Denoiser\" , value)
-"
-
-[sub_resource type="GDScript" id="GDScript_7ab2k"]
-script/source = "extends Node
-
-@onready var change_photo = $\"../Change_photo\"
-
-var actual_value : float = 1.94
-
-var active = false
-
-func _change_value():
-	actual_value -= 0.1
-	actual_value = clampf(actual_value,1.0,1.94)
-	change_photo.change_value(actual_value)	
-
-
-func _on_area_2d_area_entered(area):
-	
-	if !active:
-		return
-	if !area:
-		return
-		
-	var coin_contact = area.get_node_or_null(\"Contact_coin\")
-	if coin_contact:
-		_change_value()
 "
 
 [sub_resource type="GDScript" id="GDScript_qxq3c"]
@@ -642,168 +613,7 @@ nodes/fragment/connections = PackedInt32Array(3, 0, 5, 1, 17, 0, 18, 2, 2, 0, 7,
 resource_local_to_scene = true
 shader = SubResource("VisualShader_n63tb")
 shader_parameter/Denoiser = 1.5
-shader_parameter/Photo = ExtResource("4_a771i")
-
-[sub_resource type="Gradient" id="Gradient_j2p33"]
-offsets = PackedFloat32Array(0, 0.064, 0.202667, 1)
-colors = PackedColorArray(1, 1, 1, 1, 0.456, 0.456, 0.456, 1, 0.31959, 0.31959, 0.31959, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_m6tid"]
-gradient = SubResource("Gradient_j2p33")
-fill = 2
-fill_from = Vector2(0.5, 0.5)
-
-[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_x573l"]
-texture = SubResource("GradientTexture2D_m6tid")
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_oawhm"]
-constant = 0.4
-
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_tmpts"]
-size = Vector2(724.789, 654.559)
-expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_q0xo0"]
-
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_ub5hs"]
-parameter_name = "Opacity"
-
-[sub_resource type="VisualShader" id="VisualShader_h4umo"]
-code = "shader_type canvas_item;
-render_mode blend_mix;
-
-uniform sampler2D tex_frg_15;
-uniform float Opacity;
-
-
-
-void fragment() {
-// Texture2D:15
-	vec4 n_out15p0 = texture(tex_frg_15, UV);
-
-
-// FloatParameter:20
-	float n_out20p0 = Opacity;
-
-
-// FloatConstant:16
-	float n_out16p0 = 0.400000;
-
-
-	float n_out18p0;
-// Expression:18
-	n_out18p0 = 0.0;
-	{
-		const float DITHER_THRESHOLDS[16] ={
-				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-			};
-			
-		vec2 uv = FRAGCOORD.xy * n_out16p0;
-		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-		n_out18p0 = n_out20p0 - DITHER_THRESHOLDS[index];
-	}
-
-
-// Step:19
-	float n_out19p0 = step(n_out15p0.x, n_out18p0);
-
-
-// Output:0
-	COLOR.a = n_out19p0;
-
-
-}
-"
-graph_offset = Vector2(-567.79, 89.0975)
-mode = 1
-flags/light_only = false
-nodes/fragment/0/position = Vector2(1060, 180)
-nodes/fragment/15/node = SubResource("VisualShaderNodeTexture_x573l")
-nodes/fragment/15/position = Vector2(260, 180)
-nodes/fragment/16/node = SubResource("VisualShaderNodeFloatConstant_oawhm")
-nodes/fragment/16/position = Vector2(-220, 520)
-nodes/fragment/18/node = SubResource("VisualShaderNodeExpression_tmpts")
-nodes/fragment/18/position = Vector2(100, 480)
-nodes/fragment/18/size = Vector2(724.789, 654.559)
-nodes/fragment/18/input_ports = "0,0,In;1,0,Size;"
-nodes/fragment/18/output_ports = "0,0,Dither_Node;"
-nodes/fragment/18/expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/19/node = SubResource("VisualShaderNodeStep_q0xo0")
-nodes/fragment/19/position = Vector2(760, 180)
-nodes/fragment/20/node = SubResource("VisualShaderNodeFloatParameter_ub5hs")
-nodes/fragment/20/position = Vector2(-540, 300)
-nodes/fragment/connections = PackedInt32Array(16, 0, 18, 1, 18, 0, 19, 1, 19, 0, 0, 1, 15, 0, 19, 0, 20, 0, 18, 0)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_g87al"]
-resource_local_to_scene = true
-shader = SubResource("VisualShader_h4umo")
-shader_parameter/Opacity = 0.25
-
-[sub_resource type="GDScript" id="GDScript_0a7gw"]
-script/source = "extends Node2D
-
-
-@onready var pin : Array = get_children()
-
-
-var random_pin : int
-var lock_random = false
-
-func _ready():
-	_disable_all_pin()	
-	
-func _random_pin():
-	
-	# hide all first
-	_disable_all_pin()
-	
-	if !lock_random : 
-		random_pin = randi_range(0, pin.size()-1)
-		lock_random = true
-		
-	# show only random number index
-	pin[random_pin].visible = true
-		
-		
-func _disable_all_pin():
-
-	for element in pin:
-		element.visible = false		
-"
-
-[sub_resource type="GDScript" id="GDScript_p3ga4"]
-script/source = "extends Node
-
-signal  move_behind
-
-
-func _move_behind():
-	move_behind.emit()
-"
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_p5bvn"]
-size = Vector2(82, 81.7143)
+shader_parameter/Photo = ExtResource("4_5je6e")
 
 [node name="Photo_Square_prefabs" type="Node2D"]
 scale = Vector2(3, 3)
@@ -812,22 +622,12 @@ scale = Vector2(3, 3)
 script = SubResource("GDScript_6ohgl")
 
 [node name="Take_object" type="Node" parent="."]
-script = ExtResource("1_h5skt")
+script = ExtResource("1_hutrl")
 object_center_marge = Vector2(40, 40)
-
-[node name="Apply_pos_anim" type="Node" parent="."]
-script = ExtResource("2_jaqpo")
-
-[node name="Coin_contact_show_me" type="Node" parent="."]
-script = SubResource("GDScript_7ab2k")
 
 [node name="Legend" type="Node" parent="."]
 script = SubResource("GDScript_qxq3c")
 _legend = "it's just a photo"
-
-[node name="I_Burn" type="Node" parent="." node_paths=PackedStringArray("burn")]
-script = ExtResource("3_udy6m")
-burn = NodePath("../BURN")
 
 [node name="shadow" type="ColorRect" parent="."]
 light_mask = 3
@@ -898,98 +698,3 @@ theme_override_colors/font_color = Color(0.0234375, 0.144531, 0.160156, 1)
 theme_override_font_sizes/font_size = 25
 text = "Description"
 horizontal_alignment = 2
-
-[node name="BURN" type="ColorRect" parent="."]
-visible = false
-light_mask = 3
-material = SubResource("ShaderMaterial_g87al")
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -40.0
-offset_top = -40.0
-offset_right = 40.0
-offset_bottom = 40.0
-grow_horizontal = 2
-grow_vertical = 2
-pivot_offset = Vector2(40, 40)
-mouse_filter = 2
-color = Color(1, 0.831373, 0.568627, 1)
-metadata/_edit_use_anchors_ = true
-
-[node name="Pin_book" type="Node2D" parent="."]
-position = Vector2(33.6667, -39.3333)
-script = SubResource("GDScript_0a7gw")
-
-[node name="ColorRect3" type="ColorRect" parent="Pin_book"]
-offset_left = -70.3334
-offset_top = -3.6667
-offset_right = -63.3334
-offset_bottom = 7.3333
-rotation = -0.453786
-color = Color(0.560784, 0.545098, 0.462745, 1)
-
-[node name="ColorRect4" type="ColorRect" parent="Pin_book"]
-offset_left = -17.6667
-offset_top = -7.33337
-offset_right = -10.6667
-offset_bottom = 3.66663
-rotation = 0.310835
-color = Color(0.560784, 0.545098, 0.462745, 1)
-
-[node name="ColorRect6" type="ColorRect" parent="Pin_book"]
-offset_left = -61.3334
-offset_top = -4.00003
-offset_right = -54.3334
-offset_bottom = 6.99997
-rotation = -0.439679
-color = Color(0.560784, 0.545098, 0.462745, 1)
-
-[node name="ColorRect5" type="ColorRect" parent="Pin_book"]
-offset_left = -1.6667
-offset_top = -6.66669
-offset_right = 5.3333
-offset_bottom = 4.33331
-rotation = 0.372407
-color = Color(0.560784, 0.545098, 0.462745, 1)
-
-[node name="ColorRect7" type="ColorRect" parent="Pin_book"]
-offset_left = -24.0
-offset_top = -4.66669
-offset_right = -17.0
-offset_bottom = 6.33331
-rotation = 0.128587
-color = Color(0.560784, 0.545098, 0.462745, 1)
-
-[node name="ColorRect8" type="ColorRect" parent="Pin_book"]
-offset_left = -54.0
-offset_top = -6.66669
-offset_right = -47.0
-offset_bottom = 4.33331
-rotation = 0.128587
-color = Color(0.560784, 0.545098, 0.462745, 1)
-
-[node name="ColorRect9" type="ColorRect" parent="Pin_book"]
-offset_left = -15.6667
-offset_top = -5.66669
-offset_right = -8.6667
-offset_bottom = 5.33331
-rotation = -0.285518
-color = Color(0.560784, 0.545098, 0.462745, 1)
-
-[node name="Area2D" type="Area2D" parent="."]
-
-[node name="Apply_pos_behind" type="Node" parent="Area2D"]
-script = SubResource("GDScript_p3ga4")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-visible = false
-position = Vector2(-0.142859, -5.72205e-06)
-shape = SubResource("RectangleShape2D_p5bvn")
-
-[connection signal="area_entered" from="Area2D" to="Coin_contact_show_me" method="_on_area_2d_area_entered"]
-[connection signal="mouse_entered" from="Area2D" to="Take_object" method="_on_area_2d_mouse_entered"]
-[connection signal="mouse_exited" from="Area2D" to="Take_object" method="_on_area_2d_mouse_exited"]
-[connection signal="move_behind" from="Area2D/Apply_pos_behind" to="Apply_pos_anim" method="_on_apply_pos_behind_move_behind"]

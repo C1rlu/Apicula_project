@@ -68,6 +68,7 @@ signal _subscene_fail
 #board scene
 
 signal open_inventory(condition : bool)
+signal mouse_raycast
 var board_camera : Camera3D
 var zoom_value : float
 var OnDrag_start_position : Vector2

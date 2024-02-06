@@ -54,6 +54,9 @@ func camMovement(delta):
 
 func _physics_process(_delta):
 	
+	
+	if _global_datas.Player_lock_click:
+		return
 	if !_global_datas.Player_In_Inventory:
 		return
 	

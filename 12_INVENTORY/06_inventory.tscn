@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" path="res://12_INVENTORY/Change_cursor.gd" id="1_8ci41"]
 [ext_resource type="PackedScene" uid="uid://dyfif7fbf51gx" path="res://12_INVENTORY/Book/Book_prefab.tscn" id="1_mrfq4"]
-[ext_resource type="PackedScene" uid="uid://dr7pcue70x0dt" path="res://10_BOARD/Behaviour/Photo_square_prefabs.tscn" id="2_3xfr3"]
+[ext_resource type="PackedScene" uid="uid://dr7pcue70x0dt" path="res://12_INVENTORY/Behaviour/Photo_square_prefabs.tscn" id="2_3xfr3"]
 [ext_resource type="PackedScene" uid="uid://bjy34o0nbhbc3" path="res://12_INVENTORY/Map_ui/Map_ui.tscn" id="3_fbqjn"]
-[ext_resource type="Script" path="res://10_BOARD/Behaviour/Movable_paper.tres.gd" id="3_yssyu"]
-[ext_resource type="Script" path="res://10_BOARD/Behaviour/Apply_pos_anim.gd" id="4_ueoox"]
+[ext_resource type="Script" path="res://12_INVENTORY/Behaviour/Movable_paper.tres.gd" id="3_yssyu"]
+[ext_resource type="Script" path="res://12_INVENTORY/Behaviour/Apply_pos_anim.gd" id="4_ueoox"]
 [ext_resource type="Texture2D" uid="uid://ch5fu7wcqx25i" path="res://12_INVENTORY/Book/Quest_img/TheMirrors.png" id="4_xu54d"]
 [ext_resource type="PackedScene" uid="uid://by7rfopxdjwq" path="res://12_INVENTORY/coins_r.tscn" id="5_6qspm"]
 [ext_resource type="PackedScene" uid="uid://bba4phbllf3f8" path="res://12_INVENTORY/coins.tscn" id="6_iwb8l"]
@@ -18,6 +18,7 @@ script/source = "extends Node
 @onready var render = $Render
 
 @onready var control = $SubViewport/Inventory_2d
+
 func _ready():
 
 	_global_datas.open_inventory.connect(open_inventory)
@@ -35,41 +36,15 @@ func open_inventory(condition : bool):
 [sub_resource type="GDScript" id="GDScript_5js7i"]
 script/source = "extends Node
 
-@onready var inventory_2d = $\"../../SubViewport/Inventory_2d\"
-@onready var book = $\"../../Book\"
-
-
-@onready var map = $\"../../SubViewport/Inventory_2d/Map_Parent/Map\"
-@onready var illustration = $\"../../SubViewport/Inventory_2d/Paper_info/Illustration\"
-@onready var coins_group = $\"../../SubViewport/Inventory_2d/Coins_group\"
-@onready var clock = $\"../../Clock_Parent/clock\"
-
-@onready var photo_group =$\"../../SubViewport/Inventory_2d/Photo_group\"
-@onready var bougie = $\"../../Bougie_zone/bougie\"
-
-
 func _ready():	
 	_global_datas.active_prologue_demo.connect(_active_prologue)
 
 
 func _active_prologue():
-	
+
 	
 	print(\"PROLOGUE INVENTORY ACTIVATED\")
-	book.visible = false
-	map.visible = false 
-	illustration.visible = false 
-	var all_coins = coins_group.get_children()
-	for c in all_coins:
-		c.visible = false
-	clock.visible = false
-	
-	var photo_group_all = photo_group.get_children()
-	for e in photo_group_all:
-		e.visible = false
-	bougie.visible = false
-	
-	
+
 	
 func _on_i_burn_burn_signal():
 	print(\"UNLOCK\")
@@ -231,7 +206,7 @@ func _intance_letter(_words : String, _from: String):
 	text._update_words(_words,_from)
 "
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_q6cvl"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_dp0nq"]
 viewport_path = NodePath("SubViewport")
 
 [sub_resource type="GDScript" id="GDScript_pvnvf"]
@@ -481,7 +456,7 @@ script = SubResource("GDScript_5js7i")
 
 [node name="ACTIVE_UI_TOOLS" type="Node" parent="GAME_STATE/Prologue" node_paths=PackedStringArray("tools_list")]
 script = SubResource("GDScript_venie")
-tools_list = [NodePath("../../../Book"), NodePath("../../../Bougie_zone/bougie"), NodePath("../../../Clock_Parent/clock"), NodePath("../../../SubViewport/Inventory_2d/Map_Parent/Map")]
+tools_list = [NodePath("../../../SubViewport/Inventory_2d/Board/Book"), NodePath("../../../SubViewport/Inventory_2d/Bougie_zone/bougie"), NodePath("../../../SubViewport/Inventory_2d/Clock_Parent/clock"), NodePath("../../../SubViewport/Inventory_2d/Map_Parent/Map")]
 bougie_start_pos = Vector2(1150, 666)
 map_start_pos = Vector2(1442, 666)
 
@@ -501,10 +476,13 @@ script = ExtResource("1_8ci41")
 offset_right = 1920.0
 offset_bottom = 1080.0
 mouse_filter = 2
-texture = SubResource("ViewportTexture_q6cvl")
+texture = SubResource("ViewportTexture_dp0nq")
 
 [node name="SubViewport" type="SubViewport" parent="."]
+disable_3d = true
 handle_input_locally = false
+snap_2d_transforms_to_pixel = true
+snap_2d_vertices_to_pixel = true
 size = Vector2i(1920, 1080)
 
 [node name="Cam_Inventory" type="Camera2D" parent="SubViewport"]
@@ -541,15 +519,41 @@ anchors_preset = 0
 mouse_filter = 2
 
 [node name="Map" parent="SubViewport/Inventory_2d/Map_Parent" instance=ExtResource("3_fbqjn")]
-position = Vector2(969, 521.009)
-scale = Vector2(1.48086, 1.48086)
+position = Vector2(1019, 457)
+rotation = -0.126172
+scale = Vector2(2, 2)
+
+[node name="Clock_Parent" type="Control" parent="SubViewport/Inventory_2d"]
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+
+[node name="clock" parent="SubViewport/Inventory_2d/Clock_Parent" instance=ExtResource("7_ci51x")]
+position = Vector2(1577, 598)
+rotation = 0.0698132
+scale = Vector2(1.18041, 1.18041)
+
+[node name="Bougie_zone" type="Control" parent="SubViewport/Inventory_2d"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 338.0
+offset_top = -12.0
+offset_right = 338.0
+offset_bottom = -12.0
+mouse_filter = 2
+
+[node name="bougie" parent="SubViewport/Inventory_2d/Bougie_zone" instance=ExtResource("7_12ygw")]
+position = Vector2(1121, 607)
+scale = Vector2(0.698854, 0.698854)
 
 [node name="Board" type="Control" parent="SubViewport/Inventory_2d"]
 anchors_preset = 0
 mouse_filter = 2
 
-[node name="Board_all" type="Node2D" parent="SubViewport/Inventory_2d/Board"]
-position = Vector2(960, 1080)
+[node name="Book" parent="SubViewport/Inventory_2d/Board" instance=ExtResource("1_mrfq4")]
+position = Vector2(1537, 802)
+rotation = -0.122091
+scale = Vector2(0.440382, 0.440382)
 
 [node name="Paper_info" type="Control" parent="SubViewport/Inventory_2d"]
 anchors_preset = 0
@@ -642,15 +646,15 @@ shape = SubResource("RectangleShape2D_34v14")
 anchors_preset = 0
 
 [node name="PaperSquare_prefabs" parent="SubViewport/Inventory_2d/Photo_group" instance=ExtResource("2_3xfr3")]
-position = Vector2(143, 16)
+position = Vector2(880, 448)
 rotation = 0.0523599
 
 [node name="PaperSquare_prefabs3" parent="SubViewport/Inventory_2d/Photo_group" instance=ExtResource("2_3xfr3")]
-position = Vector2(175, 142)
+position = Vector2(855, 531)
 rotation = -0.0523599
 
 [node name="PaperSquare_prefabs2" parent="SubViewport/Inventory_2d/Photo_group" instance=ExtResource("2_3xfr3")]
-position = Vector2(247, 52)
+position = Vector2(951, 459)
 rotation = 0.0523599
 
 [node name="Words_note" type="Control" parent="SubViewport/Inventory_2d"]
@@ -674,37 +678,6 @@ position = Vector2(313, 83)
 
 [node name="Coins" parent="SubViewport/Inventory_2d/Coins_group" instance=ExtResource("6_iwb8l")]
 position = Vector2(381, 133)
-
-[node name="Clock_Parent" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-mouse_filter = 2
-
-[node name="clock" parent="Clock_Parent" instance=ExtResource("7_ci51x")]
-position = Vector2(1684, 525)
-rotation = 0.0698132
-
-[node name="Bougie_zone" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-offset_left = 338.0
-offset_top = -12.0
-offset_right = 338.0
-offset_bottom = -12.0
-mouse_filter = 2
-
-[node name="bougie" parent="Bougie_zone" instance=ExtResource("7_12ygw")]
-position = Vector2(1192, 588)
-
-[node name="PaperSquare_prefabs4" parent="." instance=ExtResource("2_3xfr3")]
-position = Vector2(335, 558)
-rotation = 0.0523599
-scale = Vector2(3, 3)
-
-[node name="Book" parent="." instance=ExtResource("1_mrfq4")]
-position = Vector2(1639, 831)
-rotation = -0.122091
-scale = Vector2(0.7, 0.7)
 
 [connection signal="mouse_entered" from="SubViewport/Inventory_2d/Paper_info/Illustration/Area2D" to="SubViewport/Inventory_2d/Paper_info/Illustration/Take_object" method="_on_area_2d_mouse_entered"]
 [connection signal="mouse_exited" from="SubViewport/Inventory_2d/Paper_info/Illustration/Area2D" to="SubViewport/Inventory_2d/Paper_info/Illustration/Take_object" method="_on_area_2d_mouse_exited"]
