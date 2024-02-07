@@ -1,0 +1,233 @@
+[gd_scene load_steps=10 format=3 uid="uid://cein0q2eirkay"]
+
+[ext_resource type="Script" path="res://10_BOARD/Board_CamTarget.gd" id="1_janbq"]
+[ext_resource type="PackedScene" uid="uid://dr73p5vs0sixe" path="res://10_BOARD/board_scene.tscn" id="2_6c571"]
+
+[sub_resource type="GDScript" id="GDScript_w13ry"]
+script/source = "extends Node
+
+
+@export var debug_board = true
+@onready var board_ui = $BOARD_UI
+
+func _ready():
+	_global_datas.Player_In_Inventory = debug_board
+	board_ui.visible = debug_board
+	_global_datas.open_inventory.connect(open_inventory)
+	
+func open_inventory(condition : bool):
+	board_ui.visible = condition
+	_global_datas.Player_In_Inventory = condition
+	
+"
+
+[sub_resource type="GDScript" id="GDScript_00hwt"]
+script/source = "extends Node
+
+@onready var Cam : Camera3D = $\"../BOARD_UI/SubViewport/CAM_STATE_BOARD_root2/Camera3D\"
+
+@export var max_zoom = 22
+@export var min_zoom = 42
+
+@export var zoom_speed = 50
+var zoom_value : float
+
+
+func _ready():
+	zoom_value = Cam.fov	
+	_global_datas.zoom_value = zoom_value
+func _process(delta):
+		
+	if !_global_datas.Player_In_Inventory:
+		return
+		
+	if Input.is_action_pressed(\"Inventory_zoom_in\"):
+		zoom_value -= zoom_speed * delta
+		zoom_value = clamp(zoom_value,max_zoom,min_zoom)	
+		Cam.fov = zoom_value
+		_global_datas.zoom_value = zoom_value
+	if Input.is_action_pressed(\"Inventory_zoom_out\"):
+		zoom_value += zoom_speed * delta	
+		zoom_value = clamp(zoom_value,max_zoom,min_zoom)
+		Cam.fov = zoom_value
+		_global_datas.zoom_value = zoom_value
+			
+
+"
+
+[sub_resource type="GDScript" id="GDScript_y5335"]
+script/source = "extends Camera3D
+
+
+@onready var target = $\"../BOARD_UI/SubViewport/CAM_STATE_BOARD_root2\"
+
+func _ready():
+	fov = $\"../BOARD_UI/SubViewport/CAM_STATE_BOARD_root2/Camera3D\".fov
+	
+
+func _process(_delta):
+	
+	if !_global_datas.Player_In_Inventory:
+		return
+		
+	transform.origin = target.position
+	fov = $\"../BOARD_UI/SubViewport/CAM_STATE_BOARD_root2/Camera3D\".fov
+"
+
+[sub_resource type="GDScript" id="GDScript_vi1bh"]
+script/source = "extends Node3D
+
+@export var smooth_speed = 3.0
+var offset: Vector3
+var active_target : Vector3
+
+@onready var Player_position = $\"../CamTarget\"
+
+func _ready():
+	
+	var playerPosition = Player_position.transform.origin
+	offset = self.transform.origin - playerPosition
+	active_target = offset
+	
+		
+func _physics_process(_delta):
+
+	if !_global_datas.Player_In_Inventory:
+		return
+			
+	var playerPosition = Player_position.transform.origin
+	self.transform.origin = lerp(self.transform.origin, playerPosition + active_target, smooth_speed * _delta)
+"
+
+[sub_resource type="GDScript" id="GDScript_l5hmx"]
+script/source = "extends Camera3D
+
+func _ready():
+	_global_datas.board_camera = self
+
+"
+
+[sub_resource type="GDScript" id="GDScript_gxd63"]
+script/source = "extends Area3D
+
+@onready var Camera = $\"../Camera_xray\"
+
+
+@export var y = 6.0
+
+#func _ready():
+	
+	#_global_datas.mouse_raycast.connect(MouseRaycast)
+	
+func _process(delta):
+	
+	if !_global_datas.Player_In_Inventory:
+		return
+
+		
+	MouseRaycast()
+		
+func MouseRaycast():
+	
+	var mousePos = get_viewport().get_mouse_position()
+	var rayLengh = 10.0
+	var from = Camera.project_ray_origin(mousePos)
+	var to = from + Camera.project_ray_normal(mousePos) * rayLengh
+	var space = get_world_3d().direct_space_state
+	var rayQuery = PhysicsRayQueryParameters3D.new()
+	rayQuery.from = from
+	rayQuery.to = to
+	rayQuery.collide_with_areas = true
+	rayQuery.collide_with_bodies = false
+
+	var result = space.intersect_ray(rayQuery)
+
+	if result.is_empty():
+		return
+	
+
+	_global_datas.mouseRaycastPosition = result.position
+
+func _check_name(result):
+		
+	if result:
+		var collider = result.collider
+		var object_name = collider.name
+		print(object_name)
+	
+"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_63y7c"]
+size = Vector3(1.71357, 0.0473518, 0.953495)
+
+[node name="04_BOARD" type="Node"]
+script = SubResource("GDScript_w13ry")
+debug_board = false
+metadata/_edit_horizontal_guides_ = [-58.0]
+
+[node name="ZOOM_Behaviour" type="Node" parent="."]
+script = SubResource("GDScript_00hwt")
+
+[node name="Camera_xray" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.173648, 0.984808, 0, -0.984808, 0.173648, 0, 21.173, 0.225)
+cull_mask = 2
+fov = 42.0
+script = SubResource("GDScript_y5335")
+
+[node name="BOARD_UI" type="SubViewportContainer" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="BOARD_UI"]
+handle_input_locally = false
+scaling_3d_scale = 0.9
+fsr_sharpness = 2.0
+size = Vector2i(1920, 1080)
+render_target_update_mode = 0
+
+[node name="CAM_STATE_BOARD_root2" type="Node3D" parent="BOARD_UI/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 21.173, 0.225)
+script = SubResource("GDScript_vi1bh")
+
+[node name="Camera3D" type="Camera3D" parent="BOARD_UI/SubViewport/CAM_STATE_BOARD_root2"]
+transform = Transform3D(1, 0, 0, 0, 0.173648, 0.984808, 0, -0.984808, 0.173648, 0, 0, 0)
+cull_mask = 66
+fov = 42.0
+far = 15.0
+script = SubResource("GDScript_l5hmx")
+
+[node name="Camera3D2" type="Camera3D" parent="BOARD_UI/SubViewport/CAM_STATE_BOARD_root2"]
+transform = Transform3D(1, 0, 0, 0, 0.173648, 0.984808, 0, -0.984808, 0.173648, 0, 0, 0)
+cull_mask = 2
+fov = 42.0
+far = 15.0
+script = SubResource("GDScript_l5hmx")
+
+[node name="CamTarget" type="Node3D" parent="BOARD_UI/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20.002, 0)
+script = ExtResource("1_janbq")
+move_speed = 1.0
+min_x = -0.5
+max_x = 0.5
+min_z = -0.5
+max_z = 0.5
+
+[node name="Board_scene" parent="." instance=ExtResource("2_6c571")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 0)
+
+[node name="Area3D" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19.9974, 0)
+collision_layer = 256
+collision_mask = 256
+priority = 2
+script = SubResource("GDScript_gxd63")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0209293, -0.010353)
+shape = SubResource("BoxShape3D_63y7c")

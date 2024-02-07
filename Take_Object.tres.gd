@@ -12,7 +12,7 @@ func _ready():
 func _process(_delta):
 	
 
-	if !_global_datas.Player_In_Inventory:
+	if !_global_datas.Player_InBoard:
 		return
 
 	if !click:

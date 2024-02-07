@@ -1,7 +1,5 @@
-[gd_scene load_steps=140 format=3 uid="uid://clc3sbquuu1us"]
+[gd_scene load_steps=137 format=3 uid="uid://clc3sbquuu1us"]
 
-[ext_resource type="Script" path="res://10_BOARD/Behaviour/Movable_paper.tres.gd" id="1_hwa20"]
-[ext_resource type="Script" path="res://10_BOARD/Behaviour/Apply_pos_anim.gd" id="2_utw7r"]
 [ext_resource type="Texture2D" uid="uid://dloafgux050ra" path="res://12_INVENTORY/Clock_montre/Clock_detail.png" id="3_qfgi4"]
 [ext_resource type="Texture2D" uid="uid://bm0x5egb7ypfh" path="res://12_INVENTORY/Clock_montre/Aiguille.png" id="4_530h2"]
 
@@ -89,18 +87,6 @@ func _on_timer_timeout():
 	_global_datas._reseting_clock_disable.emit()
 
 	_global_datas._go_Subscene.emit()
-"
-
-[sub_resource type="GDScript" id="GDScript_sqy6q"]
-script/source = "extends Node
-
-@export var _legend : String
-
-func set_legend(legend : String):
-	_legend = legend	
-
-func get_legend():
-	return _legend 
 "
 
 [sub_resource type="Gradient" id="Gradient_dg561"]
@@ -1526,7 +1512,7 @@ func _move_behind():
 	move_behind.emit()
 "
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_1tlla"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_mn5j0"]
 radius = 63.1472
 
 [node name="Clock" type="Node2D"]
@@ -1538,18 +1524,6 @@ Timer_second = 120.0
 script = SubResource("GDScript_uwuod")
 
 [node name="Timer" type="Timer" parent="GoSubscene_timer"]
-
-[node name="Take_object" type="Node" parent="."]
-script = ExtResource("1_hwa20")
-
-[node name="Apply_pos_anim" type="Node" parent="."]
-script = ExtResource("2_utw7r")
-
-[node name="Legend" type="Node" parent="."]
-script = SubResource("GDScript_sqy6q")
-_legend = "Time of oxygene left"
-
-[node name="Not_in_book" type="Node" parent="."]
 
 [node name="shadow" type="ColorRect" parent="."]
 light_mask = 3
@@ -1923,9 +1897,7 @@ script = SubResource("GDScript_y5o0k")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 visible = false
 position = Vector2(-0.977112, 0.213074)
-shape = SubResource("CircleShape2D_1tlla")
+shape = SubResource("CircleShape2D_mn5j0")
+disabled = true
 
 [connection signal="timeout" from="GoSubscene_timer/Timer" to="GoSubscene_timer" method="_on_timer_timeout"]
-[connection signal="mouse_entered" from="Area2D" to="Take_object" method="_on_area_2d_mouse_entered"]
-[connection signal="mouse_exited" from="Area2D" to="Take_object" method="_on_area_2d_mouse_exited"]
-[connection signal="move_behind" from="Area2D/Apply_pos_behind" to="Apply_pos_anim" method="_on_apply_pos_behind_move_behind"]

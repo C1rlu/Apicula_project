@@ -1,6 +1,6 @@
 extends Node
 
-var _can_flash : bool = false
+
 @onready var area = $"../ZoneCollide"
 var count : int = 0
 
@@ -8,10 +8,9 @@ var count : int = 0
 
 
 func _input(event):
-	
-	if !_can_flash:
+
+	if !_global_datas.Player_InSubScene:
 		return
-	
 	if _global_datas.Player_lock_click:
 		return
 	if event.is_action_pressed("Click"):
@@ -51,13 +50,13 @@ func check_area():
 	
 	
 func _on_mouse_over_mouse_entered():
-	_can_flash = true
+	#_can_flash = true
 	on_over_mouse_3d_shape_out.visible = true
 
 
 func _on_mouse_over_mouse_exited():
 
-	_can_flash = false
+	#_can_flash = false
 	on_over_mouse_3d_shape_out.visible = false
 
 

@@ -1,20 +1,6 @@
-[gd_scene load_steps=47 format=3 uid="uid://bjy34o0nbhbc3"]
+[gd_scene load_steps=43 format=3 uid="uid://bjy34o0nbhbc3"]
 
-[ext_resource type="Script" path="res://10_BOARD/Behaviour/Movable_paper.tres.gd" id="1_4v3k2"]
-[ext_resource type="Script" path="res://10_BOARD/Behaviour/Apply_pos_anim.gd" id="2_linhc"]
-[ext_resource type="Texture2D" uid="uid://kaln43e5c5my" path="res://10_BOARD/Map/Map_board_test.png" id="3_gbywh"]
-
-[sub_resource type="GDScript" id="GDScript_vq4md"]
-script/source = "extends Node
-
-@export var _legend : String
-
-func set_legend(legend : String):
-	_legend = legend	
-
-func get_legend():
-	return _legend
-"
+[ext_resource type="Texture2D" uid="uid://kaln43e5c5my" path="res://12_INVENTORY/Map/Map_board_test.png" id="3_gbywh"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_icff5"]
 
@@ -508,36 +494,13 @@ shader_parameter/ColorParameter = Color(0.0666667, 0.258824, 0.286275, 1)
 shader_parameter/Color2 = Color(0.721569, 0.792157, 0.8, 1)
 shader_parameter/Grid_color = Color(0.517647, 0.607843, 0.619608, 1)
 shader_parameter/Offset = Vector2(0, 0)
-shader_parameter/Size = Vector2(2000, 2000)
-shader_parameter/Ligne_widht = 0.03
-
-[sub_resource type="GDScript" id="GDScript_y5o0k"]
-script/source = "extends Node
-
-signal  move_behind
-
-
-func _move_behind():
-	move_behind.emit()
-"
+shader_parameter/Size = Vector2(1000, 1000)
+shader_parameter/Ligne_widht = 0.045
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_epdke"]
 size = Vector2(653, 656)
 
 [node name="Map" type="Node2D"]
-
-[node name="Take_object" type="Node" parent="."]
-script = ExtResource("1_4v3k2")
-
-[node name="Apply_pos_anim" type="Node" parent="."]
-script = ExtResource("2_linhc")
-
-[node name="Show_map_grid" type="Node" parent="."]
-
-[node name="Legend" type="Node" parent="."]
-script = SubResource("GDScript_vq4md")
-
-[node name="Not_in_book" type="Node" parent="."]
 
 [node name="shadow" type="ColorRect" parent="."]
 visible = false
@@ -585,13 +548,8 @@ texture = ExtResource("3_gbywh")
 
 [node name="Area2D" type="Area2D" parent="."]
 
-[node name="Apply_pos_behind" type="Node" parent="Area2D"]
-script = SubResource("GDScript_y5o0k")
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+visible = false
 position = Vector2(-0.5, 1)
 shape = SubResource("RectangleShape2D_epdke")
-
-[connection signal="mouse_entered" from="Area2D" to="Take_object" method="_on_area_2d_mouse_entered"]
-[connection signal="mouse_exited" from="Area2D" to="Take_object" method="_on_area_2d_mouse_exited"]
-[connection signal="move_behind" from="Area2D/Apply_pos_behind" to="Apply_pos_anim" method="_on_apply_pos_behind_move_behind"]
+disabled = true
