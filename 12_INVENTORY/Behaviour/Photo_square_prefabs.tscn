@@ -1,6 +1,7 @@
 [gd_scene load_steps=53 format=3 uid="uid://dr7pcue70x0dt"]
 
 [ext_resource type="Script" path="res://12_INVENTORY/Behaviour/Movable_paper.tres.gd" id="1_hutrl"]
+[ext_resource type="Script" path="res://12_INVENTORY/Behaviour/legend.tres.gd" id="2_jvqxf"]
 [ext_resource type="Texture2D" uid="uid://cvgf4l4anpjfx" path="res://12_INVENTORY/Photo/PhotoTest_01 .jpg" id="4_5je6e"]
 
 [sub_resource type="GDScript" id="GDScript_6ohgl"]
@@ -58,18 +59,6 @@ func change_value(value : float):
 	var color_rect = $\"../ColorRect5/Photo\"
 	var _material : Material = color_rect.get_material()
 	_material.set_shader_parameter(\"Denoiser\" , value)
-"
-
-[sub_resource type="GDScript" id="GDScript_qxq3c"]
-script/source = "extends Node
-
-@export var _legend : String
-
-func set_legend(legend : String):
-	_legend = legend	
-
-func get_legend():
-	return _legend
 "
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_l5qlk"]
@@ -626,8 +615,8 @@ script = ExtResource("1_hutrl")
 object_center_marge = Vector2(40, 40)
 
 [node name="Legend" type="Node" parent="."]
-script = SubResource("GDScript_qxq3c")
-_legend = "it's just a photo"
+script = ExtResource("2_jvqxf")
+_legend = "put a legend pls"
 
 [node name="shadow" type="ColorRect" parent="."]
 light_mask = 3

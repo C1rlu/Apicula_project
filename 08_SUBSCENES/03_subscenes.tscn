@@ -472,9 +472,12 @@ func _start_effect(condition):
 	is_round = !is_round
 	material.set_shader_parameter(\"Round_noise\",is_round)
 	
-	var n_position = get_viewport().get_mouse_position()
-	
-	switch_mirror_fx.position = n_position
+	#var n_position = get_viewport().get_mouse_position()
+
+	var camera = _global_datas.Subscene_Camera
+	var player = _global_datas.subbscene_playerPosition
+	var screen_position = camera.unproject_position(player)	
+	switch_mirror_fx.position = screen_position
 	
 	if t:
 		t.kill()

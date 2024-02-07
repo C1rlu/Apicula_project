@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cein0q2eirkay"]
+[gd_scene load_steps=18 format=3 uid="uid://cein0q2eirkay"]
 
 [ext_resource type="Script" path="res://10_BOARD/Board_CamTarget.gd" id="1_janbq"]
 [ext_resource type="PackedScene" uid="uid://dr73p5vs0sixe" path="res://10_BOARD/board_scene.tscn" id="2_6c571"]
@@ -9,6 +9,7 @@ script/source = "extends Node
 
 @export var debug_board = true
 @onready var board_ui = $BOARD_UI
+@onready var camera_xray = $Camera_xray
 
 func _ready():
 	_global_datas.Player_In_Inventory = debug_board
@@ -18,7 +19,7 @@ func _ready():
 func open_inventory(condition : bool):
 	board_ui.visible = condition
 	_global_datas.Player_In_Inventory = condition
-	
+	camera_xray.current = condition
 "
 
 [sub_resource type="GDScript" id="GDScript_00hwt"]
@@ -74,6 +75,96 @@ func _process(_delta):
 	fov = $\"../BOARD_UI/SubViewport/CAM_STATE_BOARD_root2/Camera3D\".fov
 "
 
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_yrkdd"]
+size = Vector2(513.781, 284.487)
+expression = "vec2 n_uv = UV -0.5;
+float d = length(n_uv);
+float c = smoothstep(r,r + feather,d);
+color = vec4(vec3(c),1.0);"
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_fxvjj"]
+input_name = "uv"
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_xdogs"]
+constant = 0.5
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_wb6mp"]
+
+[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_evu1d"]
+function = 31
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_5pf1n"]
+constant = 0.1
+
+[sub_resource type="VisualShader" id="VisualShader_elssd"]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+
+
+
+void fragment() {
+// Input:3
+	vec2 n_out3p0 = UV;
+
+
+// FloatConstant:4
+	float n_out4p0 = 0.500000;
+
+
+// FloatConstant:5
+	float n_out5p0 = 0.000000;
+
+
+	vec4 n_out2p0;
+// Expression:2
+	n_out2p0 = vec4(0.0, 0.0, 0.0, 0.0);
+	{
+		vec2 n_uv = n_out3p0 -0.5;
+		float d = length(n_uv);
+		float c = smoothstep(n_out4p0,n_out4p0 + n_out5p0,d);
+		n_out2p0 = vec4(vec3(c),1.0);
+	}
+
+
+// FloatFunc:6
+	float n_out6p0 = 1.0 - n_out2p0.x;
+
+
+// Output:0
+	COLOR.a = n_out6p0;
+
+
+}
+"
+graph_offset = Vector2(-507.845, 108.253)
+mode = 1
+flags/light_only = false
+nodes/fragment/0/position = Vector2(820, 140)
+nodes/fragment/2/node = SubResource("VisualShaderNodeExpression_yrkdd")
+nodes/fragment/2/position = Vector2(-82.4779, 287.841)
+nodes/fragment/2/size = Vector2(513.781, 284.487)
+nodes/fragment/2/input_ports = "0,3,UV;1,0,r;2,0,feather;"
+nodes/fragment/2/output_ports = "0,5,color;"
+nodes/fragment/2/expression = "vec2 n_uv = UV -0.5;
+float d = length(n_uv);
+float c = smoothstep(r,r + feather,d);
+color = vec4(vec3(c),1.0);"
+nodes/fragment/3/node = SubResource("VisualShaderNodeInput_fxvjj")
+nodes/fragment/3/position = Vector2(-482.478, 227.841)
+nodes/fragment/4/node = SubResource("VisualShaderNodeFloatConstant_xdogs")
+nodes/fragment/4/position = Vector2(-362.478, 387.841)
+nodes/fragment/5/node = SubResource("VisualShaderNodeFloatConstant_wb6mp")
+nodes/fragment/5/position = Vector2(-282.478, 487.841)
+nodes/fragment/6/node = SubResource("VisualShaderNodeFloatFunc_evu1d")
+nodes/fragment/6/position = Vector2(654.179, 36.3039)
+nodes/fragment/7/node = SubResource("VisualShaderNodeFloatConstant_5pf1n")
+nodes/fragment/7/position = Vector2(57.5221, -12.1591)
+nodes/fragment/connections = PackedInt32Array(3, 0, 2, 0, 4, 0, 2, 1, 5, 0, 2, 2, 2, 0, 6, 0, 6, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_blt4p"]
+shader = SubResource("VisualShader_elssd")
+
 [sub_resource type="GDScript" id="GDScript_vi1bh"]
 script/source = "extends Node3D
 
@@ -94,7 +185,7 @@ func _physics_process(_delta):
 
 	if !_global_datas.Player_In_Inventory:
 		return
-			
+
 	var playerPosition = Player_position.transform.origin
 	self.transform.origin = lerp(self.transform.origin, playerPosition + active_target, smooth_speed * _delta)
 "
@@ -175,7 +266,6 @@ fov = 42.0
 script = SubResource("GDScript_y5335")
 
 [node name="BOARD_UI" type="SubViewportContainer" parent="."]
-visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -189,20 +279,29 @@ handle_input_locally = false
 scaling_3d_scale = 0.9
 fsr_sharpness = 2.0
 size = Vector2i(1920, 1080)
-render_target_update_mode = 0
+render_target_update_mode = 4
+
+[node name="ColorRect" type="ColorRect" parent="BOARD_UI/SubViewport"]
+material = SubResource("ShaderMaterial_blt4p")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -12.5
+offset_top = -12.5
+offset_right = 12.5
+offset_bottom = 12.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.862745, 0.784314, 0.603922, 1)
 
 [node name="CAM_STATE_BOARD_root2" type="Node3D" parent="BOARD_UI/SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 21.173, 0.225)
 script = SubResource("GDScript_vi1bh")
 
 [node name="Camera3D" type="Camera3D" parent="BOARD_UI/SubViewport/CAM_STATE_BOARD_root2"]
-transform = Transform3D(1, 0, 0, 0, 0.173648, 0.984808, 0, -0.984808, 0.173648, 0, 0, 0)
-cull_mask = 66
-fov = 42.0
-far = 15.0
-script = SubResource("GDScript_l5hmx")
-
-[node name="Camera3D2" type="Camera3D" parent="BOARD_UI/SubViewport/CAM_STATE_BOARD_root2"]
 transform = Transform3D(1, 0, 0, 0, 0.173648, 0.984808, 0, -0.984808, 0.173648, 0, 0, 0)
 cull_mask = 2
 fov = 42.0

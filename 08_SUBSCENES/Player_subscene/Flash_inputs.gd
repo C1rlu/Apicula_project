@@ -15,6 +15,7 @@ func _input(event):
 		return
 	if event.is_action_pressed("Click"):
 		
+		_global_datas.clock_time_consume -= 3.0
 		_global_datas._take_photo.emit()
 		check_area()
 				

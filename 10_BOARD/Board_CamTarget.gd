@@ -12,7 +12,9 @@ func _process(delta):
 	
 	if !_global_datas.Player_In_Inventory:
 		return
-		
+	if _global_datas.Player_lock_click:
+		return	
+
 	var camera_position = position
 	
 	if Input.is_action_pressed(("move_right")):
