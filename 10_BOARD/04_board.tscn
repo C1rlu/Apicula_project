@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cein0q2eirkay"]
+[gd_scene load_steps=16 format=3 uid="uid://cein0q2eirkay"]
 
 [ext_resource type="Script" path="res://10_BOARD/Board_CamTarget.gd" id="1_janbq"]
 [ext_resource type="PackedScene" uid="uid://dr73p5vs0sixe" path="res://10_BOARD/board_scene.tscn" id="2_6c571"]
@@ -11,6 +11,7 @@ script/source = "extends Node
 @onready var board_ui = $BOARD_UI
 @onready var camera_xray = $Camera_xray
 
+
 func _ready():
 	_global_datas.Player_In_Inventory = debug_board
 	board_ui.visible = debug_board
@@ -20,6 +21,8 @@ func open_inventory(condition : bool):
 	board_ui.visible = condition
 	_global_datas.Player_In_Inventory = condition
 	camera_xray.current = condition
+	
+
 "
 
 [sub_resource type="GDScript" id="GDScript_00hwt"]
@@ -27,33 +30,53 @@ script/source = "extends Node
 
 @onready var Cam : Camera3D = $\"../BOARD_UI/SubViewport/CAM_STATE_BOARD_root2/Camera3D\"
 
-@export var max_zoom = 22
-@export var min_zoom = 42
-
-@export var zoom_speed = 50
 var zoom_value : float
+var zoom_index : int = 1
 
-
+var zoom_target : float = 42
+var t 
 func _ready():
 	zoom_value = Cam.fov	
 	_global_datas.zoom_value = zoom_value
-func _process(delta):
-		
-	if !_global_datas.Player_In_Inventory:
-		return
-		
-	if Input.is_action_pressed(\"Inventory_zoom_in\"):
-		zoom_value -= zoom_speed * delta
-		zoom_value = clamp(zoom_value,max_zoom,min_zoom)	
-		Cam.fov = zoom_value
-		_global_datas.zoom_value = zoom_value
-	if Input.is_action_pressed(\"Inventory_zoom_out\"):
-		zoom_value += zoom_speed * delta	
-		zoom_value = clamp(zoom_value,max_zoom,min_zoom)
-		Cam.fov = zoom_value
-		_global_datas.zoom_value = zoom_value
+
 			
 
+func _input(event):
+	
+	if !_global_datas.Player_In_Inventory:
+		return
+	if event.is_action_pressed(\"Inventory_zoom_in\"):
+		_Zoom(1)
+	if event.is_action_pressed(\"Inventory_zoom_out\"):
+		_Zoom(-1)
+		
+		
+func _Zoom(value : int):
+	
+	zoom_index+=value		
+	
+	zoom_index = clamp(zoom_index,1,3)
+	
+	if zoom_index == 1:
+		zoom_target = 42
+		
+	if zoom_index == 2:
+		zoom_target = 22	
+	if zoom_index == 3:
+		zoom_target = 5	
+		
+	if t:
+		t.kill()
+	t = create_tween()
+	
+	t .tween_method(set_shader_value,zoom_value,zoom_target,0.5)
+
+
+func set_shader_value(value):
+	Cam.fov = value
+	zoom_value = Cam.fov
+	_global_datas.zoom_value = zoom_value
+			
 "
 
 [sub_resource type="GDScript" id="GDScript_y5335"]
@@ -198,59 +221,6 @@ func _ready():
 
 "
 
-[sub_resource type="GDScript" id="GDScript_gxd63"]
-script/source = "extends Area3D
-
-@onready var Camera = $\"../Camera_xray\"
-
-
-@export var y = 6.0
-
-#func _ready():
-	
-	#_global_datas.mouse_raycast.connect(MouseRaycast)
-	
-func _process(delta):
-	
-	if !_global_datas.Player_In_Inventory:
-		return
-
-		
-	MouseRaycast()
-		
-func MouseRaycast():
-	
-	var mousePos = get_viewport().get_mouse_position()
-	var rayLengh = 10.0
-	var from = Camera.project_ray_origin(mousePos)
-	var to = from + Camera.project_ray_normal(mousePos) * rayLengh
-	var space = get_world_3d().direct_space_state
-	var rayQuery = PhysicsRayQueryParameters3D.new()
-	rayQuery.from = from
-	rayQuery.to = to
-	rayQuery.collide_with_areas = true
-	rayQuery.collide_with_bodies = false
-
-	var result = space.intersect_ray(rayQuery)
-
-	if result.is_empty():
-		return
-	
-
-	_global_datas.mouseRaycastPosition = result.position
-
-func _check_name(result):
-		
-	if result:
-		var collider = result.collider
-		var object_name = collider.name
-		print(object_name)
-	
-"
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_63y7c"]
-size = Vector3(1.71357, 0.0473518, 0.953495)
-
 [node name="04_BOARD" type="Node"]
 script = SubResource("GDScript_w13ry")
 debug_board = false
@@ -282,6 +252,7 @@ size = Vector2i(1920, 1080)
 render_target_update_mode = 4
 
 [node name="ColorRect" type="ColorRect" parent="BOARD_UI/SubViewport"]
+visible = false
 material = SubResource("ShaderMaterial_blt4p")
 anchors_preset = 8
 anchor_left = 0.5
@@ -302,7 +273,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 21.173, 0.225)
 script = SubResource("GDScript_vi1bh")
 
 [node name="Camera3D" type="Camera3D" parent="BOARD_UI/SubViewport/CAM_STATE_BOARD_root2"]
-transform = Transform3D(1, 0, 0, 0, 0.173648, 0.984808, 0, -0.984808, 0.173648, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 0.515038, 0.857167, 0, -0.857167, 0.515038, 0, 0, 0.575)
 cull_mask = 2
 fov = 42.0
 far = 15.0
@@ -319,14 +290,3 @@ max_z = 0.5
 
 [node name="Board_scene" parent="." instance=ExtResource("2_6c571")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 0)
-
-[node name="Area3D" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19.9974, 0)
-collision_layer = 256
-collision_mask = 256
-priority = 2
-script = SubResource("GDScript_gxd63")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0209293, -0.010353)
-shape = SubResource("BoxShape3D_63y7c")

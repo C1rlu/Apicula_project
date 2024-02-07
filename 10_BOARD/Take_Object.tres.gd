@@ -1,5 +1,6 @@
 extends RigidBody3D
 
+@export var photo_data : PhotoData
 @export var close_to_eyes_value : float = 0.7
 var _origin_position : Vector3
 var legend
@@ -11,7 +12,7 @@ func _ready():
 	angular_velocity = Vector3.ZERO
 	linear_velocity = Vector3.ZERO
 	_origin_position = global_position		
-	legend = get_node_or_null("legend")
+	legend = get_node_or_null("Legend")
 	
 func show_legend(condition : bool):
 	

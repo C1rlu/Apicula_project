@@ -1,19 +1,9 @@
-[gd_resource type="VisualShader" load_steps=37 format=3 uid="uid://cw0x3o7tvvdcv"]
+[gd_resource type="VisualShader" load_steps=35 format=3 uid="uid://cw0x3o7tvvdcv"]
 
 [ext_resource type="Texture2D" uid="uid://kaln43e5c5my" path="res://12_INVENTORY/Map/Map_board_test.png" id="1_r3etv"]
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_k3wil"]
 parameter_name = "Dark_color"
-
-[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_ytjqe"]
-texture = ExtResource("1_r3etv")
-
-[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_vsmuy"]
-default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(0, 0, 0), 2, Vector3(0.5, 0.5, 0.5)]
-op_type = 3
-
-[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_yubsy"]
-parameter_name = "Light_map_color"
 
 [sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_ro7ck"]
 input_name = "attenuation"
@@ -142,6 +132,9 @@ parameter_name = "Grid_color"
 default_value_enabled = true
 default_value = Color(0.470642, 0.389814, 0.0971986, 1)
 
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_ihiv7"]
+parameter_name = "Dark_color2"
+
 [sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_o234q"]
 
 [sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_gokhj"]
@@ -160,6 +153,7 @@ code = "shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx;
 
 uniform vec4 Dark_color : source_color;
+uniform vec4 Dark_color2 : source_color;
 uniform vec4 Color : source_color = vec4(0.575368, 0.573518, 0.000000, 1.000000);
 uniform vec4 Color2 : source_color = vec4(0.470642, 0.389814, 0.097199, 1.000000);
 uniform sampler2D tex_lgt_14;
@@ -182,6 +176,10 @@ void fragment() {
 }
 
 void light() {
+// ColorParameter:46
+	vec4 n_out46p0 = Dark_color2;
+
+
 // ColorParameter:15
 	vec4 n_out15p0 = Color;
 
@@ -242,8 +240,7 @@ void light() {
 
 
 // Mix:16
-	vec3 n_in16p0 = vec3(0.00000, 0.00000, 0.00000);
-	vec3 n_out16p0 = mix(n_in16p0, vec3(n_out15p0.xyz), vec3(n_out5p0));
+	vec3 n_out16p0 = mix(vec3(n_out46p0.xyz), vec3(n_out15p0.xyz), vec3(n_out5p0));
 
 
 // ColorParameter:20
@@ -362,15 +359,10 @@ void light() {
 
 }
 "
+graph_offset = Vector2(-619.968, -109.946)
 nodes/fragment/3/node = SubResource("VisualShaderNodeColorParameter_k3wil")
 nodes/fragment/3/position = Vector2(-340, -60)
-nodes/fragment/4/node = SubResource("VisualShaderNodeTexture_ytjqe")
-nodes/fragment/4/position = Vector2(-520, 280)
-nodes/fragment/5/node = SubResource("VisualShaderNodeMix_vsmuy")
-nodes/fragment/5/position = Vector2(120, 80)
-nodes/fragment/6/node = SubResource("VisualShaderNodeColorParameter_yubsy")
-nodes/fragment/6/position = Vector2(-304.107, 125.071)
-nodes/fragment/connections = PackedInt32Array(4, 0, 5, 2, 3, 0, 5, 0, 6, 0, 5, 1, 3, 0, 0, 0)
+nodes/fragment/connections = PackedInt32Array(3, 0, 0, 0)
 nodes/light/0/position = Vector2(2920, 40)
 nodes/light/2/node = SubResource("VisualShaderNodeFloatConstant_dlkxv")
 nodes/light/2/position = Vector2(-2500, 920)
@@ -481,4 +473,6 @@ nodes/light/44/node = SubResource("VisualShaderNodeMix_bswln")
 nodes/light/44/position = Vector2(2268.66, 83.1678)
 nodes/light/45/node = SubResource("VisualShaderNodeColorParameter_evsas")
 nodes/light/45/position = Vector2(1780, -180)
-nodes/light/connections = PackedInt32Array(6, 0, 7, 0, 7, 0, 8, 0, 9, 0, 7, 1, 8, 0, 11, 0, 10, 0, 11, 1, 2, 0, 4, 1, 3, 0, 4, 0, 4, 0, 5, 0, 5, 0, 16, 2, 15, 0, 16, 1, 11, 0, 5, 1, 17, 0, 19, 1, 18, 0, 19, 0, 22, 0, 21, 2, 20, 0, 21, 1, 19, 0, 22, 0, 14, 0, 22, 1, 16, 0, 21, 0, 34, 0, 33, 1, 37, 0, 33, 3, 35, 0, 33, 0, 36, 0, 33, 2, 39, 0, 33, 4, 40, 0, 42, 1, 41, 0, 42, 0, 33, 0, 43, 1, 42, 0, 43, 0, 43, 0, 44, 2, 44, 0, 0, 1, 21, 0, 44, 0, 45, 0, 44, 1)
+nodes/light/46/node = SubResource("VisualShaderNodeColorParameter_ihiv7")
+nodes/light/46/position = Vector2(-1340, 20)
+nodes/light/connections = PackedInt32Array(6, 0, 7, 0, 7, 0, 8, 0, 9, 0, 7, 1, 8, 0, 11, 0, 10, 0, 11, 1, 2, 0, 4, 1, 3, 0, 4, 0, 4, 0, 5, 0, 5, 0, 16, 2, 15, 0, 16, 1, 11, 0, 5, 1, 17, 0, 19, 1, 18, 0, 19, 0, 22, 0, 21, 2, 20, 0, 21, 1, 19, 0, 22, 0, 14, 0, 22, 1, 16, 0, 21, 0, 34, 0, 33, 1, 37, 0, 33, 3, 35, 0, 33, 0, 36, 0, 33, 2, 39, 0, 33, 4, 40, 0, 42, 1, 41, 0, 42, 0, 33, 0, 43, 1, 42, 0, 43, 0, 43, 0, 44, 2, 44, 0, 0, 1, 21, 0, 44, 0, 45, 0, 44, 1, 46, 0, 16, 0)
