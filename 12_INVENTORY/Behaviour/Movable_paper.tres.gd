@@ -18,7 +18,7 @@ func _ready():
 	change_photo = get_node_or_null("../Change_photo")
 	legend = get_node_or_null("../Legend")
 
-	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+
 	
 	if _global_datas.Npc_Dialogue != null:
 		_Zoom_Object(true)
