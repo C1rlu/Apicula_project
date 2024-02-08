@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=3 uid="uid://dr7pcue70x0dt"]
+[gd_scene load_steps=46 format=3 uid="uid://dr7pcue70x0dt"]
 
 [ext_resource type="Script" path="res://12_INVENTORY/Behaviour/Movable_paper.tres.gd" id="1_hutrl"]
 [ext_resource type="Script" path="res://12_INVENTORY/Behaviour/legend.tres.gd" id="2_jvqxf"]
@@ -379,29 +379,6 @@ Dither_Node = In - DITHER_THRESHOLDS[index];"
 
 [sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_aikbk"]
 
-[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_725la"]
-source = 5
-
-[sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_bbw4w"]
-parameter_name = "Noise"
-texture_repeat = 1
-
-[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_hq5eh"]
-default_input_values = [1, Vector2(1, 0.5), 2, Vector2(0, 0)]
-function = 1
-
-[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_45gpv"]
-default_input_values = [0, 0.0, 1, 1.0, 2, -4.85]
-
-[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_2f7eg"]
-function = 1
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_7toox"]
-constant = 1.0
-
-[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_e5kg8"]
-function = 31
-
 [sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_5u3d4"]
 size = Vector2(724.789, 654.559)
 expression = "const float DITHER_THRESHOLDS[16] ={
@@ -522,7 +499,7 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-1446.47, 3.5986)
+graph_offset = Vector2(-608.823, -233.726)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(1220, 340)
@@ -582,26 +559,12 @@ int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
 nodes/fragment/38/node = SubResource("VisualShaderNodeStep_aikbk")
 nodes/fragment/38/position = Vector2(420, 780)
-nodes/fragment/39/node = SubResource("VisualShaderNodeTexture_725la")
-nodes/fragment/39/position = Vector2(-1620, 480)
-nodes/fragment/40/node = SubResource("VisualShaderNodeTexture2DParameter_bbw4w")
-nodes/fragment/40/position = Vector2(-2480, 540)
-nodes/fragment/41/node = SubResource("VisualShaderNodeUVFunc_hq5eh")
-nodes/fragment/41/position = Vector2(-2540, 260)
-nodes/fragment/42/node = SubResource("VisualShaderNodeMix_45gpv")
-nodes/fragment/42/position = Vector2(-1080, 620)
-nodes/fragment/43/node = SubResource("VisualShaderNodeUVFunc_2f7eg")
-nodes/fragment/43/position = Vector2(-2100, 300)
-nodes/fragment/44/node = SubResource("VisualShaderNodeFloatConstant_7toox")
-nodes/fragment/44/position = Vector2(-2420, 440)
-nodes/fragment/45/node = SubResource("VisualShaderNodeFloatFunc_e5kg8")
-nodes/fragment/45/position = Vector2(-1600, 800)
-nodes/fragment/connections = PackedInt32Array(3, 0, 5, 1, 17, 0, 18, 2, 2, 0, 7, 0, 8, 0, 7, 1, 7, 0, 0, 0, 18, 0, 19, 0, 32, 0, 31, 1, 33, 0, 5, 0, 35, 0, 37, 1, 19, 0, 38, 0, 38, 0, 7, 2, 24, 0, 37, 0, 40, 0, 39, 2, 43, 0, 39, 0, 44, 0, 43, 1, 39, 0, 42, 0, 37, 0, 38, 1, 5, 0, 31, 0, 31, 0, 19, 1)
+nodes/fragment/connections = PackedInt32Array(3, 0, 5, 1, 17, 0, 18, 2, 2, 0, 7, 0, 8, 0, 7, 1, 7, 0, 0, 0, 18, 0, 19, 0, 32, 0, 31, 1, 33, 0, 5, 0, 35, 0, 37, 1, 19, 0, 38, 0, 38, 0, 7, 2, 24, 0, 37, 0, 37, 0, 38, 1, 5, 0, 31, 0, 31, 0, 19, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_idu35"]
 resource_local_to_scene = true
 shader = SubResource("VisualShader_n63tb")
-shader_parameter/Denoiser = 1.5
+shader_parameter/Denoiser = 1.0
 shader_parameter/Photo = ExtResource("4_5je6e")
 
 [node name="Photo_Square_prefabs" type="Node2D"]

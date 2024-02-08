@@ -1,0 +1,214 @@
+[gd_scene load_steps=23 format=3 uid="uid://uwg2qc3svu11"]
+
+[ext_resource type="Resource" uid="uid://bcid58kxecbk2" path="res://12_INVENTORY/Photo/Maurice_photoData.tres" id="1_2tgng"]
+[ext_resource type="Script" path="res://10_BOARD/Take_Object.tres.gd" id="2_vdbne"]
+[ext_resource type="Shader" uid="uid://upo0fuo5sqgd" path="res://05_SHADER_TEST/Board/Board_sh.tres" id="3_ysgwd"]
+[ext_resource type="Material" uid="uid://25obtp1blkk6" path="res://05_SHADER_TEST/Board/board_photo_texture.tres" id="4_0radc"]
+
+[sub_resource type="GDScript" id="GDScript_2oe2p"]
+script/source = "extends Area3D
+
+@export var photo_data : PhotoData
+"
+
+[sub_resource type="GDScript" id="GDScript_32kbr"]
+script/source = "extends Node
+
+@onready var select_this = $\"../Select_this\"
+
+@onready var photo = $\"../photo\"
+
+@onready var material : Material = photo.get_surface_override_material(0)
+
+func _ready():
+	
+	var texture_data = select_this.photo_data.image
+	material.set_shader_parameter(\"Texture\",texture_data)
+"
+
+[sub_resource type="QuadMesh" id="QuadMesh_2j3jf"]
+
+[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_53wbb"]
+function = 31
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_025qg"]
+constant = 0.4
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_5qx1q"]
+constant = 1.0
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_ijvmg"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_7m0jy"]
+constant = Color(0.84, 0.5376, 0.168, 1)
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_13c7n"]
+
+[sub_resource type="Gradient" id="Gradient_754lt"]
+offsets = PackedFloat32Array(0.779817, 0.825688, 0.926606, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.0962047, 0.0962048, 0.0962047, 1, 0.310617, 0.310617, 0.310617, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_l3nfd"]
+gradient = SubResource("Gradient_754lt")
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.91453, 0.106838)
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_vcijt"]
+texture = SubResource("GradientTexture2D_l3nfd")
+
+[sub_resource type="VisualShader" id="VisualShader_jlr7g"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded, shadows_disabled;
+
+uniform sampler2D tex_frg_9;
+
+
+
+void fragment() {
+// ColorConstant:5
+	vec4 n_out5p0 = vec4(0.840000, 0.537600, 0.168000, 1.000000);
+
+
+// Texture2D:9
+	vec4 n_out9p0 = texture(tex_frg_9, UV);
+
+
+// FloatFunc:10
+	float n_out10p0 = 1.0 - n_out9p0.x;
+
+
+// FloatConstant:3
+	float n_out3p0 = 1.000000;
+
+
+// FloatConstant:2
+	float n_out2p0 = 0.400000;
+
+
+	float n_out4p0;
+// Expression:4
+	n_out4p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out2p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out4p0 = n_out3p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Step:8
+	float n_out8p0 = step(n_out10p0, n_out4p0);
+
+
+// Output:0
+	ALBEDO = vec3(n_out5p0.xyz);
+	ALPHA = n_out8p0;
+
+
+}
+"
+graph_offset = Vector2(-320.202, -279.115)
+flags/unshaded = true
+flags/shadows_disabled = true
+nodes/fragment/0/position = Vector2(680, 20)
+nodes/fragment/2/node = SubResource("VisualShaderNodeFloatConstant_025qg")
+nodes/fragment/2/position = Vector2(-708.999, 749.102)
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_5qx1q")
+nodes/fragment/3/position = Vector2(-708.999, 609.102)
+nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_ijvmg")
+nodes/fragment/4/position = Vector2(-408.999, 729.102)
+nodes/fragment/4/size = Vector2(724.789, 654.559)
+nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/4/output_ports = "0,0,Dither_Node;"
+nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/5/node = SubResource("VisualShaderNodeColorConstant_7m0jy")
+nodes/fragment/5/position = Vector2(331.001, -290.898)
+nodes/fragment/8/node = SubResource("VisualShaderNodeStep_13c7n")
+nodes/fragment/8/position = Vector2(353.087, -105.897)
+nodes/fragment/9/node = SubResource("VisualShaderNodeTexture_vcijt")
+nodes/fragment/9/position = Vector2(-360, -260)
+nodes/fragment/10/node = SubResource("VisualShaderNodeFloatFunc_53wbb")
+nodes/fragment/10/position = Vector2(59.7326, -196.358)
+nodes/fragment/connections = PackedInt32Array(2, 0, 4, 1, 3, 0, 4, 0, 4, 0, 8, 1, 8, 0, 0, 1, 5, 0, 0, 0, 9, 0, 10, 0, 10, 0, 8, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v4xfe"]
+render_priority = 0
+shader = SubResource("VisualShader_jlr7g")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pyl61"]
+render_priority = 0
+shader = ExtResource("3_ysgwd")
+shader_parameter/Dark_color = Color(0.423529, 0.380392, 0, 1)
+shader_parameter/light_color = Color(0.741176, 0.670588, 0.490196, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_8e2mh"]
+material = SubResource("ShaderMaterial_pyl61")
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_dx6do"]
+radius = 0.0472554
+
+[sub_resource type="QuadMesh" id="QuadMesh_ewu27"]
+resource_local_to_scene = true
+
+[node name="Photo_area" type="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.00272226, 0)
+script = SubResource("GDScript_2oe2p")
+photo_data = ExtResource("1_2tgng")
+
+[node name="Select_this" type="Node" parent="."]
+script = ExtResource("2_vdbne")
+
+[node name="texture" type="Node" parent="."]
+script = SubResource("GDScript_32kbr")
+
+[node name="IS_SELECT" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.0994027, 0, 0, 0, -4.34503e-09, 0.0994027, 0, -0.0994027, -4.34503e-09, 0, 0.00213066, 0)
+visible = false
+layers = 2
+mesh = SubResource("QuadMesh_2j3jf")
+surface_material_override/0 = SubResource("ShaderMaterial_v4xfe")
+
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.0682586, 0, 0, 0, 0.00230959, 0, 0, 0, 0.0682586, 0, 0, 0)
+layers = 2
+mesh = SubResource("BoxMesh_8e2mh")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_dx6do")
+
+[node name="photo" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.0598443, 0, 0, 0, -2.61588e-09, 0.0598444, 0, -0.0598443, -2.61588e-09, 0.000475392, 0.00130028, 0)
+layers = 2
+mesh = SubResource("QuadMesh_ewu27")
+skeleton = NodePath("")
+surface_material_override/0 = ExtResource("4_0radc")
+
+[connection signal="input_event" from="." to="Select_this" method="_on_input_event"]

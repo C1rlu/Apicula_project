@@ -77,6 +77,10 @@ var In_Front_Node : Node2D
 var clock_time_consume : float
 var bougie_node : Node2D
 
+#update description on board
+signal show_board_description(condition : bool, _text: String)
+
+
 # BOOK PAGEqs
 signal  book_is_open(condition : bool)
 var Book_page_index : int

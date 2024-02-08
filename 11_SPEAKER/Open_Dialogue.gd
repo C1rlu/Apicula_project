@@ -16,6 +16,7 @@ func _ready():
 	_global_datas._show_dialogue_box.connect(_show_dialogue_box)
 	_global_datas._hide_dialogue_box.connect(_hide_dialogue_box)
 	npc_convas.visible = false
+	
 func _hide_dialogue_box():
 	dialogue_box.visible = false	
 	

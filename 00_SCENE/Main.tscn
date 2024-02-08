@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://cb8k68mtsigvd"]
+[gd_scene load_steps=14 format=3 uid="uid://cb8k68mtsigvd"]
 
 [ext_resource type="Script" path="res://00_SYSTEMS/Global_datas.gd" id="1_64l51"]
 [ext_resource type="Script" path="res://06_UI/Color_management/Color_Managers.gd" id="3_r6ky2"]
@@ -54,16 +54,6 @@ func _input(event):
 		_global_datas.player_active_tools.emit(false)
 "
 
-[sub_resource type="GDScript" id="GDScript_j70qp"]
-script/source = "extends Node
-
-@export var resolution : Vector2
-
-func _ready():
-	ProjectSettings.set_setting(\"display/window/size/width\",resolution.x)
-	ProjectSettings.set_setting(\"display/window/size/height\",resolution.y)   
-"
-
 [node name="Main" type="Node"]
 metadata/_edit_horizontal_guides_ = [-31.0]
 
@@ -81,11 +71,8 @@ one_shot = true
 
 [node name="DEBUG_STATE" type="Node" parent="01_GAME_MANAGERS"]
 script = SubResource("GDScript_gl82p")
+lock_fps = true
 fps_target = 120
-
-[node name="Resolution" type="Node" parent="01_GAME_MANAGERS"]
-script = SubResource("GDScript_j70qp")
-resolution = Vector2(1920, 1080)
 
 [node name="Color_Managers" type="Node" parent="01_GAME_MANAGERS"]
 script = ExtResource("3_r6ky2")
