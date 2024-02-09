@@ -17,7 +17,7 @@ func _ready():
 	subscene_reset_position = _all_cam_array[0].transform.origin
 	# global move
 	_global_datas._go_Subscene.connect(can_move)
-	_global_datas._backFrom_subscene.connect(cant_move)
+	#_global_datas._backFrom_subscene.connect(cant_move)
 	
 	
 func _physics_process(_delta):

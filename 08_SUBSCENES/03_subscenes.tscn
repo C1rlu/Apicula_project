@@ -1,4 +1,4 @@
-[gd_scene load_steps=87 format=3 uid="uid://nigmie4bbn6"]
+[gd_scene load_steps=90 format=3 uid="uid://nigmie4bbn6"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/Grid_scene/Subscene_loader.gd" id="1_7uoo0"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="2_3srhu"]
@@ -9,56 +9,73 @@
 [ext_resource type="Material" uid="uid://dbu2q4lhlk8w5" path="res://05_SHADER_TEST/Full_screen/Subscene_screen/Main_subscene_dither.tres" id="3_w42nb"]
 [ext_resource type="Material" uid="uid://b7ffjkgpmtkc6" path="res://05_SHADER_TEST/Full_screen/Subscene_screen/Scanner_x_subscene_dither.tres" id="4_bkck3"]
 [ext_resource type="Texture2D" uid="uid://d31xi5f7tan5w" path="res://05_SHADER_TEST/Full_screen/Dither_pattners/Blue_noise/HDR_LA_7.png" id="8_yirv7"]
+[ext_resource type="PackedScene" uid="uid://clc3sbquuu1us" path="res://12_INVENTORY/Clock_montre/Clock_oxygene_prefab.tscn" id="10_hp7pm"]
 
-[sub_resource type="GDScript" id="GDScript_yjydq"]
+[sub_resource type="GDScript" id="GDScript_btuws"]
 script/source = "extends Node
 
 @onready var subscenes_cam_scene = $\"../Viewport/Main\"
+@onready var timer = $Timer
 
 @onready var material : Material = subscenes_cam_scene.get_material()
 @onready var subscenes_cam_scanner = $\"../Viewport/Scanner\"
 @onready var subscenes_cam_scanner_x = $\"../Viewport/Scanner_x\"
 
-
-var t
-
 func _ready():
 	_global_datas._go_Subscene.connect(_fade_in)
-	_global_datas._go_Mainscene.connect(_fade_out)
 	
 func _fade_in():
-	
 	subscenes_cam_scene.visible = true
 	subscenes_cam_scanner.visible = true
 	subscenes_cam_scanner_x.visible = true
-
+	timer.start()
 	
-	if t:
-		t.kill()
-	t = create_tween()
-	
-	t .tween_method(set_shader_value,0.1,0.0,1.0).set_trans(Tween.TRANS_SINE)
 
+func _process(delta):
+	
+
+	if timer.is_stopped():
+		return
+		
+	var lerp_time = lerp(0.0,1.0, timer.time_left / timer.wait_time)	
+	material.set_shader_parameter(\"Opacity\",lerp_time)	
+
+
+func _on_timer_timeout():
+	timer.stop()
+	
+"
+
+[sub_resource type="GDScript" id="GDScript_4qsuv"]
+script/source = "extends Node
+
+@onready var subscenes_cam_scene = $\"../Viewport/Main\"
+@onready var timer = $Timer
+
+@onready var material : Material = subscenes_cam_scene.get_material()
+@onready var subscenes_cam_scanner = $\"../Viewport/Scanner\"
+@onready var subscenes_cam_scanner_x = $\"../Viewport/Scanner_x\"
+func _ready():
+	_global_datas._go_Mainscene.connect(_fade_out)
+	
 func _fade_out():
-	
+	timer.start()
 	subscenes_cam_scanner.visible = false
 	subscenes_cam_scanner_x.visible = false
-	
-	if t:
-		t.kill()
-	t = create_tween()
-	
-	t .tween_method(set_shader_value,0.0,1.0,1.0).set_trans(Tween.TRANS_SINE)	
 
-	await create_tween().tween_interval(1.0).finished
+func _process(delta):
+	
+	if timer.is_stopped():
+		return
+		
+	var lerp_time = lerp(1.0,0.0, timer.time_left / timer.wait_time)	
+	material.set_shader_parameter(\"Opacity\",lerp_time)	
+
+
+func _on_timer_timeout():
+	timer.stop()
 	subscenes_cam_scene.visible = false
-
-
 	
-
-func set_shader_value(value):
-	material.set_shader_parameter(\"Opacity\",value)
-
 "
 
 [sub_resource type="GDScript" id="GDScript_71vlv"]
@@ -171,6 +188,22 @@ func _set_opacity_value( value : float):
 	material.set_shader_parameter(\"Opacity\",value)	
 
 
+"
+
+[sub_resource type="GDScript" id="GDScript_lh1k0"]
+script/source = "extends Node
+
+@onready var clock = $\"../Clock\"
+
+func _ready():	
+	_global_datas._reseting_clock_active.connect(_show)
+	_global_datas._reseting_clock_disable.connect(_disable)
+	_disable()
+	_global_datas._go_Subscene.connect(_show)
+func _show():
+	clock.visible = true
+func _disable():
+	clock.visible = false
 "
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_gasoh"]
@@ -984,12 +1017,19 @@ script = ExtResource("1_7uoo0")
 metadata/_edit_vertical_guides_ = [960.0]
 metadata/_edit_horizontal_guides_ = [540.0]
 
+[node name="FADE_IN" type="Node" parent="."]
+script = SubResource("GDScript_btuws")
+
+[node name="Timer" type="Timer" parent="FADE_IN"]
+
+[node name="FADE_OUT" type="Node" parent="."]
+script = SubResource("GDScript_4qsuv")
+
+[node name="Timer" type="Timer" parent="FADE_OUT"]
+
 [node name="set_Resolution" type="Node" parent="." node_paths=PackedStringArray("viewports")]
 script = ExtResource("2_3srhu")
 viewports = [NodePath("../Viewport/Main_SubViewport"), NodePath("../Viewport/Scanner_SubViewport"), NodePath("../Viewport/Scanner_x_SubViewport")]
-
-[node name="FADE" type="Node" parent="."]
-script = SubResource("GDScript_yjydq")
 
 [node name="GO_SURFACE" type="Node" parent="."]
 script = SubResource("GDScript_71vlv")
@@ -999,6 +1039,9 @@ script = SubResource("GDScript_opp2i")
 
 [node name="SEE_MIRROR_FLASH" type="Node" parent="."]
 script = SubResource("GDScript_nvaxv")
+
+[node name="Show_Clock" type="Node" parent="."]
+script = SubResource("GDScript_lh1k0")
 
 [node name="Viewport" type="Node" parent="."]
 
@@ -1139,6 +1182,10 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.988235, 0.901961, 0.694118, 1)
 
+[node name="Clock" parent="." instance=ExtResource("10_hp7pm")]
+position = Vector2(978, 150)
+scale = Vector2(1.47323, 1.47323)
+
 [node name="Book_Open_backdrop" type="Node" parent="."]
 script = SubResource("GDScript_03ue1")
 
@@ -1157,4 +1204,6 @@ mouse_filter = 2
 color = Color(0.0156863, 0.0705882, 0.0823529, 1)
 metadata/_edit_use_anchors_ = true
 
+[connection signal="timeout" from="FADE_IN/Timer" to="FADE_IN" method="_on_timer_timeout"]
+[connection signal="timeout" from="FADE_OUT/Timer" to="FADE_OUT" method="_on_timer_timeout"]
 [connection signal="area_shape_entered" from="Surface_trigger" to="GO_SURFACE" method="_on_surface_trigger_area_shape_entered"]
