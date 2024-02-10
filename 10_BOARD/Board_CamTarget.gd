@@ -6,7 +6,7 @@ var speed
 @export var max_x : float = 2.0
 @export var min_z : float = -2.0
 @export var max_z : float = 2.0
-
+var border_ratio : float = 42
 	
 func _process(delta):
 	
@@ -15,12 +15,15 @@ func _process(delta):
 	if _global_datas.Player_lock_click:
 		return	
 
-	if _global_datas.zoom_value == 42:
+	if _global_datas.zoom_value == 1:
 		speed = move_speed
-	if _global_datas.zoom_value == 22:
+		border_ratio = 42
+	if _global_datas.zoom_value == 2:
 		speed = move_speed/2
-	if _global_datas.zoom_value == 5:
-		speed = move_speed / 3
+		border_ratio = 22
+	if _global_datas.zoom_value == 3:
+		speed = move_speed / 4
+		border_ratio = 5
 	var camera_position = position
 	
 	if Input.is_action_pressed(("move_right")):
@@ -32,7 +35,7 @@ func _process(delta):
 	if Input.is_action_pressed(("move_backward")):
 		camera_position.z += speed * delta
 	
-	var lerp_value = (_global_datas.zoom_value - 22.0) / (42.0 - 22.0)	
+	var lerp_value = (border_ratio - 22.0) / (42.0 - 22.0)	
 	var oneminus = lerp(1.0,0.0,lerp_value)
 	
 	camera_position.x = clamp(camera_position.x, oneminus * min_x, oneminus * max_x)

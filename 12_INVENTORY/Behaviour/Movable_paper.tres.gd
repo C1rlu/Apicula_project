@@ -34,10 +34,11 @@ func _input(event):
 		#TO DROP
 		if event.is_action_pressed("Click"):
 			_Zoom_Object(false)
+			_global_datas.book_is_open.emit(false)
 			_global_datas.Player_lock_click = false	
 			_global_datas.lock_page.emit()
 			control.queue_free()
-
+			
 
 func _Zoom_Object(condition:bool):
 	

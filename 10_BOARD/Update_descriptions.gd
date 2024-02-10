@@ -1,7 +1,8 @@
 extends Node
 
-@onready var description = $"../ColorRect2/description"
-@onready var color_rect_2 = $"../ColorRect2"
+
+@onready var description = $"../ColorRec/description"
+@onready var fade = $Fade
 
 
 func _ready():
@@ -9,7 +10,9 @@ func _ready():
 
 func _update_description(condition : bool, _text : String):
 	
-	color_rect_2.visible = condition
 	if condition:
+		
 		description.text = _text	
-	
+		fade._fade(true)
+	else:
+		fade._fade(false)

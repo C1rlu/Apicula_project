@@ -12,6 +12,7 @@ var _is_select : bool = false
 func _ready():
 	photo_data =  $"..".photo_data
 	legend = get_node_or_null("Legend")
+	_global_datas.open_inventory.connect(close_inventory)
 	
 func show_legend(condition : bool):
 	
@@ -28,9 +29,11 @@ func _on_input_event(camera, event, _position, normal, shape_idx):
 	if !_global_datas.Player_In_Inventory:
 		return
 	
+	if _is_select:
+		return
 	if event.is_action_pressed("Click"):
 		
-		_global_datas.Inventory_board_Object_isSelect = true
+	
 		show_legend(true)		
 		_is_select = true	
 		is_select.visible = true	
@@ -41,8 +44,9 @@ func _input(event):
 		if event.is_action_pressed("Click"):		
 			show_legend(false)
 			is_select.visible = false
+			_is_select = false
 
 
-
-
-
+func close_inventory(condition : bool):
+	if !condition:
+		is_select.visible = false

@@ -14,6 +14,11 @@ func _on_open_inventory_button_pressed():
 
 
 func _input(event):
+	
+	
+	if _global_datas.Player_InDialogue:
+		return
+	
 	if event.is_action_pressed(\"Open_Inventory\"):
 		is_open =!is_open
 		_global_datas.open_inventory.emit(is_open)	
@@ -64,7 +69,8 @@ func _intance_photo(photo_Data : PhotoData):
 		
 	#ada photo in global archive
 	_global_datas.photo_archives.append(photo_Data)
-
+	_global_datas.book_is_open.emit(true)
+	
 func check_photo_exist(photo_Data):
 	
 	for photo in _global_datas.photo_archives:
@@ -1418,13 +1424,3 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(0.784314, 0.709804, 0.513726, 1)
-
-[node name="Open_Inventory_Button" type="Button" parent="."]
-offset_left = 1778.0
-offset_top = 89.0
-offset_right = 1920.0
-offset_bottom = 120.0
-text = "Open inventory
-"
-
-[connection signal="pressed" from="Open_Inventory_Button" to="Open_Inventory" method="_on_open_inventory_button_pressed"]

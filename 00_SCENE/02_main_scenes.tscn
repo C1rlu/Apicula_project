@@ -1,4 +1,4 @@
-[gd_scene load_steps=79 format=3 uid="uid://cnmptm7i0xxmj"]
+[gd_scene load_steps=80 format=3 uid="uid://cnmptm7i0xxmj"]
 
 [ext_resource type="PackedScene" uid="uid://vpdvl0v7dubd" path="res://00_PLAYER/Player_boat.tscn" id="1_qltht"]
 [ext_resource type="Script" path="res://06_UI/Fps_counter.gd" id="1_s74e5"]
@@ -14,7 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://crxoyweriianl" path="res://04_SCENE_MAIN_MAP/Grid/grid_map.tscn" id="6_8jesf"]
 [ext_resource type="Material" uid="uid://ctnqf5d3uj1g7" path="res://05_SHADER_TEST/All_Materials/new_standard_material_3d.tres" id="6_vcmny"]
 [ext_resource type="Material" uid="uid://b64juw612xqpu" path="res://05_SHADER_TEST/Sea_sh/Sea_mat.tres" id="7_4y8ld"]
-[ext_resource type="PackedScene" uid="uid://bjy34o0nbhbc3" path="res://12_INVENTORY/Map_ui/Map_ui.tscn" id="8_8ciy6"]
+[ext_resource type="Texture2D" uid="uid://dafg2qvpi6wmk" path="res://06_UI/Loader_circle/Loader_circle.png" id="8_eaeqh"]
 [ext_resource type="PackedScene" uid="uid://dla1534gcagbl" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Pine/pine_prefabs.tscn" id="10_c6r5x"]
 [ext_resource type="PackedScene" uid="uid://cjp6vd8eetmyf" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Iceberg/ice_berg_03.tscn" id="10_h0nl5"]
 [ext_resource type="PackedScene" uid="uid://cegdqm3et2y35" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Iceberg/ice_berg_02.tscn" id="11_086vv"]
@@ -56,7 +56,7 @@ script/source = "extends Node
 func _ready():
 	_global_datas._end_ini_subscene.connect(_disable_main)
 	_global_datas._backFrom_subscene.connect(_active_main)
-	_global_datas.open_inventory.connect(active_main)
+	#_global_datas.open_inventory.connect(active_main)
 
 
 func active_main(conditon : bool):
@@ -549,6 +549,50 @@ func _active():
 [sub_resource type="SphereShape3D" id="SphereShape3D_yt2xy"]
 radius = 0.990634
 
+[sub_resource type="GDScript" id="GDScript_mdv56"]
+script/source = "extends Node
+
+@onready var timer = $Timer
+@onready var go_subscene_progress = $\"..\"
+
+
+func _ready():
+	_global_datas._reseting_clock_active.connect(_active_reset)
+	_global_datas._reseting_clock_disable.connect(_disable_reset)
+
+		
+func _active_reset():
+	_start_clock()
+
+func _disable_reset():
+	_stop_clock()
+
+func _process(delta):
+	
+	if timer.is_stopped():
+		return		
+	_update_clock()
+	
+
+func _update_clock():
+	var timeConvert = 1 - (timer.time_left / timer.wait_time ) 
+	go_subscene_progress.value = lerp(0.0,100.0,timeConvert)
+	
+func _start_clock():
+	go_subscene_progress.value = 0.0
+	timer.start()
+	
+func _stop_clock():
+	
+	timer.stop()
+	go_subscene_progress.value = 0.0
+	
+func _on_timer_timeout():
+	_global_datas._reseting_clock_disable.emit()
+	go_subscene_progress.value = 0.0
+	_global_datas._go_Subscene.emit()
+"
+
 [sub_resource type="GDScript" id="GDScript_i66w8"]
 script/source = "extends Node
 "
@@ -952,6 +996,30 @@ script = SubResource("GDScript_q85y0")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player_Boat/Area3D"]
 shape = SubResource("SphereShape3D_yt2xy")
 
+[node name="Go_subscene_progress" type="TextureProgressBar" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -3.0
+offset_top = -87.0
+offset_right = 61.0
+offset_bottom = -23.0
+grow_horizontal = 2
+grow_vertical = 2
+fill_mode = 4
+nine_patch_stretch = true
+texture_under = ExtResource("8_eaeqh")
+texture_progress = ExtResource("8_eaeqh")
+tint_under = Color(0.658824, 0.470588, 0.27451, 0)
+tint_progress = Color(0.658824, 0.470588, 0.27451, 1)
+
+[node name="GoSubscene_timer" type="Node" parent="Go_subscene_progress"]
+script = SubResource("GDScript_mdv56")
+
+[node name="Timer" type="Timer" parent="Go_subscene_progress/GoSubscene_timer"]
+
 [node name="--DECOR--" type="Node" parent="."]
 
 [node name="GRID_MAP" type="Node" parent="--DECOR--"]
@@ -1171,13 +1239,10 @@ layers = 2048
 mesh = SubResource("BoxMesh_wmrfd")
 skeleton = NodePath("")
 
-[node name="Map" parent="." instance=ExtResource("8_8ciy6")]
-position = Vector2(2048, -18)
-rotation = 0.337729
-
 [connection signal="pressed" from="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue/Button/Push_button" to="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue" method="_on_button_pressed"]
 [connection signal="mouse_entered" from="Player_Boat/Area3D" to="Player_Boat/Area3D" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="Player_Boat/Area3D" to="Player_Boat/Area3D" method="_on_mouse_exited"]
+[connection signal="timeout" from="Go_subscene_progress/GoSubscene_timer/Timer" to="Go_subscene_progress/GoSubscene_timer" method="_on_timer_timeout"]
 [connection signal="area_entered" from="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA" to="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA" method="_on_area_entered"]
 [connection signal="area_exited" from="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA" to="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA" method="_on_area_exited"]
 [connection signal="area_entered" from="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA2" to="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA2" method="_on_area_entered"]
