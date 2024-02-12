@@ -60,10 +60,11 @@ var subbscene_playerPosition : Vector3
 signal _take_photo
 signal _instance_photo(photoData : PhotoData)
 signal _photo_flash
+signal _photo_flash_noPhoto
 signal _teleport_position(position : Vector3)
 signal _find_loot(type : Loot_Data)
 signal _subscene_fail
-
+var flash_subscene_position : Vector3
 
 #board scene
 
@@ -79,7 +80,7 @@ var bougie_node : Node2D
 
 #update description on board
 signal show_board_description(condition : bool, _text: String)
-
+signal focus_this_on_board(target : Vector3)
 
 # BOOK PAGEqs
 signal  book_is_open(condition : bool)

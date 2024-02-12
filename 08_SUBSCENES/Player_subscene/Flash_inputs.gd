@@ -2,21 +2,23 @@ extends Node
 
 
 @onready var area = $"../ZoneCollide"
-var count : int = 0
-
-@onready var on_over_mouse_3d_shape_out = $"../On_Click/On_OverMouse_3D_SHAPE_out"
-
+@onready var timer = $Timer
 
 func _input(event):
+
 
 	if !_global_datas.Player_InSubScene:
 		return
 	if _global_datas.Player_lock_click:
 		return
-	if event.is_action_pressed("Click"):
 		
-		#_global_datas.clock_time_consume -= 3.0
+	if !timer.is_stopped():
+		return
+		
+	if event.is_action_pressed("Click"):
+		timer.start()
 		_global_datas._take_photo.emit()
+		_global_datas._photo_flash_noPhoto.emit()
 		check_area()
 				
 
@@ -49,17 +51,5 @@ func check_area():
 			_global_datas._click_mirror_switch.emit()
 	
 	
-	
-func _on_mouse_over_mouse_entered():
-	#_can_flash = true
-	on_over_mouse_3d_shape_out.visible = true
-
-
-func _on_mouse_over_mouse_exited():
-
-	#_can_flash = false
-	on_over_mouse_3d_shape_out.visible = false
-
-
-
-
+func _on_timer_timeout():
+	timer.stop()

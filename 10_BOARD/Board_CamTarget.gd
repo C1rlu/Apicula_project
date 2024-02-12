@@ -31,7 +31,7 @@ func _process(delta):
 	if Input.is_action_pressed(("move_left")):
 		camera_position.x -= speed * delta	
 	if Input.is_action_pressed(("move_forward")):
-		camera_position.z -= speed * delta
+		camera_position.z -= speed * delta	
 	if Input.is_action_pressed(("move_backward")):
 		camera_position.z += speed * delta
 	

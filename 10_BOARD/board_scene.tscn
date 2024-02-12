@@ -1,13 +1,15 @@
-[gd_scene load_steps=110 format=3 uid="uid://dr73p5vs0sixe"]
+[gd_scene load_steps=111 format=3 uid="uid://dr73p5vs0sixe"]
 
+[ext_resource type="Script" path="res://10_BOARD/photos_check.gd" id="1_bcxwj"]
 [ext_resource type="PackedScene" uid="uid://uwg2qc3svu11" path="res://10_BOARD/photo_area.tscn" id="1_mtaom"]
+[ext_resource type="Resource" uid="uid://bcid58kxecbk2" path="res://12_INVENTORY/Photo/Maurice_photoData.tres" id="1_u1hyr"]
 [ext_resource type="Texture2D" uid="uid://6cpkqsxbg2g8" path="res://09_NPC/Npc_data/Photo/Guy_01.png" id="2_b7o77"]
 [ext_resource type="Script" path="res://12_INVENTORY/Photo/Photo_data.gd" id="3_341ug"]
 [ext_resource type="Shader" uid="uid://cw0x3o7tvvdcv" path="res://12_INVENTORY/Map/Map_board_sh.tres" id="3_vh83x"]
 [ext_resource type="Script" path="res://10_BOARD/Player_onMap.gd" id="3_xuqip"]
 [ext_resource type="Resource" uid="uid://cooqi0giysm3w" path="res://12_INVENTORY/Photo/MrBirs_photoData.tres" id="4_t8cpb"]
-[ext_resource type="Texture2D" uid="uid://cvgf4l4anpjfx" path="res://12_INVENTORY/Photo/PhotoTest_01 .jpg" id="5_eq7tg"]
 [ext_resource type="Material" uid="uid://5cye33kgwfo5" path="res://10_BOARD/Shading/Board_shading_base.tres" id="6_kkuc8"]
+[ext_resource type="Resource" uid="uid://biu8liyknqiid" path="res://12_INVENTORY/Photo/MomieTest_photoData.tres" id="7_ivygn"]
 [ext_resource type="Material" uid="uid://25obtp1blkk6" path="res://05_SHADER_TEST/Board/board_photo_texture.tres" id="9_if8vc"]
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_a7r33"]
@@ -573,42 +575,36 @@ material = SubResource("ShaderMaterial_ism1w")
 size = Vector2(1.21, 0.795)
 
 [sub_resource type="Resource" id="Resource_223f0"]
-resource_local_to_scene = true
 script = ExtResource("3_341ug")
 image = ExtResource("2_b7o77")
 legend = "Maurice the normal guy"
 name = "SetaName"
 
 [sub_resource type="Resource" id="Resource_1ix77"]
-resource_local_to_scene = true
 script = ExtResource("3_341ug")
 image = ExtResource("2_b7o77")
 legend = "Maurice the normal guy"
 name = "SetaName"
 
 [sub_resource type="Resource" id="Resource_gwwl5"]
-resource_local_to_scene = true
 script = ExtResource("3_341ug")
 image = ExtResource("2_b7o77")
 legend = "Maurice the normal guy"
 name = "SetaName"
 
 [sub_resource type="Resource" id="Resource_2l38e"]
-resource_local_to_scene = true
 script = ExtResource("3_341ug")
 image = ExtResource("2_b7o77")
 legend = "Maurice the normal guy"
 name = "SetaName"
 
 [sub_resource type="Resource" id="Resource_fvfov"]
-resource_local_to_scene = true
 script = ExtResource("3_341ug")
 image = ExtResource("2_b7o77")
 legend = "Maurice the normal guy"
 name = "SetaName"
 
 [sub_resource type="Resource" id="Resource_knpbj"]
-resource_local_to_scene = true
 script = ExtResource("3_341ug")
 image = ExtResource("2_b7o77")
 legend = "Maurice the normal guy"
@@ -620,13 +616,6 @@ script = ExtResource("3_341ug")
 image = ExtResource("2_b7o77")
 legend = "Maurice the normal guy"
 name = "SetaName"
-
-[sub_resource type="Resource" id="Resource_13tle"]
-resource_local_to_scene = true
-script = ExtResource("3_341ug")
-image = ExtResource("5_eq7tg")
-legend = "Seems to beLOLOLO"
-name = "AHAHAHAH"
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_w37s1"]
 parameter_name = "Dark_color"
@@ -945,41 +934,46 @@ layers = 2
 mesh = SubResource("PlaneMesh_y3u42")
 skeleton = NodePath("../../..")
 
-[node name="Photo_area" parent="." instance=ExtResource("1_mtaom")]
+[node name="photos" type="Node3D" parent="."]
 transform = Transform3D(0.882135, 0, -0.470996, 0, 1, 0, 0.470996, 0, 0.882135, 0.16492, 0.00272226, 0.0156601)
+script = ExtResource("1_bcxwj")
+test_data = ExtResource("1_u1hyr")
+
+[node name="Photo_area" parent="photos" instance=ExtResource("1_mtaom")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
 photo_data = SubResource("Resource_223f0")
 
-[node name="Photo_area4" parent="." instance=ExtResource("1_mtaom")]
-transform = Transform3D(0.882135, 0, -0.470996, 0, 1, 0, 0.470996, 0, 0.882135, 0.322872, 0.00677434, 0.0901733)
+[node name="Photo_area4" parent="photos" instance=ExtResource("1_mtaom")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0.174431, 0.00405208, -0.00866407)
 photo_data = SubResource("Resource_1ix77")
 
-[node name="Photo_area5" parent="." instance=ExtResource("1_mtaom")]
-transform = Transform3D(0.994891, 0, -0.100952, 0, 1, 0, 0.100952, 0, 0.994891, 0.31764, 0.00677434, 0.173661)
+[node name="Photo_area5" parent="photos" instance=ExtResource("1_mtaom")]
+transform = Transform3D(0.925177, 0, 0.379537, 0, 1, 0, -0.379537, 0, 0.925177, 0.209138, 0.00405208, 0.0674477)
 photo_data = SubResource("Resource_gwwl5")
 
-[node name="Photo_area6" parent="." instance=ExtResource("1_mtaom")]
-transform = Transform3D(0.994891, 0, -0.100952, 0, 1, 0, 0.100952, 0, 0.994891, 0.387103, 0.00677434, 0.172269)
+[node name="Photo_area6" parent="photos" instance=ExtResource("1_mtaom")]
+transform = Transform3D(0.925177, 0, 0.379537, 0, 1, 0, -0.379537, 0, 0.925177, 0.269758, 0.00405208, 0.0335029)
 photo_data = SubResource("Resource_2l38e")
 
-[node name="Photo_area7" parent="." instance=ExtResource("1_mtaom")]
-transform = Transform3D(0.994891, 0, -0.100952, 0, 1, 0, 0.100952, 0, 0.994891, 0.407239, 0.00677434, 0.0874177)
+[node name="Photo_area7" parent="photos" instance=ExtResource("1_mtaom")]
+transform = Transform3D(0.925177, 0, 0.379537, 0, 1, 0, -0.379537, 0, 0.925177, 0.247556, 0.00405208, -0.0508314)
 photo_data = SubResource("Resource_fvfov")
 
-[node name="Photo_area8" parent="." instance=ExtResource("1_mtaom")]
-transform = Transform3D(0.994891, 0, -0.100952, 0, 1, 0, 0.100952, 0, 0.994891, 0.353254, 0.00677434, 0.246969)
+[node name="Photo_area8" parent="photos" instance=ExtResource("1_mtaom")]
+transform = Transform3D(0.925177, 0, 0.379537, 0, 1, 0, -0.379537, 0, 0.925177, 0.275082, 0.00405208, 0.115341)
 photo_data = SubResource("Resource_knpbj")
 
-[node name="Photo_area9" parent="." instance=ExtResource("1_mtaom")]
-transform = Transform3D(0.994891, 0, -0.100952, 0, 1, 0, 0.100952, 0, 0.994891, 0.466137, 0.00677434, 0.170952)
+[node name="Photo_area9" parent="photos" instance=ExtResource("1_mtaom")]
+transform = Transform3D(0.925177, 0, 0.379537, 0, 1, 0, -0.379537, 0, 0.925177, 0.338856, 0.00405208, -0.00488357)
 photo_data = SubResource("Resource_gkvg8")
 
-[node name="Photo_area2" parent="." instance=ExtResource("1_mtaom")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.127135, 0.00272226, -0.0640034)
+[node name="Photo_area2" parent="photos" instance=ExtResource("1_mtaom")]
+transform = Transform3D(0.882136, 0, 0.470996, 0, 1, 0, -0.470996, 0, 0.882136, -0.0708527, 0, -0.0524774)
 photo_data = ExtResource("4_t8cpb")
 
-[node name="Photo_area3" parent="." instance=ExtResource("1_mtaom")]
-transform = Transform3D(0.967387, 0, 0.253302, 0, 1, 0, -0.253302, 0, 0.967387, -0.128954, 0.00272226, -0.0855595)
-photo_data = SubResource("Resource_13tle")
+[node name="Photo_area3" parent="photos" instance=ExtResource("1_mtaom")]
+transform = Transform3D(0.734062, 0, 0.679082, 0, 1, 0, -0.679082, 0, 0.734062, -0.306911, 0, 0.0491242)
+photo_data = ExtResource("7_ivygn")
 
 [node name="MeshInstance3D6" type="MeshInstance3D" parent="."]
 transform = Transform3D(7.32638, 0, 0, 0, 0.066768, 0, 0, 0, 5.87268, 0.719096, -0.511143, -1.17145)

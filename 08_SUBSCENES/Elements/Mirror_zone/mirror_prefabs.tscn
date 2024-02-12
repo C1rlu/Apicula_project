@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dym7sjmq33hdc"]
+[gd_scene load_steps=25 format=3 uid="uid://dym7sjmq33hdc"]
 
 [ext_resource type="Material" uid="uid://goq7y1lqdpxa" path="res://05_SHADER_TEST/Subscene_materials/element_subscene_x_ray_VFX_LIGHT.tres" id="3_cb240"]
 
@@ -23,28 +23,119 @@ func _on_mirror_prefabs_area_shape_exited(area_rid, area, area_shape_index, loca
 
 [sub_resource type="SphereMesh" id="SphereMesh_ic6q1"]
 
+[sub_resource type="QuadMesh" id="QuadMesh_vc1pk"]
+
+[sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_gdx7x"]
+parameter_name = "Texture"
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_q35ux"]
+source = 5
+
+[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_dj5jl"]
+function = 31
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_n8164"]
+input_name = "vertex"
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_uq8jc"]
+noise_type = 0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_p2jtc"]
+noise = SubResource("FastNoiseLite_uq8jc")
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_1b6n7"]
+texture = SubResource("NoiseTexture2D_p2jtc")
+
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_xsejj"]
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_r4n20"]
+input_name = "time"
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_pt4pq"]
+constant = 0.01
+
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_ck2c5"]
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_w3tt4"]
+operator = 2
+
+[sub_resource type="VisualShader" id="VisualShader_x7rd3"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+
+uniform sampler2D Texture;
+
+
+
+void fragment() {
+	vec4 n_out3p0;
+// Texture2D:3
+	n_out3p0 = texture(Texture, UV);
+
+
+// FloatFunc:4
+	float n_out4p0 = 1.0 - n_out3p0.x;
+
+
+// Output:0
+	ALPHA = n_out4p0;
+
+
+}
+"
+graph_offset = Vector2(-675.138, -91.7129)
+flags/unshaded = true
+nodes/vertex/2/node = SubResource("VisualShaderNodeInput_n8164")
+nodes/vertex/2/position = Vector2(-500, 460)
+nodes/vertex/3/node = SubResource("VisualShaderNodeTexture_1b6n7")
+nodes/vertex/3/position = Vector2(-560, 20)
+nodes/vertex/4/node = SubResource("VisualShaderNodeVectorOp_xsejj")
+nodes/vertex/4/position = Vector2(80, 180)
+nodes/vertex/5/node = SubResource("VisualShaderNodeInput_r4n20")
+nodes/vertex/5/position = Vector2(-1280, 200)
+nodes/vertex/6/node = SubResource("VisualShaderNodeFloatConstant_pt4pq")
+nodes/vertex/6/position = Vector2(-1320, 380)
+nodes/vertex/7/node = SubResource("VisualShaderNodeUVFunc_ck2c5")
+nodes/vertex/7/position = Vector2(-840, 340)
+nodes/vertex/8/node = SubResource("VisualShaderNodeFloatOp_w3tt4")
+nodes/vertex/8/position = Vector2(-1040, 380)
+nodes/vertex/connections = PackedInt32Array(3, 0, 4, 0, 2, 0, 4, 1, 7, 0, 3, 0, 5, 0, 8, 0, 6, 0, 8, 1, 8, 0, 7, 2)
+nodes/fragment/2/node = SubResource("VisualShaderNodeTexture2DParameter_gdx7x")
+nodes/fragment/2/position = Vector2(-560, 320)
+nodes/fragment/3/node = SubResource("VisualShaderNodeTexture_q35ux")
+nodes/fragment/3/position = Vector2(-200, 400)
+nodes/fragment/4/node = SubResource("VisualShaderNodeFloatFunc_dj5jl")
+nodes/fragment/4/position = Vector2(60, 400)
+nodes/fragment/connections = PackedInt32Array(2, 0, 3, 2, 3, 0, 4, 0, 4, 0, 0, 1)
+
+[sub_resource type="Gradient" id="Gradient_e4d5p"]
+offsets = PackedFloat32Array(0.126068, 0.228632)
+colors = PackedColorArray(0.942823, 0.942823, 0.942823, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_r161g"]
+gradient = SubResource("Gradient_e4d5p")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qy72l"]
+render_priority = 0
+shader = SubResource("VisualShader_x7rd3")
+shader_parameter/Texture = SubResource("GradientTexture2D_r161g")
+
+[sub_resource type="QuadMesh" id="QuadMesh_l2doe"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_6kf2u"]
+gradient = SubResource("Gradient_e4d5p")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5kimp"]
+render_priority = 0
+shader = SubResource("VisualShader_x7rd3")
+shader_parameter/Texture = SubResource("GradientTexture2D_6kf2u")
+
 [sub_resource type="SphereShape3D" id="SphereShape3D_we1hc"]
-radius = 0.155206
-
-[sub_resource type="Curve" id="Curve_s07qd"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.995134, 0.156627), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_lhet1"]
-curve = SubResource("Curve_s07qd")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_vlpxx"]
-emission_shape = 1
-emission_sphere_radius = 0.05
-spread = 180.0
-radial_velocity_min = 0.5
-radial_velocity_max = 0.5
-gravity = Vector3(0, 0, 0)
-scale_min = 0.25
-scale_max = 0.25
-scale_curve = SubResource("CurveTexture_lhet1")
-
-[sub_resource type="SphereMesh" id="SphereMesh_h135x"]
+radius = 0.0156075
 
 [node name="Mirror_prefabs" type="Area3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.444128, -0.47566, 0)
@@ -57,25 +148,27 @@ collision_mask = 4
 script = SubResource("GDScript_tujf2")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.154354, 0, 0, 0, 0.154354, 0, 0, 0, 0.154354, 0, 0, 0)
+transform = Transform3D(0.453683, 0, 0, 0, 0.453683, 0, 0, 0, 0.453683, 0, 0, 0)
 layers = 4096
 mesh = SubResource("SphereMesh_ic6q1")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("3_cb240")
 
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="MeshInstance3D"]
+transform = Transform3D(6.76372, 0, 0, 0, 6.76372, 0, 0, 0, 6.76372, 0, 0, 0)
+layers = 4096
+mesh = SubResource("QuadMesh_vc1pk")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("ShaderMaterial_qy72l")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="MeshInstance3D"]
+transform = Transform3D(5.3996, 0, 0, 0, 5.3996, 0, 0, 0, 5.3996, 0, 0, 0)
+layers = 4096
+mesh = SubResource("QuadMesh_l2doe")
+surface_material_override/0 = SubResource("ShaderMaterial_5kimp")
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_we1hc")
-
-[node name="Mirror_Particule" type="GPUParticles3D" parent="."]
-layers = 4096
-material_override = ExtResource("3_cb240")
-emitting = false
-amount = 25
-lifetime = 0.25
-one_shot = true
-fixed_fps = 12
-process_material = SubResource("ParticleProcessMaterial_vlpxx")
-draw_pass_1 = SubResource("SphereMesh_h135x")
 
 [connection signal="area_shape_entered" from="." to="PLayer_InZone" method="_on_mirror_prefabs_area_shape_entered"]
 [connection signal="area_shape_exited" from="." to="PLayer_InZone" method="_on_mirror_prefabs_area_shape_exited"]

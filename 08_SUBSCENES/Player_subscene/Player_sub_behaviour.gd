@@ -8,6 +8,7 @@ extends RigidBody3D
 var _canMove = false
 
 @onready var PlayerMesh = $Render_mesh
+@onready var light_position = $Render_mesh/Light_Position
 
 
 func _ready():
@@ -40,7 +41,7 @@ func _physics_process(_delta):
 	
 	if _global_datas.Player_InSubScene:
 		_global_datas.subbscene_playerPosition = transform.origin	
-	
+		_global_datas.flash_subscene_position = light_position.global_position
 	
 	if !_canMove:
 		return
@@ -73,7 +74,9 @@ func _physics_process(_delta):
 		linear_velocity = current_velocity
 
 
-	
+func _dash():
+	linear_velocity += linear_velocity * 1.5
+
 func player_dir(_delta, angle,angle_x):
 	
 	var New_rotation = Vector3(angle_x,angle,0.0)

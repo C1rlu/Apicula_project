@@ -9,6 +9,28 @@
 script/source = "extends Area3D
 
 @export var photo_data : PhotoData
+
+@onready var collision_shape_3d = $CollisionShape3D
+@onready var mesh_instance_3d_7 = $MeshInstance3D7
+@onready var photo = $photo
+
+func _ready():
+		_disable_object()
+		
+func _active():
+	collision_shape_3d.disabled = false	
+	mesh_instance_3d_7.visible = true
+	photo.visible = true
+
+
+func _disable_object():
+	
+	collision_shape_3d.disabled = true
+	mesh_instance_3d_7.visible = false
+	photo.visible = false
+
+
+	
 "
 
 [sub_resource type="GDScript" id="GDScript_32kbr"]
@@ -204,6 +226,7 @@ skeleton = NodePath("../..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_dx6do")
+disabled = true
 
 [node name="photo" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.0598443, 0, 0, 0, -2.61588e-09, 0.0598444, 0, -0.0598443, -2.61588e-09, 0.000475392, 0.00130028, 0)

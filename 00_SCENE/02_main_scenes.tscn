@@ -7,7 +7,6 @@
 [ext_resource type="Script" path="res://03_CAMERA/CameraFollow.gd" id="2_7lb1x"]
 [ext_resource type="Material" uid="uid://cfd7rt53ee7jp" path="res://05_SHADER_TEST/Full_screen/Foam_dither_viewport.tres" id="3_qcxor"]
 [ext_resource type="Shader" uid="uid://bduoqim3kfbs6" path="res://00_PLAYER/Sonar/Sonar_sh.tres" id="3_todel"]
-[ext_resource type="Script" path="res://00_PLAYER/Sonar/Click_to_Sonar.gd" id="4_h4pmi"]
 [ext_resource type="Material" uid="uid://ua1gnqwbe2bj" path="res://05_SHADER_TEST/Full_screen/Sonar_dither_viewport.tres" id="4_qh7in"]
 [ext_resource type="Shader" uid="uid://bxavm32wwtse2" path="res://05_SHADER_TEST/Clouds_sh.tres" id="5_83wu6"]
 [ext_resource type="Material" uid="uid://chlrh834uha8l" path="res://05_SHADER_TEST/Full_screen/Grid_dither_viewport.tres" id="5_jwi16"]
@@ -27,6 +26,119 @@
 [ext_resource type="Material" uid="uid://dgl2um0yp8e3c" path="res://05_SHADER_TEST/All_Materials/Building_mat.tres" id="20_24d3w"]
 [ext_resource type="PackedScene" uid="uid://cp1aidnp626l4" path="res://04_SCENE_MAIN_MAP/Birds/Birds_prefabs.tscn" id="21_py3bv"]
 [ext_resource type="PackedScene" uid="uid://dti7l20thp2rk" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Subscene_elements/epave_zone.tscn" id="23_txlwt"]
+
+[sub_resource type="GDScript" id="GDScript_xsqte"]
+script/source = "extends Node
+
+var lock_tools = false
+func _ready():
+	_global_datas.player_active_tools.connect(_unlock)
+	
+func _unlock(condition):
+	lock_tools = condition	
+
+func _input(event: InputEvent) -> void:
+	
+	if !lock_tools:
+		return
+	if _global_datas.Player_InSubScene:
+		return
+		
+	if _global_datas.Player_InDialogue:
+		return				
+		
+	if event.is_action_pressed(\"Click\"):
+	
+		if _global_datas.Player_In_Inventory:
+			return		
+		_global_datas._active_sonar.emit()
+		
+		#TO Disable
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
+			_global_datas._reseting_clock_disable.emit()
+			
+"
+
+[sub_resource type="GDScript" id="GDScript_0xo40"]
+script/source = "extends Node
+
+
+@onready var _1 = $\"../Player_Boat/Sonar/01\"
+@onready var _2 = $\"../Player_Boat/Sonar/02\"
+@onready var sonar = $\"../Player_Boat/Sonar\"
+
+
+var t
+var is_active = false
+var lock_tools = false
+
+func _ready():
+	_global_datas._active_sonar.connect(active_sonar)
+	sonar.scale = Vector3(0.1,0.1,0.1)
+	_1.visible = false
+	_2.visible = false
+
+	
+func active_sonar():
+	
+
+	
+	if is_active:
+		return
+		
+	# ENABLE GO SUB
+	_global_datas._reseting_clock_active.emit()
+		
+	is_active = true
+	_1.visible = true
+	_2.visible = true
+	
+	if t:
+		t.kill()
+	t = create_tween()
+	
+	t .tween_method(_change_scale,0.0,5.0,1.0).set_trans(Tween.TRANS_SINE)	
+
+	_global_datas._active_go_subscene_button.emit(false)
+	
+	await create_tween().tween_interval(1.0).finished
+	_stop()
+
+func _change_scale(value : float):
+	sonar.scale = Vector3(value,value,value)
+	
+func _stop():
+	
+	sonar.scale = Vector3(0.1,0.1,0.1)
+	_1.visible = false
+	_2.visible = false
+	
+	is_active = false
+	_global_datas._active_go_subscene_button.emit(true)
+
+
+"
+
+[sub_resource type="GDScript" id="GDScript_55qk3"]
+script/source = "extends Node
+
+
+
+func _input(event):
+
+
+	if _global_datas.Player_In_Inventory:
+		return
+
+	if _global_datas.Player_InDialogue:
+		return
+	if event.is_action_pressed(\"Click\"):
+		if _global_datas.Npc_Dialogue == null:
+			return
+		_global_datas._open_dialogue.emit()	
+		print(\"OPEN DIALOGUE\")
+"
 
 [sub_resource type="GDScript" id="GDScript_ueh7h"]
 script/source = "extends Node
@@ -143,9 +255,6 @@ viewport_path = NodePath("01_GAME_UI/MAIN_SCENE_UI/Viewports/SKY_Viewport")
 [sub_resource type="GDScript" id="GDScript_hpjin"]
 script/source = "extends Node
 @onready var button = $Button
-var _player_in_dialogue_zone = false
-
-@export var Birds_data : Npc_datas
 
 func _ready():
 	_global_datas.in_dialogue_zone.connect(active_buton)
@@ -156,109 +265,21 @@ func _ready():
 func disable_buton():
 	button.visible = false
 	_global_datas.Player_InDialogue_zone = false
-	_player_in_dialogue_zone = false
+
 	
 func active_buton():
-	
-	if _global_datas.Npc_Dialogue == null:
-		return
-	
+
 	button.visible = true
 	_global_datas.Player_InDialogue_zone = true
-	_player_in_dialogue_zone = true
-	
-func _on_button_pressed():
-	
-	if _global_datas.Npc_Dialogue == null:
-		return
-	_global_datas._open_dialogue.emit()
-	
-func _input(event):
 
-	if !_global_datas.Player_InSubScene:
-		return
-	if event.is_action_pressed(\"Click\"):
-		if _global_datas.Npc_Dialogue == null:
-			return
-		_global_datas._open_dialogue.emit()	
+
 	
+
+
 "
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ituqr"]
 bounce = 500.0
-
-[sub_resource type="GDScript" id="GDScript_0xo40"]
-script/source = "extends Node
-
-
-@onready var _1 = $\"../01\"
-@onready var _2 = $\"../02\"
-@onready var collision_shape_3d = $\"../Sonar_Aera/CollisionShape3D\"
-@onready var sonar = $\"..\"
-@onready var area_3d = $\"../../Area3D\"
-
-var t
-var is_active = false
-var lock_tools = false
-
-func _ready():
-	_global_datas._active_sonar.connect(active_sonar)
-	sonar.scale = Vector3(0.1,0.1,0.1)
-	_1.visible = false
-	_2.visible = false
-
-	
-func active_sonar():
-	
-
-	
-	if is_active:
-		return
-		
-	# ENABLE GO SUB
-	_global_datas._reseting_clock_active.emit()
-		
-	is_active = true
-	_1.visible = true
-	_2.visible = true
-	collision_shape_3d.disabled = false
-	
-	if t:
-		t.kill()
-	t = create_tween()
-	
-	t .tween_method(_change_scale,0.0,5.0,1.0).set_trans(Tween.TRANS_SINE)	
-
-	_global_datas._active_go_subscene_button.emit(false)
-	
-	await create_tween().tween_interval(1.0).finished
-	_stop()
-
-func _change_scale(value : float):
-	sonar.scale = Vector3(value,value,value)
-	
-func _stop():
-	
-	sonar.scale = Vector3(0.1,0.1,0.1)
-	_1.visible = false
-	_2.visible = false
-	collision_shape_3d.disabled = true	
-	is_active = false
-	_global_datas._active_go_subscene_button.emit(true)
-
-
-# DISABLE GO SUB
-func _input(event):
-
-	if _global_datas.Player_InSubScene:
-		return
-
-	#TO Disable
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
-			_global_datas._reseting_clock_disable.emit()
-			area_3d._on_mouse_exited()
-"
 
 [sub_resource type="TorusMesh" id="TorusMesh_o3rdy"]
 inner_radius = 0.884
@@ -527,25 +548,6 @@ material = SubResource("ShaderMaterial_kcje2")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_x2n16"]
 
-[sub_resource type="GDScript" id="GDScript_q85y0"]
-script/source = "extends Node
-@onready var collision_shape_3d = $\"../CollisionShape3D\"
-
-@onready var area_3d = $\"..\"
-
-
-func _ready():
-	_global_datas._go_Subscene.connect(_disable)
-	_global_datas._backFrom_subscene.connect(_active)
-	
-func _disable():
-	area_3d.input_ray_pickable = false
-func _active():
-
-
-	area_3d.input_ray_pickable = true
-"
-
 [sub_resource type="SphereShape3D" id="SphereShape3D_yt2xy"]
 radius = 0.990634
 
@@ -712,6 +714,15 @@ size = Vector3(30, 0, 30)
 script = ExtResource("1_xd8sb")
 viewports = [NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/MAIN_Viewport"), NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/FOAM_Viewport"), NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/SONAR_Viewport"), NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/GRID_Viewport"), NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/SKY_Viewport")]
 
+[node name="Active_sonar" type="Node" parent="."]
+script = SubResource("GDScript_xsqte")
+
+[node name="Sonar_behaviour" type="Node" parent="."]
+script = SubResource("GDScript_0xo40")
+
+[node name="Open_Dialogue" type="Node" parent="."]
+script = SubResource("GDScript_55qk3")
+
 [node name="GAME_STATE" type="Node" parent="."]
 
 [node name="Prologue" type="Node" parent="GAME_STATE"]
@@ -853,7 +864,6 @@ texture = SubResource("ViewportTexture_dm76q")
 
 [node name="Button_active_Dialogue" type="Node" parent="01_GAME_UI/MAIN_SCENE_UI"]
 script = SubResource("GDScript_hpjin")
-Birds_data = ExtResource("1_trgwt")
 
 [node name="Button" type="Control" parent="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue"]
 visible = false
@@ -864,19 +874,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-
-[node name="Push_button" type="Button" parent="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue/Button"]
-modulate = Color(1, 1, 1, 0)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_default_cursor_shape = 2
-theme_override_colors/font_color = Color(0.188235, 0.188235, 0.188235, 1)
-theme_override_font_sizes/font_size = 40
-text = "..."
 
 [node name="ColorRect2" type="ColorRect" parent="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue/Button"]
 layout_mode = 0
@@ -939,9 +936,6 @@ omni_attenuation = 0.258817
 [node name="Sonar" type="Node3D" parent="Player_Boat"]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
 
-[node name="Sonar_behaviour" type="Node" parent="Player_Boat/Sonar"]
-script = SubResource("GDScript_0xo40")
-
 [node name="On_OverMouse_3D_SHAPE" type="MeshInstance3D" parent="Player_Boat/Sonar"]
 transform = Transform3D(12.8483, 0, -2.27374e-13, 0, 1.20588, 0, 2.27374e-13, 0, 12.8483, 0, -1.55876, 0)
 visible = false
@@ -987,13 +981,9 @@ transform = Transform3D(5.39371, 0, -1.42109e-14, 0, 5.39371, 0, 1.42109e-14, 0,
 shape = SubResource("SphereShape3D_x2n16")
 disabled = true
 
-[node name="Area3D" type="Area3D" parent="Player_Boat"]
-script = ExtResource("4_h4pmi")
+[node name="Enter_dialogue_zone" type="Area3D" parent="Player_Boat"]
 
-[node name="Enable_MouseClick" type="Node" parent="Player_Boat/Area3D"]
-script = SubResource("GDScript_q85y0")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Player_Boat/Area3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player_Boat/Enter_dialogue_zone"]
 shape = SubResource("SphereShape3D_yt2xy")
 
 [node name="Go_subscene_progress" type="TextureProgressBar" parent="."]
@@ -1239,9 +1229,6 @@ layers = 2048
 mesh = SubResource("BoxMesh_wmrfd")
 skeleton = NodePath("")
 
-[connection signal="pressed" from="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue/Button/Push_button" to="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue" method="_on_button_pressed"]
-[connection signal="mouse_entered" from="Player_Boat/Area3D" to="Player_Boat/Area3D" method="_on_mouse_entered"]
-[connection signal="mouse_exited" from="Player_Boat/Area3D" to="Player_Boat/Area3D" method="_on_mouse_exited"]
 [connection signal="timeout" from="Go_subscene_progress/GoSubscene_timer/Timer" to="Go_subscene_progress/GoSubscene_timer" method="_on_timer_timeout"]
 [connection signal="area_entered" from="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA" to="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA" method="_on_area_entered"]
 [connection signal="area_exited" from="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA" to="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA" method="_on_area_exited"]
