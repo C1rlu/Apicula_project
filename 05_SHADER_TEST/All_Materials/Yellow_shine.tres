@@ -1,4 +1,14 @@
-[gd_resource type="ShaderMaterial" load_steps=10 format=3 uid="uid://tp87ec3bsfbe"]
+[gd_resource type="ShaderMaterial" load_steps=13 format=3 uid="uid://tp87ec3bsfbe"]
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_7ol46"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
+op_type = 3
+
+[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_5ewgk"]
+constant = Color(0.00470651, 0.0633496, 0.0753792, 1)
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_ssj45"]
+parameter_name = "ColorParameter"
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_gf6ub"]
 parameter_name = "Dark_color"
@@ -40,6 +50,7 @@ default_value = 1.0
 code = "shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
 
+uniform vec4 ColorParameter : source_color;
 uniform float Distance = 1;
 
 
@@ -47,6 +58,10 @@ uniform float Distance = 1;
 void fragment() {
 // ColorConstant:3
 	vec4 n_out3p0 = vec4(0.461686, 0.318787, 0.144089, 1.000000);
+
+
+// ColorParameter:12
+	vec4 n_out12p0 = ColorParameter;
 
 
 // FloatParameter:9
@@ -87,9 +102,12 @@ void fragment() {
 	float n_out4p0 = smoothstep(n_out8p0, n_out7p0, n_in4p2);
 
 
+// Mix:10
+	vec3 n_out10p0 = mix(vec3(n_out3p0.xyz), vec3(n_out12p0.xyz), vec3(n_out4p0));
+
+
 // Output:0
-	ALBEDO = vec3(n_out3p0.xyz);
-	ALPHA = n_out4p0;
+	ALBEDO = n_out10p0;
 
 
 }
@@ -97,17 +115,17 @@ void fragment() {
 flags/unshaded = true
 nodes/vertex/0/position = Vector2(400, 160)
 nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_gf6ub")
-nodes/fragment/2/position = Vector2(-200, -100)
+nodes/fragment/2/position = Vector2(-640, 100)
 nodes/fragment/3/node = SubResource("VisualShaderNodeColorConstant_7ywm1")
 nodes/fragment/3/position = Vector2(-737.498, -39.0981)
 nodes/fragment/4/node = SubResource("VisualShaderNodeSmoothStep_7vj1q")
-nodes/fragment/4/position = Vector2(-1250.52, 153.546)
+nodes/fragment/4/position = Vector2(0, 520)
 nodes/fragment/5/node = SubResource("VisualShaderNodeFloatConstant_fgk4k")
-nodes/fragment/5/position = Vector2(-2380, 400)
+nodes/fragment/5/position = Vector2(-1140, 780)
 nodes/fragment/6/node = SubResource("VisualShaderNodeFloatConstant_l2qau")
-nodes/fragment/6/position = Vector2(-2380, 260)
+nodes/fragment/6/position = Vector2(-1140, 640)
 nodes/fragment/7/node = SubResource("VisualShaderNodeExpression_3gpft")
-nodes/fragment/7/position = Vector2(-2080, 380)
+nodes/fragment/7/position = Vector2(-840, 760)
 nodes/fragment/7/size = Vector2(724.789, 654.559)
 nodes/fragment/7/input_ports = "0,0,In;1,0,Size;"
 nodes/fragment/7/output_ports = "0,0,Dither_Node;"
@@ -122,13 +140,20 @@ vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
 nodes/fragment/8/node = SubResource("VisualShaderNodeFresnel_sxnu7")
-nodes/fragment/8/position = Vector2(-1490.52, -66.4541)
+nodes/fragment/8/position = Vector2(-240, 300)
 nodes/fragment/9/node = SubResource("VisualShaderNodeFloatParameter_0y8ka")
-nodes/fragment/9/position = Vector2(-1850.52, 13.5459)
-nodes/fragment/connections = PackedInt32Array(5, 0, 7, 1, 6, 0, 7, 0, 8, 0, 4, 0, 7, 0, 4, 1, 9, 0, 8, 3, 3, 0, 0, 0, 4, 0, 0, 1)
+nodes/fragment/9/position = Vector2(-600, 380)
+nodes/fragment/10/node = SubResource("VisualShaderNodeMix_7ol46")
+nodes/fragment/10/position = Vector2(-68.347, -89.6873)
+nodes/fragment/11/node = SubResource("VisualShaderNodeColorConstant_5ewgk")
+nodes/fragment/11/position = Vector2(-380, 40)
+nodes/fragment/12/node = SubResource("VisualShaderNodeColorParameter_ssj45")
+nodes/fragment/12/position = Vector2(-580, -200)
+nodes/fragment/connections = PackedInt32Array(5, 0, 7, 1, 6, 0, 7, 0, 8, 0, 4, 0, 7, 0, 4, 1, 9, 0, 8, 3, 3, 0, 10, 0, 4, 0, 10, 2, 10, 0, 0, 0, 12, 0, 10, 1)
 nodes/light/0/position = Vector2(2740, 1260)
 
 [resource]
 render_priority = 2
 shader = SubResource("VisualShader_qrkqy")
-shader_parameter/Distance = 0.6
+shader_parameter/ColorParameter = Color(0.0588235, 0.141176, 0.145098, 1)
+shader_parameter/Distance = 1.24

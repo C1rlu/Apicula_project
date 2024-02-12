@@ -54,9 +54,8 @@ func _on_ez_dialogue_custom_signal_received(value):
 			#print("player received", variable_value)
 	
 		if variable_name == "give_letter":
-				var _words = params[2]
-				var _from = params[3]	
-				state[variable_name].emit(_words,_from)
+				var note_name = params[2]
+				state[variable_name].emit(note_name)
 				
 		if variable_name == "take_note":
 				var _note_name = params[2]

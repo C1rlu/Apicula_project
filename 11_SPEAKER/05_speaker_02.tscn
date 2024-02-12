@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://bbp1ccoa6te1g"]
+[gd_scene load_steps=38 format=3 uid="uid://bbp1ccoa6te1g"]
 
 [ext_resource type="Script" path="res://11_SPEAKER/Open_Dialogue.gd" id="1_6gph5"]
 [ext_resource type="Script" path="res://09_NPC/NPC_DIVE_SELECTOR/Npc_loader.gd" id="2_gecf5"]
@@ -10,31 +10,11 @@
 [ext_resource type="Resource" uid="uid://b5kt2xn16lfgt" path="res://09_NPC/Npc_data/Otis_data.tres" id="5_wppld"]
 [ext_resource type="Resource" uid="uid://xuxu60afj84h" path="res://09_NPC/Npc_data/Guy_02_data.tres" id="6_6xaf4"]
 [ext_resource type="Material" uid="uid://dxkegh8ms5y46" path="res://06_UI/Panel_ui_disolved_mat.tres" id="7_mabi4"]
-[ext_resource type="PackedScene" uid="uid://ccq1654e6goa5" path="res://09_NPC/Model/hand_basic.tscn" id="8_rq6rq"]
 [ext_resource type="Shader" uid="uid://i5hkaugkylpm" path="res://05_SHADER_TEST/Full_screen/Speaker_dither_convas.tres" id="9_8gj0l"]
 [ext_resource type="Script" path="res://11_SPEAKER/Dialogue/Dialogue_asset/Dialogue_box.gd" id="9_n4i7c"]
 [ext_resource type="PackedScene" uid="uid://kfeia6x8pslm" path="res://09_NPC/guy_02_prefab.tscn" id="11_60j22"]
 [ext_resource type="PackedScene" uid="uid://l88yn3sqao5k" path="res://11_SPEAKER/Dialogue/Dialogue_asset/Photo_button.tscn" id="12_8wltn"]
 [ext_resource type="PackedScene" uid="uid://d2b7ysl6sho71" path="res://09_NPC/Model/Mr_birds_prefab.tscn" id="13_f7b57"]
-
-[sub_resource type="GDScript" id="GDScript_d4nqo"]
-script/source = "extends Node
-
-@onready var hand_basic = $\"../00_NPC_CREATOR/Models/hand_basic\"
-@onready var Npc = $\"../00_NPC_CREATOR/Models/Loader\"
-
-func _ready():
-	_global_datas._show_hand.connect(_show_hand)
-	_global_datas._hide_hand.connect(_hide_hand)
-	
-func _show_hand():
-	hand_basic.visible = true
-	Npc.visible = false
-func _hide_hand():
-	hand_basic.visible = false
-	Npc.visible = true
-
-"
 
 [sub_resource type="GDScript" id="GDScript_ktgfg"]
 script/source = "extends Node
@@ -70,21 +50,6 @@ func _on_timer_timeout():
 	_updateFace()
 	$Timer.start()
 	
-"
-
-[sub_resource type="GDScript" id="GDScript_wf71c"]
-script/source = "extends Node
-
-@onready var dialogue_text = $\"../00_NPC_CREATOR/Npc_convas/Dialogue_box/Dialogue_text\"
-@onready var dialogue_name = $\"../00_NPC_CREATOR/Npc_convas/Dialogue_box/Dialogue_name\"
-
-
-func _on_text_button_pressed():
-	var words: String = dialogue_text.get_text()
-	var name_words : String = dialogue_name.get_text()
-	_global_datas.instance_word_text._intance_words_note(words,name_words)	
-	
-
 "
 
 [sub_resource type="GDScript" id="GDScript_6qc5w"]
@@ -404,16 +369,10 @@ script = ExtResource("4_uwbqv")
 [node name="Npc_loader" type="Node" parent="."]
 script = ExtResource("2_gecf5")
 
-[node name="Show_Hand" type="Node" parent="."]
-script = SubResource("GDScript_d4nqo")
-
 [node name="Random_FaceChanger" type="Node" parent="."]
 script = SubResource("GDScript_ktgfg")
 
 [node name="Timer" type="Timer" parent="Random_FaceChanger"]
-
-[node name="Instance_words" type="Node" parent="."]
-script = SubResource("GDScript_wf71c")
 
 [node name="00_NPC_CREATOR" type="Node" parent="."]
 script = ExtResource("3_u2fyv")
@@ -620,10 +579,6 @@ mouse_filter = 2
 theme_override_constants/separation = 10
 
 [node name="Models" type="Node" parent="00_NPC_CREATOR"]
-
-[node name="hand_basic" parent="00_NPC_CREATOR/Models" instance=ExtResource("8_rq6rq")]
-transform = Transform3D(-0.836274, 0.104468, -0.600797, 0.469035, -0.541469, -0.747022, -0.389713, -0.875855, 0.390162, 1.205, 11.253, 0)
-visible = false
 
 [node name="Loader" type="Node3D" parent="00_NPC_CREATOR/Models"]
 

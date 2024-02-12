@@ -23,7 +23,7 @@ func _check_found(condition : bool):
 	
 			e._active()	
 	
-func check_photo_exist(photo_Data):
+func check_photo_exist(photo_Data):	
 
 	for photo in _global_datas.photo_archives:
 		if photo.name == photo_Data.name:

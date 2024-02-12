@@ -30,7 +30,7 @@ signal _reseting_clock_active
 signal _reseting_clock_disable
 signal _active_go_subscene_button(condition : bool)
 signal _active_world_grid(condition : bool)
-signal _boat_contact(dir : Vector2,strenght : float)
+
 
 # dialogue signals
 signal in_dialogue_zone
@@ -38,14 +38,18 @@ signal out_dialogue_zone
 signal  _open_dialogue
 signal  _close_dialogue
 signal _type_text(count : int)
+
+# for save game
 var photo_archives : Array[PhotoData] #list of photo data took in game
+var note_archives : Array[Note_Data]
+
 
 signal _show_hand
 signal _hide_hand
 signal _hide_dialogue_box
 signal _show_dialogue_box
 signal _bird_is_comming
-signal _give_letter(_words : String, _from : String)
+signal _give_letter( note_name : String)
 signal _take_note(note_name : String)
 signal _take_Npc_photo(condition : bool)
 signal _show_object_legend(condtion : bool, text : String)

@@ -1,7 +1,10 @@
-[gd_resource type="ShaderMaterial" load_steps=13 format=3 uid="uid://goq7y1lqdpxa"]
+[gd_resource type="ShaderMaterial" load_steps=14 format=3 uid="uid://goq7y1lqdpxa"]
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_4dc38"]
 parameter_name = "ColorParameter"
+
+[sub_resource type="VisualShaderNodeFresnel" id="VisualShaderNodeFresnel_ll8n4"]
+default_input_values = [2, false, 3, 0.635]
 
 [sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_1nxvj"]
 input_name = "vertex"
@@ -12,7 +15,7 @@ input_name = "vertex"
 input_name = "time"
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_k37aw"]
-constant = 0.489
+constant = 0.25
 
 [sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_uq1qm"]
 
@@ -47,7 +50,7 @@ void vertex() {
 
 
 // FloatConstant:5
-	float n_out5p0 = 0.489000;
+	float n_out5p0 = 0.250000;
 
 
 // FloatOp:7
@@ -87,13 +90,19 @@ void fragment() {
 	vec4 n_out3p0 = ColorParameter;
 
 
+// Fresnel:4
+	float n_in4p3 = 0.63500;
+	float n_out4p0 = pow(1.0 - clamp(dot(NORMAL, VIEW), 0.0, 1.0), n_in4p3);
+
+
 // Output:0
 	ALBEDO = vec3(n_out3p0.xyz);
+	ALPHA = n_out4p0;
 
 
 }
 "
-graph_offset = Vector2(-862.969, 101.205)
+graph_offset = Vector2(-1127.59, 104.871)
 modes/depth_draw = 1
 flags/unshaded = true
 flags/shadows_disabled = true
@@ -116,7 +125,9 @@ nodes/vertex/9/position = Vector2(-420, 200)
 nodes/vertex/connections = PackedInt32Array(2, 0, 3, 1, 6, 0, 8, 0, 4, 0, 7, 0, 5, 0, 7, 1, 7, 0, 6, 2, 8, 0, 9, 0, 9, 0, 3, 0, 3, 0, 0, 0)
 nodes/fragment/3/node = SubResource("VisualShaderNodeColorParameter_4dc38")
 nodes/fragment/3/position = Vector2(-224.54, 102.978)
-nodes/fragment/connections = PackedInt32Array(3, 0, 0, 0)
+nodes/fragment/4/node = SubResource("VisualShaderNodeFresnel_ll8n4")
+nodes/fragment/4/position = Vector2(-136.064, 312.235)
+nodes/fragment/connections = PackedInt32Array(3, 0, 0, 0, 4, 0, 0, 1)
 nodes/light/0/position = Vector2(1060, 580)
 
 [resource]

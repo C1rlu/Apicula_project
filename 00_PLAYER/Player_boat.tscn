@@ -1,29 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://vpdvl0v7dubd"]
+[gd_scene load_steps=4 format=3 uid="uid://vpdvl0v7dubd"]
 
 [ext_resource type="Script" path="res://00_PLAYER/Player_movement.gd" id="1_escsj"]
 [ext_resource type="PackedScene" uid="uid://dvyncnep1cy2q" path="res://00_PLAYER/Boat/boat_all.tscn" id="2_bk3dn"]
-
-[sub_resource type="GDScript" id="GDScript_fx5qg"]
-script/source = "extends Node
-
-@onready var player_boat = $\"..\"
-
-	
-func _contact(position : Vector3):
-	
-	var contact_pos = 	_global_datas.Main_Camera.unproject_position(position)
-	var player_pos =  _global_datas.Main_Camera.unproject_position(_global_datas.player_position)
-	
-	var dir
-	dir = (player_pos - contact_pos).normalized()
-	return dir
-
-func _on_player_boat_body_entered(body):
-	var dir : Vector2 = _contact(body.global_position)
-	var strenght : float = player_boat.linear_velocity.length()
-	_global_datas._boat_contact.emit(dir,strenght)
-
-"
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bufvh"]
 radius = 0.251435
@@ -33,8 +11,8 @@ height = 1.87309
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.040225, -0.633085)
 axis_lock_angular_x = true
 axis_lock_angular_z = true
-center_of_mass_mode = 1
 gravity_scale = 0.0
+center_of_mass_mode = 1
 max_contacts_reported = 1
 contact_monitor = true
 linear_damp = 1.0
@@ -43,9 +21,6 @@ script = ExtResource("1_escsj")
 move_speed = 9.0
 maxSpeed = 1.5
 rotation_speed = 0.25
-
-[node name="Contact" type="Node" parent="."]
-script = SubResource("GDScript_fx5qg")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 transform = Transform3D(1, -7.25367e-23, -1.98947e-22, 2.11758e-22, 0.342545, 0.939501, 0, -0.939501, 0.342545, 0.130404, 3.19906, -0.0379682)
@@ -64,5 +39,3 @@ shape = SubResource("CapsuleShape3D_bufvh")
 
 [node name="Boat_all" parent="." instance=ExtResource("2_bk3dn")]
 transform = Transform3D(1, 0, 0, 0, 0.999639, -0.0268729, 0, 0.0268729, 0.999639, 0, -0.245228, 0)
-
-[connection signal="body_entered" from="." to="Contact" method="_on_player_boat_body_entered"]

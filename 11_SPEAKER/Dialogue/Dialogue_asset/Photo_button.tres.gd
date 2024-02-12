@@ -7,8 +7,6 @@ func _ready():
 
 func _on_pressed():
 	_global_datas._take_photo.emit()
-	_global_datas._show_dialogue_box.emit()
-
 	visible = false
 
 
