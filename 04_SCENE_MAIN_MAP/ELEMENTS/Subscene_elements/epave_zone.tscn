@@ -1,25 +1,35 @@
-[gd_scene load_steps=17 format=3 uid="uid://dti7l20thp2rk"]
+[gd_scene load_steps=18 format=3 uid="uid://dti7l20thp2rk"]
 
 [ext_resource type="Shader" uid="uid://jjqliete2f27" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Subscene_elements/Subscene_element_sh.tres" id="1_4eijp"]
 
 [sub_resource type="GDScript" id="GDScript_kppkw"]
 script/source = "extends Area3D
 
-signal see_int
+@export var subscene_index : String = \"\"
+signal see_int(condition : bool)
 
+
+@onready var boue = $Boue
 
 func _on_area_entered(_area):
-
-	if _area.name != \"Sonar_Aera\":
-		return
-	see_int.emit()
-
 	
+	if _area.name == \"Enter_dialogue_zone\":
+			
+		see_int.emit(true)
+		_global_datas._active_sonar.emit()
+		_global_datas.cell_name = subscene_index
+		
+		boue.visible = true
 
-
-
+func _on_area_exited(_area):
 	
+	if _area.name == \"Enter_dialogue_zone\":
+		_global_datas.cell_name = \"null\"
+		see_int.emit(false)
+		_global_datas._reseting_clock_disable.emit()
 "
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_p534i"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_7qqy6"]
 radius = 0.67208
@@ -31,32 +41,47 @@ script/source = "extends Node
 @onready var material : Material = mesh.get_surface_override_material(0)
 
 var t
+var d
+var stop_after : bool = false
+var actual_value : float
+
 func _show():
 	
-
-	
+	if get_tree() == null:
+		return
+		
 	if t:
 		t.kill()
 	t = create_tween()
 	
-	t .tween_method(change_value,0.0,1.0,1.0).set_trans(Tween.TRANS_SINE)	
+	t .tween_method(change_value,0.0,1.0,1.0)
 	await create_tween().tween_interval(0.5).finished
 	_hide()
-
+	
 func _hide():
 	
-	if t:
-		t.kill()
-	t = create_tween()
+	if get_tree() == null:
+		return
+		
+	if d:
+		d.kill()
+	d = create_tween()
 	
-	t .tween_method(change_value,1.0,0.0,6.0).set_trans(Tween.TRANS_SINE)	
+	d .tween_method(change_value,1.0,0.0,6.0)
 	await create_tween().tween_interval(6.0).finished
+	
+	if stop_after:
+		_show()
 	
 func change_value(value : float):
 	material.set_shader_parameter(\"Distance\",value)
+	actual_value = value
 	
-func _on_epave_zone_see_int():
+func _on_epave_zone_see_int(condition):
+	stop_after = condition
 	_show()
+
+
 
 "
 
@@ -229,6 +254,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.70167, 0, 1.01103)
 input_ray_pickable = false
 script = SubResource("GDScript_kppkw")
 
+[node name="Boue" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.149789, 0, 0, 0, 0.149789, 0, 0, 0, 0.149789, -0.501549, 0, 0)
+visible = false
+mesh = SubResource("CapsuleMesh_p534i")
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_7qqy6")
 
@@ -244,4 +274,6 @@ skeleton = NodePath("")
 surface_material_override/0 = SubResource("ShaderMaterial_yfs1e")
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="area_exited" from="." to="." method="_on_area_exited"]
 [connection signal="see_int" from="." to="Epave_visuals/Fade_out" method="_on_epave_zone_see_int"]
+[connection signal="tree_exiting" from="." to="Epave_visuals/Fade_out" method="_on_epave_zone_tree_exiting"]

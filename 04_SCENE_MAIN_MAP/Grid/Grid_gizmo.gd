@@ -9,7 +9,7 @@ var cell_prefabs = preload("res://04_SCENE_MAIN_MAP/Grid/cells_grid_library.tscn
 
 func _ready():
 	_create_grid()
-	_global_datas._go_Subscene.connect(_check_sceneIndex)
+	#_global_datas._go_Subscene.connect(_check_sceneIndex)
 
 func _create_grid():
 	var used_cells = get_used_cells()
