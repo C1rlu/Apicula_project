@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://cp1aidnp626l4"]
+[gd_scene load_steps=5 format=3 uid="uid://cp1aidnp626l4"]
 
 [ext_resource type="Script" path="res://04_SCENE_MAIN_MAP/Birds/Anim_start.gd" id="1_ec7gc"]
 [ext_resource type="PackedScene" uid="uid://i3jl14mfw4um" path="res://04_SCENE_MAIN_MAP/Birds/Birds_prefabs_scene.tscn" id="2_jhkjp"]
@@ -27,22 +27,6 @@ _data = {
 "Fly": SubResource("Animation_h2vkr")
 }
 
-[sub_resource type="SphereMesh" id="SphereMesh_i7on3"]
-
-[sub_resource type="VisualShader" id="VisualShader_2wnb7"]
-code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, depth_test_disabled, unshaded;
-
-
-
-"
-flags/depth_test_disabled = true
-flags/unshaded = true
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_purqc"]
-render_priority = 0
-shader = SubResource("VisualShader_2wnb7")
-
 [node name="Birds" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.286, 0)
 
@@ -60,11 +44,3 @@ transform = Transform3D(-0.821955, 0, -0.569552, 0, 1, 0, 0.569552, 0, -0.821955
 
 [node name="Far_birds" parent="Bird_root" instance=ExtResource("2_jhkjp")]
 transform = Transform3D(0.0563447, 0, 0, 0, 0.0563447, 0, 0, 0, 0.0563447, 0, 0, 0)
-
-[node name="Bird_render" type="MeshInstance3D" parent="Bird_root"]
-transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
-visible = false
-layers = 8192
-mesh = SubResource("SphereMesh_i7on3")
-skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("ShaderMaterial_purqc")

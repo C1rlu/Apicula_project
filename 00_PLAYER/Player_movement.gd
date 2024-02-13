@@ -12,7 +12,7 @@ func move_a():
 	
 	var translation = get_global_transform().origin
 	_global_datas.player_position = translation
-	
+	_global_datas.player_boat_rotation = rotation
 	if _global_datas.Player_In_Inventory:
 		return
 	
