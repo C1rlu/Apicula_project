@@ -1,4 +1,4 @@
-[gd_scene load_steps=82 format=3 uid="uid://cnmptm7i0xxmj"]
+[gd_scene load_steps=84 format=3 uid="uid://cnmptm7i0xxmj"]
 
 [ext_resource type="PackedScene" uid="uid://vpdvl0v7dubd" path="res://00_PLAYER/Player_boat.tscn" id="1_qltht"]
 [ext_resource type="Script" path="res://06_UI/Fps_counter.gd" id="1_s74e5"]
@@ -11,7 +11,7 @@
 [ext_resource type="Shader" uid="uid://bxavm32wwtse2" path="res://05_SHADER_TEST/Clouds_sh.tres" id="5_83wu6"]
 [ext_resource type="Material" uid="uid://chlrh834uha8l" path="res://05_SHADER_TEST/Full_screen/Grid_dither_viewport.tres" id="5_jwi16"]
 [ext_resource type="PackedScene" uid="uid://crxoyweriianl" path="res://04_SCENE_MAIN_MAP/Grid/grid_map.tscn" id="6_8jesf"]
-[ext_resource type="Material" uid="uid://ctnqf5d3uj1g7" path="res://05_SHADER_TEST/All_Materials/new_standard_material_3d.tres" id="6_vcmny"]
+[ext_resource type="Material" uid="uid://ctnqf5d3uj1g7" path="res://05_SHADER_TEST/All_Materials/dark_mask.tres" id="6_vcmny"]
 [ext_resource type="Material" uid="uid://b64juw612xqpu" path="res://05_SHADER_TEST/Sea_sh/Sea_mat.tres" id="7_4y8ld"]
 [ext_resource type="Texture2D" uid="uid://dafg2qvpi6wmk" path="res://06_UI/Loader_circle/Loader_circle.png" id="8_eaeqh"]
 [ext_resource type="PackedScene" uid="uid://dla1534gcagbl" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Pine/pine_prefabs.tscn" id="10_c6r5x"]
@@ -27,6 +27,8 @@
 [ext_resource type="Material" uid="uid://tp87ec3bsfbe" path="res://05_SHADER_TEST/All_Materials/Yellow_shine.tres" id="20_hh7jv"]
 [ext_resource type="PackedScene" uid="uid://cp1aidnp626l4" path="res://04_SCENE_MAIN_MAP/Birds/Birds_prefabs.tscn" id="21_py3bv"]
 [ext_resource type="PackedScene" uid="uid://dti7l20thp2rk" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Subscene_elements/epave_zone.tscn" id="23_txlwt"]
+[ext_resource type="Resource" uid="uid://bqtier24l2d58" path="res://10_BOARD/Boue/Boue_appicula.tres" id="26_blekg"]
+[ext_resource type="Resource" uid="uid://dyrjwnrw6plmp" path="res://10_BOARD/Boue/Boue_DarkHole.tres" id="27_id2vw"]
 
 [sub_resource type="GDScript" id="GDScript_xsqte"]
 script/source = "extends Node
@@ -51,6 +53,10 @@ func _input(event: InputEvent) -> void:
 		
 	if _global_datas.Player_InDialogue:
 		return				
+	
+	if event.is_action_released(\"Click\"):
+		_global_datas._reseting_clock_disable.emit()
+	
 		
 	if _global_datas.cell_name == \"null\":
 		return
@@ -60,7 +66,8 @@ func _input(event: InputEvent) -> void:
 		if _global_datas.Player_In_Inventory:
 			return		
 		_global_datas._reseting_clock_active.emit()
-	
+		
+
 		#TO Disable
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
@@ -286,14 +293,14 @@ outer_radius = 1.074
 rings = 32
 ring_segments = 16
 
-[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_8wfnm"]
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_3d8c6"]
 parameter_name = "Light_color_ui"
 qualifier = 1
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_4akwd"]
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_kl0v0"]
 constant = 0.4
 
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_01wla"]
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_b8x62"]
 size = Vector2(724.789, 654.559)
 expression = "const float DITHER_THRESHOLDS[16] ={
 		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
@@ -306,19 +313,19 @@ vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
 
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_8fwg5"]
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_wbs4k"]
 parameter_name = "Opacity"
 hint = 1
 default_value_enabled = true
 default_value = 1.0
 
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_b4w1v"]
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_s5128"]
 default_input_values = [0, 0.3, 1, 0.0]
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_hwjhi"]
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_ixdw3"]
 constant = 0.8
 
-[sub_resource type="VisualShader" id="VisualShader_o8auv"]
+[sub_resource type="VisualShader" id="VisualShader_yq65t"]
 code = "shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
 
@@ -369,11 +376,11 @@ void fragment() {
 "
 graph_offset = Vector2(-468.563, -114.227)
 flags/unshaded = true
-nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_8wfnm")
+nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_3d8c6")
 nodes/fragment/2/position = Vector2(-760, -40)
-nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_4akwd")
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_kl0v0")
 nodes/fragment/3/position = Vector2(-1380, 520)
-nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_01wla")
+nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_b8x62")
 nodes/fragment/4/position = Vector2(-1200, 380)
 nodes/fragment/4/size = Vector2(724.789, 654.559)
 nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
@@ -388,17 +395,17 @@ nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
 vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/5/node = SubResource("VisualShaderNodeFloatParameter_8fwg5")
+nodes/fragment/5/node = SubResource("VisualShaderNodeFloatParameter_wbs4k")
 nodes/fragment/5/position = Vector2(-1780, 400)
-nodes/fragment/6/node = SubResource("VisualShaderNodeStep_b4w1v")
+nodes/fragment/6/node = SubResource("VisualShaderNodeStep_s5128")
 nodes/fragment/6/position = Vector2(-351.825, 215.819)
-nodes/fragment/7/node = SubResource("VisualShaderNodeFloatConstant_hwjhi")
+nodes/fragment/7/node = SubResource("VisualShaderNodeFloatConstant_ixdw3")
 nodes/fragment/7/position = Vector2(-1440, 360)
 nodes/fragment/connections = PackedInt32Array(3, 0, 4, 1, 4, 0, 6, 1, 6, 0, 0, 1, 7, 0, 4, 0, 2, 0, 0, 0, 2, 0, 6, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_v75yl"]
 render_priority = 0
-shader = SubResource("VisualShader_o8auv")
+shader = SubResource("VisualShader_yq65t")
 
 [sub_resource type="VisualShaderNodeProximityFade" id="VisualShaderNodeProximityFade_dnk0e"]
 default_input_values = [0, 1.5]
@@ -936,15 +943,14 @@ light_specular = 0.0
 omni_range = 7.0
 omni_attenuation = 0.258817
 
-[node name="Sonar" type="Node3D" parent="Player_Boat"]
-transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
-
-[node name="On_OverMouse_3D_SHAPE" type="MeshInstance3D" parent="Player_Boat/Sonar"]
-transform = Transform3D(12.8483, 0, -2.27374e-13, 0, 1.20588, 0, 2.27374e-13, 0, 12.8483, 0, -1.55876, 0)
+[node name="On_OverMouse_3D_SHAPE" type="MeshInstance3D" parent="Player_Boat"]
+transform = Transform3D(1.28483, 0, -2.84217e-14, 0, 0.120588, 0, 2.84217e-14, 0, 1.28483, 0, -0.155876, 0)
 visible = false
 mesh = SubResource("TorusMesh_o3rdy")
-skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("ShaderMaterial_v75yl")
+
+[node name="Sonar" type="Node3D" parent="Player_Boat"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
 
 [node name="01" type="Node3D" parent="Player_Boat/Sonar"]
 transform = Transform3D(5.52237, 0, 0, 0, 5.52237, 0, 0, 0, 5.52237, 0.049623, -0.743807, -0.269134)
@@ -1210,12 +1216,14 @@ shape = SubResource("SphereShape3D_jvty4")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.70167, -0.174761, 1.01103)
 collision_layer = 2
 collision_mask = 2
+boue_data = ExtResource("26_blekg")
 subscene_index = "A1"
 
 [node name="EPAVE_ZONE2" parent="--DECOR--/UNDER_WATER" instance=ExtResource("23_txlwt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6219, -0.192537, -2.46462)
 collision_layer = 2
 collision_mask = 2
+boue_data = ExtResource("27_id2vw")
 subscene_index = "E4"
 
 [node name="Clouds" type="MeshInstance3D" parent="--DECOR--"]

@@ -20,6 +20,8 @@ func show_legend(condition : bool):
 		_global_datas.show_board_description.emit(true,legend_text)
 		var focus_pos = photo_area.global_position
 		_global_datas.focus_this_on_board.emit(focus_pos)
+		_is_select = true	
+		is_select.visible = true	
 	else:
 		_global_datas.show_board_description.emit(false,"")	
 
@@ -36,8 +38,7 @@ func _on_input_event(camera, event, _position, normal, shape_idx):
 		
 	
 		show_legend(true)		
-		_is_select = true	
-		is_select.visible = true	
+	
 		
 func _input(event):
 	

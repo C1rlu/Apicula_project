@@ -1,9 +1,11 @@
-[gd_scene load_steps=51 format=3 uid="uid://cein0q2eirkay"]
+[gd_scene load_steps=53 format=3 uid="uid://cein0q2eirkay"]
 
 [ext_resource type="Script" path="res://10_BOARD/FollowFocus.gd" id="1_2m7ey"]
 [ext_resource type="Script" path="res://10_BOARD/Board_CamTarget.gd" id="1_janbq"]
 [ext_resource type="Script" path="res://10_BOARD/Update_descriptions.gd" id="1_ym670"]
+[ext_resource type="Script" path="res://10_BOARD/Input_switch.gd" id="2_00g5f"]
 [ext_resource type="PackedScene" uid="uid://dr73p5vs0sixe" path="res://10_BOARD/board_scene.tscn" id="2_6c571"]
+[ext_resource type="Script" path="res://10_BOARD/Pad_clic_raycast.gd" id="3_rqf42"]
 
 [sub_resource type="GDScript" id="GDScript_w13ry"]
 script/source = "extends Node
@@ -769,6 +771,12 @@ script = SubResource("GDScript_00hwt")
 script = SubResource("GDScript_q7x8f")
 _all_cam_array = [NodePath("../BOARD_UI/SubViewport/Camp_root_Render"), NodePath("../Camp_root_XRay")]
 
+[node name="Input_switch" type="Node" parent="."]
+script = ExtResource("2_00g5f")
+
+[node name="Pad_clic_raycast" type="Node" parent="."]
+script = ExtResource("3_rqf42")
+
 [node name="Update_descriptions" type="Node" parent="."]
 script = ExtResource("1_ym670")
 
@@ -800,7 +808,7 @@ fsr_sharpness = 2.0
 size = Vector2i(1920, 1080)
 render_target_update_mode = 4
 
-[node name="ColorRect" type="ColorRect" parent="BOARD_UI/SubViewport"]
+[node name="Pad_target" type="ColorRect" parent="BOARD_UI/SubViewport"]
 visible = false
 material = SubResource("ShaderMaterial_blt4p")
 anchors_preset = 8

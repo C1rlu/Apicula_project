@@ -46,16 +46,16 @@ func _set_note(_text : String, _from: String):
 
 [sub_resource type="QuadMesh" id="QuadMesh_2j3jf"]
 
-[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_53wbb"]
+[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_a4mpb"]
 function = 31
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_025qg"]
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_hopuh"]
 constant = 0.4
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_5qx1q"]
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_qqnjb"]
 constant = 1.0
 
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_ijvmg"]
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_j3s50"]
 size = Vector2(724.789, 654.559)
 expression = "const float DITHER_THRESHOLDS[16] ={
 		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
@@ -68,25 +68,25 @@ vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
 
-[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_7m0jy"]
+[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_iogh5"]
 constant = Color(0.84, 0.5376, 0.168, 1)
 
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_13c7n"]
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_e7423"]
 
-[sub_resource type="Gradient" id="Gradient_754lt"]
+[sub_resource type="Gradient" id="Gradient_rvspo"]
 offsets = PackedFloat32Array(0.779817, 0.825688, 0.926606, 1)
 colors = PackedColorArray(0, 0, 0, 1, 0.0962047, 0.0962048, 0.0962047, 1, 0.310617, 0.310617, 0.310617, 1, 0, 0, 0, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_l3nfd"]
-gradient = SubResource("Gradient_754lt")
+gradient = SubResource("Gradient_rvspo")
 fill = 2
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.91453, 0.106838)
 
-[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_vcijt"]
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_dk03g"]
 texture = SubResource("GradientTexture2D_l3nfd")
 
-[sub_resource type="VisualShader" id="VisualShader_jlr7g"]
+[sub_resource type="VisualShader" id="VisualShader_kp7dx"]
 code = "shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded, shadows_disabled;
 
@@ -147,11 +147,11 @@ graph_offset = Vector2(-320.202, -279.115)
 flags/unshaded = true
 flags/shadows_disabled = true
 nodes/fragment/0/position = Vector2(680, 20)
-nodes/fragment/2/node = SubResource("VisualShaderNodeFloatConstant_025qg")
+nodes/fragment/2/node = SubResource("VisualShaderNodeFloatConstant_hopuh")
 nodes/fragment/2/position = Vector2(-708.999, 749.102)
-nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_5qx1q")
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_qqnjb")
 nodes/fragment/3/position = Vector2(-708.999, 609.102)
-nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_ijvmg")
+nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_j3s50")
 nodes/fragment/4/position = Vector2(-408.999, 729.102)
 nodes/fragment/4/size = Vector2(724.789, 654.559)
 nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
@@ -166,19 +166,19 @@ nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
 vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/5/node = SubResource("VisualShaderNodeColorConstant_7m0jy")
+nodes/fragment/5/node = SubResource("VisualShaderNodeColorConstant_iogh5")
 nodes/fragment/5/position = Vector2(331.001, -290.898)
-nodes/fragment/8/node = SubResource("VisualShaderNodeStep_13c7n")
+nodes/fragment/8/node = SubResource("VisualShaderNodeStep_e7423")
 nodes/fragment/8/position = Vector2(353.087, -105.897)
-nodes/fragment/9/node = SubResource("VisualShaderNodeTexture_vcijt")
+nodes/fragment/9/node = SubResource("VisualShaderNodeTexture_dk03g")
 nodes/fragment/9/position = Vector2(-360, -260)
-nodes/fragment/10/node = SubResource("VisualShaderNodeFloatFunc_53wbb")
+nodes/fragment/10/node = SubResource("VisualShaderNodeFloatFunc_a4mpb")
 nodes/fragment/10/position = Vector2(59.7326, -196.358)
 nodes/fragment/connections = PackedInt32Array(2, 0, 4, 1, 3, 0, 4, 0, 4, 0, 8, 1, 8, 0, 0, 1, 5, 0, 0, 0, 9, 0, 10, 0, 10, 0, 8, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_v4xfe"]
 render_priority = 0
-shader = SubResource("VisualShader_jlr7g")
+shader = SubResource("VisualShader_kp7dx")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_dx6do"]
 radius = 0.0472554

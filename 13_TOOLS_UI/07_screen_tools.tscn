@@ -1,8 +1,11 @@
-[gd_scene load_steps=97 format=3 uid="uid://bwmu5iwushsl5"]
+[gd_scene load_steps=101 format=3 uid="uid://bwmu5iwushsl5"]
 
 [ext_resource type="Texture2D" uid="uid://d31xi5f7tan5w" path="res://05_SHADER_TEST/Full_screen/Dither_pattners/Blue_noise/HDR_LA_7.png" id="1_2l1ih"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/INSTANCE_NOTE.gd" id="1_fcb2u"]
 [ext_resource type="FastNoiseLite" uid="uid://bcwy28tydkj4w" path="res://05_SHADER_TEST/Subscene_materials/Flash_noise.tres" id="2_rp5e3"]
+[ext_resource type="Texture2D" uid="uid://dto78na6ad5o2" path="res://00_SYSTEMS/KeyOrPad/Key_inputs.png" id="4_c4v0f"]
+[ext_resource type="Material" uid="uid://bxikm4g1nkywk" path="res://06_UI/Disolved_simple_texture.tres" id="4_opffw"]
+[ext_resource type="Texture2D" uid="uid://4bq2l5jjm4r2" path="res://00_SYSTEMS/KeyOrPad/Pad_inputs.png" id="5_jufic"]
 
 [sub_resource type="GDScript" id="GDScript_yhfpo"]
 script/source = "extends Node
@@ -1268,6 +1271,46 @@ shader_parameter/R = 0.02
 shader_parameter/Size = 0.35
 shader_parameter/flash_opacity = 0.5
 
+[sub_resource type="GDScript" id="GDScript_1c22g"]
+script/source = "extends Node
+
+@onready var pad_img = $\"../pad_img\"
+@onready var key_img = $\"../key_img\"
+
+@onready var material_pad : Material = pad_img.get_material()
+@onready var material_key : Material = key_img.get_material()
+
+var t
+
+func _ready():
+	_global_datas.using_pad.connect(show_whats_used)
+	
+	
+func show_whats_used(condition : bool):
+	
+	pad_img.visible = condition
+	key_img.visible = !condition
+	
+	
+			
+	if t:
+		t.kill()
+	t = create_tween()
+	
+	if condition:
+		t .tween_method(set_shader_value,1.0,0.0,1.0)
+	else:
+		t .tween_method(set_shader_value_key,1.0,0.0,1.0)	
+
+func set_shader_value(value):
+	
+	material_pad.set_shader_parameter(\"Opacity\",value)
+
+func set_shader_value_key(value):
+	
+	material_key.set_shader_parameter(\"Opacity\",value)
+"
+
 [node name="07_SCREEN_TOOLS" type="Node"]
 
 [node name="Open_Inventory" type="Node" parent="."]
@@ -1448,3 +1491,47 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(0.784314, 0.709804, 0.513726, 1)
+
+[node name="Inputs_used" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -128.0
+offset_top = -111.0
+offset_bottom = 17.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="Show_Use_inputs" type="Node" parent="Inputs_used"]
+script = SubResource("GDScript_1c22g")
+
+[node name="pad_img" type="TextureRect" parent="Inputs_used"]
+visible = false
+material = ExtResource("4_opffw")
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_jufic")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="key_img" type="TextureRect" parent="Inputs_used"]
+visible = false
+material = ExtResource("4_opffw")
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_c4v0f")
+expand_mode = 1
+stretch_mode = 4

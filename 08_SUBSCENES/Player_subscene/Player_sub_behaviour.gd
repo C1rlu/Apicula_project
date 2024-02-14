@@ -50,19 +50,19 @@ func _physics_process(_delta):
 		return
 	
 		
-	if Input.is_action_pressed(("move_forward")):
+	if Input.is_action_pressed((_global_datas.move_forward)):
 		var goingUp = transform.basis.y
 		apply_central_force(goingUp * move_speed)
 		player_dir(_delta,0.0,-27.0)
-	if Input.is_action_pressed(("move_backward")):
+	if Input.is_action_pressed((_global_datas.move_backward)):
 		var goingDown = -transform.basis.y
 		apply_central_force(goingDown * move_speed)
 		player_dir(_delta,0.0,27.0)
-	if Input.is_action_pressed(("move_right")):
+	if Input.is_action_pressed((_global_datas.move_right)):
 		var goingRight = transform.basis.x
 		apply_central_force(goingRight * move_speed)
 		player_dir(_delta,90.0,27.0)
-	if Input.is_action_pressed(("move_left")):
+	if Input.is_action_pressed((_global_datas.move_left)):
 		var goingLeft = -transform.basis.x
 		apply_central_force(goingLeft * move_speed)
 		player_dir(_delta,-90.0,27.0)
@@ -81,3 +81,4 @@ func player_dir(_delta, angle,angle_x):
 	
 	var New_rotation = Vector3(angle_x,angle,0.0)
 	PlayerMesh.rotation_degrees = lerp(PlayerMesh.rotation_degrees,New_rotation,2.0 * _delta)
+

@@ -7,7 +7,7 @@ var speed
 @export var min_z : float = -2.0
 @export var max_z : float = 2.0
 var border_ratio : float = 42
-	
+
 func _process(delta):
 	
 	if !_global_datas.Player_In_Inventory:
@@ -26,13 +26,13 @@ func _process(delta):
 		border_ratio = 5
 	var camera_position = position
 	
-	if Input.is_action_pressed(("move_right")):
+	if Input.is_action_pressed((_global_datas.move_right)):
 		camera_position.x += speed * delta
-	if Input.is_action_pressed(("move_left")):
+	if Input.is_action_pressed((_global_datas.move_left)):
 		camera_position.x -= speed * delta	
-	if Input.is_action_pressed(("move_forward")):
+	if Input.is_action_pressed((_global_datas.move_forward)):
 		camera_position.z -= speed * delta	
-	if Input.is_action_pressed(("move_backward")):
+	if Input.is_action_pressed((_global_datas.move_backward)):
 		camera_position.z += speed * delta
 	
 	var lerp_value = (border_ratio - 22.0) / (42.0 - 22.0)	
@@ -43,5 +43,4 @@ func _process(delta):
 	
 
 	position = camera_position
-	
 	

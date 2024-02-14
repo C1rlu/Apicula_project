@@ -10,19 +10,16 @@ func _input(event):
 	if !_global_datas.Player_In_Inventory:
 		return
 		
-	
-		
-		
-	if event.is_action_pressed(("move_right")):
+	if event.is_action_pressed((_global_datas.move_right)):
 		if t:
 			t.kill()	
-	if event.is_action_pressed(("move_left")):
+	if event.is_action_pressed((_global_datas.move_left)):
 		if t:
 			t.kill()	
-	if event.is_action_pressed(("move_forward")):
+	if event.is_action_pressed((_global_datas.move_forward)):
 		if t:
 			t.kill()	
-	if event.is_action_pressed(("move_backward")):
+	if event.is_action_pressed((_global_datas.move_backward)):
 		if t:
 			t.kill()	
 
@@ -34,8 +31,11 @@ func _focus_this(target : Vector3):
 		
 	if _global_datas.zoom_value == 1:
 		return	
+		
+		
+	var offset = Vector3(0.0,0.0,-0.035)	
 	if t:
 		t.kill()
 	t = create_tween()
-
-	t.tween_property(cam_target,"position",target,0.5)
+	
+	t.tween_property(cam_target,"position",target + offset,0.5)

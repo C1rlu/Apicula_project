@@ -21,6 +21,12 @@ signal _start_ini_subscene
 signal _end_ini_subscene
 signal _backFrom_subscene
 
+# input type
+signal using_pad(condition : bool)
+var move_right : String
+var move_left : String
+var move_forward : String
+var move_backward : String
 
 # scene signals
 
@@ -41,9 +47,9 @@ signal  _close_dialogue
 signal _type_text(count : int)
 
 # for save game
-var photo_archives : Array[PhotoData] #list of photo data took in game
+var photo_archives : Array[PhotoData] 
 var note_archives : Array[Note_Data]
-
+var boue_archives : Array[BoueData]
 
 signal _show_hand
 signal _hide_hand
