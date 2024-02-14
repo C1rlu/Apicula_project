@@ -4,6 +4,10 @@ extends Node
 var t
 func _ready():
 	_global_datas.focus_this_on_board.connect(_focus_this)
+	
+
+
+
 
 func _input(event):
 	

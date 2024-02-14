@@ -8,6 +8,7 @@ var speed
 @export var max_z : float = 2.0
 var border_ratio : float = 42
 
+
 func _process(delta):
 	
 	if !_global_datas.Player_In_Inventory:

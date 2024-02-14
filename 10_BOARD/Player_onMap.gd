@@ -2,8 +2,20 @@ extends Node3D
 
 @export var offset : Vector3
 @export var division_scale : float = 28.0
+@onready var cam_target = $"../BOARD_UI/SubViewport/CamTarget"
+
+
+
 func _ready():
 	_global_datas.open_inventory.connect(_updade_playerMapPosition)
+	#_global_datas.open_inventory.connect(_focus_player_when_open)
+
+func _focus_player_when_open(condition: bool):
+	
+	if !condition:
+		var this_position = global_position
+		_global_datas.focus_this_on_board.emit(this_position)	
+	
 	
 func _updade_playerMapPosition(condition : bool):
 	if !condition:
@@ -16,4 +28,4 @@ func _updade_playerMapPosition(condition : bool):
 	rotation = _global_datas.player_boat_rotation
 	position = PlayerMapPosition
 	
-	
+	#cam_target.position = position
