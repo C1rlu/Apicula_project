@@ -38,10 +38,7 @@ script/source = "extends Node
 @onready var board_ui = $\"../BOARD_UI\"
 @onready var material : Material = board_ui.get_material()
 
-
-
 var fade_in
-var fade_out
 
 func _ready():
 	_global_datas.open_inventory.connect(open_inventory)
@@ -50,20 +47,24 @@ func _ready():
 func open_inventory(condition : bool):
 	
 	if condition:
+		board_ui.visible = true
 		if fade_in:
 			fade_in.kill()
 		
 		fade_in = create_tween()
 		fade_in.tween_method(set_shader_value,0.0,1.0,0.5)
-		
+
 	else:
 		if fade_in:
 			fade_in.kill()
 		
 		fade_in = create_tween()
 		fade_in.tween_method(set_shader_value,1.0,0.0,0.5)
+		fade_in.connect(\"finished\",_disable_viewport)
 
-	
+
+func _disable_viewport():
+	board_ui.visible = false
 
 func set_shader_value(value):
 	
@@ -102,7 +103,9 @@ func _ready():
 func _input(event):
 	
 
-	
+	if _global_datas.Player_InMenu:
+		return
+		
 	if !_global_datas.Player_In_Inventory:
 		return
 	if event.is_action_pressed(\"Inventory_zoom_in\"):
@@ -815,6 +818,7 @@ current = true
 fov = 42.0
 
 [node name="BOARD_UI" type="SubViewportContainer" parent="."]
+visible = false
 material = SubResource("ShaderMaterial_jmuyw")
 anchors_preset = 15
 anchor_right = 1.0
@@ -829,7 +833,7 @@ handle_input_locally = false
 scaling_3d_scale = 0.9
 fsr_sharpness = 2.0
 size = Vector2i(1920, 1080)
-render_target_update_mode = 4
+render_target_update_mode = 0
 
 [node name="Pad_target" type="ColorRect" parent="BOARD_UI/SubViewport"]
 visible = false

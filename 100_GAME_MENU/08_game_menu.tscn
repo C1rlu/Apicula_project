@@ -1,0 +1,476 @@
+[gd_scene load_steps=21 format=3 uid="uid://bemddl0bqqfwo"]
+
+[ext_resource type="Script" path="res://100_GAME_MENU/Open_Menu.gd" id="1_2jpo2"]
+[ext_resource type="Script" path="res://100_GAME_MENU/Option_panel.gd" id="2_gelwi"]
+[ext_resource type="Script" path="res://100_GAME_MENU/Close_all_menu.gd" id="3_w8aa0"]
+[ext_resource type="Script" path="res://100_GAME_MENU/Restart.gd" id="4_0detv"]
+
+[sub_resource type="GDScript" id="GDScript_8vnul"]
+script/source = "extends Node
+
+@onready var backdrop = $\"../Game_Menu_Root/Menu_Backdrop\"
+@onready var material : Material = backdrop .get_material()
+
+var actual_value : float
+var t
+
+func _ready():
+	_global_datas._open_menu.connect(check_condition)
+	
+
+
+func check_condition(condition : bool):
+	
+	if condition:
+		_fade_in()
+	else:
+		_fade_out()
+	
+func _fade_in():
+
+	
+	if t:
+		t.kill()
+	t = create_tween()
+	
+	t .tween_method(set_shader_value,actual_value,0.75,1.0)
+
+func _fade_out():
+	
+	if t:
+		t.kill()
+	t = create_tween()
+	
+	t .tween_method(set_shader_value,actual_value,0.0,1.0)
+
+
+func set_shader_value(value):
+	material.set_shader_parameter(\"Opacity\",value)
+	actual_value = value
+"
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_7nslp"]
+input_name = "uv"
+
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_0ooyc"]
+default_input_values = [1, Vector2(1.8, 1), 2, Vector2(0.5, 0)]
+function = 1
+
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_xikr4"]
+default_input_values = [1, Vector2(0, 1), 2, Vector2(0, 0)]
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_2yh42"]
+size = Vector2(513.781, 284.487)
+expression = "vec2 n_uv = UV -0.5;
+float d = length(n_uv);
+float c = smoothstep(r,r + feather,d);
+color = vec4(vec3(c),1.0);"
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_qpvgs"]
+constant = 1.372
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_25rqf"]
+constant = 0.406
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_gafsx"]
+constant = 0.4
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_3q4xu"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_hokwf"]
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_3ht57"]
+parameter_name = "Opacity"
+default_value_enabled = true
+
+[sub_resource type="VisualShader" id="VisualShader_x0sux"]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+uniform float Opacity = 0;
+
+
+
+void fragment() {
+// FloatParameter:9
+	float n_out9p0 = Opacity;
+
+
+// FloatConstant:2
+	float n_out2p0 = 0.400000;
+
+
+	float n_out4p0;
+// Expression:4
+	n_out4p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out2p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out4p0 = n_out9p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Step:5
+	float n_in5p0 = 0.00000;
+	float n_out5p0 = step(n_in5p0, n_out4p0);
+
+
+// Output:0
+	COLOR.a = n_out5p0;
+
+
+}
+"
+graph_offset = Vector2(-1245.45, -17.1)
+mode = 1
+flags/light_only = false
+nodes/fragment/2/node = SubResource("VisualShaderNodeFloatConstant_gafsx")
+nodes/fragment/2/position = Vector2(-1600, 600)
+nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_3q4xu")
+nodes/fragment/4/position = Vector2(-1300, 500)
+nodes/fragment/4/size = Vector2(724.789, 654.559)
+nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/4/output_ports = "0,0,Dither_Node;"
+nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/5/node = SubResource("VisualShaderNodeStep_hokwf")
+nodes/fragment/5/position = Vector2(-180, 240)
+nodes/fragment/9/node = SubResource("VisualShaderNodeFloatParameter_3ht57")
+nodes/fragment/9/position = Vector2(-1980, 380)
+nodes/fragment/10/node = SubResource("VisualShaderNodeInput_7nslp")
+nodes/fragment/10/position = Vector2(-2820, -140)
+nodes/fragment/11/node = SubResource("VisualShaderNodeUVFunc_0ooyc")
+nodes/fragment/11/position = Vector2(-2480, -200)
+nodes/fragment/12/node = SubResource("VisualShaderNodeUVFunc_xikr4")
+nodes/fragment/12/position = Vector2(-2240, -200)
+nodes/fragment/13/node = SubResource("VisualShaderNodeExpression_2yh42")
+nodes/fragment/13/position = Vector2(-1980, 20)
+nodes/fragment/13/size = Vector2(513.781, 284.487)
+nodes/fragment/13/input_ports = "0,3,UV;1,0,r;2,0,feather;"
+nodes/fragment/13/output_ports = "0,5,color;"
+nodes/fragment/13/expression = "vec2 n_uv = UV -0.5;
+float d = length(n_uv);
+float c = smoothstep(r,r + feather,d);
+color = vec4(vec3(c),1.0);"
+nodes/fragment/14/node = SubResource("VisualShaderNodeFloatConstant_qpvgs")
+nodes/fragment/14/position = Vector2(-2520, 260)
+nodes/fragment/15/node = SubResource("VisualShaderNodeFloatConstant_25rqf")
+nodes/fragment/15/position = Vector2(-2460, 40)
+nodes/fragment/connections = PackedInt32Array(2, 0, 4, 1, 4, 0, 5, 1, 5, 0, 0, 1, 9, 0, 4, 0, 10, 0, 11, 0, 11, 0, 12, 0, 14, 0, 13, 2, 12, 0, 13, 0, 15, 0, 13, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6jute"]
+shader = SubResource("VisualShader_x0sux")
+shader_parameter/Opacity = 0.0
+
+[sub_resource type="GDScript" id="GDScript_r74c2"]
+script/source = "extends Button
+
+func _ready():
+	var number : int = 0
+	set_focus_mode(number)
+
+"
+
+[sub_resource type="GDScript" id="GDScript_o2q05"]
+script/source = "extends Button
+
+func _ready():
+	var number : int = 0
+	set_focus_mode(number)
+"
+
+[sub_resource type="GDScript" id="GDScript_e1pe5"]
+script/source = "extends Button
+
+func _ready():
+	var number : int = 0
+	set_focus_mode(number)
+
+
+func _on_pressed():
+	get_tree().quit()	
+"
+
+[node name="08_GAME_MENU" type="Node"]
+
+[node name="Open_Menu" type="Node" parent="."]
+script = ExtResource("1_2jpo2")
+
+[node name="Open_backdrop" type="Node" parent="."]
+script = SubResource("GDScript_8vnul")
+
+[node name="Option_Panel" type="Node" parent="."]
+script = ExtResource("2_gelwi")
+
+[node name="Close_all_menu" type="Node" parent="." node_paths=PackedStringArray("all_menu")]
+script = ExtResource("3_w8aa0")
+all_menu = [NodePath("../Game_Menu_Root/Restart"), NodePath("../Game_Menu_Root/Options"), NodePath("../Game_Menu_Root/Exit")]
+
+[node name="Restart" type="Node" parent="."]
+script = ExtResource("4_0detv")
+
+[node name="Game_Menu_Root" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Menu_Backdrop" type="ColorRect" parent="Game_Menu_Root"]
+material = SubResource("ShaderMaterial_6jute")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -4.0
+offset_top = -1.0
+offset_right = -4.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0156863, 0.0705882, 0.0823529, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="ColorRect2" type="ColorRect" parent="Game_Menu_Root"]
+visible = false
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -313.0
+offset_bottom = -208.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.721569, 0.580392, 0.407843, 1)
+
+[node name="ColorRect" type="ColorRect" parent="Game_Menu_Root"]
+visible = false
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -308.0
+offset_bottom = -208.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.00784314, 0.0980392, 0.113725, 1)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Game_Menu_Root"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -226.5
+offset_top = 388.0
+offset_right = 226.5
+offset_bottom = 438.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 50
+
+[node name="Restart_Button" type="Button" parent="Game_Menu_Root/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.721569, 0.580392, 0.407843, 1)
+theme_override_font_sizes/font_size = 30
+text = "RESTART"
+script = SubResource("GDScript_r74c2")
+
+[node name="Option_button" type="Button" parent="Game_Menu_Root/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.721569, 0.580392, 0.407843, 1)
+theme_override_font_sizes/font_size = 30
+text = "OPTIONS"
+script = SubResource("GDScript_o2q05")
+
+[node name="Exit_Button" type="Button" parent="Game_Menu_Root/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.721569, 0.580392, 0.407843, 1)
+theme_override_font_sizes/font_size = 30
+text = "EXIT "
+script = SubResource("GDScript_e1pe5")
+
+[node name="dots" type="Label" parent="Game_Menu_Root"]
+layout_direction = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -319.0
+offset_top = 325.0
+offset_right = 319.0
+offset_bottom = 384.27
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.317647, 0.615686, 0.529412, 1)
+theme_override_font_sizes/font_size = 25
+text = "............................................."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Restart" type="Control" parent="Game_Menu_Root"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -250.0
+offset_right = 250.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Game_Menu_Root/Restart"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+
+[node name="Restart" type="Button" parent="Game_Menu_Root/Restart/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "Restart"
+
+[node name="Options" type="Control" parent="Game_Menu_Root"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -250.0
+offset_right = 250.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Game_Menu_Root/Options"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 120.0
+offset_right = 144.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+
+[node name="Fullscreen_button" type="CheckBox" parent="Game_Menu_Root/Options/VBoxContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="Label" type="Label" parent="Game_Menu_Root/Options/VBoxContainer/Fullscreen_button"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -105.0
+offset_top = -14.0
+offset_right = -26.0
+offset_bottom = 9.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.317647, 0.615686, 0.529412, 1)
+theme_override_font_sizes/font_size = 25
+text = "Fullscreen ............................"
+
+[node name="Vsync_button" type="CheckBox" parent="Game_Menu_Root/Options/VBoxContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="Label" type="Label" parent="Game_Menu_Root/Options/VBoxContainer/Vsync_button"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -105.0
+offset_top = -14.0
+offset_right = -26.0
+offset_bottom = 9.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.317647, 0.615686, 0.529412, 1)
+theme_override_font_sizes/font_size = 25
+text = "Vsync ...................................."
+
+[node name="Exit" type="Control" parent="Game_Menu_Root"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -250.0
+offset_right = 250.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Game_Menu_Root/Exit"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+
+[node name="Exit_button" type="Button" parent="Game_Menu_Root/Exit/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "Exit"
+
+[connection signal="open_option" from="Option_Panel" to="Close_all_menu" method="_on_option_panel_open_option"]
+[connection signal="Restart" from="Restart" to="Close_all_menu" method="_on_restart_restart"]
+[connection signal="pressed" from="Game_Menu_Root/HBoxContainer/Restart_Button" to="Restart" method="_on_restart_button_pressed"]
+[connection signal="pressed" from="Game_Menu_Root/HBoxContainer/Option_button" to="Option_Panel" method="_on_option_button_pressed"]
+[connection signal="pressed" from="Game_Menu_Root/HBoxContainer/Exit_Button" to="Game_Menu_Root/HBoxContainer/Exit_Button" method="_on_pressed"]
+[connection signal="toggled" from="Game_Menu_Root/Options/VBoxContainer/Fullscreen_button" to="Option_Panel" method="_on_fullscreen_button_toggled"]
+[connection signal="toggled" from="Game_Menu_Root/Options/VBoxContainer/Vsync_button" to="Option_Panel" method="_on_vsync_button_toggled"]

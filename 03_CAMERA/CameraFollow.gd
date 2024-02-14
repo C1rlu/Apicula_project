@@ -24,6 +24,7 @@ func _ready():
 	_global_datas._open_dialogue.connect(_inDialogue)
 	_global_datas.in_dialogue_zone.connect(_outDialogue)
 	
+	_global_datas._open_menu.connect(_in_menu_state)
 
 
 	
@@ -47,3 +48,14 @@ func _inDialogue():
 	
 func _outDialogue():
 	active_target = offset
+
+
+func _in_menu_state(condition : bool):
+	
+	if _global_datas.Player_InDialogue:
+		return
+	if condition:
+		active_target = offset + sub_scene_offset
+	else :
+		active_target = offset
+	

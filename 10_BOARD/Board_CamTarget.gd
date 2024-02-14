@@ -11,6 +11,9 @@ var border_ratio : float = 42
 
 func _process(delta):
 	
+	if _global_datas.Player_InMenu:
+		return
+	
 	if !_global_datas.Player_In_Inventory:
 		return
 	if _global_datas.Player_lock_click:

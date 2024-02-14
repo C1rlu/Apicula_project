@@ -34,7 +34,7 @@ func _input(event):
 		#TO DROP
 		if event.is_action_pressed("Click"):
 			_Zoom_Object(false)
-			_global_datas.book_is_open.emit(false)
+			_global_datas.Open_ui_dark_backdrop.emit(false)
 			_global_datas.Player_lock_click = false	
 			_global_datas.lock_page.emit()
 			control.queue_free()
@@ -59,6 +59,8 @@ func _Zoom_Object(condition:bool):
 		if change_photo:
 			change_photo._change_photo_shade()
 			
+		_global_datas.Open_ui_dark_backdrop.emit(true)	
+		
 	else:
 		_scale_change(size)
 		_global_datas._show_object_legend.emit(false,"")

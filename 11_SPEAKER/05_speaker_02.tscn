@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://bbp1ccoa6te1g"]
+[gd_scene load_steps=51 format=3 uid="uid://bbp1ccoa6te1g"]
 
 [ext_resource type="Script" path="res://11_SPEAKER/Open_Dialogue.gd" id="1_6gph5"]
 [ext_resource type="Script" path="res://09_NPC/NPC_DIVE_SELECTOR/Npc_loader.gd" id="2_gecf5"]
@@ -51,6 +51,189 @@ func _on_timer_timeout():
 	$Timer.start()
 	
 "
+
+[sub_resource type="GDScript" id="GDScript_mltnc"]
+script/source = "extends Node
+
+@onready var backdrop = $Backdrop
+@onready var material : Material = backdrop .get_material()
+
+var actual_value : float
+var t
+
+func _ready():
+	_global_datas.Open_ui_dark_backdrop.connect(check_condition)
+	
+
+
+func check_condition(condition : bool):
+	
+	if condition:
+		_fade_in()
+	else:
+		_fade_out()
+	
+func _fade_in():
+
+	
+	if t:
+		t.kill()
+	t = create_tween()
+	
+	t .tween_method(set_shader_value,actual_value,0.75,1.0)
+
+func _fade_out():
+	
+	if t:
+		t.kill()
+	t = create_tween()
+	
+	t .tween_method(set_shader_value,actual_value,0.0,1.0)
+
+
+func set_shader_value(value):
+	material.set_shader_parameter(\"Opacity\",value)
+	actual_value = value
+"
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_ch3rr"]
+input_name = "uv"
+
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_ib8ml"]
+default_input_values = [1, Vector2(1.8, 1), 2, Vector2(0.5, 0)]
+function = 1
+
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_6f3di"]
+default_input_values = [1, Vector2(0, 1), 2, Vector2(0, 0)]
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_6ekxw"]
+size = Vector2(513.781, 284.487)
+expression = "vec2 n_uv = UV -0.5;
+float d = length(n_uv);
+float c = smoothstep(r,r + feather,d);
+color = vec4(vec3(c),1.0);"
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_oqqpg"]
+constant = 1.372
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_037d1"]
+constant = 0.406
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_xj2cx"]
+constant = 0.4
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_58pge"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_x8bp4"]
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_fnda7"]
+parameter_name = "Opacity"
+default_value_enabled = true
+
+[sub_resource type="VisualShader" id="VisualShader_cqqjt"]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+uniform float Opacity = 0;
+
+
+
+void fragment() {
+// FloatParameter:9
+	float n_out9p0 = Opacity;
+
+
+// FloatConstant:2
+	float n_out2p0 = 0.400000;
+
+
+	float n_out4p0;
+// Expression:4
+	n_out4p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out2p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out4p0 = n_out9p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Step:5
+	float n_in5p0 = 0.00000;
+	float n_out5p0 = step(n_in5p0, n_out4p0);
+
+
+// Output:0
+	COLOR.a = n_out5p0;
+
+
+}
+"
+graph_offset = Vector2(-1245.45, -17.1)
+mode = 1
+flags/light_only = false
+nodes/fragment/2/node = SubResource("VisualShaderNodeFloatConstant_xj2cx")
+nodes/fragment/2/position = Vector2(-1600, 600)
+nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_58pge")
+nodes/fragment/4/position = Vector2(-1300, 500)
+nodes/fragment/4/size = Vector2(724.789, 654.559)
+nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/4/output_ports = "0,0,Dither_Node;"
+nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/5/node = SubResource("VisualShaderNodeStep_x8bp4")
+nodes/fragment/5/position = Vector2(-180, 240)
+nodes/fragment/9/node = SubResource("VisualShaderNodeFloatParameter_fnda7")
+nodes/fragment/9/position = Vector2(-1980, 380)
+nodes/fragment/10/node = SubResource("VisualShaderNodeInput_ch3rr")
+nodes/fragment/10/position = Vector2(-2820, -140)
+nodes/fragment/11/node = SubResource("VisualShaderNodeUVFunc_ib8ml")
+nodes/fragment/11/position = Vector2(-2480, -200)
+nodes/fragment/12/node = SubResource("VisualShaderNodeUVFunc_6f3di")
+nodes/fragment/12/position = Vector2(-2240, -200)
+nodes/fragment/13/node = SubResource("VisualShaderNodeExpression_6ekxw")
+nodes/fragment/13/position = Vector2(-1980, 20)
+nodes/fragment/13/size = Vector2(513.781, 284.487)
+nodes/fragment/13/input_ports = "0,3,UV;1,0,r;2,0,feather;"
+nodes/fragment/13/output_ports = "0,5,color;"
+nodes/fragment/13/expression = "vec2 n_uv = UV -0.5;
+float d = length(n_uv);
+float c = smoothstep(r,r + feather,d);
+color = vec4(vec3(c),1.0);"
+nodes/fragment/14/node = SubResource("VisualShaderNodeFloatConstant_oqqpg")
+nodes/fragment/14/position = Vector2(-2520, 260)
+nodes/fragment/15/node = SubResource("VisualShaderNodeFloatConstant_037d1")
+nodes/fragment/15/position = Vector2(-2460, 40)
+nodes/fragment/connections = PackedInt32Array(2, 0, 4, 1, 4, 0, 5, 1, 5, 0, 0, 1, 9, 0, 4, 0, 10, 0, 11, 0, 11, 0, 12, 0, 14, 0, 13, 2, 12, 0, 13, 0, 15, 0, 13, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7np4u"]
+shader = SubResource("VisualShader_cqqjt")
+shader_parameter/Opacity = 0.0
 
 [sub_resource type="GDScript" id="GDScript_6qc5w"]
 script/source = "extends Node
@@ -373,6 +556,24 @@ script = ExtResource("2_gecf5")
 script = SubResource("GDScript_ktgfg")
 
 [node name="Timer" type="Timer" parent="Random_FaceChanger"]
+
+[node name="Open_backdrop" type="Node" parent="."]
+script = SubResource("GDScript_mltnc")
+
+[node name="Backdrop" type="ColorRect" parent="Open_backdrop"]
+material = SubResource("ShaderMaterial_7np4u")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -4.0
+offset_top = -1.0
+offset_right = -4.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.0156863, 0.0705882, 0.0823529, 1)
+metadata/_edit_use_anchors_ = true
 
 [node name="00_NPC_CREATOR" type="Node" parent="."]
 script = ExtResource("3_u2fyv")

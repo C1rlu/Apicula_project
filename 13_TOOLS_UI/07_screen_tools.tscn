@@ -11,13 +11,11 @@
 script/source = "extends Node
 
 var is_open : bool = false
-func _on_open_inventory_button_pressed():
-	
-	is_open =!is_open
-	_global_datas.open_inventory.emit(is_open)
-
 
 func _input(event):
+	
+	if _global_datas.Player_InMenu:
+		return
 	
 	if _global_datas.Player_InSubScene:
 		return
@@ -25,6 +23,7 @@ func _input(event):
 		return
 	
 	if event.is_action_pressed(\"Open_Inventory\"):
+	
 		is_open =!is_open
 		_global_datas.open_inventory.emit(is_open)	
 "
@@ -1311,7 +1310,7 @@ func set_shader_value_key(value):
 	material_key.set_shader_parameter(\"Opacity\",value)
 "
 
-[node name="07_SCREEN_TOOLS" type="Node"]
+[node name="07_SCREEN_UI" type="Node"]
 
 [node name="Open_Inventory" type="Node" parent="."]
 script = SubResource("GDScript_yhfpo")

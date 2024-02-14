@@ -20,6 +20,9 @@ signal _go_Subscene
 signal _start_ini_subscene
 signal _end_ini_subscene
 signal _backFrom_subscene
+signal _open_menu(condition : bool)
+
+
 
 # input type
 signal using_pad(condition : bool)
@@ -94,7 +97,7 @@ signal show_board_description(condition : bool, _text: String)
 signal focus_this_on_board(target : Vector3)
 
 # BOOK PAGEqs
-signal  book_is_open(condition : bool)
+signal Open_ui_dark_backdrop(condition : bool)
 var Book_page_index : int
 var Book_pages : Array
 var Book_group : Node2D
