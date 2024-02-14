@@ -1,9 +1,10 @@
-[gd_scene load_steps=36 format=3 uid="uid://bemddl0bqqfwo"]
+[gd_scene load_steps=37 format=3 uid="uid://bemddl0bqqfwo"]
 
 [ext_resource type="Script" path="res://100_GAME_MENU/Open_Menu.gd" id="1_2jpo2"]
 [ext_resource type="Script" path="res://100_GAME_MENU/Option_panel.gd" id="2_gelwi"]
 [ext_resource type="Script" path="res://100_GAME_MENU/Close_all_menu.gd" id="3_w8aa0"]
 [ext_resource type="Script" path="res://100_GAME_MENU/Restart.gd" id="4_0detv"]
+[ext_resource type="Script" path="res://100_GAME_MENU/resolution_button.gd" id="5_rnqar"]
 
 [sub_resource type="GDScript" id="GDScript_8vnul"]
 script/source = "extends Node
@@ -255,7 +256,6 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-752.355, -126.832)
 mode = 1
 flags/light_only = false
 nodes/fragment/2/node = SubResource("VisualShaderNodeFloatConstant_ny6mo")
@@ -553,13 +553,14 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Game_Menu_Root/Options"]
+custom_minimum_size = Vector2(25, 25)
 layout_mode = 1
 anchors_preset = 13
 anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 120.0
-offset_right = 144.0
+offset_left = 87.0
+offset_right = 112.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 15
@@ -662,6 +663,28 @@ theme_override_colors/font_color = Color(0.317647, 0.615686, 0.529412, 1)
 theme_override_font_sizes/font_size = 25
 text = "Vsync ...................................."
 
+[node name="OptionButton" type="OptionButton" parent="Game_Menu_Root/Options"]
+layout_mode = 2
+offset_left = 337.0
+offset_top = 78.0
+offset_right = 382.0
+offset_bottom = 98.0
+script = ExtResource("5_rnqar")
+
+[node name="Label2" type="Label" parent="Game_Menu_Root/Options/OptionButton"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -337.0
+offset_top = -17.5
+offset_right = -9.0
+offset_bottom = 17.5
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.317647, 0.615686, 0.529412, 1)
+theme_override_font_sizes/font_size = 25
+text = "Resolution ..........................."
+
 [node name="Exit" type="Control" parent="Game_Menu_Root"]
 visible = false
 layout_mode = 1
@@ -699,3 +722,4 @@ text = "Exit"
 [connection signal="pressed" from="Game_Menu_Root/HBoxContainer/Exit_Button" to="Game_Menu_Root/HBoxContainer/Exit_Button" method="_on_pressed"]
 [connection signal="toggled" from="Game_Menu_Root/Options/VBoxContainer/Fullscreen_button" to="Option_Panel" method="_on_fullscreen_button_toggled"]
 [connection signal="toggled" from="Game_Menu_Root/Options/VBoxContainer/Vsync_button" to="Option_Panel" method="_on_vsync_button_toggled"]
+[connection signal="item_selected" from="Game_Menu_Root/Options/OptionButton" to="Game_Menu_Root/Options/OptionButton" method="_on_item_selected"]
