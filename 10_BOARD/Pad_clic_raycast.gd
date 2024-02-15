@@ -1,7 +1,7 @@
 extends Node
 
 var _active : bool = false
-@onready var pad_target = $"../BOARD_UI/SubViewport/Pad_target"
+@onready var pad_target = $"../SubViewport/Pad_target"
 @onready var  Camera = $"../Camp_root_XRay/Camera_xray"
 
 func _ready():

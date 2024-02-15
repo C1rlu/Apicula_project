@@ -48,8 +48,8 @@ func _fade_out():
 
 func set_shader_value(value):
 	material.set_shader_parameter(\"Opacity\",value)
-	var clamp = clamp(value,0.0,0.5)
-	material_normal.set_shader_parameter(\"Opacity\",clamp)
+	var clamp_y = clamp(value,0.0,0.5)
+	material_normal.set_shader_parameter(\"Opacity\",clamp_y)
 	actual_value = value
 "
 
@@ -76,8 +76,9 @@ constant = 1.372
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_25rqf"]
 constant = 0.406
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_gafsx"]
-constant = 0.4
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_3ivuf"]
+parameter_name = "Dither_size"
+qualifier = 1
 
 [sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_3q4xu"]
 size = Vector2(724.789, 654.559)
@@ -103,6 +104,7 @@ code = "shader_type canvas_item;
 render_mode blend_mix;
 
 uniform float Opacity = 0;
+global uniform float Dither_size;
 
 
 
@@ -111,8 +113,8 @@ void fragment() {
 	float n_out9p0 = Opacity;
 
 
-// FloatConstant:2
-	float n_out2p0 = 0.400000;
+// FloatParameter:16
+	float n_out16p0 = Dither_size;
 
 
 	float n_out4p0;
@@ -126,7 +128,7 @@ void fragment() {
 				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
 			};
 			
-		vec2 uv = FRAGCOORD.xy * n_out2p0;
+		vec2 uv = FRAGCOORD.xy * n_out16p0;
 		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 		n_out4p0 = n_out9p0 - DITHER_THRESHOLDS[index];
 	}
@@ -143,11 +145,9 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-1245.45, -17.1)
+graph_offset = Vector2(-2005.46, -71.6162)
 mode = 1
 flags/light_only = false
-nodes/fragment/2/node = SubResource("VisualShaderNodeFloatConstant_gafsx")
-nodes/fragment/2/position = Vector2(-1600, 600)
 nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_3q4xu")
 nodes/fragment/4/position = Vector2(-1300, 500)
 nodes/fragment/4/size = Vector2(724.789, 654.559)
@@ -186,7 +186,9 @@ nodes/fragment/14/node = SubResource("VisualShaderNodeFloatConstant_qpvgs")
 nodes/fragment/14/position = Vector2(-2520, 260)
 nodes/fragment/15/node = SubResource("VisualShaderNodeFloatConstant_25rqf")
 nodes/fragment/15/position = Vector2(-2460, 40)
-nodes/fragment/connections = PackedInt32Array(2, 0, 4, 1, 4, 0, 5, 1, 5, 0, 0, 1, 9, 0, 4, 0, 10, 0, 11, 0, 11, 0, 12, 0, 14, 0, 13, 2, 12, 0, 13, 0, 15, 0, 13, 1)
+nodes/fragment/16/node = SubResource("VisualShaderNodeFloatParameter_3ivuf")
+nodes/fragment/16/position = Vector2(-2063.3, 662.089)
+nodes/fragment/connections = PackedInt32Array(4, 0, 5, 1, 5, 0, 0, 1, 9, 0, 4, 0, 10, 0, 11, 0, 11, 0, 12, 0, 14, 0, 13, 2, 12, 0, 13, 0, 15, 0, 13, 1, 16, 0, 4, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6jute"]
 shader = SubResource("VisualShader_x0sux")

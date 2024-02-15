@@ -1,6 +1,6 @@
 extends Node
 
-@onready var cam_target = $"../BOARD_UI/SubViewport/CamTarget"
+@onready var cam_target = $"../SubViewport/CamTarget"
 var t
 func _ready():
 	_global_datas.focus_this_on_board.connect(_focus_this)

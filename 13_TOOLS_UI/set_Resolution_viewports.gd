@@ -4,11 +4,10 @@ extends Node
 
 
 func _ready():
-	set_resolution()
+	_global_datas.set_resolution.connect(set_resolution)
 	
-	
-func set_resolution():
-	var resolution = get_viewport().size
+func set_resolution(resolution : Vector2i):
+	#var resolution = get_viewport().size
 	for v in viewports:
 		v.size = resolution
 

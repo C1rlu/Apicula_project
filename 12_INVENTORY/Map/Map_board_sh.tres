@@ -1,4 +1,4 @@
-[gd_resource type="VisualShader" load_steps=37 format=3 uid="uid://cw0x3o7tvvdcv"]
+[gd_resource type="VisualShader" load_steps=38 format=3 uid="uid://cw0x3o7tvvdcv"]
 
 [ext_resource type="Texture2D" uid="uid://kaln43e5c5my" path="res://12_INVENTORY/Map/Map_board_test.png" id="1_r3etv"]
 [ext_resource type="Texture2D" uid="uid://v5bi85b50j4g" path="res://10_BOARD/Map/Map_board_01.png" id="2_hic37"]
@@ -138,6 +138,10 @@ parameter_name = "Dark_color2"
 [sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_0l0a7"]
 texture = ExtResource("2_hic37")
 
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_wi80b"]
+parameter_name = "Dither_size"
+qualifier = 1
+
 [sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_o234q"]
 
 [sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_gokhj"]
@@ -159,6 +163,7 @@ render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_s
 uniform vec4 Dark_color : source_color;
 uniform vec4 Dark_color2 : source_color;
 uniform vec4 Color : source_color = vec4(0.575368, 0.573518, 0.000000, 1.000000);
+global uniform float Dither_size;
 uniform vec4 Color2 : source_color = vec4(0.470642, 0.389814, 0.097199, 1.000000);
 uniform sampler2D tex_lgt_47;
 uniform vec4 Grid_color : source_color = vec4(0.470642, 0.389814, 0.097199, 1.000000);
@@ -192,8 +197,8 @@ void light() {
 	float n_out3p0 = 0.000000;
 
 
-// FloatConstant:2
-	float n_out2p0 = 0.400000;
+// FloatParameter:48
+	float n_out48p0 = Dither_size;
 
 
 	float n_out4p0;
@@ -207,7 +212,7 @@ void light() {
 				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
 			};
 			
-		vec2 uv = FRAGCOORD.xy * n_out2p0;
+		vec2 uv = FRAGCOORD.xy * n_out48p0;
 		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 		n_out4p0 = n_out3p0 - DITHER_THRESHOLDS[index];
 	}
@@ -255,10 +260,6 @@ void light() {
 	float n_out18p0 = 1.029000;
 
 
-// FloatConstant:17
-	float n_out17p0 = 0.400000;
-
-
 	float n_out19p0;
 // Expression:19
 	n_out19p0 = 0.0;
@@ -270,7 +271,7 @@ void light() {
 				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
 			};
 			
-		vec2 uv = FRAGCOORD.xy * n_out17p0;
+		vec2 uv = FRAGCOORD.xy * n_out48p0;
 		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 		n_out19p0 = n_out18p0 - DITHER_THRESHOLDS[index];
 	}
@@ -296,10 +297,6 @@ void light() {
 	float n_out41p0 = 1.300000;
 
 
-// FloatConstant:40
-	float n_out40p0 = 0.400000;
-
-
 	float n_out42p0;
 // Expression:42
 	n_out42p0 = 0.0;
@@ -311,7 +308,7 @@ void light() {
 				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
 			};
 			
-		vec2 uv = FRAGCOORD.xy * n_out40p0;
+		vec2 uv = FRAGCOORD.xy * n_out48p0;
 		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 		n_out42p0 = n_out41p0 - DITHER_THRESHOLDS[index];
 	}
@@ -363,6 +360,7 @@ void light() {
 
 }
 "
+graph_offset = Vector2(-818.943, -49.3163)
 nodes/fragment/3/node = SubResource("VisualShaderNodeColorParameter_k3wil")
 nodes/fragment/3/position = Vector2(-340, -60)
 nodes/fragment/connections = PackedInt32Array(3, 0, 0, 0)
@@ -480,4 +478,6 @@ nodes/light/46/node = SubResource("VisualShaderNodeColorParameter_ihiv7")
 nodes/light/46/position = Vector2(-1340, 20)
 nodes/light/47/node = SubResource("VisualShaderNodeTexture_0l0a7")
 nodes/light/47/position = Vector2(-1080, 260)
-nodes/light/connections = PackedInt32Array(6, 0, 7, 0, 7, 0, 8, 0, 9, 0, 7, 1, 8, 0, 11, 0, 10, 0, 11, 1, 2, 0, 4, 1, 3, 0, 4, 0, 4, 0, 5, 0, 5, 0, 16, 2, 15, 0, 16, 1, 17, 0, 19, 1, 18, 0, 19, 0, 22, 0, 21, 2, 20, 0, 21, 1, 19, 0, 22, 0, 16, 0, 21, 0, 34, 0, 33, 1, 37, 0, 33, 3, 35, 0, 33, 0, 36, 0, 33, 2, 39, 0, 33, 4, 40, 0, 42, 1, 41, 0, 42, 0, 33, 0, 43, 1, 42, 0, 43, 0, 43, 0, 44, 2, 21, 0, 44, 0, 45, 0, 44, 1, 46, 0, 16, 0, 44, 0, 0, 1, 11, 0, 5, 1, 47, 0, 22, 1)
+nodes/light/48/node = SubResource("VisualShaderNodeFloatParameter_wi80b")
+nodes/light/48/position = Vector2(-2600, 1120)
+nodes/light/connections = PackedInt32Array(6, 0, 7, 0, 7, 0, 8, 0, 9, 0, 7, 1, 8, 0, 11, 0, 10, 0, 11, 1, 3, 0, 4, 0, 4, 0, 5, 0, 5, 0, 16, 2, 15, 0, 16, 1, 18, 0, 19, 0, 22, 0, 21, 2, 20, 0, 21, 1, 19, 0, 22, 0, 16, 0, 21, 0, 34, 0, 33, 1, 37, 0, 33, 3, 35, 0, 33, 0, 36, 0, 33, 2, 39, 0, 33, 4, 41, 0, 42, 0, 33, 0, 43, 1, 42, 0, 43, 0, 43, 0, 44, 2, 21, 0, 44, 0, 45, 0, 44, 1, 46, 0, 16, 0, 44, 0, 0, 1, 11, 0, 5, 1, 47, 0, 22, 1, 48, 0, 4, 1, 48, 0, 19, 1, 48, 0, 42, 1)

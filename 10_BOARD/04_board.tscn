@@ -1,11 +1,13 @@
-[gd_scene load_steps=56 format=3 uid="uid://cein0q2eirkay"]
+[gd_scene load_steps=53 format=3 uid="uid://cein0q2eirkay"]
 
 [ext_resource type="Script" path="res://10_BOARD/FollowFocus.gd" id="1_2m7ey"]
+[ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_g3pi7"]
 [ext_resource type="Script" path="res://10_BOARD/Board_CamTarget.gd" id="1_janbq"]
 [ext_resource type="Script" path="res://10_BOARD/Update_descriptions.gd" id="1_ym670"]
 [ext_resource type="Script" path="res://10_BOARD/Input_switch.gd" id="2_00g5f"]
 [ext_resource type="PackedScene" uid="uid://dr73p5vs0sixe" path="res://10_BOARD/board_scene.tscn" id="2_6c571"]
 [ext_resource type="Script" path="res://10_BOARD/Pad_clic_raycast.gd" id="3_rqf42"]
+[ext_resource type="Material" uid="uid://5qv6cc3a63nt" path="res://05_SHADER_TEST/Full_screen/04_board_simple_disolved.tres" id="7_fiqjo"]
 [ext_resource type="Script" path="res://10_BOARD/Player_onMap.gd" id="7_vhvc2"]
 [ext_resource type="Material" uid="uid://t4qtyso7w6ee" path="res://05_SHADER_TEST/Board/board_boat.tres" id="8_et36p"]
 
@@ -14,7 +16,6 @@ script/source = "extends Node
 
 
 @export var debug_board = true
-@onready var board_ui = $BOARD_UI
 @onready var camera_xray = $Camp_root_XRay/Camera_xray
 
 
@@ -24,7 +25,7 @@ func _ready():
 	_global_datas.open_inventory.connect(open_inventory)
 	
 func open_inventory(condition : bool):
-	#board_ui.visible = condition
+
 	_global_datas.Player_In_Inventory = condition
 	camera_xray.current = condition
 	
@@ -35,7 +36,7 @@ func open_inventory(condition : bool):
 [sub_resource type="GDScript" id="GDScript_52477"]
 script/source = "extends Node
 
-@onready var board_ui = $\"../BOARD_UI\"
+@onready var board_ui = $\"../RENDER\"
 @onready var material : Material = board_ui.get_material()
 
 var fade_in
@@ -74,7 +75,7 @@ func set_shader_value(value):
 [sub_resource type="GDScript" id="GDScript_00hwt"]
 script/source = "extends Node
 
-@onready var Cam : Camera3D = $\"../BOARD_UI/SubViewport/Camp_root_Render/Camera3D\"
+@onready var Cam : Camera3D = $\"../SubViewport/Camp_root_Render/Camera3D\"
 @onready var camera_xray = $\"../Camp_root_XRay/Camera_xray\"
 
 @export var no_zoom_pos : Vector3
@@ -166,10 +167,10 @@ var smooth_speed = 3.0
 var offset: Vector3
 var active_target : Vector3
 
-@onready var cam_target = $\"../BOARD_UI/SubViewport/CamTarget\"
+@onready var cam_target = $\"../SubViewport/CamTarget\"
 @export var _all_cam_array : Array[Node3D]
 @onready var camera_xray = $\"../Camp_root_XRay/Camera_xray\"
-@onready var camera_3d = $\"../BOARD_UI/SubViewport/Camp_root_Render/Camera3D\"
+@onready var camera_3d = $\"../SubViewport/Camp_root_Render/Camera3D\"
 
 func _ready():
 	
@@ -227,105 +228,6 @@ func set_shader_value(value):
 	material_text.set_shader_parameter(\"Opacity\",value)
 	actual_opacity = value
 "
-
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_lhyu5"]
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_r0roy"]
-constant = 0.4
-
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_pq3rc"]
-size = Vector2(724.789, 654.559)
-expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_bbdki"]
-parameter_name = "Opacity"
-hint = 1
-default_value_enabled = true
-default_value = 0.5
-
-[sub_resource type="VisualShader" id="VisualShader_wl38o"]
-code = "shader_type canvas_item;
-render_mode blend_mix;
-
-uniform float Opacity : hint_range(0, 1) = 0.5;
-
-
-
-void fragment() {
-// FloatParameter:5
-	float n_out5p0 = Opacity;
-
-
-// FloatConstant:3
-	float n_out3p0 = 0.400000;
-
-
-	float n_out4p0;
-// Expression:4
-	n_out4p0 = 0.0;
-	{
-		const float DITHER_THRESHOLDS[16] ={
-				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-			};
-			
-		vec2 uv = FRAGCOORD.xy * n_out3p0;
-		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-		n_out4p0 = n_out5p0 - DITHER_THRESHOLDS[index];
-	}
-
-
-// Step:2
-	float n_in2p0 = 0.00000;
-	float n_out2p0 = step(n_in2p0, n_out4p0);
-
-
-// Output:0
-	COLOR.a = n_out2p0;
-
-
-}
-"
-graph_offset = Vector2(-1178.47, -20.4586)
-mode = 1
-flags/light_only = false
-nodes/fragment/2/node = SubResource("VisualShaderNodeStep_lhyu5")
-nodes/fragment/2/position = Vector2(60, 220)
-nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_r0roy")
-nodes/fragment/3/position = Vector2(-1360, 380)
-nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_pq3rc")
-nodes/fragment/4/position = Vector2(-1060, 360)
-nodes/fragment/4/size = Vector2(724.789, 654.559)
-nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
-nodes/fragment/4/output_ports = "0,0,Dither_Node;"
-nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/5/node = SubResource("VisualShaderNodeFloatParameter_bbdki")
-nodes/fragment/5/position = Vector2(-1420, 80)
-nodes/fragment/connections = PackedInt32Array(3, 0, 4, 1, 5, 0, 4, 0, 4, 0, 2, 1, 2, 0, 0, 1)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_jmuyw"]
-shader = SubResource("VisualShader_wl38o")
-shader_parameter/Opacity = 1.0
 
 [sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_yrkdd"]
 size = Vector2(513.781, 284.487)
@@ -424,6 +326,9 @@ func _ready():
 	_global_datas.board_camera = self
 
 "
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_bjncg"]
+viewport_path = NodePath("SubViewport")
 
 [sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_vjd82"]
 parameter_name = "Opacity"
@@ -784,6 +689,10 @@ script = SubResource("GDScript_w13ry")
 debug_board = false
 metadata/_edit_horizontal_guides_ = [-58.0]
 
+[node name="set_Resolution" type="Node" parent="." node_paths=PackedStringArray("viewports")]
+script = ExtResource("1_g3pi7")
+viewports = [NodePath("../SubViewport")]
+
 [node name="Fade" type="Node" parent="."]
 script = SubResource("GDScript_52477")
 
@@ -795,7 +704,7 @@ script = SubResource("GDScript_00hwt")
 
 [node name="Cam_follow" type="Node" parent="." node_paths=PackedStringArray("_all_cam_array")]
 script = SubResource("GDScript_q7x8f")
-_all_cam_array = [NodePath("../BOARD_UI/SubViewport/Camp_root_Render"), NodePath("../Camp_root_XRay")]
+_all_cam_array = [NodePath("../SubViewport/Camp_root_Render"), NodePath("../Camp_root_XRay")]
 
 [node name="Input_switch" type="Node" parent="."]
 script = ExtResource("2_00g5f")
@@ -817,25 +726,13 @@ cull_mask = 2
 current = true
 fov = 42.0
 
-[node name="BOARD_UI" type="SubViewportContainer" parent="."]
-visible = false
-material = SubResource("ShaderMaterial_jmuyw")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-stretch = true
-
-[node name="SubViewport" type="SubViewport" parent="BOARD_UI"]
+[node name="SubViewport" type="SubViewport" parent="."]
 handle_input_locally = false
 scaling_3d_scale = 0.9
 fsr_sharpness = 2.0
 size = Vector2i(1920, 1080)
-render_target_update_mode = 0
 
-[node name="Pad_target" type="ColorRect" parent="BOARD_UI/SubViewport"]
+[node name="Pad_target" type="ColorRect" parent="SubViewport"]
 visible = false
 material = SubResource("ShaderMaterial_blt4p")
 anchors_preset = 8
@@ -852,17 +749,17 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.862745, 0.784314, 0.603922, 1)
 
-[node name="Camp_root_Render" type="Node3D" parent="BOARD_UI/SubViewport"]
+[node name="Camp_root_Render" type="Node3D" parent="SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.38419e-07)
 
-[node name="Camera3D" type="Camera3D" parent="BOARD_UI/SubViewport/Camp_root_Render"]
-transform = Transform3D(0.994881, 0.0700726, -0.0728162, 0, 0.720551, 0.693401, 0.101056, -0.689852, 0.716862, -0.08, 0.945, 1.035)
+[node name="Camera3D" type="Camera3D" parent="SubViewport/Camp_root_Render"]
+transform = Transform3D(0.994881, 0.0700724, -0.072816, 0, 0.720551, 0.693402, 0.101056, -0.689852, 0.716862, -0.08, 0.945, 1.035)
 cull_mask = 2
 fov = 42.0
 far = 4.25
 script = SubResource("GDScript_l5hmx")
 
-[node name="CamTarget" type="Node3D" parent="BOARD_UI/SubViewport"]
+[node name="CamTarget" type="Node3D" parent="SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.002, 0)
 script = ExtResource("1_janbq")
 move_speed = 1.0
@@ -870,6 +767,15 @@ min_x = -0.5
 max_x = 0.5
 min_z = -0.5
 max_z = 0.5
+
+[node name="RENDER" type="TextureRect" parent="."]
+material = ExtResource("7_fiqjo")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("ViewportTexture_bjncg")
 
 [node name="ColorRec" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_nsjqj")

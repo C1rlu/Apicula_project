@@ -21,7 +21,7 @@ signal _start_ini_subscene
 signal _end_ini_subscene
 signal _backFrom_subscene
 signal _open_menu(condition : bool)
-
+signal set_resolution(resolution : Vector2i)
 
 
 # input type
@@ -111,6 +111,7 @@ signal active_scanner_button(condition : bool)
 signal active_mirror_switch(condition : bool)
 signal _click_mirror_switch 
 signal player_mirror_contact(condition : bool)
+
 
 
 var scanner_mat : Material

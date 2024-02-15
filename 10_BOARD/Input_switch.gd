@@ -1,5 +1,5 @@
 extends Node
-@onready var pad_target = $"../BOARD_UI/SubViewport/Pad_target"
+@onready var pad_target = $"../SubViewport/Pad_target"
 
 
 

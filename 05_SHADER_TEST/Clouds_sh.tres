@@ -1,4 +1,4 @@
-[gd_resource type="VisualShader" load_steps=26 format=3 uid="uid://bxavm32wwtse2"]
+[gd_resource type="VisualShader" load_steps=27 format=3 uid="uid://bxavm32wwtse2"]
 
 [ext_resource type="Texture2D" uid="uid://b2wyv8gs1cvkn" path="res://05_SHADER_TEST/Full_screen/Dither_pattners/blue_noise.png" id="1_mnaaa"]
 
@@ -75,6 +75,10 @@ qualifier = 1
 default_value_enabled = true
 default_value = 1.0
 
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_bl1d6"]
+parameter_name = "Dither_size"
+qualifier = 1
+
 [sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_x3qw3"]
 default_input_values = [0, 0.0, 1, 2.0]
 operator = 2
@@ -100,6 +104,7 @@ code = "shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
 
 global uniform float isSubscene_value = 1;
+global uniform float Dither_size;
 uniform sampler2D tex_frg_24;
 uniform sampler2D tex_frg_6;
 
@@ -114,8 +119,8 @@ void fragment() {
 	float n_out21p0 = 1.000000;
 
 
-// FloatConstant:20
-	float n_out20p0 = 0.300000;
+// FloatParameter:35
+	float n_out35p0 = Dither_size;
 
 
 	float n_out19p0;
@@ -129,7 +134,7 @@ void fragment() {
 				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
 			};
 			
-		vec2 uv = FRAGCOORD.xy * n_out20p0;
+		vec2 uv = FRAGCOORD.xy * n_out35p0;
 		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 		n_out19p0 = n_out21p0 - DITHER_THRESHOLDS[index];
 	}
@@ -195,6 +200,7 @@ void fragment() {
 
 }
 "
+graph_offset = Vector2(-1780.26, 1525.59)
 flags/unshaded = true
 nodes/fragment/0/position = Vector2(660, 1600)
 nodes/fragment/2/node = SubResource("VisualShaderNodeUVFunc_xks05")
@@ -225,7 +231,7 @@ vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
 nodes/fragment/20/node = SubResource("VisualShaderNodeFloatConstant_3mhar")
-nodes/fragment/20/position = Vector2(-1520, 2200)
+nodes/fragment/20/position = Vector2(-1820, 2200)
 nodes/fragment/21/node = SubResource("VisualShaderNodeFloatConstant_pui14")
 nodes/fragment/21/position = Vector2(-1520, 2100)
 nodes/fragment/22/node = SubResource("VisualShaderNodeStep_ua4n2")
@@ -250,4 +256,6 @@ nodes/fragment/33/node = SubResource("VisualShaderNodeFloatConstant_yt6d6")
 nodes/fragment/33/position = Vector2(-500, 2420)
 nodes/fragment/34/node = SubResource("VisualShaderNodeFloatParameter_ao2ox")
 nodes/fragment/34/position = Vector2(280, 1420)
-nodes/fragment/connections = PackedInt32Array(5, 0, 4, 0, 4, 0, 3, 0, 3, 0, 2, 2, 20, 0, 19, 2, 21, 0, 19, 1, 2, 0, 6, 0, 22, 0, 23, 1, 4, 0, 26, 0, 27, 0, 24, 0, 32, 0, 30, 0, 31, 0, 32, 0, 33, 0, 32, 1, 14, 0, 22, 1, 6, 0, 25, 1, 24, 0, 25, 0, 19, 0, 22, 0, 23, 0, 0, 1, 25, 0, 14, 0, 34, 0, 0, 0)
+nodes/fragment/35/node = SubResource("VisualShaderNodeFloatParameter_bl1d6")
+nodes/fragment/35/position = Vector2(-1920, 2380)
+nodes/fragment/connections = PackedInt32Array(5, 0, 4, 0, 4, 0, 3, 0, 3, 0, 2, 2, 21, 0, 19, 1, 2, 0, 6, 0, 22, 0, 23, 1, 4, 0, 26, 0, 27, 0, 24, 0, 32, 0, 30, 0, 31, 0, 32, 0, 33, 0, 32, 1, 14, 0, 22, 1, 6, 0, 25, 1, 24, 0, 25, 0, 19, 0, 22, 0, 23, 0, 0, 1, 25, 0, 14, 0, 34, 0, 0, 0, 35, 0, 19, 2)
