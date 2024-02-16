@@ -11,7 +11,6 @@ var Player_InSubScene : bool
 var Player_InMenu : bool
 var Player_InDialogue : bool
 var Player_InDialogue_zone : bool
-var Player_lock_click : bool
 var Coins_aspirator_array : Array
 var Element_sub_zone_array : Array
 
@@ -56,6 +55,7 @@ var boue_archives : Array[BoueData]
 
 signal _show_hand
 signal _hide_hand
+signal _start_dialogue_box
 signal _hide_dialogue_box
 signal _show_dialogue_box
 signal _bird_is_comming
@@ -99,15 +99,7 @@ var bougie_node : Node2D
 #update description on board
 signal show_board_description(condition : bool, _text: String)
 signal focus_this_on_board(target : Vector3)
-
-# BOOK PAGEqs
 signal Open_ui_dark_backdrop(condition : bool)
-var Book_page_index : int
-var Book_pages : Array
-var Book_group : Node2D
-signal lock_page
-signal flip_left_end
-
 #tools_ui
 var clock_timer : Timer
 signal active_photo_button(condition : bool)

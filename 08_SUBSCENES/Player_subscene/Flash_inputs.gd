@@ -9,9 +9,7 @@ func _input(event):
 
 	if !_global_datas.Player_InSubScene:
 		return
-	if _global_datas.Player_lock_click:
-		return
-		
+
 	if !timer.is_stopped():
 		return
 		

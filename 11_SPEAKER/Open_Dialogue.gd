@@ -30,7 +30,7 @@ func _open_dialogue():
 	if _global_datas.Npc_Dialogue == null:
 		return
 	_global_datas.Player_InDialogue = true
-	_global_datas.Player_InMenu = true
+
 	
 	dialogue.visible = true
 	name_text.text = _global_datas.Npc_Dialogue.name
@@ -45,7 +45,7 @@ func _close_dialogue():
 	_global_datas.in_dialogue_zone.emit()
 	dialogue.visible =  false
 	_global_datas.Player_InDialogue = false
-	_global_datas.Player_InMenu = false
+
 	
 
 	$Random_FaceChanger/Timer.stop()

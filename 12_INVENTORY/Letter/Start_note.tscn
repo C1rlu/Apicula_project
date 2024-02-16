@@ -20,13 +20,11 @@ script/source = "extends Node
 var size : float
 
 @export var object_center_marge : Vector2
+@onready var take_it_button = $\"../Take_it_button\"
 
 func _ready():
 	
 	size = control.scale.x
-
-
-
 	
 	if _global_datas.Npc_Dialogue != null:
 		_Zoom_Object(true)
@@ -35,18 +33,6 @@ func _ready():
 		_Zoom_Object(true)
 	
 
-func _input(event):
-
-	#TO DRAG
-	if !_global_datas.Player_lock_click == true:
-		#TO DROP
-		if event.is_action_pressed(\"Click\"):
-			_Zoom_Object(false)
-			_global_datas.Open_ui_dark_backdrop.emit(false)
-			_global_datas.Player_lock_click = false	
-			_global_datas.lock_page.emit()
-			control.queue_free()
-			
 
 func _Zoom_Object(condition:bool):
 	
@@ -61,11 +47,23 @@ func _Zoom_Object(condition:bool):
 		_scale_change(size)
 		_global_datas._show_object_legend.emit(false,\"\")
 
-				
+	take_it_button.grab_focus()
+		
+		
+		
 func _scale_change(value):
 	
 	control.set_scale(Vector2(value,value))
 
+func _take_it():
+	_Zoom_Object(false)
+	_global_datas.Open_ui_dark_backdrop.emit(false)
+	_global_datas._show_dialogue_box.emit()
+	control.queue_free()
+
+
+func _on_take_it_button_pressed():
+	_take_it()
 "
 
 [node name="Start_note" type="Node2D"]
@@ -110,3 +108,11 @@ text = "M.Apart"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
+
+[node name="Take_it_button" type="Button" parent="."]
+offset_left = -168.0
+offset_top = -12.0006
+offset_right = -115.0
+offset_bottom = 47.9994
+
+[connection signal="pressed" from="Take_it_button" to="Take_object" method="_on_take_it_button_pressed"]

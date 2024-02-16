@@ -16,8 +16,7 @@ func _process(delta):
 	
 	if !_global_datas.Player_In_Inventory:
 		return
-	if _global_datas.Player_lock_click:
-		return	
+
 
 	if _global_datas.zoom_value == 1:
 		speed = move_speed

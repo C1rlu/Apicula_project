@@ -16,7 +16,7 @@ signal up_dialogue_index
 }
 
 func _ready():
-	_global_datas._open_dialogue.connect(_open_dialogue)
+	_global_datas._start_dialogue_box.connect(_open_dialogue)
 	
 func _open_dialogue():
 	
@@ -56,14 +56,14 @@ func _on_ez_dialogue_custom_signal_received(value):
 		if variable_name == "give_letter":
 				var note_name = params[2]
 				state[variable_name].emit(note_name)
-				
+				_global_datas._hide_dialogue_box.emit()
 		if variable_name == "take_note":
 				var _note_name = params[2]
 				state[variable_name].emit(_note_name)
-				
+				_global_datas._hide_dialogue_box.emit()
 		if variable_name == "up_dialogue_index":
 			up_dialogue_index.emit()	
-	
+		
 
 func _on_ez_dialogue_end_of_dialogue_reached():
 	dialogue_box.is_dialogue_done = true	

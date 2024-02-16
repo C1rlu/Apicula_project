@@ -39,8 +39,9 @@ func show_all_responce():
 	var choice = v_box_container.get_children()
 	for c in choice:
 		c.visible = true
-	
-	
+		
+	choice[0].grab_focus()
+	print("SHOW ALL REPONSE NOW")
 func _on_choice_selected(choice_index : int):
 	
 	if !is_dialogue_done:
@@ -50,5 +51,6 @@ func _on_choice_selected(choice_index : int):
 
 func _on_dialogue_typing_text_type_done():
 	show_all_responce()
+
 
 

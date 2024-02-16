@@ -10,6 +10,8 @@ func _physics_process(_delta):
 
 func move_a():
 	
+	
+	
 	var translation = get_global_transform().origin
 	_global_datas.player_position = translation
 	_global_datas.player_boat_rotation = rotation
@@ -20,6 +22,9 @@ func move_a():
 		return
 	if _global_datas.Player_InMenu:
 		return
+		
+	if _global_datas.Player_InDialogue:
+		return	
 			
 	var forward_value = 0.0
 	if Input.is_action_pressed(("move_forward")):

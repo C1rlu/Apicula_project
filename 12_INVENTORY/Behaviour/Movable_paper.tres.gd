@@ -9,6 +9,7 @@ var size : float
 
 var change_photo
 var legend
+@onready var take_it_button = $"../Take_it_button"
 
 @export var object_center_marge : Vector2
 
@@ -26,20 +27,7 @@ func _ready():
 	if _global_datas.Player_InSubScene:
 		_Zoom_Object(true)
 	
-
-func _input(event):
-
-	#TO DRAG
-	if !_global_datas.Player_lock_click == true:
-		#TO DROP
-		if event.is_action_pressed("Click"):
-			_Zoom_Object(false)
-			_global_datas.Open_ui_dark_backdrop.emit(false)
-			_global_datas.Player_lock_click = false	
-			_global_datas.lock_page.emit()
-			control.queue_free()
-			
-
+	take_it_button.grab_focus()
 func _Zoom_Object(condition:bool):
 	
 	if condition:
@@ -65,8 +53,16 @@ func _Zoom_Object(condition:bool):
 		_scale_change(size)
 		_global_datas._show_object_legend.emit(false,"")
 
+
 				
 func _scale_change(value):
 	
 	control.set_scale(Vector2(value,value))
 
+func _take_it():
+	_Zoom_Object(false)
+	_global_datas.Open_ui_dark_backdrop.emit(false)
+	control.queue_free()
+	_global_datas._start_dialogue_box.emit()
+func _on_take_it_button_pressed():
+	_take_it()	

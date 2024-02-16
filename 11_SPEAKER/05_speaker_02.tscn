@@ -1,14 +1,10 @@
-[gd_scene load_steps=51 format=3 uid="uid://bbp1ccoa6te1g"]
+[gd_scene load_steps=47 format=3 uid="uid://bbp1ccoa6te1g"]
 
 [ext_resource type="Script" path="res://11_SPEAKER/Open_Dialogue.gd" id="1_6gph5"]
 [ext_resource type="Script" path="res://09_NPC/NPC_DIVE_SELECTOR/Npc_loader.gd" id="2_gecf5"]
 [ext_resource type="Script" path="res://addons/ez_dialogue/ez_dialogue_node.gd" id="2_iqwu8"]
 [ext_resource type="Script" path="res://11_SPEAKER/Dialogue/Dialogue_asset/Ini_dialogue.gd" id="2_pxao7"]
-[ext_resource type="Script" path="res://09_NPC/Npc_Init.gd" id="3_u2fyv"]
 [ext_resource type="Script" path="res://11_SPEAKER/Dialogue_typing.gd" id="4_uwbqv"]
-[ext_resource type="Resource" uid="uid://l3coaeai3lx6" path="res://09_NPC/Npc_data/Baltazar_data.tres" id="4_y4ud3"]
-[ext_resource type="Resource" uid="uid://b5kt2xn16lfgt" path="res://09_NPC/Npc_data/Otis_data.tres" id="5_wppld"]
-[ext_resource type="Resource" uid="uid://xuxu60afj84h" path="res://09_NPC/Npc_data/Guy_02_data.tres" id="6_6xaf4"]
 [ext_resource type="Material" uid="uid://dxkegh8ms5y46" path="res://06_UI/Panel_ui_disolved_mat.tres" id="7_mabi4"]
 [ext_resource type="Shader" uid="uid://i5hkaugkylpm" path="res://05_SHADER_TEST/Full_screen/Speaker_dither_convas.tres" id="9_8gj0l"]
 [ext_resource type="Script" path="res://11_SPEAKER/Dialogue/Dialogue_asset/Dialogue_box.gd" id="9_n4i7c"]
@@ -292,11 +288,12 @@ func _on_timer_timeout():
 	if _global_datas.Npc_Dialogue != null:
 		var photo_Data = _global_datas.Npc_Dialogue.photo_data
 		if check_photo_exist(photo_Data):
-			_global_datas._show_dialogue_box.emit()	
 			photo_button.visible = false
+			_global_datas._start_dialogue_box.emit()
+			_global_datas._show_dialogue_box.emit()	
 		else:
 			photo_button.visible = true	
-			
+			photo_button.grab_focus()
 			
 "
 
@@ -576,8 +573,6 @@ color = Color(0.0156863, 0.0705882, 0.0823529, 1)
 metadata/_edit_use_anchors_ = true
 
 [node name="00_NPC_CREATOR" type="Node" parent="."]
-script = ExtResource("3_u2fyv")
-Npc_all = Array[Resource("res://09_NPC/Npc_data.gd")]([ExtResource("4_y4ud3"), ExtResource("5_wppld"), ExtResource("6_6xaf4")])
 
 [node name="Fade_in" type="Node" parent="00_NPC_CREATOR"]
 script = SubResource("GDScript_6qc5w")
@@ -651,7 +646,6 @@ grow_vertical = 2
 texture = SubResource("ViewportTexture_ah4ff")
 
 [node name="PhotoButton" parent="00_NPC_CREATOR/Npc_convas" instance=ExtResource("12_8wltn")]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
