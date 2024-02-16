@@ -16,7 +16,7 @@ var Coins_aspirator_array : Array
 var Element_sub_zone_array : Array
 
 # menu signals
-signal _go_Subscene
+
 signal _start_ini_subscene
 signal _end_ini_subscene
 signal _backFrom_subscene
@@ -67,6 +67,10 @@ signal _show_object_legend(condtion : bool, text : String)
 
 
 #subsceneSignal
+signal _load_subscene(condition : bool)
+signal _go_Subscene
+
+
 var mouseRaycastPosition : Vector3
 signal get_raycastPosition
 var subbscene_playerPosition : Vector3
