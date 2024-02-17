@@ -63,6 +63,7 @@ func _take_it():
 	_Zoom_Object(false)
 	_global_datas.Open_ui_dark_backdrop.emit(false)
 	control.queue_free()
-	_global_datas._start_dialogue_box.emit()
+	if _global_datas.Npc_Dialogue != null:
+		_global_datas._start_dialogue_box.emit()
 func _on_take_it_button_pressed():
 	_take_it()	

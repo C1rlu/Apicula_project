@@ -21,7 +21,8 @@ func show_legend(condition : bool):
 		var focus_pos = photo_area.global_position
 		_global_datas.focus_this_on_board.emit(focus_pos)
 		_is_select = true	
-		is_select.visible = true	
+		is_select.visible = true
+		_global_datas.show_on_scanner.emit(photo_data)	
 	else:
 		_global_datas.show_board_description.emit(false,"")	
 

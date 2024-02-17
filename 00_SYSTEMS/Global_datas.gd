@@ -96,10 +96,17 @@ var In_Front_Node : Node2D
 var clock_time_consume : float
 var bougie_node : Node2D
 
+
+
+
 #update description on board
 signal show_board_description(condition : bool, _text: String)
 signal focus_this_on_board(target : Vector3)
 signal Open_ui_dark_backdrop(condition : bool)
+signal show_on_scanner(photoData : PhotoData)
+var in_scanner_mode : bool 
+
+
 #tools_ui
 var clock_timer : Timer
 signal active_photo_button(condition : bool)

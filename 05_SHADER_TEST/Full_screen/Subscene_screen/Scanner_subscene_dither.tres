@@ -1,6 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=28 format=3 uid="uid://b1iqs8p4it3ni"]
-
-[ext_resource type="Texture2D" uid="uid://p4idp83103im" path="res://05_SHADER_TEST/Full_screen/Dither_pattners/Blue_noise/HDR_L_7.png" id="1_601x8"]
+[gd_resource type="ShaderMaterial" load_steps=24 format=3 uid="uid://b1iqs8p4it3ni"]
 
 [sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_dj8vr"]
 input_name = "texture"
@@ -36,10 +34,6 @@ hint = 1
 default_value_enabled = true
 default_value = 0.5
 
-[sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_tcmyv"]
-parameter_name = "Noise"
-texture_repeat = 1
-
 [sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_atyix"]
 source = 5
 
@@ -62,9 +56,6 @@ constant = Color(0.0143067, 0.116367, 0.131475, 1)
 [sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_dectx"]
 constant = Color(0.992188, 0.847656, 0.621094, 1)
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_vsslt"]
-constant = 12.5
-
 [sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_6bf42"]
 function = 1
 
@@ -86,22 +77,21 @@ operator = 2
 [sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_jo1kq"]
 constant = Color(0.61, 0.61, 0.61, 1)
 
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_4qqkm"]
-parameter_name = "Dither_size"
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_5dp8q"]
+parameter_name = "Dither_blue_noise_size"
 qualifier = 1
 
-[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_bd4ow"]
-operator = 2
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_onk6o"]
-constant = 12.5
+[sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_yhfjp"]
+parameter_name = "BlueNoise"
+qualifier = 1
+texture_repeat = 1
 
 [sub_resource type="VisualShader" id="VisualShader_pn65u"]
 code = "shader_type canvas_item;
 render_mode blend_mix;
 
-global uniform float Dither_size;
-uniform sampler2D Noise : repeat_enable;
+global uniform float Dither_blue_noise_size;
+global uniform sampler2D BlueNoise : repeat_enable;
 uniform float Circle : hint_range(0, 1) = 0.5;
 
 
@@ -117,16 +107,8 @@ void fragment() {
 	vec2 n_out59p0 = (UV - n_in59p2) * n_in59p1 + n_in59p2;
 
 
-// FloatConstant:66
-	float n_out66p0 = 12.500000;
-
-
-// FloatParameter:64
-	float n_out64p0 = Dither_size;
-
-
-// FloatOp:65
-	float n_out65p0 = n_out66p0 * n_out64p0;
+// FloatParameter:67
+	float n_out67p0 = Dither_blue_noise_size;
 
 
 // Input:60
@@ -144,12 +126,12 @@ void fragment() {
 
 
 // UVFunc:58
-	vec2 n_out58p0 = (n_out59p0 - vec2(n_out62p0)) * vec2(n_out65p0) + vec2(n_out62p0);
+	vec2 n_out58p0 = (n_out59p0 - vec2(n_out62p0)) * vec2(n_out67p0) + vec2(n_out62p0);
 
 
 	vec4 n_out42p0;
 // Texture2D:42
-	n_out42p0 = texture(Noise, n_out58p0);
+	n_out42p0 = texture(BlueNoise, n_out58p0);
 
 
 // Mix:48
@@ -217,7 +199,6 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-2426.46, -1070.75)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(1320, 40)
@@ -248,8 +229,6 @@ int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
 nodes/fragment/39/node = SubResource("VisualShaderNodeFloatParameter_5opgu")
 nodes/fragment/39/position = Vector2(-1620, 200)
-nodes/fragment/41/node = SubResource("VisualShaderNodeTexture2DParameter_tcmyv")
-nodes/fragment/41/position = Vector2(-820, -380)
 nodes/fragment/42/node = SubResource("VisualShaderNodeTexture_atyix")
 nodes/fragment/42/position = Vector2(-240, -580)
 nodes/fragment/43/node = SubResource("VisualShaderNodeStep_i2gji")
@@ -264,8 +243,6 @@ nodes/fragment/54/node = SubResource("VisualShaderNodeColorConstant_umwfw")
 nodes/fragment/54/position = Vector2(120, -280)
 nodes/fragment/56/node = SubResource("VisualShaderNodeColorConstant_dectx")
 nodes/fragment/56/position = Vector2(420, -760)
-nodes/fragment/57/node = SubResource("VisualShaderNodeFloatConstant_vsslt")
-nodes/fragment/57/position = Vector2(-2240, -880)
 nodes/fragment/58/node = SubResource("VisualShaderNodeUVFunc_6bf42")
 nodes/fragment/58/position = Vector2(-1440, -840)
 nodes/fragment/59/node = SubResource("VisualShaderNodeUVFunc_v7bc7")
@@ -278,15 +255,12 @@ nodes/fragment/62/node = SubResource("VisualShaderNodeFloatOp_2iv12")
 nodes/fragment/62/position = Vector2(-1660, -400)
 nodes/fragment/63/node = SubResource("VisualShaderNodeColorConstant_jo1kq")
 nodes/fragment/63/position = Vector2(620, -720)
-nodes/fragment/64/node = SubResource("VisualShaderNodeFloatParameter_4qqkm")
-nodes/fragment/64/position = Vector2(-2300, -760)
-nodes/fragment/65/node = SubResource("VisualShaderNodeFloatOp_bd4ow")
-nodes/fragment/65/position = Vector2(-1973.4, -756.381)
-nodes/fragment/66/node = SubResource("VisualShaderNodeFloatConstant_onk6o")
-nodes/fragment/66/position = Vector2(-2040, -940)
-nodes/fragment/connections = PackedInt32Array(36, 0, 37, 1, 39, 0, 37, 0, 41, 0, 42, 2, 43, 0, 52, 2, 43, 0, 53, 2, 24, 0, 25, 2, 53, 0, 52, 0, 60, 0, 61, 0, 61, 0, 62, 0, 59, 0, 58, 0, 62, 0, 58, 2, 58, 0, 42, 0, 54, 0, 53, 0, 56, 0, 52, 1, 25, 0, 43, 1, 35, 0, 0, 1, 52, 0, 0, 0, 37, 0, 35, 1, 42, 0, 48, 0, 48, 0, 43, 0, 64, 0, 65, 1, 65, 0, 58, 1, 66, 0, 65, 0)
+nodes/fragment/67/node = SubResource("VisualShaderNodeFloatParameter_5dp8q")
+nodes/fragment/67/position = Vector2(-2440, -940)
+nodes/fragment/68/node = SubResource("VisualShaderNodeTexture2DParameter_yhfjp")
+nodes/fragment/68/position = Vector2(-780, -360)
+nodes/fragment/connections = PackedInt32Array(36, 0, 37, 1, 39, 0, 37, 0, 43, 0, 52, 2, 43, 0, 53, 2, 24, 0, 25, 2, 53, 0, 52, 0, 60, 0, 61, 0, 61, 0, 62, 0, 59, 0, 58, 0, 62, 0, 58, 2, 58, 0, 42, 0, 54, 0, 53, 0, 56, 0, 52, 1, 25, 0, 43, 1, 35, 0, 0, 1, 52, 0, 0, 0, 37, 0, 35, 1, 42, 0, 48, 0, 48, 0, 43, 0, 67, 0, 58, 1, 68, 0, 42, 2)
 
 [resource]
 shader = SubResource("VisualShader_pn65u")
-shader_parameter/Circle = 0.0
-shader_parameter/Noise = ExtResource("1_601x8")
+shader_parameter/Circle = 1.0
