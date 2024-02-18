@@ -1,4 +1,4 @@
-[gd_scene load_steps=104 format=3 uid="uid://cein0q2eirkay"]
+[gd_scene load_steps=105 format=3 uid="uid://cein0q2eirkay"]
 
 [ext_resource type="Script" path="res://10_BOARD/FollowFocus.gd" id="1_2m7ey"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_g3pi7"]
@@ -15,6 +15,7 @@
 [ext_resource type="Script" path="res://10_BOARD/Player_onMap.gd" id="7_vhvc2"]
 [ext_resource type="PackedScene" uid="uid://b4hspc8dsyv14" path="res://08_SUBSCENES/Elements/Tiny_boat/scene_boat_ch_test.tscn" id="8_42r81"]
 [ext_resource type="Material" uid="uid://t4qtyso7w6ee" path="res://05_SHADER_TEST/Board/board_boat.tres" id="8_et36p"]
+[ext_resource type="Script" path="res://10_BOARD/Zoom_scanner.gd" id="9_1m4w2"]
 [ext_resource type="Shader" uid="uid://ldgfjh6i8vem" path="res://05_SHADER_TEST/Board/Board_scanner_sh.tres" id="9_dapi1"]
 [ext_resource type="Texture2D" uid="uid://dafg2qvpi6wmk" path="res://06_UI/Loader_circle/Loader_circle.png" id="12_yjoj8"]
 
@@ -38,6 +39,7 @@ func open_inventory(condition : bool):
 	
 	if !condition:
 		_global_datas.show_board_description.emit(false,\"\")	
+		_global_datas.show_on_scanner.emit(false)
 "
 
 [sub_resource type="GDScript" id="GDScript_52477"]
@@ -87,8 +89,11 @@ script/source = "extends Node
 @onready var Cam : Camera3D = $\"../SubViewport/Camp_root_Render/Camera3D\"
 
 @export var no_zoom_pos : Vector3
-@export var mid_zoom_pos : Vector3
-@export var max_zoom_pos : Vector3
+@export var normal_zoom_pos : Vector3
+
+@export var photo_zoom_pos : Vector3
+@export var scanner_zoom_pos : Vector3
+
 var target : Vector3
 var rotation_target : Vector3
 var zoom_index : int = 1
@@ -107,7 +112,8 @@ func _ready():
 	rotation_target = Vector3(-43.9,-5.8,0)
 
 	_global_datas.show_on_scanner.connect(_Zoom_OnScanner)
-	
+
+
 func _input(event):
 	
 	if _global_datas.in_scanner_mode:
@@ -134,49 +140,41 @@ func _Zoom(value : int):
 	if zoom_index == 1:
 		target = no_zoom_pos
 		rotation_target = Vector3(-43.9,-5.8,0)
-		#_global_datas.show_board_description.emit(false,\"\")
-		#_global_datas.show_on_scanner.emit(false)
-		
+	
 	if zoom_index == 2:
-		target = mid_zoom_pos
+		target = normal_zoom_pos
 		rotation_target = Vector3(-43.9,-5.8,0)
-		#rotation_target = Vector3(-50,-5.8,0)
-	
-	
-	#if zoom_index == 3:
-	#	target = max_zoom_pos	
-	#	rotation_target = Vector3(-60,-5.8,0)
-	
+
 	if t:
 		t.kill()
 	t = create_tween()
 	
-	t.tween_property(Cam,\"position\",target,0.5)
+	t.tween_property(Cam,\"position\",target,0.5).set_trans(Tween.TRANS_SINE)
 	
 	if r:
 		r.kill()
 	r = create_tween()
-	r.tween_property(Cam,\"rotation_degrees\",rotation_target,0.5)
+	r.tween_property(Cam,\"rotation_degrees\",rotation_target,0.5).set_trans(Tween.TRANS_SINE)
 
 func _Zoom_OnScanner(condition : bool):
 	
 	if !condition:
 		_Zoom(0)
 		return	
-	target = max_zoom_pos
+	target = scanner_zoom_pos
 	rotation_target = Vector3(-30,-5.8,0)	
 	
 	if t:
 		t.kill()
 	t = create_tween()
 	
-	t.tween_property(Cam,\"position\",target,0.5)
+	t.tween_property(Cam,\"position\",target,0.5).set_trans(Tween.TRANS_SINE)
 	
 	if r:
 		r.kill()
 	r = create_tween()
-	r.tween_property(Cam,\"rotation_degrees\",rotation_target,0.5)	
-	
+	r.tween_property(Cam,\"rotation_degrees\",rotation_target,0.5).set_trans(Tween.TRANS_SINE)	
+
 	
 func _set_zoom_pos():
 	
@@ -184,8 +182,9 @@ func _set_zoom_pos():
 	var forward = -dir.normalized()
 
 	no_zoom_pos = Cam.position
-	mid_zoom_pos = no_zoom_pos + forward * 1.0 + Vector3(0.0,0.0,-0.1)
-	max_zoom_pos = no_zoom_pos + forward * 1.1 + Vector3(0.0,0.0,-0.18)
+	normal_zoom_pos = no_zoom_pos + forward * 1.15 + Vector3(0.0,0.0,-0.1)
+	scanner_zoom_pos = no_zoom_pos + forward * 1.15 + Vector3(0.0,0.0,-0.18)
+	photo_zoom_pos = no_zoom_pos + forward * 1.2 + Vector3(0.0,0.0,-0.18)
 "
 
 [sub_resource type="GDScript" id="GDScript_q7x8f"]
@@ -204,7 +203,7 @@ var active_target : Vector3
 func _ready():
 	
 
-	offset = _all_cam_array[0].transform.origin - cam_target.position
+	offset = _all_cam_array[0].global_position - cam_target.global_position
 	active_target = offset
 	
 	
@@ -214,14 +213,17 @@ func _physics_process(_delta):
 	if !_global_datas.Player_In_Inventory:
 		return
 		
-	var playerPosition = cam_target.position
+	var playerPosition = cam_target.global_position
 	for cam in _all_cam_array:
-		cam.transform.origin = lerp(cam.transform.origin, playerPosition + active_target, smooth_speed * _delta)	
+		cam.global_position= lerp(cam.global_position, playerPosition + active_target, smooth_speed * _delta)	
 	
-	camera_xray.position = camera_3d.position
-	camera_xray.rotation = camera_3d.rotation
-	camera_3d_scanner.position = camera_3d.position
-	camera_3d_scanner.rotation = camera_3d.rotation	
+	camera_xray.global_position = camera_3d.global_position
+	camera_xray.global_rotation  = camera_3d.global_rotation 
+	camera_xray.fov = camera_3d.fov
+	
+	camera_3d_scanner.global_position = camera_3d.global_position
+	camera_3d_scanner.global_rotation = camera_3d.global_rotation	
+	camera_3d_scanner.fov = camera_3d.fov
 "
 
 [sub_resource type="GDScript" id="GDScript_xw18g"]
@@ -480,7 +482,6 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-649.43, -338.023)
 mode = 1
 flags/light_only = false
 nodes/fragment/2/node = SubResource("VisualShaderNodeStep_1g27w")
@@ -576,7 +577,7 @@ default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5
 op_type = 3
 
 [sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_fkng4"]
-constant = Color(0.0143067, 0.116367, 0.131475, 1)
+constant = Color(0.392157, 0.352941, 0.270588, 1)
 
 [sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_gxdju"]
 constant = Color(0.992188, 0.847656, 0.621094, 1)
@@ -678,6 +679,7 @@ void fragment() {
 
 }
 "
+graph_offset = Vector2(-113.684, -346.898)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(1320, 40)
@@ -1156,6 +1158,9 @@ script = ExtResource("6_fjfen")
 [node name="Fade_scanner" type="Node" parent="Show_OnScanner"]
 script = ExtResource("7_3smbg")
 
+[node name="Zoom_scanner" type="Node" parent="Show_OnScanner"]
+script = ExtResource("9_1m4w2")
+
 [node name="Update_descriptions" type="Node" parent="."]
 script = ExtResource("1_ym670")
 
@@ -1199,7 +1204,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.38419e-07)
 [node name="Camera3D" type="Camera3D" parent="SubViewport/Camp_root_Render"]
 transform = Transform3D(0.994881, 0.0700724, -0.072816, 0, 0.720551, 0.693402, 0.101056, -0.689852, 0.716862, -0.08, 0.945, 1.035)
 cull_mask = 2
-fov = 42.0
+current = true
+fov = 40.0
 far = 4.25
 script = SubResource("GDScript_l5hmx")
 
@@ -1225,7 +1231,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.38419e-07)
 [node name="Camera3D" type="Camera3D" parent="SubViewport_scanner/Camp_root_Render"]
 transform = Transform3D(0.994881, 0.0700724, -0.072816, 0, 0.720551, 0.693402, 0.101056, -0.689852, 0.716862, -0.08, 0.945, 1.035)
 cull_mask = 128
-fov = 42.0
+fov = 55.0
 far = 4.25
 
 [node name="RENDER" type="TextureRect" parent="."]

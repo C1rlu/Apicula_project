@@ -8,7 +8,7 @@ func _ready():
 
 	var os_screen_resolution = DisplayServer.screen_get_size()
 	if os_screen_resolution.x < 1281:	
-		_on_item_selected(0)
+		_on_item_selected(1)
 	else:
 		_on_item_selected(1)	
 		

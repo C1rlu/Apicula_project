@@ -32,14 +32,18 @@ func _process(delta):
 		border_ratio = 5
 	var camera_position = position
 	
-	if Input.is_action_pressed((_global_datas.move_right)):
-		camera_position.x += speed * delta
-	if Input.is_action_pressed((_global_datas.move_left)):
-		camera_position.x -= speed * delta	
-	if Input.is_action_pressed((_global_datas.move_forward)):
-		camera_position.z -= speed * delta	
-	if Input.is_action_pressed((_global_datas.move_backward)):
-		camera_position.z += speed * delta
+	if Input.is_action_pressed(_global_datas.move_right):
+		var _magnitude = Input.get_action_strength(_global_datas.move_right)
+		camera_position.x += _magnitude * speed * delta
+	if Input.is_action_pressed(_global_datas.move_left):
+		var _magnitude = Input.get_action_strength(_global_datas.move_left)
+		camera_position.x -= _magnitude * speed * delta	
+	if Input.is_action_pressed(_global_datas.move_forward):
+		var _magnitude = Input.get_action_strength(_global_datas.move_forward)
+		camera_position.z -= _magnitude * speed * delta	
+	if Input.is_action_pressed(_global_datas.move_backward):
+		var _magnitude = Input.get_action_strength(_global_datas.move_backward)
+		camera_position.z += _magnitude * speed * delta
 	
 	var lerp_value = (border_ratio - 22.0) / (42.0 - 22.0)	
 	var oneminus = lerp(1.0,0.0,lerp_value)

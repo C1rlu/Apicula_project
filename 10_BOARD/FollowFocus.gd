@@ -27,7 +27,7 @@ func _focus_this(target : Vector3):
 		t.kill()
 	t = create_tween()
 	
-	t.tween_property(cam_target,"position",target + offset,0.5)
+	t.tween_property(cam_target,"position",target + offset,0.5).set_trans(Tween.TRANS_SINE)
 	previous_photoTarget = target
 
 func _focus_scanner(condition : bool):
@@ -46,7 +46,7 @@ func _focus_scanner(condition : bool):
 			t.kill()
 		t = create_tween()
 	
-		t.tween_property(cam_target,"position",target_position.global_position + offset,0.5)
+		t.tween_property(cam_target,"position",target_position.global_position + offset,0.5).set_trans(Tween.TRANS_SINE)
 	else:
 		if previous_photoTarget == null:
 			return
@@ -55,4 +55,4 @@ func _focus_scanner(condition : bool):
 			t.kill()
 		t = create_tween()
 	
-		t.tween_property(cam_target,"position",previous_photoTarget + offset,0.5)	
+		t.tween_property(cam_target,"position",previous_photoTarget + offset,0.5).set_trans(Tween.TRANS_SINE)	

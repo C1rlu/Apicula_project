@@ -14,13 +14,11 @@ func _input(event):
 	if event is InputEventJoypadButton or event is InputEventJoypadMotion:
 		
 		if !using_pad:
-			print("Using PAD")
 			_global_datas.using_pad.emit(true)
 			using_pad = true
 	else:
 		
 		if using_pad:
-			print("Using Keyboard")
 			_global_datas.using_pad.emit(false)
 			using_pad = false
 			

@@ -27,18 +27,15 @@ func _input(event):
 			
 		if _pad: 
 			var target = pad_target.position
+			print(target)
 			check_cast(target)	
+			
 		else:
 			var target = get_viewport().get_mouse_position()
 			check_cast(target)
 			
 	if event.is_action_released("Click"):
 		active_scanner.emit(false)	
-
-
-
-
-
 
 func check_cast(targetPos : Vector2):
 	
