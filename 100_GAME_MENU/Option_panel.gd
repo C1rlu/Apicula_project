@@ -6,7 +6,9 @@ extends Node
 
 signal open_option
 
-
+func _ready():
+	active_vsync(true)
+	
 func _on_option_button_pressed():
 
 	open_option.emit()

@@ -22,34 +22,13 @@ func show_legend(condition : bool):
 		_global_datas.focus_this_on_board.emit(focus_pos)
 		_is_select = true	
 		is_select.visible = true
-		_global_datas.show_on_scanner.emit(photo_data)	
+		_global_datas.selected_photoData = photo_data
+		#_global_datas.show_on_scanner.emit(photo_data)	
 	else:
 		_global_datas.show_board_description.emit(false,"")	
-
-	
-				
-func _on_input_event(camera, event, _position, normal, shape_idx):
-
-	if !_global_datas.Player_In_Inventory:
-		return
-	
-	if _is_select:
-		return
-	if event.is_action_pressed("Click"):
+		is_select.visible = false
+		_is_select = false		
 		
-	
-		show_legend(true)		
-	
-		
-func _input(event):
-	
-	if _is_select:
-		if event.is_action_pressed("Click"):		
-			show_legend(false)
-			is_select.visible = false
-			_is_select = false
-
-
 func close_inventory(condition : bool):
 	if !condition:
 		is_select.visible = false

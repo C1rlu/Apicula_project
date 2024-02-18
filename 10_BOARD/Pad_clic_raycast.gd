@@ -1,30 +1,47 @@
 extends Node
 
-var _active : bool = false
+var _pad : bool = false
 @onready var pad_target = $"../SubViewport/Pad_target"
 @onready var  Camera = $"../Camp_root_XRay/Camera_xray"
+
+var selectable
+signal active_scanner(condition : bool)
+
+
 
 func _ready():
 	_global_datas.using_pad.connect(_active_raycast)
 	
 func _active_raycast(condition : bool):
-	_active = condition			
+	_pad = condition			
 
 func _input(event):
-	
-	if !_active:
-		return
-		
+
 	if !_global_datas.Player_In_Inventory:
 		return	
 			
 	if event.is_action_pressed("Click"):
-		check_cast()
-		
+	
+		if _global_datas.in_scanner_mode:
+			_global_datas.show_on_scanner.emit(false)		
+			
+		if _pad: 
+			var target = pad_target.position
+			check_cast(target)	
+		else:
+			var target = get_viewport().get_mouse_position()
+			check_cast(target)
+			
+	if event.is_action_released("Click"):
+		active_scanner.emit(false)	
 
-func check_cast():
-		
-	var targetPos = pad_target.position
+
+
+
+
+
+func check_cast(targetPos : Vector2):
+	
 	var rayLengh = 1000.0
 	var from = Camera.project_ray_origin(targetPos)
 	var to = from + Camera.project_ray_normal(targetPos) * rayLengh
@@ -37,11 +54,15 @@ func check_cast():
 
 	var result = space.intersect_ray(rayQuery)
 	if !result:
-		_global_datas.show_board_description.emit(false,"")	
+		if selectable: # Deselect selected photo data if exist
+			selectable.show_legend(false)		
 		return
-	var selectable = result.collider.get_node_or_null("Select_this")	
+	selectable = result.collider.get_node_or_null("Select_this")	
 	
 	if selectable:	
 		selectable.show_legend(true)
+		selectable = selectable
+		# active progress if keep pressing
+		active_scanner.emit(true)
+		
 
-	

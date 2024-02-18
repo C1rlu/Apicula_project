@@ -9,33 +9,32 @@ extends Node
 
 var fade_in
 
+var actual_value : float
 
 func _ready():
 	_global_datas.show_on_scanner.connect(start_fade_in)
-	_global_datas.show_board_description.connect(start_fade_out)
 
-func start_fade_in(photodata : PhotoData):
 
-	if fade_in:
-		fade_in.kill()
-	
-	fade_in = create_tween()
-	fade_in.tween_method(set_shader_value,0.0,1.0,0.5)
-	
-func start_fade_out(condition : bool, no_need):
+func start_fade_in(condition : bool):
 
 	if condition:
-		return
+		if fade_in:
+			fade_in.kill()
+	
+		fade_in = create_tween()
+		fade_in.tween_method(set_shader_value,actual_value,1.0,0.5)
 		
-	if fade_in:
-		fade_in.kill()
+	else:		
+		if fade_in:
+			fade_in.kill()
 	
-	fade_in = create_tween()
-	fade_in.tween_method(set_shader_value,1.0,0.0,0.5)
-	
-	
+		fade_in = create_tween()
+		fade_in.tween_method(set_shader_value,actual_value,0.0,0.5)	
+
+
 func set_shader_value(value):
 	
 	render_scanner_material.set_shader_parameter("Opacity",value)
 	var clamp_backdrop = clampf(value,0.0,0.8)
 	backdrop_focus_material.set_shader_parameter("Opacity",clamp_backdrop)
+	actual_value = value
