@@ -16,7 +16,7 @@ func _active_scanner_progress(condition):
 	if t:
 		t.kill()
 	t = create_tween()
-	t.tween_method(set_progress,0.0,100.0,0.8)	
+	t.tween_method(set_progress,0.0,100.0,0.5)	
 	t.connect("finished",open_scanner)
 
 func set_progress(value):

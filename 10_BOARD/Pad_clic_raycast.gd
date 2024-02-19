@@ -22,6 +22,7 @@ func _input(event):
 			
 	if event.is_action_pressed("Click"):
 	
+			
 		if _pad: 
 			var target = pad_target.position
 			check_cast(target)	

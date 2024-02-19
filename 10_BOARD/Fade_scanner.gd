@@ -30,7 +30,7 @@ func start_fade_in(condition : bool):
 	
 		fade_in = create_tween()
 		fade_in.tween_method(set_shader_value,actual_value,0.0,0.5)	
-
+	
 
 func set_shader_value(value):
 	

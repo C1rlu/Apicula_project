@@ -52,8 +52,7 @@ script/source = "extends Node
 
 @onready var board_ui = $\"../RENDER\"
 @onready var material : Material = board_ui.get_material()
-@onready var render_scanner = $\"../RENDER_Scanner\"
-@onready var render_scanner_material : Material = render_scanner.get_material()
+
 var fade_in
 
 func _ready():
@@ -85,7 +84,7 @@ func _disable_viewport():
 func set_shader_value(value):
 	
 	material.set_shader_parameter(\"Opacity\",value)
-	#render_scanner_material.set_shader_parameter(\"Opacity\",0.0)
+
 "
 
 [sub_resource type="GDScript" id="GDScript_00hwt"]
@@ -116,7 +115,7 @@ func _ready():
 	_set_zoom_pos()	
 	rotation_target = Vector3(-43.9,-5.8,0)
 
-	_global_datas.show_on_scanner.connect(_Zoom_OnScanner)
+	#_global_datas.show_on_scanner.connect(_Zoom_OnScanner)
 
 
 func _input(event):
@@ -148,7 +147,7 @@ func _Zoom(value : int):
 	
 	if zoom_index == 2:
 		target = normal_zoom_pos
-		rotation_target = Vector3(-43.9,-5.8,0)
+		rotation_target = Vector3(-35.0,-5.8,0)
 
 	if t:
 		t.kill()
@@ -187,7 +186,7 @@ func _set_zoom_pos():
 	var forward = -dir.normalized()
 
 	no_zoom_pos = Cam.position
-	normal_zoom_pos = no_zoom_pos + forward * 1.15 + Vector3(0.0,0.0,-0.1)
+	normal_zoom_pos = no_zoom_pos + forward * 1.1 + Vector3(0.0,0.0,-0.08)
 	scanner_zoom_pos = no_zoom_pos + forward * 1.15 + Vector3(0.0,0.0,-0.18)
 	photo_zoom_pos = no_zoom_pos + forward * 1.2 + Vector3(0.0,0.0,-0.18)
 "
@@ -226,9 +225,9 @@ func _physics_process(_delta):
 	camera_xray.global_rotation  = camera_3d.global_rotation 
 	camera_xray.fov = camera_3d.fov
 	
-	camera_3d_scanner.global_position = camera_3d.global_position
-	camera_3d_scanner.global_rotation = camera_3d.global_rotation	
-	camera_3d_scanner.fov = camera_3d.fov
+	#camera_3d_scanner.global_position = camera_3d.global_position
+	#camera_3d_scanner.global_rotation = camera_3d.global_rotation	
+	#camera_3d_scanner.fov = camera_3d.fov
 "
 
 [sub_resource type="GDScript" id="GDScript_xw18g"]
@@ -487,6 +486,7 @@ void fragment() {
 
 }
 "
+graph_offset = Vector2(-247.971, -128.499)
 mode = 1
 flags/light_only = false
 nodes/fragment/2/node = SubResource("VisualShaderNodeStep_1g27w")
@@ -528,7 +528,7 @@ nodes/fragment/21/node = SubResource("VisualShaderNodeTexture2DParameter_kylus")
 nodes/fragment/21/position = Vector2(-1180, -300)
 nodes/fragment/22/node = SubResource("VisualShaderNodeFloatConstant_vank2")
 nodes/fragment/22/position = Vector2(-1740, -360)
-nodes/fragment/connections = PackedInt32Array(2, 0, 0, 1, 6, 0, 4, 1, 9, 0, 0, 0, 17, 0, 18, 0, 18, 0, 19, 0, 16, 0, 15, 0, 19, 0, 15, 2, 15, 0, 13, 0, 21, 0, 13, 2, 5, 0, 2, 1, 13, 0, 2, 0, 22, 0, 15, 1)
+nodes/fragment/connections = PackedInt32Array(6, 0, 4, 1, 9, 0, 0, 0, 17, 0, 18, 0, 18, 0, 19, 0, 16, 0, 15, 0, 19, 0, 15, 2, 15, 0, 13, 0, 21, 0, 13, 2, 5, 0, 2, 1, 13, 0, 2, 0, 22, 0, 15, 1, 2, 0, 0, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_i3h3t"]
 shader = SubResource("VisualShader_gll0c")
@@ -752,7 +752,7 @@ nodes/fragment/connections = PackedInt32Array(39, 0, 37, 0, 43, 0, 53, 2, 24, 0,
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pyikp"]
 shader = SubResource("VisualShader_evyyy")
-shader_parameter/Opacity = 1.0
+shader_parameter/Opacity = 0.0
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_2hsdg"]
 viewport_path = NodePath("SubViewport_scanner")
@@ -1142,7 +1142,7 @@ script = SubResource("GDScript_00hwt")
 
 [node name="Cam_follow" type="Node" parent="." node_paths=PackedStringArray("_all_cam_array")]
 script = SubResource("GDScript_q7x8f")
-_all_cam_array = [NodePath("../SubViewport/Camp_root_Render"), NodePath("../Camp_root_XRay"), NodePath("../SubViewport_scanner/Camp_root_Render")]
+_all_cam_array = [NodePath("../SubViewport/Camp_root_Render"), NodePath("../Camp_root_XRay")]
 
 [node name="Input_switch" type="Node" parent="."]
 script = ExtResource("2_00g5f")
@@ -1233,9 +1233,9 @@ size = Vector2i(1920, 1080)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.38419e-07)
 
 [node name="Camera3D" type="Camera3D" parent="SubViewport_scanner/Camp_root_Render"]
-transform = Transform3D(0.994881, 0.0700724, -0.072816, 0, 0.720551, 0.693402, 0.101056, -0.689852, 0.716862, -0.08, 0.945, 1.035)
+transform = Transform3D(0.994881, 0.0505281, -0.0875173, 0, 0.866025, 0.5, 0.101056, -0.49744, 0.861592, -0.01, 0.181, 0.197)
 cull_mask = 128
-fov = 55.0
+fov = 40.0
 far = 4.25
 
 [node name="RENDER" type="TextureRect" parent="."]
@@ -1314,7 +1314,6 @@ tint_under = Color(0.658824, 0.470588, 0.27451, 0)
 tint_progress = Color(0.658824, 0.470588, 0.27451, 1)
 
 [node name="InsidePhoto_scanner_scene" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.438655, 0, -0.149262)
 
 [node name="OmniLight3D" type="OmniLight3D" parent="InsidePhoto_scanner_scene"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.199094, 0.00701758)
@@ -1331,12 +1330,14 @@ transform = Transform3D(-0.0133484, 0, 0.000189887, 0, 0.0133497, 0, -0.00018988
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="InsidePhoto_scanner_scene"]
 transform = Transform3D(0.147211, 0, 0, 0, 0.0105471, 0, 0, 0, 0.147211, 0, 0.0145418, 0)
+visible = false
 layers = 2
 mesh = SubResource("CylinderMesh_c55xx")
 surface_material_override/0 = SubResource("ShaderMaterial_llaq4")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="InsidePhoto_scanner_scene"]
 transform = Transform3D(0.0652137, 0, 0, 0, 0.0046723, 0, 0, 0, 0.0652137, 0, 0.0263333, 0)
+visible = false
 layers = 2
 mesh = SubResource("CylinderMesh_c55xx")
 surface_material_override/0 = SubResource("ShaderMaterial_llaq4")

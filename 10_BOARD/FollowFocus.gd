@@ -11,7 +11,7 @@ var previous_photoTarget
 
 func _ready():
 	_global_datas.focus_this_on_board.connect(_focus_this)
-	_global_datas.show_on_scanner.connect(_focus_scanner)
+	#_global_datas.show_on_scanner.connect(_focus_scanner)
 		
 func _focus_this(target : Vector3):
 

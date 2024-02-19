@@ -1,7 +1,7 @@
 extends Node
 
 
-@onready var camera_3d = $"../../SubViewport/Camp_root_Render/Camera3D"
+@onready var camera_3d = $"../../SubViewport_scanner/Camp_root_Render/Camera3D"
 
 
 
