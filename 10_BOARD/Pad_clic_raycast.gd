@@ -22,12 +22,8 @@ func _input(event):
 			
 	if event.is_action_pressed("Click"):
 	
-		if _global_datas.in_scanner_mode:
-			_global_datas.show_on_scanner.emit(false)		
-			
 		if _pad: 
 			var target = pad_target.position
-			print(target)
 			check_cast(target)	
 			
 		else:
@@ -48,12 +44,14 @@ func check_cast(targetPos : Vector2):
 	rayQuery.to = to
 	rayQuery.collide_with_areas = true
 	rayQuery.collide_with_bodies = false
-
+	
 	var result = space.intersect_ray(rayQuery)
 	if !result:
 		if selectable: # Deselect selected photo data if exist
-			selectable.show_legend(false)		
+			if !_global_datas.in_scanner_mode:
+				selectable.show_legend(false)		
 		return
+		
 	selectable = result.collider.get_node_or_null("Select_this")	
 	
 	if selectable:	

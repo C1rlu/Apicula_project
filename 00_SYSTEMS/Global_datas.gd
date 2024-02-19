@@ -23,6 +23,14 @@ signal _open_menu(condition : bool)
 signal set_resolution(resolution : Vector2i)
 
 
+#backcalls
+signal _back_call
+signal _add_back_call(back_call)
+var _back_call_list : Array
+
+func _ready():
+	_back_call_list.clear()
+
 # input type
 signal using_pad(condition : bool)
 var move_right : String

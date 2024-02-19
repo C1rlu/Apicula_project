@@ -16,10 +16,14 @@ func _input(event):
 	if event.is_action_pressed("Open_Menu"):
 		_global_datas.Player_InMenu =! _global_datas.Player_InMenu
 		_global_datas._open_menu.emit(_global_datas.Player_InMenu)	
-		#_global_datas.Open_ui_dark_backdrop.emit(_global_datas.Player_InMenu)
 		focus_button.grab_focus()
-	if _global_datas.Player_InMenu:
-		if event.is_action_pressed("Back_call"):
-			_global_datas.Player_InMenu = false
-			_global_datas._open_menu.emit(_global_datas.Player_InMenu)	
-			#_global_datas.Open_ui_dark_backdrop.emit(_global_datas.Player_InMenu)
+		
+		#set back call
+		_global_datas._back_call_list.append(set_back_call)	
+		
+			
+
+func set_back_call():
+	_global_datas._open_menu.emit(false)
+	_global_datas.Player_InMenu = false
+

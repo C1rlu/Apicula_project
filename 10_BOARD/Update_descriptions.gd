@@ -14,5 +14,14 @@ func _update_description(condition : bool, _text : String):
 		
 		description.text = _text	
 		fade._fade(true)
+		_global_datas._add_back_call.emit(_back_call)
+	
 	else:
 		fade._fade(false)
+		
+
+func _back_call():
+	_global_datas.show_board_description.emit(false,"")	
+
+
+
