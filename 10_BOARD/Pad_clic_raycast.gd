@@ -59,11 +59,12 @@ func check_cast(targetPos : Vector2):
 	rayQuery.collide_with_bodies = false
 	
 	var result = space.intersect_ray(rayQuery)
+	
 	if !result:
 		if selectable: # Deselect selected photo data if exist
 			if !_global_datas.in_scanner_mode:
 				selectable.show_legend(false)
-				selectable = null		
+				selectable = null	 		
 		return
 		
 	selectable = result.collider.get_node_or_null("Select_this")	

@@ -114,9 +114,6 @@ func _ready():
 	_set_zoom_pos()	
 	rotation_target = Vector3(-43.9,-5.8,0)
 
-	#_global_datas.show_on_scanner.connect(_Zoom_OnScanner)
-
-
 func _input(event):
 	
 	if _global_datas.in_scanner_mode:
@@ -165,25 +162,6 @@ func _Zoom(value : int):
 	r = create_tween()
 	r.tween_property(Cam,\"rotation_degrees\",rotation_target,0.8).set_trans(Tween.TRANS_SINE)
 
-func _Zoom_OnScanner(condition : bool):
-	
-	if !condition:
-		_Zoom(0)
-		return	
-	target = scanner_zoom_pos
-	rotation_target = Vector3(-30,-5.8,0)	
-	
-	if t:
-		t.kill()
-	t = create_tween()
-	
-	t.tween_property(Cam,\"position\",target,0.5).set_trans(Tween.TRANS_SINE)
-	
-	if r:
-		r.kill()
-	r = create_tween()
-	r.tween_property(Cam,\"rotation_degrees\",rotation_target,0.5).set_trans(Tween.TRANS_SINE)	
-
 	
 func _set_zoom_pos():
 	
@@ -212,7 +190,6 @@ var active_target : Vector3
 @onready var cam_target = $\"../SubViewport/CamTarget\"
 @export var _all_cam_array : Array[Node3D]
 @onready var camera_xray = $\"../Camp_root_XRay/Camera_xray\"
-@onready var camera_3d_scanner = $\"../SubViewport_scanner/Camp_root_Render/Camera3D\"
 @onready var camera_3d = $\"../SubViewport/Camp_root_Render/Camera3D\"
 
 func _ready():
@@ -236,9 +213,7 @@ func _physics_process(_delta):
 	camera_xray.global_rotation  = camera_3d.global_rotation 
 	camera_xray.fov = camera_3d.fov
 	
-	#camera_3d_scanner.global_position = camera_3d.global_position
-	#camera_3d_scanner.global_rotation = camera_3d.global_rotation	
-	#camera_3d_scanner.fov = camera_3d.fov
+
 "
 
 [sub_resource type="GDScript" id="GDScript_xw18g"]

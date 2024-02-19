@@ -19,12 +19,9 @@ signal see_int(condition : bool)
 var was_detected : bool = false
 
 func _on_area_entered(_area):
-	
-	if _area.name == \"Sonar_Aera\":
-			
-		see_int.emit(true)
-	
+
 	if _area.name == \"Enter_dialogue_zone\":
+			
 			
 		see_int.emit(true)
 		on_over.visible = true
@@ -32,6 +29,7 @@ func _on_area_entered(_area):
 		_global_datas._load_subscene.emit(true)
 		
 		if !was_detected:
+			_global_datas._active_sonar.emit()
 			if boue_data:
 				_global_datas.boue_archives.append(boue_data)
 		boue.visible = true

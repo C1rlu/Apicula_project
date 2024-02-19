@@ -1,11 +1,10 @@
-[gd_scene load_steps=85 format=3 uid="uid://cnmptm7i0xxmj"]
+[gd_scene load_steps=84 format=3 uid="uid://cnmptm7i0xxmj"]
 
 [ext_resource type="PackedScene" uid="uid://vpdvl0v7dubd" path="res://00_PLAYER/Player_boat.tscn" id="1_qltht"]
 [ext_resource type="Script" path="res://06_UI/Fps_counter.gd" id="1_s74e5"]
 [ext_resource type="Resource" uid="uid://ppxk5i543dfn" path="res://09_NPC/Npc_data/Mr_Birds_data.tres" id="1_trgwt"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_xd8sb"]
 [ext_resource type="Script" path="res://03_CAMERA/CameraFollow.gd" id="2_7lb1x"]
-[ext_resource type="Script" path="res://00_SCENE/Active_Sonar.gd" id="2_rwn15"]
 [ext_resource type="Material" uid="uid://cfd7rt53ee7jp" path="res://05_SHADER_TEST/Full_screen/Foam_dither_viewport.tres" id="3_qcxor"]
 [ext_resource type="Shader" uid="uid://bduoqim3kfbs6" path="res://00_PLAYER/Sonar/Sonar_sh.tres" id="3_todel"]
 [ext_resource type="Material" uid="uid://ua1gnqwbe2bj" path="res://05_SHADER_TEST/Full_screen/Sonar_dither_viewport.tres" id="4_qh7in"]
@@ -725,12 +724,6 @@ size = Vector3(30, 0, 30)
 script = ExtResource("1_xd8sb")
 viewports = [NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/MAIN_Viewport"), NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/FOAM_Viewport"), NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/SONAR_Viewport"), NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/GRID_Viewport"), NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/SKY_Viewport")]
 
-[node name="Active_Sonar" type="Node" parent="."]
-script = ExtResource("2_rwn15")
-
-[node name="Timer" type="Timer" parent="Active_Sonar"]
-wait_time = 3.0
-
 [node name="Push_to_subscene" type="Node" parent="."]
 script = SubResource("GDScript_xsqte")
 
@@ -989,8 +982,8 @@ skeleton = NodePath("../..")
 
 [node name="Sonar_Aera" type="Area3D" parent="Player_Boat/Sonar"]
 transform = Transform3D(1, 0, -7.10543e-15, 0, 1, 0, 7.10543e-15, 0, 1, 0, 0, 0)
-collision_layer = 2
-collision_mask = 2
+collision_layer = 0
+collision_mask = 0
 input_ray_pickable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player_Boat/Sonar/Sonar_Aera"]
@@ -1257,7 +1250,6 @@ layers = 2048
 mesh = SubResource("BoxMesh_wmrfd")
 skeleton = NodePath("")
 
-[connection signal="timeout" from="Active_Sonar/Timer" to="Active_Sonar" method="_on_timer_timeout"]
 [connection signal="timeout" from="Go_subscene_progress/GoSubscene_timer/Timer" to="Go_subscene_progress/GoSubscene_timer" method="_on_timer_timeout"]
 [connection signal="area_entered" from="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA" to="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA" method="_on_area_entered"]
 [connection signal="area_exited" from="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA" to="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA" method="_on_area_exited"]
