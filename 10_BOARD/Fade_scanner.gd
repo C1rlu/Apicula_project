@@ -22,14 +22,14 @@ func start_fade_in(condition : bool):
 			fade_in.kill()
 	
 		fade_in = create_tween()
-		fade_in.tween_method(set_shader_value,actual_value,1.0,0.5)
+		fade_in.tween_method(set_shader_value,actual_value,1.0,1.0).set_trans(Tween.TRANS_SINE)
 		
 	else:		
 		if fade_in:
 			fade_in.kill()
 	
 		fade_in = create_tween()
-		fade_in.tween_method(set_shader_value,actual_value,0.0,0.5)	
+		fade_in.tween_method(set_shader_value,actual_value,0.0,1.0).set_trans(Tween.TRANS_SINE)
 	
 
 func set_shader_value(value):

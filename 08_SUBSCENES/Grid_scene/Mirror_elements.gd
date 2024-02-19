@@ -9,6 +9,6 @@ func _ready():
 func _active_mirror_Elements(condition : bool):
 	for element in elements_mesh:
 		element.visible = condition
-		var col = element.get_node_or_null("StaticBody3D/CollisionShape3D")
+		var col = element.get_node_or_null("All_render/CollisionShape3D")
 		if col:
 			col.disabled = !condition

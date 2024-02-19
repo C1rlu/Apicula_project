@@ -22,7 +22,7 @@ func _focus_this(target : Vector3):
 		return	
 		
 		
-	var offset = Vector3(0.0,0.0,0.05)	
+	var offset = Vector3(0.0,0.0,0.025)	
 	if t:
 		t.kill()
 	t = create_tween()

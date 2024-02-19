@@ -25,4 +25,4 @@ func set_progress(value):
 
 func open_scanner():
 	_global_datas.show_on_scanner.emit(true)	
-	
+	go_scanner_progress.value = 0.0	

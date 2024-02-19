@@ -92,17 +92,16 @@ script/source = "extends Node
 
 @onready var Cam : Camera3D = $\"../SubViewport/Camp_root_Render/Camera3D\"
 
-@export var no_zoom_pos : Vector3
-@export var normal_zoom_pos : Vector3
+var no_zoom_pos : Vector3
+var normal_zoom_pos : Vector3
+var max_zoom_pos : Vector3
 
-@export var photo_zoom_pos : Vector3
-@export var scanner_zoom_pos : Vector3
+var scanner_zoom_pos : Vector3
 
 var target : Vector3
 var rotation_target : Vector3
 var zoom_index : int = 1
 var zoom_value : float
-var origin_value : float
 
 var t 
 var r
@@ -138,27 +137,33 @@ func _Zoom(value : int):
 	
 	zoom_index += value
 
-	zoom_index = clamp(zoom_index,1,2)
+	zoom_index = clamp(zoom_index,1,3)
 	_global_datas.zoom_value = zoom_index 
 	
 	if zoom_index == 1:
 		target = no_zoom_pos
 		rotation_target = Vector3(-43.9,-5.8,0)
 	
+	
 	if zoom_index == 2:
 		target = normal_zoom_pos
-		rotation_target = Vector3(-35.0,-5.8,0)
+		rotation_target = Vector3(-45,-5.8,0)
+	
+	
+	if zoom_index == 3:
+		target = max_zoom_pos	
+		rotation_target = Vector3(-50,-5.8,0)
 
 	if t:
 		t.kill()
 	t = create_tween()
 	
-	t.tween_property(Cam,\"position\",target,0.5).set_trans(Tween.TRANS_SINE)
+	t.tween_property(Cam,\"position\",target,0.8).set_trans(Tween.TRANS_SINE)
 	
 	if r:
 		r.kill()
 	r = create_tween()
-	r.tween_property(Cam,\"rotation_degrees\",rotation_target,0.5).set_trans(Tween.TRANS_SINE)
+	r.tween_property(Cam,\"rotation_degrees\",rotation_target,0.8).set_trans(Tween.TRANS_SINE)
 
 func _Zoom_OnScanner(condition : bool):
 	
@@ -186,9 +191,15 @@ func _set_zoom_pos():
 	var forward = -dir.normalized()
 
 	no_zoom_pos = Cam.position
-	normal_zoom_pos = no_zoom_pos + forward * 1.1 + Vector3(0.0,0.0,-0.08)
+	normal_zoom_pos = no_zoom_pos + forward * 0.7 + Vector3(0.0,0.0,-0.08)
+	max_zoom_pos = no_zoom_pos + forward * 1.1 + Vector3(0.0,0.0,-0.12)
+
 	scanner_zoom_pos = no_zoom_pos + forward * 1.15 + Vector3(0.0,0.0,-0.18)
-	photo_zoom_pos = no_zoom_pos + forward * 1.2 + Vector3(0.0,0.0,-0.18)
+
+
+func _on_pad_clic_raycast_active_scanner(condition):
+	if condition:
+		_Zoom(1)
 "
 
 [sub_resource type="GDScript" id="GDScript_q7x8f"]
@@ -486,7 +497,6 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-247.971, -128.499)
 mode = 1
 flags/light_only = false
 nodes/fragment/2/node = SubResource("VisualShaderNodeStep_1g27w")
@@ -1360,4 +1370,5 @@ skeleton = NodePath("")
 visible = false
 mesh = SubResource("BoxMesh_byg66")
 
+[connection signal="active_scanner" from="Pad_clic_raycast" to="ZOOM_Behaviour" method="_on_pad_clic_raycast_active_scanner"]
 [connection signal="active_scanner" from="Pad_clic_raycast" to="Pad_clic_raycast/Active_scanner_progress" method="_active_scanner_progress"]

@@ -17,11 +17,20 @@ func _active_raycast(condition : bool):
 
 func _input(event):
 
+
+	
+
+	if event.is_action_released("Click"):
+		if selectable:
+			_global_datas.show_on_scanner.emit(false)	
+	if _global_datas.in_scanner_mode:
+		return
+		
+		
 	if !_global_datas.Player_In_Inventory:
 		return	
 			
 	if event.is_action_pressed("Click"):
-	
 			
 		if _pad: 
 			var target = pad_target.position
@@ -30,10 +39,13 @@ func _input(event):
 		else:
 			var target = get_viewport().get_mouse_position()
 			check_cast(target)
-			
+		
+		if selectable:
+			_global_datas.show_on_scanner.emit(true)
 	if event.is_action_released("Click"):
 		active_scanner.emit(false)	
 
+		
 func check_cast(targetPos : Vector2):
 	
 	var rayLengh = 1000.0
@@ -50,7 +62,8 @@ func check_cast(targetPos : Vector2):
 	if !result:
 		if selectable: # Deselect selected photo data if exist
 			if !_global_datas.in_scanner_mode:
-				selectable.show_legend(false)		
+				selectable.show_legend(false)
+				selectable = null		
 		return
 		
 	selectable = result.collider.get_node_or_null("Select_this")	
