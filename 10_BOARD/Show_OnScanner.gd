@@ -15,6 +15,8 @@ func _show_scanner(condition : bool):
 	_global_datas.in_scanner_mode = condition
 	if condition:
 		stop_scanner()
+		if !_global_datas.selected_photoData:
+			return
 		if _global_datas.selected_photoData.scanner_prefab:	
 			var instance = _global_datas.selected_photoData.scanner_prefab.instantiate()
 			loader.add_child(instance)
