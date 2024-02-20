@@ -137,4 +137,4 @@ var Npc_Dialogue : Npc_datas
 
 signal active_prologue_demo
 signal player_active_tools(condition : bool)# to active sonar, dive and clock ect, after the lighthouse
-signal player_received_ui_tool(_name : String)
+

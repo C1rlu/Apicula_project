@@ -1,19 +1,12 @@
 extends Node3D
 
+@export var already_in_inventory : Array[PhotoData]
 
-@export var test_data : PhotoData
-@export var test_data_02 : PhotoData
-
-var all_photos : Array
-
+var all_photos
 func _ready():
 	all_photos = get_children()
-
-	_global_datas.photo_archives.append(test_data)
-	_global_datas.photo_archives.append(test_data_02)
 	_global_datas.open_inventory.connect(_check_found)
 
-		
 func _check_found(condition : bool):
 	
 	if !condition:

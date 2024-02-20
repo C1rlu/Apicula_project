@@ -10,7 +10,6 @@ signal up_dialogue_index
 	"hide_hand_signal" : _global_datas._hide_hand,
 	"give_letter" : _global_datas._give_letter,	
 	"take_note":_global_datas._take_note,
-	"give_tool" : _global_datas.player_received_ui_tool,
 	"up_dialogue_index" : up_dialogue_index
 
 }

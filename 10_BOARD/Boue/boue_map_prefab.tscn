@@ -4,7 +4,7 @@
 [ext_resource type="Material" uid="uid://cndqni443mbf" path="res://00_PLAYER/Boat/Boat_mat.tres" id="2_0td7k"]
 [ext_resource type="Resource" uid="uid://bqtier24l2d58" path="res://10_BOARD/Boue/Boue_appicula.tres" id="2_qe1o7"]
 
-[sub_resource type="QuadMesh" id="QuadMesh_b6tms"]
+[sub_resource type="QuadMesh" id="QuadMesh_bcdgt"]
 
 [sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_nsx0g"]
 function = 31
@@ -33,18 +33,18 @@ constant = Color(0.84, 0.5376, 0.168, 1)
 
 [sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_2d1bj"]
 
-[sub_resource type="Gradient" id="Gradient_754lt"]
+[sub_resource type="Gradient" id="Gradient_38ddq"]
 offsets = PackedFloat32Array(0.779817, 0.825688, 0.926606, 1)
 colors = PackedColorArray(0, 0, 0, 1, 0.0962047, 0.0962048, 0.0962047, 1, 0.310617, 0.310617, 0.310617, 1, 0, 0, 0, 1)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_kfj81"]
-gradient = SubResource("Gradient_754lt")
-fill = 2
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_yv8ml"]
+gradient = SubResource("Gradient_38ddq")
+fill = 1
 fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(0.91453, 0.106838)
+fill_to = Vector2(0.858974, 0.247863)
 
 [sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_24f2u"]
-texture = SubResource("GradientTexture2D_kfj81")
+texture = SubResource("GradientTexture2D_yv8ml")
 
 [sub_resource type="VisualShader" id="VisualShader_h4616"]
 code = "shader_type spatial;
@@ -103,7 +103,7 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-564.298, -115.179)
+graph_offset = Vector2(-737.403, -431.074)
 flags/unshaded = true
 flags/shadows_disabled = true
 nodes/fragment/0/position = Vector2(680, 20)
@@ -149,8 +149,10 @@ var boue_data : BoueData
 
 @onready var root = $\"../..\"
 
-
+var can_be_scanne = false
 var _is_select : bool = false
+
+signal on_click(condition:bool)
 
 func _ready():
 	boue_data =  $\"../..\".Boue_Data
@@ -161,8 +163,8 @@ func show_legend(condition : bool):
 	if condition:
 		var legend_text = boue_data.legend
 		_global_datas.show_board_description.emit(true,legend_text)
-		#var focus_pos = root.global_position
-		#_global_datas.focus_this_on_board.emit(focus_pos)
+		var focus_pos = root.global_position
+		_global_datas.focus_this_on_board.emit(focus_pos)
 		_is_select = true	
 		is_select.visible = true	
 	else:
@@ -195,7 +197,6 @@ func _input(event):
 func close_inventory(condition : bool):
 	if !condition:
 		is_select.visible = false
-
 
 "
 
@@ -241,10 +242,10 @@ script = ExtResource("1_7mkw5")
 Boue_Data = ExtResource("2_qe1o7")
 
 [node name="IS_SELECT" type="MeshInstance3D" parent="."]
-transform = Transform3D(5.941, 0, 0, 0, -2.59689e-07, 5.941, 0, -5.941, -2.59689e-07, 0, 0.834062, 0)
+transform = Transform3D(5.941, 0, 0, 0, -2.59689e-07, 5.941, 0, -5.941, -2.59689e-07, 0, 0.404643, 0)
 visible = false
 layers = 2
-mesh = SubResource("QuadMesh_b6tms")
+mesh = SubResource("QuadMesh_bcdgt")
 surface_material_override/0 = SubResource("ShaderMaterial_e3ub3")
 
 [node name="Area3D" type="Area3D" parent="."]

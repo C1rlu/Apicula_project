@@ -44,7 +44,7 @@ script/source = "extends Node
 
 @onready var player_sub = $\"..\"
 
-@onready var timer = $Timer
+@onready var timer = $\"../Flash_inputs/Timer\"
 var can_dash : bool = true
 
 func _input(event: InputEvent):
@@ -969,9 +969,6 @@ one_shot = true
 [node name="Dash" type="Node" parent="."]
 script = SubResource("GDScript_0rnti")
 
-[node name="Timer" type="Timer" parent="Dash"]
-wait_time = 2.0
-
 [node name="Photo_Flash" type="Node" parent="."]
 script = SubResource("GDScript_8qwgp")
 
@@ -1122,5 +1119,5 @@ process_material = SubResource("ParticleProcessMaterial_snyp2")
 draw_pass_1 = ExtResource("4_6vpi7")
 
 [connection signal="timeout" from="Ini_subscene/Timer" to="Ini_subscene" method="_on_timer_timeout"]
-[connection signal="timeout" from="Dash/Timer" to="Dash" method="_on_timer_timeout"]
+[connection signal="timeout" from="Flash_inputs/Timer" to="Dash" method="_on_timer_timeout"]
 [connection signal="timeout" from="Flash_inputs/Timer" to="Flash_inputs" method="_on_timer_timeout"]

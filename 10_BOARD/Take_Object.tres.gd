@@ -6,8 +6,10 @@ var photo_data : PhotoData
 
 @onready var photo_area = $".."
 
-
+var can_be_scanne = true
 var _is_select : bool = false
+
+signal on_click(condition : bool)
 
 func _ready():
 	photo_data =  $"..".photo_data
@@ -23,7 +25,7 @@ func show_legend(condition : bool):
 		_is_select = true	
 		is_select.visible = true
 		_global_datas.selected_photoData = photo_data
-		#_global_datas.show_on_scanner.emit(photo_data)	
+
 	else:
 		_global_datas.show_board_description.emit(false,"")	
 		is_select.visible = false
@@ -32,3 +34,11 @@ func show_legend(condition : bool):
 func close_inventory(condition : bool):
 	if !condition:
 		is_select.visible = false
+
+
+func _on_on_click(condition):
+	
+	if condition:
+		_global_datas.show_on_scanner.emit(true)
+	else:
+		_global_datas.show_on_scanner.emit(false)

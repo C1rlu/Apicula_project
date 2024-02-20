@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://dr7pcue70x0dt"]
+[gd_scene load_steps=62 format=3 uid="uid://dr7pcue70x0dt"]
 
 [ext_resource type="Script" path="res://12_INVENTORY/Behaviour/Movable_paper.tres.gd" id="1_hutrl"]
 [ext_resource type="Script" path="res://12_INVENTORY/Behaviour/legend.tres.gd" id="2_jvqxf"]
@@ -568,6 +568,147 @@ shader = SubResource("VisualShader_n63tb")
 shader_parameter/Denoiser = 1.0
 shader_parameter/Photo = ExtResource("4_5je6e")
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_j65n2"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3t3vd"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_67tgs"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_12j5a"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2xjys"]
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_w71tt"]
+constant = 0.4
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_2aj4p"]
+constant = 1.0
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_48s3l"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_lv1bp"]
+constant = Color(0.98551, 0.77733, 0.57116, 1)
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_rpe5e"]
+
+[sub_resource type="Gradient" id="Gradient_air1u"]
+offsets = PackedFloat32Array(0, 0.829703, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 1, 0.212305, 0.212305, 0.212305, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_mylai"]
+gradient = SubResource("Gradient_air1u")
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_fm2ug"]
+texture = SubResource("GradientTexture2D_mylai")
+
+[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_wk7en"]
+function = 31
+
+[sub_resource type="VisualShader" id="VisualShader_2kkwg"]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+uniform sampler2D tex_frg_7;
+
+
+
+void fragment() {
+// ColorConstant:5
+	vec4 n_out5p0 = vec4(0.985510, 0.777330, 0.571160, 1.000000);
+
+
+// Texture2D:7
+	vec4 n_out7p0 = texture(tex_frg_7, UV);
+
+
+// FloatFunc:8
+	float n_out8p0 = 1.0 - n_out7p0.x;
+
+
+// FloatConstant:3
+	float n_out3p0 = 1.000000;
+
+
+// FloatConstant:2
+	float n_out2p0 = 0.400000;
+
+
+	float n_out4p0;
+// Expression:4
+	n_out4p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out2p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out4p0 = n_out3p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Step:6
+	float n_out6p0 = step(n_out8p0, n_out4p0);
+
+
+// Output:0
+	COLOR.rgb = vec3(n_out5p0.xyz);
+	COLOR.a = n_out6p0;
+
+
+}
+"
+graph_offset = Vector2(-1383.97, -83.3688)
+mode = 1
+flags/light_only = false
+nodes/fragment/2/node = SubResource("VisualShaderNodeFloatConstant_w71tt")
+nodes/fragment/2/position = Vector2(-1020, 940)
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_2aj4p")
+nodes/fragment/3/position = Vector2(-1020, 800)
+nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_48s3l")
+nodes/fragment/4/position = Vector2(-720, 920)
+nodes/fragment/4/size = Vector2(724.789, 654.559)
+nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/4/output_ports = "0,0,Dither_Node;"
+nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/5/node = SubResource("VisualShaderNodeColorConstant_lv1bp")
+nodes/fragment/5/position = Vector2(20, -100)
+nodes/fragment/6/node = SubResource("VisualShaderNodeStep_rpe5e")
+nodes/fragment/6/position = Vector2(40, 100)
+nodes/fragment/7/node = SubResource("VisualShaderNodeTexture_fm2ug")
+nodes/fragment/7/position = Vector2(-680, -60)
+nodes/fragment/8/node = SubResource("VisualShaderNodeFloatFunc_wk7en")
+nodes/fragment/8/position = Vector2(-260, 80)
+nodes/fragment/connections = PackedInt32Array(2, 0, 4, 1, 3, 0, 4, 0, 4, 0, 6, 1, 7, 0, 8, 0, 8, 0, 6, 0, 6, 0, 0, 1, 5, 0, 0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f1ub3"]
+shader = SubResource("VisualShader_2kkwg")
+
 [node name="Photo_Square_prefabs" type="Node2D"]
 scale = Vector2(3, 3)
 
@@ -653,9 +794,22 @@ text = "Description"
 horizontal_alignment = 2
 
 [node name="Take_it_button" type="Button" parent="."]
-offset_left = -2.33333
-offset_top = 43.3333
-offset_right = 5.66667
-offset_bottom = 51.3333
+offset_left = -41.0
+offset_top = -41.0
+offset_right = 41.0
+offset_bottom = 42.0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_j65n2")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_3t3vd")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_67tgs")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_12j5a")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_2xjys")
+
+[node name="Select_border" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_f1ub3")
+offset_left = -40.0
+offset_top = -40.0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
 
 [connection signal="pressed" from="Take_it_button" to="Take_object" method="_on_take_it_button_pressed"]

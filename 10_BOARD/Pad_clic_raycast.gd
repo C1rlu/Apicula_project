@@ -18,32 +18,27 @@ func _active_raycast(condition : bool):
 func _input(event):
 
 
-	
-
 	if event.is_action_released("Click"):
 		if selectable:
-			_global_datas.show_on_scanner.emit(false)	
+			selectable.on_click.emit(false)
+
 	if _global_datas.in_scanner_mode:
 		return
-		
-		
+
 	if !_global_datas.Player_In_Inventory:
 		return	
 			
-	if event.is_action_pressed("Click"):
-			
+	if event.is_action_pressed("Click"):	
 		if _pad: 
 			var target = pad_target.position
-			check_cast(target)	
-			
+			check_cast(target)		
 		else:
 			var target = get_viewport().get_mouse_position()
 			check_cast(target)
-		
+
 		if selectable:
-			_global_datas.show_on_scanner.emit(true)
-	if event.is_action_released("Click"):
-		active_scanner.emit(false)	
+			selectable.on_click.emit(true)
+
 
 		
 func check_cast(targetPos : Vector2):
@@ -66,13 +61,14 @@ func check_cast(targetPos : Vector2):
 				selectable.show_legend(false)
 				selectable = null	 		
 		return
-		
+	
+	if selectable:
+		selectable.show_legend(false)	
 	selectable = result.collider.get_node_or_null("Select_this")	
 	
 	if selectable:	
 		selectable.show_legend(true)
 		selectable = selectable
-		# active progress if keep pressing
-		active_scanner.emit(true)
+	
 		
 
