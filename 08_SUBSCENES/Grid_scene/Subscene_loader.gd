@@ -15,16 +15,38 @@ func _ready():
 	_global_datas._load_subscene.connect(_loadscene)
 	_global_datas._go_Subscene.connect(active_subscene)
 	_global_datas._go_Mainscene.connect(disable_subscene)
+	
+	_global_datas._load_mirror_subscene.connect(_loadSubscene_mirror)
+	
 	_global_datas.cell_name = "null"
+	
+	
 	cam_raycast.current = false
 	mouse_raycast.set_collision_layer(0)
+	
+
+
+
+func _loadSubscene_mirror(scene_name : String):
+	#REMOVE PREVIOUS SCENE
+	for child in load_scene.get_children():
+		child.free()	
+	
+	
+	#LOAD NEW SUBSCENE	
+	
+	constant_string =  "res://08_SUBSCENES/Grid_scene/" + scene_name + ".tscn"
+	
+	if ResourceLoader.exists(constant_string):
+		ResourceLoader.load_threaded_request(constant_string)
+	
+	_load = true
 	
 	
 func _loadscene(condition : bool):
 	
 	if !condition:
-		
-		
+			
 		#REMOVE PREVIOUS SCENE
 		for child in load_scene.get_children():
 			child.free()	

@@ -40,5 +40,6 @@ func _on_on_click(condition):
 	
 	if condition:
 		_global_datas.show_on_scanner.emit(true)
+		
 	else:
 		_global_datas.show_on_scanner.emit(false)

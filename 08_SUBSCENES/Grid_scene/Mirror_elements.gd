@@ -7,6 +7,11 @@ func _ready():
 
 
 func _active_mirror_Elements(condition : bool):
+	
+	
+	if elements_mesh.size() < 1:
+		return
+	
 	for element in elements_mesh:
 		element.visible = condition
 		var col = element.get_node_or_null("All_render/CollisionShape3D")

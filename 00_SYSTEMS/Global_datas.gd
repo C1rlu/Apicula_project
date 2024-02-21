@@ -41,8 +41,7 @@ var move_backward : String
 # scene signals
 
 signal _go_Mainscene
-signal _active_sonar
-signal _disable_sonar
+signal _active_sonar(position : Vector3)
 signal _reseting_clock_active
 signal _reseting_clock_disable
 signal _active_go_subscene_button(condition : bool)
@@ -77,7 +76,7 @@ signal _show_object_legend(condtion : bool, text : String)
 #subsceneSignal
 signal _load_subscene(condition : bool)
 signal _go_Subscene
-
+signal _load_mirror_subscene(scene : String)
 
 var mouseRaycastPosition : Vector3
 signal get_raycastPosition

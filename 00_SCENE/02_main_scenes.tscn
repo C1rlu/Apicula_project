@@ -1,4 +1,4 @@
-[gd_scene load_steps=84 format=3 uid="uid://cnmptm7i0xxmj"]
+[gd_scene load_steps=74 format=3 uid="uid://cnmptm7i0xxmj"]
 
 [ext_resource type="PackedScene" uid="uid://vpdvl0v7dubd" path="res://00_PLAYER/Player_boat.tscn" id="1_qltht"]
 [ext_resource type="Script" path="res://06_UI/Fps_counter.gd" id="1_s74e5"]
@@ -79,9 +79,9 @@ func _input(event: InputEvent) -> void:
 script/source = "extends Node
 
 
-@onready var _1 = $\"../Player_Boat/Sonar/01\"
-@onready var _2 = $\"../Player_Boat/Sonar/02\"
-@onready var sonar = $\"../Player_Boat/Sonar\"
+@onready var _1 = $\"../--DECOR--/Sonar/01\"
+@onready var _2 = $\"../--DECOR--/Sonar/02\"
+@onready var sonar = $\"../--DECOR--/Sonar\"
 
 var t
 var is_active = false
@@ -95,7 +95,10 @@ func _ready():
 	_2.visible = false
 
 	
-func active_sonar():
+func active_sonar(position : Vector3):
+	
+	
+	sonar.global_position = position
 	
 	if is_active:
 		return
@@ -224,12 +227,12 @@ func _ready():
 		
 func _ckeck_condition(condition : bool):
 	if condition:
-		_show()
+		_show(condition)
 	else:
 		_hide()	
 	
 	
-func _show():
+func _show(value_null):
 
 
 	if t:
@@ -287,125 +290,52 @@ func active_buton():
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ituqr"]
 bounce = 500.0
 
-[sub_resource type="TorusMesh" id="TorusMesh_o3rdy"]
-inner_radius = 0.884
-outer_radius = 1.074
-rings = 32
-ring_segments = 16
+[sub_resource type="SphereShape3D" id="SphereShape3D_yt2xy"]
+radius = 0.990634
 
-[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_3d8c6"]
-parameter_name = "Light_color_ui"
-qualifier = 1
+[sub_resource type="GDScript" id="GDScript_mdv56"]
+script/source = "extends Node
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_kl0v0"]
-constant = 0.4
+@onready var timer = $Timer
+@onready var go_subscene_progress = $\"..\"
 
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_b8x62"]
-size = Vector2(724.789, 654.559)
-expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
+
+func _ready():
+	_global_datas._reseting_clock_active.connect(_active_reset)
+	_global_datas._reseting_clock_disable.connect(_disable_reset)
+
+		
+func _active_reset():
+	_start_clock()
+
+func _disable_reset():
+	_stop_clock()
+
+func _process(delta):
 	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
+	if timer.is_stopped():
+		return		
+	_update_clock()
+	
 
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_wbs4k"]
-parameter_name = "Opacity"
-hint = 1
-default_value_enabled = true
-default_value = 1.0
-
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_s5128"]
-default_input_values = [0, 0.3, 1, 0.0]
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_ixdw3"]
-constant = 0.8
-
-[sub_resource type="VisualShader" id="VisualShader_yq65t"]
-code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
-
-global uniform vec4 Light_color_ui : source_color;
-
-
-
-void fragment() {
-// ColorParameter:2
-	vec4 n_out2p0 = Light_color_ui;
-
-
-// FloatConstant:7
-	float n_out7p0 = 0.800000;
-
-
-// FloatConstant:3
-	float n_out3p0 = 0.400000;
-
-
-	float n_out4p0;
-// Expression:4
-	n_out4p0 = 0.0;
-	{
-		const float DITHER_THRESHOLDS[16] ={
-				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-			};
-			
-		vec2 uv = FRAGCOORD.xy * n_out3p0;
-		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-		n_out4p0 = n_out7p0 - DITHER_THRESHOLDS[index];
-	}
-
-
-// Step:6
-	float n_out6p0 = step(n_out2p0.x, n_out4p0);
-
-
-// Output:0
-	ALBEDO = vec3(n_out2p0.xyz);
-	ALPHA = n_out6p0;
-
-
-}
+func _update_clock():
+	var timeConvert = 1 - (timer.time_left / timer.wait_time ) 
+	go_subscene_progress.value = lerp(0.0,100.0,timeConvert)
+	
+func _start_clock():
+	go_subscene_progress.value = 0.0
+	timer.start()
+	
+func _stop_clock():
+	
+	timer.stop()
+	go_subscene_progress.value = 0.0
+	
+func _on_timer_timeout():
+	_global_datas._reseting_clock_disable.emit()
+	go_subscene_progress.value = 0.0
+	_global_datas._go_Subscene.emit()
 "
-graph_offset = Vector2(-468.563, -114.227)
-flags/unshaded = true
-nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_3d8c6")
-nodes/fragment/2/position = Vector2(-760, -40)
-nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_kl0v0")
-nodes/fragment/3/position = Vector2(-1380, 520)
-nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_b8x62")
-nodes/fragment/4/position = Vector2(-1200, 380)
-nodes/fragment/4/size = Vector2(724.789, 654.559)
-nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
-nodes/fragment/4/output_ports = "0,0,Dither_Node;"
-nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/5/node = SubResource("VisualShaderNodeFloatParameter_wbs4k")
-nodes/fragment/5/position = Vector2(-1780, 400)
-nodes/fragment/6/node = SubResource("VisualShaderNodeStep_s5128")
-nodes/fragment/6/position = Vector2(-351.825, 215.819)
-nodes/fragment/7/node = SubResource("VisualShaderNodeFloatConstant_ixdw3")
-nodes/fragment/7/position = Vector2(-1440, 360)
-nodes/fragment/connections = PackedInt32Array(3, 0, 4, 1, 4, 0, 6, 1, 6, 0, 0, 1, 7, 0, 4, 0, 2, 0, 0, 0, 2, 0, 6, 0)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_v75yl"]
-render_priority = 0
-shader = SubResource("VisualShader_yq65t")
 
 [sub_resource type="VisualShaderNodeProximityFade" id="VisualShaderNodeProximityFade_dnk0e"]
 default_input_values = [0, 1.5]
@@ -551,56 +481,6 @@ shader_parameter/Sonar_color = Color(1, 1, 1, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_56jr0"]
 material = SubResource("ShaderMaterial_kcje2")
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_x2n16"]
-radius = 1.22447
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_yt2xy"]
-radius = 0.990634
-
-[sub_resource type="GDScript" id="GDScript_mdv56"]
-script/source = "extends Node
-
-@onready var timer = $Timer
-@onready var go_subscene_progress = $\"..\"
-
-
-func _ready():
-	_global_datas._reseting_clock_active.connect(_active_reset)
-	_global_datas._reseting_clock_disable.connect(_disable_reset)
-
-		
-func _active_reset():
-	_start_clock()
-
-func _disable_reset():
-	_stop_clock()
-
-func _process(delta):
-	
-	if timer.is_stopped():
-		return		
-	_update_clock()
-	
-
-func _update_clock():
-	var timeConvert = 1 - (timer.time_left / timer.wait_time ) 
-	go_subscene_progress.value = lerp(0.0,100.0,timeConvert)
-	
-func _start_clock():
-	go_subscene_progress.value = 0.0
-	timer.start()
-	
-func _stop_clock():
-	
-	timer.stop()
-	go_subscene_progress.value = 0.0
-	
-func _on_timer_timeout():
-	_global_datas._reseting_clock_disable.emit()
-	go_subscene_progress.value = 0.0
-	_global_datas._go_Subscene.emit()
-"
 
 [sub_resource type="GDScript" id="GDScript_i66w8"]
 script/source = "extends Node
@@ -943,53 +823,6 @@ light_specular = 0.0
 omni_range = 7.0
 omni_attenuation = 0.258817
 
-[node name="On_OverMouse_3D_SHAPE" type="MeshInstance3D" parent="Player_Boat"]
-transform = Transform3D(1.28483, 0, -2.84217e-14, 0, 0.120588, 0, 2.84217e-14, 0, 1.28483, 0, -0.155876, 0)
-visible = false
-mesh = SubResource("TorusMesh_o3rdy")
-surface_material_override/0 = SubResource("ShaderMaterial_v75yl")
-
-[node name="Sonar" type="Node3D" parent="Player_Boat"]
-transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
-
-[node name="01" type="Node3D" parent="Player_Boat/Sonar"]
-transform = Transform3D(5.52237, 0, 0, 0, 5.52237, 0, 0, 0, 5.52237, 0.049623, -0.743807, -0.269134)
-visible = false
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Player_Boat/Sonar/01"]
-layers = 8
-mesh = SubResource("SphereMesh_pgy1w")
-skeleton = NodePath("../..")
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="Player_Boat/Sonar/01"]
-layers = 8
-mesh = SubResource("SphereMesh_56jr0")
-skeleton = NodePath("../..")
-
-[node name="02" type="Node3D" parent="Player_Boat/Sonar"]
-transform = Transform3D(3.89763, 0.0211405, -0.0748208, -0.0200288, 3.89793, 0.0579978, 0.075126, -0.0576019, 3.89726, 0.049623, -0.743807, -0.269134)
-visible = false
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Player_Boat/Sonar/02"]
-layers = 8
-mesh = SubResource("SphereMesh_pgy1w")
-skeleton = NodePath("../..")
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="Player_Boat/Sonar/02"]
-layers = 8
-mesh = SubResource("SphereMesh_56jr0")
-skeleton = NodePath("../..")
-
-[node name="Sonar_Aera" type="Area3D" parent="Player_Boat/Sonar"]
-transform = Transform3D(1, 0, -7.10543e-15, 0, 1, 0, 7.10543e-15, 0, 1, 0, 0, 0)
-collision_layer = 0
-collision_mask = 0
-input_ray_pickable = false
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Player_Boat/Sonar/Sonar_Aera"]
-transform = Transform3D(5.39371, 0, -1.42109e-14, 0, 5.39371, 0, 1.42109e-14, 0, 5.39371, 1.77636e-15, 0, -0.39557)
-shape = SubResource("SphereShape3D_x2n16")
-
 [node name="Enter_dialogue_zone" type="Area3D" parent="Player_Boat"]
 collision_layer = 3
 collision_mask = 3
@@ -1022,6 +855,37 @@ script = SubResource("GDScript_mdv56")
 [node name="Timer" type="Timer" parent="Go_subscene_progress/GoSubscene_timer"]
 
 [node name="--DECOR--" type="Node" parent="."]
+
+[node name="Sonar" type="Node3D" parent="--DECOR--"]
+transform = Transform3D(-4.37114e-09, 0, -0.1, 0, 0.1, 0, 0.1, 0, -4.37114e-09, 0, 0, 0)
+
+[node name="01" type="Node3D" parent="--DECOR--/Sonar"]
+transform = Transform3D(5.52237, 0, 0, 0, 5.52237, 0, 0, 0, 5.52237, 0.049623, -0.743807, -0.269134)
+visible = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="--DECOR--/Sonar/01"]
+layers = 8
+mesh = SubResource("SphereMesh_pgy1w")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="--DECOR--/Sonar/01"]
+layers = 8
+mesh = SubResource("SphereMesh_56jr0")
+skeleton = NodePath("../..")
+
+[node name="02" type="Node3D" parent="--DECOR--/Sonar"]
+transform = Transform3D(3.89763, 0.0211405, -0.0748208, -0.0200288, 3.89793, 0.0579978, 0.075126, -0.0576019, 3.89726, 0.049623, -0.743807, -0.269134)
+visible = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="--DECOR--/Sonar/02"]
+layers = 8
+mesh = SubResource("SphereMesh_pgy1w")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="--DECOR--/Sonar/02"]
+layers = 8
+mesh = SubResource("SphereMesh_56jr0")
+skeleton = NodePath("../..")
 
 [node name="GRID_MAP" type="Node" parent="--DECOR--"]
 

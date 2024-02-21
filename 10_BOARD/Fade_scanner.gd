@@ -2,9 +2,12 @@ extends Node
 
 @onready var backdrop_focus = $"../../BACKDROP_FOCUS"
 @onready var render_scanner = $"../../RENDER_Scanner"
+@onready var render_scanner_noise = $"../../RENDER_Scanner_NOISE"
+
 
 @onready var render_scanner_material : Material = render_scanner.get_material()
 @onready var backdrop_focus_material : Material = backdrop_focus.get_material()
+@onready var render_scanner_noise_material : Material = render_scanner_noise.get_material()
 
 
 var fade_in
@@ -35,6 +38,9 @@ func start_fade_in(condition : bool):
 func set_shader_value(value):
 	
 	render_scanner_material.set_shader_parameter("Opacity",value)
+	
 	var clamp_backdrop = clampf(value,0.0,0.8)
 	backdrop_focus_material.set_shader_parameter("Opacity",clamp_backdrop)
+	var clamp_scanner_noise = clampf(value,0.0,0.525)
+	render_scanner_noise_material.set_shader_parameter("Opacity",clamp_scanner_noise )
 	actual_value = value

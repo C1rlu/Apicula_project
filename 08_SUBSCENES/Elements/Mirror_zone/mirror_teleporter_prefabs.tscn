@@ -1,27 +1,23 @@
-[gd_scene load_steps=25 format=3 uid="uid://dym7sjmq33hdc"]
+[gd_scene load_steps=26 format=3 uid="uid://b5kfjvfgflgli"]
 
-[ext_resource type="Material" uid="uid://goq7y1lqdpxa" path="res://05_SHADER_TEST/Subscene_materials/element_subscene_x_ray_VFX_LIGHT.tres" id="3_cb240"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Elements/Mirror_zone/Mirror_data/Mirror_data.gd" id="1_ccat4"]
+[ext_resource type="Material" uid="uid://goq7y1lqdpxa" path="res://05_SHADER_TEST/Subscene_materials/element_subscene_x_ray_VFX_LIGHT.tres" id="2_y1tif"]
 
-[sub_resource type="GDScript" id="GDScript_tujf2"]
+[sub_resource type="GDScript" id="GDScript_c8e8x"]
 script/source = "extends Node
 
-var in_zone : bool = false
 
-signal in_zone_signal(condition : bool)
+@onready var root = $\"..\"
 
-func _on_mirror_prefabs_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
-	if area.get_node_or_null(\"Player_photoActive\"):
-		in_zone = true
-		print(area)
-		in_zone_signal.emit(true)
-		
-func _on_mirror_prefabs_area_shape_exited(area_rid, area, area_shape_index, local_shape_index):
-	if in_zone:
-		in_zone = false
-		in_zone_signal.emit(false)
+var destination : String
+
+func _ready():
+	
+	if root.mirror_destination:
+		destination = root.mirror_destination
 "
 
-[sub_resource type="SphereMesh" id="SphereMesh_ic6q1"]
+[sub_resource type="PrismMesh" id="PrismMesh_jc13m"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_vc1pk"]
 
@@ -137,21 +133,20 @@ shader_parameter/Texture = SubResource("GradientTexture2D_6kf2u")
 [sub_resource type="SphereShape3D" id="SphereShape3D_we1hc"]
 radius = 0.0156075
 
-[node name="Mirror_prefabs" type="Area3D"]
+[node name="Mirror_Teleport" type="Area3D"]
 collision_layer = 4
 collision_mask = 4
+script = ExtResource("1_ccat4")
 
-[node name="Mirror" type="Node" parent="."]
-
-[node name="PLayer_InZone" type="Node" parent="."]
-script = SubResource("GDScript_tujf2")
+[node name="Mirror_destination" type="Node" parent="."]
+script = SubResource("GDScript_c8e8x")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.408552, 0, 0, 0)
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.0932106, 0, 0, 0)
 layers = 4096
-mesh = SubResource("SphereMesh_ic6q1")
+mesh = SubResource("PrismMesh_jc13m")
 skeleton = NodePath("")
-surface_material_override/0 = ExtResource("3_cb240")
+surface_material_override/0 = ExtResource("2_y1tif")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="MeshInstance3D"]
 transform = Transform3D(4.21183, 0, 0, 0, 4.21183, 0, 0, 0, 4.21183, 0, 0, 0)
@@ -168,6 +163,3 @@ surface_material_override/0 = SubResource("ShaderMaterial_5kimp")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_we1hc")
-
-[connection signal="area_shape_entered" from="." to="PLayer_InZone" method="_on_mirror_prefabs_area_shape_entered"]
-[connection signal="area_shape_exited" from="." to="PLayer_InZone" method="_on_mirror_prefabs_area_shape_exited"]

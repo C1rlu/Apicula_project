@@ -19,8 +19,8 @@ func _disable_show(_condition : bool):
 		
 func _hide():
 	
-	if _global_datas.Player_In_Inventory:
-		return
+	#if _global_datas.Player_In_Inventory:
+		#return
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	
 func _show():

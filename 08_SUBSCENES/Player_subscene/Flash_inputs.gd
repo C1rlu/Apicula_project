@@ -32,6 +32,7 @@ func check_area():
 		var photo_data_node = areas.get_node_or_null("Photo_data")
 		var loot_data_node = areas.get_node_or_null("Lootable")
 		var mirror_node = areas.get_node_or_null("Mirror")
+		var mirror_destination = areas.get_node_or_null("Mirror_destination")
 		
 		if  photo_data_node:
 			var photo_data_rs : PhotoData = photo_data_node.get_PhotoData()
@@ -44,7 +45,13 @@ func check_area():
 			_global_datas._find_loot.emit(lootable_data_rs)	
 
 			return
-				
+		
+		if mirror_destination:
+			var desination = mirror_destination.destination
+			if desination:
+				_global_datas._load_mirror_subscene.emit(desination)
+				return
+	
 		if mirror_node:
 			_global_datas._click_mirror_switch.emit()
 	
