@@ -107,9 +107,9 @@ func active_sonar(position : Vector3):
 		t.kill()
 	t = create_tween()
 	
-	t .tween_method(_change_scale,0.0,5.0,1.0).set_trans(Tween.TRANS_SINE)	
-	await create_tween().tween_interval(1.0).finished
-	_stop()
+	t .tween_method(_change_scale,0.0,7.0,1.5).set_ease(Tween.EASE_OUT)
+	t.connect(\"finished\",_stop)
+
 
 func _change_scale(value : float):
 	sonar.scale = Vector3(value,value,value)
@@ -661,7 +661,7 @@ mouse_filter = 2
 
 [node name="All_Cam_Move" type="Node" parent="01_GAME_UI/MAIN_SCENE_UI" node_paths=PackedStringArray("_all_cam_array")]
 script = ExtResource("2_7lb1x")
-_all_cam_array = [NodePath("../CAM_MAIN_RAYCAST"), NodePath("../Viewports/MAIN_Viewport/CAM_STATE_MAIN"), NodePath("../Viewports/FOAM_Viewport/CAM_STATE_FOAM"), NodePath("../Viewports/SONAR_Viewport/CAM_STATE_SONAR"), NodePath("../Viewports/GRID_Viewport/CAM_STATE_GRID"), NodePath("../Viewports/SKY_Viewport/CAM_STATE_SKY")]
+_all_cam_array = [NodePath("../Viewports/MAIN_Viewport/CAM_STATE_MAIN"), NodePath("../Viewports/FOAM_Viewport/CAM_STATE_FOAM"), NodePath("../Viewports/SONAR_Viewport/CAM_STATE_SONAR"), NodePath("../Viewports/GRID_Viewport/CAM_STATE_GRID"), NodePath("../Viewports/SKY_Viewport/CAM_STATE_SKY"), NodePath("../CAM_MAIN_RAYCAST")]
 
 [node name="CAM_MAIN_RAYCAST" type="Camera3D" parent="01_GAME_UI/MAIN_SCENE_UI"]
 transform = Transform3D(1, 0, 0, 0, 0.882947, 0.469472, 0, -0.469472, 0.882947, 0, 16.056, 29.059)

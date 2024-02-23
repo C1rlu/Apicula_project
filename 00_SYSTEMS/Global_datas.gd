@@ -4,7 +4,7 @@ var Main_Camera : Camera3D
 var Subscene_Camera : Camera3D
 var player_position : Vector3
 var player_boat_rotation : Vector3
-var cell_name : String
+var cell_name : String = "null"
 
 var Player_In_Inventory : bool
 var Player_InSubScene : bool
