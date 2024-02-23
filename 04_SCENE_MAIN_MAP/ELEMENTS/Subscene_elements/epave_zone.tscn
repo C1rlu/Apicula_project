@@ -7,7 +7,6 @@
 script/source = "extends Area3D
 
 @export var boue_data : BoueData
-@export var subscene_index : String = \"\"
 @onready var on_over = $Boue_msh_01/On_Over
 
 
@@ -22,10 +21,9 @@ func _on_area_entered(_area):
 
 	if _area.name == \"Enter_dialogue_zone\":
 			
-			
+		_global_datas.cell_name = boue_data.zone_name	
 		see_int.emit(true)
 		on_over.visible = true
-		_global_datas.cell_name = subscene_index
 		_global_datas._load_subscene.emit(true)
 		
 		if !was_detected:
@@ -34,15 +32,17 @@ func _on_area_entered(_area):
 				_global_datas.boue_archives.append(boue_data)
 		boue.visible = true
 		was_detected = true
-		
+
 func _on_area_exited(_area):
 	
 	if _area.name == \"Enter_dialogue_zone\":
+		
 		_global_datas.cell_name = \"null\"
 		_global_datas._load_subscene.emit(false)
 		see_int.emit(false)
 		on_over.visible = false
-		_global_datas._reseting_clock_disable.emit()
+
+		_global_datas._active_progress_subscene.emit(false)
 "
 
 [sub_resource type="TorusMesh" id="TorusMesh_8ej3g"]

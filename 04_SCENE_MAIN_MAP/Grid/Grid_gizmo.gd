@@ -32,7 +32,8 @@ func _create_grid():
 		cellList.append(cell_data)
 		_instance_visual_cells(cellPos,cell_name)
 		
-	find_nearest_cell_to_player()	
+
+	#find_nearest_cell_to_player()	
 
 func find_nearest_cell_to_player():
 	

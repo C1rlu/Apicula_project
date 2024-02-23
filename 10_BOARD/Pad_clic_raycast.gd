@@ -43,18 +43,19 @@ func _input(event):
 		
 func check_cast(targetPos : Vector2):
 	
-	var rayLengh = 1000.0
+	var rayLengh = 250.0
 	var from = Camera.project_ray_origin(targetPos)
 	var to = from + Camera.project_ray_normal(targetPos) * rayLengh
 	var space = Camera.get_world_3d().direct_space_state
 	var rayQuery = PhysicsRayQueryParameters3D.new()
+	rayQuery.collision_mask = 7
 	rayQuery.from = from
 	rayQuery.to = to
+	
 	rayQuery.collide_with_areas = true
 	rayQuery.collide_with_bodies = false
-	
 	var result = space.intersect_ray(rayQuery)
-	
+	#print(result)
 	if !result:
 		if selectable: # Deselect selected photo data if exist
 			if !_global_datas.in_scanner_mode:

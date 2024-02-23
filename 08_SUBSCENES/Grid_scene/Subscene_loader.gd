@@ -18,9 +18,6 @@ func _ready():
 	
 	_global_datas._load_mirror_subscene.connect(_loadSubscene_mirror)
 	
-	_global_datas.cell_name = "null"
-	
-	
 	cam_raycast.current = false
 	mouse_raycast.set_collision_layer(0)
 	

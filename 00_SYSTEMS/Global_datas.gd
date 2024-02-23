@@ -42,8 +42,7 @@ var move_backward : String
 
 signal _go_Mainscene
 signal _active_sonar(position : Vector3)
-signal _reseting_clock_active
-signal _reseting_clock_disable
+signal _active_progress_subscene(condition : bool)
 signal _active_go_subscene_button(condition : bool)
 signal _active_world_grid(condition : bool)
 

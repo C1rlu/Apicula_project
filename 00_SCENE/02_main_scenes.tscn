@@ -1,10 +1,11 @@
-[gd_scene load_steps=74 format=3 uid="uid://cnmptm7i0xxmj"]
+[gd_scene load_steps=76 format=3 uid="uid://cnmptm7i0xxmj"]
 
 [ext_resource type="PackedScene" uid="uid://vpdvl0v7dubd" path="res://00_PLAYER/Player_boat.tscn" id="1_qltht"]
 [ext_resource type="Script" path="res://06_UI/Fps_counter.gd" id="1_s74e5"]
 [ext_resource type="Resource" uid="uid://ppxk5i543dfn" path="res://09_NPC/Npc_data/Mr_Birds_data.tres" id="1_trgwt"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_xd8sb"]
 [ext_resource type="Script" path="res://03_CAMERA/CameraFollow.gd" id="2_7lb1x"]
+[ext_resource type="Script" path="res://00_SCENE/MainScene/Fade_Subscene_progress.gd" id="2_np5n5"]
 [ext_resource type="Material" uid="uid://cfd7rt53ee7jp" path="res://05_SHADER_TEST/Full_screen/Foam_dither_viewport.tres" id="3_qcxor"]
 [ext_resource type="Shader" uid="uid://bduoqim3kfbs6" path="res://00_PLAYER/Sonar/Sonar_sh.tres" id="3_todel"]
 [ext_resource type="Material" uid="uid://ua1gnqwbe2bj" path="res://05_SHADER_TEST/Full_screen/Sonar_dither_viewport.tres" id="4_qh7in"]
@@ -38,6 +39,8 @@ var lock_tools = false
 
 func _ready():
 	_global_datas.player_active_tools.connect(_unlock)
+
+	
 	
 func _unlock(condition):
 	lock_tools = condition	
@@ -51,28 +54,21 @@ func _input(event: InputEvent) -> void:
 	if _global_datas.Player_InSubScene:
 		return
 		
-	if _global_datas.Player_InDialogue:
+	if _global_datas.cell_name == \"null\":
 		return				
 	
-	if event.is_action_released(\"Click\"):
-		_global_datas._reseting_clock_disable.emit()
 	
-		
-	if _global_datas.cell_name == \"null\":
-		return
+	if event.is_action_released(\"Click\"):
+		_global_datas._active_progress_subscene.emit(false)
+	
 		
 	if event.is_action_pressed(\"Click\"):
 	
 		if _global_datas.Player_In_Inventory:
 			return		
-		_global_datas._reseting_clock_active.emit()
+		_global_datas._active_progress_subscene.emit(true)
 		
 
-		#TO Disable
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
-			_global_datas._reseting_clock_disable.emit()
-			
 "
 
 [sub_resource type="GDScript" id="GDScript_0xo40"]
@@ -290,6 +286,22 @@ func active_buton():
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ituqr"]
 bounce = 500.0
 
+[sub_resource type="GDScript" id="GDScript_yt3v2"]
+script/source = "extends Area3D
+
+
+@onready var collision_shape_3d = $CollisionShape3D
+
+
+
+func _ready():
+	_global_datas.open_inventory.connect(active_enter_dialogue)
+
+
+func active_enter_dialogue(condition : bool):
+	collision_shape_3d.disabled = condition	
+"
+
 [sub_resource type="SphereShape3D" id="SphereShape3D_yt2xy"]
 radius = 0.990634
 
@@ -301,15 +313,17 @@ script/source = "extends Node
 
 
 func _ready():
-	_global_datas._reseting_clock_active.connect(_active_reset)
-	_global_datas._reseting_clock_disable.connect(_disable_reset)
+	_global_datas._active_progress_subscene.connect(_active)
+
 
 		
-func _active_reset():
-	_start_clock()
+func _active(condition : bool):
+	
+	if condition:
+		_start_clock()
+	else :
+		_stop_clock()	
 
-func _disable_reset():
-	_stop_clock()
 
 func _process(delta):
 	
@@ -332,9 +346,10 @@ func _stop_clock():
 	go_subscene_progress.value = 0.0
 	
 func _on_timer_timeout():
-	_global_datas._reseting_clock_disable.emit()
+	_global_datas._active_progress_subscene.emit(false)
 	go_subscene_progress.value = 0.0
 	_global_datas._go_Subscene.emit()
+
 "
 
 [sub_resource type="VisualShaderNodeProximityFade" id="VisualShaderNodeProximityFade_dnk0e"]
@@ -607,6 +622,9 @@ viewports = [NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/MAIN_Viewport"), No
 [node name="Push_to_subscene" type="Node" parent="."]
 script = SubResource("GDScript_xsqte")
 
+[node name="Fade_Subscene_progress" type="Node" parent="Push_to_subscene"]
+script = ExtResource("2_np5n5")
+
 [node name="Sonar_behaviour" type="Node" parent="."]
 script = SubResource("GDScript_0xo40")
 
@@ -826,6 +844,8 @@ omni_attenuation = 0.258817
 [node name="Enter_dialogue_zone" type="Area3D" parent="Player_Boat"]
 collision_layer = 3
 collision_mask = 3
+input_ray_pickable = false
+script = SubResource("GDScript_yt3v2")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player_Boat/Enter_dialogue_zone"]
 shape = SubResource("SphereShape3D_yt2xy")
@@ -1023,6 +1043,7 @@ transform = Transform3D(-0.271044, 0, 2.89823e-08, 0, 0.271044, 0, -2.89823e-08,
 
 [node name="NPC_AREA" type="Area3D" parent="--DECOR--/NPC_TRIGGER_ZONE"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.61404, 1.19209e-07, -2.30636)
+input_ray_pickable = false
 script = SubResource("GDScript_w8xnd")
 Npc_data = ExtResource("18_3k0t8")
 
@@ -1048,6 +1069,7 @@ surface_material_override/0 = ExtResource("6_vcmny")
 
 [node name="NPC_AREA2" type="Area3D" parent="--DECOR--/NPC_TRIGGER_ZONE" node_paths=PackedStringArray("hide_this")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.98105, 1.07288e-06, 2.31768)
+input_ray_pickable = false
 script = SubResource("GDScript_w8xnd")
 Npc_data = ExtResource("1_trgwt")
 hide_this = NodePath("Birds")
@@ -1061,6 +1083,7 @@ shape = SubResource("SphereShape3D_jvty4")
 
 [node name="NPC_AREA3" type="Area3D" parent="--DECOR--/NPC_TRIGGER_ZONE" node_paths=PackedStringArray("hide_this")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.0813, 1.19209e-07, 5.71347)
+input_ray_pickable = false
 script = SubResource("GDScript_w8xnd")
 Npc_data = ExtResource("1_trgwt")
 hide_this = NodePath("Birds")
@@ -1079,14 +1102,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.70167, -0.174761, 1.01103)
 collision_layer = 2
 collision_mask = 2
 boue_data = ExtResource("26_blekg")
-subscene_index = "A1"
 
 [node name="EPAVE_ZONE2" parent="--DECOR--/UNDER_WATER" instance=ExtResource("23_txlwt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6219, -0.192537, -2.46462)
 collision_layer = 2
 collision_mask = 2
 boue_data = ExtResource("27_id2vw")
-subscene_index = "E4"
 
 [node name="Clouds" type="MeshInstance3D" parent="--DECOR--"]
 transform = Transform3D(57.2458, 0, 0, 0, 57.2458, 0, 0, 0, 57.2458, 0, 6.93092, 0)

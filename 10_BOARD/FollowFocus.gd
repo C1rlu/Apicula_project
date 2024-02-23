@@ -16,8 +16,8 @@ func _focus_this(target : Vector3):
 	if !_global_datas.Player_In_Inventory:
 		return
 		
-	if _global_datas.zoom_value == 1:
-		return	
+	#if _global_datas.zoom_value == 1:
+		#return	
 		
 		
 	var offset = Vector3(0.0,0.0,0.025)	

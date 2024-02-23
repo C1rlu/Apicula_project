@@ -13,6 +13,7 @@ func _ready():
 	sub_scene_offset = Vector3(0.0,-3.125,0.0)
 	dialogue_offset =  Vector3(3.125,0.0,0.0)
 	menu_scene_offset = Vector3(0.0,-2.5,0.0)
+	
 	var playerPosition = _global_datas.player_position
 	offset = _all_cam_array[0].transform.origin - playerPosition
 	active_target = offset
