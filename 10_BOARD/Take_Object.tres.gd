@@ -19,7 +19,8 @@ func show_legend(condition : bool):
 	
 	if condition:
 		var legend_text = photo_data.legend
-		_global_datas.show_board_description.emit(true,legend_text)
+
+		_global_datas._show_object_legend.emit(true,legend_text)
 		var focus_pos = photo_area.global_position
 		_global_datas.focus_this_on_board.emit(focus_pos)
 		_is_select = true	
@@ -27,7 +28,7 @@ func show_legend(condition : bool):
 		_global_datas.selected_photoData = photo_data
 
 	else:
-		_global_datas.show_board_description.emit(false,"")	
+		_global_datas._show_object_legend.emit(false,"")	
 		is_select.visible = false
 		_is_select = false		
 		

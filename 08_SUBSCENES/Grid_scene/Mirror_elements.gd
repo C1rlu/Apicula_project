@@ -4,7 +4,9 @@ extends Node
 
 func _ready():
 	_global_datas.active_mirror_switch.connect(_active_mirror_Elements)
-
+	
+	
+	_active_mirror_Elements(_global_datas.Player_InMirrorScene)	
 
 func _active_mirror_Elements(condition : bool):
 	

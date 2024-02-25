@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://dti7l20thp2rk"]
+[gd_scene load_steps=26 format=3 uid="uid://dti7l20thp2rk"]
 
 [ext_resource type="Shader" uid="uid://jjqliete2f27" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Subscene_elements/Subscene_element_sh.tres" id="1_4eijp"]
 [ext_resource type="PackedScene" uid="uid://bxyofd07elshh" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Boue/boue_msh_01_prefab.tscn" id="1_68viu"]
@@ -71,17 +71,11 @@ vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
 
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_8fwg5"]
-parameter_name = "Opacity"
-hint = 1
-default_value_enabled = true
-default_value = 1.0
-
 [sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_b4w1v"]
 default_input_values = [0, 0.3, 1, 0.0]
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_hwjhi"]
-constant = 0.8
+constant = 0.9
 
 [sub_resource type="VisualShader" id="VisualShader_o8auv"]
 code = "shader_type spatial;
@@ -97,7 +91,7 @@ void fragment() {
 
 
 // FloatConstant:7
-	float n_out7p0 = 0.800000;
+	float n_out7p0 = 0.900000;
 
 
 // FloatConstant:3
@@ -132,7 +126,7 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-468.563, -114.227)
+graph_offset = Vector2(-2362.65, 490.918)
 flags/unshaded = true
 nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_8wfnm")
 nodes/fragment/2/position = Vector2(-760, -40)
@@ -153,8 +147,6 @@ nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
 vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/5/node = SubResource("VisualShaderNodeFloatParameter_8fwg5")
-nodes/fragment/5/position = Vector2(-1780, 400)
 nodes/fragment/6/node = SubResource("VisualShaderNodeStep_b4w1v")
 nodes/fragment/6/position = Vector2(-351.825, 215.819)
 nodes/fragment/7/node = SubResource("VisualShaderNodeFloatConstant_hwjhi")
@@ -389,7 +381,6 @@ script = SubResource("GDScript_kppkw")
 
 [node name="Boue_msh_01" parent="." instance=ExtResource("1_68viu")]
 transform = Transform3D(0.0575288, 0, -0.0887662, 0, 0.105778, 0, 0.0887662, 0, 0.0575288, 0, -0.027, 0)
-visible = false
 
 [node name="On_Over" type="MeshInstance3D" parent="Boue_msh_01"]
 transform = Transform3D(4.67111, 0, 7.20747, 0, 0.806101, 0, -7.20747, 0, 4.67111, 0.0122547, 0.410116, -0.0189056)
@@ -414,5 +405,5 @@ surface_material_override/0 = SubResource("ShaderMaterial_yfs1e")
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
 [connection signal="area_exited" from="." to="." method="_on_area_exited"]
-[connection signal="see_int" from="." to="Epave_visuals/Fade_out" method="_on_epave_zone_see_int"]
+[connection signal="see_int" from="." to="Boue_msh_01" method="_on_epave_zone_see_int"]
 [connection signal="tree_exiting" from="." to="Epave_visuals/Fade_out" method="_on_epave_zone_tree_exiting"]

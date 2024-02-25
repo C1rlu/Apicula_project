@@ -10,6 +10,9 @@ func _input(event):
 	if !_global_datas.Player_InSubScene:
 		return
 
+	if _global_datas.in_scanner_mode:
+		return
+		
 	if !timer.is_stopped():
 		return
 		
@@ -36,8 +39,11 @@ func check_area():
 		
 		if  photo_data_node:
 			var photo_data_rs : PhotoData = photo_data_node.get_PhotoData()
-			_global_datas._instance_photo.emit(photo_data_rs)
-
+			#_global_datas._instance_photo.emit(photo_data_rs)
+			_global_datas.selected_photoData = photo_data_rs
+			_global_datas.show_on_scanner.emit(true)
+			_global_datas._photo_flash.emit()
+			_global_datas._show_object_legend.emit(true, photo_data_rs.legend)
 			return
 			
 		if  loot_data_node:
@@ -47,14 +53,15 @@ func check_area():
 			return
 		
 		if mirror_destination:
-			var desination = mirror_destination.destination
-			if desination:
-				_global_datas._load_mirror_subscene.emit(desination)
-				return
+			if _global_datas.Player_InMirrorScene:
+				var desination = mirror_destination.destination
+				if desination:
+					_global_datas._load_mirror_subscene.emit(desination)
+					return
 	
 		if mirror_node:
 			_global_datas._click_mirror_switch.emit()
-	
+			_global_datas.Player_InMirrorScene = !_global_datas.Player_InMirrorScene	
 	
 func _on_timer_timeout():
 	timer.stop()

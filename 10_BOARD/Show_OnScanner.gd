@@ -21,7 +21,10 @@ func _show_scanner(condition : bool):
 			var instance = _global_datas.selected_photoData.scanner_prefab.instantiate()
 			loader.add_child(instance)
 		_global_datas._add_back_call.emit(_back_call)
-	
+		
+		if _global_datas.Npc_Dialogue != null:
+			_global_datas._start_dialogue_box.emit()
+		
 func stop_scanner():
 
 	var previous = loader.get_children()
@@ -30,4 +33,11 @@ func stop_scanner():
 
 
 func _back_call():
-	_global_datas.show_on_scanner.emit(false)	
+	_global_datas.show_on_scanner.emit(false)
+	_global_datas._show_object_legend.emit(false,"")
+
+	
+	#_global_datas._start_dialogue_box.emit()
+	if _global_datas.Npc_Dialogue != null:
+		_global_datas._show_dialogue_box.emit()
+	

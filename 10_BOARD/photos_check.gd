@@ -1,7 +1,5 @@
 extends Node3D
 
-@export var already_in_inventory : Array[PhotoData]
-
 var all_photos
 func _ready():
 	all_photos = get_children()

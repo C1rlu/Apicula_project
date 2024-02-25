@@ -39,6 +39,7 @@ func _speedDown():
 func _physics_process(_delta):
 	
 	
+	
 	if _global_datas.Player_InSubScene:
 		_global_datas.subbscene_playerPosition = transform.origin	
 		_global_datas.flash_subscene_position = light_position.global_position
@@ -48,7 +49,8 @@ func _physics_process(_delta):
 			
 	if _global_datas.Player_In_Inventory:
 		return
-	
+	if _global_datas.in_scanner_mode:
+		return
 		
 	if Input.is_action_pressed((_global_datas.move_forward)):
 		var goingUp = transform.basis.y

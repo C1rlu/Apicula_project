@@ -8,6 +8,7 @@ var cell_name : String = "null"
 
 var Player_In_Inventory : bool
 var Player_InSubScene : bool
+var Player_InMirrorScene : bool = false
 var Player_InMenu : bool
 var Player_InDialogue : bool
 var Player_InDialogue_zone : bool
@@ -106,7 +107,6 @@ var bougie_node : Node2D
 
 
 #update description on board
-signal show_board_description(condition : bool, _text: String)
 signal focus_this_on_board(target : Vector3)
 signal Open_ui_dark_backdrop(condition : bool)
 signal show_on_scanner(condition : bool)
