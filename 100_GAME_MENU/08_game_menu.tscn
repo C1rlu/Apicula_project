@@ -1,8 +1,7 @@
-[gd_scene load_steps=39 format=3 uid="uid://bemddl0bqqfwo"]
+[gd_scene load_steps=37 format=3 uid="uid://bemddl0bqqfwo"]
 
 [ext_resource type="Script" path="res://100_GAME_MENU/Open_Menu.gd" id="1_2jpo2"]
 [ext_resource type="Script" path="res://100_GAME_MENU/Option_panel.gd" id="2_gelwi"]
-[ext_resource type="Script" path="res://100_GAME_MENU/Close_all_menu.gd" id="3_w8aa0"]
 [ext_resource type="Script" path="res://100_GAME_MENU/Restart.gd" id="4_0detv"]
 [ext_resource type="Script" path="res://100_GAME_MENU/resolution_button.gd" id="5_rnqar"]
 
@@ -344,14 +343,6 @@ script/source = "extends Button
 
 "
 
-[sub_resource type="GDScript" id="GDScript_o2q05"]
-script/source = "extends Button
-
-#func _ready():
-	#var number : int = 0
-#set_focus_mode(number)
-"
-
 [sub_resource type="GDScript" id="GDScript_e1pe5"]
 script/source = "extends Button
 
@@ -386,18 +377,14 @@ script/source = "extends CheckBox
 [node name="Open_Menu" type="Node" parent="."]
 script = ExtResource("1_2jpo2")
 
-[node name="Open_backdrop" type="Node" parent="."]
-script = SubResource("GDScript_8vnul")
-
 [node name="Option_Panel" type="Node" parent="."]
 script = ExtResource("2_gelwi")
 
-[node name="Close_all_menu" type="Node" parent="." node_paths=PackedStringArray("all_menu")]
-script = ExtResource("3_w8aa0")
-all_menu = [NodePath("../Game_Menu_Root/Restart"), NodePath("../Game_Menu_Root/Options"), NodePath("../Game_Menu_Root/Exit")]
-
 [node name="Restart" type="Node" parent="."]
 script = ExtResource("4_0detv")
+
+[node name="Open_backdrop" type="Node" parent="."]
+script = SubResource("GDScript_8vnul")
 
 [node name="Game_Menu_Root" type="Control" parent="."]
 layout_mode = 3
@@ -423,7 +410,6 @@ color = Color(0.0156863, 0.0705882, 0.0823529, 1)
 metadata/_edit_use_anchors_ = true
 
 [node name="Menu_Backdrop_normal" type="ColorRect" parent="Game_Menu_Root"]
-visible = false
 material = SubResource("ShaderMaterial_bglt3")
 layout_mode = 1
 anchors_preset = 15
@@ -437,6 +423,28 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.0156863, 0.0705882, 0.0823529, 1)
 metadata/_edit_use_anchors_ = true
+
+[node name="Title" type="Label" parent="Game_Menu_Root"]
+clip_contents = true
+layout_direction = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -319.0
+offset_top = -183.0
+offset_right = 319.0
+offset_bottom = -114.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.317647, 0.615686, 0.529412, 1)
+theme_override_font_sizes/font_size = 50
+text = "APICULA (PROTOTYPE)"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Game_Menu_Root"]
 layout_mode = 1
@@ -473,16 +481,6 @@ theme_override_font_sizes/font_size = 30
 text = "RESTART"
 script = SubResource("GDScript_r74c2")
 
-[node name="Option_button" type="Button" parent="Game_Menu_Root/VBoxContainer"]
-visible = false
-layout_mode = 2
-focus_mode = 1
-theme_type_variation = &"FlatButton"
-theme_override_colors/font_color = Color(0.721569, 0.580392, 0.407843, 1)
-theme_override_font_sizes/font_size = 30
-text = "OPTIONS"
-script = SubResource("GDScript_o2q05")
-
 [node name="Exit_Button" type="Button" parent="Game_Menu_Root/VBoxContainer"]
 layout_mode = 2
 focus_neighbor_top = NodePath("../Restart_Button")
@@ -493,27 +491,6 @@ theme_override_colors/font_color = Color(0.721569, 0.580392, 0.407843, 1)
 theme_override_font_sizes/font_size = 30
 text = "EXIT "
 script = SubResource("GDScript_e1pe5")
-
-[node name="Title" type="Label" parent="Game_Menu_Root"]
-layout_direction = 1
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -319.0
-offset_top = -183.0
-offset_right = 319.0
-offset_bottom = -114.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.317647, 0.615686, 0.529412, 1)
-theme_override_font_sizes/font_size = 50
-text = "APICULA (PROTOTYPE)"
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 3
 
 [node name="dots" type="Label" parent="Game_Menu_Root"]
 layout_direction = 1
@@ -531,35 +508,6 @@ theme_override_font_sizes/font_size = 25
 text = "....................................."
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="Restart" type="Control" parent="Game_Menu_Root"]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -250.0
-offset_top = -250.0
-offset_right = 250.0
-offset_bottom = 250.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Game_Menu_Root/Restart"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 15
-
-[node name="Restart" type="Button" parent="Game_Menu_Root/Restart/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 25
-text = "Restart"
 
 [node name="Options" type="Control" parent="Game_Menu_Root"]
 layout_mode = 1
@@ -642,6 +590,7 @@ text = "Fullscreen ............................"
 [node name="Vsync_button" type="CheckBox" parent="Game_Menu_Root/Options/VBoxContainer"]
 layout_mode = 2
 focus_neighbor_top = NodePath("../Fullscreen_button")
+button_pressed = true
 alignment = 2
 script = SubResource("GDScript_ihwu0")
 
@@ -712,40 +661,8 @@ theme_override_colors/font_color = Color(0.317647, 0.615686, 0.529412, 1)
 theme_override_font_sizes/font_size = 25
 text = "Resolution ..........................."
 
-[node name="Exit" type="Control" parent="Game_Menu_Root"]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -250.0
-offset_top = -250.0
-offset_right = 250.0
-offset_bottom = 250.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Game_Menu_Root/Exit"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 15
-
-[node name="Exit_button" type="Button" parent="Game_Menu_Root/Exit/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 25
-text = "Exit"
-
-[connection signal="open_option" from="Option_Panel" to="Close_all_menu" method="_on_option_panel_open_option"]
-[connection signal="Restart" from="Restart" to="Close_all_menu" method="_on_restart_restart"]
 [connection signal="pressed" from="Game_Menu_Root/VBoxContainer/Resum_Button2" to="Game_Menu_Root/VBoxContainer/Resum_Button2" method="_on_pressed"]
 [connection signal="pressed" from="Game_Menu_Root/VBoxContainer/Restart_Button" to="Restart" method="_on_restart_button_pressed"]
-[connection signal="pressed" from="Game_Menu_Root/VBoxContainer/Option_button" to="Option_Panel" method="_on_option_button_pressed"]
 [connection signal="pressed" from="Game_Menu_Root/VBoxContainer/Exit_Button" to="Game_Menu_Root/VBoxContainer/Exit_Button" method="_on_pressed"]
 [connection signal="toggled" from="Game_Menu_Root/Options/VBoxContainer/Fullscreen_button" to="Option_Panel" method="_on_fullscreen_button_toggled"]
 [connection signal="toggled" from="Game_Menu_Root/Options/VBoxContainer/Vsync_button" to="Option_Panel" method="_on_vsync_button_toggled"]

@@ -18,13 +18,14 @@ func _active_raycast(condition : bool):
 func _input(event):
 
 
-	if event.is_action_released("Click"):
-		if selectable:
-			selectable.on_click.emit(false)
 
 	if _global_datas.in_scanner_mode:
 		return
-
+		
+	if event.is_action_released("Click"):
+		if selectable:
+			selectable.on_click.emit(false)
+	
 	if !_global_datas.Player_In_Inventory:
 		return	
 			
@@ -38,7 +39,7 @@ func _input(event):
 
 		if selectable:
 			selectable.on_click.emit(true)
-
+		
 
 		
 func check_cast(targetPos : Vector2):

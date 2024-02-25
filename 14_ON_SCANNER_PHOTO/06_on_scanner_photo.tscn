@@ -1,6 +1,7 @@
-[gd_scene load_steps=107 format=3 uid="uid://dpl12cginnwpp"]
+[gd_scene load_steps=108 format=3 uid="uid://dpl12cginnwpp"]
 
 [ext_resource type="Script" path="res://10_BOARD/Show_OnScanner.gd" id="1_0c44t"]
+[ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_ifne7"]
 [ext_resource type="Script" path="res://10_BOARD/Rotation_scanner.gd" id="2_6aofa"]
 [ext_resource type="Script" path="res://10_BOARD/Fade_scanner.gd" id="3_iqou0"]
 [ext_resource type="Script" path="res://10_BOARD/Zoom_scanner.gd" id="4_06k31"]
@@ -1002,12 +1003,16 @@ nodes/fragment/connections = PackedInt32Array(24, 0, 25, 2, 60, 0, 61, 0, 61, 0,
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1p8ix"]
 shader = SubResource("VisualShader_drqso")
-shader_parameter/Opacity = 0.535
+shader_parameter/Opacity = 0.5
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_ucabj"]
 viewport_path = NodePath("SubViewport_scanner_Noise")
 
 [node name="06_ON_SCANNER_PHOTO" type="Node"]
+
+[node name="set_Resolution" type="Node" parent="." node_paths=PackedStringArray("viewports")]
+script = ExtResource("1_ifne7")
+viewports = [NodePath("../SubViewport_scanner"), NodePath("../SubViewport_scanner_Noise")]
 
 [node name="Show_OnScanner" type="Node" parent="."]
 script = ExtResource("1_0c44t")
@@ -1068,6 +1073,7 @@ mesh = SubResource("TorusMesh_bj3q2")
 surface_material_override/0 = SubResource("ShaderMaterial_d571k")
 
 [node name="BACKDROP_FOCUS" type="ColorRect" parent="."]
+visible = false
 material = SubResource("ShaderMaterial_vn7gh")
 anchors_preset = 15
 anchor_right = 1.0

@@ -1,4 +1,4 @@
-extends Node2D
+extends Control
 
 @onready var choice_button_scn = preload("res://11_SPEAKER/Dialogue/Dialogue_asset/Choice_button.tscn")
 var choice_buttons : Array[Button] = []

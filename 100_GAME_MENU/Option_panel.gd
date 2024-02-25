@@ -8,7 +8,7 @@ signal open_option
 
 func _ready():
 	active_vsync(true)
-	
+	checker_on_vsync.visible = true
 func _on_option_button_pressed():
 
 	open_option.emit()

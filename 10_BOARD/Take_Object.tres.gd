@@ -31,7 +31,7 @@ func show_legend(condition : bool):
 		_global_datas._show_object_legend.emit(false,"")	
 		is_select.visible = false
 		_is_select = false		
-		
+		_global_datas.selected_photoData = null
 func close_inventory(condition : bool):
 	if !condition:
 		is_select.visible = false
