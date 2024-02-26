@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://cein0q2eirkay"]
+[gd_scene load_steps=30 format=3 uid="uid://cein0q2eirkay"]
 
 [ext_resource type="Script" path="res://10_BOARD/FollowFocus.gd" id="1_2m7ey"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_g3pi7"]
@@ -39,6 +39,25 @@ func open_inventory(condition : bool):
 		
 func _back_call():
 	_global_datas.open_inventory.emit(false)
+"
+
+[sub_resource type="GDScript" id="GDScript_1a2yk"]
+script/source = "extends Node
+
+var is_open : bool = false
+
+func _input(event):
+	
+	if _global_datas.Player_InMenu:
+		return
+	
+	if _global_datas.Player_InDialogue:
+		return
+	
+	if event.is_action_pressed(\"Open_Inventory\"):
+	
+		is_open =!is_open
+		_global_datas.open_inventory.emit(is_open)	
 "
 
 [sub_resource type="GDScript" id="GDScript_52477"]
@@ -357,6 +376,9 @@ blend_shape_mode = 0
 script = SubResource("GDScript_w13ry")
 debug_board = false
 metadata/_edit_horizontal_guides_ = [-58.0]
+
+[node name="Open_Inventory" type="Node" parent="."]
+script = SubResource("GDScript_1a2yk")
 
 [node name="Load_archive" type="Node" parent="."]
 script = ExtResource("1_qgawh")

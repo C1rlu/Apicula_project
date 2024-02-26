@@ -1,4 +1,4 @@
-[gd_scene load_steps=102 format=3 uid="uid://bwmu5iwushsl5"]
+[gd_scene load_steps=101 format=3 uid="uid://bwmu5iwushsl5"]
 
 [ext_resource type="Texture2D" uid="uid://d31xi5f7tan5w" path="res://05_SHADER_TEST/Full_screen/Dither_pattners/Blue_noise/HDR_LA_7.png" id="1_2l1ih"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/INSTANCE_NOTE.gd" id="1_fcb2u"]
@@ -6,27 +6,6 @@
 [ext_resource type="Texture2D" uid="uid://dto78na6ad5o2" path="res://00_SYSTEMS/KeyOrPad/Key_inputs.png" id="4_c4v0f"]
 [ext_resource type="Material" uid="uid://bxikm4g1nkywk" path="res://06_UI/Disolved_simple_texture.tres" id="4_opffw"]
 [ext_resource type="Texture2D" uid="uid://4bq2l5jjm4r2" path="res://00_SYSTEMS/KeyOrPad/Pad_inputs.png" id="5_jufic"]
-
-[sub_resource type="GDScript" id="GDScript_yhfpo"]
-script/source = "extends Node
-
-var is_open : bool = false
-
-func _input(event):
-	
-	if _global_datas.Player_InMenu:
-		return
-	
-	if _global_datas.Player_InSubScene:
-		return
-	if _global_datas.Player_InDialogue:
-		return
-	
-	if event.is_action_pressed(\"Open_Inventory\"):
-	
-		is_open =!is_open
-		_global_datas.open_inventory.emit(is_open)	
-"
 
 [sub_resource type="GDScript" id="GDScript_ebu32"]
 script/source = "extends Node
@@ -1318,9 +1297,6 @@ func set_shader_value_key(value):
 "
 
 [node name="07_SCREEN_UI" type="Node"]
-
-[node name="Open_Inventory" type="Node" parent="."]
-script = SubResource("GDScript_yhfpo")
 
 [node name="INSTANCE_PICTURES" type="Node" parent="."]
 script = SubResource("GDScript_ebu32")

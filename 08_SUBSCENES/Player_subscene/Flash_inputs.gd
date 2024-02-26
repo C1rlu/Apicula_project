@@ -6,7 +6,8 @@ extends Node
 
 func _input(event):
 
-
+	if _global_datas.Player_In_Inventory:
+		return 
 	if !_global_datas.Player_InSubScene:
 		return
 

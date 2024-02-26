@@ -14,8 +14,8 @@ func _ready():
 
 	if os_screen_resolution.y == 800:
 		_on_item_selected(2)	
-		return
-		
+		return	 		
+
 	if os_screen_resolution.x < 1281:	
 		_on_item_selected(0)
 	else:
@@ -28,7 +28,7 @@ func _on_item_selected(index):
 	if current_selected == 0:
 		DisplayServer.window_set_size(Vector2(1280,720))
 		_global_datas.set_resolution.emit(Vector2(1280,720))
-		RenderingServer.global_shader_parameter_set("Dither_size",0.55)
+		RenderingServer.global_shader_parameter_set("Dither_size",0.5)
 		RenderingServer.global_shader_parameter_set("Dither_blue_noise_size",5)
 		print("SCREEN SIZE",Vector2(1280,720))
 	if current_selected == 1:
@@ -40,6 +40,6 @@ func _on_item_selected(index):
 	if current_selected == 2:
 		DisplayServer.window_set_size(Vector2(1280,800))
 		_global_datas.set_resolution.emit(Vector2(1280,800))
-		RenderingServer.global_shader_parameter_set("Dither_size",0.55)
+		RenderingServer.global_shader_parameter_set("Dither_size",0.5)
 		RenderingServer.global_shader_parameter_set("Dither_blue_noise_size",5)	
 		print("SCREEN SIZE",Vector2(1280,800))	

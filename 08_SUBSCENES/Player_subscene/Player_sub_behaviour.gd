@@ -38,20 +38,19 @@ func _speedDown():
 	
 func _physics_process(_delta):
 	
-	
+	if !_canMove:
+		return 
+	if _global_datas.Player_InMenu:
+		return	
+	if _global_datas.Player_In_Inventory:
+		return 
+	if _global_datas.in_scanner_mode:
+		return 	
 	
 	if _global_datas.Player_InSubScene:
 		_global_datas.subbscene_playerPosition = transform.origin	
 		_global_datas.flash_subscene_position = light_position.global_position
 	
-	if !_canMove:
-		return
-			
-	if _global_datas.Player_In_Inventory:
-		return
-	if _global_datas.in_scanner_mode:
-		return
-		
 	if Input.is_action_pressed((_global_datas.move_forward)):
 		var goingUp = transform.basis.y
 		apply_central_force(goingUp * move_speed)
@@ -83,4 +82,5 @@ func player_dir(_delta, angle,angle_x):
 	
 	var New_rotation = Vector3(angle_x,angle,0.0)
 	PlayerMesh.rotation_degrees = lerp(PlayerMesh.rotation_degrees,New_rotation,2.0 * _delta)
+
 
