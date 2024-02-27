@@ -30,7 +30,7 @@ func _ready():
 	_global_datas._open_dialogue.connect(_inDialogue)
 	_global_datas.in_dialogue_zone.connect(_outDialogue)
 	
-	_global_datas._open_menu.connect(_in_menu_state)
+	#_global_datas._open_menu.connect(_in_menu_state)
 
 	#_global_datas._active_progress_subscene.connect(_start_progress)
 	

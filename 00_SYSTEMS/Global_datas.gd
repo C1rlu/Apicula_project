@@ -119,7 +119,7 @@ var clock_timer : Timer
 signal active_photo_button(condition : bool)
 signal active_scanner_button(condition : bool)
 signal active_mirror_switch(condition : bool)
-signal _click_mirror_switch 
+signal _click_mirror_switch(condition : bool)
 signal player_mirror_contact(condition : bool)
 
 
