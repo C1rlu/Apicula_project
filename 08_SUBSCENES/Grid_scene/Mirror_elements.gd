@@ -1,7 +1,7 @@
 extends Node
 
-@export var elements_mesh : Array [MeshInstance3D]
-
+@export var elements_mesh : Array[MeshInstance3D]
+@export var element_collision : Array[CollisionShape3D]
 func _ready():
 	_global_datas.active_mirror_switch.connect(_active_mirror_Elements)
 	
@@ -16,6 +16,6 @@ func _active_mirror_Elements(condition : bool):
 	
 	for element in elements_mesh:
 		element.visible = condition
-		var col = element.get_node_or_null("All_render/CollisionShape3D")
-		if col:
-			col.disabled = !condition
+
+	for col in element_collision:
+		col.disabled = !condition

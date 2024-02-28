@@ -61,9 +61,9 @@ func check_area():
 					return
 	
 		if mirror_node:
-			pass
-			#_global_datas._click_mirror_switch.emit()
-			#_global_datas.Player_InMirrorScene = !_global_datas.Player_InMirrorScene	
+			if _global_datas.Player_InMirrorScene:
+				_global_datas._click_mirror_switch.emit(false)
+				_global_datas.Player_InMirrorScene = false
 	
 func _on_timer_timeout():
 	timer.stop()
