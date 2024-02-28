@@ -2,7 +2,7 @@ extends Node3D
 
 @export var offset : Vector3
 @export var division_scale : float = 28.0
-@onready var cam_target = $"../SubViewport/CamTarget"
+@onready var cam_target = $"../CamTarget"
 
 
 

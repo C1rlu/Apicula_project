@@ -1,5 +1,5 @@
 extends Node
-@onready var pad_target = $"../SubViewport/Pad_target"
+@onready var pad_target = $"../3D_SCENE/SubViewport/Pad_target"
 
 
 

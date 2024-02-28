@@ -1,6 +1,6 @@
 extends Node
 
-@onready var cam_target = $"../SubViewport/CamTarget"
+@onready var cam_target = $"../3D_SCENE/CamTarget"
 var t
 
 @export var target_position : Node3D

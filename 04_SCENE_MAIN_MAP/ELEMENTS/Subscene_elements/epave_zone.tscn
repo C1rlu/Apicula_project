@@ -32,7 +32,8 @@ func _on_area_entered(_area):
 				_global_datas.boue_archives.append(boue_data)
 		boue.visible = true
 		was_detected = true
-
+		_global_datas.Active_boue_position = global_position
+		
 func _on_area_exited(_area):
 	
 	if _area.name == \"Enter_dialogue_zone\":
@@ -43,6 +44,7 @@ func _on_area_exited(_area):
 		on_over.visible = false
 
 		_global_datas._active_progress_subscene.emit(false)
+		
 "
 
 [sub_resource type="TorusMesh" id="TorusMesh_8ej3g"]
@@ -51,14 +53,14 @@ outer_radius = 0.55
 rings = 32
 ring_segments = 16
 
-[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_8wfnm"]
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_g0aus"]
 parameter_name = "Light_color_ui"
 qualifier = 1
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_4akwd"]
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_ipfbe"]
 constant = 0.4
 
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_01wla"]
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_1hhps"]
 size = Vector2(724.789, 654.559)
 expression = "const float DITHER_THRESHOLDS[16] ={
 		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
@@ -71,13 +73,13 @@ vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
 
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_b4w1v"]
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_vk34y"]
 default_input_values = [0, 0.3, 1, 0.0]
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_hwjhi"]
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_fv10g"]
 constant = 0.9
 
-[sub_resource type="VisualShader" id="VisualShader_o8auv"]
+[sub_resource type="VisualShader" id="VisualShader_w0qe3"]
 code = "shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
 
@@ -128,11 +130,11 @@ void fragment() {
 "
 graph_offset = Vector2(-2362.65, 490.918)
 flags/unshaded = true
-nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_8wfnm")
+nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_g0aus")
 nodes/fragment/2/position = Vector2(-760, -40)
-nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_4akwd")
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_ipfbe")
 nodes/fragment/3/position = Vector2(-1380, 520)
-nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_01wla")
+nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_1hhps")
 nodes/fragment/4/position = Vector2(-1200, 380)
 nodes/fragment/4/size = Vector2(724.789, 654.559)
 nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
@@ -147,15 +149,15 @@ nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
 vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/6/node = SubResource("VisualShaderNodeStep_b4w1v")
+nodes/fragment/6/node = SubResource("VisualShaderNodeStep_vk34y")
 nodes/fragment/6/position = Vector2(-351.825, 215.819)
-nodes/fragment/7/node = SubResource("VisualShaderNodeFloatConstant_hwjhi")
+nodes/fragment/7/node = SubResource("VisualShaderNodeFloatConstant_fv10g")
 nodes/fragment/7/position = Vector2(-1440, 360)
 nodes/fragment/connections = PackedInt32Array(3, 0, 4, 1, 4, 0, 6, 1, 6, 0, 0, 1, 7, 0, 4, 0, 2, 0, 0, 0, 2, 0, 6, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ahafp"]
 render_priority = 0
-shader = SubResource("VisualShader_o8auv")
+shader = SubResource("VisualShader_w0qe3")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_7qqy6"]
 radius = 0.67208

@@ -1,8 +1,8 @@
 extends Node
 
 var _pad : bool = false
-@onready var pad_target = $"../SubViewport/Pad_target"
-@onready var  Camera = $"../Camp_root_XRay/Camera_xray"
+@onready var pad_target = $"../3D_SCENE/SubViewport/Pad_target"
+@onready var  Camera = $"../3D_SCENE/Camp_root_XRay/Camera_xray"
 
 var selectable
 signal active_scanner(condition : bool)

@@ -1,5 +1,6 @@
-[gd_scene load_steps=76 format=3 uid="uid://cnmptm7i0xxmj"]
+[gd_scene load_steps=77 format=3 uid="uid://cnmptm7i0xxmj"]
 
+[ext_resource type="Script" path="res://00_SCENE/Active_Decor_Scene.gd" id="1_ounvv"]
 [ext_resource type="PackedScene" uid="uid://vpdvl0v7dubd" path="res://00_PLAYER/Player_boat.tscn" id="1_qltht"]
 [ext_resource type="Script" path="res://06_UI/Fps_counter.gd" id="1_s74e5"]
 [ext_resource type="Resource" uid="uid://ppxk5i543dfn" path="res://09_NPC/Npc_data/Mr_Birds_data.tres" id="1_trgwt"]
@@ -30,6 +31,24 @@
 [ext_resource type="PackedScene" uid="uid://dti7l20thp2rk" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Subscene_elements/epave_zone.tscn" id="23_txlwt"]
 [ext_resource type="Resource" uid="uid://bqtier24l2d58" path="res://10_BOARD/Boue/Boue_appicula.tres" id="26_blekg"]
 [ext_resource type="Resource" uid="uid://dyrjwnrw6plmp" path="res://10_BOARD/Boue/Boue_DarkHole.tres" id="27_id2vw"]
+
+[sub_resource type="GDScript" id="GDScript_ueh7h"]
+script/source = "extends Node
+
+@onready var player_boat = $\"../../--DECOR--/Player_Boat\"
+@export var prologue_position : Vector3
+
+
+func _ready():
+	_global_datas.active_prologue_demo.connect(_state_change)
+
+	
+func _state_change():
+	player_boat.position = prologue_position
+
+	
+
+"
 
 [sub_resource type="GDScript" id="GDScript_xsqte"]
 script/source = "extends Node
@@ -143,24 +162,6 @@ func _input(event):
 			return
 		_global_datas._open_dialogue.emit()	
 		print(\"OPEN DIALOGUE\")
-"
-
-[sub_resource type="GDScript" id="GDScript_ueh7h"]
-script/source = "extends Node
-
-@onready var player_boat = $\"../../Player_Boat\"
-@export var prologue_position : Vector3
-
-
-func _ready():
-	_global_datas.active_prologue_demo.connect(_state_change)
-
-	
-func _state_change():
-	player_boat.position = prologue_position
-
-	
-
 "
 
 [sub_resource type="GDScript" id="GDScript_8cfdp"]
@@ -283,28 +284,6 @@ func active_buton():
 
 "
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ituqr"]
-bounce = 500.0
-
-[sub_resource type="GDScript" id="GDScript_yt3v2"]
-script/source = "extends Area3D
-
-
-@onready var collision_shape_3d = $CollisionShape3D
-
-
-
-func _ready():
-	_global_datas.open_inventory.connect(active_enter_dialogue)
-
-
-func active_enter_dialogue(condition : bool):
-	collision_shape_3d.disabled = condition	
-"
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_yt2xy"]
-radius = 0.990634
-
 [sub_resource type="GDScript" id="GDScript_mdv56"]
 script/source = "extends Node
 
@@ -351,6 +330,28 @@ func _on_timer_timeout():
 	_global_datas._go_Subscene.emit()
 
 "
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ituqr"]
+bounce = 500.0
+
+[sub_resource type="GDScript" id="GDScript_yt3v2"]
+script/source = "extends Area3D
+
+
+@onready var collision_shape_3d = $CollisionShape3D
+
+
+
+func _ready():
+	_global_datas.open_inventory.connect(active_enter_dialogue)
+
+
+func active_enter_dialogue(condition : bool):
+	collision_shape_3d.disabled = condition	
+"
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_yt2xy"]
+radius = 0.990634
 
 [sub_resource type="VisualShaderNodeProximityFade" id="VisualShaderNodeProximityFade_dnk0e"]
 default_input_values = [0, 1.5]
@@ -615,6 +616,15 @@ size = Vector3(30, 0, 30)
 
 [node name="02_MAIN_SCENES" type="Node"]
 
+[node name="GAME_STATE" type="Node" parent="."]
+
+[node name="Prologue" type="Node" parent="GAME_STATE"]
+script = SubResource("GDScript_ueh7h")
+prologue_position = Vector3(-21, 0, 7)
+
+[node name="Active_Decor_Scene" type="Node" parent="."]
+script = ExtResource("1_ounvv")
+
 [node name="set_Resolution" type="Node" parent="." node_paths=PackedStringArray("viewports")]
 script = ExtResource("1_xd8sb")
 viewports = [NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/MAIN_Viewport"), NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/FOAM_Viewport"), NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/SONAR_Viewport"), NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/GRID_Viewport"), NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/SKY_Viewport")]
@@ -622,7 +632,7 @@ viewports = [NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/MAIN_Viewport"), No
 [node name="Push_to_subscene" type="Node" parent="."]
 script = SubResource("GDScript_xsqte")
 
-[node name="Fade_Subscene_progress" type="Node" parent="Push_to_subscene"]
+[node name="Progress_subscene_call" type="Node" parent="Push_to_subscene"]
 script = ExtResource("2_np5n5")
 
 [node name="Sonar_behaviour" type="Node" parent="."]
@@ -630,12 +640,6 @@ script = SubResource("GDScript_0xo40")
 
 [node name="Open_Dialogue" type="Node" parent="."]
 script = SubResource("GDScript_55qk3")
-
-[node name="GAME_STATE" type="Node" parent="."]
-
-[node name="Prologue" type="Node" parent="GAME_STATE"]
-script = SubResource("GDScript_ueh7h")
-prologue_position = Vector3(-21, 0, 7)
 
 [node name="01_GAME_UI" type="Node" parent="." node_paths=PackedStringArray("all_renders")]
 script = SubResource("GDScript_8cfdp")
@@ -823,33 +827,6 @@ text = "..."
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Player_Boat" parent="." instance=ExtResource("1_qltht")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
-input_ray_pickable = false
-mass = 4.0
-physics_material_override = SubResource("PhysicsMaterial_ituqr")
-max_contacts_reported = 10
-move_speed = 5.0
-maxSpeed = 5.0
-rotation_speed = 3.0
-
-[node name="OmniLight3D2" type="OmniLight3D" parent="Player_Boat"]
-transform = Transform3D(1, -3.55271e-15, 0, 2.11758e-22, 0.342545, 0.939501, 0, -0.939501, 0.342545, 0.130404, 3.19906, -0.0379682)
-light_indirect_energy = 0.0
-light_volumetric_fog_energy = 0.0
-light_specular = 0.0
-omni_range = 7.0
-omni_attenuation = 0.258817
-
-[node name="Enter_dialogue_zone" type="Area3D" parent="Player_Boat"]
-collision_layer = 3
-collision_mask = 3
-input_ray_pickable = false
-script = SubResource("GDScript_yt3v2")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Player_Boat/Enter_dialogue_zone"]
-shape = SubResource("SphereShape3D_yt2xy")
-
 [node name="Go_subscene_progress" type="TextureProgressBar" parent="."]
 anchors_preset = 7
 anchor_left = 0.5
@@ -874,7 +851,34 @@ script = SubResource("GDScript_mdv56")
 
 [node name="Timer" type="Timer" parent="Go_subscene_progress/GoSubscene_timer"]
 
-[node name="--DECOR--" type="Node" parent="."]
+[node name="--DECOR--" type="Node3D" parent="."]
+
+[node name="Player_Boat" parent="--DECOR--" instance=ExtResource("1_qltht")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
+input_ray_pickable = false
+mass = 4.0
+physics_material_override = SubResource("PhysicsMaterial_ituqr")
+max_contacts_reported = 10
+move_speed = 5.0
+maxSpeed = 5.0
+rotation_speed = 3.0
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="--DECOR--/Player_Boat"]
+transform = Transform3D(1, -3.55271e-15, 0, 2.11758e-22, 0.342545, 0.939501, 0, -0.939501, 0.342545, 0.130404, 3.19906, -0.0379682)
+light_indirect_energy = 0.0
+light_volumetric_fog_energy = 0.0
+light_specular = 0.0
+omni_range = 7.0
+omni_attenuation = 0.258817
+
+[node name="Enter_dialogue_zone" type="Area3D" parent="--DECOR--/Player_Boat"]
+collision_layer = 3
+collision_mask = 3
+input_ray_pickable = false
+script = SubResource("GDScript_yt3v2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="--DECOR--/Player_Boat/Enter_dialogue_zone"]
+shape = SubResource("SphereShape3D_yt2xy")
 
 [node name="Sonar" type="Node3D" parent="--DECOR--"]
 transform = Transform3D(-4.37114e-09, 0, -0.1, 0, 0.1, 0, 0.1, 0, -4.37114e-09, 0, 0, 0)
@@ -907,7 +911,7 @@ layers = 8
 mesh = SubResource("SphereMesh_56jr0")
 skeleton = NodePath("../..")
 
-[node name="GRID_MAP" type="Node" parent="--DECOR--"]
+[node name="GRID_MAP" type="Node3D" parent="--DECOR--"]
 
 [node name="GridMap" parent="--DECOR--/GRID_MAP" instance=ExtResource("6_8jesf")]
 transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, 0, -0.224, 0)
@@ -922,7 +926,7 @@ metadata/_editor_floor_ = Vector3(0, 0, 0)
 [node name="VISUAL_CELLS" type="Node" parent="--DECOR--/GRID_MAP"]
 script = SubResource("GDScript_i66w8")
 
-[node name="WORLD_ELEMENTS" type="Node" parent="--DECOR--"]
+[node name="WORLD_ELEMENTS" type="Node3D" parent="--DECOR--"]
 
 [node name="Pine_prefabs" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_c6r5x")]
 transform = Transform3D(0.0545151, 0, 0.0545151, 0, 0.077096, 0, -0.0545151, 0, 0.0545151, 3.2319, 0.0817456, -2.66318)
@@ -1039,7 +1043,7 @@ transform = Transform3D(-0.522002, 0, 0.559075, 0, 0.764886, 0, -0.559075, 0, -0
 [node name="Lighthouse2" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("16_u78ww")]
 transform = Transform3D(-0.271044, 0, 2.89823e-08, 0, 0.271044, 0, -2.89823e-08, 0, -0.271044, 2.95369, 0.241196, -3.30812)
 
-[node name="NPC_TRIGGER_ZONE" type="Node" parent="--DECOR--"]
+[node name="NPC_TRIGGER_ZONE" type="Node3D" parent="--DECOR--"]
 
 [node name="NPC_AREA" type="Area3D" parent="--DECOR--/NPC_TRIGGER_ZONE"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.61404, 1.19209e-07, -2.30636)
@@ -1095,15 +1099,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.643425, 0, 0.626134)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.484242, 0, 0.113853)
 shape = SubResource("SphereShape3D_jvty4")
 
-[node name="UNDER_WATER" type="Node" parent="--DECOR--"]
+[node name="UNDER_WATER2" type="Node3D" parent="--DECOR--"]
 
-[node name="EPAVE_ZONE" parent="--DECOR--/UNDER_WATER" instance=ExtResource("23_txlwt")]
+[node name="EPAVE_ZONE" parent="--DECOR--/UNDER_WATER2" instance=ExtResource("23_txlwt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.70167, -0.174761, 1.01103)
 collision_layer = 2
 collision_mask = 2
 boue_data = ExtResource("26_blekg")
 
-[node name="EPAVE_ZONE2" parent="--DECOR--/UNDER_WATER" instance=ExtResource("23_txlwt")]
+[node name="EPAVE_ZONE2" parent="--DECOR--/UNDER_WATER2" instance=ExtResource("23_txlwt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6219, -0.192537, -2.46462)
 collision_layer = 2
 collision_mask = 2
@@ -1116,7 +1120,7 @@ mesh = SubResource("PlaneMesh_k8245")
 skeleton = NodePath("../../..")
 surface_material_override/0 = SubResource("ShaderMaterial_2pkhh")
 
-[node name="SEA" type="Node" parent="--DECOR--"]
+[node name="SEA" type="Node3D" parent="--DECOR--"]
 
 [node name="back_color" type="MeshInstance3D" parent="--DECOR--/SEA"]
 transform = Transform3D(4.4285, 0, 0, 0, 0.44285, 0, 0, 0, 4.4285, 0.739399, -15.5369, 1.21398)

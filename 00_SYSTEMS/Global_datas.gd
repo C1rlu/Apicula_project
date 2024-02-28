@@ -5,6 +5,7 @@ var Subscene_Camera : Camera3D
 var player_position : Vector3
 var player_boat_rotation : Vector3
 var cell_name : String = "null"
+var Active_boue_position : Vector3
 
 var Player_In_Inventory : bool
 var Player_InSubScene : bool
@@ -22,6 +23,12 @@ signal _end_ini_subscene
 signal _backFrom_subscene
 signal _open_menu(condition : bool)
 signal set_resolution(resolution : Vector2i)
+
+#visual visibility call // FOR PERFORMANCE HIDE AND SHOW 3D ELEMENT SCENE WHEN NEED
+signal show_3D_MainScene(condition : bool)
+signal show_3D_BoardScene(condition : bool)
+signal show_3D_SubScene(condition : bool)
+signal show_3D_SpeackerScene(condition : bool)
 
 
 #backcalls

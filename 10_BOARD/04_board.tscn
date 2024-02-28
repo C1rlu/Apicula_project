@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://10_BOARD/FollowFocus.gd" id="1_2m7ey"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_g3pi7"]
 [ext_resource type="Script" path="res://10_BOARD/Board_CamTarget.gd" id="1_janbq"]
+[ext_resource type="Script" path="res://10_BOARD/Active_3D_BoardScene.gd" id="1_n6a4y"]
 [ext_resource type="Script" path="res://10_BOARD/Load_archive.gd" id="1_qgawh"]
 [ext_resource type="Script" path="res://10_BOARD/Input_switch.gd" id="2_00g5f"]
 [ext_resource type="PackedScene" uid="uid://dr73p5vs0sixe" path="res://10_BOARD/board_scene.tscn" id="2_6c571"]
@@ -18,12 +19,11 @@ script/source = "extends Node
 
 
 @export var debug_board = true
-@onready var camera_xray = $Camp_root_XRay/Camera_xray
+@onready var camera_xray = $\"3D_SCENE/Camp_root_XRay/Camera_xray\"
 
 
 func _ready():
 	_global_datas.Player_In_Inventory = debug_board
-	#board_ui.visible = debug_board
 	_global_datas.open_inventory.connect(open_inventory)
 	
 func open_inventory(condition : bool):
@@ -33,12 +33,14 @@ func open_inventory(condition : bool):
 	
 	if !condition:
 		_global_datas._show_object_legend.emit(false,\"\")
-		_global_datas.show_on_scanner.emit(false)	
+		_global_datas.show_on_scanner.emit(false)
+		_global_datas.show_ui_scanner_dots.emit(false)	
 	else:
 		_global_datas._add_back_call.emit(_back_call)
 		
 func _back_call():
 	_global_datas.open_inventory.emit(false)
+	
 "
 
 [sub_resource type="GDScript" id="GDScript_1a2yk"]
@@ -61,12 +63,13 @@ func _input(event):
 	
 		is_open =!is_open
 		_global_datas.open_inventory.emit(is_open)	
+		
 "
 
 [sub_resource type="GDScript" id="GDScript_52477"]
 script/source = "extends Node
 
-@onready var board_ui = $\"../RENDER\"
+@onready var board_ui = $\"../3D_SCENE/RENDER\"
 @onready var material : Material = board_ui.get_material()
 
 var fade_in
@@ -78,14 +81,17 @@ func _ready():
 func open_inventory(condition : bool):
 	
 	if condition:
-		board_ui.visible = true
+		_global_datas.show_3D_BoardScene.emit(true)
 		if fade_in:
 			fade_in.kill()
 		
 		fade_in = create_tween()
 		fade_in.tween_method(set_shader_value,0.0,1.0,0.5)
-
+		fade_in.connect(\"finished\",end_fadeIn)
 	else:
+		
+		_global_datas.show_3D_MainScene.emit(true)
+		
 		if fade_in:
 			fade_in.kill()
 		
@@ -95,18 +101,20 @@ func open_inventory(condition : bool):
 
 
 func _disable_viewport():
-	board_ui.visible = false
+	_global_datas.show_3D_BoardScene.emit(false)
+func end_fadeIn():
+	_global_datas.show_3D_MainScene.emit(false)	
 
 func set_shader_value(value):
 	
 	material.set_shader_parameter(\"Opacity\",value)
-
+	
 "
 
 [sub_resource type="GDScript" id="GDScript_00hwt"]
 script/source = "extends Node
 
-@onready var Cam : Camera3D = $\"../SubViewport/Camp_root_Render/Camera3D\"
+@onready var Cam : Camera3D = $\"../3D_SCENE/SubViewport/Camp_root_Render/Camera3D\"
 
 
 
@@ -226,10 +234,10 @@ var smooth_speed = 3.0
 var offset: Vector3
 var active_target : Vector3
 
-@onready var cam_target = $\"../SubViewport/CamTarget\"
+@onready var cam_target = $\"../3D_SCENE/CamTarget\"
 @export var _all_cam_array : Array[Node3D]
-@onready var camera_xray = $\"../Camp_root_XRay/Camera_xray\"
-@onready var camera_3d = $\"../SubViewport/Camp_root_Render/Camera3D\"
+@onready var camera_xray = $\"../3D_SCENE/Camp_root_XRay/Camera_xray\"
+@onready var camera_3d = $\"../3D_SCENE/SubViewport/Camp_root_Render/Camera3D\"
 
 func _ready():
 	
@@ -354,7 +362,7 @@ func _ready():
 "
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_bjncg"]
-viewport_path = NodePath("SubViewport")
+viewport_path = NodePath("3D_SCENE/SubViewport")
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_i7f22"]
 resource_name = "Player_Boat_01-c9377ed3c1eb09ef00335a9606626fca_Cube_001"
@@ -373,8 +381,6 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 
-[sub_resource type="BoxMesh" id="BoxMesh_byg66"]
-
 [node name="04_BOARD" type="Node"]
 script = SubResource("GDScript_w13ry")
 debug_board = false
@@ -383,16 +389,19 @@ metadata/_edit_horizontal_guides_ = [-58.0]
 [node name="Open_Inventory" type="Node" parent="."]
 script = SubResource("GDScript_1a2yk")
 
+[node name="Active_3D_scene" type="Node" parent="."]
+script = ExtResource("1_n6a4y")
+
+[node name="Fade" type="Node" parent="."]
+script = SubResource("GDScript_52477")
+
 [node name="Load_archive" type="Node" parent="."]
 script = ExtResource("1_qgawh")
 already_in_inventory = Array[Resource("res://12_INVENTORY/Photo/Photo_data.gd")]([ExtResource("2_i4g8w"), ExtResource("4_3rhj0")])
 
 [node name="set_Resolution" type="Node" parent="." node_paths=PackedStringArray("viewports")]
 script = ExtResource("1_g3pi7")
-viewports = [NodePath("../SubViewport")]
-
-[node name="Fade" type="Node" parent="."]
-script = SubResource("GDScript_52477")
+viewports = [NodePath("../3D_SCENE/SubViewport")]
 
 [node name="Focus_this" type="Node" parent="."]
 script = ExtResource("1_2m7ey")
@@ -402,7 +411,7 @@ script = SubResource("GDScript_00hwt")
 
 [node name="Cam_follow" type="Node" parent="." node_paths=PackedStringArray("_all_cam_array")]
 script = SubResource("GDScript_q7x8f")
-_all_cam_array = [NodePath("../SubViewport/Camp_root_Render"), NodePath("../Camp_root_XRay"), NodePath("../SubViewport/Camp_root_Render")]
+_all_cam_array = [NodePath("../3D_SCENE/SubViewport/Camp_root_Render"), NodePath("../3D_SCENE/Camp_root_XRay")]
 
 [node name="Input_switch" type="Node" parent="."]
 script = ExtResource("2_00g5f")
@@ -410,21 +419,23 @@ script = ExtResource("2_00g5f")
 [node name="Pad_clic_raycast" type="Node" parent="."]
 script = ExtResource("3_rqf42")
 
-[node name="Camp_root_XRay" type="Node3D" parent="."]
+[node name="3D_SCENE" type="Node3D" parent="."]
 
-[node name="Camera_xray" type="Camera3D" parent="Camp_root_XRay"]
+[node name="Camp_root_XRay" type="Node3D" parent="3D_SCENE"]
+
+[node name="Camera_xray" type="Camera3D" parent="3D_SCENE/Camp_root_XRay"]
 transform = Transform3D(0.994881, 0.0700726, -0.0728162, 0, 0.720551, 0.693402, 0.101056, -0.689852, 0.716862, -0.08, 0.945, 1.035)
 cull_mask = 0
 current = true
 fov = 42.0
 
-[node name="SubViewport" type="SubViewport" parent="."]
+[node name="SubViewport" type="SubViewport" parent="3D_SCENE"]
 handle_input_locally = false
 scaling_3d_scale = 0.9
 fsr_sharpness = 2.0
 size = Vector2i(1920, 1080)
 
-[node name="Pad_target" type="ColorRect" parent="SubViewport"]
+[node name="Pad_target" type="ColorRect" parent="3D_SCENE/SubViewport"]
 visible = false
 material = SubResource("ShaderMaterial_blt4p")
 anchors_preset = 8
@@ -441,10 +452,10 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.862745, 0.784314, 0.603922, 1)
 
-[node name="Camp_root_Render" type="Node3D" parent="SubViewport"]
+[node name="Camp_root_Render" type="Node3D" parent="3D_SCENE/SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.38419e-07)
 
-[node name="Camera3D" type="Camera3D" parent="SubViewport/Camp_root_Render"]
+[node name="Camera3D" type="Camera3D" parent="3D_SCENE/SubViewport/Camp_root_Render"]
 transform = Transform3D(0.994881, 0.0700724, -0.072816, 0, 0.720551, 0.693402, 0.101056, -0.689852, 0.716862, -0.08, 0.945, 1.035)
 cull_mask = 2
 current = true
@@ -452,16 +463,7 @@ fov = 40.0
 far = 4.25
 script = SubResource("GDScript_l5hmx")
 
-[node name="CamTarget" type="Node3D" parent="SubViewport"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.002, 0)
-script = ExtResource("1_janbq")
-move_speed = 1.0
-min_x = -0.5
-max_x = 0.5
-min_z = -0.5
-max_z = 0.5
-
-[node name="RENDER" type="TextureRect" parent="."]
+[node name="RENDER" type="TextureRect" parent="3D_SCENE"]
 material = ExtResource("7_fiqjo")
 anchors_preset = 15
 anchor_right = 1.0
@@ -470,22 +472,27 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("ViewportTexture_bjncg")
 
-[node name="Board_scene" parent="." instance=ExtResource("2_6c571")]
+[node name="Board_scene" parent="3D_SCENE" instance=ExtResource("2_6c571")]
 
-[node name="Player_on_map" type="Node3D" parent="."]
+[node name="CamTarget" type="Node3D" parent="3D_SCENE"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.002, 0)
+script = ExtResource("1_janbq")
+move_speed = 1.0
+min_x = -0.5
+max_x = 0.5
+min_z = -0.5
+max_z = 0.5
+
+[node name="Player_on_map" type="Node3D" parent="3D_SCENE"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.000402212, 0.00895628, -0.00213873)
 script = ExtResource("7_vhvc2")
 offset = Vector3(-0.124, 0, 0.26)
 division_scale = 50.0
 
-[node name="Msh_boat" type="MeshInstance3D" parent="Player_on_map"]
+[node name="Msh_boat" type="MeshInstance3D" parent="3D_SCENE/Player_on_map"]
 transform = Transform3D(0.00480529, 0, 0, 0, 0.00480529, 0, 0, 0, 0.00480529, -1.16415e-09, -0.002, -0.000658046)
 layers = 2
 mesh = SubResource("ArrayMesh_i7f22")
 skeleton = NodePath("")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-visible = false
-mesh = SubResource("BoxMesh_byg66")
 
 [connection signal="active_scanner" from="Pad_clic_raycast" to="ZOOM_Behaviour" method="_on_pad_clic_raycast_active_scanner"]

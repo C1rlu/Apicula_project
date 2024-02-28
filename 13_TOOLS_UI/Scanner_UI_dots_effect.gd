@@ -6,13 +6,13 @@ extends Node
 
 var t
 
+var actual_value : float
 
 func _ready():
 	_global_datas.show_ui_scanner_dots.connect(_Ui_dots_effect)
 
 
 func _Ui_dots_effect(condition : bool):
-	
 	
 	if t:
 		t.kill()
@@ -26,10 +26,10 @@ func _Ui_dots_effect(condition : bool):
 		t.tween_method(set_shader_value,0.0,1.0,0.5)
 	else:
 		t = create_tween()	
-		t.tween_method(set_shader_value,1.0,0.0,0.5)
+		t.tween_method(set_shader_value,actual_value,0.0,0.5)
 		
 		
 func set_shader_value(value):
 	
 	material_dots.set_shader_parameter("Opacity",value)
-	
+	actual_value = value
