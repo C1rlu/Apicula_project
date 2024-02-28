@@ -25,7 +25,8 @@ func _input(event):
 	if event.is_action_released("Click"):
 		if selectable:
 			selectable.on_click.emit(false)
-	
+		
+			
 	if !_global_datas.Player_In_Inventory:
 		return	
 			

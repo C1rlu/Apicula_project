@@ -110,6 +110,9 @@ var bougie_node : Node2D
 signal focus_this_on_board(target : Vector3)
 signal Open_ui_dark_backdrop(condition : bool)
 signal show_on_scanner(condition : bool)
+signal show_ui_scanner_dots(condition : bool)
+
+
 var selected_photoData : PhotoData
 var in_scanner_mode : bool 
 
