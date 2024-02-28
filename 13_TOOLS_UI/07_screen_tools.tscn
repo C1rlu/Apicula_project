@@ -1,4 +1,4 @@
-[gd_scene load_steps=101 format=3 uid="uid://bwmu5iwushsl5"]
+[gd_scene load_steps=102 format=3 uid="uid://bwmu5iwushsl5"]
 
 [ext_resource type="Texture2D" uid="uid://d31xi5f7tan5w" path="res://05_SHADER_TEST/Full_screen/Dither_pattners/Blue_noise/HDR_LA_7.png" id="1_2l1ih"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/INSTANCE_NOTE.gd" id="1_fcb2u"]
@@ -369,7 +369,15 @@ script/source = "extends Node
 
 @onready var photo_effect : ColorRect = $\"../Photo_tools/photo_UI_elements/Photo_FX/Photo_effect\"
 @onready var material : Material = photo_effect.get_material()
+
+@onready var photo_effect_dots = $\"../Photo_effect_dots_scanner\"
+@onready var material_dots : Material = photo_effect_dots.get_material()
+@onready var FLASH_NOISE = preload(\"res://05_SHADER_TEST/Subscene_materials/Flash_noise.tres\")
+
+
 @onready var photo_tools = $\"../Photo_tools\"
+
+
 
 var t
 var center_position : Vector2
@@ -384,41 +392,8 @@ func _flash():
 	
 	photo_tools.position = center_position	
 	
+
 		
-		
-	if t:
-		t.kill()
-	t = create_tween()
-	
-	photo_effect.visible = true
-	
-
-	t .tween_method(set_shader_value,0.0,1.0,1.0)
-	
-
-func set_shader_value(value):
-	
-	var lerp_time = lerpf(0.5,0.0, value)	
-	material.set_shader_parameter(\"flash_opacity\",lerp_time)
-	
-
-"
-
-[sub_resource type="GDScript" id="GDScript_d3vsr"]
-script/source = "extends Node
-@onready var photo_tools = $\"../Photo_tools\"
-
-@onready var photo_effect : ColorRect = $\"../Photo_tools/photo_UI_elements/Photo_FX/Photo_effect_flashSubscene\"
-@onready var material : Material = photo_effect.get_material()
-
-var t 
-
-func _ready():
-	_global_datas._photo_flash_noPhoto.connect(_flash)
-
-
-func _flash():
-				
 	if t:
 		t.kill()
 	t = create_tween()
@@ -429,6 +404,45 @@ func _flash():
 	t .tween_method(set_shader_value,0.0,1.0,0.5)
 	
 
+	
+func set_shader_value(value):
+	
+	var lerp_time = lerpf(0.5,0.0, value)	
+	#var lerp_time_b = lerpf(0.0,0.5, value)
+	material.set_shader_parameter(\"flash_opacity\",lerp_time)
+	#material_dots.set_shader_parameter(\"Opacity\",lerp_time_b)
+
+	
+"
+
+[sub_resource type="GDScript" id="GDScript_d3vsr"]
+script/source = "extends Node
+@onready var photo_tools = $\"../Photo_tools\"
+
+@onready var photo_effect : ColorRect = $\"../Photo_tools/photo_UI_elements/Photo_FX/Photo_effect_flashSubscene\"
+@onready var material : Material = photo_effect.get_material()
+
+@onready var photo_effect_dots = $\"../Photo_effect_dots\"
+@onready var material_dots : Material = photo_effect_dots.get_material()
+@onready var FLASH_NOISE = preload(\"res://05_SHADER_TEST/Subscene_materials/Flash_noise.tres\")
+
+
+var t 
+
+func _ready():
+	_global_datas._photo_flash_noPhoto.connect(_flash)
+
+
+func _flash():
+	
+		
+	if t:
+		t.kill()
+	t = create_tween()
+	
+	photo_effect.visible = true
+	t.tween_method(set_shader_value,0.0,1.0,1.5)
+
 func set_shader_value(value):
 	
 	var lerp_time = lerpf(0.5,0.0, value)	
@@ -438,6 +452,9 @@ func set_shader_value(value):
 	var player = _global_datas.flash_subscene_position
 	var screen_position = camera.unproject_position(player)	
 	photo_tools.position = screen_position		
+
+	var lerp_time_b = lerpf(1.0,0.0, value)
+	material_dots.set_shader_parameter(\"Opacity\",lerp_time_b)
 "
 
 [sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_lu80i"]
@@ -631,7 +648,7 @@ source = 5
 [sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_uy744"]
 parameter_name = "Opacity"
 hint = 1
-max = 0.3
+max = 1.3
 default_value_enabled = true
 default_value = 0.5
 
@@ -643,7 +660,7 @@ texture_repeat = 1
 source = 5
 
 [sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_1rnw3"]
-default_input_values = [0, 0.03, 1, 1.0, 2, 1.0]
+default_input_values = [0, 0.3, 1, 0.0, 2, 1.0]
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_1llfs"]
 constant = 5.0
@@ -677,7 +694,7 @@ code = "shader_type canvas_item;
 render_mode blend_mix;
 
 uniform sampler2D Noise : repeat_enable;
-uniform float Opacity : hint_range(0, 0.30000001192093) = 0.5;
+uniform float Opacity : hint_range(0, 1.29999995231628) = 0.5;
 uniform sampler2D Texture2DParameter : repeat_enable;
 
 
@@ -721,8 +738,8 @@ void fragment() {
 
 
 // Mix:37
-	float n_in37p1 = 1.00000;
-	float n_out37p0 = mix(n_out36p0.x, n_in37p1, n_out34p0);
+	float n_in37p0 = 0.30000;
+	float n_out37p0 = mix(n_in37p0, n_out36p0.x, n_out34p0);
 
 
 	vec4 n_out29p0;
@@ -748,7 +765,7 @@ nodes/fragment/29/position = Vector2(-2157.62, 1713.6)
 nodes/fragment/34/node = SubResource("VisualShaderNodeFloatParameter_uy744")
 nodes/fragment/34/position = Vector2(-1460, 2240)
 nodes/fragment/35/node = SubResource("VisualShaderNodeTexture2DParameter_rxrqi")
-nodes/fragment/35/position = Vector2(-1837.62, 2173.6)
+nodes/fragment/35/position = Vector2(-1940, 2220)
 nodes/fragment/36/node = SubResource("VisualShaderNodeTexture_tysav")
 nodes/fragment/36/position = Vector2(-1577.62, 1953.6)
 nodes/fragment/37/node = SubResource("VisualShaderNodeMix_1rnw3")
@@ -769,22 +786,28 @@ nodes/fragment/49/node = SubResource("VisualShaderNodeStep_lrevg")
 nodes/fragment/49/position = Vector2(-1000, 1860)
 nodes/fragment/50/node = SubResource("VisualShaderNodeTexture2DParameter_aowm5")
 nodes/fragment/50/position = Vector2(-2700, 1580)
-nodes/fragment/connections = PackedInt32Array(35, 0, 36, 2, 37, 0, 49, 0, 45, 0, 46, 0, 46, 0, 47, 0, 42, 0, 43, 1, 47, 0, 43, 2, 29, 0, 49, 1, 49, 0, 0, 1, 43, 0, 36, 0, 44, 0, 43, 0, 34, 0, 37, 2, 36, 0, 37, 0, 50, 0, 29, 2)
+nodes/fragment/connections = PackedInt32Array(35, 0, 36, 2, 37, 0, 49, 0, 45, 0, 46, 0, 46, 0, 47, 0, 42, 0, 43, 1, 47, 0, 43, 2, 29, 0, 49, 1, 49, 0, 0, 1, 43, 0, 36, 0, 44, 0, 43, 0, 34, 0, 37, 2, 50, 0, 29, 2, 36, 0, 37, 1)
 
 [sub_resource type="Gradient" id="Gradient_st0ga"]
-offsets = PackedFloat32Array(0.18123, 1)
+offsets = PackedFloat32Array(0.473684, 1)
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_jro2l"]
 width = 1280
 height = 720
-generate_mipmaps = false
+seamless = true
 normalize = false
 color_ramp = SubResource("Gradient_st0ga")
 noise = ExtResource("2_rp5e3")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7tgd0"]
 shader = SubResource("VisualShader_vokeb")
-shader_parameter/Opacity = 0.3
+shader_parameter/Opacity = 0.0
+shader_parameter/Noise = ExtResource("1_2l1ih")
+shader_parameter/Texture2DParameter = SubResource("NoiseTexture2D_jro2l")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_augab"]
+shader = SubResource("VisualShader_vokeb")
+shader_parameter/Opacity = 0.0
 shader_parameter/Noise = ExtResource("1_2l1ih")
 shader_parameter/Texture2DParameter = SubResource("NoiseTexture2D_jro2l")
 
@@ -1246,7 +1269,7 @@ nodes/fragment/connections = PackedInt32Array(4, 0, 6, 0, 6, 0, 7, 0, 23, 0, 25,
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ta2vq"]
 shader = SubResource("VisualShader_0jkik")
-shader_parameter/R = 0.11
+shader_parameter/R = -0.065
 shader_parameter/Size = 0.7
 shader_parameter/flash_opacity = 0.5
 
@@ -1254,7 +1277,7 @@ shader_parameter/flash_opacity = 0.5
 shader = SubResource("VisualShader_0jkik")
 shader_parameter/R = 0.02
 shader_parameter/Size = 0.35
-shader_parameter/flash_opacity = 0.5
+shader_parameter/flash_opacity = 0.0
 
 [sub_resource type="GDScript" id="GDScript_1c22g"]
 script/source = "extends Node
@@ -1393,6 +1416,22 @@ color = Color(0.0313726, 0.0941176, 0.0941176, 1)
 
 [node name="Photo_effect_dots" type="ColorRect" parent="Photo_tools"]
 material = SubResource("ShaderMaterial_7tgd0")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -960.0
+offset_top = -544.0
+offset_right = 960.0
+offset_bottom = 536.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.784314, 0.709804, 0.513726, 1)
+
+[node name="Photo_effect_dots_scanner" type="ColorRect" parent="Photo_tools"]
+material = SubResource("ShaderMaterial_augab")
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
