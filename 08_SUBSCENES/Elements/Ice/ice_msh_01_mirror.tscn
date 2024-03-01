@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://bneebc6fpaysa"]
+[gd_scene load_steps=10 format=3 uid="uid://bpf4quqap67es"]
 
-[ext_resource type="PackedScene" uid="uid://duffwm80yuqso" path="res://08_SUBSCENES/Elements/Ice/Ice_msh_01.blend" id="1_x8j7y"]
-[ext_resource type="Material" uid="uid://bxf2r8qu2qvay" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_rock.tres" id="2_bx2rb"]
-[ext_resource type="Material" uid="uid://pvr0u5gwh5ek" path="res://05_SHADER_TEST/Subscene_materials/element_subscene_x_ray.tres" id="3_tfjyf"]
+[ext_resource type="PackedScene" uid="uid://duffwm80yuqso" path="res://08_SUBSCENES/Elements/Ice/Ice_msh_01.blend" id="1_vb7pt"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Grid_scene/Mirror_elements.gd" id="2_5qvk5"]
+[ext_resource type="Material" uid="uid://bxf2r8qu2qvay" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_rock.tres" id="2_qj7jd"]
+[ext_resource type="Material" uid="uid://pvr0u5gwh5ek" path="res://05_SHADER_TEST/Subscene_materials/element_subscene_x_ray.tres" id="3_qwqrp"]
 
 [sub_resource type="GDScript" id="GDScript_exrbt"]
 script/source = "extends Node
@@ -64,14 +65,19 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_vr7ex")
 
-[node name="Ice_msh_01" instance=ExtResource("1_x8j7y")]
+[node name="Ice_msh_01_mirror_element" instance=ExtResource("1_vb7pt")]
 
-[node name="Visibility" type="Node" parent="." index="0"]
+[node name="Mirror_Element" type="Node" parent="." index="0" node_paths=PackedStringArray("elements_mesh", "element_collision")]
+script = ExtResource("2_5qvk5")
+elements_mesh = [NodePath("../Ice_msh_01")]
+element_collision = [NodePath("../Ice_msh_01/StaticBody3D/CollisionShape3D")]
+
+[node name="Visibility" type="Node" parent="." index="1"]
 script = SubResource("GDScript_exrbt")
 
-[node name="Ice_msh_01" parent="." index="1"]
+[node name="Ice_msh_01" parent="." index="2"]
 layers = 4
-surface_material_override/0 = ExtResource("2_bx2rb")
+surface_material_override/0 = ExtResource("2_qj7jd")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Ice_msh_01" index="0"]
 collision_layer = 2
@@ -81,18 +87,9 @@ input_ray_pickable = false
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ice_msh_01/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_lyai7")
 
-[node name="VisibleOnScreenNotifier3D" type="VisibleOnScreenNotifier3D" parent="." index="2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.522598, 0.731833, 0)
-visible = false
-layers = 6
-aabb = AABB(-4.61388, -3.2937, -2.63732, 8.65355, 6.5874, 5.27463)
-
 [node name="Ice_msh_X_ray" type="MeshInstance3D" parent="." index="3"]
 transform = Transform3D(1.00123, 0, 0, 0, 1.00123, 0, 0, 0, 1.00123, 0, 0, 0)
 layers = 4096
 mesh = SubResource("ArrayMesh_rb20e")
 skeleton = NodePath("")
-surface_material_override/0 = ExtResource("3_tfjyf")
-
-[connection signal="screen_entered" from="VisibleOnScreenNotifier3D" to="Visibility" method="_on_visible_on_screen_notifier_3d_screen_entered"]
-[connection signal="screen_exited" from="VisibleOnScreenNotifier3D" to="Visibility" method="_on_visible_on_screen_notifier_3d_screen_exited"]
+surface_material_override/0 = ExtResource("3_qwqrp")

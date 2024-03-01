@@ -39,7 +39,7 @@ func set_shader_value(value):
 	
 	render_scanner_material.set_shader_parameter("Opacity",value)
 	
-	var clamp_backdrop = clampf(value,0.0,0.8)
+	var clamp_backdrop = clampf(value,0.0,0.85)
 	backdrop_focus_material.set_shader_parameter("Opacity",clamp_backdrop)
 	var clamp_scanner_noise = clampf(value,0.0,0.525)
 	render_scanner_noise_material.set_shader_parameter("Opacity",clamp_scanner_noise )

@@ -8,11 +8,12 @@ script/source = "extends Node
 @onready var root = $\"..\"
 
 func _ready():
+	
 	_global_datas._click_mirror_switch.connect(_delete_vortex)
 	
 func _delete_vortex(condition : bool):
 	
-	if !condition:
+	if condition:
 		root.queue_free()	
 "
 
@@ -26,9 +27,8 @@ signal in_zone_signal(condition : bool)
 func _on_mirror_prefabs_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
 	if area.get_node_or_null(\"Player_photoActive\"):
 		in_zone = true
-		print(area)
 		in_zone_signal.emit(true)
-		
+
 func _on_mirror_prefabs_area_shape_exited(area_rid, area, area_shape_index, local_shape_index):
 	if in_zone:
 		in_zone = false
@@ -163,21 +163,21 @@ script = SubResource("GDScript_tujf2")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.408552, 0, 0, 0)
-layers = 4100
+layers = 524288
 mesh = SubResource("SphereMesh_ic6q1")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("3_cb240")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="MeshInstance3D"]
 transform = Transform3D(4.21183, 0, 0, 0, 4.21183, 0, 0, 0, 4.21183, 0, 0, 0)
-layers = 4100
+layers = 524288
 mesh = SubResource("QuadMesh_vc1pk")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("ShaderMaterial_qy72l")
 
 [node name="MeshInstance3D3" type="MeshInstance3D" parent="MeshInstance3D"]
 transform = Transform3D(5.3996, 0, 0, 0, 5.3996, 0, 0, 0, 5.3996, 0, 0, 0)
-layers = 4100
+layers = 524288
 mesh = SubResource("QuadMesh_l2doe")
 surface_material_override/0 = SubResource("ShaderMaterial_5kimp")
 
