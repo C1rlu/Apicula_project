@@ -1,14 +1,7 @@
 extends Node
-
-
-
-@onready var cam_raycast = $Viewport/CAM_RAYCAST
 @onready var load_scene = $LoadScene
-@onready var mouse_raycast = $MOUSE_RAYCAST
-
 var _load : bool = false
 var constant_string
-
 
 func _ready():
 	
@@ -18,8 +11,7 @@ func _ready():
 	
 	_global_datas._load_mirror_subscene.connect(_loadSubscene_mirror)
 	
-	cam_raycast.current = false
-	mouse_raycast.set_collision_layer(0)
+
 	
 
 
@@ -67,14 +59,8 @@ func active_subscene():
 
 	_global_datas.Player_InSubScene = true
 	_global_datas._start_ini_subscene.emit()
-
-
-	cam_raycast.current = true
-	mouse_raycast.set_collision_layer(4) 
 func disable_subscene():
 	_global_datas.Player_InSubScene = false
-	cam_raycast.current = false
-	mouse_raycast.set_collision_layer(0) 
 
 func instance_loaded_scene():
 	

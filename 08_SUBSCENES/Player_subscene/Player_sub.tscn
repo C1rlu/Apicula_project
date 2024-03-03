@@ -1,11 +1,14 @@
-[gd_scene load_steps=79 format=3 uid="uid://g7u8o55jrnyy"]
+[gd_scene load_steps=85 format=3 uid="uid://g7u8o55jrnyy"]
 
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="1_n1vw4"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Player_sub_behaviour.gd" id="1_o2v73"]
 [ext_resource type="PackedScene" uid="uid://d32pm6ao6u7gq" path="res://08_SUBSCENES/POD/pod_prefabs.tscn" id="2_5t88l"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Flash_inputs.gd" id="2_skl68"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Input_Instance_teleporter.gd" id="2_y2ppl"]
 [ext_resource type="ArrayMesh" uid="uid://cm4cl6n84qj86" path="res://07_VFX/Boat_smoke/smoke_msh.obj" id="4_6vpi7"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Input_teleport.gd" id="4_bymul"]
 [ext_resource type="PackedScene" uid="uid://bbqugqn5rlg3o" path="res://08_SUBSCENES/Player_subscene/Foreuse.tscn" id="4_djlha"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Teleporter/Teleporter_detection.gd" id="4_lfyio"]
 [ext_resource type="Material" uid="uid://cdnmf431kgh7" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat_far.tres" id="6_ixu0h"]
 [ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_elements_mat.tres" id="8_wvhjt"]
 
@@ -87,44 +90,6 @@ func set_shader_value(value):
 	omni_light_3d.omni_range = value
 
 
-"
-
-[sub_resource type="GDScript" id="GDScript_l3a1b"]
-script/source = "extends Node
-
-@onready var player_sub = $\"..\"
-
-@export var _c_active_teleport : bool = false
-
-
-func _ready():
-	_global_datas._teleport_position.connect(_teleport)
-
-
-func _teleport(position : Vector3):
-	player_sub.linear_velocity = Vector3.ZERO
-	player_sub.transform.origin = position
-	
-
-func _input(event: InputEvent):
-
-
-	if !_c_active_teleport:
-		return
-		
-	if !_global_datas.Player_InSubScene:
-		return
-		
-	pass
-	#if event.is_action_released(\"Click\"):
-		#_active_teleport()	
-
-	
-
-func _active_teleport():
-	_global_datas.get_raycastPosition.emit()
-	var target = _global_datas.mouseRaycastPosition
-	_teleport(target)
 "
 
 [sub_resource type="GDScript" id="GDScript_mbf75"]
@@ -381,11 +346,8 @@ shader_parameter/Lighter = 1.4
 
 [sub_resource type="BoxMesh" id="BoxMesh_8junt"]
 
-[sub_resource type="SphereMesh" id="SphereMesh_gj0qo"]
-material = ExtResource("8_wvhjt")
-
-[sub_resource type="TorusMesh" id="TorusMesh_ljaqx"]
-inner_radius = 1.472
+[sub_resource type="TorusMesh" id="TorusMesh_507c3"]
+inner_radius = 2.287
 outer_radius = 2.545
 rings = 32
 ring_segments = 16
@@ -493,6 +455,15 @@ nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0, 3, 0, 4, 1, 4, 0, 6, 1
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8eybx"]
 render_priority = 0
 shader = SubResource("VisualShader_clku3")
+
+[sub_resource type="TorusMesh" id="TorusMesh_ljaqx"]
+inner_radius = 3.922
+outer_radius = 2.545
+rings = 32
+ring_segments = 16
+
+[sub_resource type="SphereMesh" id="SphereMesh_gj0qo"]
+material = ExtResource("8_wvhjt")
 
 [sub_resource type="BoxMesh" id="BoxMesh_3nn6t"]
 
@@ -945,6 +916,27 @@ turbulence_noise_speed_random = 0.0
 turbulence_influence_min = 0.0
 turbulence_influence_max = 0.0
 
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_0ye1k"]
+emission_shape = 2
+emission_sphere_radius = 0.25
+direction = Vector3(0, 0, 0)
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+radial_accel_min = -0.5
+scale_min = 0.01
+scale_max = 0.05
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_inbo0"]
+shading_mode = 0
+albedo_color = Color(0.52549, 0.52549, 0.52549, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_6ufqt"]
+material = SubResource("StandardMaterial3D_inbo0")
+radius = 0.25
+height = 0.5
+radial_segments = 8
+rings = 8
+
 [node name="Player_Sub" type="RigidBody3D"]
 collision_layer = 2
 collision_mask = 2
@@ -969,14 +961,28 @@ script = SubResource("GDScript_lbkea")
 [node name="Timer" type="Timer" parent="Ini_subscene"]
 one_shot = true
 
+[node name="TELEPORTER" type="Node" parent="."]
+
+[node name="Input_Instance_teleporter" type="Node" parent="TELEPORTER"]
+script = ExtResource("2_y2ppl")
+
+[node name="Closet_teleporter" type="Node" parent="TELEPORTER"]
+script = ExtResource("4_lfyio")
+
+[node name="Timer" type="Timer" parent="TELEPORTER/Closet_teleporter"]
+wait_time = 0.5
+
+[node name="Timer_Alarm" type="Timer" parent="TELEPORTER/Closet_teleporter"]
+wait_time = 0.25
+
+[node name="Input_teleport" type="Node" parent="TELEPORTER"]
+script = ExtResource("4_bymul")
+
 [node name="Dash" type="Node" parent="."]
 script = SubResource("GDScript_0rnti")
 
 [node name="Photo_Flash" type="Node" parent="."]
 script = SubResource("GDScript_8qwgp")
-
-[node name="Teleport" type="Node" parent="."]
-script = SubResource("GDScript_l3a1b")
 
 [node name="Flash_inputs" type="Node" parent="."]
 script = ExtResource("2_skl68")
@@ -1021,17 +1027,26 @@ transform = Transform3D(0.031873, 0, 0, 0, -1.39321e-09, -0.031873, 0, 0.031873,
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00877953, -0.0123595, -0.0143354)
 
 [node name="01" type="MeshInstance3D" parent="Render_mesh/Sonar"]
+transform = Transform3D(0.0418692, -6.95419e-17, 1.55431e-14, 1.55431e-14, -1.71769e-10, -0.0418692, 7.40951e-16, 0.00392965, -1.83016e-09, 0.0592484, 0.40145, -0.088995)
+visible = false
+layers = 4
+mesh = SubResource("TorusMesh_507c3")
+skeleton = NodePath("../../../..")
+surface_material_override/0 = SubResource("ShaderMaterial_8eybx")
+
+[node name="02" type="MeshInstance3D" parent="Render_mesh/Sonar"]
+transform = Transform3D(0.0132068, -2.19356e-17, 5.32907e-15, 5.32907e-15, -5.41813e-11, -0.0132068, 2.33718e-16, 0.00123953, -5.77286e-10, 0.0592484, 0.40145, -0.088995)
+visible = false
+layers = 4
+mesh = SubResource("TorusMesh_ljaqx")
+skeleton = NodePath("../../../..")
+surface_material_override/0 = SubResource("ShaderMaterial_8eybx")
+
+[node name="lampe" type="MeshInstance3D" parent="Render_mesh/Sonar"]
 transform = Transform3D(-0.0379565, -3.31825e-09, 0, 3.31825e-09, -0.0379565, 0, 0, 0, 0.0379565, 0.0587758, 0.401025, -0.0883384)
 layers = 4
 mesh = SubResource("SphereMesh_gj0qo")
 skeleton = NodePath("../MeshInstance3D")
-
-[node name="On_OverMouse_3D_SHAPE3" type="MeshInstance3D" parent="Render_mesh/Sonar/01"]
-transform = Transform3D(-0.299964, 3.90637e-16, -2.62237e-08, -2.62237e-08, 1.23061e-09, 0.299964, 5.3084e-15, 0.0281532, -1.31118e-08, -0.0124503, -0.0111856, -0.0172977)
-layers = 4
-mesh = SubResource("TorusMesh_ljaqx")
-skeleton = NodePath("../../../../..")
-surface_material_override/0 = SubResource("ShaderMaterial_8eybx")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Render_mesh/Sonar"]
 transform = Transform3D(0.00832142, 0, 0, 0, 0.224506, 0, 0, 0, -0.0044408, 0.0590617, 0.266138, -0.0899213)
@@ -1121,6 +1136,23 @@ fract_delta = false
 process_material = SubResource("ParticleProcessMaterial_snyp2")
 draw_pass_1 = ExtResource("4_6vpi7")
 
+[node name="VFX_SPHERE_MIRROR" type="GPUParticles3D" parent="."]
+transform = Transform3D(1.429, 0, 0, 0, 1.429, 0, 0, 0, 1.429, -0.0042951, 0.15829, -0.111169)
+layers = 32768
+cast_shadow = 0
+emitting = false
+amount = 100
+lifetime = 0.8
+fixed_fps = 20
+interpolate = false
+fract_delta = false
+process_material = SubResource("ParticleProcessMaterial_0ye1k")
+draw_pass_1 = SubResource("SphereMesh_6ufqt")
+
 [connection signal="timeout" from="Ini_subscene/Timer" to="Ini_subscene" method="_on_timer_timeout"]
+[connection signal="timeout" from="TELEPORTER/Closet_teleporter/Timer" to="TELEPORTER/Closet_teleporter" method="_on_timer_timeout"]
+[connection signal="timeout" from="TELEPORTER/Closet_teleporter/Timer_Alarm" to="TELEPORTER/Closet_teleporter" method="_on_timer_alarm_timeout"]
 [connection signal="timeout" from="Flash_inputs/Timer" to="Dash" method="_on_timer_timeout"]
 [connection signal="timeout" from="Flash_inputs/Timer" to="Flash_inputs" method="_on_timer_timeout"]
+[connection signal="area_shape_entered" from="ZoneCollide" to="TELEPORTER/Closet_teleporter" method="_on_zone_collide_area_shape_entered"]
+[connection signal="area_shape_exited" from="ZoneCollide" to="TELEPORTER/Closet_teleporter" method="_on_zone_collide_area_shape_exited"]
