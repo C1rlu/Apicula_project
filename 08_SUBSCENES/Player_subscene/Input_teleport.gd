@@ -32,7 +32,6 @@ func _click_teleporter(condition : bool):
 		t.connect("finished",done)
 
 func done():
-	print(_global_datas._active_teleporter_node)
 	_global_datas._teleport_at_position.emit()
 	vfx_sphere_mirror.emitting = false
 	

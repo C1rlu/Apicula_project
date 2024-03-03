@@ -8,14 +8,9 @@ func _ready():
 	_global_datas._load_subscene.connect(_loadscene)
 	_global_datas._go_Subscene.connect(active_subscene)
 	_global_datas._go_Mainscene.connect(disable_subscene)
-	
 	_global_datas._load_mirror_subscene.connect(_loadSubscene_mirror)
 	
-
 	
-
-
-
 func _loadSubscene_mirror(scene_name : String):
 	#REMOVE PREVIOUS SCENE
 	for child in load_scene.get_children():

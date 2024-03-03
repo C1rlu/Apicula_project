@@ -923,7 +923,7 @@ direction = Vector3(0, 0, 0)
 spread = 180.0
 gravity = Vector3(0, 0, 0)
 radial_accel_min = -0.5
-scale_min = 0.01
+scale_min = 0.03
 scale_max = 0.05
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_inbo0"]
@@ -968,9 +968,6 @@ script = ExtResource("2_y2ppl")
 
 [node name="Closet_teleporter" type="Node" parent="TELEPORTER"]
 script = ExtResource("4_lfyio")
-
-[node name="Timer" type="Timer" parent="TELEPORTER/Closet_teleporter"]
-wait_time = 0.5
 
 [node name="Timer_Alarm" type="Timer" parent="TELEPORTER/Closet_teleporter"]
 wait_time = 0.25
@@ -1142,15 +1139,11 @@ layers = 32768
 cast_shadow = 0
 emitting = false
 amount = 100
-lifetime = 0.8
-fixed_fps = 20
-interpolate = false
-fract_delta = false
+speed_scale = 0.5
 process_material = SubResource("ParticleProcessMaterial_0ye1k")
 draw_pass_1 = SubResource("SphereMesh_6ufqt")
 
 [connection signal="timeout" from="Ini_subscene/Timer" to="Ini_subscene" method="_on_timer_timeout"]
-[connection signal="timeout" from="TELEPORTER/Closet_teleporter/Timer" to="TELEPORTER/Closet_teleporter" method="_on_timer_timeout"]
 [connection signal="timeout" from="TELEPORTER/Closet_teleporter/Timer_Alarm" to="TELEPORTER/Closet_teleporter" method="_on_timer_alarm_timeout"]
 [connection signal="timeout" from="Flash_inputs/Timer" to="Dash" method="_on_timer_timeout"]
 [connection signal="timeout" from="Flash_inputs/Timer" to="Flash_inputs" method="_on_timer_timeout"]
