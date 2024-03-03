@@ -46,7 +46,7 @@ func _back_call():
 [sub_resource type="GDScript" id="GDScript_1a2yk"]
 script/source = "extends Node
 
-
+var is_open : bool = false
 
 func _input(event):
 	
@@ -60,7 +60,8 @@ func _input(event):
 		return
 	
 	if event.is_action_pressed(\"Open_Inventory\"):
-		_global_datas.Player_In_Inventory =!_global_datas.Player_In_Inventory
+	
+		_global_datas.Player_In_Inventory = !_global_datas.Player_In_Inventory
 		_global_datas.open_inventory.emit(_global_datas.Player_In_Inventory)	
 		
 "
@@ -72,7 +73,7 @@ script/source = "extends Node
 @onready var material : Material = board_ui.get_material()
 
 var fade_in
-var active_value
+var fade_value: float
 func _ready():
 	_global_datas.open_inventory.connect(open_inventory)
 	material.set_shader_parameter(\"Opacity\",0.0)
@@ -95,7 +96,7 @@ func open_inventory(condition : bool):
 			fade_in.kill()
 		
 		fade_in = create_tween()
-		fade_in.tween_method(set_shader_value,active_value,0.0,0.5)
+		fade_in.tween_method(set_shader_value,fade_value,0.0,0.5)
 		fade_in.connect(\"finished\",_disable_viewport)
 
 
@@ -105,9 +106,8 @@ func end_fadeIn():
 	_global_datas.show_3D_MainScene.emit(false)	
 
 func set_shader_value(value):
-	
 	material.set_shader_parameter(\"Opacity\",value)
-	active_value = value
+	fade_value = value
 "
 
 [sub_resource type="GDScript" id="GDScript_00hwt"]

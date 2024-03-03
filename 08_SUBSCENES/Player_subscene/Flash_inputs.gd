@@ -14,11 +14,7 @@ func _input(event):
 	if _global_datas.in_scanner_mode:
 		return
 		
-	if !timer.is_stopped():
-		return
-		
 	if event.is_action_pressed("Click"):
-		timer.start()
 		_global_datas._take_photo.emit()
 		_global_datas._photo_flash_noPhoto.emit()
 		check_area()

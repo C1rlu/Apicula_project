@@ -1,21 +1,39 @@
 [gd_scene load_steps=26 format=3 uid="uid://dym7sjmq33hdc"]
 
-[ext_resource type="Script" path="res://08_SUBSCENES/Elements/Mirror_zone/Mirror.gd" id="1_xu1w5"]
 [ext_resource type="Material" uid="uid://goq7y1lqdpxa" path="res://05_SHADER_TEST/Subscene_materials/element_subscene_x_ray_VFX_LIGHT.tres" id="3_cb240"]
+
+[sub_resource type="GDScript" id="GDScript_vsb1f"]
+script/source = "extends Node
+
+@onready var root = $\"..\"
+@onready var mesh_instance_3d = $\"../MeshInstance3D\"
+
+func _ready():
+
+	_global_datas.Mirror_vortex_Node = root
+	
+func active_vortext():
+	mesh_instance_3d.visible = true	
+
+"
 
 [sub_resource type="GDScript" id="GDScript_tujf2"]
 script/source = "extends Node
 
 var in_zone : bool = false
 
+signal in_zone_signal(condition : bool)
+
 func _on_mirror_prefabs_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
 	if area.get_node_or_null(\"Player_photoActive\"):
 		in_zone = true
+		print(area)
+		in_zone_signal.emit(true)
 		
 func _on_mirror_prefabs_area_shape_exited(area_rid, area, area_shape_index, local_shape_index):
 	if in_zone:
 		in_zone = false
-
+		in_zone_signal.emit(false)
 "
 
 [sub_resource type="SphereMesh" id="SphereMesh_ic6q1"]
@@ -139,28 +157,28 @@ collision_layer = 4
 collision_mask = 4
 
 [node name="Mirror" type="Node" parent="."]
-script = ExtResource("1_xu1w5")
+script = SubResource("GDScript_vsb1f")
 
 [node name="PLayer_InZone" type="Node" parent="."]
 script = SubResource("GDScript_tujf2")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.408552, 0, 0, 0)
-layers = 524288
+layers = 32768
 mesh = SubResource("SphereMesh_ic6q1")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("3_cb240")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="MeshInstance3D"]
 transform = Transform3D(4.21183, 0, 0, 0, 4.21183, 0, 0, 0, 4.21183, 0, 0, 0)
-layers = 524288
+layers = 32768
 mesh = SubResource("QuadMesh_vc1pk")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("ShaderMaterial_qy72l")
 
 [node name="MeshInstance3D3" type="MeshInstance3D" parent="MeshInstance3D"]
 transform = Transform3D(5.3996, 0, 0, 0, 5.3996, 0, 0, 0, 5.3996, 0, 0, 0)
-layers = 524288
+layers = 32768
 mesh = SubResource("QuadMesh_l2doe")
 surface_material_override/0 = SubResource("ShaderMaterial_5kimp")
 

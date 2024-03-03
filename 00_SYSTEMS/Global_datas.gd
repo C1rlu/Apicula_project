@@ -15,7 +15,7 @@ var Player_InDialogue : bool
 var Player_InDialogue_zone : bool
 var Coins_aspirator_array : Array
 var Element_sub_zone_array : Array
-
+var Mirror_vortex_Node : Node3D
 # menu signals
 
 signal _start_ini_subscene
