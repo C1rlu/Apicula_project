@@ -6,4 +6,4 @@ func _ready():
 	
 func _hide_decor(condition : bool):
 	decor.visible = condition	
-	print("SHOW MAIN DECOR__", condition)
+

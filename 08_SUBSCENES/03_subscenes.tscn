@@ -131,7 +131,7 @@ func _on_pulse_sphere_area_shape_entered(area_rid, area, area_shape_index, local
 		if player_is_here:
 			_global_datas._go_Mainscene.emit()
 			_global_datas._backFrom_subscene.emit()
-			_global_datas.Player_InMirrorScene = false	
+			_global_datas.Player_InMirrorScene = false
 "
 
 [sub_resource type="GDScript" id="GDScript_m1p72"]
@@ -146,16 +146,19 @@ func _ready():
 	_global_datas._go_Subscene.connect(_disable)
 	_global_datas._go_Mainscene.connect(_disable)
 	_global_datas._backFrom_subscene.connect(_disable)
-	_global_datas._click_mirror_switch.connect(_switch_mirror)
+	_global_datas._mirror_switch.connect(_switch_mirror)
 		
 func _switch_mirror(condition : bool):
+	
+	
 	if _global_datas.in_scanner_mode:
 		return
 	if !_global_datas.Player_InSubScene:
 		return
+		
 	_mirror_switch(condition)
-	_global_datas.active_mirror_switch.emit(condition )
-
+	_global_datas.Player_InMirrorScene = condition
+	
 func _disable():
 	_mirror_switch(false)
 	
@@ -1188,7 +1191,6 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-611.331, 63.9091)
 flags/unshaded = true
 nodes/vertex/2/node = SubResource("VisualShaderNodeInput_ueks7")
 nodes/vertex/2/position = Vector2(-500, 400)
@@ -1234,7 +1236,7 @@ script/source = "extends Node
 var t
 var is_round = true
 func _ready():
-	_global_datas.active_mirror_switch.connect(_start_effect)
+	_global_datas._mirror_switch.connect(_start_effect)
 	#_global_datas._load_mirror_subscene.connect(start_effect_loadSubscene)
 	
 	

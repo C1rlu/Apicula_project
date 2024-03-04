@@ -15,6 +15,4 @@ func _input(event):
 		_global_datas._instance_teleporter.emit()
 			
 
-func done():
-	_global_datas._instance_teleporter.emit()
 

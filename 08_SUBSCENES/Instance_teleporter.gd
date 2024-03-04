@@ -6,7 +6,7 @@ const TELEPORTER_PREFABS = preload("res://08_SUBSCENES/Teleporter/Teleporter_pre
 
 func _ready():
 	_global_datas._instance_teleporter.connect(_instance_teleporter)
-	
+	_global_datas._backFrom_subscene.connect(reload_teleporter)
 func _instance_teleporter():
 
 	_global_datas.teleporter_amount += 1
@@ -18,6 +18,7 @@ func _instance_teleporter():
 	load_scene.add_child(instance_teleporter)
 
 
-	
+func reload_teleporter():
+	_global_datas.teleporter_amount = 0	
 	
 

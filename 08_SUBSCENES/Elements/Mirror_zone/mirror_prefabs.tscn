@@ -14,26 +14,18 @@ func _ready():
 func _remove_mirror():
 	root.queue_free()
 				
-
+	
 "
 
 [sub_resource type="GDScript" id="GDScript_tujf2"]
 script/source = "extends Node
 
-var in_zone : bool = false
-
-signal in_zone_signal(condition : bool)
 
 func _on_mirror_prefabs_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
+	
 	if area.get_node_or_null(\"Player_photoActive\"):
-		in_zone = true
-		print(area)
-		in_zone_signal.emit(true)
-		
-func _on_mirror_prefabs_area_shape_exited(area_rid, area, area_shape_index, local_shape_index):
-	if in_zone:
-		in_zone = false
-		in_zone_signal.emit(false)
+		_global_datas._mirror_switch.emit(true)
+		print(\"IN VORTEX\")
 "
 
 [sub_resource type="SphereMesh" id="SphereMesh_ic6q1"]
@@ -149,8 +141,8 @@ render_priority = 0
 shader = SubResource("VisualShader_x7rd3")
 shader_parameter/Texture = SubResource("GradientTexture2D_6kf2u")
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_we1hc"]
-radius = 0.0156075
+[sub_resource type="SphereShape3D" id="SphereShape3D_b7y4g"]
+radius = 0.227403
 
 [node name="Mirror_prefabs" type="Area3D"]
 collision_layer = 4
@@ -183,7 +175,6 @@ mesh = SubResource("QuadMesh_l2doe")
 surface_material_override/0 = SubResource("ShaderMaterial_5kimp")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-shape = SubResource("SphereShape3D_we1hc")
+shape = SubResource("SphereShape3D_b7y4g")
 
 [connection signal="area_shape_entered" from="." to="PLayer_InZone" method="_on_mirror_prefabs_area_shape_entered"]
-[connection signal="area_shape_exited" from="." to="PLayer_InZone" method="_on_mirror_prefabs_area_shape_exited"]

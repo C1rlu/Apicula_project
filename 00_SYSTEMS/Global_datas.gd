@@ -18,7 +18,6 @@ var Mirror_vortex_Node : Node3D
 
 signal _start_ini_subscene
 signal _end_ini_subscene
-signal _backFrom_subscene
 signal _open_menu(condition : bool)
 signal set_resolution(resolution : Vector2i)
 
@@ -50,6 +49,7 @@ var move_backward : String
 # scene signals
 
 signal _go_Mainscene
+signal _backFrom_subscene
 signal _active_sonar(position : Vector3)
 signal _active_progress_subscene(condition : bool)
 signal _active_go_subscene_button(condition : bool)
@@ -82,7 +82,7 @@ signal _show_object_legend(condtion : bool, text : String)
 #subsceneSignal
 signal _load_subscene(condition : bool)
 signal _go_Subscene
-signal _load_mirror_subscene(scene : String)
+
 var subbscene_playerPosition : Vector3
 signal _take_photo
 signal _instance_photo(photoData : PhotoData)
@@ -126,10 +126,7 @@ var in_scanner_mode : bool
 var clock_timer : Timer
 signal active_photo_button(condition : bool)
 signal active_scanner_button(condition : bool)
-signal active_mirror_switch(condition : bool)
-signal _click_mirror_switch(condition : bool)
-signal player_mirror_contact(condition : bool)
-
+signal _mirror_switch(condition : bool)
 
 
 var scanner_mat : Material

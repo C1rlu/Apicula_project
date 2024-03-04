@@ -7,34 +7,21 @@ func _ready():
 	
 	_global_datas._load_subscene.connect(_loadscene)
 	_global_datas._go_Subscene.connect(active_subscene)
-	_global_datas._go_Mainscene.connect(disable_subscene)
-	_global_datas._load_mirror_subscene.connect(_loadSubscene_mirror)
-	
-	
-func _loadSubscene_mirror(scene_name : String):
-	#REMOVE PREVIOUS SCENE
-	for child in load_scene.get_children():
-		child.free()	
-	
-	
-	#LOAD NEW SUBSCENE	
-	
-	constant_string =  "res://08_SUBSCENES/Grid_scene/" + scene_name + ".tscn"
-	
-	if ResourceLoader.exists(constant_string):
-		ResourceLoader.load_threaded_request(constant_string)
-	
-	_load = true
-	
+	_global_datas._backFrom_subscene.connect(disable_subscene)
+
 	
 func _loadscene(condition : bool):
 	
 	if !condition:
 			
-		#REMOVE PREVIOUS SCENE
+		#REMOVE PREVIOUS SCENE ONLY
 		for child in load_scene.get_children():
 			child.free()	
 	else :
+		#REMOVE PREVIOUS SCENE EVERYLOAD
+		for child in load_scene.get_children():
+			child.free()	
+			
 	#LOAD NEW SCENE
 		var scene_name =  _global_datas.cell_name
 		constant_string = "res://08_SUBSCENES/Grid_scene/" + scene_name + ".tscn"
@@ -54,6 +41,7 @@ func active_subscene():
 
 	_global_datas.Player_InSubScene = true
 	_global_datas._start_ini_subscene.emit()
+	
 func disable_subscene():
 	_global_datas.Player_InSubScene = false
 
@@ -62,7 +50,6 @@ func instance_loaded_scene():
 	var scene_loaded = ResourceLoader.load_threaded_get(constant_string)
 	var instance_scene = scene_loaded.instantiate()
 	$LoadScene.add_child(instance_scene)	
-	print("SCENE IS INSTANTIATE in background")	
 	_load = false
 	
 func _process(delta):

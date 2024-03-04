@@ -9,10 +9,8 @@ func _start_progress(condition : bool):
 		return
 		
 	if condition:
-		print("start progress")
 		_global_datas.Open_ui_dark_backdrop.emit(true)
 
 	else:
-		print("stop progress")
 		_global_datas.Open_ui_dark_backdrop.emit(false)
 
