@@ -37,7 +37,7 @@ func _ready():
 	_back_call_list.clear()
 	_teleporter_list.clear()
 	_active_teleporter_node = null
-	
+	_selected_tool = null
 	
 # input type
 signal using_pad(condition : bool)
@@ -92,7 +92,7 @@ signal _photo_flash_noPhoto
 signal _find_loot(type : Loot_Data)
 signal _subscene_fail
 var flash_subscene_position : Vector3
-
+var _selected_tool : tool_data 
 # SUBSCENE TELEPORTER
 signal _instance_teleporter
 signal _teleport_at_position

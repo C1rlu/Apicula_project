@@ -1,24 +1,27 @@
 extends Node
 
 @onready var vfx_sphere_mirror = $"../../VFX_SPHERE_MIRROR"
-
-
 var t
-func _input(event):
+
+@export var teleporter_data : tool_data
+
+func _ready():
+	teleporter_data.tool_active_signal.connect(play_teleporter)		
+
+func play_teleporter(condition : bool):
 	
 	if !_global_datas.Player_InSubScene:
 		return
 		
 	if _global_datas._teleporter_list.size() == 0:
 		return
-	
-	if event.is_action_released("Add_teleporter"):
-		_click_teleporter(false)		
 		
-	if event.is_action_pressed("Add_teleporter"):
+	if condition:
 		_click_teleporter(true)	
-			
+	else:
+		_click_teleporter(false)		
 
+	
 func _click_teleporter(condition : bool):
 	
 	vfx_sphere_mirror.emitting = condition

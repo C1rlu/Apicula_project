@@ -6,4 +6,4 @@ func _ready():
 	_global_datas.show_3D_BoardScene.emit(false)
 func _hide_decor(condition : bool):
 	Scene.visible = condition	
-	print("SHOW BOARD DECOR__", condition)
+

@@ -3,25 +3,25 @@ extends Node
 
 @onready var area = $"../ZoneCollide"
 @onready var timer = $Timer
+@export var flash_tool_data : tool_data
 
-func _input(event):
-
-	if _global_datas.Player_In_Inventory:
-		return 
-	if !_global_datas.Player_InSubScene:
-		return
-
+			
+func _ready():
+	flash_tool_data.tool_active_signal.connect(check_area)	
+	
+func check_area(condition : bool):
+	
 	if _global_datas.in_scanner_mode:
 		return
 		
-	if event.is_action_pressed("Click"):
-		_global_datas._take_photo.emit()
-		_global_datas._photo_flash_noPhoto.emit()
-		check_area()
-				
-
-func check_area():
-	
+	if !condition:
+		return
+	if !timer.is_stopped():
+		return	
+		
+	timer.start()
+	_global_datas._take_photo.emit()
+	_global_datas._photo_flash_noPhoto.emit()	
 	var overlap_areas_ = area.get_overlapping_areas()
 	
 	if overlap_areas_ == null:

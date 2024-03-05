@@ -22,7 +22,6 @@ func _input(event):
 func _Play_last_back_call():
 	
 	var top_call = _global_datas._back_call_list.size()
-	print(top_call)
 	_global_datas._back_call.connect(_global_datas._back_call_list[top_call-1])
 	
 
