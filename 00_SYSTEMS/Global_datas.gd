@@ -105,11 +105,9 @@ signal open_inventory(condition : bool)
 signal mouse_raycast
 var board_camera : Camera3D
 var zoom_value : float
-var OnDrag_start_position : Vector2
 var Cursor_mode : Node
 var In_Front_Node : Node2D
-var clock_time_consume : float
-var bougie_node : Node2D
+
 
 
 #update description on board

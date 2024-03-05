@@ -4,6 +4,7 @@
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="2_3srhu"]
 [ext_resource type="PackedScene" uid="uid://g7u8o55jrnyy" path="res://08_SUBSCENES/Player_subscene/Player_sub.tscn" id="2_ri8q1"]
 [ext_resource type="Script" path="res://03_CAMERA/CameraFollow_subscene.gd" id="2_tc6o2"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Tools/Switch_tools_input.gd" id="3_2mtx3"]
 [ext_resource type="Material" uid="uid://b1iqs8p4it3ni" path="res://05_SHADER_TEST/Full_screen/Subscene_screen/Scanner_subscene_dither.tres" id="3_rto3a"]
 [ext_resource type="Material" uid="uid://dbu2q4lhlk8w5" path="res://05_SHADER_TEST/Full_screen/Subscene_screen/Main_subscene_dither.tres" id="3_w42nb"]
 [ext_resource type="Material" uid="uid://b7ffjkgpmtkc6" path="res://05_SHADER_TEST/Full_screen/Subscene_screen/Scanner_x_subscene_dither.tres" id="4_bkck3"]
@@ -206,49 +207,6 @@ func _set_opacity_value( value : float):
 	material.set_shader_parameter(\"Opacity\",value)	
 
 
-"
-
-[sub_resource type="GDScript" id="GDScript_wjnt5"]
-script/source = "extends Node
-
-@export var Timer_second : float = 20.0
-@onready var go_subscene_progress = $\"../Viewport/Go_subscene_progress\"
-
-var _active = false
-
-func _ready():
-	pass
-	#_global_datas._end_ini_subscene.connect(_start_clock)
-	#_global_datas._backFrom_subscene.connect(_stop_clock)
-	
-func _process(delta):
-	
-	if !_active:
-		return
-	_update_clock(delta)
-
-func _update_clock(delta):
-
-	_global_datas.clock_time_consume -= 1 * delta
-	
-	var timeConvert = (_global_datas.clock_time_consume  / Timer_second ) 
-	go_subscene_progress.value = lerp(0.0,100.0,timeConvert)
-	
-	if _global_datas.clock_time_consume <= 0.0:
-		_global_datas._go_Mainscene.emit()
-		_global_datas._subscene_fail.emit()
-		_global_datas._backFrom_subscene.emit()	
-			
-
-	
-func _start_clock():
-	_global_datas.clock_time_consume = Timer_second
-	_active = true
-	go_subscene_progress.visible = true
-func _stop_clock():
-	_active = false
-	go_subscene_progress.value = 0.0
-	go_subscene_progress.visible = false
 "
 
 [sub_resource type="QuadMesh" id="QuadMesh_yckwt"]
@@ -1571,12 +1529,13 @@ script = SubResource("GDScript_71vlv")
 [node name="Fade_in_mirror" type="Node" parent="MIRROR_switch"]
 script = SubResource("GDScript_m1p72")
 
+[node name="TOOLS" type="Node" parent="."]
+
+[node name="Switch_tools_input" type="Node" parent="TOOLS"]
+script = ExtResource("3_2mtx3")
+
 [node name="SEE_MIRROR_FLASH" type="Node" parent="."]
 script = SubResource("GDScript_nvaxv")
-
-[node name="OXIGENE_TIMER" type="Node" parent="."]
-script = SubResource("GDScript_wjnt5")
-Timer_second = 60.0
 
 [node name="Instance_teleporter_in_world" type="Node" parent="."]
 script = ExtResource("10_h65by")
