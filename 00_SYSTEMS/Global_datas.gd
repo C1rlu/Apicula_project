@@ -67,6 +67,7 @@ signal _type_text(count : int)
 var photo_archives : Array[PhotoData] 
 var note_archives : Array[Note_Data]
 var boue_archives : Array[BoueData]
+var tools_list : Array[tool_data]
 
 signal _show_hand
 signal _hide_hand
