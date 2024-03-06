@@ -9,7 +9,8 @@ func _ready():
 	
 	
 func _teleport_player():
-	
+	if !_global_datas.Player_InMirrorScene:
+		return
 	if _global_datas._teleporter_list.size() == 0:
 		return
 		

@@ -6,11 +6,14 @@ extends Node
 var index : int
 
 func _ready():
+	
 	_global_datas.tools_list = tool_list
-	
 	index = 0
-	
 	_global_datas._selected_tool = _global_datas.tools_list[index]
+
+	update_active_tool()
+	
+	_global_datas._go_Subscene.connect(update_active_tool)
 	
 	
 func _input(event):
@@ -32,13 +35,14 @@ func select_next_tool():
 	#SELECT ACTIVE TOOL SIGNAL	
 	_global_datas._selected_tool = _global_datas.tools_list[index]
 	
+	update_active_tool()
+	#print(_global_datas._selected_tool.Tool_Name, " is selected")
+	
+
+func update_active_tool():
 	
 	#SELECT VISUAL TOOLS IN SCENE
 	for t in _global_datas.tools_list:
 		t.select_this_tool_scene_prefabs.emit(false)
 		
 	_global_datas._selected_tool.select_this_tool_scene_prefabs.emit(true)
-	
-	#print(_global_datas._selected_tool.Tool_Name, " is selected")
-	
-

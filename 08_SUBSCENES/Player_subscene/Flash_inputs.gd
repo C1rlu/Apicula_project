@@ -33,7 +33,7 @@ func check_area(condition : bool):
 		var loot_data_node = areas.get_node_or_null("Lootable")
 		#var mirror_node = areas.get_node_or_null("Mirror")
 		var mirror_destination = areas.get_node_or_null("Mirror_destination")
-		var teleporter = areas.get_node_or_null("Take_teleporter")
+		#var teleporter = areas.get_node_or_null("Take_teleporter")
 		if  photo_data_node:
 			var photo_data_rs : PhotoData = photo_data_node.get_PhotoData()
 			#_global_datas._instance_photo.emit(photo_data_rs)
@@ -64,8 +64,8 @@ func check_area(condition : bool):
 		if _global_datas.Player_InMirrorScene:
 			return
 			
-		if teleporter:
-			teleporter.remove_teleporter()
+		#if teleporter:
+			#teleporter.remove_teleporter()
 			
 func _on_timer_timeout():
 	timer.stop()
