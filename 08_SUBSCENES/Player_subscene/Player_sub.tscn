@@ -12,8 +12,8 @@
 [ext_resource type="Resource" uid="uid://d11cl4f25dgwg" path="res://08_SUBSCENES/Tools/Flash_light.tres" id="6_axu5t"]
 [ext_resource type="Material" uid="uid://cdnmf431kgh7" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat_far.tres" id="6_ixu0h"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/active_tool_scene.gd" id="8_8bfcd"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Scanne_element.gd" id="8_r5dlo"]
 [ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_elements_mat.tres" id="8_wvhjt"]
-[ext_resource type="Resource" uid="uid://cvvmdnn65eav" path="res://08_SUBSCENES/Tools/Scanner.tres" id="9_jw0dy"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_c70j3"]
 bounce = 0.8
@@ -1003,6 +1003,10 @@ script = SubResource("GDScript_mbf75")
 [node name="Timer" type="Timer" parent="Flash_inputs"]
 one_shot = true
 
+[node name="Scanne_element" type="Node" parent="."]
+script = ExtResource("8_r5dlo")
+scanner_tool = ExtResource("6_axu5t")
+
 [node name="Render_mesh" type="Node3D" parent="."]
 
 [node name="On_OverMouse_3D_SHAPE_in2" type="MeshInstance3D" parent="Render_mesh"]
@@ -1015,20 +1019,15 @@ surface_material_override/0 = SubResource("ShaderMaterial_t28it")
 
 [node name="Active_visual_tools" type="Node" parent="Render_mesh"]
 
-[node name="active_light" type="Node" parent="Render_mesh/Active_visual_tools" node_paths=PackedStringArray("list_of_object")]
-script = ExtResource("8_8bfcd")
-_tool_data = ExtResource("6_axu5t")
-list_of_object = [NodePath("../../Photographe")]
-
 [node name="active_teleporter" type="Node" parent="Render_mesh/Active_visual_tools" node_paths=PackedStringArray("list_of_object")]
 script = ExtResource("8_8bfcd")
 _tool_data = ExtResource("3_2sukr")
 list_of_object = [NodePath("../../Teleporter")]
 
-[node name="active_Scanner" type="Node" parent="Render_mesh/Active_visual_tools" node_paths=PackedStringArray("list_of_object")]
+[node name="active_light_Scanner" type="Node" parent="Render_mesh/Active_visual_tools" node_paths=PackedStringArray("list_of_object")]
 script = ExtResource("8_8bfcd")
-_tool_data = ExtResource("9_jw0dy")
-list_of_object = [NodePath("../../Scanner")]
+_tool_data = ExtResource("6_axu5t")
+list_of_object = [NodePath("../../Scanner"), NodePath("../../Sonar")]
 
 [node name="Scanner" type="MeshInstance3D" parent="Render_mesh"]
 transform = Transform3D(-1.7049e-09, -0.038187, 0, 0.0390036, -1.66921e-09, 0, 0, 0, 0.121949, 0.0349853, 0.140869, 0.0761496)

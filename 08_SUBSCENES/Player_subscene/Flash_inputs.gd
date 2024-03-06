@@ -29,20 +29,11 @@ func check_area(condition : bool):
 		
 	for areas in overlap_areas_:
 		
-		var photo_data_node = areas.get_node_or_null("Photo_data")
 		var loot_data_node = areas.get_node_or_null("Lootable")
 		#var mirror_node = areas.get_node_or_null("Mirror")
 		var mirror_destination = areas.get_node_or_null("Mirror_destination")
 		#var teleporter = areas.get_node_or_null("Take_teleporter")
-		if  photo_data_node:
-			var photo_data_rs : PhotoData = photo_data_node.get_PhotoData()
-			#_global_datas._instance_photo.emit(photo_data_rs)
-			_global_datas.selected_photoData = photo_data_rs
-			_global_datas.show_on_scanner.emit(true)
-			_global_datas._photo_flash.emit()
-			_global_datas._show_object_legend.emit(true, photo_data_rs.legend)
-			return
-			
+		
 		if  loot_data_node:
 			var lootable_data_rs : Loot_Data = loot_data_node.get_lootable()
 			_global_datas._find_loot.emit(lootable_data_rs)	
