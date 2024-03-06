@@ -8,8 +8,8 @@ var pulse = false
 func _Alarm_pulse():
 	
 	pulse = !pulse
-	$"../../Render_mesh/Teleporter/01".visible = pulse
-	$"../../Render_mesh/Teleporter/02".visible = !pulse
+	$"../../Render_mesh/Sonar/02".visible = pulse
+	$"../../Render_mesh/Sonar/01".visible = !pulse
 
 func _on_timer_alarm_timeout():
 	_Alarm_pulse()
@@ -37,6 +37,6 @@ func _on_zone_collide_area_shape_exited(area_rid, area, area_shape_index, local_
 
 	if _global_datas._teleporter_list.size() == 0:
 		timer_alarm.stop()
-		$"../../Render_mesh/Teleporter/01".visible = false
-		$"../../Render_mesh/Teleporter/02".visible = false
+		$"../../Render_mesh/Sonar/01".visible = false
+		$"../../Render_mesh/Sonar/02".visible = false
 

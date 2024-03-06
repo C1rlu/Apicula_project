@@ -93,6 +93,9 @@ signal _find_loot(type : Loot_Data)
 signal _subscene_fail
 var flash_subscene_position : Vector3
 var _selected_tool : tool_data 
+signal switching_tool(tool : tool_data)
+
+
 # SUBSCENE TELEPORTER
 signal _instance_teleporter
 signal _teleport_at_position

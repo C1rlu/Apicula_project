@@ -6,6 +6,7 @@ extends Node
 
 var photo_data_node 
 
+
 func _ready():
 	scanner_tool.tool_active_signal.connect(_scann_element)
 	
@@ -31,10 +32,5 @@ func _scann_element(condition : bool):
 			
 			photo_data_node.scanning(true)
 			
-			#_global_datas.show_on_scanner.emit(true)
-			#_global_datas._photo_flash.emit()
-			#_global_datas._show_object_legend.emit(true, photo_data_rs.legend)
 			return
-	
-			
 	

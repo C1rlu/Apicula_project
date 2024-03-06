@@ -1,4 +1,4 @@
-[gd_scene load_steps=91 format=3 uid="uid://g7u8o55jrnyy"]
+[gd_scene load_steps=93 format=3 uid="uid://g7u8o55jrnyy"]
 
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="1_n1vw4"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Player_sub_behaviour.gd" id="1_o2v73"]
@@ -14,6 +14,9 @@
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/active_tool_scene.gd" id="8_8bfcd"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Scanne_element.gd" id="8_r5dlo"]
 [ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_elements_mat.tres" id="8_wvhjt"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Active_scanner_visual_pulse.gd" id="10_ir8y2"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Tool_active_automatique.gd" id="14_m6gco"]
+[ext_resource type="Resource" uid="uid://vv3dws7dmhtd" path="res://08_SUBSCENES/Tools/Scanner.tres" id="15_vswql"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_c70j3"]
 bounce = 0.8
@@ -235,6 +238,122 @@ shader = SubResource("VisualShader_jxk1w")
 
 [sub_resource type="BoxMesh" id="BoxMesh_8vb5i"]
 
+[sub_resource type="TorusMesh" id="TorusMesh_507c3"]
+inner_radius = 2.287
+outer_radius = 2.545
+rings = 32
+ring_segments = 16
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_53ku2"]
+parameter_name = "Light_color_ui"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_cyinv"]
+constant = 0.4
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_teiut"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_1ycy5"]
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_q1plc"]
+constant = 1.073
+
+[sub_resource type="VisualShader" id="VisualShader_clku3"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+
+global uniform vec4 Light_color_ui : source_color;
+
+
+
+void fragment() {
+// ColorParameter:2
+	vec4 n_out2p0 = Light_color_ui;
+
+
+// FloatConstant:7
+	float n_out7p0 = 1.073000;
+
+
+// FloatConstant:3
+	float n_out3p0 = 0.400000;
+
+
+	float n_out4p0;
+// Expression:4
+	n_out4p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out3p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out4p0 = n_out7p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Step:6
+	float n_out6p0 = step(n_out2p0.x, n_out4p0);
+
+
+// Output:0
+	ALBEDO = vec3(n_out2p0.xyz);
+	ALPHA = n_out6p0;
+
+
+}
+"
+flags/unshaded = true
+nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_53ku2")
+nodes/fragment/2/position = Vector2(-760, -40)
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_cyinv")
+nodes/fragment/3/position = Vector2(-1380, 520)
+nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_teiut")
+nodes/fragment/4/position = Vector2(-1200, 380)
+nodes/fragment/4/size = Vector2(724.789, 654.559)
+nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/4/output_ports = "0,0,Dither_Node;"
+nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/6/node = SubResource("VisualShaderNodeStep_1ycy5")
+nodes/fragment/6/position = Vector2(-351.825, 215.819)
+nodes/fragment/7/node = SubResource("VisualShaderNodeFloatConstant_q1plc")
+nodes/fragment/7/position = Vector2(-1440, 360)
+nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0, 3, 0, 4, 1, 4, 0, 6, 1, 2, 0, 6, 0, 6, 0, 0, 1, 7, 0, 4, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8eybx"]
+render_priority = 0
+shader = SubResource("VisualShader_clku3")
+
+[sub_resource type="TorusMesh" id="TorusMesh_ljaqx"]
+inner_radius = 3.922
+outer_radius = 2.545
+rings = 32
+ring_segments = 16
+
 [sub_resource type="TorusMesh" id="TorusMesh_k0nng"]
 outer_radius = 0.702
 
@@ -353,124 +472,6 @@ shader = SubResource("VisualShader_0pt0r")
 shader_parameter/Lighter = 1.4
 
 [sub_resource type="BoxMesh" id="BoxMesh_8junt"]
-
-[sub_resource type="PrismMesh" id="PrismMesh_1di81"]
-
-[sub_resource type="TorusMesh" id="TorusMesh_507c3"]
-inner_radius = 2.287
-outer_radius = 2.545
-rings = 32
-ring_segments = 16
-
-[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_53ku2"]
-parameter_name = "Light_color_ui"
-qualifier = 1
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_cyinv"]
-constant = 0.4
-
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_teiut"]
-size = Vector2(724.789, 654.559)
-expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_1ycy5"]
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_q1plc"]
-constant = 1.073
-
-[sub_resource type="VisualShader" id="VisualShader_clku3"]
-code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
-
-global uniform vec4 Light_color_ui : source_color;
-
-
-
-void fragment() {
-// ColorParameter:2
-	vec4 n_out2p0 = Light_color_ui;
-
-
-// FloatConstant:7
-	float n_out7p0 = 1.073000;
-
-
-// FloatConstant:3
-	float n_out3p0 = 0.400000;
-
-
-	float n_out4p0;
-// Expression:4
-	n_out4p0 = 0.0;
-	{
-		const float DITHER_THRESHOLDS[16] ={
-				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-			};
-			
-		vec2 uv = FRAGCOORD.xy * n_out3p0;
-		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-		n_out4p0 = n_out7p0 - DITHER_THRESHOLDS[index];
-	}
-
-
-// Step:6
-	float n_out6p0 = step(n_out2p0.x, n_out4p0);
-
-
-// Output:0
-	ALBEDO = vec3(n_out2p0.xyz);
-	ALPHA = n_out6p0;
-
-
-}
-"
-flags/unshaded = true
-nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_53ku2")
-nodes/fragment/2/position = Vector2(-760, -40)
-nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_cyinv")
-nodes/fragment/3/position = Vector2(-1380, 520)
-nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_teiut")
-nodes/fragment/4/position = Vector2(-1200, 380)
-nodes/fragment/4/size = Vector2(724.789, 654.559)
-nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
-nodes/fragment/4/output_ports = "0,0,Dither_Node;"
-nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/6/node = SubResource("VisualShaderNodeStep_1ycy5")
-nodes/fragment/6/position = Vector2(-351.825, 215.819)
-nodes/fragment/7/node = SubResource("VisualShaderNodeFloatConstant_q1plc")
-nodes/fragment/7/position = Vector2(-1440, 360)
-nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0, 3, 0, 4, 1, 4, 0, 6, 1, 2, 0, 6, 0, 6, 0, 0, 1, 7, 0, 4, 0)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8eybx"]
-render_priority = 0
-shader = SubResource("VisualShader_clku3")
-
-[sub_resource type="TorusMesh" id="TorusMesh_ljaqx"]
-inner_radius = 3.922
-outer_radius = 2.545
-rings = 32
-ring_segments = 16
 
 [sub_resource type="SphereMesh" id="SphereMesh_gj0qo"]
 material = ExtResource("8_wvhjt")
@@ -1005,7 +1006,14 @@ one_shot = true
 
 [node name="Scanne_element" type="Node" parent="."]
 script = ExtResource("8_r5dlo")
-scanner_tool = ExtResource("6_axu5t")
+scanner_tool = ExtResource("15_vswql")
+
+[node name="Active_scanner_visual_pulse" type="Node" parent="Scanne_element"]
+script = ExtResource("10_ir8y2")
+scanner_tool_data = ExtResource("15_vswql")
+
+[node name="Timer" type="Timer" parent="Scanne_element/Active_scanner_visual_pulse"]
+wait_time = 0.25
 
 [node name="Render_mesh" type="Node3D" parent="."]
 
@@ -1019,15 +1027,15 @@ surface_material_override/0 = SubResource("ShaderMaterial_t28it")
 
 [node name="Active_visual_tools" type="Node" parent="Render_mesh"]
 
-[node name="active_teleporter" type="Node" parent="Render_mesh/Active_visual_tools" node_paths=PackedStringArray("list_of_object")]
-script = ExtResource("8_8bfcd")
-_tool_data = ExtResource("3_2sukr")
-list_of_object = [NodePath("../../Teleporter")]
-
-[node name="active_light_Scanner" type="Node" parent="Render_mesh/Active_visual_tools" node_paths=PackedStringArray("list_of_object")]
+[node name="active_light" type="Node" parent="Render_mesh/Active_visual_tools" node_paths=PackedStringArray("list_of_object")]
 script = ExtResource("8_8bfcd")
 _tool_data = ExtResource("6_axu5t")
-list_of_object = [NodePath("../../Scanner"), NodePath("../../Sonar")]
+list_of_object = [NodePath("../../Photographe")]
+
+[node name="active_scanner" type="Node" parent="Render_mesh/Active_visual_tools" node_paths=PackedStringArray("list_of_object")]
+script = ExtResource("8_8bfcd")
+_tool_data = ExtResource("15_vswql")
+list_of_object = [NodePath("../../Scanner/01"), NodePath("../../Scanner/02")]
 
 [node name="Scanner" type="MeshInstance3D" parent="Render_mesh"]
 transform = Transform3D(-1.7049e-09, -0.038187, 0, 0.0390036, -1.66921e-09, 0, 0, 0, 0.121949, 0.0349853, 0.140869, 0.0761496)
@@ -1036,6 +1044,22 @@ mesh = SubResource("BoxMesh_8vb5i")
 skeleton = NodePath("../../Player_sub_collider")
 surface_material_override/0 = ExtResource("1_n1vw4")
 
+[node name="01" type="MeshInstance3D" parent="Render_mesh/Scanner"]
+transform = Transform3D(-4.69226e-08, -4.40394e-09, -1.07347, -1.09643, 9.82716e-15, 4.79258e-08, 1.2518e-14, 0.0322237, -1.50076e-08, 0.0940733, 0.0775418, 0.510083)
+visible = false
+layers = 4
+mesh = SubResource("TorusMesh_507c3")
+skeleton = NodePath("../../../..")
+surface_material_override/0 = SubResource("ShaderMaterial_8eybx")
+
+[node name="02" type="MeshInstance3D" parent="Render_mesh/Scanner"]
+transform = Transform3D(-1.48007e-08, -1.38915e-09, -0.338605, -0.345844, -7.55667e-16, 1.51173e-08, 3.41399e-16, 0.0101643, -4.73382e-09, 0.0940733, 0.0775418, 0.510083)
+visible = false
+layers = 4
+mesh = SubResource("TorusMesh_ljaqx")
+skeleton = NodePath("../../../..")
+surface_material_override/0 = SubResource("ShaderMaterial_8eybx")
+
 [node name="Teleporter_msh2" type="MeshInstance3D" parent="Render_mesh/Scanner"]
 transform = Transform3D(2.33372, -1.0201e-07, -1.02011e-07, -1.04191e-07, -1.04191e-07, -2.38362, 3.26264e-08, 0.746404, -3.26264e-08, 0, 0.0100367, 0.261699)
 layers = 4
@@ -1043,9 +1067,15 @@ mesh = SubResource("TorusMesh_k0nng")
 skeleton = NodePath("../../../Player_sub_collider")
 surface_material_override/0 = ExtResource("1_n1vw4")
 
+[node name="Teleporter_msh3" type="MeshInstance3D" parent="Render_mesh/Scanner"]
+transform = Transform3D(2.33372, -1.0201e-07, -1.02011e-07, -1.04191e-07, -1.04191e-07, -2.38362, 3.26264e-08, 0.746404, -3.26264e-08, 0, 0.0100367, 0.261699)
+layers = 4
+mesh = SubResource("TorusMesh_k0nng")
+skeleton = NodePath("../../../Player_sub_collider")
+surface_material_override/0 = ExtResource("1_n1vw4")
+
 [node name="Photographe" type="Node3D" parent="Render_mesh"]
-transform = Transform3D(-2.20889e-09, -0.0854802, 0, 0.0505334, -3.73647e-09, 0, 0, 0, 0.0481292, -0.0280341, 0.147749, 0.077203)
-visible = false
+transform = Transform3D(-3.47124e-09, -0.134331, 0, 0.0794125, -5.87181e-09, 0, 0, 0, 0.052318, -0.0310052, 0.139258, 0.0626681)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Render_mesh/Photographe"]
 transform = Transform3D(0.477894, -7.10543e-15, 0, 4.44089e-15, 0.477894, 0, 0, 0, 0.477894, 0, 0, 0.236441)
@@ -1061,36 +1091,22 @@ mesh = SubResource("BoxMesh_8junt")
 skeleton = NodePath("../../../Player_sub_collider")
 surface_material_override/0 = ExtResource("1_n1vw4")
 
-[node name="Teleporter" type="MeshInstance3D" parent="Render_mesh"]
-transform = Transform3D(0.0942411, 3.55569e-10, 2.53267e-09, -1.15475e-09, 0.075805, -7.58508e-09, 5.70232e-10, -1.25347e-09, 0.0981645, 0.0218231, 0.141704, 0.0770912)
-layers = 4
-mesh = SubResource("PrismMesh_1di81")
-skeleton = NodePath("../../Player_sub_collider")
-surface_material_override/0 = ExtResource("1_n1vw4")
+[node name="Sonar" type="Node3D" parent="Render_mesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00877953, -0.0123595, -0.0143354)
 
-[node name="01" type="MeshInstance3D" parent="Render_mesh/Teleporter"]
-transform = Transform3D(0.444278, -1.07582e-09, 2.08408e-09, 6.76797e-09, 1.73961e-09, -0.552327, -2.58077e-09, 0.0400313, -2.56965e-08, 0.146438, -0.0184066, 0.536485)
+[node name="01" type="MeshInstance3D" parent="Render_mesh/Sonar"]
+transform = Transform3D(0.0418692, -3.67761e-16, 1.55752e-14, 1.60068e-14, -1.71769e-10, -0.0418691, 1.52656e-15, 0.00392965, -1.83016e-09, 0.0605061, 0.404056, -0.0896417)
 layers = 4
 mesh = SubResource("TorusMesh_507c3")
 skeleton = NodePath("../../../..")
 surface_material_override/0 = SubResource("ShaderMaterial_8eybx")
 
-[node name="02" type="MeshInstance3D" parent="Render_mesh/Teleporter"]
-transform = Transform3D(0.140138, -3.39345e-10, 6.57382e-10, 2.13483e-09, 5.48722e-10, -0.174221, -8.14053e-10, 0.0126271, -8.10544e-09, 0.146438, -0.0184066, 0.536485)
+[node name="02" type="MeshInstance3D" parent="Render_mesh/Sonar"]
+transform = Transform3D(0.0132068, 3.1225e-17, 4.802e-15, 6.4871e-15, -5.41817e-11, -0.0132068, 4.16334e-17, 0.00123953, -5.77285e-10, 0.0605061, 0.404056, -0.0896417)
 layers = 4
 mesh = SubResource("TorusMesh_ljaqx")
 skeleton = NodePath("../../../..")
 surface_material_override/0 = SubResource("ShaderMaterial_8eybx")
-
-[node name="Teleporter" type="MeshInstance3D" parent="Render_mesh/Teleporter"]
-transform = Transform3D(0.538789, -2.03555e-15, -1.33227e-15, 1.00831e-14, 0.538789, 1.77636e-15, 1.9984e-15, 2.66454e-15, 0.233953, 0, -0.016485, 0.463597)
-layers = 4
-mesh = SubResource("PrismMesh_1di81")
-skeleton = NodePath("../../../Player_sub_collider")
-surface_material_override/0 = ExtResource("8_wvhjt")
-
-[node name="Sonar" type="Node3D" parent="Render_mesh"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00877953, -0.0123595, -0.0143354)
 
 [node name="lampe" type="MeshInstance3D" parent="Render_mesh/Sonar"]
 transform = Transform3D(-0.0379565, -3.31825e-09, 0, 3.31825e-09, -0.0379565, 0, 0, 0, 0.0379565, 0.0587758, 0.401025, -0.0883384)
@@ -1156,6 +1172,11 @@ input_ray_pickable = false
 
 [node name="Player_photoActive" type="Node" parent="ZoneCollide"]
 
+[node name="Tool_active_automatique" type="Node" parent="ZoneCollide"]
+script = ExtResource("14_m6gco")
+light_tool_data = ExtResource("6_axu5t")
+scanner_tool_data = ExtResource("15_vswql")
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ZoneCollide"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.138627, 0)
 shape = SubResource("SphereShape3D_g1ic5")
@@ -1200,5 +1221,8 @@ draw_pass_1 = SubResource("SphereMesh_6ufqt")
 [connection signal="timeout" from="TELEPORTER/Closet_teleporter/Timer_Alarm" to="TELEPORTER/Closet_teleporter" method="_on_timer_alarm_timeout"]
 [connection signal="timeout" from="Flash_inputs/Timer" to="Dash" method="_on_timer_timeout"]
 [connection signal="timeout" from="Flash_inputs/Timer" to="Flash_inputs" method="_on_timer_timeout"]
+[connection signal="timeout" from="Scanne_element/Active_scanner_visual_pulse/Timer" to="Scanne_element/Active_scanner_visual_pulse" method="_on_timer_timeout"]
 [connection signal="area_shape_entered" from="ZoneCollide" to="TELEPORTER/Closet_teleporter" method="_on_zone_collide_area_shape_entered"]
+[connection signal="area_shape_entered" from="ZoneCollide" to="ZoneCollide/Tool_active_automatique" method="_on_zone_collide_area_shape_entered"]
 [connection signal="area_shape_exited" from="ZoneCollide" to="TELEPORTER/Closet_teleporter" method="_on_zone_collide_area_shape_exited"]
+[connection signal="area_shape_exited" from="ZoneCollide" to="ZoneCollide/Tool_active_automatique" method="_on_zone_collide_area_shape_exited"]

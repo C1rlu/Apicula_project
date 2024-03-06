@@ -12,6 +12,9 @@ func play_teleporter(condition : bool):
 	
 	if !_global_datas.Player_InSubScene:
 		return
+	
+	if !_global_datas.Player_InMirrorScene:
+		return
 		
 	if _global_datas._teleporter_list.size() == 0:
 		return

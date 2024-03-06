@@ -1,5 +1,6 @@
 extends Node
 
+@export var active_switch_tool_input : bool = true
 
 @export var tool_list : Array[tool_data]
 
@@ -14,10 +15,13 @@ func _ready():
 	update_active_tool()
 	
 	_global_datas._go_Subscene.connect(update_active_tool)
-	
+	_global_datas.switching_tool.connect(switch_active_tool)
 	
 func _input(event):
 	
+	if active_switch_tool_input:
+		return 
+		
 	if !_global_datas.Player_InSubScene:
 		return
 	
@@ -45,4 +49,14 @@ func update_active_tool():
 	for t in _global_datas.tools_list:
 		t.select_this_tool_scene_prefabs.emit(false)
 		
+	_global_datas._selected_tool.select_this_tool_scene_prefabs.emit(true)
+	
+func switch_active_tool(tool : tool_data):
+	
+	#SELECT VISUAL TOOLS IN SCENE
+	for t in _global_datas.tools_list:
+		t.select_this_tool_scene_prefabs.emit(false)
+		
+	_global_datas._selected_tool = tool	
+	
 	_global_datas._selected_tool.select_this_tool_scene_prefabs.emit(true)
