@@ -17,8 +17,8 @@ func _on_timer_alarm_timeout():
 
 func _on_zone_collide_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
 	
-	#if !_global_datas.Player_InMirrorScene:
-		#return
+	if !_global_datas.Player_InMirrorScene:
+		return
 		
 	var element = area.get_node_or_null("Teleporter")
 	if element:

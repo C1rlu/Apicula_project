@@ -11,7 +11,6 @@ var actual_value : float
 func _ready():
 	_global_datas.show_ui_scanner_dots.connect(_Ui_dots_effect)
 
-
 func _Ui_dots_effect(condition : bool):
 	
 	if t:

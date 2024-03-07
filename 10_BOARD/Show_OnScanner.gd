@@ -6,9 +6,20 @@ extends Node
 
 func _ready():
 	_global_datas.show_on_scanner.connect(_show_scanner)
+	_global_datas.show_subscene_scanner.connect(sub_scanner_flash)
 	render_scanner.visible = true
 	backdrop_focus.visible = true
 	stop_scanner()
+	
+	
+func sub_scanner_flash():
+	
+	if !_global_datas.selected_photoData:
+		return
+	if _global_datas.selected_photoData.scanner_prefab:	
+		var instance = _global_datas.selected_photoData.scanner_prefab.instantiate()
+		loader.add_child(instance)
+	_global_datas.show_ui_scanner_dots.emit(false)
 	
 func _show_scanner(condition : bool):
 	

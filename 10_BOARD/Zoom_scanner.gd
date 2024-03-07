@@ -11,9 +11,18 @@ var t
 func _ready():
 	
 	_global_datas.show_on_scanner.connect(back_from_scanner)
+	_global_datas.show_subscene_scanner.connect(_zoom_on_pose)
+	
+	
+func _zoom_on_pose():
+	zoom_in_scanner()				
+	
 	
 func _process(delta):
 	
+	if _global_datas.Player_InSubScene:
+		return
+
 	if !_global_datas.in_scanner_mode:
 		return
 	
@@ -42,7 +51,10 @@ func back_from_scanner(condition : bool):
 				
 	t = create_tween()
 	t.tween_method(change_fov,actual_fov,40,0.5)
-
+	
+func zoom_in_scanner():
+	change_fov(30)
+	
 func change_fov(value : float):
 	camera_3d.fov = value	
 	camera_3d_noise.fov = camera_3d.fov

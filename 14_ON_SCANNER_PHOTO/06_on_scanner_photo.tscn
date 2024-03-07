@@ -1,4 +1,4 @@
-[gd_scene load_steps=113 format=3 uid="uid://dpl12cginnwpp"]
+[gd_scene load_steps=114 format=3 uid="uid://dpl12cginnwpp"]
 
 [ext_resource type="Script" path="res://10_BOARD/Show_OnScanner.gd" id="1_0c44t"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_ifne7"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://10_BOARD/Zoom_scanner.gd" id="4_06k31"]
 [ext_resource type="PackedScene" uid="uid://b4hspc8dsyv14" path="res://08_SUBSCENES/Elements/Tiny_boat/scene_boat_ch_test.tscn" id="5_fy62g"]
 [ext_resource type="PackedScene" uid="uid://bv8bjtbsocs37" path="res://09_NPC/Mr_birds_scanner.tscn" id="6_aqq0q"]
+[ext_resource type="Script" path="res://14_ON_SCANNER_PHOTO/Fade_scanner_subFlash.gd" id="6_p66kl"]
 [ext_resource type="PackedScene" uid="uid://bntd6uahyoir6" path="res://09_NPC/Maurice_scanner.tscn" id="7_bpf84"]
 
 [sub_resource type="TorusMesh" id="TorusMesh_0vhf5"]
@@ -1109,7 +1110,7 @@ nodes/fragment/connections = PackedInt32Array(24, 0, 25, 2, 60, 0, 61, 0, 61, 0,
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1p8ix"]
 shader = SubResource("VisualShader_drqso")
-shader_parameter/Opacity = 0.5
+shader_parameter/Opacity = 0.0
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_ucabj"]
 viewport_path = NodePath("SubViewport_scanner_Noise")
@@ -1131,6 +1132,9 @@ script = ExtResource("2_6aofa")
 
 [node name="Fade_scanner" type="Node" parent="Show_OnScanner"]
 script = ExtResource("3_iqou0")
+
+[node name="Fade_scanner_subFlash" type="Node" parent="Show_OnScanner"]
+script = ExtResource("6_p66kl")
 
 [node name="Zoom_scanner" type="Node" parent="Show_OnScanner"]
 script = ExtResource("4_06k31")
@@ -1223,10 +1227,11 @@ omni_range = 0.240332
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0487088, 0)
 
 [node name="Scene_boat_ch_test" parent="InsidePhoto_scanner_scene/loader" instance=ExtResource("5_fy62g")]
-transform = Transform3D(-0.0133484, 0, 0.000189886, 0, 0.0133497, 0, -0.000189886, 0, -0.0133484, 0, 0, 0)
+transform = Transform3D(0.0133498, 0, 0, 0, 0.0133497, 0, 0, 0, 0.0133498, 0, 0, 0)
 
 [node name="Mr_Birds" parent="InsidePhoto_scanner_scene/loader" instance=ExtResource("6_aqq0q")]
 transform = Transform3D(0.999998, 0.00174533, 0, -0.00174533, 0.999998, 0, 0, 0, 1, 0, 0, 0)
 metadata/_edit_lock_ = true
 
 [node name="Maurice_scanner" parent="InsidePhoto_scanner_scene/loader" instance=ExtResource("7_bpf84")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)

@@ -3,8 +3,21 @@ extends Node
 @onready var loader = $"../../InsidePhoto_scanner_scene/loader"
 
 
+func _ready():
+	_global_datas.show_subscene_scanner.connect(_turn_on_pose)
+	
+
+
+func _turn_on_pose():
+	
+	loader.rotation.y = 60
+	
+	
 func _process(delta):
 	
+	if _global_datas.Player_InSubScene:
+		return
+
 	if !_global_datas.in_scanner_mode:
 		return
 
