@@ -1,33 +1,49 @@
 extends Node
+@onready var area = $"../../../ZoneCollide"
 
 @export var light_tool_data : tool_data
 @export var scanner_tool_data : tool_data
 @export var magnet_tool : tool_data
 
-func _on_zone_collide_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
+@onready var timer = $Timer
+
+func _ready():
+	_global_datas._go_Subscene.connect(_start_checker)
+	_global_datas._backFrom_subscene.connect(_stop_checker)
 	
-	if !area:
-		return
-		
-	var photo_data_node = area.get_node_or_null("Photo_data")			
-	if photo_data_node:
-		_global_datas.switching_tool.emit(scanner_tool_data)	
+func _start_checker():
+	timer.start()	
+	
+func _stop_checker():
+	timer.stop()
+	
+	
+func _checker():
+	
+	var overlap_areas_ = area.get_overlapping_areas()
+
+	_global_datas.switching_tool.emit(light_tool_data)
+	
+	if overlap_areas_ == null:
 		return	
-	
-	var teleporter_node = area.get_node_or_null("Take_teleporter")	  
-	if teleporter_node:
-		_global_datas.switching_tool.emit(magnet_tool)			
+
+
+	for areas in overlap_areas_:
 		
-func _on_zone_collide_area_shape_exited(area_rid, area, area_shape_index, local_shape_index):
-	
-	if !area:
-		return
+		_global_datas.switching_tool.emit(light_tool_data)
 		
-	var photo_data_node = area.get_node_or_null("Photo_data")			
-	if photo_data_node:
-		_global_datas.switching_tool.emit(light_tool_data)	
+		var teleporter_node = areas.get_node_or_null("Take_teleporter")
+			  
+		if teleporter_node:
+			_global_datas.switching_tool.emit(magnet_tool)
+			return	
+			
+		var photo_data_node = areas.get_node_or_null("Photo_data")	
+				
+		if photo_data_node:
+			_global_datas.switching_tool.emit(scanner_tool_data)
+			return	
 	
 	
-	var teleporter_node = area.get_node_or_null("Take_teleporter")	  
-	if teleporter_node:
-		_global_datas.switching_tool.emit(light_tool_data)		
+func _on_timer_timeout():
+	_checker()	
