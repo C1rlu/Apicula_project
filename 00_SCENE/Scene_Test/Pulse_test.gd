@@ -10,8 +10,9 @@ var vortex_position
 var t 
 
 func _ready():
-	_global_datas._mirror_switch.connect(start_vortex)
-	_global_datas._backFrom_subscene.connect(disable)
+	pass
+	#_global_datas._mirror_switch.connect(start_vortex)
+	#_global_datas._backFrom_subscene.connect(disable)
 	
 func start_vortex(condition : bool):
 	
@@ -30,7 +31,6 @@ func active_zone(condition : bool):
 	
 	if condition:
 		pulse_sphere_root.global_position = vortex_position.origin + offset 
-		
 
 	if t:
 		t.kill()
@@ -43,7 +43,8 @@ func active_zone(condition : bool):
 	
 func change_value(value : float):
 	
-	pulse_sphere_root.scale = Vector3(value/2,value/2,value/2)
+
+	pulse_sphere_root.scale = Vector3(value/2,value/2,value/4)
 
 func disable():
 	

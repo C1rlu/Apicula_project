@@ -1041,9 +1041,6 @@ light_tool_data = ExtResource("6_axu5t")
 scanner_tool_data = ExtResource("15_vswql")
 magnet_tool = ExtResource("17_iywa5")
 
-[node name="Timer" type="Timer" parent="Render_mesh/Active_visual_tools/Tool_zone_detect"]
-wait_time = 0.25
-
 [node name="active_light" type="Node" parent="Render_mesh/Active_visual_tools" node_paths=PackedStringArray("list_of_object")]
 script = ExtResource("8_8bfcd")
 _tool_data = ExtResource("6_axu5t")
@@ -1252,6 +1249,7 @@ draw_pass_1 = SubResource("SphereMesh_6ufqt")
 [connection signal="timeout" from="Flash_inputs/Timer" to="Dash" method="_on_timer_timeout"]
 [connection signal="timeout" from="Flash_inputs/Timer" to="Flash_inputs" method="_on_timer_timeout"]
 [connection signal="timeout" from="Scanne_element/Active_scanner_visual_pulse/Timer" to="Scanne_element/Active_scanner_visual_pulse" method="_on_timer_timeout"]
-[connection signal="timeout" from="Render_mesh/Active_visual_tools/Tool_zone_detect/Timer" to="Render_mesh/Active_visual_tools/Tool_zone_detect" method="_on_timer_timeout"]
 [connection signal="area_shape_entered" from="ZoneCollide" to="TELEPORTER/Closet_teleporter" method="_on_zone_collide_area_shape_entered"]
+[connection signal="area_shape_entered" from="ZoneCollide" to="Render_mesh/Active_visual_tools/Tool_zone_detect" method="_on_zone_collide_area_shape_entered"]
 [connection signal="area_shape_exited" from="ZoneCollide" to="TELEPORTER/Closet_teleporter" method="_on_zone_collide_area_shape_exited"]
+[connection signal="area_shape_exited" from="ZoneCollide" to="Render_mesh/Active_visual_tools/Tool_zone_detect" method="_on_zone_collide_area_shape_exited"]

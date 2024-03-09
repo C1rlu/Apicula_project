@@ -5,28 +5,7 @@ extends Node
 @export var scanner_tool_data : tool_data
 @export var magnet_tool : tool_data
 
-@onready var timer = $Timer
 
-func _ready():
-	_global_datas._go_Subscene.connect(_start_checker)
-	_global_datas._backFrom_subscene.connect(_stop_checker)
-	
-	
-func _input(event):
-	
-	if _global_datas.Player_InSubScene:
-		if event.is_action_pressed("Click"):
-			_checker()
-		
-		
-		
-func _start_checker():
-	timer.start()	
-	
-func _stop_checker():
-	timer.stop()
-	
-	
 func _checker():
 	
 	var overlap_areas_ = area.get_overlapping_areas()
@@ -56,7 +35,10 @@ func _checker():
 			return	
 	
 	
-func _on_timer_timeout():
-	pass
-	#_checker()	
 
+func _on_zone_collide_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
+	_checker()	
+
+
+func _on_zone_collide_area_shape_exited(area_rid, area, area_shape_index, local_shape_index):
+	_checker()
