@@ -64,7 +64,7 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_vr7ex")
 
-[node name="Ice_msh_01" instance=ExtResource("1_x8j7y")]
+[node name="Ice_msh_02" instance=ExtResource("1_x8j7y")]
 
 [node name="Visibility" type="Node" parent="." index="0"]
 script = SubResource("GDScript_exrbt")
@@ -81,18 +81,13 @@ input_ray_pickable = false
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ice_msh_01/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_lyai7")
 
-[node name="VisibleOnScreenNotifier3D" type="VisibleOnScreenNotifier3D" parent="." index="2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.522598, 0.731833, 0)
-visible = false
-layers = 6
-aabb = AABB(-4.61388, -3.2937, -2.63732, 8.65355, 6.5874, 5.27463)
-
-[node name="Ice_msh_X_ray" type="MeshInstance3D" parent="." index="3"]
+[node name="Ice_msh_X_ray" type="MeshInstance3D" parent="." index="2"]
 transform = Transform3D(1.0076, 0, 0, 0, 1.0076, 0, 0, 0, 1.0076, 0, 0, 0)
 layers = 4096
 mesh = SubResource("ArrayMesh_rb20e")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("3_tfjyf")
 
-[connection signal="screen_entered" from="VisibleOnScreenNotifier3D" to="Visibility" method="_on_visible_on_screen_notifier_3d_screen_entered"]
-[connection signal="screen_exited" from="VisibleOnScreenNotifier3D" to="Visibility" method="_on_visible_on_screen_notifier_3d_screen_exited"]
+[node name="Inside" parent="." index="3"]
+visible = false
+layers = 0

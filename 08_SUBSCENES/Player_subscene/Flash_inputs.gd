@@ -30,7 +30,7 @@ func check_area(condition : bool):
 	for areas in overlap_areas_:
 		
 		var loot_data_node = areas.get_node_or_null("Lootable")
-		#var mirror_node = areas.get_node_or_null("Mirror")
+		var mirror_node = areas.get_node_or_null("Mirror")
 		var mirror_destination = areas.get_node_or_null("Mirror_destination")
 		#var teleporter = areas.get_node_or_null("Take_teleporter")
 		
@@ -47,16 +47,10 @@ func check_area(condition : bool):
 					_global_datas._load_mirror_subscene.emit(desination)
 					return
 	
-		#if mirror_node:
-			#if !_global_datas.Player_InMirrorScene:
-				#_global_datas._mirror_switch.emit(true)
+		if mirror_node:
+			_global_datas._mirror_switch.emit(true)
 				
-				
-		if _global_datas.Player_InMirrorScene:
-			return
-			
-		#if teleporter:
-			#teleporter.remove_teleporter()
+
 			
 func _on_timer_timeout():
 	timer.stop()

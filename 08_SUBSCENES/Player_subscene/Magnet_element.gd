@@ -12,16 +12,8 @@ func _ready():
 	
 func _magnet_element(condition : bool):
 	
-	if !condition:
-		if Magnet_node_list.size() == 0:
-			return
-		for m in Magnet_node_list:
-			if m == null:
-				return
-			m._magnet_me(false)	
-			
-		Magnet_node_list.clear()	
-		return
+
+	Magnet_node_list.clear()	
 		
 	var overlap_areas_ = area.get_overlapping_areas()
 	
@@ -35,3 +27,10 @@ func _magnet_element(condition : bool):
 			Magnet_node._magnet_me(true)
 			Magnet_node_list.append(Magnet_node)
 		
+	if Magnet_node_list.size() == 0:
+		return
+		
+	if !condition:
+		for m in Magnet_node_list:
+			m._magnet_me(false)	
+			

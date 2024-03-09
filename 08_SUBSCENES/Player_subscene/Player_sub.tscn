@@ -133,14 +133,14 @@ outer_radius = 2.08
 rings = 32
 ring_segments = 16
 
-[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_ar8u6"]
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_s13ts"]
 parameter_name = "Light_color_ui"
 qualifier = 1
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_w6m6h"]
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_m7oaf"]
 constant = 0.4
 
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_x0hof"]
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_1mh3b"]
 size = Vector2(724.789, 654.559)
 expression = "const float DITHER_THRESHOLDS[16] ={
 		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
@@ -153,12 +153,12 @@ vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
 
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_da32g"]
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_hkw02"]
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_50n6f"]
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_r2img"]
 constant = 0.814
 
-[sub_resource type="VisualShader" id="VisualShader_jxk1w"]
+[sub_resource type="VisualShader" id="VisualShader_1ffxi"]
 code = "shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
 
@@ -209,11 +209,11 @@ void fragment() {
 "
 graph_offset = Vector2(-2592.23, 392.193)
 flags/unshaded = true
-nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_ar8u6")
+nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_s13ts")
 nodes/fragment/2/position = Vector2(-760, -40)
-nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_w6m6h")
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_m7oaf")
 nodes/fragment/3/position = Vector2(-1380, 520)
-nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_x0hof")
+nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_1mh3b")
 nodes/fragment/4/position = Vector2(-1200, 380)
 nodes/fragment/4/size = Vector2(724.789, 654.559)
 nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
@@ -228,15 +228,15 @@ nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
 vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/6/node = SubResource("VisualShaderNodeStep_da32g")
+nodes/fragment/6/node = SubResource("VisualShaderNodeStep_hkw02")
 nodes/fragment/6/position = Vector2(-351.825, 215.819)
-nodes/fragment/7/node = SubResource("VisualShaderNodeFloatConstant_50n6f")
+nodes/fragment/7/node = SubResource("VisualShaderNodeFloatConstant_r2img")
 nodes/fragment/7/position = Vector2(-1440, 360)
 nodes/fragment/connections = PackedInt32Array(3, 0, 4, 1, 4, 0, 6, 1, 6, 0, 0, 1, 7, 0, 4, 0, 2, 0, 6, 0, 2, 0, 0, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_t28it"]
 render_priority = 0
-shader = SubResource("VisualShader_jxk1w")
+shader = SubResource("VisualShader_1ffxi")
 
 [sub_resource type="BoxMesh" id="BoxMesh_8vb5i"]
 
@@ -1068,7 +1068,6 @@ surface_material_override/0 = ExtResource("1_n1vw4")
 
 [node name="01" type="MeshInstance3D" parent="Render_mesh/Scanner"]
 transform = Transform3D(-4.69226e-08, -4.40394e-09, -1.07347, -1.09643, 9.82716e-15, 4.79258e-08, 1.2518e-14, 0.0322237, -1.50076e-08, 0.0940733, 0.0775418, 0.510083)
-visible = false
 layers = 4
 mesh = SubResource("TorusMesh_507c3")
 skeleton = NodePath("../../../..")
@@ -1076,7 +1075,6 @@ surface_material_override/0 = SubResource("ShaderMaterial_8eybx")
 
 [node name="02" type="MeshInstance3D" parent="Render_mesh/Scanner"]
 transform = Transform3D(-1.48007e-08, -1.38915e-09, -0.338605, -0.345844, -7.55667e-16, 1.51173e-08, 3.41399e-16, 0.0101643, -4.73382e-09, 0.0940733, 0.0775418, 0.510083)
-visible = false
 layers = 4
 mesh = SubResource("TorusMesh_ljaqx")
 skeleton = NodePath("../../../..")

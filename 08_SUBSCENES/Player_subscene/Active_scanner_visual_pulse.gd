@@ -8,7 +8,8 @@ extends Node
 @onready var timer = $Timer
 
 var pulse : bool
-	
+var is_active : bool = false
+
 func _ready():
 	scanner_tool_data.select_this_tool_scene_prefabs.connect(active_pulse)				
 			

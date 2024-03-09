@@ -1,4 +1,4 @@
-[gd_scene load_steps=140 format=3 uid="uid://nigmie4bbn6"]
+[gd_scene load_steps=143 format=3 uid="uid://nigmie4bbn6"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/Grid_scene/Subscene_loader.gd" id="1_7uoo0"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="2_3srhu"]
@@ -18,7 +18,6 @@
 [ext_resource type="Script" path="res://08_SUBSCENES/Play_selected_tool.gd" id="7_whguu"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Add_teleporter_inputs.gd" id="8_2kb68"]
 [ext_resource type="Texture2D" uid="uid://d31xi5f7tan5w" path="res://05_SHADER_TEST/Full_screen/Dither_pattners/Blue_noise/HDR_LA_7.png" id="8_yirv7"]
-[ext_resource type="Material" uid="uid://cb62q1hmv35nl" path="res://05_SHADER_TEST/Full_screen/Subscene_screen/Pulse_render_dither.tres" id="9_tbhw8"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Instance_teleporter.gd" id="10_h65by"]
 
 [sub_resource type="GDScript" id="GDScript_btuws"]
@@ -215,107 +214,6 @@ func _set_opacity_value( value : float):
 
 "
 
-[sub_resource type="QuadMesh" id="QuadMesh_yckwt"]
-flip_faces = true
-size = Vector2(2, 2)
-
-[sub_resource type="Shader" id="Shader_aj2yl"]
-code = "/* 
-Basic sci-fi pulse post-processing effect.
-Required to be put on a quad mesh that is rendered in the scene.
-Required associated script to increase the radius over time.
-Video tutorial on YouTube: https://youtu.be/x1dIJdz8Uj8
-Written by Michael Watt
-
-Thanks to Inigo Quilez for the SDF (https://iquilezles.org/articles/distfunctions/)
-Thanks to nonunknown for the conditional statement replacements (https://godotshaders.com/shader/optimize-your-shaders/)
-*/
-
-shader_type spatial;
-render_mode unshaded;
-
-// Settings to play with
-uniform mat4 start_point = mat4(1.0);
-uniform float pulse_width = 2.0;
-uniform vec4 color : source_color = vec4(1.0);
-
-
-// Updated by Script
-uniform float radius = 5.0;
-
-// Access the screen and depth buffers
-uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, filter_linear_mipmap;
-uniform sampler2D DEPTH_TEXTURE : hint_depth_texture, filter_linear_mipmap;
-
-// Necessary for rebuilding the world coordinates
-varying mat4 CAMERA;
-
-// Function from Inigo Quilez https://iquilezles.org/articles/distfunctions/
-float sdSphere( vec3 p, float s ) {
-	return length(p)-s;
-}
-
-// Replacements for < and > because math on GPU is fast. They return 1 or 0
-float when_lt(float left_side, float right_side) {
-	return max(sign(right_side - left_side), 0.0);
-}
-float when_gt(float left_side, float right_side) {
-	return max(sign(left_side - right_side), 0.0);
-}
-
-void vertex() {
-	POSITION = vec4(VERTEX, 1.0);
-
-	CAMERA = INV_VIEW_MATRIX;
-}
-
-void fragment() {
-	// Get the original screen rendered texture at the screen uv coordinates.
-	vec4 original = textureLod(SCREEN_TEXTURE, SCREEN_UV, 0.0);
-	
-	// Get the depth value form the depth buffer.
-	float depth = textureLod(DEPTH_TEXTURE, SCREEN_UV, 0.0).x;
-	vec3 ndc = vec3(SCREEN_UV * 2.0 - 1.0, depth);
-	
-	// Unecessary for this effect, but to get the linear depth value,
-	// use the following code.
-	// vec4 view = INV_PROJECTION_MATRIX * vec4(ndc, 1.0);
-	// view.xyz /= view.w;
-	// float linear_depth = -view.z;
-	
-	// Calculate the fragment's world position
-	vec4 world = CAMERA * INV_PROJECTION_MATRIX * vec4(ndc, 1.0);
-	vec3 world_position = world.xyz / world.w;
-	
-	// Use the provided start transform and shift the world position to match
-	// for the SDF to work as expected.
-	vec3 adjusted_position = (inverse(start_point) * vec4(world_position, 1.0)).xyz;
-	float dist = sdSphere(adjusted_position, radius);
-	
-
-	// Extra calculations to get the correct gradient direction.
-	// Using calculation functions in place of if statements.
-	float mix_ratio = 0.0;
-	float check = when_lt(dist, 0.0) * when_gt(dist, -pulse_width);
-	float percentage = abs(dist) / abs(pulse_width);
-	mix_ratio = 1.0 * check - percentage;
-	mix_ratio = clamp(mix_ratio, 0.0, 1.0);
-	
-	float inverse_e = mix_ratio - percentage * dist ;
-	float one_minus = 1.0 - inverse_e;
-	// Set the albedo to the mix between the original screen and the added
-	// pulse color.
-	ALBEDO = mix(original.rgb, color.rgb,mix_ratio - inverse_e);
-}"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_dsi6e"]
-render_priority = 0
-shader = SubResource("Shader_aj2yl")
-shader_parameter/start_point = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
-shader_parameter/pulse_width = 0.29
-shader_parameter/color = Color(1, 1, 1, 1)
-shader_parameter/radius = -0.1
-
 [sub_resource type="ViewportTexture" id="ViewportTexture_gasoh"]
 viewport_path = NodePath("Viewport/Main_SubViewport")
 
@@ -499,9 +397,6 @@ shader_parameter/Opacity = 0.0
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_yvp20"]
 viewport_path = NodePath("Viewport/Scanner_VORTEX_FX")
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_01nkg"]
-viewport_path = NodePath("Viewport/PULSE_FX")
 
 [sub_resource type="GDScript" id="GDScript_pi1q7"]
 script/source = "extends TextureProgressBar
@@ -877,41 +772,6 @@ shader_parameter/Distance_light = 0.2
 material = SubResource("ShaderMaterial_toa8a")
 size = Vector2(10, 10)
 
-[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_w88ow"]
-constant = Color(0, 0, 0, 1)
-
-[sub_resource type="VisualShader" id="VisualShader_ssp81"]
-code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
-
-
-
-
-void fragment() {
-// ColorConstant:2
-	vec4 n_out2p0 = vec4(0.000000, 0.000000, 0.000000, 1.000000);
-
-
-// Output:0
-	ALBEDO = vec3(n_out2p0.xyz);
-
-
-}
-"
-graph_offset = Vector2(-61.5, 0.5)
-flags/unshaded = true
-nodes/fragment/2/node = SubResource("VisualShaderNodeColorConstant_w88ow")
-nodes/fragment/2/position = Vector2(80, 180)
-nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_e3gl1"]
-render_priority = 0
-shader = SubResource("VisualShader_ssp81")
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_kuq8o"]
-material = SubResource("ShaderMaterial_e3gl1")
-size = Vector2(10, 10)
-
 [sub_resource type="Gradient" id="Gradient_wtm6t"]
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_twljs"]
@@ -1054,7 +914,7 @@ lightmap_size_hint = Vector2i(17, 9)
 parameter_name = "ColorParameter"
 
 [sub_resource type="VisualShaderNodeFresnel" id="VisualShaderNodeFresnel_6t7x0"]
-default_input_values = [2, true, 3, 6.61]
+default_input_values = [2, true, 3, 1.185]
 
 [sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_ueks7"]
 input_name = "vertex"
@@ -1074,12 +934,12 @@ constant = 0.1
 [sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_51hre"]
 operator = 2
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_uq8jc"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_qo71n"]
 noise_type = 0
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_p2jtc"]
 seamless = true
-noise = SubResource("FastNoiseLite_uq8jc")
+noise = SubResource("FastNoiseLite_qo71n")
 
 [sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_4qfh7"]
 texture = SubResource("NoiseTexture2D_p2jtc")
@@ -1144,7 +1004,7 @@ void fragment() {
 
 
 // Fresnel:3
-	float n_in3p3 = 6.61000;
+	float n_in3p3 = 1.18500;
 	float n_out3p0 = pow(clamp(dot(NORMAL, VIEW), 0.0, 1.0), n_in3p3);
 
 
@@ -1155,6 +1015,7 @@ void fragment() {
 
 }
 "
+graph_offset = Vector2(-906.882, 533.834)
 flags/unshaded = true
 nodes/vertex/2/node = SubResource("VisualShaderNodeInput_ueks7")
 nodes/vertex/2/position = Vector2(-500, 400)
@@ -1182,10 +1043,138 @@ nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0, 3, 0, 0, 1)
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ovcre"]
 render_priority = 0
 shader = SubResource("VisualShader_4x2ht")
-shader_parameter/ColorParameter = Color(1, 1, 1, 1)
+shader_parameter/ColorParameter = Color(0.572549, 0.572549, 0.572549, 1)
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_gcgsn"]
+parameter_name = "ColorParameter"
+
+[sub_resource type="VisualShaderNodeFresnel" id="VisualShaderNodeFresnel_xr14n"]
+default_input_values = [2, true, 3, 6.795]
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_7jumn"]
+input_name = "vertex"
+
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_a0ksd"]
+default_input_values = [0, Quaternion(0, 0, 0, 0), 1, Quaternion(0, 0, 0, 0)]
+op_type = 2
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_8ghh3"]
+input_name = "time"
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_vgdru"]
+constant = 0.1
+
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_x1pvs"]
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_4uk76"]
+operator = 2
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_uu5aj"]
+texture = SubResource("NoiseTexture2D_p2jtc")
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_eifye"]
+default_input_values = [0, 0.0, 1, 0.025]
+operator = 2
+
+[sub_resource type="VisualShader" id="VisualShader_4ni88"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+
+uniform sampler2D tex_vtx_8;
+uniform vec4 ColorParameter : source_color;
+
+
+
+void vertex() {
+// Input:4
+	float n_out4p0 = TIME;
+
+
+// FloatConstant:5
+	float n_out5p0 = 0.100000;
+
+
+// FloatOp:7
+	float n_out7p0 = n_out4p0 * n_out5p0;
+
+
+// UVFunc:6
+	vec2 n_in6p1 = vec2(1.00000, 1.00000);
+	vec2 n_out6p0 = vec2(n_out7p0) * n_in6p1 + UV;
+
+
+// Texture2D:8
+	vec4 n_out8p0 = texture(tex_vtx_8, n_out6p0);
+
+
+// FloatOp:9
+	float n_in9p1 = 0.02500;
+	float n_out9p0 = n_out8p0.x * n_in9p1;
+
+
+// Input:2
+	vec3 n_out2p0 = VERTEX;
+
+
+// VectorOp:3
+	vec4 n_out3p0 = vec4(n_out9p0) + vec4(n_out2p0, 0.0);
+
+
+// Output:0
+	VERTEX = vec3(n_out3p0.xyz);
+
+
+}
+
+void fragment() {
+// ColorParameter:2
+	vec4 n_out2p0 = ColorParameter;
+
+
+// Fresnel:3
+	float n_in3p3 = 6.79500;
+	float n_out3p0 = pow(clamp(dot(NORMAL, VIEW), 0.0, 1.0), n_in3p3);
+
+
+// Output:0
+	ALBEDO = vec3(n_out2p0.xyz);
+	ALPHA = n_out3p0;
+
+
+}
+"
+graph_offset = Vector2(-906.244, 361.876)
+flags/unshaded = true
+nodes/vertex/2/node = SubResource("VisualShaderNodeInput_7jumn")
+nodes/vertex/2/position = Vector2(-500, 400)
+nodes/vertex/3/node = SubResource("VisualShaderNodeVectorOp_a0ksd")
+nodes/vertex/3/position = Vector2(80, 120)
+nodes/vertex/4/node = SubResource("VisualShaderNodeInput_8ghh3")
+nodes/vertex/4/position = Vector2(-1420, 160)
+nodes/vertex/5/node = SubResource("VisualShaderNodeFloatConstant_vgdru")
+nodes/vertex/5/position = Vector2(-1320, 320)
+nodes/vertex/6/node = SubResource("VisualShaderNodeUVFunc_x1pvs")
+nodes/vertex/6/position = Vector2(-840, 280)
+nodes/vertex/7/node = SubResource("VisualShaderNodeFloatOp_4uk76")
+nodes/vertex/7/position = Vector2(-1040, 320)
+nodes/vertex/8/node = SubResource("VisualShaderNodeTexture_uu5aj")
+nodes/vertex/8/position = Vector2(-560, -40)
+nodes/vertex/9/node = SubResource("VisualShaderNodeFloatOp_eifye")
+nodes/vertex/9/position = Vector2(-120, 20)
+nodes/vertex/connections = PackedInt32Array(2, 0, 3, 1, 6, 0, 8, 0, 4, 0, 7, 0, 5, 0, 7, 1, 7, 0, 6, 2, 8, 0, 9, 0, 9, 0, 3, 0, 3, 0, 0, 0)
+nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_gcgsn")
+nodes/fragment/2/position = Vector2(-340, 0)
+nodes/fragment/3/node = SubResource("VisualShaderNodeFresnel_xr14n")
+nodes/fragment/3/position = Vector2(-340, 440)
+nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0, 3, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e806i"]
+render_priority = 0
+shader = SubResource("VisualShader_4ni88")
+shader_parameter/ColorParameter = Color(0.572549, 0.572549, 0.572549, 1)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_mtge5"]
-radius = 0.480998
+radius = 0.469206
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_qfjre"]
 size = Vector3(2.03379, 0.029557, 10.4284)
@@ -1525,7 +1514,7 @@ script = SubResource("GDScript_4qsuv")
 
 [node name="set_Resolution" type="Node" parent="." node_paths=PackedStringArray("viewports")]
 script = ExtResource("2_3srhu")
-viewports = [NodePath("../Viewport/Main_SubViewport"), NodePath("../Viewport/Scanner_SubViewport"), NodePath("../Viewport/Scanner_x_SubViewport"), NodePath("../Viewport/PULSE_FX")]
+viewports = [NodePath("../Viewport/Main_SubViewport"), NodePath("../Viewport/Scanner_SubViewport"), NodePath("../Viewport/Scanner_x_SubViewport")]
 
 [node name="GO_SURFACE" type="Node" parent="."]
 script = SubResource("GDScript_71vlv")
@@ -1557,11 +1546,20 @@ script = ExtResource("10_h65by")
 [node name="Teleport_Player" type="Node" parent="."]
 script = ExtResource("4_jsgo0")
 
+[node name="PULSE_EXPLOSION" type="Node" parent="."]
+
+[node name="Pulse_test" type="Node" parent="PULSE_EXPLOSION"]
+script = ExtResource("5_nqm5k")
+
+[node name="start_vortex" type="Timer" parent="PULSE_EXPLOSION"]
+wait_time = 3.0
+one_shot = true
+
 [node name="Viewport" type="Node" parent="."]
 
 [node name="All_cam_follow" type="Node" parent="Viewport" node_paths=PackedStringArray("_all_cam_array")]
 script = ExtResource("2_tc6o2")
-_all_cam_array = [NodePath("../Main_SubViewport/CAM_STATE_MAIN"), NodePath("../Scanner_SubViewport/CAM_STATE_BOAT"), NodePath("../Scanner_x_SubViewport/CAM_STATE_BOAT"), NodePath("../PULSE_FX/CAM_PULSE"), NodePath("../Scanner_VORTEX_FX/CAM_STATE_BOAT")]
+_all_cam_array = [NodePath("../Main_SubViewport/CAM_STATE_MAIN"), NodePath("../Scanner_SubViewport/CAM_STATE_BOAT"), NodePath("../Scanner_x_SubViewport/CAM_STATE_BOAT"), NodePath("../Scanner_VORTEX_FX/CAM_STATE_BOAT")]
 basePos = Vector3(0, -0.35, 0)
 
 [node name="Main_SubViewport" type="SubViewport" parent="Viewport"]
@@ -1597,28 +1595,6 @@ size = Vector2i(1920, 1080)
 [node name="CAM_STATE_BOAT" type="Camera3D" parent="Viewport/Scanner_VORTEX_FX"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 1.8)
 cull_mask = 32768
-
-[node name="PULSE_FX" type="SubViewport" parent="Viewport"]
-transparent_bg = true
-size = Vector2i(1920, 1080)
-
-[node name="CAM_PULSE" type="Camera3D" parent="Viewport/PULSE_FX"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 1.8)
-cull_mask = 20480
-
-[node name="Pulse_test" type="Node" parent="Viewport/PULSE_FX/CAM_PULSE"]
-script = ExtResource("5_nqm5k")
-
-[node name="start_vortex" type="Timer" parent="Viewport/PULSE_FX/CAM_PULSE"]
-wait_time = 10.0
-one_shot = true
-
-[node name="zDepth_circle_buffer" type="MeshInstance3D" parent="Viewport/PULSE_FX/CAM_PULSE"]
-transform = Transform3D(2.78, 0, 0, 0, 2.78, 1.19209e-07, 0, -1.19209e-07, 2.78, 0, -0.0116273, -1.75666)
-visible = false
-layers = 16384
-mesh = SubResource("QuadMesh_yckwt")
-surface_material_override/0 = SubResource("ShaderMaterial_dsi6e")
 
 [node name="Main" type="TextureRect" parent="Viewport"]
 visible = false
@@ -1670,16 +1646,6 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("ViewportTexture_yvp20")
 
-[node name="CAM_PULSE_RENDER" type="TextureRect" parent="Viewport"]
-visible = false
-material = ExtResource("9_tbhw8")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = SubResource("ViewportTexture_01nkg")
-
 [node name="Go_subscene_progress" type="TextureProgressBar" parent="Viewport"]
 visible = false
 anchors_preset = 8
@@ -1716,11 +1682,6 @@ transform = Transform3D(28.5013, 0, 0, 0, 2.38419e-07, -9.55943, 0, 7.74673, 2.9
 layers = 4
 mesh = SubResource("PlaneMesh_8q6wo")
 
-[node name="pulse_back" type="MeshInstance3D" parent="."]
-transform = Transform3D(28.5013, 0, 0, 0, 2.38419e-07, -9.55943, 0, 7.74673, 2.94208e-07, 0, 0.3656, -0.222171)
-layers = 16384
-mesh = SubResource("PlaneMesh_kuq8o")
-
 [node name="WATER_SURFACE" type="MeshInstance3D" parent="."]
 transform = Transform3D(11.2155, 0, 0, 0, -7.74673, 4.39024e-08, 0, -6.77241e-07, -0.502185, 0, 0.964028, -0.773959)
 layers = 4
@@ -1728,18 +1689,24 @@ mesh = SubResource("PlaneMesh_llvpy")
 
 [node name="Pulse_sphere_SCALE" type="Node3D" parent="."]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -1.99495, 0, 0)
-visible = false
 
 [node name="Pulse_sphere" type="Area3D" parent="Pulse_sphere_SCALE"]
 transform = Transform3D(3.9474, 0, 0, 0, 3.9474, 0, 0, 0, 3.9474, 0, 0, 0)
 collision_layer = 6
 collision_mask = 6
+monitoring = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Pulse_sphere_SCALE/Pulse_sphere"]
-transform = Transform3D(-4.84204e-08, 1.10773, 0, -1.10773, -4.84204e-08, 0, 0, 0, 1.10773, 0, 0, 0)
-layers = 16388
+transform = Transform3D(-4.24894e-08, 0.972044, 0, -0.972044, -4.24894e-08, 0, 0, 0, 0.972044, 0, 0, 0)
+layers = 4
 mesh = SubResource("SphereMesh_n4rwc")
 surface_material_override/0 = SubResource("ShaderMaterial_ovcre")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Pulse_sphere_SCALE/Pulse_sphere"]
+transform = Transform3D(-5.90864e-08, 1.35174, 0, -1.35174, -5.90864e-08, 0, 0, 0, 1.35174, 0, 0, 0)
+layers = 4
+mesh = SubResource("SphereMesh_n4rwc")
+surface_material_override/0 = SubResource("ShaderMaterial_e806i")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Pulse_sphere_SCALE/Pulse_sphere"]
 shape = SubResource("SphereShape3D_mtge5")
@@ -1788,6 +1755,6 @@ theme_override_font_sizes/font_size = 35
 
 [connection signal="timeout" from="FADE_IN/Timer" to="FADE_IN" method="_on_timer_timeout"]
 [connection signal="timeout" from="FADE_OUT/Timer" to="FADE_OUT" method="_on_timer_timeout"]
-[connection signal="timeout" from="Viewport/PULSE_FX/CAM_PULSE/start_vortex" to="Viewport/PULSE_FX/CAM_PULSE/Pulse_test" method="_on_start_vortex_timeout"]
+[connection signal="timeout" from="PULSE_EXPLOSION/start_vortex" to="PULSE_EXPLOSION/Pulse_test" method="_on_start_vortex_timeout"]
 [connection signal="area_shape_entered" from="Pulse_sphere_SCALE/Pulse_sphere" to="GO_SURFACE" method="_on_pulse_sphere_area_shape_entered"]
 [connection signal="area_shape_entered" from="Surface_trigger" to="GO_SURFACE" method="_on_surface_trigger_area_shape_entered"]
