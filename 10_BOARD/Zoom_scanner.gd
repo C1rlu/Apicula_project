@@ -11,17 +11,10 @@ var t
 func _ready():
 	
 	_global_datas.show_on_scanner.connect(back_from_scanner)
-	_global_datas.show_subscene_scanner.connect(_zoom_on_pose)
-	
-	
-func _zoom_on_pose():
-	zoom_in_scanner()				
-	
-	
+		
 func _process(delta):
 	
-	if _global_datas.Player_InSubScene:
-		return
+
 
 	if !_global_datas.in_scanner_mode:
 		return

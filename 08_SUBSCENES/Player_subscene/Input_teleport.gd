@@ -39,7 +39,9 @@ func _click_teleporter(condition : bool):
 
 func done():
 	_global_datas._instance_teleporter.emit()
+	
 	_global_datas._teleport_at_position.emit()
+	_global_datas._instance_teleporter.emit()
 	vfx_sphere_mirror.emitting = false
 	
 func change_value(value):

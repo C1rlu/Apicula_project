@@ -1,20 +1,19 @@
 extends Node
-@onready var area = $"../../../ZoneCollide"
+@onready var collide = $"../../../ZoneCollide"
 
 @export var light_tool_data : tool_data
 @export var scanner_tool_data : tool_data
 @export var magnet_tool : tool_data
 
-
 func _checker():
 	
-	var overlap_areas_ = area.get_overlapping_areas()
+	var overlap_areas_ = collide.get_overlapping_areas()
 
 	_global_datas.switching_tool.emit(light_tool_data)
+	scanner_tool_data.tool_active_signal.emit(false)
 	
-	if overlap_areas_ == null:
+	if overlap_areas_ == null:	
 		return	
-
 
 	for areas in overlap_areas_:
 		
@@ -38,7 +37,8 @@ func _checker():
 
 func _on_zone_collide_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
 	_checker()	
-
+	
 
 func _on_zone_collide_area_shape_exited(area_rid, area, area_shape_index, local_shape_index):
 	_checker()
+	

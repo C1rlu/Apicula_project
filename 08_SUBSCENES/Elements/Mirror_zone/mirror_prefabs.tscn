@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://dym7sjmq33hdc"]
+[gd_scene load_steps=26 format=3 uid="uid://dym7sjmq33hdc"]
 
 [ext_resource type="Material" uid="uid://goq7y1lqdpxa" path="res://05_SHADER_TEST/Subscene_materials/element_subscene_x_ray_VFX_LIGHT.tres" id="3_cb240"]
 
@@ -210,6 +210,8 @@ shader_parameter/ColorParameter = Color(0.286275, 0.286275, 0.286275, 1)
 [sub_resource type="SphereShape3D" id="SphereShape3D_b7y4g"]
 radius = 0.175116
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wc7d6"]
+
 [node name="Mirror_prefabs" type="Area3D"]
 collision_layer = 4
 collision_mask = 4
@@ -221,7 +223,7 @@ script = SubResource("GDScript_vsb1f")
 script = SubResource("GDScript_tujf2")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.650255, 0, 0, 0, 0.650255, 0, 0, 0, 0.650255, 0, 0, 0)
+transform = Transform3D(0.942532, 0, 0, 0, 0.942532, 0, 0, 0, 0.942532, 0, 0, 0)
 layers = 32768
 mesh = SubResource("SphereMesh_ic6q1")
 skeleton = NodePath("")
@@ -234,5 +236,9 @@ mesh = SubResource("SphereMesh_iskgr")
 surface_material_override/0 = SubResource("ShaderMaterial_rw8rk")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0120305, 0.0105445, 0)
+transform = Transform3D(1.42314, 0, 0, 0, 1.42314, 0, 0, 0, 1.42314, 0.0120305, 0.0105445, 0)
 shape = SubResource("SphereShape3D_b7y4g")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="CollisionShape3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+process_material = SubResource("ShaderMaterial_wc7d6")

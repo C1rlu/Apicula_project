@@ -36,9 +36,8 @@ var _back_call_list : Array
 func _ready():
 	_back_call_list.clear()
 	_teleporter_list.clear()
-	_active_teleporter_node = null
 	_selected_tool = null
-	
+
 # input type
 signal using_pad(condition : bool)
 var move_right : String
@@ -101,7 +100,7 @@ signal _instance_teleporter
 signal _teleport_at_position
 var teleporter_amount : int = 0
 var _teleporter_list : Array[Node] 
-var _active_teleporter_node : Node
+
 
 #board scene
 
@@ -119,7 +118,7 @@ signal focus_this_on_board(target : Vector3)
 signal Open_ui_dark_backdrop(condition : bool)
 signal show_on_scanner(condition : bool)
 signal show_ui_scanner_dots(condition : bool)
-signal show_subscene_scanner
+
 var selected_photoData : PhotoData
 var in_scanner_mode : bool 
 

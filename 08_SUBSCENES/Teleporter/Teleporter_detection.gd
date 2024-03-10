@@ -5,6 +5,7 @@ extends Node
 @onready var timer_alarm = $Timer_Alarm
 var pulse = false
 
+
 func _Alarm_pulse():
 	
 	pulse = !pulse
@@ -26,7 +27,7 @@ func _on_zone_collide_area_shape_entered(area_rid, area, area_shape_index, local
 		timer_alarm.start()
 		
 func _on_zone_collide_area_shape_exited(area_rid, area, area_shape_index, local_shape_index):
-	
+		
 	if area == null:
 		return
 
