@@ -9,7 +9,6 @@ func _ready():
 	_global_datas._backFrom_subscene.connect(reload_teleporter)
 	
 func _instance_teleporter():
-
 	
 	_global_datas.teleporter_amount += 1
 	var player = _global_datas.subbscene_playerPosition

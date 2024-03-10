@@ -38,7 +38,6 @@ func _click_teleporter(condition : bool):
 		t.connect("finished",done)
 
 func done():
-	_global_datas._instance_teleporter.emit()
 	
 	_global_datas._teleport_at_position.emit()
 	_global_datas._instance_teleporter.emit()
