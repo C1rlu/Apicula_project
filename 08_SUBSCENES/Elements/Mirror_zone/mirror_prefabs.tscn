@@ -28,16 +28,48 @@ script/source = "extends Node
 
 @onready var gpu_circle_effect = $\"../GPU_CircleEffect\"
 
-func _on_mirror_prefabs_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
+@onready var render_vortex = $\"../Render_vortex\"
+@onready var render_vortex_mat : Material = render_vortex.get_surface_override_material(0)
 
-	if area.get_node_or_null(\"Player_photoActive\"):
-		gpu_circle_effect.emitting = true		
-		
+var t
+var actual_value : float
+
+
+
+
+func _on_mirror_prefabs_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
+	if area:
+		if area.get_node_or_null(\"Player_photoActive\"):
+			start_tween(true)
 
 
 func _on_mirror_prefabs_area_shape_exited(area_rid, area, area_shape_index, local_shape_index):
-	if area.get_node_or_null(\"Player_photoActive\"):
-		gpu_circle_effect.emitting = false		
+	if area:
+		if area.get_node_or_null(\"Player_photoActive\"):
+			start_tween(false)
+
+
+func start_tween(condition : bool):
+	
+	
+	gpu_circle_effect.emitting = condition
+	if t:
+		t.kill()	
+	t = create_tween()	
+	
+	if condition:
+		
+
+		t.tween_method(change_value,0.5,1.0,0.25)		
+			
+	else:
+
+		t.tween_method(change_value,actual_value,0.5,0.25)				
+
+func change_value(value : float):
+	render_vortex_mat.set_shader_parameter(\"Speed\",value)	
+	var range_value = clampf(value * 2,1.0,1.05)
+	render_vortex.scale = Vector3(range_value,range_value,range_value)
 "
 
 [sub_resource type="SphereMesh" id="SphereMesh_ic6q1"]
@@ -217,10 +249,10 @@ shader = SubResource("VisualShader_vn78f")
 shader_parameter/ColorParameter = Color(0.286275, 0.286275, 0.286275, 1)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_b7y4g"]
-radius = 0.175116
+radius = 0.0957538
 
 [sub_resource type="Curve" id="Curve_o04a3"]
-_data = [Vector2(0, 0.0592105), 0.0, 0.0, 0, 0, Vector2(1, 0.0225563), 0.0, 0.0, 0, 0]
+_data = [Vector2(0.00246305, 0.0469924), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="CurveTexture" id="CurveTexture_60tdt"]
@@ -229,7 +261,7 @@ curve = SubResource("Curve_o04a3")
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ov2hl"]
 particle_flag_disable_z = true
 emission_shape = 2
-emission_sphere_radius = 0.5
+emission_sphere_radius = 0.6
 gravity = Vector3(0, 0, 0)
 tangential_accel_min = 0.9
 tangential_accel_max = 1.0
@@ -243,10 +275,11 @@ rings = 16
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_tviuq"]
 emission_shape = 2
-emission_sphere_radius = 0.5
+emission_sphere_radius = 0.53
+inherit_velocity_ratio = -0.525
+direction = Vector3(0, 0, 0)
 gravity = Vector3(0, 0, 0)
-radial_accel_min = 5.0
-radial_accel_max = 10.0
+radial_accel_min = -3.0
 scale_curve = SubResource("CurveTexture_60tdt")
 
 [node name="Mirror_prefabs" type="Area3D"]
@@ -259,15 +292,14 @@ script = SubResource("GDScript_vsb1f")
 [node name="PLayer_InZone" type="Node" parent="."]
 script = SubResource("GDScript_tujf2")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.942532, 0, 0, 0, 0.942532, 0, 0, 0, 0.942532, 0, 0, 0)
+[node name="Render_vortex" type="MeshInstance3D" parent="."]
 layers = 32768
 mesh = SubResource("SphereMesh_ic6q1")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("3_cb240")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="MeshInstance3D"]
-transform = Transform3D(-6.98745e-08, 1.59854, 0, -1.59854, -6.98745e-08, 0, 0, 0, 1.59854, 0.0134362, 0.095031, 0)
+[node name="Render_vortex_globe" type="MeshInstance3D" parent="Render_vortex"]
+transform = Transform3D(-5.62846e-08, 1.28764, 0, -1.28764, -5.62846e-08, 0, 0, 0, 1.28764, 0.0134362, 0.095031, 0)
 layers = 32768
 mesh = SubResource("SphereMesh_iskgr")
 surface_material_override/0 = SubResource("ShaderMaterial_rw8rk")
@@ -288,9 +320,13 @@ draw_pass_1 = SubResource("SphereMesh_8a3y3")
 layers = 4
 material_override = ExtResource("2_dulgr")
 emitting = false
-amount = 150
+amount = 250
 one_shot = true
+speed_scale = 2.0
 explosiveness = 1.0
+fixed_fps = 24
+interpolate = false
+fract_delta = false
 process_material = SubResource("ParticleProcessMaterial_tviuq")
 draw_pass_1 = SubResource("SphereMesh_8a3y3")
 
