@@ -1,5 +1,6 @@
-[gd_scene load_steps=31 format=3 uid="uid://dym7sjmq33hdc"]
+[gd_scene load_steps=32 format=3 uid="uid://dym7sjmq33hdc"]
 
+[ext_resource type="Script" path="res://08_SUBSCENES/Elements/Mirror_zone/Scale_in_switch.gd" id="1_c0oo0"]
 [ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_elements_mat.tres" id="2_dulgr"]
 [ext_resource type="Material" uid="uid://goq7y1lqdpxa" path="res://05_SHADER_TEST/Subscene_materials/element_subscene_x_ray_VFX_LIGHT.tres" id="3_cb240"]
 
@@ -10,7 +11,6 @@ script/source = "extends Node
 @onready var gpu_explosed = $\"../GPU_Explosed\"
 
 func _ready():
-
 	_global_datas.Mirror_vortex_Node = root
 	#_global_datas._mirror_switch.connect(emit_fx)
 	
@@ -35,8 +35,6 @@ var t
 var actual_value : float
 
 
-
-
 func _on_mirror_prefabs_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
 	if area:
 		if area.get_node_or_null(\"Player_photoActive\"):
@@ -58,12 +56,8 @@ func start_tween(condition : bool):
 	t = create_tween()	
 	
 	if condition:
-		
-
-		t.tween_method(change_value,0.5,1.0,0.25)		
-			
+		t.tween_method(change_value,0.5,1.0,0.25)	
 	else:
-
 		t.tween_method(change_value,actual_value,0.5,0.25)				
 
 func change_value(value : float):
@@ -292,6 +286,9 @@ script = SubResource("GDScript_vsb1f")
 [node name="PLayer_InZone" type="Node" parent="."]
 script = SubResource("GDScript_tujf2")
 
+[node name="Scale_in_switch" type="Node" parent="."]
+script = ExtResource("1_c0oo0")
+
 [node name="Render_vortex" type="MeshInstance3D" parent="."]
 layers = 32768
 mesh = SubResource("SphereMesh_ic6q1")
@@ -307,6 +304,13 @@ surface_material_override/0 = SubResource("ShaderMaterial_rw8rk")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1.42314, 0, 0, 0, 1.42314, 0, 0, 0, 1.42314, 0.0120305, 0.0105445, 0)
 shape = SubResource("SphereShape3D_b7y4g")
+
+[node name="Render_vortex_globe_effect" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0.0134362, 0.095031, 0)
+layers = 32768
+mesh = SubResource("SphereMesh_iskgr")
+skeleton = NodePath("../Render_vortex")
+surface_material_override/0 = SubResource("ShaderMaterial_rw8rk")
 
 [node name="GPU_CircleEffect" type="GPUParticles3D" parent="."]
 layers = 4

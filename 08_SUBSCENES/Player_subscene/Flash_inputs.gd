@@ -32,8 +32,7 @@ func check_area(condition : bool):
 		var loot_data_node = areas.get_node_or_null("Lootable")
 		var mirror_node = areas.get_node_or_null("Mirror")
 		var mirror_destination = areas.get_node_or_null("Mirror_destination")
-		#var teleporter = areas.get_node_or_null("Take_teleporter")
-		
+	
 		if  loot_data_node:
 			var lootable_data_rs : Loot_Data = loot_data_node.get_lootable()
 			_global_datas._find_loot.emit(lootable_data_rs)	
