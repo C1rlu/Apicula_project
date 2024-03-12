@@ -21,10 +21,10 @@ func _input(event):
 		
 		#set back call
 		_global_datas._back_call_list.append(set_back_call)	
-		
+		get_tree().paused = true
 			
 
 func set_back_call():
 	_global_datas._open_menu.emit(false)
 	_global_datas.Player_InMenu = false
-
+	get_tree().paused = false	
