@@ -1,4 +1,4 @@
-[gd_scene load_steps=64 format=3 uid="uid://bwmu5iwushsl5"]
+[gd_scene load_steps=63 format=3 uid="uid://bwmu5iwushsl5"]
 
 [ext_resource type="Texture2D" uid="uid://d31xi5f7tan5w" path="res://05_SHADER_TEST/Full_screen/Dither_pattners/Blue_noise/HDR_LA_7.png" id="1_2l1ih"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/INSTANCE_NOTE.gd" id="1_fcb2u"]
@@ -338,51 +338,6 @@ func _ready():
 
 "
 
-[sub_resource type="GDScript" id="GDScript_xsufx"]
-script/source = "extends Node
-
-@onready var photo_effect : ColorRect = $\"../Photo_tools/photo_UI_elements/Photo_FX/Photo_effect_flashSubscene\"
-@onready var material : Material = photo_effect.get_material()
-
-@onready var photo_tools = $\"../Photo_tools\"
-
-
-
-var t
-var center_position : Vector2
-
-func _ready():
-	
-	_global_datas._photo_flash.connect(_flash)
-	center_position =  photo_tools.position
-
-func _flash():
-	
-	
-	photo_tools.position = center_position	
-	
-
-		
-	if t:
-		t.kill()
-	t = create_tween()
-	
-	photo_effect.visible = true
-	
-
-	t .tween_method(set_shader_value,0.0,1.0,0.5)
-	
-
-	
-func set_shader_value(value):
-	
-	var lerp_time = lerpf(0.5,0.0, value)	
-	material.set_shader_parameter(\"flash_opacity\",lerp_time)
-
-
-	
-"
-
 [sub_resource type="GDScript" id="GDScript_d3vsr"]
 script/source = "extends Node
 @onready var photo_tools = $\"../Photo_tools\"
@@ -393,8 +348,7 @@ script/source = "extends Node
 var t 
 
 func _ready():
-	_global_datas._photo_flash_noPhoto.connect(_flash)
-
+	_global_datas._photo_flash.connect(_flash)
 
 func _flash():
 	
@@ -766,7 +720,6 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-1847.17, 708.333)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(2240, 520)
@@ -934,9 +887,6 @@ autowrap_mode = 1
 script = ExtResource("2_2br5g")
 
 [node name="Flash" type="Node" parent="Photo_tools"]
-script = SubResource("GDScript_xsufx")
-
-[node name="Flash_NoPhoto" type="Node" parent="Photo_tools"]
 script = SubResource("GDScript_d3vsr")
 
 [node name="Dots_scanner" type="ColorRect" parent="Photo_tools"]

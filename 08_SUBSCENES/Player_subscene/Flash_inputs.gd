@@ -21,7 +21,8 @@ func check_area(condition : bool):
 		
 	timer.start()
 	_global_datas._take_photo.emit()
-	_global_datas._photo_flash_noPhoto.emit()	
+	_global_datas._photo_flash.emit()
+
 	var overlap_areas_ = area.get_overlapping_areas()
 	
 	if overlap_areas_ == null:

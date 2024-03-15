@@ -1,4 +1,4 @@
-[gd_scene load_steps=98 format=3 uid="uid://g7u8o55jrnyy"]
+[gd_scene load_steps=107 format=3 uid="uid://g7u8o55jrnyy"]
 
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="1_n1vw4"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Player_sub_behaviour.gd" id="1_o2v73"]
@@ -103,28 +103,30 @@ func set_shader_value(value):
 [sub_resource type="GDScript" id="GDScript_mbf75"]
 script/source = "extends Node
 
-@onready var timer = $\"../Timer\"
+var t
+@onready var light_sphere = $\"../../Light_sphere\"
 
-@onready var reload_shape = $\"../../Render_mesh/On_OverMouse_3D_SHAPE_in2\"
 
-
-var active = false
 func _ready():
-	reload_shape.visible = true	
-	var lerp_scale = 0.0
-	reload_shape.scale = Vector3(lerp_scale,lerp_scale,lerp_scale)
+	#_global_datas._photo_flash.connect(_start_flash)
+	pass
+func _start_flash():
+
+	light_sphere.visible = true
+
+	if t:
+		t.kill()
+		
+	t = create_tween()
 	
-func _process(delta):
+	t.tween_method(change_scale,1.0,0.0,1.5)
+	t.connect(\"finished\",done)
 
+func change_scale(value : float):
+	light_sphere.scale = Vector3(value,value,value)		
 
-	if !active:
-		return
-	if timer.is_stopped():
-		return
-	
-	var lerp_scale = lerp(0.0,0.1,timer.time_left)
-	reload_shape.scale = Vector3(lerp_scale,lerp_scale,lerp_scale)
-
+func done():
+	light_sphere.visible = false
 "
 
 [sub_resource type="TorusMesh" id="TorusMesh_vtx34"]
@@ -960,6 +962,127 @@ height = 0.5
 radial_segments = 8
 rings = 8
 
+[sub_resource type="SphereMesh" id="SphereMesh_pr77n"]
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_a0x06"]
+parameter_name = "ColorParameter"
+
+[sub_resource type="VisualShaderNodeFresnel" id="VisualShaderNodeFresnel_xdo26"]
+default_input_values = [2, true, 3, 9.975]
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_c0wh5"]
+constant = 1.0
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_pfal7"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_hjop0"]
+parameter_name = "Dither_size"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_p4onu"]
+
+[sub_resource type="VisualShader" id="VisualShader_t3o1v"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_front, diffuse_lambert, specular_schlick_ggx, unshaded, shadows_disabled;
+
+uniform vec4 ColorParameter : source_color;
+global uniform float Dither_size;
+
+
+
+void fragment() {
+// ColorParameter:3
+	vec4 n_out3p0 = ColorParameter;
+
+
+// FloatConstant:5
+	float n_out5p0 = 1.000000;
+
+
+// FloatParameter:7
+	float n_out7p0 = Dither_size;
+
+
+	float n_out6p0;
+// Expression:6
+	n_out6p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out7p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out6p0 = n_out5p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Fresnel:4
+	float n_in4p3 = 9.97500;
+	float n_out4p0 = pow(clamp(dot(NORMAL, VIEW), 0.0, 1.0), n_in4p3);
+
+
+// Step:8
+	float n_out8p0 = step(n_out6p0, n_out4p0);
+
+
+// Output:0
+	ALBEDO = vec3(n_out3p0.xyz);
+	ALPHA = n_out8p0;
+
+
+}
+"
+modes/cull = 1
+flags/unshaded = true
+flags/shadows_disabled = true
+nodes/fragment/3/node = SubResource("VisualShaderNodeColorParameter_a0x06")
+nodes/fragment/3/position = Vector2(-680, 20)
+nodes/fragment/4/node = SubResource("VisualShaderNodeFresnel_xdo26")
+nodes/fragment/4/position = Vector2(-420, 280)
+nodes/fragment/5/node = SubResource("VisualShaderNodeFloatConstant_c0wh5")
+nodes/fragment/5/position = Vector2(-1020, 360)
+nodes/fragment/6/node = SubResource("VisualShaderNodeExpression_pfal7")
+nodes/fragment/6/position = Vector2(-720, 480)
+nodes/fragment/6/size = Vector2(724.789, 654.559)
+nodes/fragment/6/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/6/output_ports = "0,0,Dither_Node;"
+nodes/fragment/6/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/7/node = SubResource("VisualShaderNodeFloatParameter_hjop0")
+nodes/fragment/7/position = Vector2(-1300, 600)
+nodes/fragment/8/node = SubResource("VisualShaderNodeStep_p4onu")
+nodes/fragment/8/position = Vector2(100, 360)
+nodes/fragment/connections = PackedInt32Array(3, 0, 0, 0, 5, 0, 6, 0, 7, 0, 6, 1, 8, 0, 0, 1, 6, 0, 8, 0, 4, 0, 8, 1)
+nodes/light/0/position = Vector2(1060, 580)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mn4ca"]
+render_priority = 0
+shader = SubResource("VisualShader_t3o1v")
+shader_parameter/ColorParameter = Color(0.784314, 0.709804, 0.513726, 1)
+
 [node name="Player_Sub" type="RigidBody3D"]
 collision_layer = 2
 collision_mask = 2
@@ -1010,7 +1133,7 @@ script = SubResource("GDScript_8qwgp")
 script = ExtResource("2_skl68")
 flash_tool_data = ExtResource("6_axu5t")
 
-[node name="show_wait_circle" type="Node" parent="Flash_inputs"]
+[node name="Fade_flash" type="Node" parent="Flash_inputs"]
 script = SubResource("GDScript_mbf75")
 
 [node name="Timer" type="Timer" parent="Flash_inputs"]
@@ -1216,14 +1339,6 @@ input_ray_pickable = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.138627, 0)
 shape = SubResource("SphereShape3D_g1ic5")
 
-[node name="On_OverMouse_3D_SHAPE_in" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.155103, -2.57618e-16, -1.889e-14, -1.889e-14, -6.3632e-10, -0.155103, 2.74483e-15, 0.0145572, -6.77979e-09, 0, 0.136106, -4.39584e-05)
-visible = false
-layers = 4
-mesh = SubResource("TorusMesh_vtx34")
-skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("ShaderMaterial_t28it")
-
 [node name="Light" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.348655, 0.114098)
 layers = 4100
@@ -1251,6 +1366,14 @@ amount = 100
 speed_scale = 0.5
 process_material = SubResource("ParticleProcessMaterial_0ye1k")
 draw_pass_1 = SubResource("SphereMesh_6ufqt")
+
+[node name="Light_sphere" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.044148, 0.391272, -0.104383)
+visible = false
+layers = 4
+mesh = SubResource("SphereMesh_pr77n")
+skeleton = NodePath("")
+surface_material_override/0 = SubResource("ShaderMaterial_mn4ca")
 
 [connection signal="timeout" from="Ini_subscene/Timer" to="Ini_subscene" method="_on_timer_timeout"]
 [connection signal="timeout" from="TELEPORTER/Closet_teleporter/Timer_Alarm" to="TELEPORTER/Closet_teleporter" method="_on_timer_alarm_timeout"]
