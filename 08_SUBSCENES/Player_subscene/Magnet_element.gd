@@ -24,8 +24,9 @@ func _magnet_element(condition : bool):
 
 		var Magnet_node = areas.get_node_or_null("Magnet")
 		if  Magnet_node:
-			Magnet_node._magnet_me(true)
-			Magnet_node_list.append(Magnet_node)
+			if condition:
+				Magnet_node._magnet_me(true)
+				Magnet_node_list.append(Magnet_node)
 		
 	if Magnet_node_list.size() == 0:
 		return

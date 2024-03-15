@@ -67,6 +67,8 @@ var photo_archives : Array[PhotoData]
 var note_archives : Array[Note_Data]
 var boue_archives : Array[BoueData]
 var tools_list : Array[tool_data]
+var _orbe_type_list : Array[orbe_data]
+
 
 signal _show_hand
 signal _hide_hand
@@ -95,13 +97,14 @@ var _selected_tool : tool_data
 signal switching_tool(tool : tool_data)
 
 
-# SUBSCENE TELEPORTER
+# SUBSCENE ORBE previously teleporter
 signal _instance_teleporter
 signal _teleport_at_position
 var teleporter_amount : int = 0
 var _teleporter_list : Array[Node] 
-
-
+#ui orbe
+signal _open_orbe_select_ui(condition : bool)
+signal _update_orbe_ui_type(orbe_data_type : orbe_data)
 #board scene
 
 signal open_inventory(condition : bool)
