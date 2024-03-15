@@ -32,7 +32,7 @@ func _checker():
 		if photo_data_node:
 			_global_datas.switching_tool.emit(scanner_tool_data)
 			return	
-	
+		
 	
 
 func _on_zone_collide_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):

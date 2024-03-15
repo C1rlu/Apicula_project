@@ -48,9 +48,12 @@ func _on_mirror_prefabs_area_shape_exited(area_rid, area, area_shape_index, loca
 
 
 func start_tween(condition : bool):
-	
-	
+
+	if _global_datas.Player_InMirrorScene:
+		return
+		
 	gpu_circle_effect.emitting = condition
+	
 	if t:
 		t.kill()	
 	t = create_tween()	
