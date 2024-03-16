@@ -103,6 +103,8 @@ signal _teleport_at_position
 var _teleporter_list : Array[Node] 
 #ui orbe
 signal _select_orbe_type(orbe_data_type : orbe_data)
+signal _remove_orbe_from_data(orbe_data_type : orbe_data)
+
 #board scene
 
 signal open_inventory(condition : bool)

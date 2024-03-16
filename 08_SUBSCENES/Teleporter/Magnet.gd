@@ -1,12 +1,13 @@
 extends Node
 
+@export var orbe_name : String = ""
 @onready var teleporter = $"../.."
-@export var orbe_type_data : orbe_data
 
 var player_position 
 var t 
 
 var index : int 
+
 
 func _magnet_me(condition:bool):
 	
@@ -27,5 +28,5 @@ func _value(value):
 		done()	
 		
 func done():
-	#orbe_type_data.Orbe_scene_amount -= 1
+	_global_datas._remove_orbe_from_data.emit(orbe_name)
 	teleporter.queue_free()

@@ -25,11 +25,12 @@ func _instance_teleporter():
 	
 	var player = _global_datas.subbscene_playerPosition
 	var offset = Vector3(0.0,0.15,0.0)
-	var orbe_prefab = orbe_data_type.Orbe_prefab
+	var orbe_prefab : PackedScene = orbe_data_type.Orbe_prefab
 	var instance_teleporter = orbe_prefab.instantiate()			
 	instance_teleporter .position = player + offset
 	load_scene.add_child(instance_teleporter)
-
+	
+	_global_datas._select_orbe_type.emit(orbe_data_type)
 	
 
 
