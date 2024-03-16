@@ -10,9 +10,6 @@ func _play_tool(condition : bool):
 	if _global_datas.Player_InMirrorScene:
 		return
 	
-	if _global_datas.teleporter_amount == 3:
-		return
-	
 	if !condition:
 		return
 		

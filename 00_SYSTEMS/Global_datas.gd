@@ -37,7 +37,7 @@ func _ready():
 	_back_call_list.clear()
 	_teleporter_list.clear()
 	_selected_tool = null
-
+	_orbe_type_list.clear()
 # input type
 signal using_pad(condition : bool)
 var move_right : String
@@ -100,11 +100,9 @@ signal switching_tool(tool : tool_data)
 # SUBSCENE ORBE previously teleporter
 signal _instance_teleporter
 signal _teleport_at_position
-var teleporter_amount : int = 0
 var _teleporter_list : Array[Node] 
 #ui orbe
-signal _open_orbe_select_ui(condition : bool)
-signal _update_orbe_ui_type(orbe_data_type : orbe_data)
+signal _select_orbe_type(orbe_data_type : orbe_data)
 #board scene
 
 signal open_inventory(condition : bool)

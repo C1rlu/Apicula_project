@@ -50,6 +50,35 @@ func _on_timer_timeout():
 
 "
 
+[sub_resource type="GDScript" id="GDScript_mbf75"]
+script/source = "extends Node
+
+var t
+@onready var light_sphere = $\"../../Light_sphere\"
+
+
+func _ready():
+	#_global_datas._photo_flash.connect(_start_flash)
+	pass
+func _start_flash():
+
+	light_sphere.visible = true
+
+	if t:
+		t.kill()
+		
+	t = create_tween()
+	
+	t.tween_method(change_scale,1.0,0.0,1.5)
+	t.connect(\"finished\",done)
+
+func change_scale(value : float):
+	light_sphere.scale = Vector3(value,value,value)		
+
+func done():
+	light_sphere.visible = false
+"
+
 [sub_resource type="GDScript" id="GDScript_0rnti"]
 script/source = "extends Node
 
@@ -98,35 +127,6 @@ func set_shader_value(value):
 	omni_light_3d.omni_range = value
 
 
-"
-
-[sub_resource type="GDScript" id="GDScript_mbf75"]
-script/source = "extends Node
-
-var t
-@onready var light_sphere = $\"../../Light_sphere\"
-
-
-func _ready():
-	#_global_datas._photo_flash.connect(_start_flash)
-	pass
-func _start_flash():
-
-	light_sphere.visible = true
-
-	if t:
-		t.kill()
-		
-	t = create_tween()
-	
-	t.tween_method(change_scale,1.0,0.0,1.5)
-	t.connect(\"finished\",done)
-
-func change_scale(value : float):
-	light_sphere.scale = Vector3(value,value,value)		
-
-func done():
-	light_sphere.visible = false
 "
 
 [sub_resource type="TorusMesh" id="TorusMesh_vtx34"]
@@ -1123,12 +1123,6 @@ wait_time = 0.25
 script = ExtResource("4_bymul")
 teleporter_data = ExtResource("3_2sukr")
 
-[node name="Dash" type="Node" parent="."]
-script = SubResource("GDScript_0rnti")
-
-[node name="Photo_Flash" type="Node" parent="."]
-script = SubResource("GDScript_8qwgp")
-
 [node name="Flash_inputs" type="Node" parent="."]
 script = ExtResource("2_skl68")
 flash_tool_data = ExtResource("6_axu5t")
@@ -1149,6 +1143,12 @@ scanner_tool_data = ExtResource("15_vswql")
 
 [node name="Timer" type="Timer" parent="Scanne_element/Active_scanner_visual_pulse"]
 wait_time = 0.25
+
+[node name="Dash" type="Node" parent="."]
+script = SubResource("GDScript_0rnti")
+
+[node name="Photo_Flash" type="Node" parent="."]
+script = SubResource("GDScript_8qwgp")
 
 [node name="Magnet_element" type="Node" parent="."]
 script = ExtResource("11_ctwl5")
@@ -1379,8 +1379,8 @@ surface_material_override/0 = SubResource("ShaderMaterial_mn4ca")
 
 [connection signal="timeout" from="Ini_subscene/Timer" to="Ini_subscene" method="_on_timer_timeout"]
 [connection signal="timeout" from="TELEPORTER/Closet_teleporter/Timer_Alarm" to="TELEPORTER/Closet_teleporter" method="_on_timer_alarm_timeout"]
-[connection signal="timeout" from="Flash_inputs/Timer" to="Dash" method="_on_timer_timeout"]
 [connection signal="timeout" from="Flash_inputs/Timer" to="Flash_inputs" method="_on_timer_timeout"]
+[connection signal="timeout" from="Flash_inputs/Timer" to="Dash" method="_on_timer_timeout"]
 [connection signal="timeout" from="Scanne_element/Active_scanner_visual_pulse/Timer" to="Scanne_element/Active_scanner_visual_pulse" method="_on_timer_timeout"]
 [connection signal="area_shape_entered" from="ZoneCollide" to="TELEPORTER/Closet_teleporter" method="_on_zone_collide_area_shape_entered"]
 [connection signal="area_shape_entered" from="ZoneCollide" to="Render_mesh/Active_visual_tools/Tool_zone_detect" method="_on_zone_collide_area_shape_entered"]
