@@ -4,7 +4,10 @@ extends Node
 @onready var vfx_sphere_mirror = $"../VFX_SPHERE_MIRROR"
 var t
 @onready var area = $"../ZoneCollide"
-var Magnet_node_list : Array
+
+var magnet_list : Array
+
+var active_magnet
 
 func _ready():
 	teleporter_data.tool_active_signal.connect(_play_tool)		
@@ -26,7 +29,7 @@ func _click_teleporter(condition : bool):
 	if condition:	
 		t = create_tween()
 		t.tween_method(change_value,0.5,3.0,0.5)
-		t.connect("finished",done)
+		#t.connect("finished",done)
 		
 		_global_datas._show_orbe_ui.emit()
 		
@@ -45,25 +48,37 @@ func change_value(value):
 
 func _magnet_element(condition : bool):
 	
-
-	Magnet_node_list.clear()	
-		
 	var overlap_areas_ = area.get_overlapping_areas()
+
+		
+	magnet_list.clear()
 	
 	if overlap_areas_ == null:
 		return
 		
 	for areas in overlap_areas_:
-
 		var Magnet_node = areas.get_node_or_null("Orbe_Magnet")
 		if  Magnet_node:
-			if condition:
-				Magnet_node._magnet_me(true)
-				Magnet_node_list.append(Magnet_node)
+			magnet_list.append(Magnet_node)
+			
+	var closet_magnet = _closest_element(magnet_list)
+	active_magnet = closet_magnet		
+	
+	if active_magnet:
+		active_magnet._magnet_me(condition)	
+				
+
 		
-	if Magnet_node_list.size() == 0:
-		return
 		
-	if !condition:
-		for m in Magnet_node_list:
-			m._magnet_me(false)	
+func _closest_element(array):
+	
+	var closest_node = null
+	var closest_node_distance = 0.0
+	for element in array:
+		var player_sub = _global_datas.subbscene_playerPosition
+		var current_node_distance = player_sub.distance_to(element.get_magnet_position())
+		if closest_node == null or current_node_distance < closest_node_distance:
+			closest_node = element
+			closest_node_distance = current_node_distance
+
+	return closest_node

@@ -7,8 +7,10 @@ var index : int = 0
 
 @onready var descriptions = $"../Panel_ui/Orbe_descriptions/Descriptions"
 
-
+var active = false
 func _ready():
+	if !active :
+		return
 	_global_datas._show_orbe_ui.connect(_update_ui)
 	_global_datas._open_menu.connect(close_orbe_ui)
 	_global_datas._backFrom_subscene.connect(close_orbe_ui_back)
@@ -17,7 +19,9 @@ func _ready():
 	
 func _input(event):
 	
-	
+	if !active :
+		return
+		
 	if _global_datas.Player_InMirrorScene:
 		return
 		

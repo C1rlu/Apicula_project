@@ -2,7 +2,7 @@ extends Node
 
 
 @export var orbe_list : Array[orbe_data]
-	
+@export var tool_object_in_hand : tool_data	
 func _ready():
 	_global_datas._orbe_type_list = orbe_list
 	_global_datas._backFrom_subscene.connect(reload_teleporter)
@@ -21,5 +21,7 @@ func remove_orbe(string : String):
 		if o.Orbe_kind == string:
 			o.Orbe_scene_amount -= 1
 			_global_datas._select_orbe_type.emit(o)			
+			_global_datas.orbe_in_hand = o
+
 		
 	_global_datas._show_orbe_ui.emit()

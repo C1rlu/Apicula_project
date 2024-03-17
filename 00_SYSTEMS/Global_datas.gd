@@ -38,6 +38,8 @@ func _ready():
 	_teleporter_list.clear()
 	_selected_tool = null
 	_orbe_type_list.clear()
+	
+	
 # input type
 signal using_pad(condition : bool)
 var move_right : String
@@ -101,6 +103,8 @@ signal switching_tool(tool : tool_data)
 signal _instance_teleporter
 signal _teleport_at_position(start_position: Vector3)
 var _teleporter_list : Array[Node] 
+
+
 #ui orbe
 signal _select_orbe_type(orbe_data_type : orbe_data)
 signal _remove_orbe_from_data(orbe_data_type : orbe_data)

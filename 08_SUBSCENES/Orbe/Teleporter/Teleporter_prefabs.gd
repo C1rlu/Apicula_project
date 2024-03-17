@@ -12,3 +12,7 @@ func _remove_teleporter():
 func set_position(_position : Vector3):
 	teleporter.position = _position	
 	teleporter_position = teleporter.position
+
+func magnet_end():
+	var player_position = _global_datas.subbscene_playerPosition	
+	teleporter_position = player_position	

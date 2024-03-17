@@ -12,6 +12,7 @@ func _ready():
 func _open_menu(condition : bool):
 	game_menu_root.visible = condition		
 	_global_datas.show_ui_scanner_dots.emit(condition)
+	
 func _input(event):
 	
 	if event.is_action_pressed("Open_Menu"):
