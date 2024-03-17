@@ -13,6 +13,8 @@ func _ready():
 	_global_datas._open_menu.connect(close_orbe_ui)
 	_global_datas._backFrom_subscene.connect(close_orbe_ui_back)
 	_global_datas._mirror_switch.connect(close_orbe_ui)
+	
+	
 func _input(event):
 	
 	
@@ -29,7 +31,7 @@ func _input(event):
 		switch_orbe_type_data(-1)	
 		
 func _update_ui():
-	
+
 	var orbe_type = _global_datas._orbe_type_list[index]
 	
 	descriptions.text = orbe_type.Orbe_descriptions
@@ -71,9 +73,9 @@ func update_icon_select_color(orbe_type : orbe_data):
 func close_orbe_ui(condition : bool):
 	if condition:
 		Panel_ui.visible = false	
-			
+
 func close_orbe_ui_back():
 	Panel_ui.visible = false	
-		
+
 func _on_timer_timeout():
 	Panel_ui.visible = false
