@@ -18,9 +18,9 @@
 [ext_resource type="Script" path="res://08_SUBSCENES/Add_teleporter_inputs.gd" id="8_2kb68"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Instance_teleporter.gd" id="10_h65by"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Orbe.gd" id="11_uy3s0"]
-[ext_resource type="Resource" uid="uid://cubpsapqnetwr" path="res://08_SUBSCENES/Teleporter/Orbe_datas/Orbe_teleporter.tres" id="12_kv1gg"]
-[ext_resource type="Resource" uid="uid://ck5e4tpntmloe" path="res://08_SUBSCENES/Teleporter/Orbe_datas/Orbe_exitMirror.tres" id="13_dfmp2"]
-[ext_resource type="Resource" uid="uid://dvoyfwvhfmjcb" path="res://08_SUBSCENES/Teleporter/Orbe_datas/Orbe_megaphone.tres" id="14_7ej3m"]
+[ext_resource type="Resource" uid="uid://cubpsapqnetwr" path="res://08_SUBSCENES/Orbe/Orbe_datas/Orbe_teleporter.tres" id="12_kv1gg"]
+[ext_resource type="Resource" uid="uid://ck5e4tpntmloe" path="res://08_SUBSCENES/Orbe/Orbe_datas/Orbe_exitMirror.tres" id="13_aabh8"]
+[ext_resource type="Resource" uid="uid://dvoyfwvhfmjcb" path="res://08_SUBSCENES/Orbe/Orbe_datas/Orbe_megaphone.tres" id="22_knnkf"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/Update_orbe_type_ui.gd" id="22_sg2pd"]
 [ext_resource type="PackedScene" uid="uid://dru316jqflpmo" path="res://13_TOOLS_UI/Choose_orbe_type/Orbe_typeIcon_select.tscn" id="23_yvu72"]
 
@@ -954,10 +954,6 @@ script = SubResource("GDScript_nvaxv")
 script = ExtResource("10_h65by")
 orbe_data_type = ExtResource("12_kv1gg")
 
-[node name="Orbe_list_setups" type="Node" parent="."]
-script = ExtResource("11_uy3s0")
-orbe_list = Array[Resource("res://08_SUBSCENES/Teleporter/Orbe_datas/Orbe_data.gd")]([ExtResource("12_kv1gg"), ExtResource("13_dfmp2"), ExtResource("14_7ej3m")])
-
 [node name="Teleport_Player" type="Node" parent="."]
 script = ExtResource("4_jsgo0")
 
@@ -1113,6 +1109,10 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
+[node name="Orbe_list_setups" type="Node" parent="Orbe_select_type_ui"]
+script = ExtResource("11_uy3s0")
+orbe_list = Array[Resource("res://08_SUBSCENES/Orbe/Orbe_datas/Orbe_data.gd")]([ExtResource("13_aabh8"), ExtResource("22_knnkf"), ExtResource("12_kv1gg")])
+
 [node name="Update_orbe_type_ui" type="Node" parent="Orbe_select_type_ui"]
 script = ExtResource("22_sg2pd")
 
@@ -1122,6 +1122,7 @@ wait_time = 3.0
 [node name="Add_panel_icon" type="Node" parent="Orbe_select_type_ui"]
 
 [node name="Panel_ui" type="Control" parent="Orbe_select_type_ui"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1192,7 +1193,7 @@ mouse_filter = 2
 [node name="Panel5" parent="Orbe_select_type_ui/Panel_ui/HBoxContainer" instance=ExtResource("23_yvu72")]
 layout_mode = 2
 mouse_filter = 2
-orbe_data_type = ExtResource("14_7ej3m")
+orbe_data_type = ExtResource("22_knnkf")
 
 [connection signal="timeout" from="FADE_IN/Timer" to="FADE_IN" method="_on_timer_timeout"]
 [connection signal="timeout" from="FADE_OUT/Timer" to="FADE_OUT" method="_on_timer_timeout"]

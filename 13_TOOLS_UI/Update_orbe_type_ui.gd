@@ -12,8 +12,9 @@ func _ready():
 	_global_datas._show_orbe_ui.connect(_update_ui)
 	_global_datas._open_menu.connect(close_orbe_ui)
 	_global_datas._backFrom_subscene.connect(close_orbe_ui_back)
-	
+	_global_datas._mirror_switch.connect(close_orbe_ui)
 func _input(event):
+	
 	
 	if _global_datas.Player_InMirrorScene:
 		return
