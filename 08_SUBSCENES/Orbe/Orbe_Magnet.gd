@@ -2,36 +2,34 @@ extends Node
 
 @export var orbe_name : String = ""
 @onready var teleporter = $"../.."
-@onready var teleporter_node = $"../../Teleporter"
 
 var player_position 
 var t 
 
 var index : int 
+var active_magnet : bool
+
+signal magnet_end
+
+
 
 func _magnet_me(condition:bool):
+	active_magnet = condition
+			
+func _process(delta):
 	
-	if t:
-		t.kill()
-		
-	if condition:
-		player_position = _global_datas.subbscene_playerPosition	
-		t = create_tween()		
-		t.tween_method(_value,0.0,1.0,4.5)
+	if !active_magnet:
+		return
+
+	_value(delta)	
+			
+func _value(delta):
 	
-func _value(value):
+	player_position = _global_datas.subbscene_playerPosition + Vector3(0.0,0.3,0.0)	
 	
-	player_position = _global_datas.subbscene_playerPosition	
-	teleporter.global_position = lerp(teleporter.global_position,player_position,value)			
-	#var distance = teleporter.global_position.distance_to(player_position)
-	
-	teleporter_node.magnet_end()
-	#if distance < 0.1:
-	#	done()	
+	teleporter.global_position = lerp(teleporter.global_position,player_position, 4 * delta)			
+	magnet_end.emit()
 	
 func get_magnet_position():
 	return 	teleporter.global_position
 		
-func done():
-	_global_datas._remove_orbe_from_data.emit(orbe_name)
-	teleporter.queue_free()

@@ -16,3 +16,7 @@ func set_position(_position : Vector3):
 func magnet_end():
 	var player_position = _global_datas.subbscene_playerPosition	
 	teleporter_position = player_position	
+
+
+func _on_orbe_magnet_magnet_end():
+	magnet_end()

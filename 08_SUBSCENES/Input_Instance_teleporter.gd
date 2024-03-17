@@ -50,9 +50,12 @@ func _magnet_element(condition : bool):
 	
 	var overlap_areas_ = area.get_overlapping_areas()
 
+	if !condition:
+		if active_magnet:
+			active_magnet._magnet_me(false)	
+		magnet_list.clear()
+		return
 		
-	magnet_list.clear()
-	
 	if overlap_areas_ == null:
 		return
 		
