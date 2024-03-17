@@ -5,10 +5,13 @@ extends Node
 
 var index : int = 0
 
+@onready var descriptions = $"../Panel_ui/Orbe_descriptions/Descriptions"
+
+
 func _ready():
 	_global_datas._show_orbe_ui.connect(_update_ui)
 	_global_datas._open_menu.connect(close_orbe_ui)
-	
+	_global_datas._backFrom_subscene.connect(close_orbe_ui_back)
 	
 func _input(event):
 	
@@ -27,6 +30,9 @@ func _input(event):
 func _update_ui():
 	
 	var orbe_type = _global_datas._orbe_type_list[index]
+	
+	descriptions.text = orbe_type.Orbe_descriptions
+	
 	Panel_ui.visible = true
 	timer.start()
 	
@@ -63,7 +69,10 @@ func update_icon_select_color(orbe_type : orbe_data):
 	
 func close_orbe_ui(condition : bool):
 	if condition:
-		Panel_ui.visible = false		
-	
+		Panel_ui.visible = false	
+			
+func close_orbe_ui_back():
+	Panel_ui.visible = false	
+		
 func _on_timer_timeout():
 	Panel_ui.visible = false
