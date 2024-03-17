@@ -1,15 +1,11 @@
-[gd_scene load_steps=67 format=3 uid="uid://bwmu5iwushsl5"]
+[gd_scene load_steps=63 format=3 uid="uid://bwmu5iwushsl5"]
 
 [ext_resource type="Texture2D" uid="uid://d31xi5f7tan5w" path="res://05_SHADER_TEST/Full_screen/Dither_pattners/Blue_noise/HDR_LA_7.png" id="1_2l1ih"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/INSTANCE_NOTE.gd" id="1_fcb2u"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/Scanner_UI_dots_effect.gd" id="2_2br5g"]
 [ext_resource type="Texture2D" uid="uid://dto78na6ad5o2" path="res://00_SYSTEMS/KeyOrPad/Key_inputs.png" id="4_c4v0f"]
 [ext_resource type="Material" uid="uid://bxikm4g1nkywk" path="res://06_UI/Disolved_simple_texture.tres" id="4_opffw"]
-[ext_resource type="PackedScene" uid="uid://dru316jqflpmo" path="res://13_TOOLS_UI/Choose_orbe_type/Orbe_typeIcon_select.tscn" id="5_e5eav"]
-[ext_resource type="Resource" uid="uid://dvoyfwvhfmjcb" path="res://08_SUBSCENES/Teleporter/Orbe_datas/Orbe_megaphone.tres" id="5_jdta3"]
 [ext_resource type="Texture2D" uid="uid://4bq2l5jjm4r2" path="res://00_SYSTEMS/KeyOrPad/Pad_inputs.png" id="5_jufic"]
-[ext_resource type="Script" path="res://13_TOOLS_UI/Update_orbe_type_ui.gd" id="5_mfs3k"]
-[ext_resource type="Resource" uid="uid://cubpsapqnetwr" path="res://08_SUBSCENES/Teleporter/Orbe_datas/Orbe_teleporter.tres" id="6_lwwno"]
 
 [sub_resource type="GDScript" id="GDScript_ebu32"]
 script/source = "extends Node
@@ -825,66 +821,6 @@ script = SubResource("GDScript_ebu32")
 [node name="INSTANCE_NOTE" type="Node" parent="."]
 script = ExtResource("1_fcb2u")
 
-[node name="Orbe_select_type_ui" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="Update_orbe_type_ui" type="Node" parent="Orbe_select_type_ui"]
-script = ExtResource("5_mfs3k")
-
-[node name="Timer" type="Timer" parent="Orbe_select_type_ui/Update_orbe_type_ui"]
-wait_time = 3.0
-
-[node name="Add_panel_icon" type="Node" parent="Orbe_select_type_ui"]
-
-[node name="Panel_ui" type="Control" parent="Orbe_select_type_ui"]
-visible = false
-layout_mode = 1
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_top = 354.0
-offset_bottom = 467.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Orbe_select_type_ui/Panel_ui"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -105.0
-offset_top = -50.0
-offset_right = 105.0
-offset_bottom = 50.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-theme_override_constants/separation = 10
-
-[node name="Panel3" parent="Orbe_select_type_ui/Panel_ui/HBoxContainer" instance=ExtResource("5_e5eav")]
-layout_mode = 2
-mouse_filter = 2
-orbe_data_type = ExtResource("6_lwwno")
-
-[node name="Panel4" parent="Orbe_select_type_ui/Panel_ui/HBoxContainer" instance=ExtResource("5_e5eav")]
-layout_mode = 2
-mouse_filter = 2
-
-[node name="Panel5" parent="Orbe_select_type_ui/Panel_ui/HBoxContainer" instance=ExtResource("5_e5eav")]
-layout_mode = 2
-mouse_filter = 2
-orbe_data_type = ExtResource("5_jdta3")
-
 [node name="Description" type="Node2D" parent="."]
 position = Vector2(989, 752)
 
@@ -1044,5 +980,3 @@ grow_vertical = 2
 texture = ExtResource("4_c4v0f")
 expand_mode = 1
 stretch_mode = 4
-
-[connection signal="timeout" from="Orbe_select_type_ui/Update_orbe_type_ui/Timer" to="Orbe_select_type_ui/Update_orbe_type_ui" method="_on_timer_timeout"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=93 format=3 uid="uid://nigmie4bbn6"]
+[gd_scene load_steps=95 format=3 uid="uid://nigmie4bbn6"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/Grid_scene/Subscene_loader.gd" id="1_7uoo0"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="2_3srhu"]
@@ -21,6 +21,8 @@
 [ext_resource type="Resource" uid="uid://cubpsapqnetwr" path="res://08_SUBSCENES/Teleporter/Orbe_datas/Orbe_teleporter.tres" id="12_kv1gg"]
 [ext_resource type="Resource" uid="uid://ck5e4tpntmloe" path="res://08_SUBSCENES/Teleporter/Orbe_datas/Orbe_exitMirror.tres" id="13_dfmp2"]
 [ext_resource type="Resource" uid="uid://dvoyfwvhfmjcb" path="res://08_SUBSCENES/Teleporter/Orbe_datas/Orbe_megaphone.tres" id="14_7ej3m"]
+[ext_resource type="Script" path="res://13_TOOLS_UI/Update_orbe_type_ui.gd" id="22_sg2pd"]
+[ext_resource type="PackedScene" uid="uid://dru316jqflpmo" path="res://13_TOOLS_UI/Choose_orbe_type/Orbe_typeIcon_select.tscn" id="23_yvu72"]
 
 [sub_resource type="GDScript" id="GDScript_btuws"]
 script/source = "extends Node
@@ -1102,6 +1104,67 @@ offset_right = 1856.0
 offset_bottom = 68.0
 theme_override_font_sizes/font_size = 35
 
+[node name="Orbe_select_type_ui" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Update_orbe_type_ui" type="Node" parent="Orbe_select_type_ui"]
+script = ExtResource("22_sg2pd")
+
+[node name="Timer" type="Timer" parent="Orbe_select_type_ui/Update_orbe_type_ui"]
+wait_time = 3.0
+
+[node name="Add_panel_icon" type="Node" parent="Orbe_select_type_ui"]
+
+[node name="Panel_ui" type="Control" parent="Orbe_select_type_ui"]
+visible = false
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -406.0
+offset_bottom = -293.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Orbe_select_type_ui/Panel_ui"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -105.0
+offset_top = -50.0
+offset_right = 105.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="Panel3" parent="Orbe_select_type_ui/Panel_ui/HBoxContainer" instance=ExtResource("23_yvu72")]
+layout_mode = 2
+mouse_filter = 2
+orbe_data_type = ExtResource("12_kv1gg")
+
+[node name="Panel4" parent="Orbe_select_type_ui/Panel_ui/HBoxContainer" instance=ExtResource("23_yvu72")]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Panel5" parent="Orbe_select_type_ui/Panel_ui/HBoxContainer" instance=ExtResource("23_yvu72")]
+layout_mode = 2
+mouse_filter = 2
+orbe_data_type = ExtResource("14_7ej3m")
+
 [connection signal="timeout" from="FADE_IN/Timer" to="FADE_IN" method="_on_timer_timeout"]
 [connection signal="timeout" from="FADE_OUT/Timer" to="FADE_OUT" method="_on_timer_timeout"]
 [connection signal="area_shape_entered" from="Surface_trigger" to="GO_SURFACE" method="_on_surface_trigger_area_shape_entered"]
+[connection signal="timeout" from="Orbe_select_type_ui/Update_orbe_type_ui/Timer" to="Orbe_select_type_ui/Update_orbe_type_ui" method="_on_timer_timeout"]
