@@ -19,7 +19,7 @@ func _checker():
 		
 		_global_datas.switching_tool.emit(light_tool_data)
 		
-		var teleporter_node = areas.get_node_or_null("Take_teleporter")
+		var teleporter_node = areas.get_node_or_null("Orbe_Magnet")
 			  
 		if teleporter_node:
 			if _global_datas.Player_InMirrorScene:

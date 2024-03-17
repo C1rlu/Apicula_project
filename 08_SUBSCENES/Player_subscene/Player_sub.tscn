@@ -79,30 +79,6 @@ func done():
 	light_sphere.visible = false
 "
 
-[sub_resource type="GDScript" id="GDScript_0rnti"]
-script/source = "extends Node
-
-@onready var player_sub = $\"..\"
-
-@onready var timer = $\"../Flash_inputs/Timer\"
-var can_dash : bool = true
-
-func _input(event: InputEvent):
-	
-	if !can_dash:	
-		return
-		
-	if event.is_action_pressed(\"speed_up\"):
-		player_sub._dash()
-		can_dash = false
-		timer.start()
-
-
-func _on_timer_timeout():
-	can_dash = true	
-	
-"
-
 [sub_resource type="GDScript" id="GDScript_8qwgp"]
 script/source = "extends Node
 
@@ -127,6 +103,30 @@ func set_shader_value(value):
 	omni_light_3d.omni_range = value
 
 
+"
+
+[sub_resource type="GDScript" id="GDScript_0rnti"]
+script/source = "extends Node
+
+@onready var player_sub = $\"..\"
+
+@onready var timer = $\"../Flash_inputs/Timer\"
+var can_dash : bool = true
+
+func _input(event: InputEvent):
+	
+	if !can_dash:	
+		return
+		
+	if event.is_action_pressed(\"speed_up\"):
+		player_sub._dash()
+		can_dash = false
+		timer.start()
+
+
+func _on_timer_timeout():
+	can_dash = true	
+	
 "
 
 [sub_resource type="TorusMesh" id="TorusMesh_vtx34"]
@@ -1144,15 +1144,15 @@ wait_time = 0.25
 script = ExtResource("4_bymul")
 teleporter_data = ExtResource("3_2sukr")
 
-[node name="Dash" type="Node" parent="."]
-script = SubResource("GDScript_0rnti")
-
 [node name="Photo_Flash" type="Node" parent="."]
 script = SubResource("GDScript_8qwgp")
 
 [node name="Magnet_element" type="Node" parent="."]
 script = ExtResource("11_ctwl5")
 magnet_tool = ExtResource("17_iywa5")
+
+[node name="Dash" type="Node" parent="."]
+script = SubResource("GDScript_0rnti")
 
 [node name="Render_mesh" type="Node3D" parent="."]
 

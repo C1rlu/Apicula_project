@@ -2,8 +2,8 @@
 
 [ext_resource type="Material" uid="uid://cdnmf431kgh7" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat_far.tres" id="2_xs4tr"]
 [ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_elements_mat.tres" id="3_c6p4e"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Magnet.gd" id="4_v3th2"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Take_teleporter.gd" id="5_5y8km"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Orbe_Magnet.gd" id="3_xc1lh"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Orbe_Contact.gd" id="4_vlilf"]
 
 [sub_resource type="TorusMesh" id="TorusMesh_5b3r5"]
 
@@ -157,12 +157,12 @@ shape = SubResource("SphereShape3D_skf8y")
 collision_layer = 6
 collision_mask = 6
 
-[node name="Magnet" type="Node" parent="Area_take_it"]
-script = ExtResource("4_v3th2")
+[node name="Orbe_Magnet" type="Node" parent="Area_take_it"]
+script = ExtResource("3_xc1lh")
 orbe_name = "Megaphone"
 
-[node name="Take_teleporter" type="Node" parent="Area_take_it"]
-script = ExtResource("5_5y8km")
+[node name="Orbe_Contact" type="Node" parent="Area_take_it"]
+script = ExtResource("4_vlilf")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="Area_take_it"]
 shape = SubResource("SphereShape3D_fsn5p")
@@ -182,5 +182,5 @@ mesh = SubResource("TorusMesh_rprlq")
 skeleton = NodePath("../../..")
 surface_material_override/0 = SubResource("ShaderMaterial_of2nf")
 
-[connection signal="area_shape_entered" from="Area_take_it" to="Area_take_it/Take_teleporter" method="_on_area_take_it_area_shape_entered"]
-[connection signal="area_shape_exited" from="Area_take_it" to="Area_take_it/Take_teleporter" method="_on_area_take_it_area_shape_exited"]
+[connection signal="area_shape_entered" from="Area_take_it" to="Area_take_it/Orbe_Contact" method="_on_area_take_it_area_shape_entered"]
+[connection signal="area_shape_exited" from="Area_take_it" to="Area_take_it/Orbe_Contact" method="_on_area_take_it_area_shape_exited"]

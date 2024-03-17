@@ -22,7 +22,7 @@ func _magnet_element(condition : bool):
 		
 	for areas in overlap_areas_:
 
-		var Magnet_node = areas.get_node_or_null("Magnet")
+		var Magnet_node = areas.get_node_or_null("Orbe_Magnet")
 		if  Magnet_node:
 			if condition:
 				Magnet_node._magnet_me(true)

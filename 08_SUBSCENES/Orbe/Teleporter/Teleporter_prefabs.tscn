@@ -1,10 +1,10 @@
 [gd_scene load_steps=18 format=3 uid="uid://d1dy8wdybrr7m"]
 
-[ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_elements_mat.tres" id="1_cvxa8"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Teleporter/Teleporter_prefabs.gd" id="1_prh7u"]
-[ext_resource type="Material" uid="uid://cdnmf431kgh7" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat_far.tres" id="2_irkwc"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Take_teleporter.gd" id="3_6fuat"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Magnet.gd" id="4_0g2el"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Teleporter/Teleporter_prefabs.gd" id="1_qf47g"]
+[ext_resource type="Material" uid="uid://cdnmf431kgh7" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat_far.tres" id="2_af0vg"]
+[ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_elements_mat.tres" id="3_7lp5l"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Orbe_Magnet.gd" id="4_626aq"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Orbe_Contact.gd" id="5_pryy3"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_8xv11"]
 radial_segments = 16
@@ -138,19 +138,19 @@ collision_layer = 6
 collision_mask = 6
 
 [node name="Teleporter" type="Node" parent="."]
-script = ExtResource("1_prh7u")
+script = ExtResource("1_qf47g")
 
 [node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.123877, 0, 0, 0, 0.123877, 0, 0, 0, 0.123877, 0, 0, 0)
 layers = 4
 mesh = SubResource("SphereMesh_8xv11")
-surface_material_override/0 = ExtResource("2_irkwc")
+surface_material_override/0 = ExtResource("2_af0vg")
 
 [node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.061185, 0, 0, 0, 0.061185, 0, 0, 0, 0.061185, 0, 0, 0.0416332)
 layers = 4
 mesh = SubResource("SphereMesh_8xv11")
-surface_material_override/0 = ExtResource("1_cvxa8")
+surface_material_override/0 = ExtResource("3_7lp5l")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_skf8y")
@@ -159,12 +159,12 @@ shape = SubResource("SphereShape3D_skf8y")
 collision_layer = 6
 collision_mask = 6
 
-[node name="Magnet" type="Node" parent="Area_take_it"]
-script = ExtResource("4_0g2el")
+[node name="Orbe_Magnet" type="Node" parent="Area_take_it"]
+script = ExtResource("4_626aq")
 orbe_name = "Teleporter"
 
-[node name="Take_teleporter" type="Node" parent="Area_take_it"]
-script = ExtResource("3_6fuat")
+[node name="Orbe_Contact" type="Node" parent="Area_take_it"]
+script = ExtResource("5_pryy3")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="Area_take_it"]
 shape = SubResource("SphereShape3D_fsn5p")
@@ -184,5 +184,5 @@ mesh = SubResource("TorusMesh_rprlq")
 skeleton = NodePath("../../..")
 surface_material_override/0 = SubResource("ShaderMaterial_of2nf")
 
-[connection signal="area_shape_entered" from="Area_take_it" to="Area_take_it/Take_teleporter" method="_on_area_take_it_area_shape_entered"]
-[connection signal="area_shape_exited" from="Area_take_it" to="Area_take_it/Take_teleporter" method="_on_area_take_it_area_shape_exited"]
+[connection signal="area_shape_entered" from="Area_take_it" to="Area_take_it/Orbe_Contact" method="_on_area_take_it_area_shape_entered"]
+[connection signal="area_shape_exited" from="Area_take_it" to="Area_take_it/Orbe_Contact" method="_on_area_take_it_area_shape_exited"]
