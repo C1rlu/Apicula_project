@@ -99,11 +99,12 @@ signal switching_tool(tool : tool_data)
 
 # SUBSCENE ORBE previously teleporter
 signal _instance_teleporter
-signal _teleport_at_position
+signal _teleport_at_position(start_position: Vector3)
 var _teleporter_list : Array[Node] 
 #ui orbe
 signal _select_orbe_type(orbe_data_type : orbe_data)
 signal _remove_orbe_from_data(orbe_data_type : orbe_data)
+signal _show_orbe_ui
 
 #board scene
 

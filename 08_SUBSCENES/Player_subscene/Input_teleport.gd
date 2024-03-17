@@ -19,10 +19,7 @@ func play_teleporter(condition : bool):
 	if _global_datas._teleporter_list.size() == 0:
 		return
 		
-	if condition:
-		_click_teleporter(true)	
-	else:
-		_click_teleporter(false)		
+	_click_teleporter(condition)		
 
 	
 func _click_teleporter(condition : bool):
@@ -33,14 +30,18 @@ func _click_teleporter(condition : bool):
 		t.kill()
 	
 	if condition:	
+	
+		
 		t = create_tween()
 		t.tween_method(change_value,0.5,3.0,0.5)
 		t.connect("finished",done)
-
+		
 func done():
+
 	
-	_global_datas._teleport_at_position.emit()
-	_global_datas._instance_teleporter.emit()
+	var start_position = _global_datas.subbscene_playerPosition
+	
+	_global_datas._teleport_at_position.emit(start_position)
 	vfx_sphere_mirror.emitting = false
 	
 func change_value(value):

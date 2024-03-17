@@ -8,22 +8,24 @@ func _ready():
 	_global_datas._teleport_at_position.connect(_teleport_player)
 	
 	
-func _teleport_player():
+func _teleport_player(start_position):
 	
 	if !_global_datas.Player_InMirrorScene:
 		return
 		
-	closet_teleport()	
+	closet_teleport(start_position)	
 
 		
-func closet_teleport():		
+func closet_teleport(start_position):		
+	
 	if _global_datas._teleporter_list.size() == 0:
 		return
 		
 	var closest_teleporter = _closest_element(_global_datas._teleporter_list)
 	player_sub.linear_velocity = Vector3.ZERO
 	player_sub.position = closest_teleporter.teleporter_position
-	closest_teleporter._remove_teleporter()
+	
+	closest_teleporter.set_position(start_position)
 	
 func _closest_element(array):
 	

@@ -15,9 +15,11 @@ func reload_teleporter():
 	
 func remove_orbe(string : String):	
 	
-	if string == "Teleporter":
-		orbe_list[0].Orbe_scene_amount -= 1			
-		_global_datas._select_orbe_type.emit(orbe_list[0])
-	if string == "Exit mirror":
-		orbe_list[1].Orbe_scene_amount -= 1			
-		_global_datas._select_orbe_type.emit(orbe_list[1])
+	
+	for o in orbe_list:
+		
+		if o.Orbe_kind == string:
+			o.Orbe_scene_amount -= 1
+			_global_datas._select_orbe_type.emit(o)			
+		
+	_global_datas._show_orbe_ui.emit()

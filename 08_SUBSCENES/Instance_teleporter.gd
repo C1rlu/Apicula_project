@@ -30,7 +30,7 @@ func _instance_teleporter():
 	instance_teleporter .position = player + offset
 	load_scene.add_child(instance_teleporter)
 	
-	_global_datas._select_orbe_type.emit(orbe_data_type)
 	
+	_global_datas._show_orbe_ui.emit()
 
 

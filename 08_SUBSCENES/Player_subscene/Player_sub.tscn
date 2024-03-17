@@ -1107,20 +1107,8 @@ script = SubResource("GDScript_lbkea")
 [node name="Timer" type="Timer" parent="Ini_subscene"]
 one_shot = true
 
-[node name="TELEPORTER" type="Node" parent="."]
-
-[node name="Input_Instance_teleporter" type="Node" parent="TELEPORTER"]
+[node name="Input_Instance_Orbe" type="Node" parent="."]
 script = ExtResource("2_y2ppl")
-teleporter_data = ExtResource("3_2sukr")
-
-[node name="Closet_teleporter" type="Node" parent="TELEPORTER"]
-script = ExtResource("4_lfyio")
-
-[node name="Timer_Alarm" type="Timer" parent="TELEPORTER/Closet_teleporter"]
-wait_time = 0.25
-
-[node name="Input_teleport" type="Node" parent="TELEPORTER"]
-script = ExtResource("4_bymul")
 teleporter_data = ExtResource("3_2sukr")
 
 [node name="Flash_inputs" type="Node" parent="."]
@@ -1143,6 +1131,18 @@ scanner_tool_data = ExtResource("15_vswql")
 
 [node name="Timer" type="Timer" parent="Scanne_element/Active_scanner_visual_pulse"]
 wait_time = 0.25
+
+[node name="TELEPORTER" type="Node" parent="."]
+
+[node name="Closet_teleporter" type="Node" parent="TELEPORTER"]
+script = ExtResource("4_lfyio")
+
+[node name="Timer_Alarm" type="Timer" parent="TELEPORTER/Closet_teleporter"]
+wait_time = 0.25
+
+[node name="Input_teleport" type="Node" parent="TELEPORTER"]
+script = ExtResource("4_bymul")
+teleporter_data = ExtResource("3_2sukr")
 
 [node name="Dash" type="Node" parent="."]
 script = SubResource("GDScript_0rnti")
@@ -1378,10 +1378,10 @@ skeleton = NodePath("")
 surface_material_override/0 = SubResource("ShaderMaterial_mn4ca")
 
 [connection signal="timeout" from="Ini_subscene/Timer" to="Ini_subscene" method="_on_timer_timeout"]
-[connection signal="timeout" from="TELEPORTER/Closet_teleporter/Timer_Alarm" to="TELEPORTER/Closet_teleporter" method="_on_timer_alarm_timeout"]
 [connection signal="timeout" from="Flash_inputs/Timer" to="Flash_inputs" method="_on_timer_timeout"]
 [connection signal="timeout" from="Flash_inputs/Timer" to="Dash" method="_on_timer_timeout"]
 [connection signal="timeout" from="Scanne_element/Active_scanner_visual_pulse/Timer" to="Scanne_element/Active_scanner_visual_pulse" method="_on_timer_timeout"]
+[connection signal="timeout" from="TELEPORTER/Closet_teleporter/Timer_Alarm" to="TELEPORTER/Closet_teleporter" method="_on_timer_alarm_timeout"]
 [connection signal="area_shape_entered" from="ZoneCollide" to="TELEPORTER/Closet_teleporter" method="_on_zone_collide_area_shape_entered"]
 [connection signal="area_shape_entered" from="ZoneCollide" to="Render_mesh/Active_visual_tools/Tool_zone_detect" method="_on_zone_collide_area_shape_entered"]
 [connection signal="area_shape_exited" from="ZoneCollide" to="TELEPORTER/Closet_teleporter" method="_on_zone_collide_area_shape_exited"]

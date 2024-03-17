@@ -12,7 +12,7 @@ script/source = "extends Node
 
 func _ready():
 	_global_datas.Mirror_vortex_Node = root
-	#_global_datas._mirror_switch.connect(emit_fx)
+
 	
 func _remove_mirror():
 	root.queue_free()
@@ -34,6 +34,12 @@ script/source = "extends Node
 var t
 var actual_value : float
 
+func _ready():
+	_global_datas._mirror_switch.connect(back_from_mirror)
+
+
+func back_from_mirror(condition : bool):
+	start_tween(condition)			
 
 func _on_mirror_prefabs_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
 	if area:

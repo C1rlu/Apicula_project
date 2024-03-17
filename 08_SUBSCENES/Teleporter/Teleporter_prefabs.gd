@@ -8,3 +8,7 @@ func _ready():
 
 func _remove_teleporter():
 	teleporter.queue_free()	
+
+func set_position(_position : Vector3):
+	teleporter.position = _position	
+	teleporter_position = teleporter.position
