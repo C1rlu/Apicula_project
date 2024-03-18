@@ -1124,12 +1124,16 @@ one_shot = true
 script = ExtResource("8_r5dlo")
 scanner_tool = ExtResource("15_vswql")
 
+[node name="time_checker" type="Timer" parent="Scanne_element"]
+wait_time = 0.1
+one_shot = true
+
 [node name="Active_scanner_visual_pulse" type="Node" parent="Scanne_element"]
 script = ExtResource("10_ir8y2")
 scanner_tool_data = ExtResource("15_vswql")
 
 [node name="Timer" type="Timer" parent="Scanne_element/Active_scanner_visual_pulse"]
-wait_time = 0.25
+wait_time = 0.1
 
 [node name="TELEPORTER" type="Node" parent="."]
 
@@ -1170,7 +1174,7 @@ magnet_tool = ExtResource("17_iywa5")
 [node name="active_light" type="Node" parent="Render_mesh/Active_visual_tools" node_paths=PackedStringArray("list_of_object")]
 script = ExtResource("8_8bfcd")
 _tool_data = ExtResource("6_axu5t")
-list_of_object = [NodePath("../../Photographe")]
+list_of_object = [NodePath("../../Photographe"), NodePath("../../Sonar")]
 
 [node name="active_scanner" type="Node" parent="Render_mesh/Active_visual_tools" node_paths=PackedStringArray("list_of_object")]
 script = ExtResource("8_8bfcd")
@@ -1191,6 +1195,7 @@ surface_material_override/0 = ExtResource("1_n1vw4")
 
 [node name="01" type="MeshInstance3D" parent="Render_mesh/Scanner"]
 transform = Transform3D(-4.69226e-08, -4.40394e-09, -1.07347, -1.09643, 9.82716e-15, 4.79258e-08, 1.2518e-14, 0.0322237, -1.50076e-08, 0.0940733, 0.0775418, 0.510083)
+visible = false
 layers = 4
 mesh = SubResource("TorusMesh_507c3")
 skeleton = NodePath("../../../..")
@@ -1198,6 +1203,7 @@ surface_material_override/0 = SubResource("ShaderMaterial_8eybx")
 
 [node name="02" type="MeshInstance3D" parent="Render_mesh/Scanner"]
 transform = Transform3D(-1.48007e-08, -1.38915e-09, -0.338605, -0.345844, -7.55667e-16, 1.51173e-08, 3.41399e-16, 0.0101643, -4.73382e-09, 0.0940733, 0.0775418, 0.510083)
+visible = false
 layers = 4
 mesh = SubResource("TorusMesh_ljaqx")
 skeleton = NodePath("../../../..")
@@ -1219,6 +1225,7 @@ surface_material_override/0 = ExtResource("1_n1vw4")
 
 [node name="Magnet" type="MeshInstance3D" parent="Render_mesh"]
 transform = Transform3D(-1.7049e-09, -0.038187, 0, 0.0390036, -1.66921e-09, 0, 0, 0, 0.121949, 0.0349853, 0.140869, 0.0761496)
+visible = false
 layers = 4
 mesh = SubResource("BoxMesh_8vb5i")
 skeleton = NodePath("../../Player_sub_collider")
@@ -1375,6 +1382,7 @@ surface_material_override/0 = SubResource("ShaderMaterial_mn4ca")
 [connection signal="timeout" from="Ini_subscene/Timer" to="Ini_subscene" method="_on_timer_timeout"]
 [connection signal="timeout" from="Flash_inputs/Timer" to="Flash_inputs" method="_on_timer_timeout"]
 [connection signal="timeout" from="Flash_inputs/Timer" to="Dash" method="_on_timer_timeout"]
+[connection signal="timeout" from="Scanne_element/time_checker" to="Scanne_element" method="_on_time_checker_timeout"]
 [connection signal="timeout" from="Scanne_element/Active_scanner_visual_pulse/Timer" to="Scanne_element/Active_scanner_visual_pulse" method="_on_timer_timeout"]
 [connection signal="timeout" from="TELEPORTER/Closet_teleporter/Timer_Alarm" to="TELEPORTER/Closet_teleporter" method="_on_timer_alarm_timeout"]
 [connection signal="area_shape_entered" from="ZoneCollide" to="TELEPORTER/Closet_teleporter" method="_on_zone_collide_area_shape_entered"]

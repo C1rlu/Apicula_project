@@ -3,7 +3,7 @@ extends Node
 @onready var teleporter_circle = $"../../teleporter_circle"
 @onready var teleporter_circle_close = $"../../teleporter_circle_close"
 
-
+var active : bool = false
 
 func _player_is_close(condition : bool):
 	
@@ -13,6 +13,9 @@ func _player_is_close(condition : bool):
 
 func _on_area_take_it_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
 	
+	if !active:
+		return
+		
 	if area:
 		var player = area.get_node_or_null("Player_photoActive")
 		if player:
@@ -20,6 +23,10 @@ func _on_area_take_it_area_shape_entered(area_rid, area, area_shape_index, local
 
 
 func _on_area_take_it_area_shape_exited(area_rid, area, area_shape_index, local_shape_index):
+	
+	if !active:
+		return
+		
 	if area:
 		var player = area.get_node_or_null("Player_photoActive")
 		if player:

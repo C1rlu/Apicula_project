@@ -5,7 +5,13 @@ extends Node
 @export var scanner_tool_data : tool_data
 @export var magnet_tool : tool_data
 
+var active : bool = false
+
+
 func _checker():
+	
+	if !active:
+		return
 	
 	var overlap_areas_ = collide.get_overlapping_areas()
 

@@ -11,8 +11,8 @@ var pulse : bool
 var is_active : bool = false
 
 func _ready():
-	scanner_tool_data.select_this_tool_scene_prefabs.connect(active_pulse)				
-			
+	#scanner_tool_data.select_this_tool_scene_prefabs.connect(active_pulse)				
+	scanner_tool_data.tool_active_signal.connect(active_pulse)		
 func active_pulse(condition : bool):
 	
 	if condition:	

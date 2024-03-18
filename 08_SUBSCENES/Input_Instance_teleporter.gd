@@ -19,6 +19,8 @@ func _play_tool(condition : bool):
 		
 	_click_teleporter(condition)	
 
+
+
 func _click_teleporter(condition : bool):
 	
 	vfx_sphere_mirror.emitting = condition
