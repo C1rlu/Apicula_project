@@ -7,8 +7,9 @@ extends Node
 
 var photo_list : Array
 var photo_data_node 
-var previous_node
+
 @onready var time_checker = $time_checker
+
 
 func _ready():
 	scanner_tool.tool_active_signal.connect(_scann_element)
@@ -30,8 +31,6 @@ func _scann_element(condition : bool):
 		time_checker.stop()
 		return
 		
-	photo_list.clear()	
-	
 	var overlap_areas_ = area.get_overlapping_areas()
 	
 	if overlap_areas_ == null:
@@ -42,17 +41,18 @@ func _scann_element(condition : bool):
 		if  photo_node :
 			photo_node.scanning(false)
 			photo_list.append(photo_node)	
-	
-	
+			
 	var closet_photo = _closest_element(photo_list)
-	photo_data_node = closet_photo 
 	
+	
+	if photo_data_node == closet_photo:
+		return
+		
 	if closet_photo:
+		photo_data_node = closet_photo 
+
 		closet_photo.scanning(true)
 			
-		var photo_data_rs : PhotoData = closet_photo.get_PhotoData()
-		_global_datas.selected_photoData = photo_data_rs
-
 	
 func _closest_element(array):
 	
