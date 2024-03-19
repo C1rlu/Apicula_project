@@ -1,59 +1,37 @@
 extends Node
 
-
 @export var scanner_tool : tool_data
-@onready var area = $"../ZoneCollide"
-
-
-var photo_list : Array
-var photo_data_node 
-
 @onready var time_checker = $time_checker
+@onready var zone_collide = $"../ZoneCollide"
 
 
 func _ready():
-	scanner_tool.tool_active_signal.connect(_scann_element)
+	scanner_tool.tool_active_signal.connect(check_scanning)
 	
 func check_scanning(condition : bool):
-
-	_scann_element(condition)
-		
-	
-	
-func _scann_element(condition : bool):
-	
-	time_checker.start()
 	
 	if !condition:
-		if photo_data_node:
-			photo_data_node.scanning(false)	
-		photo_list.clear()
 		time_checker.stop()
+		disable_all_scanning()
 		return
 		
-	var overlap_areas_ = area.get_overlapping_areas()
+	time_checker.start()
 	
-	if overlap_areas_ == null:
+	var closet_photo = _closest_element(_global_datas._photo_data_scene_list)
+	var overlap_areas = zone_collide.get_overlapping_areas()
+	if overlap_areas == null:
 		return
 		
-	for areas in overlap_areas_:
-		var photo_node = areas.get_node_or_null("Photo_data")
-		if  photo_node :
-			photo_node.scanning(false)
-			photo_list.append(photo_node)	
-			
-	var closet_photo = _closest_element(photo_list)
+	for area in overlap_areas:
+		var photo_data_node = area.get_node_or_null("Photo_data")	 
+		if photo_data_node:
+			if photo_data_node == closet_photo:
 	
-	
-	if photo_data_node == closet_photo:
-		return
-		
-	if closet_photo:
-		photo_data_node = closet_photo 
+				if !closet_photo.is_scanning:
+					_scanning_this(closet_photo)
 
-		closet_photo.scanning(true)
-			
-	
+					
+
 func _closest_element(array):
 	
 	var closest_node = null
@@ -68,8 +46,19 @@ func _closest_element(array):
 	return closest_node
 
 func _on_time_checker_timeout():
-
+	
 	time_checker.start()
-	_scann_element(true)	
+	check_scanning(true)
 	
 	
+func _scanning_this(node):
+	
+	for e in _global_datas._photo_data_scene_list:
+		e.stop_scanning()
+				
+	node.scanning()
+	
+func disable_all_scanning():
+	
+	for e in _global_datas._photo_data_scene_list:
+		e.stop_scanning()	
