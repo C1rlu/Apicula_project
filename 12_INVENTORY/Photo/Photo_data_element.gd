@@ -52,15 +52,14 @@ func set_shader_value(value):
 	scanner_effect_value.emit(value)	
 	actual_value = value
 	
-	#print(value)
-
 func scanning_done():
 	
 	stop_scanning()
 	
 	_global_datas.selected_photoData = photoData
 	_global_datas.show_on_scanner.emit(true)
-
+	_global_datas._show_object_legend.emit(true,photoData.legend)
+	
 func get_node_position():
 	return 	root.position
 

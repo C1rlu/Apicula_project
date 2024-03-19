@@ -26,7 +26,6 @@ func check_scanning(condition : bool):
 		var photo_data_node = area.get_node_or_null("Photo_data")	 
 		if photo_data_node:
 			if photo_data_node == closet_photo:
-	
 				if !closet_photo.is_scanning:
 					_scanning_this(closet_photo)
 
