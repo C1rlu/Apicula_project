@@ -36,6 +36,9 @@ func _closest_element(array):
 	var closest_node = null
 	var closest_node_distance = 0.0
 	for element in array:
+		
+		if !element:
+			return
 		var player_sub = _global_datas.subbscene_playerPosition
 		var current_node_distance = player_sub.distance_to(element.get_node_position())
 		if closest_node == null or current_node_distance < closest_node_distance:
