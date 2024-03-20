@@ -38,6 +38,11 @@ func scanning():
 		
 func stop_scanning():
 	
+	var trees = get_tree()
+	
+	if !trees:
+		return
+		
 	if t:
 		t.kill()
 	
