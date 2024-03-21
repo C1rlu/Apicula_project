@@ -1,4 +1,4 @@
-[gd_scene load_steps=106 format=3 uid="uid://g7u8o55jrnyy"]
+[gd_scene load_steps=105 format=3 uid="uid://g7u8o55jrnyy"]
 
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="1_n1vw4"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Player_sub_behaviour.gd" id="1_o2v73"]
@@ -15,7 +15,6 @@
 [ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_elements_mat.tres" id="8_wvhjt"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Teleporter/Teleporter_detection.gd" id="9_ve8gm"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Active_scanner_visual_pulse.gd" id="10_ir8y2"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Tool_active_automatique.gd" id="14_m6gco"]
 [ext_resource type="Resource" uid="uid://vv3dws7dmhtd" path="res://08_SUBSCENES/Tools/Scanner.tres" id="15_vswql"]
 [ext_resource type="Resource" uid="uid://dqpl0ihtab1su" path="res://08_SUBSCENES/Tools/Magnet.tres" id="17_iywa5"]
 
@@ -1165,12 +1164,6 @@ surface_material_override/0 = SubResource("ShaderMaterial_t28it")
 
 [node name="Active_visual_tools" type="Node" parent="Render_mesh"]
 
-[node name="Tool_zone_detect" type="Node" parent="Render_mesh/Active_visual_tools"]
-script = ExtResource("14_m6gco")
-light_tool_data = ExtResource("6_axu5t")
-scanner_tool_data = ExtResource("15_vswql")
-magnet_tool = ExtResource("17_iywa5")
-
 [node name="active_light" type="Node" parent="Render_mesh/Active_visual_tools" node_paths=PackedStringArray("list_of_object")]
 script = ExtResource("8_8bfcd")
 _tool_data = ExtResource("6_axu5t")
@@ -1386,6 +1379,4 @@ surface_material_override/0 = SubResource("ShaderMaterial_mn4ca")
 [connection signal="timeout" from="Scanne_element/Active_scanner_visual_pulse/Timer" to="Scanne_element/Active_scanner_visual_pulse" method="_on_timer_timeout"]
 [connection signal="timeout" from="TELEPORTER/Closet_teleporter/Timer_Alarm" to="TELEPORTER/Closet_teleporter" method="_on_timer_alarm_timeout"]
 [connection signal="area_shape_entered" from="ZoneCollide" to="TELEPORTER/Closet_teleporter" method="_on_zone_collide_area_shape_entered"]
-[connection signal="area_shape_entered" from="ZoneCollide" to="Render_mesh/Active_visual_tools/Tool_zone_detect" method="_on_zone_collide_area_shape_entered"]
 [connection signal="area_shape_exited" from="ZoneCollide" to="TELEPORTER/Closet_teleporter" method="_on_zone_collide_area_shape_exited"]
-[connection signal="area_shape_exited" from="ZoneCollide" to="Render_mesh/Active_visual_tools/Tool_zone_detect" method="_on_zone_collide_area_shape_exited"]

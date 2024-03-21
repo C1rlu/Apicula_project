@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://dslbq8jv2myej"]
+
+[ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_elements_mat.tres" id="1_534jv"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_5mn8m"]
+radius = 0.256382
+
+[sub_resource type="BoxMesh" id="BoxMesh_imale"]
+size = Vector3(0.05, 0.25, 0.05)
+
+[sub_resource type="SphereMesh" id="SphereMesh_cavm1"]
+
+[node name="Caller_prefabs" type="Node3D"]
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 6
+collision_mask = 6
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0706899, 0)
+shape = SubResource("SphereShape3D_5mn8m")
+
+[node name="Caller" type="Node" parent="Area3D"]
+
+[node name="tige" type="MeshInstance3D" parent="."]
+layers = 4
+mesh = SubResource("BoxMesh_imale")
+
+[node name="globe" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.106929, 0, 0, 0, 0.106929, 0, 0, 0, 0.106929, 0, 0.140622, 0)
+layers = 4
+mesh = SubResource("SphereMesh_cavm1")
+surface_material_override/0 = ExtResource("1_534jv")

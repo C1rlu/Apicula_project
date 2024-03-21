@@ -104,11 +104,7 @@ signal _instance_teleporter
 signal _teleport_at_position(start_position: Vector3)
 var _teleporter_list : Array[Node] 
 var _photo_data_scene_list : Array[Node]
-
-#ui orbe
-signal _select_orbe_type(orbe_data_type : orbe_data)
-signal _remove_orbe_from_data(orbe_data_type : orbe_data)
-signal _show_orbe_ui
+signal _add_orbe_in_inventory(orbe : orbe_data) 
 
 #board scene
 

@@ -33,8 +33,6 @@ func _click_teleporter(condition : bool):
 		t.tween_method(change_value,0.5,3.0,0.5)
 		#t.connect("finished",done)
 		
-		_global_datas._show_orbe_ui.emit()
-		
 	
 	_magnet_element(condition)	
 	
