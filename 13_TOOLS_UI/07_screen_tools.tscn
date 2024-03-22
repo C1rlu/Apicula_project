@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://bwmu5iwushsl5"]
+[gd_scene load_steps=30 format=3 uid="uid://bwmu5iwushsl5"]
 
 [ext_resource type="Texture2D" uid="uid://d31xi5f7tan5w" path="res://05_SHADER_TEST/Full_screen/Dither_pattners/Blue_noise/HDR_LA_7.png" id="1_2l1ih"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/INSTANCE_NOTE.gd" id="1_fcb2u"]
@@ -36,35 +36,6 @@ func check_photo_exist(photo_Data):
 
 "
 
-[sub_resource type="GDScript" id="GDScript_b8tm5"]
-script/source = "extends Node
-
-var t 
-var actual_value : float
-
-func _ready():
-	pass
-	#_global_datas._show_object_legend.connect(_update_text)
-
-
-func _update_text(condition : bool, _text : String):
-	
-	if condition:	
-		_global_datas._hide_dialogue_box.emit()
-	else:
-		if _global_datas.Npc_Dialogue != null:
-			var photo_Data = _global_datas.Npc_Dialogue.photo_data
-			if check_photo_exist(photo_Data):	
-				_global_datas._show_dialogue_box.emit()
-		
-
-func check_photo_exist(photo_Data):
-	
-	for photo in _global_datas.photo_archives:
-		if photo == photo_Data:
-			return true
-"
-
 [sub_resource type="GDScript" id="GDScript_cnn2b"]
 script/source = "extends Node
 
@@ -73,19 +44,23 @@ script/source = "extends Node
 
 var t 
 var _is_typing : bool = false
+
+
 func _ready():
 	
 	_global_datas._show_object_legend.connect(_update_text)
-
-
+	_global_datas._go_Subscene.connect(disable_text)
+	_global_datas._backFrom_subscene.connect(back_from_subscene)
+	_global_datas.in_dialogue_zone.connect(back_from_dialogue)
+	_global_datas._open_dialogue.connect(disable_text)
+	
 func _update_text(condition : bool, _text : String):
 	
 	description_text.visible = condition
 	description_text.text = _text
 	var text_count = _text.length()
 	type_text(text_count)
-	print(_text)
-	
+
 func type_text(count : int):
 	
 	description_text.visible_ratio = 0.0
@@ -93,6 +68,11 @@ func type_text(count : int):
 	#var clamp_speed = clamp(1.0,2.0,speed)
 	#print( speed,\" for \", count ,\" letter\")
 	_is_typing = true
+	
+	
+	var node = get_tree()
+	if !node:
+		return
 	if t:
 		t.kill()
 	t = create_tween()
@@ -106,8 +86,22 @@ func change_ration(value : float):
 	description_text.visible_ratio = value
 	
 
+func disable_text():
+	description_text.visible = false
 
+func back_from_subscene():
+	description_text.visible = true
+	var text_count = description_text.text.length()
+	type_text(text_count)
 	
+func back_from_dialogue():
+	
+	if _global_datas.Npc_Dialogue == null:
+		return
+	description_text.text = _global_datas.Npc_Dialogue.zone_name
+	description_text.visible = true
+	var text_count = description_text.text.length()
+	type_text(text_count)
 "
 
 [sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_uy744"]
@@ -371,9 +365,6 @@ script = ExtResource("1_fcb2u")
 
 [node name="Description" type="Node2D" parent="."]
 position = Vector2(989, 752)
-
-[node name="Zoom_backdrop" type="Node" parent="Description"]
-script = SubResource("GDScript_b8tm5")
 
 [node name="Update_description" type="Node" parent="Description"]
 script = SubResource("GDScript_cnn2b")

@@ -8,7 +8,8 @@
 
 [sub_resource type="GDScript" id="GDScript_8vnul"]
 script/source = "extends Node
-
+@onready var menu_backdrop = $\"../Game_Menu_Root/Menu_Backdrop\"
+@onready var menu_backdrop_mat : Material = menu_backdrop.get_material()
 @onready var menu_backdrop_normal = $\"../Game_Menu_Root/Menu_Backdrop_normal\"
 @onready var material_normal : Material = menu_backdrop_normal.get_material()
 var actual_value : float
@@ -49,6 +50,8 @@ func set_shader_value(value):
 	var clamp_y = clamp(value,0.0,0.5)
 	material_normal.set_shader_parameter(\"Opacity\",clamp_y)
 	actual_value = value
+
+	#menu_backdrop_mat.set_shader_parameter(\"Opacity\",value)
 "
 
 [sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_3ivuf"]
@@ -390,10 +393,11 @@ script = SubResource("GDScript_8vnul")
 [node name="FPS_COUNTER" type="Label" parent="."]
 process_mode = 3
 z_index = 1
-offset_left = 14.0
+offset_left = 8.0
 offset_top = 10.0
-offset_right = 121.0
+offset_right = 115.0
 offset_bottom = 36.0
+theme_override_font_sizes/font_size = 10
 text = "FPS COUNTER"
 script = ExtResource("4_86v10")
 
