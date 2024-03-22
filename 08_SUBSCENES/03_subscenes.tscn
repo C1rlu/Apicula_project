@@ -1,4 +1,4 @@
-[gd_scene load_steps=91 format=3 uid="uid://nigmie4bbn6"]
+[gd_scene load_steps=90 format=3 uid="uid://nigmie4bbn6"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/Grid_scene/Subscene_loader.gd" id="1_7uoo0"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="2_3srhu"]
@@ -12,12 +12,12 @@
 [ext_resource type="Script" path="res://08_SUBSCENES/Teleport_Player.gd" id="4_jsgo0"]
 [ext_resource type="Resource" uid="uid://vv3dws7dmhtd" path="res://08_SUBSCENES/Tools/Scanner.tres" id="6_b80v7"]
 [ext_resource type="Resource" uid="uid://vbro0qss1p45" path="res://08_SUBSCENES/Tools/Teleporter.tres" id="6_s1f2c"]
-[ext_resource type="Texture2D" uid="uid://dafg2qvpi6wmk" path="res://06_UI/Loader_circle/Loader_circle.png" id="7_h5t4r"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Play_selected_tool.gd" id="7_whguu"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Add_teleporter_inputs.gd" id="8_2kb68"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Orbe.gd" id="11_uy3s0"]
 [ext_resource type="Resource" uid="uid://cubpsapqnetwr" path="res://08_SUBSCENES/Orbe/Orbe_datas/Orbe_teleporter.tres" id="12_kv1gg"]
 [ext_resource type="Resource" uid="uid://ck5e4tpntmloe" path="res://08_SUBSCENES/Orbe/Orbe_datas/Orbe_exitMirror.tres" id="13_aabh8"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Active_scene_viewports.gd" id="14_28kqk"]
 [ext_resource type="Resource" uid="uid://dvoyfwvhfmjcb" path="res://08_SUBSCENES/Orbe/Orbe_datas/Orbe_megaphone.tres" id="22_knnkf"]
 
 [sub_resource type="GDScript" id="GDScript_btuws"]
@@ -31,6 +31,9 @@ script/source = "extends Node
 @onready var subscenes_cam_scanner_x = $\"../Viewport/Scanner_x\"
 @onready var vortex_fx = $\"../Viewport/Vortex_fx\"
 
+@onready var active_scene_viewports = $\"../Viewport/Active_scene_viewports\"
+
+
 func _ready():
 	_global_datas._go_Subscene.connect(_fade_in)
 	
@@ -40,6 +43,8 @@ func _fade_in():
 	subscenes_cam_scanner_x.visible = true
 	vortex_fx.visible  = true
 	timer.start()
+	
+	active_scene_viewports._active_viewports(true)
 	
 
 func _process(delta):
@@ -55,6 +60,7 @@ func _process(delta):
 func _on_timer_timeout():
 	timer.stop()
 	_global_datas.show_3D_MainScene.emit(false)
+
 "
 
 [sub_resource type="GDScript" id="GDScript_4qsuv"]
@@ -67,7 +73,7 @@ script/source = "extends Node
 @onready var subscenes_cam_scanner = $\"../Viewport/Scanner\"
 @onready var subscenes_cam_scanner_x = $\"../Viewport/Scanner_x\"
 @onready var vortex_fx = $\"../Viewport/Vortex_fx\"
-
+@onready var active_scene_viewports = $\"../Viewport/Active_scene_viewports\"
 
 func _ready():
 	_global_datas._go_Mainscene.connect(_fade_out)
@@ -79,6 +85,10 @@ func _fade_out():
 	vortex_fx.visible = false
 	
 	_global_datas.show_3D_MainScene.emit(true)
+	active_scene_viewports._active_viewports(false)
+	
+	#clear photo dates list when leave subscene
+	_global_datas._photo_data_scene_list.clear()
 	
 func _process(delta):
 	
@@ -390,33 +400,6 @@ shader_parameter/Opacity = 0.0
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_yvp20"]
 viewport_path = NodePath("Viewport/Scanner_VORTEX_FX")
-
-[sub_resource type="GDScript" id="GDScript_pi1q7"]
-script/source = "extends TextureProgressBar
-
-
-var active : bool = false
-@export var pos_offset : Vector2
-func _ready():
-	_global_datas._go_Subscene.connect(is_active)
-	_global_datas._backFrom_subscene.connect(is_disable)
-	
-func is_active():
-	active = true	
-func is_disable():
-	active = false	
-
-func _process(delta):
-	
-	if !active:
-		return	
-
-	var player_sub_pos = _global_datas.subbscene_playerPosition
-	var cam = _global_datas.Subscene_Camera
-		
-	var p_position = cam.unproject_position(player_sub_pos)
-	position = p_position + pos_offset
-"
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_3w81f"]
 parameter_name = "Subscene_Darker_color"
@@ -955,6 +938,10 @@ script = ExtResource("4_jsgo0")
 
 [node name="Viewport" type="Node" parent="."]
 
+[node name="Active_scene_viewports" type="Node" parent="Viewport" node_paths=PackedStringArray("viewports")]
+script = ExtResource("14_28kqk")
+viewports = [NodePath("../Main_SubViewport"), NodePath("../Scanner_SubViewport"), NodePath("../Scanner_x_SubViewport"), NodePath("../Scanner_VORTEX_FX")]
+
 [node name="All_cam_follow" type="Node" parent="Viewport" node_paths=PackedStringArray("_all_cam_array")]
 script = ExtResource("2_tc6o2")
 _all_cam_array = [NodePath("../Main_SubViewport/CAM_STATE_MAIN"), NodePath("../Scanner_SubViewport/CAM_STATE_BOAT"), NodePath("../Scanner_x_SubViewport/CAM_STATE_BOAT"), NodePath("../Scanner_VORTEX_FX/CAM_STATE_BOAT")]
@@ -1003,6 +990,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("ViewportTexture_gasoh")
+expand_mode = 3
 
 [node name="Scanner" type="TextureRect" parent="Viewport"]
 visible = false
@@ -1013,6 +1001,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("ViewportTexture_6enrc")
+expand_mode = 3
 script = SubResource("GDScript_k733y")
 
 [node name="Scanner_x" type="TextureRect" parent="Viewport"]
@@ -1024,6 +1013,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("ViewportTexture_dqppn")
+expand_mode = 3
 
 [node name="Vortex_fx" type="TextureRect" parent="Viewport"]
 visible = false
@@ -1034,29 +1024,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("ViewportTexture_yvp20")
-
-[node name="Go_subscene_progress" type="TextureProgressBar" parent="Viewport"]
-visible = false
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 52.0
-offset_top = -98.0
-offset_right = 84.0
-offset_bottom = -66.0
-grow_horizontal = 2
-grow_vertical = 2
-value = 100.0
-fill_mode = 5
-nine_patch_stretch = true
-texture_under = ExtResource("7_h5t4r")
-texture_progress = ExtResource("7_h5t4r")
-tint_under = Color(0.203922, 0.415686, 0.364706, 0)
-tint_progress = Color(0.105882, 0.345098, 0.360784, 1)
-script = SubResource("GDScript_pi1q7")
-pos_offset = Vector2(65, -140)
+expand_mode = 3
 
 [node name="Player_Sub" parent="." instance=ExtResource("2_ri8q1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.334, 0)
@@ -1089,12 +1057,11 @@ shape = SubResource("BoxShape3D_qfjre")
 [node name="LoadScene" type="Node" parent="."]
 
 [node name="load_sublevel" type="ProgressBar" parent="."]
-visible = false
-offset_left = 1852.0
-offset_top = 15.0
-offset_right = 1856.0
-offset_bottom = 68.0
-theme_override_font_sizes/font_size = 35
+offset_left = 1236.0
+offset_top = 12.0
+offset_right = 1240.0
+offset_bottom = 65.0
+theme_override_font_sizes/font_size = 10
 
 [connection signal="timeout" from="FADE_IN/Timer" to="FADE_IN" method="_on_timer_timeout"]
 [connection signal="timeout" from="FADE_OUT/Timer" to="FADE_OUT" method="_on_timer_timeout"]

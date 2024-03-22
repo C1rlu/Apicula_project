@@ -113,8 +113,6 @@ signal mouse_raycast
 var board_camera : Camera3D
 var zoom_value : float
 var Cursor_mode : Node
-var In_Front_Node : Node2D
-
 
 
 #update description on board
@@ -122,7 +120,7 @@ signal focus_this_on_board(target : Vector3)
 signal Open_ui_dark_backdrop(condition : bool)
 signal show_on_scanner(condition : bool)
 signal show_ui_scanner_dots(condition : bool)
-
+var In_Front_Node : Node
 var selected_photoData : PhotoData
 var in_scanner_mode : bool 
 

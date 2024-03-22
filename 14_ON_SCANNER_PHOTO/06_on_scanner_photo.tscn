@@ -1,4 +1,4 @@
-[gd_scene load_steps=97 format=3 uid="uid://dpl12cginnwpp"]
+[gd_scene load_steps=98 format=3 uid="uid://dpl12cginnwpp"]
 
 [ext_resource type="Script" path="res://10_BOARD/Show_OnScanner.gd" id="1_0c44t"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_ifne7"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://b4hspc8dsyv14" path="res://08_SUBSCENES/Elements/Tiny_boat/scene_boat_ch_test.tscn" id="5_fy62g"]
 [ext_resource type="PackedScene" uid="uid://bv8bjtbsocs37" path="res://09_NPC/Mr_birds_scanner.tscn" id="6_aqq0q"]
 [ext_resource type="PackedScene" uid="uid://bntd6uahyoir6" path="res://09_NPC/Maurice_scanner.tscn" id="7_bpf84"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Active_scene_viewports.gd" id="7_j563j"]
 [ext_resource type="PackedScene" uid="uid://bgaq3h0r61ktm" path="res://08_SUBSCENES/Elements/Mirror_zone/mirror_photo_prefabs.tscn" id="10_ccsy3"]
 
 [sub_resource type="TorusMesh" id="TorusMesh_bj3q2"]
@@ -295,7 +296,6 @@ input_name = "color"
 code = "shader_type canvas_item;
 render_mode blend_mix;
 
-global uniform sampler2D BlueNoise : repeat_enable;
 uniform float Opacity : hint_range(0, 1) = 0.5;
 
 
@@ -305,54 +305,18 @@ void fragment() {
 	vec4 n_out9p0 = COLOR;
 
 
-// UVFunc:16
-	vec2 n_in16p1 = vec2(1.00000, 0.50000);
-	vec2 n_in16p2 = vec2(0.00000, 0.00000);
-	vec2 n_out16p0 = (UV - n_in16p2) * n_in16p1 + n_in16p2;
-
-
-// FloatConstant:22
-	float n_out22p0 = 5.000000;
-
-
-// Input:17
-	float n_out17p0 = TIME;
-
-
-// FloatOp:18
-	float n_in18p1 = 0.00100;
-	float n_out18p0 = n_out17p0 * n_in18p1;
-
-
-// FloatOp:19
-	float n_in19p1 = 0.10000;
-	float n_out19p0 = n_out18p0 * n_in19p1;
-
-
-// UVFunc:15
-	vec2 n_out15p0 = (n_out16p0 - vec2(n_out19p0)) * vec2(n_out22p0) + vec2(n_out19p0);
-
-
-	vec4 n_out13p0;
-// Texture2D:13
-	n_out13p0 = texture(BlueNoise, n_out15p0);
-
-
 // FloatParameter:5
 	float n_out5p0 = Opacity;
 
 
-// Step:2
-	float n_out2p0 = step(n_out13p0.x, n_out5p0);
-
-
 // Output:0
 	COLOR.rgb = vec3(n_out9p0.xyz);
-	COLOR.a = n_out2p0;
+	COLOR.a = n_out5p0;
 
 
 }
 "
+graph_offset = Vector2(-515.301, -51.2685)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(680, 140)
@@ -414,7 +378,7 @@ nodes/fragment/28/node = SubResource("VisualShaderNodeStep_31mdv")
 nodes/fragment/28/position = Vector2(100, 380)
 nodes/fragment/29/node = SubResource("VisualShaderNodeMix_4ga3g")
 nodes/fragment/29/position = Vector2(370.348, 207.228)
-nodes/fragment/connections = PackedInt32Array(6, 0, 4, 1, 9, 0, 0, 0, 17, 0, 18, 0, 18, 0, 19, 0, 16, 0, 15, 0, 19, 0, 15, 2, 15, 0, 13, 0, 21, 0, 13, 2, 13, 0, 2, 0, 22, 0, 15, 1, 25, 0, 23, 0, 24, 0, 23, 1, 26, 0, 23, 2, 13, 0, 28, 1, 23, 0, 28, 0, 5, 0, 2, 1, 2, 0, 29, 1, 28, 0, 29, 2, 2, 0, 0, 1)
+nodes/fragment/connections = PackedInt32Array(6, 0, 4, 1, 9, 0, 0, 0, 17, 0, 18, 0, 18, 0, 19, 0, 16, 0, 15, 0, 19, 0, 15, 2, 15, 0, 13, 0, 21, 0, 13, 2, 13, 0, 2, 0, 22, 0, 15, 1, 25, 0, 23, 0, 24, 0, 23, 1, 26, 0, 23, 2, 13, 0, 28, 1, 23, 0, 28, 0, 2, 0, 29, 1, 28, 0, 29, 2, 5, 0, 0, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vn7gh"]
 shader = SubResource("VisualShader_gll0c")
@@ -934,6 +898,10 @@ script = ExtResource("3_iqou0")
 [node name="Zoom_scanner" type="Node" parent="Show_OnScanner"]
 script = ExtResource("4_06k31")
 
+[node name="Active_scene_viewports" type="Node" parent="." node_paths=PackedStringArray("viewports")]
+script = ExtResource("7_j563j")
+viewports = [NodePath("../SubViewport_scanner"), NodePath("../SubViewport_scanner_Noise")]
+
 [node name="SubViewport_scanner" type="SubViewport" parent="."]
 transparent_bg = true
 handle_input_locally = false
@@ -979,7 +947,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.0196078, 0.121569, 0.129412, 1)
+color = Color(0.0705882, 0.12549, 0.129412, 1)
 
 [node name="RENDER_Scanner" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_qojhl")
@@ -990,6 +958,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 texture = SubResource("ViewportTexture_ev3qb")
+expand_mode = 3
 
 [node name="RENDER_Scanner_NOISE" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_1p8ix")
@@ -1000,6 +969,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 texture = SubResource("ViewportTexture_ucabj")
+expand_mode = 3
 
 [node name="InsidePhoto_scanner_scene" type="Node3D" parent="."]
 

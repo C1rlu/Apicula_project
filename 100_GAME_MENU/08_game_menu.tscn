@@ -9,8 +9,6 @@
 [sub_resource type="GDScript" id="GDScript_8vnul"]
 script/source = "extends Node
 
-@onready var backdrop = $\"../Game_Menu_Root/Menu_Backdrop\"
-@onready var material : Material = backdrop .get_material()
 @onready var menu_backdrop_normal = $\"../Game_Menu_Root/Menu_Backdrop_normal\"
 @onready var material_normal : Material = menu_backdrop_normal.get_material()
 var actual_value : float
@@ -47,7 +45,7 @@ func _fade_out():
 
 
 func set_shader_value(value):
-	material.set_shader_parameter(\"Opacity\",value)
+
 	var clamp_y = clamp(value,0.0,0.5)
 	material_normal.set_shader_parameter(\"Opacity\",clamp_y)
 	actual_value = value
@@ -435,19 +433,16 @@ metadata/_edit_use_anchors_ = true
 clip_contents = true
 layout_direction = 1
 layout_mode = 1
-anchors_preset = 8
+anchors_preset = 5
 anchor_left = 0.5
-anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -312.0
-offset_top = -380.0
-offset_right = 326.0
-offset_bottom = -311.0
+offset_left = -319.0
+offset_top = 76.0
+offset_right = 319.0
+offset_bottom = 145.0
 grow_horizontal = 2
-grow_vertical = 2
 theme_override_colors/font_color = Color(0.317647, 0.615686, 0.529412, 1)
-theme_override_font_sizes/font_size = 50
+theme_override_font_sizes/font_size = 35
 text = "APICULA (PROTOTYPE)"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -455,11 +450,18 @@ autowrap_mode = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Game_Menu_Root"]
 process_mode = 3
-layout_mode = 0
-offset_left = 745.0
-offset_top = 936.0
-offset_right = 1185.0
-offset_bottom = 986.0
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -220.0
+offset_top = -88.0
+offset_right = 220.0
+offset_bottom = -38.0
+grow_horizontal = 2
+grow_vertical = 0
 theme_override_constants/separation = 50
 
 [node name="Resum_Button2" type="Button" parent="Game_Menu_Root/HBoxContainer"]
@@ -469,7 +471,7 @@ focus_neighbor_right = NodePath("../Restart_Button")
 focus_mode = 1
 theme_type_variation = &"FlatButton"
 theme_override_colors/font_color = Color(0.721569, 0.580392, 0.407843, 1)
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 25
 text = "RESUME"
 script = SubResource("GDScript_rl0qu")
 
@@ -481,7 +483,7 @@ focus_neighbor_right = NodePath("../Exit_Button")
 focus_mode = 1
 theme_type_variation = &"FlatButton"
 theme_override_colors/font_color = Color(0.721569, 0.580392, 0.407843, 1)
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 25
 text = "RESTART"
 script = SubResource("GDScript_r74c2")
 
@@ -492,43 +494,23 @@ focus_neighbor_top = NodePath("../../Options/VBoxContainer/Vsync_button")
 focus_mode = 1
 theme_type_variation = &"FlatButton"
 theme_override_colors/font_color = Color(0.721569, 0.580392, 0.407843, 1)
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 25
 text = "EXIT "
 script = SubResource("GDScript_e1pe5")
 
-[node name="dots" type="Label" parent="Game_Menu_Root"]
-visible = false
-layout_direction = 1
-layout_mode = 1
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -17.0
-offset_top = 357.0
-offset_right = -17.0
-offset_bottom = 392.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.317647, 0.615686, 0.529412, 1)
-theme_override_font_sizes/font_size = 25
-text = "........................................................"
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="Options" type="Control" parent="Game_Menu_Root"]
 layout_mode = 1
-anchors_preset = 8
+anchors_preset = 7
 anchor_left = 0.5
-anchor_top = 0.5
+anchor_top = 1.0
 anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -207.0
-offset_top = 297.0
-offset_right = 293.0
-offset_bottom = 414.0
+anchor_bottom = 1.0
+offset_left = -214.0
+offset_top = -183.0
+offset_right = 286.0
+offset_bottom = -66.0
 grow_horizontal = 2
-grow_vertical = 2
+grow_vertical = 0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Game_Menu_Root/Options"]
 process_mode = 3

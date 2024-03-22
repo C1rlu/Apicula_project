@@ -6,8 +6,6 @@ signal up_dialogue_index
 
 @onready var state = {
 	
-	"hand_signal" : _global_datas._show_hand,
-	"hide_hand_signal" : _global_datas._hide_hand,
 	"give_letter" : _global_datas._give_letter,	
 	"take_note":_global_datas._take_note,
 	"up_dialogue_index" : up_dialogue_index

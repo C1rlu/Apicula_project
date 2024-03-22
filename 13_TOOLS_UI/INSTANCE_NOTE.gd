@@ -1,6 +1,7 @@
 extends Node
 
 @onready var letter_prefab = preload("res://12_INVENTORY/Letter/Start_note.tscn")
+@onready var front_element = $"../Front_element"
 
 func _ready():
 	_global_datas._give_letter.connect(_intance_letter)
@@ -14,9 +15,10 @@ func _intance_letter(note_name: String):
 		return
 	
 	var new_node = 	letter_prefab.instantiate()
-	_global_datas.In_Front_Node.add_child(new_node)
 	
-	var screen_center = Vector2(1920.0 / 2.0, 1080/ 2.0 )
+	front_element.add_child(new_node)
+	
+	var screen_center = Vector2(1280.0 / 2.0, 720/ 2.0 )
 	var random_angle = randf_range(-96.0, -84.0)
 	
 	new_node.rotation_degrees = random_angle

@@ -388,8 +388,9 @@ metadata/_edit_horizontal_guides_ = [-58.0]
 [node name="Open_Inventory" type="Node" parent="."]
 script = SubResource("GDScript_1a2yk")
 
-[node name="Active_3D_scene" type="Node" parent="."]
+[node name="Active_3D_scene" type="Node" parent="." node_paths=PackedStringArray("viewports")]
 script = ExtResource("1_n6a4y")
+viewports = [NodePath("../3D_SCENE/SubViewport")]
 
 [node name="Fade" type="Node" parent="."]
 script = SubResource("GDScript_52477")
@@ -431,21 +432,17 @@ fov = 42.0
 [node name="SubViewport" type="SubViewport" parent="3D_SCENE"]
 handle_input_locally = false
 scaling_3d_scale = 0.9
-fsr_sharpness = 2.0
 size = Vector2i(1920, 1080)
 
 [node name="Pad_target" type="ColorRect" parent="3D_SCENE/SubViewport"]
-visible = false
 material = SubResource("ShaderMaterial_blt4p")
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -7.5
-offset_top = -7.5
-offset_right = 7.5
-offset_bottom = 7.5
+offset_right = 20.0
+offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -470,6 +467,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("ViewportTexture_bjncg")
+expand_mode = 3
 
 [node name="Board_scene" parent="3D_SCENE" instance=ExtResource("2_6c571")]
 

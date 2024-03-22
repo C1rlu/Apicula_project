@@ -3,6 +3,7 @@ extends Node
 @onready var render_scanner = $"../RENDER_Scanner"
 @onready var loader = $"../InsidePhoto_scanner_scene/loader"
 @onready var backdrop_focus = $"../BACKDROP_FOCUS"
+@onready var active_scene_viewports = $"../Active_scene_viewports"
 
 func _ready():
 	_global_datas.show_on_scanner.connect(_show_scanner)
@@ -14,6 +15,8 @@ func _ready():
 func _show_scanner(condition : bool):
 	
 	_global_datas.in_scanner_mode = condition
+	
+	active_scene_viewports._active_viewports(condition)
 	
 	if condition:
 		stop_scanner()

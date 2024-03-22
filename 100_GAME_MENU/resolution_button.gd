@@ -1,26 +1,10 @@
 extends OptionButton
 
 
-
 func _ready():
 	add_item("1280x720")	
 	add_item("1920*1080")
 	add_item("1280*800")
-	var os_screen_resolution = DisplayServer.screen_get_size()
-	
-	#_on_item_selected(2)	
-	#return
-		
-
-	if os_screen_resolution.y == 800:
-		_on_item_selected(2)	
-		return	 		
-
-	if os_screen_resolution.x < 1281:	
-		_on_item_selected(0)
-	else:
-		_on_item_selected(1)	
-		
 
 func _on_item_selected(index):
 	var current_selected = index

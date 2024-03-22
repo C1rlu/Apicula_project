@@ -1,12 +1,11 @@
 extends Node
 
 var _pad : bool = false
-@onready var pad_target = $"../3D_SCENE/SubViewport/Pad_target"
+
 @onready var  Camera = $"../3D_SCENE/Camp_root_XRay/Camera_xray"
 
 var selectable
 signal active_scanner(condition : bool)
-
 
 
 func _ready():
@@ -16,8 +15,6 @@ func _active_raycast(condition : bool):
 	_pad = condition			
 
 func _input(event):
-
-
 
 	if _global_datas.in_scanner_mode:
 		return
@@ -32,12 +29,14 @@ func _input(event):
 			
 	if event.is_action_pressed("Click"):	
 		if _pad: 
-			var target = pad_target.position
-			check_cast(target)		
+	
+			var center_screen = Vector2i(640,360)
+
+			check_cast(center_screen)		
 		else:
 			var target = get_viewport().get_mouse_position()
 			check_cast(target)
-
+	
 		if selectable:
 			selectable.on_click.emit(true)
 		

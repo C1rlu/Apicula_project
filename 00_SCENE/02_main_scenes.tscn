@@ -1,4 +1,4 @@
-[gd_scene load_steps=76 format=3 uid="uid://cnmptm7i0xxmj"]
+[gd_scene load_steps=77 format=3 uid="uid://cnmptm7i0xxmj"]
 
 [ext_resource type="Script" path="res://00_SCENE/Active_Decor_Scene.gd" id="1_ounvv"]
 [ext_resource type="PackedScene" uid="uid://vpdvl0v7dubd" path="res://00_PLAYER/Player_boat.tscn" id="1_qltht"]
@@ -9,6 +9,7 @@
 [ext_resource type="Material" uid="uid://cfd7rt53ee7jp" path="res://05_SHADER_TEST/Full_screen/Foam_dither_viewport.tres" id="3_qcxor"]
 [ext_resource type="Shader" uid="uid://bduoqim3kfbs6" path="res://00_PLAYER/Sonar/Sonar_sh.tres" id="3_todel"]
 [ext_resource type="Material" uid="uid://ua1gnqwbe2bj" path="res://05_SHADER_TEST/Full_screen/Sonar_dither_viewport.tres" id="4_qh7in"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Active_scene_viewports.gd" id="4_tulh2"]
 [ext_resource type="Shader" uid="uid://bxavm32wwtse2" path="res://05_SHADER_TEST/Clouds_sh.tres" id="5_83wu6"]
 [ext_resource type="Material" uid="uid://chlrh834uha8l" path="res://05_SHADER_TEST/Full_screen/Grid_dither_viewport.tres" id="5_jwi16"]
 [ext_resource type="PackedScene" uid="uid://crxoyweriianl" path="res://04_SCENE_MAIN_MAP/Grid/grid_map.tscn" id="6_8jesf"]
@@ -621,8 +622,9 @@ size = Vector3(30, 0, 30)
 script = SubResource("GDScript_ueh7h")
 prologue_position = Vector3(-21, 0, 7)
 
-[node name="Active_Decor_Scene" type="Node" parent="."]
+[node name="Active_Decor_Scene" type="Node" parent="." node_paths=PackedStringArray("viewports")]
 script = ExtResource("1_ounvv")
+viewports = [NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/MAIN_Viewport"), NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/FOAM_Viewport"), NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/SONAR_Viewport"), NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/GRID_Viewport"), NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/SKY_Viewport")]
 
 [node name="set_Resolution" type="Node" parent="." node_paths=PackedStringArray("viewports")]
 script = ExtResource("1_xd8sb")
@@ -652,6 +654,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+
+[node name="Active_scene_viewports" type="Node" parent="01_GAME_UI/MAIN_SCENE_UI" node_paths=PackedStringArray("viewports")]
+script = ExtResource("4_tulh2")
+viewports = [NodePath("../Viewports/MAIN_Viewport"), NodePath("../Viewports/FOAM_Viewport"), NodePath("../Viewports/SONAR_Viewport"), NodePath("../Viewports/GRID_Viewport"), NodePath("../Viewports/SKY_Viewport")]
 
 [node name="All_Cam_Move" type="Node" parent="01_GAME_UI/MAIN_SCENE_UI" node_paths=PackedStringArray("_all_cam_array")]
 script = ExtResource("2_7lb1x")
@@ -722,6 +728,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 texture = SubResource("ViewportTexture_4iosc")
+expand_mode = 3
 
 [node name="FOAM" type="TextureRect" parent="01_GAME_UI/MAIN_SCENE_UI/Viewports"]
 material = ExtResource("3_qcxor")
@@ -732,6 +739,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 texture = SubResource("ViewportTexture_y37a4")
+expand_mode = 3
 
 [node name="SONAR" type="TextureRect" parent="01_GAME_UI/MAIN_SCENE_UI/Viewports"]
 material = ExtResource("4_qh7in")
@@ -742,6 +750,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 texture = SubResource("ViewportTexture_vtvr5")
+expand_mode = 3
 
 [node name="GRID" type="TextureRect" parent="01_GAME_UI/MAIN_SCENE_UI/Viewports"]
 material = ExtResource("5_jwi16")
@@ -752,6 +761,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 texture = SubResource("ViewportTexture_tsb8l")
+expand_mode = 3
 script = SubResource("GDScript_08g8g")
 
 [node name="SKY" type="TextureRect" parent="01_GAME_UI/MAIN_SCENE_UI/Viewports"]
@@ -762,6 +772,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 texture = SubResource("ViewportTexture_dm76q")
+expand_mode = 3
 
 [node name="Button_active_Dialogue" type="Node" parent="01_GAME_UI/MAIN_SCENE_UI"]
 script = SubResource("GDScript_hpjin")
@@ -769,39 +780,46 @@ script = SubResource("GDScript_hpjin")
 [node name="Button" type="Control" parent="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue"]
 visible = false
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 28.0
+offset_top = -71.0
+offset_right = 28.0
+offset_bottom = -71.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(0.776034, 0.776034)
 mouse_filter = 2
 
 [node name="ColorRect2" type="ColorRect" parent="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue/Button"]
 layout_mode = 0
-offset_left = 934.978
-offset_top = 458.0
-offset_right = 1084.98
-offset_bottom = 532.505
+offset_left = -32.022
+offset_top = -16.0
+offset_right = 117.98
+offset_bottom = 58.505
 rotation = 1.17948
 scale = Vector2(0.577567, 0.231991)
 color = Color(0.952941, 0.815686, 0.690196, 1)
 
 [node name="ColorRect3" type="ColorRect" parent="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue/Button"]
 layout_mode = 0
-offset_left = 956.978
-offset_top = 456.0
-offset_right = 1106.98
-offset_bottom = 530.505
+offset_left = -10.022
+offset_top = -18.0
+offset_right = 139.98
+offset_bottom = 56.505
 rotation = 1.43593
 scale = Vector2(0.577567, 0.231991)
 color = Color(0.952941, 0.815686, 0.690196, 1)
 
 [node name="ColorRect" type="ColorRect" parent="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue/Button"]
 layout_mode = 0
-offset_left = 839.0
-offset_top = 434.0
-offset_right = 989.0
-offset_bottom = 508.505
+offset_left = -128.0
+offset_top = -40.0
+offset_right = 22.0
+offset_bottom = 34.505
 color = Color(0.952941, 0.815686, 0.690196, 1)
 
 [node name="Label" type="Label" parent="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue/Button/ColorRect"]

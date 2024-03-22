@@ -63,4 +63,5 @@ func _scanning_this(node):
 func disable_all_scanning():
 	
 	for e in _global_datas._photo_data_scene_list:
-		e.stop_scanning()	
+		if e != null:
+			e.stop_scanning()	
