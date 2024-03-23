@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cb8k68mtsigvd"]
+[gd_scene load_steps=19 format=3 uid="uid://cb8k68mtsigvd"]
 
 [ext_resource type="Script" path="res://00_SYSTEMS/Global_datas.gd" id="1_64l51"]
 [ext_resource type="Script" path="res://06_UI/Color_management/Color_Managers.gd" id="3_r6ky2"]
@@ -45,6 +45,12 @@ func _ready():
 	if lock_fps:
 		Engine.set_max_fps(fps_target)
 	
+"
+
+[sub_resource type="GDScript" id="GDScript_c11gh"]
+script/source = "extends Node
+
+
 func _input(event):
 	
 	if event.is_action_pressed(\"Go_subscene_debug\"):
@@ -73,10 +79,6 @@ script = SubResource("GDScript_7v3dw")
 wait_time = 0.1
 one_shot = true
 
-[node name="DEBUG_STATE" type="Node" parent="01_GAME_MANAGERS"]
-script = SubResource("GDScript_gl82p")
-fps_target = 120
-
 [node name="Color_Managers" type="Node" parent="01_GAME_MANAGERS"]
 script = ExtResource("3_r6ky2")
 ColorRessource = ExtResource("4_wremn")
@@ -96,6 +98,13 @@ script = ExtResource("7_wpew2")
 
 [node name="Set_Resolution" type="Node" parent="01_GAME_MANAGERS/Options"]
 script = ExtResource("8_slpjd")
+
+[node name="Fps_locker" type="Node" parent="01_GAME_MANAGERS/Options"]
+script = SubResource("GDScript_gl82p")
+fps_target = 90
+
+[node name="Dev_shortcut" type="Node" parent="01_GAME_MANAGERS/Options"]
+script = SubResource("GDScript_c11gh")
 
 [node name="02_MAIN_SCENES" parent="." instance=ExtResource("18_gvi4q")]
 

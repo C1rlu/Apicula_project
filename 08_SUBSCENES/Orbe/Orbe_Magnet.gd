@@ -25,7 +25,7 @@ func _process(delta):
 			
 func _value(delta):
 	
-	player_position = _global_datas.subbscene_playerPosition + Vector3(0.0,0.3,0.0)	
+	player_position = _global_datas.subbscene_playerPosition #+ Vector3(0.0,0.3,0.0)	
 	
 	teleporter.global_position = lerp(teleporter.global_position,player_position, 4 * delta)			
 	magnet_end.emit()
