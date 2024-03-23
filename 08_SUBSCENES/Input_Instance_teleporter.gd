@@ -11,11 +11,16 @@ var active_magnet
 
 func _ready():
 	teleporter_data.tool_active_signal.connect(_play_tool)		
+	_global_datas._go_Subscene.connect(reset_magnet_list)
 	
+	
+func reset_magnet_list():
+	magnet_list.clear()	
+	active_magnet = null
 func _play_tool(condition : bool):
 	
-	if _global_datas.Player_InMirrorScene:
-		return
+	#if _global_datas.Player_InMirrorScene:
+		#return
 		
 	_click_teleporter(condition)	
 

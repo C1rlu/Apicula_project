@@ -48,7 +48,7 @@ func switch_active_tool_index(value):
 	#SELECT VISUAL TOOLS IN SCENE
 	for t in _global_datas.tools_list:
 		t.select_this_tool_scene_prefabs.emit(false)
-		
+		t.tool_active_signal.emit(false)
 	_global_datas._selected_tool = _global_datas.tools_list[tool_index]	
 	
 	_global_datas._selected_tool.select_this_tool_scene_prefabs.emit(true)

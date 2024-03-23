@@ -17,11 +17,10 @@ func play_teleporter(condition : bool):
 		return
 		
 	if _global_datas._teleporter_list.size() == 0:
-		return
+		return	
 		
-	_click_teleporter(condition)		
-
-	
+	if condition:
+		_click_teleporter(condition)		
 func _click_teleporter(condition : bool):
 	
 	vfx_sphere_mirror.emitting = condition
@@ -33,7 +32,7 @@ func _click_teleporter(condition : bool):
 	
 		
 		t = create_tween()
-		t.tween_method(change_value,0.5,3.0,0.5)
+		t.tween_method(change_value,0.5,3.0,0.1)
 		t.connect("finished",done)
 		
 func done():
