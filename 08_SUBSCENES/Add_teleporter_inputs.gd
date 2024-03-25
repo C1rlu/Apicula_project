@@ -1,7 +1,7 @@
 extends Node
 
 
-@export var teleporter_tool : tool_data
+@export var Second_action_tool : tool_data
 
 func _input(event):
 		
@@ -10,6 +10,6 @@ func _input(event):
 		
 		
 	if event.is_action_pressed("Add_teleporter"):
-		teleporter_tool.tool_active_signal.emit(true)	
+		Second_action_tool.tool_active_signal.emit(true)	
 	if event.is_action_released("Add_teleporter"):
-		teleporter_tool.tool_active_signal.emit(false)	
+		Second_action_tool.tool_active_signal.emit(false)	

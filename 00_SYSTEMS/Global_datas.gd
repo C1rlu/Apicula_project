@@ -37,7 +37,7 @@ func _ready():
 	_back_call_list.clear()
 	_teleporter_list.clear()
 	_selected_tool = null
-	_orbe_type_list.clear()
+
 	_photo_data_scene_list.clear()
 	
 # input type
@@ -69,7 +69,6 @@ var photo_archives : Array[PhotoData]
 var note_archives : Array[Note_Data]
 var boue_archives : Array[BoueData]
 var tools_list : Array[tool_data]
-var _orbe_type_list : Array[orbe_data]
 
 
 signal _show_hand
@@ -100,12 +99,11 @@ signal switching_tool(tool : tool_data)
 
 
 # SUBSCENE ORBE previously teleporter
-signal _instance_teleporter
 signal _teleport_at_position(start_position: Vector3)
 var _teleporter_list : Array[Node] 
 var _photo_data_scene_list : Array[Node]
-signal _add_orbe_in_inventory(orbe : orbe_data) 
 
+signal _instance_orbe
 #board scene
 
 signal open_inventory(condition : bool)

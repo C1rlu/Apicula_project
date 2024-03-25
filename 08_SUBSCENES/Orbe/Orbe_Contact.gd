@@ -1,14 +1,9 @@
 extends Node
 
-@onready var teleporter_circle = $"../../teleporter_circle"
-@onready var teleporter_circle_close = $"../../teleporter_circle_close"
-
 var active : bool = false
 
-func _player_is_close(condition : bool):
-	
-	teleporter_circle.visible = !condition
-	teleporter_circle_close.visible = condition
+signal player_contact(condition : bool)
+
 
 
 func _on_area_take_it_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
@@ -19,7 +14,7 @@ func _on_area_take_it_area_shape_entered(area_rid, area, area_shape_index, local
 	if area:
 		var player = area.get_node_or_null("Player_photoActive")
 		if player:
-			_player_is_close(true)
+			player_contact.emit(true)
 
 
 func _on_area_take_it_area_shape_exited(area_rid, area, area_shape_index, local_shape_index):
@@ -30,5 +25,5 @@ func _on_area_take_it_area_shape_exited(area_rid, area, area_shape_index, local_
 	if area:
 		var player = area.get_node_or_null("Player_photoActive")
 		if player:
-			_player_is_close(false)
+			player_contact.emit(false)
 	
