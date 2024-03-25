@@ -37,8 +37,8 @@ func _ready():
 	_back_call_list.clear()
 	_teleporter_list.clear()
 	_selected_tool = null
-
 	_photo_data_scene_list.clear()
+	_orbe_list.clear()
 	
 # input type
 signal using_pad(condition : bool)
@@ -90,8 +90,6 @@ var subbscene_playerPosition : Vector3
 signal _take_photo
 signal _instance_photo(photoData : PhotoData)
 signal _photo_flash
-signal _photo_flash_noPhoto
-signal _find_loot(type : Loot_Data)
 signal _subscene_fail
 var flash_subscene_position : Vector3
 var _selected_tool : tool_data 
@@ -103,7 +101,13 @@ signal _teleport_at_position(start_position: Vector3)
 var _teleporter_list : Array[Node] 
 var _photo_data_scene_list : Array[Node]
 
+
+# Orbe list
 signal _instance_orbe
+var _orbe_list : Array[Node3D]
+
+signal instance_mirror_at_pos
+
 #board scene
 
 signal open_inventory(condition : bool)

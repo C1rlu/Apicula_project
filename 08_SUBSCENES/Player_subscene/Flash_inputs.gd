@@ -29,17 +29,10 @@ func check_area(condition : bool):
 		return
 		
 	for areas in overlap_areas_:
-		
-		var loot_data_node = areas.get_node_or_null("Lootable")
+	
 		var mirror_node = areas.get_node_or_null("Mirror")
 		var mirror_destination = areas.get_node_or_null("Mirror_destination")
 	
-		if  loot_data_node:
-			var lootable_data_rs : Loot_Data = loot_data_node.get_lootable()
-			_global_datas._find_loot.emit(lootable_data_rs)	
-
-			return
-		
 		if mirror_destination:
 			if _global_datas.Player_InMirrorScene:
 				var desination = mirror_destination.destination
