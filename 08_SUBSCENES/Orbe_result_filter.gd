@@ -1,6 +1,7 @@
 extends Node
 
-
+@export var Mirror_data: orbe_data
+@export var teleporter_data: orbe_data
 
 func _ready():
 	_global_datas._photo_flash.connect(check_shape)
@@ -17,16 +18,18 @@ func check_shape():
 	
 func check_triangle():	
 	
-	if _global_datas._orbe_list.size() != 3:
-		return	
+	
 		
 	if is_equilateral_triangle(_global_datas._orbe_list):
 		print("The points form an equilateral triangle.")
-		_global_datas.instance_mirror_at_pos.emit()
-	else:
-		print("The points do not form an equilateral triangle.")
+		_global_datas.instance_mirror_at_pos.emit(teleporter_data)
+		return
 		
-		
+	if is_circle(_global_datas._orbe_list):
+		print("The points approximately form a circle.")
+		_global_datas.instance_mirror_at_pos.emit(Mirror_data)
+		return
+	
 			
 func distance(point1, point2):
 	# Calculate the distance between two points
@@ -46,14 +49,15 @@ func angle(p1, p2, p3):
 	
 func is_equilateral_triangle(points):
 	
-	
+	# Check if the points form an equilateral triangle
+	if points.size() != 3:
+		return false
+		
 	# Define a tolerance for comparing distances and angles
 	var  TOLERANCE_DISTANCE = 0.25 # You can adjust this value based on your requirements
 	var TOLERANCE_ANGLE = 20.0  # 10 degrees tolerance for angles
 	
-	# Check if the points form an equilateral triangle
-	if points.size() != 3:
-		return false
+	
 
 	# Calculate distances between points
 	var distances = []
@@ -84,7 +88,30 @@ func is_equilateral_triangle(points):
 			return false
 	return true
 
+func is_circle(points):
+	# Check if the points approximately form a circle
+	if points.size() != 6:
+		return false
 
+
+	var  TOLERANCE_DISTANCE = 0.5
+	
+	# Calculate distances between points
+	var distances = []
+	for i in range(5):
+		for j in range(i+1, 6):
+			distances.append(distance(points[i], points[j]))
+
+	# Check if all distances are approximately equal
+	var max_distance = distances[0]
+	var min_distance = distances[0]
+	for dist in distances:
+		max_distance = max(max_distance, dist)
+		min_distance = min(min_distance, dist)
+	if max_distance - min_distance > TOLERANCE_DISTANCE:
+		return false
+
+	return true
 
 func reset_orbe_list():
 	_global_datas._orbe_list.clear()

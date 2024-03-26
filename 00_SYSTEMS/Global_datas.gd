@@ -106,7 +106,7 @@ var _photo_data_scene_list : Array[Node]
 signal _instance_orbe
 var _orbe_list : Array[Node3D]
 
-signal instance_mirror_at_pos
+signal instance_mirror_at_pos(data : orbe_data)
 
 #board scene
 
