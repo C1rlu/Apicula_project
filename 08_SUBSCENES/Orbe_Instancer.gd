@@ -26,7 +26,7 @@ func _instance_mirror_at_pos(data : orbe_data):
 	var mirror = data.Orbe_Result_prefabs.instantiate()
 	mirror.position  =  instance_position
 	load_scene.add_child(mirror)
-
+	_global_datas._orbe_instancer_center = instance_position  
 
 func calculate_instance_position(points: Array):
 	

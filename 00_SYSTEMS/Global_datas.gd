@@ -39,6 +39,7 @@ func _ready():
 	_selected_tool = null
 	_photo_data_scene_list.clear()
 	_orbe_list.clear()
+	_orbe_instancer_center = Vector3.ZERO
 	
 # input type
 signal using_pad(condition : bool)
@@ -82,6 +83,8 @@ signal _take_note(note_name : String)
 signal _take_Npc_photo(condition : bool)
 signal _show_object_legend(condtion : bool, text : String)
 
+
+
 #subsceneSignal
 signal _load_subscene(condition : bool)
 signal _go_Subscene
@@ -105,6 +108,7 @@ var _photo_data_scene_list : Array[Node]
 # Orbe list
 signal _instance_orbe
 var _orbe_list : Array[Node3D]
+var _orbe_instancer_center : Vector3 
 
 signal instance_mirror_at_pos(data : orbe_data)
 

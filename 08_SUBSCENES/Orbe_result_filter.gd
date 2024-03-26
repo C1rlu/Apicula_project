@@ -8,18 +8,12 @@ func _ready():
 
 func check_shape():
 	
-
-	check_triangle()
-
+	check()
 	reset_orbe_list()
+
+func check():	
 	
 	
-	
-	
-func check_triangle():	
-	
-	
-		
 	if is_equilateral_triangle(_global_datas._orbe_list):
 		print("The points form an equilateral triangle.")
 		_global_datas.instance_mirror_at_pos.emit(teleporter_data)
@@ -28,9 +22,11 @@ func check_triangle():
 	if is_circle(_global_datas._orbe_list):
 		print("The points approximately form a circle.")
 		_global_datas.instance_mirror_at_pos.emit(Mirror_data)
+		
 		return
 	
-			
+	_global_datas._orbe_instancer_center = _global_datas.subbscene_playerPosition
+		
 func distance(point1, point2):
 	# Calculate the distance between two points
 	return sqrt((point2.position.x - point1.position.x)**2 + (point2.position.y - point1.position.y)**2)	
@@ -115,4 +111,4 @@ func is_circle(points):
 
 func reset_orbe_list():
 	_global_datas._orbe_list.clear()
-
+	
