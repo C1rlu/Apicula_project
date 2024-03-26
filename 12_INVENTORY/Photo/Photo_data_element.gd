@@ -13,13 +13,8 @@ signal scanner_effect_value(value : float)
 var is_scanning : bool = false
 
 func  _ready():
-	
-	_global_datas._end_ini_subscene.connect(_register_photoScene)
-	
-	
-func _register_photoScene():
-	_global_datas._photo_data_scene_list.append(self)
-	
+	_global_datas._photo_data_scene_list.append(self)	
+
 func get_PhotoData():
 	return photoData 
 	

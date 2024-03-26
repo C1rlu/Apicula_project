@@ -19,11 +19,11 @@ func check():
 		_global_datas.instance_mirror_at_pos.emit(teleporter_data)
 		return
 		
-	if is_circle(_global_datas._orbe_list):
-		print("The points approximately form a circle.")
-		_global_datas.instance_mirror_at_pos.emit(Mirror_data)
-		
-		return
+	#if is_circle(_global_datas._orbe_list):
+	#	print("The points approximately form a circle.")
+		#_global_datas.instance_mirror_at_pos.emit(Mirror_data)
+		#
+		#return
 	
 	_global_datas._orbe_instancer_center = _global_datas.subbscene_playerPosition
 		

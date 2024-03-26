@@ -3,7 +3,6 @@ extends Node
 @onready var render_vortex_globe_effect = $"../Render_vortex_globe_effect"
 @onready var render_vortex = $"../Render_vortex"
 @onready var area_col = $"../CollisionShape3D"
-@onready var gpu_circle_effect = $"../GPU_CircleEffect"
 
 var t
 
@@ -35,7 +34,7 @@ func _scale_globe_effect(condition : bool):
 func hide():
 	render_vortex_globe_effect.visible = false	
 	render_vortex.visible = false
-	gpu_circle_effect.emitting = false
+
 	
 func show():
 	render_vortex_globe_effect.visible = true
