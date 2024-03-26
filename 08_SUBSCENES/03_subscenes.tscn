@@ -1,4 +1,4 @@
-[gd_scene load_steps=91 format=3 uid="uid://nigmie4bbn6"]
+[gd_scene load_steps=92 format=3 uid="uid://nigmie4bbn6"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/Grid_scene/Subscene_loader.gd" id="1_7uoo0"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="2_3srhu"]
@@ -188,6 +188,167 @@ func _set_scanner_opacity_value( value : float):
 	_global_datas.scanner_mat.set_shader_parameter(\"Circle\",value)	
 	RenderingServer.global_shader_parameter_set(\"Subscene_mirror_alpha\",value)	
 
+"
+
+[sub_resource type="GDScript" id="GDScript_os5yk"]
+script/source = "extends Node
+
+# Define your templates here
+var templates = {
+	
+	\"Circle\": [
+		Vector2(0, 1),
+		Vector2(0.3827, 0.9239),
+		Vector2(0.7071, 0.7071),
+		Vector2(0.9239, 0.3827),
+		Vector2(1, 0),
+		Vector2(0.9239, -0.3827),
+		Vector2(0.7071, -0.7071),
+		Vector2(0.3827, -0.9239),
+		Vector2(0, -1),
+		Vector2(-0.3827, -0.9239),
+		Vector2(-0.7071, -0.7071),
+		Vector2(-0.9239, -0.3827),
+		Vector2(-1, 0),
+		Vector2(-0.9239, 0.3827),
+		Vector2(-0.7071, 0.7071),
+		Vector2(-0.3827, 0.9239)
+	],
+	
+	\"Triangle\": [Vector2(0, 0), Vector2(1, 0), Vector2(1, 1), Vector2(0, 0)]
+}
+
+# Example usage:
+func _ready():
+	var stroke = [Vector2(0, 0), Vector2(1, 0), Vector2(1, 1), Vector2(0, 0)]
+	
+	var gestureName = recognize(stroke)
+	print(\"Recognized gesture:\", gestureName)
+	
+	
+	
+	_global_datas._photo_flash.connect(check)
+
+
+func check():
+	
+	
+	if !_global_datas._orbe_list:
+		return
+	var points = convert_to_vector2_array(_global_datas._orbe_list)	
+	var center_points = movePointsToOrigin(points)
+	#print(center_points)q
+	var gestureName = recognize(center_points)
+	#print(\"Recognized gesture:\", gestureName)
+	_global_datas._orbe_list.clear()
+	
+	
+func convert_to_vector2_array(vector3_array):
+	var vector2_array = []
+	for vector3 in vector3_array:
+		# Create a new Vector2 without the Z component
+		var vector2 = Vector2(vector3.position.x, vector3.position.y)
+		vector2_array.append(vector2)
+	return vector2_array
+	
+func calculate_instance_position(points: Array):
+	
+	var sum_x = 0
+	var sum_y = 0
+	#var sum_z = 0
+	# Summing up all the x, y, and z coordinates
+	for point in points:
+		sum_x += point.position.x
+		sum_y += point.position.y
+		#sum_z += point.position.z
+
+	# Calculating the average
+	var avg_x = sum_x / points.size()
+	var avg_y = sum_y / points.size()
+	#var avg_z = sum_z / points.size()
+
+	return Vector2(avg_x, avg_y)	
+	
+func movePointsToOrigin(points: Array) -> Array:
+	# Find the center of the points array
+	var totalX = 0
+	var totalY = 0
+	for point in points:
+		totalX += point.x
+		totalY += point.y
+	var centerX = totalX / points.size()
+	var centerY = totalY / points.size()
+
+	# Calculate the offset needed to move the center to the origin
+	var offsetX = -centerX
+	var offsetY = -centerY
+
+	# Subtract the offset from each point
+	var movedPoints = []
+	for point in points:
+		var movedX = point.x + offsetX
+		var movedY = point.y + offsetY
+		movedPoints.append(Vector2(movedX, movedY))
+
+	return movedPoints	
+#------------------------------------------------------
+# below reco
+# Function to recognize the input stroke
+func recognize(stroke: Array) -> String:
+	var normalizedStroke = normalize(stroke)
+	var scoreThreshold = 0.1
+	var bestScore = 0
+	var bestMatch = \"\"
+
+	# Iterate over each template
+	for templateName in templates.keys():
+		var template = templates[templateName]
+		var score = gestureScore(normalizedStroke, template)
+		print(templateName,score )
+		# Update best match if score is higher than threshold and previous best score
+		if score > scoreThreshold and score > bestScore:
+			bestScore = score
+			bestMatch = templateName
+
+	return bestMatch
+
+# Function to normalize the input stroke
+func normalize(stroke: Array) -> Array:
+	 # Find bounding box of the template
+	var minX = float('inf')
+	var minY = float('inf')
+	var maxX = float('-inf')
+	var maxY = float('-inf')
+
+	for point in stroke:
+		minX = min(minX, point.x)
+		minY = min(minY, point.y)
+		maxX = max(maxX, point.x)
+		maxY = max(maxY, point.y)
+
+	var width = maxX - minX
+	var height = maxY - minY
+
+	# Normalize points to fit within the bounding box of the template
+	var normalizedStroke = []
+	for point in stroke:
+		var normalizedX = (point.x - minX) / width
+		var normalizedY = (point.y - minY) / height
+		normalizedStroke.append(Vector2(normalizedX, normalizedY))
+
+	return normalizedStroke
+
+# Function to calculate the score of a gesture compared to a template
+func gestureScore(stroke: Array, template: Array) -> float:
+	var n = min(stroke.size(), template.size())
+	var epsilon = 0.50 # Distance threshold for a correct match
+
+	var sum = 0.0
+	for i in range(n):
+		var distance = stroke[i].distance_to(template[i])
+		sum += max(0, 1 - distance / epsilon)
+
+	return sum / n # Average score
 "
 
 [sub_resource type="GDScript" id="GDScript_nvaxv"]
@@ -938,6 +1099,9 @@ script = ExtResource("11_dnajt")
 script = ExtResource("11_fqwit")
 Mirror_data = ExtResource("12_l61c1")
 teleporter_data = ExtResource("13_ywb87")
+
+[node name="Test_PC_reco" type="Node" parent="ORBE"]
+script = SubResource("GDScript_os5yk")
 
 [node name="SEE_MIRROR_FLASH" type="Node" parent="."]
 script = SubResource("GDScript_nvaxv")

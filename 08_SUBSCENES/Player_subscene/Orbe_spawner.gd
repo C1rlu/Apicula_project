@@ -12,7 +12,8 @@ func spawn_orbe(condition : bool):
 
 	vfx_sphere_mirror.emitting = condition
 	
-	if condition:	
+	if condition:
+		_global_datas._instance_orbe.emit()	
 		timer.start()	
 	else :
 		timer.stop()		

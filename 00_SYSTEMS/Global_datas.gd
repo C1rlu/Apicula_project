@@ -40,6 +40,7 @@ func _ready():
 	_photo_data_scene_list.clear()
 	_orbe_list.clear()
 	_orbe_instancer_center = Vector3.ZERO
+	_orbe_tool_origin_position = Vector3.ZERO
 	
 # input type
 signal using_pad(condition : bool)
@@ -109,6 +110,8 @@ var _photo_data_scene_list : Array[Node]
 signal _instance_orbe
 var _orbe_list : Array[Node3D]
 var _orbe_instancer_center : Vector3 
+var _orbe_tool_origin_position : Vector3
+
 
 signal instance_mirror_at_pos(data : orbe_data)
 

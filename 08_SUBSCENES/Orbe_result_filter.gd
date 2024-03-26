@@ -9,7 +9,7 @@ func _ready():
 func check_shape():
 	
 	check()
-	reset_orbe_list()
+	#reset_orbe_list()
 
 func check():	
 	

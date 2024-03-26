@@ -10,13 +10,14 @@ func _ready():
 	
 func _instance_at_pos():
 	
-	var player_position = _global_datas.subbscene_playerPosition
-	
+	var target = _global_datas._orbe_tool_origin_position
+				
 	var orbe = BASE_ORBE_PREFABS.instantiate()
-	orbe.position  =  player_position
+	orbe.position  = target 
 	load_scene.add_child(orbe)
 	_global_datas._orbe_list.append(orbe)
-
+	
+	
 func _instance_mirror_at_pos(data : orbe_data):
 	
 	#var player_position = _global_datas.subbscene_playerPosition
