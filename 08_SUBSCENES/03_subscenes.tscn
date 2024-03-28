@@ -220,12 +220,6 @@ var templates = {
 
 # Example usage:
 func _ready():
-	var stroke = [Vector2(0, 0), Vector2(1, 0), Vector2(1, 1), Vector2(0, 0)]
-	
-	var gestureName = recognize(stroke)
-	print(\"Recognized gesture:\", gestureName)
-	
-	
 	
 	_global_datas._photo_flash.connect(check)
 
@@ -236,10 +230,9 @@ func check():
 	if !_global_datas._orbe_list:
 		return
 	var points = convert_to_vector2_array(_global_datas._orbe_list)	
-	var center_points = movePointsToOrigin(points)
-	#print(center_points)q
-	var gestureName = recognize(center_points)
-	#print(\"Recognized gesture:\", gestureName)
+	var normalized_plan = normalize(points,_global_datas._orbe_list.size())
+	print(normalized_plan)
+
 	_global_datas._orbe_list.clear()
 	
 	
@@ -251,51 +244,76 @@ func convert_to_vector2_array(vector3_array):
 		vector2_array.append(vector2)
 	return vector2_array
 	
-func calculate_instance_position(points: Array):
+# Gesture normalization function
+func normalize(points : Array, n):
+	var points_n = resample(points, n)
+	scale(points)
+	translate_to_origin(points, n)
+	return points_n
 	
-	var sum_x = 0
-	var sum_y = 0
-	#var sum_z = 0
-	# Summing up all the x, y, and z coordinates
-	for point in points:
-		sum_x += point.position.x
-		sum_y += point.position.y
-		#sum_z += point.position.z
-
-	# Calculating the average
-	var avg_x = sum_x / points.size()
-	var avg_y = sum_y / points.size()
-	#var avg_z = sum_z / points.size()
-
-	return Vector2(avg_x, avg_y)	
+# Points resampling
+func resample(points, n):
+	var path_length = path_length(points)
+	var interval = path_length / (n - 1)
+	var distance = 0
+	var new_points = [points[0]]
+	for i in range(1, points.size()):
+		if points[i].strokeId == points[i - 1].strokeId:
+			var d = euclidean_distance(points[i - 1], points[i])
+			if (distance + d) >= interval:
+				var qx = points[i - 1].x + ((interval - distance) / d) * (points[i].x - points[i - 1].x)
+				var qy = points[i - 1].y + ((interval - distance) / d) * (points[i].y - points[i - 1].y)
+				var q = Vector2(qx, qy)
+				q.strokeId = points[i].strokeId
+				new_points.append(q)
+				points.insert(i, q)
+				distance = 0
+			else:
+				distance += d
+	return new_points		
 	
-func movePointsToOrigin(points: Array) -> Array:
-	# Find the center of the points array
-	var totalX = 0
-	var totalY = 0
-	for point in points:
-		totalX += point.x
-		totalY += point.y
-	var centerX = totalX / points.size()
-	var centerY = totalY / points.size()
+# Points scaling
+func scale(points):
+	var xmin = INF
+	var xmax = -INF
+	var ymin = INF
+	var ymax = -INF
+	for p in points:
+		xmin = min(xmin, p.x)
+		ymin = min(ymin, p.y)
+		xmax = max(xmax, p.x)
+		ymax = max(ymax, p.y)
+	var scale = max(xmax - xmin, ymax - ymin)
+	for p in points:
+		p.x = (p.x - xmin) / scale
+		p.y = (p.y - ymin) / scale
+	
+# Points translation to origin
+func translate_to_origin(points, n):
+	var centroid = Vector2()
+	for p in points:
+		centroid += p
+	centroid /= n
+	for p in points:
+		p -= centroid
+		
+# Path length calculation
+func path_length(points):
+	var d = 0
+	for i in range(1, points.size()):
+		if points[i].strokeId == points[i - 1].strokeId:
+			d += euclidean_distance(points[i - 1], points[i])
+	return d		
 
-	# Calculate the offset needed to move the center to the origin
-	var offsetX = -centerX
-	var offsetY = -centerY
 
-	# Subtract the offset from each point
-	var movedPoints = []
-	for point in points:
-		var movedX = point.x + offsetX
-		var movedY = point.y + offsetY
-		movedPoints.append(Vector2(movedX, movedY))
+func euclidean_distance(p1, p2):
+	return sqrt(pow(p2.x - p1.x, 2) + pow(p2.y - p1.y, 2))
 
-	return movedPoints	
 #------------------------------------------------------
 # below reco
 # Function to recognize the input stroke
 func recognize(stroke: Array) -> String:
-	var normalizedStroke = normalize(stroke)
+	var normalizedStroke = scale(stroke)
 	var scoreThreshold = 0.1
 	var bestScore = 0
 	var bestMatch = \"\"
@@ -312,31 +330,6 @@ func recognize(stroke: Array) -> String:
 
 	return bestMatch
 
-# Function to normalize the input stroke
-func normalize(stroke: Array) -> Array:
-	 # Find bounding box of the template
-	var minX = float('inf')
-	var minY = float('inf')
-	var maxX = float('-inf')
-	var maxY = float('-inf')
-
-	for point in stroke:
-		minX = min(minX, point.x)
-		minY = min(minY, point.y)
-		maxX = max(maxX, point.x)
-		maxY = max(maxY, point.y)
-
-	var width = maxX - minX
-	var height = maxY - minY
-
-	# Normalize points to fit within the bounding box of the template
-	var normalizedStroke = []
-	for point in stroke:
-		var normalizedX = (point.x - minX) / width
-		var normalizedY = (point.y - minY) / height
-		normalizedStroke.append(Vector2(normalizedX, normalizedY))
-
-	return normalizedStroke
 
 # Function to calculate the score of a gesture compared to a template
 func gestureScore(stroke: Array, template: Array) -> float:
