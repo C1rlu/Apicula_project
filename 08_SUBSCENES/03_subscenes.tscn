@@ -223,125 +223,27 @@ func _ready():
 	
 	_global_datas._photo_flash.connect(check)
 
-
-func check():
 	
+func check():
 	
 	if !_global_datas._orbe_list:
 		return
+			
 	var points = convert_to_vector2_array(_global_datas._orbe_list)	
-	var normalized_plan = normalize(points,_global_datas._orbe_list.size())
-	print(normalized_plan)
+		
 
 	_global_datas._orbe_list.clear()
-	
+
+
 	
 func convert_to_vector2_array(vector3_array):
+	
 	var vector2_array = []
 	for vector3 in vector3_array:
 		# Create a new Vector2 without the Z component
 		var vector2 = Vector2(vector3.position.x, vector3.position.y)
 		vector2_array.append(vector2)
 	return vector2_array
-	
-# Gesture normalization function
-func normalize(points : Array, n):
-	var points_n = resample(points, n)
-	scale(points)
-	translate_to_origin(points, n)
-	return points_n
-	
-# Points resampling
-func resample(points, n):
-	var path_length = path_length(points)
-	var interval = path_length / (n - 1)
-	var distance = 0
-	var new_points = [points[0]]
-	for i in range(1, points.size()):
-		if points[i].strokeId == points[i - 1].strokeId:
-			var d = euclidean_distance(points[i - 1], points[i])
-			if (distance + d) >= interval:
-				var qx = points[i - 1].x + ((interval - distance) / d) * (points[i].x - points[i - 1].x)
-				var qy = points[i - 1].y + ((interval - distance) / d) * (points[i].y - points[i - 1].y)
-				var q = Vector2(qx, qy)
-				q.strokeId = points[i].strokeId
-				new_points.append(q)
-				points.insert(i, q)
-				distance = 0
-			else:
-				distance += d
-	return new_points		
-	
-# Points scaling
-func scale(points):
-	var xmin = INF
-	var xmax = -INF
-	var ymin = INF
-	var ymax = -INF
-	for p in points:
-		xmin = min(xmin, p.x)
-		ymin = min(ymin, p.y)
-		xmax = max(xmax, p.x)
-		ymax = max(ymax, p.y)
-	var scale = max(xmax - xmin, ymax - ymin)
-	for p in points:
-		p.x = (p.x - xmin) / scale
-		p.y = (p.y - ymin) / scale
-	
-# Points translation to origin
-func translate_to_origin(points, n):
-	var centroid = Vector2()
-	for p in points:
-		centroid += p
-	centroid /= n
-	for p in points:
-		p -= centroid
-		
-# Path length calculation
-func path_length(points):
-	var d = 0
-	for i in range(1, points.size()):
-		if points[i].strokeId == points[i - 1].strokeId:
-			d += euclidean_distance(points[i - 1], points[i])
-	return d		
-
-
-func euclidean_distance(p1, p2):
-	return sqrt(pow(p2.x - p1.x, 2) + pow(p2.y - p1.y, 2))
-
-#------------------------------------------------------
-# below reco
-# Function to recognize the input stroke
-func recognize(stroke: Array) -> String:
-	var normalizedStroke = scale(stroke)
-	var scoreThreshold = 0.1
-	var bestScore = 0
-	var bestMatch = \"\"
-
-	# Iterate over each template
-	for templateName in templates.keys():
-		var template = templates[templateName]
-		var score = gestureScore(normalizedStroke, template)
-		print(templateName,score )
-		# Update best match if score is higher than threshold and previous best score
-		if score > scoreThreshold and score > bestScore:
-			bestScore = score
-			bestMatch = templateName
-
-	return bestMatch
-
-
-# Function to calculate the score of a gesture compared to a template
-func gestureScore(stroke: Array, template: Array) -> float:
-	var n = min(stroke.size(), template.size())
-	var epsilon = 0.50 # Distance threshold for a correct match
-
-	var sum = 0.0
-	for i in range(n):
-		var distance = stroke[i].distance_to(template[i])
-		sum += max(0, 1 - distance / epsilon)
-
-	return sum / n # Average score
 "
 
 [sub_resource type="GDScript" id="GDScript_nvaxv"]
