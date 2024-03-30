@@ -15,10 +15,11 @@
 [ext_resource type="Script" path="res://08_SUBSCENES/Play_selected_tool.gd" id="7_whguu"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Add_teleporter_inputs.gd" id="8_2kb68"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Orbe_Instancer.gd" id="11_dnajt"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Orbe_result_filter.gd" id="11_fqwit"]
 [ext_resource type="Script" path="res://08_SUBSCENES/PhotoData_list_update.gd" id="11_uy3s0"]
 [ext_resource type="Resource" uid="uid://cbbmkpkisxagn" path="res://08_SUBSCENES/Orbe/Orbe_datas/Orbe_Mirror.tres" id="12_l61c1"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Stroke_Filter/Orbe_Result_Instancer.gd" id="12_lg0wa"]
 [ext_resource type="Resource" uid="uid://cubpsapqnetwr" path="res://08_SUBSCENES/Orbe/Orbe_datas/Orbe_teleporter.tres" id="13_ywb87"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Stroke_Filter/Stroke_Filter.tres.gd" id="14_0roc3"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Active_scene_viewports.gd" id="14_28kqk"]
 
 [sub_resource type="GDScript" id="GDScript_btuws"]
@@ -188,62 +189,6 @@ func _set_scanner_opacity_value( value : float):
 	_global_datas.scanner_mat.set_shader_parameter(\"Circle\",value)	
 	RenderingServer.global_shader_parameter_set(\"Subscene_mirror_alpha\",value)	
 
-"
-
-[sub_resource type="GDScript" id="GDScript_os5yk"]
-script/source = "extends Node
-
-# Define your templates here
-var templates = {
-	
-	\"Circle\": [
-		Vector2(0, 1),
-		Vector2(0.3827, 0.9239),
-		Vector2(0.7071, 0.7071),
-		Vector2(0.9239, 0.3827),
-		Vector2(1, 0),
-		Vector2(0.9239, -0.3827),
-		Vector2(0.7071, -0.7071),
-		Vector2(0.3827, -0.9239),
-		Vector2(0, -1),
-		Vector2(-0.3827, -0.9239),
-		Vector2(-0.7071, -0.7071),
-		Vector2(-0.9239, -0.3827),
-		Vector2(-1, 0),
-		Vector2(-0.9239, 0.3827),
-		Vector2(-0.7071, 0.7071),
-		Vector2(-0.3827, 0.9239)
-	],
-	
-	\"Triangle\": [Vector2(0, 0), Vector2(1, 0), Vector2(1, 1), Vector2(0, 0)]
-}
-
-# Example usage:
-func _ready():
-	
-	_global_datas._photo_flash.connect(check)
-
-	
-func check():
-	
-	if !_global_datas._orbe_list:
-		return
-			
-	var points = convert_to_vector2_array(_global_datas._orbe_list)	
-		
-
-	_global_datas._orbe_list.clear()
-
-
-	
-func convert_to_vector2_array(vector3_array):
-	
-	var vector2_array = []
-	for vector3 in vector3_array:
-		# Create a new Vector2 without the Z component
-		var vector2 = Vector2(vector3.position.x, vector3.position.y)
-		vector2_array.append(vector2)
-	return vector2_array
 "
 
 [sub_resource type="GDScript" id="GDScript_nvaxv"]
@@ -990,13 +935,13 @@ script = ExtResource("11_uy3s0")
 [node name="Orbe_Instancer" type="Node" parent="ORBE"]
 script = ExtResource("11_dnajt")
 
-[node name="Orbe_result_filter" type="Node" parent="ORBE"]
-script = ExtResource("11_fqwit")
-Mirror_data = ExtResource("12_l61c1")
-teleporter_data = ExtResource("13_ywb87")
+[node name="Stroke_Filter" type="Node" parent="ORBE"]
+script = ExtResource("14_0roc3")
+Teleporter_Orbe = ExtResource("13_ywb87")
+Mirror_Orbe = ExtResource("12_l61c1")
 
-[node name="Test_PC_reco" type="Node" parent="ORBE"]
-script = SubResource("GDScript_os5yk")
+[node name="Orbe_Result_Instancer" type="Node" parent="ORBE"]
+script = ExtResource("12_lg0wa")
 
 [node name="SEE_MIRROR_FLASH" type="Node" parent="."]
 script = SubResource("GDScript_nvaxv")

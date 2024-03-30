@@ -43,8 +43,8 @@ func check_area(condition : bool):
 		if mirror_node:
 			if !_global_datas.Player_InMirrorScene:		
 				_global_datas._mirror_switch.emit(true)
-			#else:
-				#_global_datas._mirror_switch.emit(false)	
+			else:
+				_global_datas._mirror_switch.emit(false)	
 		
 		if Orbe_Contact:
 			Orbe_Contact.delete_node.emit()	

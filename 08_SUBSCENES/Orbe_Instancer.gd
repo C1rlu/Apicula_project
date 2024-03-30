@@ -4,10 +4,14 @@ const BASE_ORBE_PREFABS = preload("res://08_SUBSCENES/Orbe/Base_Orbe/Base_Orbe_p
 @onready var load_scene = $"../../LoadScene"
 
 
+@export var show_stroke_id_debug = false
+
+
 func _ready():
-	_global_datas._instance_orbe.connect(_instance_at_pos)
-	_global_datas.instance_mirror_at_pos.connect(_instance_mirror_at_pos)
 	
+	_global_datas._instance_stroke.connect(_instance_at_pos)
+
+
 func _instance_at_pos():
 	
 	var target = _global_datas._orbe_tool_origin_position
@@ -15,19 +19,16 @@ func _instance_at_pos():
 	var orbe = BASE_ORBE_PREFABS.instantiate()
 	orbe.position  = target 
 	load_scene.add_child(orbe)
-	_global_datas._orbe_list.append(orbe)
+	_global_datas._orbe_stroke_scene.append(orbe)
+
+	# add the actual points in the stroke list
+	var StrokeID = _global_datas._strokeID
+	var newPoints = Points.Point.new(target.x * 100,target.y*100,StrokeID)
+	_global_datas._orbe_stroke.append(newPoints)
 	
-	
-func _instance_mirror_at_pos(data : orbe_data):
-	
-	#var player_position = _global_datas.subbscene_playerPosition
-	
-	var instance_position = calculate_instance_position(_global_datas._orbe_list)
-	
-	var mirror = data.Orbe_Result_prefabs.instantiate()
-	mirror.position  =  instance_position
-	load_scene.add_child(mirror)
-	_global_datas._orbe_instancer_center = instance_position  
+	if show_stroke_id_debug:
+		var string = "Points.Point.new("+str(newPoints.X)+","+str(newPoints.Y)+","+str(newPoints.StrokeID)+"),"
+		print(string)
 
 func calculate_instance_position(points: Array):
 	
@@ -46,3 +47,4 @@ func calculate_instance_position(points: Array):
 	var avg_z = sum_z / points.size()
 
 	return Vector3(avg_x, avg_y, avg_z)
+	

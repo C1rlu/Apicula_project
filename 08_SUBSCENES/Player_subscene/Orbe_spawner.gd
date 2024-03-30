@@ -13,14 +13,15 @@ func spawn_orbe(condition : bool):
 	vfx_sphere_mirror.emitting = condition
 	
 	if condition:
-		_global_datas._instance_orbe.emit()	
-		timer.start()	
+		_global_datas._instance_stroke.emit()	
+		timer.start()
+		_global_datas._strokeID += 1	
 	else :
 		timer.stop()		
 
 func done():
 	
-	_global_datas._instance_orbe.emit()
+	_global_datas._instance_stroke.emit()
 
 
 func _on_timer_timeout():

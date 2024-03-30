@@ -38,10 +38,10 @@ func _ready():
 	_teleporter_list.clear()
 	_selected_tool = null
 	_photo_data_scene_list.clear()
-	_orbe_list.clear()
-	_orbe_instancer_center = Vector3.ZERO
+	_orbe_stroke_scene.clear()
 	_orbe_tool_origin_position = Vector3.ZERO
-	
+	_orbe_stroke.clear()
+	_strokeID = 0
 # input type
 signal using_pad(condition : bool)
 var move_right : String
@@ -106,14 +106,17 @@ var _teleporter_list : Array[Node]
 var _photo_data_scene_list : Array[Node]
 
 
-# Orbe list
-signal _instance_orbe
-var _orbe_list : Array[Node3D]
-var _orbe_instancer_center : Vector3 
+# Orbe Points.Point.New
+signal _instance_stroke
+var _orbe_stroke : Array
+var _strokeID : int
+
+# orbe stroke in scene
+var _orbe_stroke_scene : Array[Node3D]
 var _orbe_tool_origin_position : Vector3
 
 
-signal instance_mirror_at_pos(data : orbe_data)
+signal instance_orbe_result(data : orbe_data, instance_position : Vector3)
 
 #board scene
 
