@@ -14,6 +14,7 @@ var Player_InMenu : bool
 var Player_InDialogue : bool
 var Player_InDialogue_zone : bool
 var Mirror_vortex_Node : Node3D
+var Mirror_vortex_out_Node : Node3D
 # menu signals
 
 signal _start_ini_subscene

@@ -11,8 +11,7 @@ func _ready():
 	
 	_global_datas._photo_flash.connect(_flash_vortex)	
 
-	
-	
+
 func _flash_vortex():
 
 	if player_inside:

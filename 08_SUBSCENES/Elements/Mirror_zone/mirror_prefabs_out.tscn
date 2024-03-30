@@ -1,12 +1,10 @@
-[gd_scene load_steps=45 format=3 uid="uid://dym7sjmq33hdc"]
+[gd_scene load_steps=46 format=3 uid="uid://cvjeyvpdoiyby"]
 
-[ext_resource type="Script" path="res://08_SUBSCENES/Elements/Mirror_zone/Scale_in_switch.gd" id="1_c0oo0"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Elements/Mirror_zone/Flash_vortex_effect.gd" id="1_kctf1"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Tools/Scanning_effect.gd" id="2_6ls2a"]
-[ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_elements_mat.tres" id="2_dulgr"]
-[ext_resource type="Script" path="res://12_INVENTORY/Photo/Photo_data_element.gd" id="2_hc0a6"]
-[ext_resource type="Resource" uid="uid://whupf3xrs1no" path="res://08_SUBSCENES/Elements/Mirror_zone/Mirror_photo.tres" id="3_4hncg"]
-[ext_resource type="Material" uid="uid://goq7y1lqdpxa" path="res://05_SHADER_TEST/Subscene_materials/element_subscene_x_ray_VFX_LIGHT.tres" id="3_cb240"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Tools/Scanning_effect.gd" id="2_h0h2g"]
+[ext_resource type="Script" path="res://12_INVENTORY/Photo/Photo_data_element.gd" id="3_ni3nk"]
+[ext_resource type="Resource" uid="uid://whupf3xrs1no" path="res://08_SUBSCENES/Elements/Mirror_zone/Mirror_photo.tres" id="4_b1a5t"]
+[ext_resource type="Material" uid="uid://goq7y1lqdpxa" path="res://05_SHADER_TEST/Subscene_materials/element_subscene_x_ray_VFX_LIGHT.tres" id="6_pkq3x"]
+[ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_elements_mat.tres" id="7_48krf"]
 
 [sub_resource type="VisualShaderNodeFresnel" id="VisualShaderNodeFresnel_gqvum"]
 default_input_values = [2, true, 3, 10.0]
@@ -69,75 +67,105 @@ scale_curve = SubResource("CurveTexture_0talk")
 
 [sub_resource type="BoxMesh" id="BoxMesh_krsxd"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_s4hpl"]
-radius = 0.363589
+[sub_resource type="SphereShape3D" id="SphereShape3D_enpcj"]
+radius = 0.105374
 
-[sub_resource type="GDScript" id="GDScript_vsb1f"]
+[sub_resource type="GDScript" id="GDScript_jwr6v"]
 script/source = "extends Node
 
 @onready var root = $\"../..\"
 
 func _ready():
-	_global_datas.Mirror_vortex_Node = root
+	_global_datas.Mirror_vortex_out_Node = root
 
 "
 
-[sub_resource type="GDScript" id="GDScript_tujf2"]
+[sub_resource type="GDScript" id="GDScript_v2sqn"]
 script/source = "extends Node
 
-@onready var render_vortex = $\"../Render_vortex\"
-@onready var render_vortex_mat : Material = render_vortex.get_surface_override_material(0)
+@onready var gpu_circle_effect = $\"../GPU_CircleEffect\"
 
-var t
 var actual_value : float
-signal player_in(condition)
-
-func _ready():
-	_global_datas._mirror_switch.connect(back_from_mirror)
-
-
-func back_from_mirror(condition : bool):
-	start_tween(condition)			
 
 func _on_mirror_prefabs_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
 	if area:
 		if area.get_node_or_null(\"Player_photoActive\"):
-			start_tween(true)
+			change_value(1.0)
 
 
 func _on_mirror_prefabs_area_shape_exited(area_rid, area, area_shape_index, local_shape_index):
 	if area:
 		if area.get_node_or_null(\"Player_photoActive\"):
-			start_tween(false)
+			change_value(0.25)
 
-
-func start_tween(condition : bool):
-
-
-	
-	if _global_datas.Player_InMirrorScene:
-		return
-		
-	player_in.emit(condition)	
-	
-
-	var trees = get_tree()
-	
-	if !trees:
-		return
-		
-	if t:
-		t.kill()	
-	t = create_tween()	
-	
-	if condition:
-		t.tween_method(change_value,0.5,1.0,0.25)	
-	else:
-		t.tween_method(change_value,actual_value,0.5,0.25)				
 
 func change_value(value : float):
-	render_vortex_mat.set_shader_parameter(\"Speed\",value)	
 
+	gpu_circle_effect.speed_scale = value 
+"
+
+[sub_resource type="GDScript" id="GDScript_66rku"]
+script/source = "extends Node
+
+@onready var mirror_root = $\"../..\"
+
+@onready var gpu_explosed = $\"../GPU_Explosed\"
+
+@onready var render_vortex_globe_effect = $\"../Render_vortex_globe_effect\"
+@onready var render_vortex = $\"../Render_vortex\"
+@onready var area_col = $\"../CollisionShape3D\"
+
+var t
+
+
+func _ready():
+	_global_datas._mirror_switch.connect(_scale_globe_effect)
+
+	
+	
+func _scale_globe_effect(condition : bool):
+	
+	render_vortex_globe_effect.visible = true
+	
+
+		
+	if condition:
+		if t:
+			t.kill()
+		t = create_tween()
+		t.tween_method(scale_value,1.0,10.0,0.5)	
+		t.connect(\"finished\",hide)	
+	else :	
+		
+		show()
+		
+		
+		
+		if t:
+			t.kill()
+		t = create_tween()
+		t.tween_method(scale_value,10.0,1.0,0.5)	
+		t.connect(\"finished\",show_end)
+
+
+									
+func hide():
+	render_vortex_globe_effect.visible = false	
+	render_vortex.visible = false
+	mirror_root.queue_free()
+
+func show():
+	gpu_explosed.emitting = true
+	render_vortex_globe_effect.visible = true
+	render_vortex.visible = true	
+	
+func show_end():
+	mirror_root.queue_free()
+								
+func scale_value(value : float):
+	render_vortex_globe_effect.scale = Vector3(value,value,value)	
+	render_vortex.scale = Vector3(value,value,value)	
+	
 "
 
 [sub_resource type="SphereMesh" id="SphereMesh_ic6q1"]
@@ -319,21 +347,20 @@ shader_parameter/ColorParameter = Color(0.286275, 0.286275, 0.286275, 1)
 [sub_resource type="SphereShape3D" id="SphereShape3D_b7y4g"]
 radius = 0.0957538
 
-[sub_resource type="Curve" id="Curve_o04a3"]
+[sub_resource type="Curve" id="Curve_ymgms"]
 _data = [Vector2(0.00954654, 0.051224), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_plvsx"]
-curve = SubResource("Curve_o04a3")
+[sub_resource type="CurveTexture" id="CurveTexture_60tdt"]
+curve = SubResource("Curve_ymgms")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_tviuq"]
-emission_shape = 2
-emission_sphere_radius = 0.53
-inherit_velocity_ratio = -0.525
-direction = Vector3(0, 0, 0)
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_3jiab"]
+emission_shape = 1
+emission_sphere_radius = 0.1
 gravity = Vector3(0, 0, 0)
-radial_accel_min = -3.0
-scale_curve = SubResource("CurveTexture_plvsx")
+radial_accel_min = 0.1
+radial_accel_max = 0.2
+scale_curve = SubResource("CurveTexture_60tdt")
 
 [sub_resource type="SphereMesh" id="SphereMesh_8a3y3"]
 radius = 0.1
@@ -341,13 +368,25 @@ height = 0.25
 radial_segments = 16
 rings = 16
 
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_81qqh"]
+emission_shape = 2
+emission_sphere_radius = 0.53
+inherit_velocity_ratio = -0.525
+direction = Vector3(0, 0, 0)
+gravity = Vector3(0, 0, 0)
+radial_accel_min = -3.0
+scale_curve = SubResource("CurveTexture_60tdt")
+
+[sub_resource type="SphereMesh" id="SphereMesh_0gber"]
+radius = 0.1
+height = 0.25
+radial_segments = 16
+rings = 16
+
 [node name="Mirror_root" type="Node3D"]
 
-[node name="Flash_effect" type="Node" parent="."]
-script = ExtResource("1_kctf1")
-
 [node name="Scanning_effect" type="Node" parent="."]
-script = ExtResource("2_6ls2a")
+script = ExtResource("2_h0h2g")
 
 [node name="Mirror_Particule" type="GPUParticles3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00202631, -0.00481871, 0)
@@ -368,32 +407,35 @@ collision_mask = 4
 
 [node name="col" type="CollisionShape3D" parent="Area3D"]
 transform = Transform3D(1.42314, 0, 0, 0, 1.42314, 0, 0, 0, 1.42314, 0.0120305, 0.0105445, 0)
-shape = SubResource("SphereShape3D_s4hpl")
+shape = SubResource("SphereShape3D_enpcj")
 
 [node name="Photo_data" type="Node" parent="Area3D"]
-script = ExtResource("2_hc0a6")
-photoData = ExtResource("3_4hncg")
+script = ExtResource("3_ni3nk")
+photoData = ExtResource("4_b1a5t")
 
 [node name="Timer" type="Timer" parent="Area3D/Photo_data"]
+wait_time = 1.5
 
 [node name="Mirror_prefabs" type="Area3D" parent="."]
 collision_layer = 4
 collision_mask = 4
 
 [node name="Mirror" type="Node" parent="Mirror_prefabs"]
-script = SubResource("GDScript_vsb1f")
+script = SubResource("GDScript_jwr6v")
 
 [node name="PLayer_InZone" type="Node" parent="Mirror_prefabs"]
-script = SubResource("GDScript_tujf2")
+script = SubResource("GDScript_v2sqn")
 
 [node name="Scale_in_switch" type="Node" parent="Mirror_prefabs"]
-script = ExtResource("1_c0oo0")
+script = SubResource("GDScript_66rku")
 
 [node name="Render_vortex" type="MeshInstance3D" parent="Mirror_prefabs"]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0, 0)
+visible = false
 layers = 32768
 mesh = SubResource("SphereMesh_ic6q1")
 skeleton = NodePath("")
-surface_material_override/0 = ExtResource("3_cb240")
+surface_material_override/0 = ExtResource("6_pkq3x")
 
 [node name="Render_vortex_globe" type="MeshInstance3D" parent="Mirror_prefabs/Render_vortex"]
 transform = Transform3D(-5.62846e-08, 1.28764, 0, -1.28764, -5.62846e-08, 0, 0, 0, 1.28764, 0.0134362, 0.095031, 0)
@@ -406,15 +448,27 @@ transform = Transform3D(1.42314, 0, 0, 0, 1.42314, 0, 0, 0, 1.42314, 0.0120305, 
 shape = SubResource("SphereShape3D_b7y4g")
 
 [node name="Render_vortex_globe_effect" type="MeshInstance3D" parent="Mirror_prefabs"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0.0134362, 0.095031, 0)
+transform = Transform3D(-4.37114e-07, 10, 0, -10, -4.37114e-07, 0, 0, 0, 10, 0.0134362, 0.095031, 0)
+visible = false
 layers = 32768
 mesh = SubResource("SphereMesh_iskgr")
 skeleton = NodePath("../Render_vortex")
 surface_material_override/0 = SubResource("ShaderMaterial_rw8rk")
 
+[node name="GPU_CircleEffect" type="GPUParticles3D" parent="Mirror_prefabs"]
+layers = 4
+material_override = ExtResource("7_48krf")
+amount = 100
+speed_scale = 0.25
+fixed_fps = 16
+interpolate = false
+fract_delta = false
+process_material = SubResource("ParticleProcessMaterial_3jiab")
+draw_pass_1 = SubResource("SphereMesh_8a3y3")
+
 [node name="GPU_Explosed" type="GPUParticles3D" parent="Mirror_prefabs"]
 layers = 4
-material_override = ExtResource("2_dulgr")
+material_override = ExtResource("7_48krf")
 emitting = false
 amount = 250
 one_shot = true
@@ -423,12 +477,11 @@ explosiveness = 1.0
 fixed_fps = 24
 interpolate = false
 fract_delta = false
-process_material = SubResource("ParticleProcessMaterial_tviuq")
-draw_pass_1 = SubResource("SphereMesh_8a3y3")
+process_material = SubResource("ParticleProcessMaterial_81qqh")
+draw_pass_1 = SubResource("SphereMesh_0gber")
 
 [connection signal="scanner_effect_condition" from="Area3D/Photo_data" to="Scanning_effect" method="_on_photo_data_scanner_effect_condition"]
 [connection signal="scanner_effect_value" from="Area3D/Photo_data" to="Scanning_effect" method="_on_photo_data_scanner_effect_value"]
 [connection signal="timeout" from="Area3D/Photo_data/Timer" to="Area3D/Photo_data" method="_on_timer_timeout"]
 [connection signal="area_shape_entered" from="Mirror_prefabs" to="Mirror_prefabs/PLayer_InZone" method="_on_mirror_prefabs_area_shape_entered"]
 [connection signal="area_shape_exited" from="Mirror_prefabs" to="Mirror_prefabs/PLayer_InZone" method="_on_mirror_prefabs_area_shape_exited"]
-[connection signal="player_in" from="Mirror_prefabs/PLayer_InZone" to="Flash_effect" method="_on_p_layer_in_zone_player_in"]

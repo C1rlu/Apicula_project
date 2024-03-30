@@ -2,13 +2,14 @@ extends Node
 
 @export var photoData : PhotoData
 	
-var t
-var actual_value : float
 
 signal scanner_effect_condition(condition : bool)
 signal scanner_effect_value(value : float)
 
 @onready var root =  $"../.."
+@onready var timer = $Timer
+
+
 
 var is_scanning : bool = false
 
@@ -23,39 +24,26 @@ func scanning():
 	if is_scanning:
 		return
 		
+
 	is_scanning = true
-	
-	if t:
-		t.kill()
+	if timer:		
+		timer.start()
 		
-	t = create_tween()
-	t.tween_method(set_shader_value,0.0,1.0,1.0).set_ease(Tween.EASE_OUT)
-	t.connect("finished", scanning_done)
-	
 	scanner_effect_condition.emit(true)
 
 
-		
 func stop_scanning():
 	
-	var trees = get_tree()
-	
-	if !trees:
-		return
-		
-	if t:
-		t.kill()
-	
-	t = create_tween()
-	t.tween_method(set_shader_value,actual_value,0.0,1.5)
-			
+	if timer:
+		timer.stop()
+
+	is_scanning = false
 	scanner_effect_condition.emit(false)
 	
-	is_scanning = false
-		
+
 func set_shader_value(value):
 	scanner_effect_value.emit(value)	
-	actual_value = value
+
 	
 func scanning_done():
 	
@@ -75,3 +63,8 @@ func _on_area_take_it_area_shape_exited(area_rid, area, area_shape_index, local_
 		if player_out:
 			stop_scanning()		
 		
+
+
+func _on_timer_timeout():
+	scanning_done()
+	print("SCANNING DONE")

@@ -45,7 +45,7 @@ func check_area(condition : bool):
 				_global_datas._mirror_switch.emit(true)
 			else:
 				_global_datas._mirror_switch.emit(false)	
-		
+
 		if Orbe_Contact:
 			Orbe_Contact.delete_node.emit()	
 			

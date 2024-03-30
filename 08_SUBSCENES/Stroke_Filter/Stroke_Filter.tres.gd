@@ -2,7 +2,7 @@ extends Node
 
 @export var Teleporter_Orbe : orbe_data
 @export var Mirror_Orbe : orbe_data
-
+@export var Mirror_Orbe_out : orbe_data
 # CACHE ALL THE ACTUAL TEMPLATE
 var templates_clouds : Array[Gesture]
 
@@ -56,8 +56,24 @@ func result_condition(result):
 	if result[1] > 0.9:
 		print(result)
 		var calculate_center = center_of_mass_points()
+		
+		
 		if result[0] == "Circle":
-			_global_datas.instance_orbe_result.emit(Mirror_Orbe,calculate_center)
+			if !_global_datas.Player_InMirrorScene:
+				
+				if !_global_datas.Mirror_vortex_Node:
+					_global_datas.instance_orbe_result.emit(Mirror_Orbe,calculate_center)
+				else:
+					_global_datas.Mirror_vortex_Node.position = calculate_center		
+			else:
+				
+				if !_global_datas.Mirror_vortex_out_Node:
+					_global_datas.instance_orbe_result.emit(Mirror_Orbe_out,calculate_center)
+				else:
+					_global_datas.Mirror_vortex_out_Node.position = calculate_center	
+					
+					
+					
 		if result[0] == "Triangle":
 			_global_datas.instance_orbe_result.emit(Teleporter_Orbe,calculate_center)
 			

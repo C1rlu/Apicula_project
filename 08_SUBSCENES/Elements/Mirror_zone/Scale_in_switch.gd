@@ -49,6 +49,7 @@ func show():
 	render_vortex.visible = true	
 	
 func show_end():
+	_global_datas.Mirror_vortex_Node = null
 	mirror_root.queue_free()
 								
 func scale_value(value : float):
