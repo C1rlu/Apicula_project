@@ -58,7 +58,7 @@ signal _active_sonar(position : Vector3)
 signal _active_progress_subscene(condition : bool)
 signal _active_go_subscene_button(condition : bool)
 signal _active_world_grid(condition : bool)
-
+signal _teleport_boat_at_pos(position : Vector3)
 
 # dialogue signals
 signal in_dialogue_zone

@@ -1,8 +1,9 @@
-[gd_scene load_steps=21 format=3 uid="uid://b0j7tl0gn4vg8"]
+[gd_scene load_steps=22 format=3 uid="uid://b0j7tl0gn4vg8"]
 
 [ext_resource type="Script" path="res://10_BOARD/Boue/boue_map_prefab.gd" id="1_7mkw5"]
 [ext_resource type="Material" uid="uid://cndqni443mbf" path="res://00_PLAYER/Boat/Boat_mat.tres" id="2_0td7k"]
 [ext_resource type="Resource" uid="uid://bqtier24l2d58" path="res://10_BOARD/Boue/Boue_appicula.tres" id="2_qe1o7"]
+[ext_resource type="Script" path="res://10_BOARD/Teleport_PlayerBoat_active.gd" id="3_vu30j"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_bcdgt"]
 
@@ -154,6 +155,7 @@ var _is_select : bool = false
 
 signal on_click(condition:bool)
 
+
 func _ready():
 	boue_data =  $\"../..\".Boue_Data
 	_global_datas.open_inventory.connect(close_inventory)
@@ -226,10 +228,20 @@ layers = 2
 mesh = SubResource("QuadMesh_bcdgt")
 surface_material_override/0 = SubResource("ShaderMaterial_e3ub3")
 
+[node name="Teleport_scale_visual" type="MeshInstance3D" parent="."]
+transform = Transform3D(15, 0, 0, 0, -6.55671e-07, 5, 0, -15, -2.18557e-07, 0, 0.404643, 0)
+visible = false
+layers = 2
+mesh = SubResource("QuadMesh_bcdgt")
+surface_material_override/0 = SubResource("ShaderMaterial_e3ub3")
+
 [node name="Area3D" type="Area3D" parent="."]
 
 [node name="Select_this" type="Node" parent="Area3D"]
 script = SubResource("GDScript_1q1ab")
+
+[node name="Teleport_PlayerBoat" type="Node" parent="Area3D"]
+script = ExtResource("3_vu30j")
 
 [node name="collide" type="CollisionShape3D" parent="Area3D"]
 shape = SubResource("SphereShape3D_pu4um")
@@ -242,3 +254,4 @@ skeleton = NodePath("")
 surface_material_override/0 = ExtResource("2_0td7k")
 
 [connection signal="input_event" from="Area3D" to="Area3D/Select_this" method="_on_input_event"]
+[connection signal="on_click" from="Area3D/Select_this" to="Area3D/Teleport_PlayerBoat" method="_on_select_this_on_click"]
