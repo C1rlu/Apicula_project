@@ -1,4 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=26 format=3 uid="uid://b1iqs8p4it3ni"]
+[gd_resource type="ShaderMaterial" load_steps=28 format=3 uid="uid://b1iqs8p4it3ni"]
 
 [sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_dj8vr"]
 input_name = "texture"
@@ -102,6 +102,11 @@ Dither_Node = In - DITHER_THRESHOLDS[index];"
 [sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_ixkq8"]
 parameter_name = "Dither_size"
 qualifier = 1
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_2l5mb"]
+default_input_values = [0, 0.03, 1, 0.065, 2, 0.26]
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_nwsci"]
 
 [sub_resource type="VisualShader" id="VisualShader_pn65u"]
 code = "shader_type canvas_item;
@@ -216,6 +221,7 @@ void fragment() {
 
 }
 "
+graph_offset = Vector2(-713.058, -477.858)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(1320, 40)
@@ -293,7 +299,11 @@ int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
 nodes/fragment/72/node = SubResource("VisualShaderNodeFloatParameter_ixkq8")
 nodes/fragment/72/position = Vector2(-1760, 20)
-nodes/fragment/connections = PackedInt32Array(36, 0, 37, 1, 39, 0, 37, 0, 43, 0, 52, 2, 43, 0, 53, 2, 24, 0, 25, 2, 53, 0, 52, 0, 60, 0, 61, 0, 61, 0, 62, 0, 59, 0, 58, 0, 62, 0, 58, 2, 58, 0, 42, 0, 54, 0, 53, 0, 25, 0, 43, 1, 35, 0, 0, 1, 52, 0, 0, 0, 37, 0, 35, 1, 42, 0, 48, 0, 67, 0, 58, 1, 68, 0, 42, 2, 69, 0, 52, 1, 70, 0, 71, 0, 72, 0, 71, 1, 48, 0, 43, 0)
+nodes/fragment/73/node = SubResource("VisualShaderNodeMix_2l5mb")
+nodes/fragment/73/position = Vector2(-273.762, -261.725)
+nodes/fragment/74/node = SubResource("VisualShaderNodeStep_nwsci")
+nodes/fragment/74/position = Vector2(41.4899, -23.9417)
+nodes/fragment/connections = PackedInt32Array(36, 0, 37, 1, 39, 0, 37, 0, 24, 0, 25, 2, 53, 0, 52, 0, 60, 0, 61, 0, 61, 0, 62, 0, 59, 0, 58, 0, 62, 0, 58, 2, 58, 0, 42, 0, 54, 0, 53, 0, 25, 0, 43, 1, 35, 0, 0, 1, 52, 0, 0, 0, 37, 0, 35, 1, 42, 0, 48, 0, 67, 0, 58, 1, 68, 0, 42, 2, 69, 0, 52, 1, 48, 0, 43, 0, 43, 0, 53, 2, 43, 0, 52, 2, 70, 0, 71, 0, 72, 0, 71, 1, 71, 0, 73, 0)
 
 [resource]
 shader = SubResource("VisualShader_pn65u")
