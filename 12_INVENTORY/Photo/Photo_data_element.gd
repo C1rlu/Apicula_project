@@ -75,3 +75,4 @@ func _on_timer_timeout():
 func _on_tree_exited():
 
 	_global_datas._photo_data_scene_list.erase(self)	
+	

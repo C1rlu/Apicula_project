@@ -32,7 +32,7 @@ func check_area(condition : bool):
 	
 		var mirror_node = areas.get_node_or_null("Mirror")
 		var mirror_destination = areas.get_node_or_null("Mirror_destination")
-		var Orbe_Contact = 	areas.get_node_or_null("Orbe_Contact")
+		#var Orbe_Contact = 	areas.get_node_or_null("Orbe_Contact")
 		if mirror_destination:
 			if _global_datas.Player_InMirrorScene:
 				var desination = mirror_destination.destination
@@ -46,8 +46,8 @@ func check_area(condition : bool):
 			else:
 				_global_datas._mirror_switch.emit(false)	
 
-		if Orbe_Contact:
-			Orbe_Contact.delete_node.emit()	
+		#if Orbe_Contact:
+			#Orbe_Contact.delete_node.emit()	
 			
 func _on_timer_timeout():
 	timer.stop()

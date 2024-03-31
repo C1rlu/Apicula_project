@@ -1,0 +1,57 @@
+[gd_scene load_steps=5 format=3 uid="uid://cabu656hjjiyl"]
+
+[ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Remover/Remover_check.gd" id="1_p2xlo"]
+[ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_elements_mat.tres" id="1_udr6a"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ix2u8"]
+radius = 0.398972
+
+[sub_resource type="SphereMesh" id="SphereMesh_ly7tq"]
+radius = 0.1
+height = 0.2
+
+[node name="Line_Orbe_Remover" type="Node3D"]
+
+[node name="Remover_check" type="Node" parent="."]
+script = ExtResource("1_p2xlo")
+
+[node name="Timer" type="Timer" parent="Remover_check"]
+wait_time = 0.05
+autostart = true
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("SphereShape3D_ix2u8")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.185948, 0, 0)
+visible = false
+layers = 4
+mesh = SubResource("SphereMesh_ly7tq")
+surface_material_override/0 = ExtResource("1_udr6a")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.203036, 0, 0)
+visible = false
+layers = 4
+mesh = SubResource("SphereMesh_ly7tq")
+surface_material_override/0 = ExtResource("1_udr6a")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0101522, 0.229844, 0)
+visible = false
+layers = 4
+mesh = SubResource("SphereMesh_ly7tq")
+surface_material_override/0 = ExtResource("1_udr6a")
+
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0101522, -0.224757, 0)
+visible = false
+layers = 4
+mesh = SubResource("SphereMesh_ly7tq")
+surface_material_override/0 = ExtResource("1_udr6a")
+
+[connection signal="timeout" from="Remover_check/Timer" to="Remover_check" method="_on_timer_timeout"]

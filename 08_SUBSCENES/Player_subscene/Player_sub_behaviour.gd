@@ -1,6 +1,12 @@
 extends RigidBody3D
 
-@export var move_speed: float = 5.0
+
+
+@export var orbe_tool : tool_data
+
+@export var actual_speed: float = 5.0
+@export var hight_speed: float = 5.0
+@export var normal_speed: float = 5.0
 @export var maxSpeed = 10.0
 
 @export var startPos : Vector3
@@ -11,30 +17,41 @@ var _canMove = false
 @onready var light_position = $Render_mesh/Light_Position
 @onready var orbe_spawner_position = $Orbe_spawner_position
 
+
+
 func _ready():
 
 	_global_datas._start_ini_subscene.connect(ini_Pos)
 	_global_datas._end_ini_subscene.connect(can_Move)
 	_global_datas._backFrom_subscene.connect(cant_Move)
-		
+	orbe_tool.tool_active_signal.connect(_change_speed)	
+	
 func ini_Pos():
 	_canMove = true
 	transform.origin = startPos
 	PlayerMesh.rotation_degrees = Vector3.ZERO
 	splash()
+
+func _change_speed(condition : bool):
+	
+
+	if condition:
+		actual_speed = hight_speed
+		print(actual_speed)
+	else :
+		actual_speed = normal_speed
+		print(actual_speed)
+	
 	
 func can_Move():
 	_canMove = true
 func cant_Move():
 	_canMove = false
+	
+	
 func splash():
 	apply_central_force(Vector3.DOWN * 600)
 	
-
-func _speedUp():
-	move_speed += 5
-func _speedDown():
-	move_speed -= 5
 	
 func _physics_process(_delta):
 	
@@ -54,19 +71,19 @@ func _physics_process(_delta):
 		
 	if Input.is_action_pressed((_global_datas.move_forward)):
 		var goingUp = transform.basis.y
-		apply_central_force(goingUp * move_speed)
+		apply_central_force(goingUp * actual_speed)
 		player_dir(_delta,0.0,-27.0)
 	if Input.is_action_pressed((_global_datas.move_backward)):
 		var goingDown = -transform.basis.y
-		apply_central_force(goingDown * move_speed)
+		apply_central_force(goingDown * actual_speed)
 		player_dir(_delta,0.0,27.0)
 	if Input.is_action_pressed((_global_datas.move_right)):
 		var goingRight = transform.basis.x
-		apply_central_force(goingRight * move_speed)
+		apply_central_force(goingRight * actual_speed)
 		player_dir(_delta,90.0,27.0)
 	if Input.is_action_pressed((_global_datas.move_left)):
 		var goingLeft = -transform.basis.x
-		apply_central_force(goingLeft * move_speed)
+		apply_central_force(goingLeft * actual_speed)
 		player_dir(_delta,-90.0,27.0)
 	var current_velocity = linear_velocity
 	var current_speed = current_velocity.length()
@@ -75,9 +92,6 @@ func _physics_process(_delta):
 		current_velocity = current_velocity.normalized() * maxSpeed
 		linear_velocity = current_velocity
 
-
-func _dash():
-	linear_velocity += linear_velocity * 1.5
 
 func player_dir(_delta, angle,angle_x):
 	

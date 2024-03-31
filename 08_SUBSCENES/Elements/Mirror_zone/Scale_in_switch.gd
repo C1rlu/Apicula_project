@@ -49,10 +49,13 @@ func show():
 	render_vortex.visible = true	
 	
 func show_end():
-	_global_datas.Mirror_vortex_Node = null
+	
 	mirror_root.queue_free()
 								
 func scale_value(value : float):
 	render_vortex_globe_effect.scale = Vector3(value,value,value)	
 	render_vortex.scale = Vector3(value,value,value)	
 	
+
+func _on_tree_exited():
+	_global_datas.Mirror_vortex_Node = null

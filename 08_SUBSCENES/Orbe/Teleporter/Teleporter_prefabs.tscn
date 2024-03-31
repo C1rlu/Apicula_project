@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://d1dy8wdybrr7m"]
+[gd_scene load_steps=32 format=3 uid="uid://d1dy8wdybrr7m"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Teleporter/Teleporter_prefabs.gd" id="1_qf47g"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Tools/Scanning_effect.gd" id="2_jwtc3"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Orbe_Magnet.gd" id="4_626aq"]
 [ext_resource type="Script" path="res://12_INVENTORY/Photo/Photo_data_element.gd" id="4_e00ki"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Teleporter/Remover.gd" id="4_k2307"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Remover/Line_remover.gd" id="5_e36hk"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Orbe_Contact.gd" id="5_pryy3"]
 
 [sub_resource type="VisualShaderNodeFresnel" id="VisualShaderNodeFresnel_mw66r"]
@@ -209,7 +210,6 @@ process_material = SubResource("ParticleProcessMaterial_1ke37")
 draw_pass_1 = SubResource("BoxMesh_pqfq1")
 
 [node name="Render_on" type="Node3D" parent="."]
-transform = Transform3D(0.511378, 0, 0, 0, 0.511378, 0, 0, 0, 0.511378, 0, 0, 0)
 
 [node name="MeshInstance3D3" type="MeshInstance3D" parent="Render_on"]
 transform = Transform3D(0.123877, 0, 0, 0, 0.123877, 0, 0, 0, 0.123877, 0, 0, 0)
@@ -261,7 +261,6 @@ skeleton = NodePath("../../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_fieuw")
 
 [node name="Render_off" type="Node3D" parent="."]
-transform = Transform3D(0.511378, 0, 0, 0, 0.511378, 0, 0, 0, 0.511378, 0, 0, 0)
 visible = false
 
 [node name="MeshInstance3D3" type="MeshInstance3D" parent="Render_off"]
@@ -320,6 +319,9 @@ shape = SubResource("SphereShape3D_skf8y")
 collision_layer = 6
 collision_mask = 6
 
+[node name="Line_remover" type="Node" parent="Area_take_it"]
+script = ExtResource("5_e36hk")
+
 [node name="Photo_data" type="Node" parent="Area_take_it"]
 script = ExtResource("4_e00ki")
 photoData = ExtResource("4_0y3qy")
@@ -357,6 +359,7 @@ surface_material_override/0 = SubResource("ShaderMaterial_of2nf")
 [connection signal="area_shape_exited" from="Area_take_it" to="Area_take_it/Orbe_Contact" method="_on_area_take_it_area_shape_exited"]
 [connection signal="scanner_effect_condition" from="Area_take_it/Photo_data" to="Scanning_effect" method="_on_photo_data_scanner_effect_condition"]
 [connection signal="scanner_effect_value" from="Area_take_it/Photo_data" to="Scanning_effect" method="_on_photo_data_scanner_effect_value"]
+[connection signal="tree_exited" from="Area_take_it/Photo_data" to="Area_take_it/Photo_data" method="_on_tree_exited"]
 [connection signal="timeout" from="Area_take_it/Photo_data/Timer" to="Area_take_it/Photo_data" method="_on_timer_timeout"]
 [connection signal="magnet_end" from="Area_take_it/Orbe_Magnet" to="Teleporter" method="_on_orbe_magnet_magnet_end"]
 [connection signal="delete_node" from="Area_take_it/Orbe_Contact" to="Remover" method="_on_orbe_contact_delete_node"]
