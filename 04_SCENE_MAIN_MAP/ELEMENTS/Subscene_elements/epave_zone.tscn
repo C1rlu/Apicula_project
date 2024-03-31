@@ -9,6 +9,7 @@ script/source = "extends Area3D
 @export var boue_data : BoueData
 @onready var on_over = $Boue_msh_01/On_Over
 
+@onready var root = $\".\"
 
 
 signal see_int(condition : bool)
@@ -16,6 +17,12 @@ signal see_int(condition : bool)
 
 @onready var boue = $Boue_msh_01
 var was_detected : bool = false
+
+func _ready():
+	
+	boue_data.world_position = root.global_position
+
+
 
 func _on_area_entered(_area):
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://d1dy8wdybrr7m"]
+[gd_scene load_steps=31 format=3 uid="uid://d1dy8wdybrr7m"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Teleporter/Teleporter_prefabs.gd" id="1_qf47g"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Tools/Scanning_effect.gd" id="2_jwtc3"]
@@ -8,10 +8,6 @@
 [ext_resource type="Script" path="res://12_INVENTORY/Photo/Photo_data_element.gd" id="4_e00ki"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Teleporter/Remover.gd" id="4_k2307"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Orbe_Contact.gd" id="5_pryy3"]
-
-[sub_resource type="GDScript" id="GDScript_jeye4"]
-script/source = "extends Area3D
-"
 
 [sub_resource type="VisualShaderNodeFresnel" id="VisualShaderNodeFresnel_mw66r"]
 default_input_values = [2, true, 3, 10.0]
@@ -184,7 +180,6 @@ ring_segments = 16
 [node name="Teleporter" type="Area3D"]
 collision_layer = 6
 collision_mask = 6
-script = SubResource("GDScript_jeye4")
 
 [node name="Teleporter" type="Node" parent="."]
 script = ExtResource("1_qf47g")
@@ -329,6 +324,8 @@ collision_mask = 6
 script = ExtResource("4_e00ki")
 photoData = ExtResource("4_0y3qy")
 
+[node name="Timer" type="Timer" parent="Area_take_it/Photo_data"]
+
 [node name="Orbe_Magnet" type="Node" parent="Area_take_it"]
 script = ExtResource("4_626aq")
 orbe_name = "Teleporter"
@@ -360,6 +357,7 @@ surface_material_override/0 = SubResource("ShaderMaterial_of2nf")
 [connection signal="area_shape_exited" from="Area_take_it" to="Area_take_it/Orbe_Contact" method="_on_area_take_it_area_shape_exited"]
 [connection signal="scanner_effect_condition" from="Area_take_it/Photo_data" to="Scanning_effect" method="_on_photo_data_scanner_effect_condition"]
 [connection signal="scanner_effect_value" from="Area_take_it/Photo_data" to="Scanning_effect" method="_on_photo_data_scanner_effect_value"]
+[connection signal="timeout" from="Area_take_it/Photo_data/Timer" to="Area_take_it/Photo_data" method="_on_timer_timeout"]
 [connection signal="magnet_end" from="Area_take_it/Orbe_Magnet" to="Teleporter" method="_on_orbe_magnet_magnet_end"]
 [connection signal="delete_node" from="Area_take_it/Orbe_Contact" to="Remover" method="_on_orbe_contact_delete_node"]
 [connection signal="player_contact" from="Area_take_it/Orbe_Contact" to="Show_hide" method="_on_orbe_contact_player_contact"]

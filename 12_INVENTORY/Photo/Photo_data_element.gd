@@ -21,6 +21,8 @@ func get_PhotoData():
 	
 func scanning():
 	
+
+	
 	if is_scanning:
 		return
 		
@@ -67,4 +69,9 @@ func _on_area_take_it_area_shape_exited(area_rid, area, area_shape_index, local_
 
 func _on_timer_timeout():
 	scanning_done()
-	print("SCANNING DONE")
+
+
+
+func _on_tree_exited():
+
+	_global_datas._photo_data_scene_list.erase(self)	
