@@ -1,9 +1,10 @@
-[gd_scene load_steps=38 format=3 uid="uid://bemddl0bqqfwo"]
+[gd_scene load_steps=41 format=3 uid="uid://bemddl0bqqfwo"]
 
 [ext_resource type="Script" path="res://100_GAME_MENU/Open_Menu.gd" id="1_2jpo2"]
 [ext_resource type="Script" path="res://100_GAME_MENU/Option_panel.gd" id="2_gelwi"]
 [ext_resource type="Script" path="res://100_GAME_MENU/Restart.gd" id="4_0detv"]
 [ext_resource type="Script" path="res://06_UI/Fps_counter.gd" id="4_86v10"]
+[ext_resource type="Script" path="res://100_GAME_MENU/HSlider.gd" id="5_7b61k"]
 [ext_resource type="Script" path="res://100_GAME_MENU/resolution_button.gd" id="5_rnqar"]
 
 [sub_resource type="GDScript" id="GDScript_8vnul"]
@@ -357,6 +358,24 @@ func _on_pressed():
 	get_tree().quit()	
 "
 
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_hcfes"]
+color = Color(0.180392, 0.388235, 0.329412, 1)
+thickness = 10
+
+[sub_resource type="GDScript" id="GDScript_ytjgd"]
+script/source = "extends HSlider
+
+@onready var label_2 = $\"../Label2\"
+
+func change_dither(value):
+	RenderingServer.global_shader_parameter_set(\"Dither_blue_noise_size\",value)
+
+func _on_value_changed(new_value):
+
+	change_dither(new_value)	
+	label_2.text = str(new_value)
+"
+
 [sub_resource type="GDScript" id="GDScript_7e2vg"]
 script/source = "extends CheckBox
 
@@ -408,6 +427,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="Menu_Backdrop" type="ColorRect" parent="Game_Menu_Root"]
 process_mode = 3
@@ -430,6 +450,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 color = Color(0.0156863, 0.0705882, 0.0823529, 1)
 metadata/_edit_use_anchors_ = true
 
@@ -469,6 +490,7 @@ grow_vertical = 0
 theme_override_constants/separation = 50
 
 [node name="Resum_Button2" type="Button" parent="Game_Menu_Root/HBoxContainer"]
+process_mode = 2
 layout_mode = 2
 focus_neighbor_top = NodePath("../../Options/VBoxContainer/Vsync_button")
 focus_neighbor_right = NodePath("../Restart_Button")
@@ -480,6 +502,7 @@ text = "RESUME"
 script = SubResource("GDScript_rl0qu")
 
 [node name="Restart_Button" type="Button" parent="Game_Menu_Root/HBoxContainer"]
+process_mode = 2
 layout_mode = 2
 focus_neighbor_left = NodePath("../Resum_Button2")
 focus_neighbor_top = NodePath("../../Options/VBoxContainer/Vsync_button")
@@ -492,6 +515,7 @@ text = "RESTART"
 script = SubResource("GDScript_r74c2")
 
 [node name="Exit_Button" type="Button" parent="Game_Menu_Root/HBoxContainer"]
+process_mode = 2
 layout_mode = 2
 focus_neighbor_left = NodePath("../Resum_Button2")
 focus_neighbor_top = NodePath("../../Options/VBoxContainer/Vsync_button")
@@ -515,6 +539,68 @@ offset_right = 286.0
 offset_bottom = -66.0
 grow_horizontal = 2
 grow_vertical = 0
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="Game_Menu_Root/Options"]
+layout_mode = 0
+offset_left = 387.0
+offset_top = -71.0
+offset_right = 427.0
+offset_bottom = -48.0
+text = "0.4"
+
+[node name="HSlider_dither" type="HSlider" parent="Game_Menu_Root/Options"]
+process_mode = 2
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -244.0
+offset_top = -120.5
+offset_right = 122.0
+offset_bottom = -104.5
+grow_horizontal = 2
+grow_vertical = 2
+focus_neighbor_bottom = NodePath("../VBoxContainer/Fullscreen_button")
+theme_override_styles/slider = SubResource("StyleBoxLine_hcfes")
+min_value = 0.1
+max_value = 1.0
+step = 0.05
+value = 0.4
+script = ExtResource("5_7b61k")
+
+[node name="HSlider_noise" type="HSlider" parent="Game_Menu_Root/Options"]
+process_mode = 2
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -244.0
+offset_top = -92.5
+offset_right = 122.0
+offset_bottom = -76.5
+grow_horizontal = 2
+grow_vertical = 2
+focus_neighbor_bottom = NodePath("../VBoxContainer/Fullscreen_button")
+theme_override_styles/slider = SubResource("StyleBoxLine_hcfes")
+min_value = 1.0
+max_value = 10.0
+step = 0.1
+value = 5.0
+script = SubResource("GDScript_ytjgd")
+
+[node name="Label2" type="Label" parent="Game_Menu_Root/Options"]
+layout_mode = 0
+offset_left = 387.0
+offset_top = -38.0
+offset_right = 427.0
+offset_bottom = -15.0
+text = "5
+"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Game_Menu_Root/Options"]
 process_mode = 3
@@ -531,7 +617,9 @@ grow_vertical = 2
 theme_override_constants/separation = 15
 
 [node name="Fullscreen_button" type="CheckBox" parent="Game_Menu_Root/Options/VBoxContainer"]
+process_mode = 2
 layout_mode = 2
+focus_neighbor_top = NodePath("../../HSlider_dither")
 focus_neighbor_bottom = NodePath("../Vsync_button")
 alignment = 2
 script = SubResource("GDScript_7e2vg")
@@ -581,6 +669,7 @@ theme_override_font_sizes/font_size = 25
 text = "Fullscreen ............................"
 
 [node name="Vsync_button" type="CheckBox" parent="Game_Menu_Root/Options/VBoxContainer"]
+process_mode = 2
 layout_mode = 2
 focus_neighbor_top = NodePath("../Fullscreen_button")
 focus_neighbor_bottom = NodePath("../../../HBoxContainer/Resum_Button2")
@@ -658,6 +747,8 @@ text = "Resolution ..........................."
 [connection signal="pressed" from="Game_Menu_Root/HBoxContainer/Resum_Button2" to="Game_Menu_Root/HBoxContainer/Resum_Button2" method="_on_pressed"]
 [connection signal="pressed" from="Game_Menu_Root/HBoxContainer/Restart_Button" to="Restart" method="_on_restart_button_pressed"]
 [connection signal="pressed" from="Game_Menu_Root/HBoxContainer/Exit_Button" to="Game_Menu_Root/HBoxContainer/Exit_Button" method="_on_pressed"]
+[connection signal="value_changed" from="Game_Menu_Root/Options/HSlider_dither" to="Game_Menu_Root/Options/HSlider_dither" method="_on_value_changed"]
+[connection signal="value_changed" from="Game_Menu_Root/Options/HSlider_noise" to="Game_Menu_Root/Options/HSlider_noise" method="_on_value_changed"]
 [connection signal="toggled" from="Game_Menu_Root/Options/VBoxContainer/Fullscreen_button" to="Option_Panel" method="_on_fullscreen_button_toggled"]
 [connection signal="toggled" from="Game_Menu_Root/Options/VBoxContainer/Vsync_button" to="Option_Panel" method="_on_vsync_button_toggled"]
 [connection signal="item_selected" from="Game_Menu_Root/Options/OptionButton" to="Game_Menu_Root/Options/OptionButton" method="_on_item_selected"]

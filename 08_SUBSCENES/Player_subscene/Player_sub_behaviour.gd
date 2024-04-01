@@ -37,10 +37,10 @@ func _change_speed(condition : bool):
 
 	if condition:
 		actual_speed = hight_speed
-		print(actual_speed)
+	
 	else :
 		actual_speed = normal_speed
-		print(actual_speed)
+		
 	
 	
 func can_Move():

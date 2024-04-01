@@ -3,9 +3,18 @@ extends Node
 
 func _ready():
 	
+	var Distro = OS.get_distribution_name()
+	
+	print(Distro)
+	if Distro == "SteamOS":
+		
+		set_resolution(1)
+	
+	if Distro == "Windows":
+		set_resolution(0)
+			
 
 
-	set_resolution(0)	
 	
 func set_resolution(index):
 	
@@ -17,6 +26,7 @@ func set_resolution(index):
 	
 		RenderingServer.global_shader_parameter_set("Dither_size",0.4)
 		RenderingServer.global_shader_parameter_set("Dither_blue_noise_size",5)
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 		print("SCREEN SIZE",Vector2(1280,720))
 
 	if current_selected == 1:
@@ -25,6 +35,8 @@ func set_resolution(index):
 	
 		RenderingServer.global_shader_parameter_set("Dither_size",0.5)
 		RenderingServer.global_shader_parameter_set("Dither_blue_noise_size",5)	
+		
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
 		print("SCREEN SIZE",Vector2(1280,800))		
 		
 	if current_selected == 3:
