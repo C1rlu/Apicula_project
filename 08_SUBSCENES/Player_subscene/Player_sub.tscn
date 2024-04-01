@@ -1,4 +1,4 @@
-[gd_scene load_steps=109 format=3 uid="uid://g7u8o55jrnyy"]
+[gd_scene load_steps=108 format=3 uid="uid://g7u8o55jrnyy"]
 
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="1_n1vw4"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Player_sub_behaviour.gd" id="1_o2v73"]
@@ -551,9 +551,6 @@ color = vec4(vec3(c),1.0);"
 
 [sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_if3it"]
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_utifc"]
-constant = 0.4
-
 [sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_hkm4y"]
 size = Vector2(724.789, 654.559)
 expression = "const float DITHER_THRESHOLDS[16] ={
@@ -626,6 +623,7 @@ uniform vec4 ColorParameter : source_color;
 uniform float R = 0.10999999940395;
 uniform float Size = 0.69999998807907;
 uniform float flash_opacity : hint_range(0, 0.5) = 0.5;
+global uniform float Dither_size;
 
 
 
@@ -667,8 +665,8 @@ void fragment() {
 	float n_out15p0 = flash_opacity;
 
 
-// FloatConstant:13
-	float n_out13p0 = 0.400000;
+// FloatParameter:7
+	float n_out7p0 = Dither_size;
 
 
 	float n_out14p0;
@@ -682,7 +680,7 @@ void fragment() {
 				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
 			};
 			
-		vec2 uv = FRAGCOORD.xy * n_out13p0;
+		vec2 uv = FRAGCOORD.xy * n_out7p0;
 		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 		n_out14p0 = n_out15p0 - DITHER_THRESHOLDS[index];
 	}
@@ -699,6 +697,7 @@ void fragment() {
 
 }
 "
+graph_offset = Vector2(-1179.91, -125.15)
 modes/cull = 1
 flags/unshaded = true
 flags/shadows_disabled = true
@@ -724,7 +723,7 @@ vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
 nodes/fragment/7/node = SubResource("VisualShaderNodeFloatParameter_hjop0")
-nodes/fragment/7/position = Vector2(-1780, 1600)
+nodes/fragment/7/position = Vector2(-2540, 620)
 nodes/fragment/8/node = SubResource("VisualShaderNodeStep_p4onu")
 nodes/fragment/8/position = Vector2(100, 360)
 nodes/fragment/9/node = SubResource("VisualShaderNodeInput_qleyu")
@@ -742,8 +741,6 @@ float c = smoothstep(r,r + feather,d);
 color = vec4(vec3(c),1.0);"
 nodes/fragment/12/node = SubResource("VisualShaderNodeStep_if3it")
 nodes/fragment/12/position = Vector2(-760, 300)
-nodes/fragment/13/node = SubResource("VisualShaderNodeFloatConstant_utifc")
-nodes/fragment/13/position = Vector2(-2060, -180)
 nodes/fragment/14/node = SubResource("VisualShaderNodeExpression_hkm4y")
 nodes/fragment/14/position = Vector2(-1760, -200)
 nodes/fragment/14/size = Vector2(724.789, 654.559)
@@ -767,7 +764,7 @@ nodes/fragment/17/node = SubResource("VisualShaderNodeFloatParameter_4ysed")
 nodes/fragment/17/position = Vector2(-4360, 0)
 nodes/fragment/18/node = SubResource("VisualShaderNodeFloatParameter_d0u7s")
 nodes/fragment/18/position = Vector2(-4200, -300)
-nodes/fragment/connections = PackedInt32Array(3, 0, 0, 0, 5, 0, 6, 0, 7, 0, 6, 1, 6, 0, 8, 0, 4, 0, 8, 1, 13, 0, 14, 1, 10, 0, 11, 0, 12, 0, 16, 1, 11, 0, 12, 0, 14, 0, 12, 1, 15, 0, 14, 0, 17, 0, 11, 2, 18, 0, 11, 1, 9, 0, 10, 0, 12, 0, 0, 1)
+nodes/fragment/connections = PackedInt32Array(3, 0, 0, 0, 5, 0, 6, 0, 7, 0, 6, 1, 6, 0, 8, 0, 4, 0, 8, 1, 10, 0, 11, 0, 12, 0, 16, 1, 11, 0, 12, 0, 14, 0, 12, 1, 15, 0, 14, 0, 17, 0, 11, 2, 18, 0, 11, 1, 9, 0, 10, 0, 12, 0, 0, 1, 7, 0, 14, 1)
 nodes/light/0/position = Vector2(1060, 580)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_mn4ca"]
@@ -843,8 +840,9 @@ input_name = "uv"
 [sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_h6opy"]
 default_input_values = [0, 0.0, 1, 1.0, 2, 0.07]
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_uvju6"]
-constant = 0.4
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_4b3v3"]
+parameter_name = "Dither_size"
+qualifier = 1
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_n3ejf"]
 constant = 0.3
@@ -853,6 +851,7 @@ constant = 0.3
 code = "shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
 
+global uniform float Dither_size;
 uniform sampler2D tex_frg_24;
 global uniform float Subscene_mirror_alpha;
 
@@ -881,8 +880,8 @@ void fragment() {
 	float n_out4p0 = 0.300000;
 
 
-// FloatConstant:3
-	float n_out3p0 = 0.400000;
+// FloatParameter:28
+	float n_out28p0 = Dither_size;
 
 
 	float n_out2p0;
@@ -896,7 +895,7 @@ void fragment() {
 				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
 			};
 			
-		vec2 uv = FRAGCOORD.xy * n_out3p0;
+		vec2 uv = FRAGCOORD.xy * n_out28p0;
 		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 		n_out2p0 = n_out4p0 - DITHER_THRESHOLDS[index];
 	}
@@ -953,6 +952,7 @@ void fragment() {
 
 }
 "
+graph_offset = Vector2(-466.351, -75.4855)
 flags/unshaded = true
 nodes/fragment/0/position = Vector2(780, 160)
 nodes/fragment/2/node = SubResource("VisualShaderNodeExpression_erg5y")
@@ -970,8 +970,6 @@ nodes/fragment/2/expression = "const float DITHER_THRESHOLDS[16] ={
 vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_uvju6")
-nodes/fragment/3/position = Vector2(-1180, 980)
 nodes/fragment/4/node = SubResource("VisualShaderNodeFloatConstant_n3ejf")
 nodes/fragment/4/position = Vector2(-1180, 880)
 nodes/fragment/10/node = SubResource("VisualShaderNodeStep_5j6tu")
@@ -1002,7 +1000,9 @@ nodes/fragment/26/node = SubResource("VisualShaderNodeInput_x0mgy")
 nodes/fragment/26/position = Vector2(-20, 1460)
 nodes/fragment/27/node = SubResource("VisualShaderNodeMix_h6opy")
 nodes/fragment/27/position = Vector2(895.324, 959.374)
-nodes/fragment/connections = PackedInt32Array(3, 0, 2, 2, 15, 0, 0, 0, 4, 0, 2, 1, 2, 0, 10, 1, 16, 0, 10, 0, 17, 0, 16, 2, 18, 0, 16, 0, 10, 0, 20, 0, 21, 0, 23, 2, 22, 0, 23, 0, 24, 0, 25, 1, 23, 0, 25, 0, 26, 0, 24, 0, 25, 0, 27, 1, 20, 0, 0, 1, 27, 0, 20, 1, 19, 0, 20, 2)
+nodes/fragment/28/node = SubResource("VisualShaderNodeFloatParameter_4b3v3")
+nodes/fragment/28/position = Vector2(-1500.72, 1122.86)
+nodes/fragment/connections = PackedInt32Array(15, 0, 0, 0, 4, 0, 2, 1, 2, 0, 10, 1, 16, 0, 10, 0, 17, 0, 16, 2, 18, 0, 16, 0, 10, 0, 20, 0, 21, 0, 23, 2, 22, 0, 23, 0, 24, 0, 25, 1, 23, 0, 25, 0, 26, 0, 24, 0, 25, 0, 27, 1, 20, 0, 0, 1, 27, 0, 20, 1, 19, 0, 20, 2, 28, 0, 2, 2)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_auo33"]
 render_priority = 3
@@ -1084,9 +1084,9 @@ linear_damp = 1.0
 script = ExtResource("1_o2v73")
 orbe_tool = ExtResource("12_nmehd")
 actual_speed = 8.0
-hight_speed = 16.0
+hight_speed = 12.0
 normal_speed = 8.0
-maxSpeed = 16.0
+maxSpeed = 12.0
 startPos = Vector3(0, 1, 0)
 
 [node name="Player_sub_collider" type="CollisionShape3D" parent="."]
@@ -1132,8 +1132,11 @@ wait_time = 0.1
 script = ExtResource("9_ypfq5")
 orbe_spawner_tool = ExtResource("12_nmehd")
 
-[node name="Timer" type="Timer" parent="Orbe_spawner"]
-wait_time = 0.01
+[node name="Timer_stroke" type="Timer" parent="Orbe_spawner"]
+wait_time = 0.05
+
+[node name="Timer_Orber" type="Timer" parent="Orbe_spawner"]
+wait_time = 0.25
 
 [node name="TELEPORTER" type="Node" parent="."]
 
@@ -1334,8 +1337,8 @@ mesh = SubResource("QuadMesh_uqek7")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("ShaderMaterial_mn4ca")
 
-[node name="Orbe_spawner_position" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0341371, 0.0760001, 0.133507)
+[node name="Orbe_spawner_position" type="Node3D" parent="Render_mesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0341371, 0.137754, 0.194054)
 
 [node name="ZoneCollide" type="Area3D" parent="."]
 collision_layer = 4
@@ -1382,7 +1385,8 @@ draw_pass_1 = SubResource("SphereMesh_6ufqt")
 [connection signal="timeout" from="Flash_inputs/Timer" to="Flash_inputs" method="_on_timer_timeout"]
 [connection signal="timeout" from="Scanne_element/time_checker" to="Scanne_element" method="_on_time_checker_timeout"]
 [connection signal="timeout" from="Scanne_element/Active_scanner_visual_pulse/Timer" to="Scanne_element/Active_scanner_visual_pulse" method="_on_timer_timeout"]
-[connection signal="timeout" from="Orbe_spawner/Timer" to="Orbe_spawner" method="_on_timer_timeout"]
+[connection signal="timeout" from="Orbe_spawner/Timer_stroke" to="Orbe_spawner" method="_on_timer_stroke_timeout"]
+[connection signal="timeout" from="Orbe_spawner/Timer_Orber" to="Orbe_spawner" method="_on_timer_orber_timeout"]
 [connection signal="timeout" from="TELEPORTER/Closet_teleporter/Timer_Alarm" to="TELEPORTER/Closet_teleporter" method="_on_timer_alarm_timeout"]
 [connection signal="area_shape_entered" from="ZoneCollide" to="TELEPORTER/Closet_teleporter" method="_on_zone_collide_area_shape_entered"]
 [connection signal="area_shape_exited" from="ZoneCollide" to="TELEPORTER/Closet_teleporter" method="_on_zone_collide_area_shape_exited"]

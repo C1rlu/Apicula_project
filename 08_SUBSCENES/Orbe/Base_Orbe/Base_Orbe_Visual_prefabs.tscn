@@ -1,0 +1,38 @@
+[gd_scene load_steps=6 format=3 uid="uid://dyfav1cm8uogd"]
+
+[ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Base_Orbe/Micro_mouvement.gd" id="1_8fxus"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Base_Orbe/Remover_orbe.gd" id="1_i4l8x"]
+[ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_elements_mat.tres" id="2_xobi5"]
+[ext_resource type="Material" uid="uid://c3ex62yofqsj3" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Subscene_elements/Subscene_element_mat.tres" id="3_hhjba"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_8xv11"]
+radial_segments = 16
+rings = 16
+
+[node name="orbe_base_prefab" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00535464, 0, 0)
+
+[node name="Micro_mouvement" type="Node" parent="."]
+script = ExtResource("1_8fxus")
+
+[node name="Remover_orbe" type="Node" parent="."]
+script = ExtResource("1_i4l8x")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 8.0
+
+[node name="Render" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.0600533, 0, 0, 0, 0.0600533, 0, 0, 0, 0.0600533, 0, 0, 0)
+layers = 32768
+mesh = SubResource("SphereMesh_8xv11")
+skeleton = NodePath("")
+surface_material_override/0 = ExtResource("2_xobi5")
+
+[node name="Render2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.0683392, 0, 0, 0, 0.0683392, 0, 0, 0, 0.0683392, 0, 0, 0)
+layers = 32768
+mesh = SubResource("SphereMesh_8xv11")
+skeleton = NodePath("")
+surface_material_override/0 = ExtResource("3_hhjba")
+
+[connection signal="timeout" from="Timer" to="Remover_orbe" method="_on_timer_timeout"]

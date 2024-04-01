@@ -1,4 +1,4 @@
-[gd_scene load_steps=94 format=3 uid="uid://nigmie4bbn6"]
+[gd_scene load_steps=96 format=3 uid="uid://nigmie4bbn6"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/Grid_scene/Subscene_loader.gd" id="1_7uoo0"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="2_3srhu"]
@@ -16,6 +16,7 @@
 [ext_resource type="Script" path="res://08_SUBSCENES/Add_teleporter_inputs.gd" id="8_2kb68"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Orbe_Instancer.gd" id="11_dnajt"]
 [ext_resource type="Script" path="res://08_SUBSCENES/PhotoData_list_update.gd" id="11_uy3s0"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Base_Orbe/Link_stroke.gd" id="11_yi7j0"]
 [ext_resource type="Resource" uid="uid://cbbmkpkisxagn" path="res://08_SUBSCENES/Orbe/Orbe_datas/Orbe_Mirror.tres" id="12_l61c1"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Stroke_Filter/Orbe_Result_Instancer.gd" id="12_lg0wa"]
 [ext_resource type="Resource" uid="uid://cubpsapqnetwr" path="res://08_SUBSCENES/Orbe/Orbe_datas/Orbe_teleporter.tres" id="13_ywb87"]
@@ -23,6 +24,7 @@
 [ext_resource type="Script" path="res://08_SUBSCENES/Active_scene_viewports.gd" id="14_28kqk"]
 [ext_resource type="Resource" uid="uid://drupv3acvl1k4" path="res://08_SUBSCENES/Orbe/Orbe_datas/Orbe_Mirror_Out.tres" id="14_dpsgd"]
 [ext_resource type="Resource" uid="uid://ncll7t2e5k5v" path="res://08_SUBSCENES/Orbe/Remover/RemoverOrbe_data.tres" id="15_2trwq"]
+[ext_resource type="PackedScene" uid="uid://bo33th5yn61n1" path="res://08_SUBSCENES/Grid_scene/E4.tscn" id="24_hpliv"]
 
 [sub_resource type="GDScript" id="GDScript_btuws"]
 script/source = "extends Node
@@ -937,6 +939,13 @@ script = ExtResource("11_uy3s0")
 [node name="Orbe_Instancer" type="Node" parent="ORBE"]
 script = ExtResource("11_dnajt")
 
+[node name="Link_stroke" type="Node" parent="ORBE/Orbe_Instancer"]
+script = ExtResource("11_yi7j0")
+
+[node name="Timer" type="Timer" parent="ORBE/Orbe_Instancer/Link_stroke"]
+wait_time = 0.05
+one_shot = true
+
 [node name="Stroke_Filter" type="Node" parent="ORBE"]
 script = ExtResource("14_0roc3")
 Teleporter_Orbe = ExtResource("13_ywb87")
@@ -1073,6 +1082,8 @@ shape = SubResource("BoxShape3D_qfjre")
 
 [node name="LoadScene" type="Node" parent="."]
 
+[node name="E4" parent="LoadScene" instance=ExtResource("24_hpliv")]
+
 [node name="load_sublevel" type="ProgressBar" parent="."]
 anchors_preset = 1
 anchor_left = 1.0
@@ -1084,6 +1095,9 @@ offset_bottom = 39.0
 grow_horizontal = 0
 theme_override_font_sizes/font_size = 20
 
+[node name="Timer" type="Timer" parent="."]
+
 [connection signal="timeout" from="FADE_IN/Timer" to="FADE_IN" method="_on_timer_timeout"]
 [connection signal="timeout" from="FADE_OUT/Timer" to="FADE_OUT" method="_on_timer_timeout"]
+[connection signal="timeout" from="ORBE/Orbe_Instancer/Link_stroke/Timer" to="ORBE/Orbe_Instancer/Link_stroke" method="_on_timer_timeout"]
 [connection signal="area_shape_entered" from="Surface_trigger" to="GO_SURFACE" method="_on_surface_trigger_area_shape_entered"]

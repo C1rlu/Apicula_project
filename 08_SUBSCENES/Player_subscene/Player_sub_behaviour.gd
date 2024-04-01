@@ -15,7 +15,7 @@ var _canMove = false
 
 @onready var PlayerMesh = $Render_mesh
 @onready var light_position = $Render_mesh/Light_Position
-@onready var orbe_spawner_position = $Orbe_spawner_position
+@onready var orbe_spawner_position = $Render_mesh/Orbe_spawner_position
 
 
 

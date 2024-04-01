@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://bemddl0bqqfwo"]
+[gd_scene load_steps=38 format=3 uid="uid://bemddl0bqqfwo"]
 
 [ext_resource type="Script" path="res://100_GAME_MENU/Open_Menu.gd" id="1_2jpo2"]
 [ext_resource type="Script" path="res://100_GAME_MENU/Option_panel.gd" id="2_gelwi"]
@@ -55,10 +55,6 @@ func set_shader_value(value):
 	#menu_backdrop_mat.set_shader_parameter(\"Opacity\",value)
 "
 
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_3ivuf"]
-parameter_name = "Dither_size"
-qualifier = 1
-
 [sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_e0bhj"]
 parameter_name = "Opacity"
 hint = 1
@@ -87,31 +83,18 @@ texture_repeat = 1
 
 [sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_4gb3t"]
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_uqtks"]
-constant = 5.0
-
 [sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_rjr07"]
 function = 1
 
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_3q4xu"]
-size = Vector2(724.789, 654.559)
-expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_hokwf"]
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_t6b26"]
+parameter_name = "Dither_blue_noise_size"
+qualifier = 1
 
 [sub_resource type="VisualShader" id="VisualShader_x0sux"]
 code = "shader_type canvas_item;
 render_mode blend_mix;
 
+global uniform float Dither_blue_noise_size;
 global uniform sampler2D BlueNoise : repeat_enable;
 uniform float Opacity : hint_range(0, 1) = 0.5;
 
@@ -124,8 +107,8 @@ void fragment() {
 	vec2 n_out19p0 = (UV - n_in19p2) * n_in19p1 + n_in19p2;
 
 
-// FloatConstant:24
-	float n_out24p0 = 5.000000;
+// FloatParameter:26
+	float n_out26p0 = Dither_blue_noise_size;
 
 
 // FloatOp:20
@@ -140,7 +123,7 @@ void fragment() {
 
 
 // UVFunc:25
-	vec2 n_out25p0 = (n_out19p0 - vec2(n_out21p0)) * vec2(n_out24p0) + vec2(n_out21p0);
+	vec2 n_out25p0 = (n_out19p0 - vec2(n_out21p0)) * vec2(n_out26p0) + vec2(n_out21p0);
 
 
 	vec4 n_out18p0;
@@ -162,27 +145,9 @@ void fragment() {
 
 }
 "
+graph_offset = Vector2(-2545.63, -628.617)
 mode = 1
 flags/light_only = false
-nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_3q4xu")
-nodes/fragment/4/position = Vector2(-1300, 500)
-nodes/fragment/4/size = Vector2(724.789, 654.559)
-nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
-nodes/fragment/4/output_ports = "0,0,Dither_Node;"
-nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/5/node = SubResource("VisualShaderNodeStep_hokwf")
-nodes/fragment/5/position = Vector2(-180, 240)
-nodes/fragment/16/node = SubResource("VisualShaderNodeFloatParameter_3ivuf")
-nodes/fragment/16/position = Vector2(-2063.3, 662.089)
 nodes/fragment/17/node = SubResource("VisualShaderNodeFloatParameter_e0bhj")
 nodes/fragment/17/position = Vector2(-2040, -100)
 nodes/fragment/18/node = SubResource("VisualShaderNodeTexture_06gwt")
@@ -197,11 +162,11 @@ nodes/fragment/22/node = SubResource("VisualShaderNodeTexture2DParameter_g232x")
 nodes/fragment/22/position = Vector2(-1800, -480)
 nodes/fragment/23/node = SubResource("VisualShaderNodeStep_4gb3t")
 nodes/fragment/23/position = Vector2(-560, 40)
-nodes/fragment/24/node = SubResource("VisualShaderNodeFloatConstant_uqtks")
-nodes/fragment/24/position = Vector2(-2360, -540)
 nodes/fragment/25/node = SubResource("VisualShaderNodeUVFunc_rjr07")
 nodes/fragment/25/position = Vector2(-2040, -640)
-nodes/fragment/connections = PackedInt32Array(4, 0, 5, 1, 16, 0, 4, 1, 20, 0, 21, 0, 19, 0, 25, 0, 21, 0, 25, 2, 25, 0, 18, 0, 22, 0, 18, 2, 17, 0, 23, 1, 18, 0, 23, 0, 24, 0, 25, 1, 23, 0, 0, 1)
+nodes/fragment/26/node = SubResource("VisualShaderNodeFloatParameter_t6b26")
+nodes/fragment/26/position = Vector2(-2840, -520)
+nodes/fragment/connections = PackedInt32Array(20, 0, 21, 0, 19, 0, 25, 0, 21, 0, 25, 2, 25, 0, 18, 0, 22, 0, 18, 2, 17, 0, 23, 1, 18, 0, 23, 0, 23, 0, 0, 1, 26, 0, 25, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6jute"]
 shader = SubResource("VisualShader_x0sux")
@@ -367,8 +332,8 @@ script/source = "extends HSlider
 
 @onready var label_2 = $\"../Label2\"
 
-func change_dither(value):
-	RenderingServer.global_shader_parameter_set(\"Dither_blue_noise_size\",value)
+func change_dither(c_value):
+	RenderingServer.global_shader_parameter_set(\"Dither_blue_noise_size\",c_value)
 
 func _on_value_changed(new_value):
 
@@ -458,14 +423,10 @@ metadata/_edit_use_anchors_ = true
 clip_contents = true
 layout_direction = 1
 layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -319.0
-offset_top = 76.0
-offset_right = 319.0
-offset_bottom = 145.0
-grow_horizontal = 2
+offset_left = -86.0
+offset_top = 85.0
+offset_right = 552.0
+offset_bottom = 154.0
 theme_override_colors/font_color = Color(0.317647, 0.615686, 0.529412, 1)
 theme_override_font_sizes/font_size = 35
 text = "APICULA (PROTOTYPE)"
@@ -476,17 +437,10 @@ autowrap_mode = 3
 [node name="HBoxContainer" type="HBoxContainer" parent="Game_Menu_Root"]
 process_mode = 3
 layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -220.0
-offset_top = -88.0
-offset_right = 220.0
-offset_bottom = -38.0
-grow_horizontal = 2
-grow_vertical = 0
+offset_left = 43.0
+offset_top = 385.0
+offset_right = 483.0
+offset_bottom = 435.0
 theme_override_constants/separation = 50
 
 [node name="Resum_Button2" type="Button" parent="Game_Menu_Root/HBoxContainer"]
@@ -528,25 +482,19 @@ script = SubResource("GDScript_e1pe5")
 
 [node name="Options" type="Control" parent="Game_Menu_Root"]
 layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -214.0
-offset_top = -183.0
-offset_right = 286.0
-offset_bottom = -66.0
-grow_horizontal = 2
-grow_vertical = 0
+anchors_preset = 0
+offset_left = 43.0
+offset_top = 262.0
+offset_right = 543.0
+offset_bottom = 379.0
 mouse_filter = 2
 
 [node name="Label" type="Label" parent="Game_Menu_Root/Options"]
 layout_mode = 0
 offset_left = 387.0
-offset_top = -71.0
+offset_top = -91.0
 offset_right = 427.0
-offset_bottom = -48.0
+offset_bottom = -68.0
 text = "0.4"
 
 [node name="HSlider_dither" type="HSlider" parent="Game_Menu_Root/Options"]
@@ -558,9 +506,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -244.0
-offset_top = -120.5
+offset_top = -140.5
 offset_right = 122.0
-offset_bottom = -104.5
+offset_bottom = -124.5
 grow_horizontal = 2
 grow_vertical = 2
 focus_neighbor_bottom = NodePath("../VBoxContainer/Fullscreen_button")
@@ -571,6 +519,15 @@ step = 0.05
 value = 0.4
 script = ExtResource("5_7b61k")
 
+[node name="Label2" type="Label" parent="Game_Menu_Root/Options"]
+layout_mode = 0
+offset_left = 387.0
+offset_top = -50.0
+offset_right = 427.0
+offset_bottom = -27.0
+text = "5
+"
+
 [node name="HSlider_noise" type="HSlider" parent="Game_Menu_Root/Options"]
 process_mode = 2
 layout_mode = 1
@@ -580,9 +537,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -244.0
-offset_top = -92.5
+offset_top = -104.5
 offset_right = 122.0
-offset_bottom = -76.5
+offset_bottom = -88.5
 grow_horizontal = 2
 grow_vertical = 2
 focus_neighbor_bottom = NodePath("../VBoxContainer/Fullscreen_button")
@@ -590,17 +547,8 @@ theme_override_styles/slider = SubResource("StyleBoxLine_hcfes")
 min_value = 1.0
 max_value = 10.0
 step = 0.1
-value = 5.0
+value = 4.0
 script = SubResource("GDScript_ytjgd")
-
-[node name="Label2" type="Label" parent="Game_Menu_Root/Options"]
-layout_mode = 0
-offset_left = 387.0
-offset_top = -38.0
-offset_right = 427.0
-offset_bottom = -15.0
-text = "5
-"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Game_Menu_Root/Options"]
 process_mode = 3

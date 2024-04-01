@@ -43,6 +43,7 @@ func _ready():
 	_orbe_tool_origin_position = Vector3.ZERO
 	_orbe_stroke.clear()
 	_strokeID = 0
+	_orbe_visual_scene.clear()
 # input type
 signal using_pad(condition : bool)
 var move_right : String
@@ -109,12 +110,14 @@ var _photo_data_scene_list : Array[Node]
 
 # Orbe Points.Point.New
 signal _instance_stroke
+signal _instance_visual_Orbe
 var _orbe_stroke : Array
 var _strokeID : int
 
 # orbe stroke in scene
 var _orbe_stroke_scene : Array[Node3D]
 var _orbe_tool_origin_position : Vector3
+var _orbe_visual_scene : Array[Node3D]
 
 
 signal instance_orbe_result(data : orbe_data, instance_position : Vector3)

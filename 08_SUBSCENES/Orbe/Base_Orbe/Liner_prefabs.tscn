@@ -1,0 +1,33 @@
+[gd_scene load_steps=4 format=3 uid="uid://b0nifqtn0pfb"]
+
+[ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_elements_mat.tres" id="3_gfnyt"]
+
+[sub_resource type="GDScript" id="GDScript_lao4e"]
+script/source = "extends Node
+
+@onready var orbe_base_prefab = $\"..\"
+
+func _ready():
+	_global_datas._photo_flash.connect(delete)	
+	
+
+func delete():
+	orbe_base_prefab.queue_free()		
+
+"
+
+[sub_resource type="SphereMesh" id="SphereMesh_8xv11"]
+radial_segments = 16
+rings = 16
+
+[node name="Liner_prefab" type="Node3D"]
+
+[node name="Remover_orbe" type="Node" parent="."]
+script = SubResource("GDScript_lao4e")
+
+[node name="Render" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.024537, 0, 0, 0, 0.024537, 0, 0, 0, 0.024537, 0, 0, 0)
+layers = 32768
+mesh = SubResource("SphereMesh_8xv11")
+skeleton = NodePath("")
+surface_material_override/0 = ExtResource("3_gfnyt")

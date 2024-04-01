@@ -29,7 +29,7 @@ func check():
 	recognize_gesture(_global_datas._orbe_stroke)
 
 	_global_datas._orbe_stroke.clear()
-
+	
 
 func recognize_gesture(strokes):
 	
@@ -53,7 +53,13 @@ func reset_stroke():
 		
 	_global_datas._orbe_stroke_scene.clear()
 	
-
+	for v in _global_datas._orbe_visual_scene:
+		v.queue_free()
+		
+	_global_datas._orbe_visual_scene.clear()
+	
+	
+	
 func result_condition(result):
 	
 	if result[1] > 0.9:
