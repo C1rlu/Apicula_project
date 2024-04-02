@@ -8,19 +8,21 @@ const LINER_PREFABS = preload("res://08_SUBSCENES/Orbe/Base_Orbe/Liner_prefabs.t
 
 func _ready():
 	_global_datas._instance_visual_Orbe.connect(start)
-	
+
 	
 func start():	
 	timer.start()	
 
 func link_stroke():
 	
-	print(_global_datas._orbe_visual_scene.size())
 	
+	if !_global_datas._orbe_visual_scene:
+		return
 	if _global_datas._orbe_visual_scene.size() < 2:
 		return
 
-	
+	# START LINE SHOULD BE THE CLOSEST IN THE LIST FROM PLAYER POSITION
+	#var start_line = closet_orbe(_global_datas._orbe_visual_scene)
 
 	var start_line_index = _global_datas._orbe_visual_scene.size()-2	
 	var start_line = _global_datas._orbe_visual_scene[start_line_index]
@@ -30,7 +32,7 @@ func link_stroke():
 	var end_line = _global_datas._orbe_visual_scene[end_line_index]
 	
 
-	var line_stroke = calculateLineOfDots(start_line.position,end_line.position,0.01)
+	var line_stroke = calculateLineOfDots(start_line.position,end_line.position,0.05)
 
 	for dots in line_stroke:
 		var instance_dots = LINER_PREFABS.instantiate()
@@ -38,9 +40,10 @@ func link_stroke():
 		load_scene.add_child(instance_dots)	
 		
 		
-	print("STROKE")	
+	
 		
 func calculateLineOfDots(start_pos: Vector3, end_pos: Vector3, dot_spacing: float) -> Array:
+	
 	var dot_positions = []
 	var distance = (end_pos - start_pos).length()
 	var num_dots = distance / dot_spacing
@@ -53,6 +56,28 @@ func calculateLineOfDots(start_pos: Vector3, end_pos: Vector3, dot_spacing: floa
 	return dot_positions
 
 
+func closet_orbe(array):
+	
+	var closest_node = null
+	var closest_node_distance = 0.0
+	
+	for i in range(array.size()-1):
+		var o = array[i]
+		var player_sub = _global_datas.subbscene_playerPosition	
+		var current_node_distance = player_sub.distance_to(o.position)
+		if closest_node == null or current_node_distance < closest_node_distance:
+			closest_node = o
+			closest_node_distance = current_node_distance	
+			
+	return closest_node		
+
+
 func _on_timer_timeout():
+	
+	if !_global_datas._orbe_visual_scene:
+		return
+		
+	if !_global_datas.Player_InSubScene:
+		return
 	link_stroke()	
 	

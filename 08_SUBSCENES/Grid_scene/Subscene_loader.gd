@@ -16,11 +16,11 @@ func _loadscene(condition : bool):
 			
 		#REMOVE PREVIOUS SCENE ONLY
 		for child in load_scene.get_children():
-			child.free()	
+			child.queue_free()	
 	else :
 		#REMOVE PREVIOUS SCENE EVERYLOAD
 		for child in load_scene.get_children():
-			child.free()	
+			child.queue_free()	
 			
 	#LOAD NEW SCENE
 		var scene_name =  _global_datas.cell_name
