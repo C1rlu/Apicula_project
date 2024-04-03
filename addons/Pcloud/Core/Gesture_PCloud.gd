@@ -23,7 +23,7 @@ func normalize(points, n):
 
 func resample(points: Array, n: int) -> Array:
 	var new_points = []
-	new_points.append(Points.Point.new(points[0].X, points[0].Y, points[0].StrokeID))
+	new_points.append(Points.Pointa.new(points[0].X, points[0].Y, points[0].StrokeID))
 	var num_points = 1
 
 	var path_length = calculate_path_length(points)
@@ -40,7 +40,7 @@ func resample(points: Array, n: int) -> Array:
 					var t = min(max((I - D) / d, 0.0), 1.0)
 					if t != t: # Check if t is NaN
 						t = 0.5
-					new_points.append(Points.Point.new(
+					new_points.append(Points.Pointa.new(
 						(1.0 - t) * first_point.X + t * points[i].X,
 						(1.0 - t) * first_point.Y + t * points[i].Y,
 						points[i].StrokeID
@@ -57,7 +57,7 @@ func resample(points: Array, n: int) -> Array:
 				D += d
 
 	if num_points == n - 1: # sometimes we fall a rounding-error short of adding the last point, so add it if so
-		new_points.append(Points.Point.new(points[points.size() - 1].X, points[points.size() - 1].Y, points[points.size() - 1].StrokeID))
+		new_points.append(Points.Pointa.new(points[points.size() - 1].X, points[points.size() - 1].Y, points[points.size() - 1].StrokeID))
 
 	return new_points
 	
@@ -90,7 +90,7 @@ func scale(points: Array) -> Array:
 		var scaledX = (point.X - minx) / scale
 		var scaledY = (point.Y - miny) / scale
 		# Assuming Point is defined in your script
-		var newPoint = Points.Point.new(scaledX, scaledY, point.StrokeID)
+		var newPoint = Points.Pointa.new(scaledX, scaledY, point.StrokeID)
 		newPoints.append(newPoint)
 
 	return newPoints

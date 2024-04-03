@@ -89,7 +89,7 @@ func end_stroke():
 	strokes_index += 1
 	
 	for p in current_stroke:
-		var new_points = Points.Point.new(p.x,p.y,strokes_index)
+		var new_points = Points.Pointa.new(p.x,p.y,strokes_index)
 		#print("X ",new_points.X," Y ",new_points.Y," ID ",new_points.StrokeID)
 		var string = "Points.Point.new("+str(new_points.X)+","+str(new_points.Y)+","+str(new_points.StrokeID)+"),"
 		#print(string)

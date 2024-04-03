@@ -2,7 +2,7 @@ extends Object
 
 class_name Points
 
-class Point:
+class Pointa:
 	var X: float
 	var Y: float
 	var StrokeID: int

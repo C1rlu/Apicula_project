@@ -12,7 +12,7 @@ const BASE_ORBE_VISUAL_PREFABS = preload("res://08_SUBSCENES/Orbe/Base_Orbe/Base
 
 func _ready():
 	
-	_global_datas._instance_stroke.connect(_instance_stroke_at_pos)
+	#_global_datas._instance_stroke.connect(_instance_stroke_at_pos)
 	_global_datas._instance_visual_Orbe.connect(_instance_visual_orbe)
 
 func _instance_stroke_at_pos():
@@ -30,7 +30,7 @@ func _instance_stroke_at_pos():
 
 	# add the actual points in the stroke list
 	var StrokeID = _global_datas._strokeID
-	var newPoints = Points.Point.new(target.x * 100,target.y*100,StrokeID)
+	var newPoints = Points.Pointa.new(target.x * 100,target.y*100,StrokeID)
 	_global_datas._orbe_stroke.append(newPoints)
 	
 	if show_stroke_id_debug:
@@ -43,11 +43,11 @@ func _instance_visual_orbe():
 	if _global_datas._orbe_visual_scene.size() > orbe_stroke_maxLenght:
 		return
 	
-	var target = _global_datas._orbe_tool_origin_position
+	var target = Vector3(_global_datas._orbe_tool_origin_position.x,_global_datas._orbe_tool_origin_position.y,0.0)
 				
 	var orbe = BASE_ORBE_VISUAL_PREFABS.instantiate()
 	orbe.position  = target 
 	load_scene.add_child(orbe)
 	_global_datas._orbe_visual_scene.append(orbe)
 
-
+	_instance_stroke_at_pos()
