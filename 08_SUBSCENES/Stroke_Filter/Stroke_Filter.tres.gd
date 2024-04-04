@@ -70,9 +70,9 @@ func result_condition(result):
 		if result[0] == "line_1" or result[0] == "line_2" or result[0] == "line_3" or result[0] == "line_4":
 			_global_datas.instance_orbe_result.emit(Remover,calculate_center)		
 		
-		
-		if result[0] == "Circle":
-			
+	
+		if result[0] == "Time":
+				
 			if !_global_datas.Player_InMirrorScene:
 				
 				if !_global_datas.Mirror_vortex_Node:
@@ -80,7 +80,6 @@ func result_condition(result):
 				else:
 					_global_datas.Mirror_vortex_Node.position = calculate_center		
 			else:
-				
 				if !_global_datas.Mirror_vortex_out_Node:
 					_global_datas.instance_orbe_result.emit(Mirror_Orbe_out,calculate_center)
 				else:
@@ -95,12 +94,12 @@ func center_of_mass_points()->Vector3:
 	
 	var center = Vector3.ZERO#_global_datas._orbe_stroke_scene[0].position
 	 # Calculate the sum of all points
-	for point in _global_datas._orbe_stroke_scene:
+	for point in _global_datas._orbe_visual_scene:
 		center += point.position
 	
 	# Divide the sum by the number of points to get the average
-	if _global_datas._orbe_stroke_scene.size() > 0:
-		center /= _global_datas._orbe_stroke_scene	.size()	
+	if _global_datas._orbe_visual_scene.size() > 0:
+		center /= _global_datas._orbe_visual_scene.size()	
 	
 	
 	return center

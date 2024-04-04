@@ -5,7 +5,7 @@ const LINER_PREFABS = preload("res://08_SUBSCENES/Orbe/Base_Orbe/Liner_prefabs.t
 
 @onready var timer = $Timer
 
-
+@export var show_stroke_id_debug = false
 func _ready():
 	_global_datas._instance_visual_Orbe.connect(start)
 
@@ -39,9 +39,22 @@ func link_stroke():
 		instance_dots.position = dots		
 		load_scene.add_child(instance_dots)	
 		
+		create_point(dots)
 		
 	
-		
+func create_point(point_target : Vector3):
+	
+	var target = point_target
+				
+	# add the actual points in the stroke list
+	var StrokeID = _global_datas._strokeID
+	var newPoints = Points.Pointa.new(target.x * 100,target.y*100,StrokeID)
+	_global_datas._orbe_stroke.append(newPoints)
+	
+	if show_stroke_id_debug:
+		var string = "Points.Pointa.new("+str(newPoints.X)+","+str(newPoints.Y)+","+str(newPoints.StrokeID)+"),"
+		print(string)
+				
 func calculateLineOfDots(start_pos: Vector3, end_pos: Vector3, dot_spacing: float) -> Array:
 	
 	var dot_positions = []

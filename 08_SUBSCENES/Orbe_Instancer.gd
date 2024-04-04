@@ -1,14 +1,14 @@
 extends Node
 
-const BASE_ORBE_PREFABS = preload("res://08_SUBSCENES/Orbe/Base_Orbe/Base_Orbe_prefabs.tscn")
+
 const BASE_ORBE_VISUAL_PREFABS = preload("res://08_SUBSCENES/Orbe/Base_Orbe/Base_Orbe_Visual_prefabs.tscn")
 @onready var load_scene = $"../../LoadScene"
 
 
 @export var show_stroke_id_debug = false
 
-
 @export var orbe_stroke_maxLenght = 10;
+
 
 func _ready():
 	
@@ -20,14 +20,9 @@ func _instance_stroke_at_pos():
 	# HERE FOR DRAW POSITIONS 
 	if _global_datas._orbe_visual_scene.size() > orbe_stroke_maxLenght:
 		return
-	
+		
 	var target = _global_datas._orbe_tool_origin_position
 				
-	var orbe = BASE_ORBE_PREFABS.instantiate()
-	orbe.position  = target 
-	load_scene.add_child(orbe)
-	_global_datas._orbe_stroke_scene.append(orbe)
-
 	# add the actual points in the stroke list
 	var StrokeID = _global_datas._strokeID
 	var newPoints = Points.Pointa.new(target.x * 100,target.y*100,StrokeID)
@@ -50,4 +45,4 @@ func _instance_visual_orbe():
 	load_scene.add_child(orbe)
 	_global_datas._orbe_visual_scene.append(orbe)
 
-	_instance_stroke_at_pos()
+	#_instance_stroke_at_pos()
