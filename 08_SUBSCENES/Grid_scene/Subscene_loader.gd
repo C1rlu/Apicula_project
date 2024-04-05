@@ -38,7 +38,7 @@ func _loadscene(condition : bool):
 	$load_sublevel.visible = condition
 	
 func active_subscene():
-
+	
 	_global_datas.Player_InSubScene = true
 	_global_datas._start_ini_subscene.emit()
 	
@@ -46,6 +46,8 @@ func disable_subscene():
 	_global_datas.Player_InSubScene = false
 
 func instance_loaded_scene():
+	
+	_global_datas._photo_data_scene_list.clear()
 	
 	var scene_loaded = ResourceLoader.load_threaded_get(constant_string)
 	var instance_scene = scene_loaded.instantiate()
