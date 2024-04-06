@@ -72,7 +72,9 @@ func result_condition(result):
 		
 	
 		if result[0] == "Time":
-				
+			
+			if _global_datas.Mirror_vortex_Node:
+				return	
 			if !_global_datas.Player_InMirrorScene:
 				
 				if !_global_datas.Mirror_vortex_Node:

@@ -25,7 +25,7 @@ func set_resolution(index):
 		_global_datas.set_resolution.emit(Vector2(1280,720))
 	
 		RenderingServer.global_shader_parameter_set("Dither_size",0.4)
-		RenderingServer.global_shader_parameter_set("Dither_blue_noise_size",5)
+		RenderingServer.global_shader_parameter_set("Dither_blue_noise_size",4)
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 		print("SCREEN SIZE",Vector2(1280,720))
 
