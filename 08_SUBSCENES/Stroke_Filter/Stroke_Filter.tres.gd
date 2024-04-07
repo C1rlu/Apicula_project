@@ -3,7 +3,7 @@ extends Node
 @export var Teleporter_Orbe : orbe_data
 @export var Mirror_Orbe : orbe_data
 @export var Mirror_Orbe_out : orbe_data
-
+@export var Movable_Oddity : orbe_data
 @export var Remover : orbe_data
 
 # CACHE ALL THE ACTUAL TEMPLATE
@@ -69,28 +69,29 @@ func result_condition(result):
 		
 		if result[0] == "line_1" or result[0] == "line_2" or result[0] == "line_3" or result[0] == "line_4":
 			_global_datas.instance_orbe_result.emit(Remover,calculate_center)		
-		
+			
 	
 		if result[0] == "Time":
 			
-			if _global_datas.Mirror_vortex_Node:
-				return	
 			if !_global_datas.Player_InMirrorScene:
 				
 				if !_global_datas.Mirror_vortex_Node:
 					_global_datas.instance_orbe_result.emit(Mirror_Orbe,calculate_center)
+					
 				else:
 					_global_datas.Mirror_vortex_Node.position = calculate_center		
 			else:
-				if !_global_datas.Mirror_vortex_out_Node:
-					_global_datas.instance_orbe_result.emit(Mirror_Orbe_out,calculate_center)
-				else:
-					_global_datas.Mirror_vortex_out_Node.position = calculate_center	
+				pass
+				#if !_global_datas.Mirror_vortex_out_Node:
+					#_global_datas.instance_orbe_result.emit(Mirror_Orbe_out,calculate_center)
+				#else:
+					#_global_datas.Mirror_vortex_out_Node.position = calculate_center	
 					
 					
 					
 		if result[0] == "teleporter":
-			_global_datas.instance_orbe_result.emit(Teleporter_Orbe,calculate_center)
+
+			_global_datas.instance_orbe_result.emit(Movable_Oddity,calculate_center)
 			
 func center_of_mass_points()->Vector3:
 	

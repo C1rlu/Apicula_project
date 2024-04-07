@@ -4,6 +4,7 @@ extends Node
 @export var tool_list : Array[tool_data]
 
 var tool_index : int = 0
+var enalbe = false
 
 func _ready():
 	
@@ -27,6 +28,9 @@ func switch_active_tool(tool : tool_data):
 
 func _input(event):
 	
+	if !enalbe:
+		return
+		
 	if event.is_action_pressed("Select_next_orbre"):
 		switch_active_tool_index(1)	
 	if event.is_action_pressed("Select_previous_orbre"):

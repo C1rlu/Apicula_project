@@ -1,8 +1,9 @@
 extends Node
 
+@onready var root = $"../.."
+
+@export var mirror_out : orbe_data
 @onready var mirror_root = $"../.."
-
-
 @onready var render_vortex_globe_effect = $"../Render_vortex_globe_effect"
 @onready var render_vortex = $"../Render_vortex"
 @onready var area_col = $"../CollisionShape3D"
@@ -42,6 +43,9 @@ func _scale_globe_effect(condition : bool):
 func hide():
 	render_vortex_globe_effect.visible = false	
 	render_vortex.visible = false
+	var target = root.global_position
+	_global_datas.instance_orbe_result.emit(mirror_out,target)
+	
 	mirror_root.queue_free()
 
 func show():

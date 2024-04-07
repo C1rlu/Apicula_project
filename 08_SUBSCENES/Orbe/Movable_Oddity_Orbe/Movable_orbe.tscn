@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3 uid="uid://oii306x35cmx"]
+
+[ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Movable_Oddity_Orbe/Movable_oddity_orbe.gd" id="1_2hp1y"]
+[ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_elements_mat.tres" id="2_iflbx"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ix2u8"]
+radius = 0.398972
+
+[sub_resource type="SphereMesh" id="SphereMesh_ly7tq"]
+radius = 0.1
+height = 0.2
+
+[node name="Movable_orbe_check" type="Area3D"]
+collision_layer = 4
+collision_mask = 4
+
+[node name="Movable_check" type="Node" parent="."]
+script = ExtResource("1_2hp1y")
+
+[node name="Timer" type="Timer" parent="Movable_check"]
+wait_time = 0.05
+one_shot = true
+autostart = true
+
+[node name="Col" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_ix2u8")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
+transform = Transform3D(3.43244, 0, 0, 0, 3.43244, 0, 0, 0, 3.43244, 0, 0, 0)
+visible = false
+layers = 4
+mesh = SubResource("SphereMesh_ly7tq")
+skeleton = NodePath("")
+surface_material_override/0 = ExtResource("2_iflbx")
+
+[connection signal="timeout" from="Movable_check/Timer" to="Movable_check" method="_on_timer_timeout"]

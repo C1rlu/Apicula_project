@@ -33,6 +33,8 @@ func check_area(condition : bool):
 		var mirror_node = areas.get_node_or_null("Mirror")
 		var mirror_destination = areas.get_node_or_null("Mirror_destination")
 		#var Orbe_Contact = 	areas.get_node_or_null("Orbe_Contact")
+		var Movable_oddity = areas.get_node_or_null("Movable_oddity")
+		
 		if mirror_destination:
 			if _global_datas.Player_InMirrorScene:
 				var desination = mirror_destination.destination
@@ -45,7 +47,10 @@ func check_area(condition : bool):
 				_global_datas._mirror_switch.emit(true)
 			else:
 				_global_datas._mirror_switch.emit(false)	
-
+	
+		if Movable_oddity:
+			Movable_oddity.move_oddity()
+			
 		#if Orbe_Contact:
 			#Orbe_Contact.delete_node.emit()	
 			
