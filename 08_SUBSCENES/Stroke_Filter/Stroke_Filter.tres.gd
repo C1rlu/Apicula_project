@@ -82,10 +82,10 @@ func result_condition(result):
 					_global_datas.Mirror_vortex_Node.position = calculate_center		
 			else:
 				pass
-				#if !_global_datas.Mirror_vortex_out_Node:
-					#_global_datas.instance_orbe_result.emit(Mirror_Orbe_out,calculate_center)
-				#else:
-					#_global_datas.Mirror_vortex_out_Node.position = calculate_center	
+				if !_global_datas.Mirror_vortex_out_Node:
+					_global_datas.instance_orbe_result.emit(Mirror_Orbe_out,calculate_center)
+				else:
+					_global_datas.Mirror_vortex_out_Node.position = calculate_center	
 					
 					
 					

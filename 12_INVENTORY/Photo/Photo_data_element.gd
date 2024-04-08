@@ -65,7 +65,8 @@ func _on_area_take_it_area_shape_exited(area_rid, area, area_shape_index, local_
 		if player_out:
 			stop_scanning()		
 		
-
+func disable_photoData():
+	_global_datas._photo_data_scene_list.erase(self)	
 
 func _on_timer_timeout():
 	scanning_done()

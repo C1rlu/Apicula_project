@@ -25,7 +25,7 @@ func set_resolution(index):
 		_global_datas.set_resolution.emit(Vector2(1280,720))
 	
 		RenderingServer.global_shader_parameter_set("Dither_size",0.4)
-		RenderingServer.global_shader_parameter_set("Dither_blue_noise_size",4)
+		RenderingServer.global_shader_parameter_set("Dither_blue_noise_size",10)
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 		print("SCREEN SIZE",Vector2(1280,720))
 
@@ -34,7 +34,7 @@ func set_resolution(index):
 		get_window().content_scale_size = Vector2(1280,800)
 	
 		RenderingServer.global_shader_parameter_set("Dither_size",0.3)
-		RenderingServer.global_shader_parameter_set("Dither_blue_noise_size",3)	
+		RenderingServer.global_shader_parameter_set("Dither_blue_noise_size",10)	
 		
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
 		print("SCREEN SIZE",Vector2(1280,800))		
@@ -44,5 +44,5 @@ func set_resolution(index):
 		get_window().content_scale_size = Vector2(1920,1080)
 	
 		RenderingServer.global_shader_parameter_set("Dither_size",0.4)
-		RenderingServer.global_shader_parameter_set("Dither_blue_noise_size",5)	
+		RenderingServer.global_shader_parameter_set("Dither_blue_noise_size",10)	
 		print("SCREEN SIZE",Vector2(1920,1080))		

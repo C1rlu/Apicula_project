@@ -44,6 +44,10 @@ func _ready():
 	_orbe_stroke.clear()
 	_strokeID = 0
 	_orbe_visual_scene.clear()
+	_peon_oddity_following.clear()
+	
+	
+	
 # input type
 signal using_pad(condition : bool)
 var move_right : String
@@ -118,9 +122,17 @@ var _strokeID : int
 var _orbe_stroke_scene : Array[Node3D]
 var _orbe_tool_origin_position : Vector3
 var _orbe_visual_scene : Array[Node3D]
-
-
 signal instance_orbe_result(data : orbe_data, instance_position : Vector3)
+
+# Oddity # FOR ODDITY IN SCENE
+
+var _peon_oddity_following : Array
+signal _use_peon_oddity(number : int)
+
+
+
+
+
 
 #board scene
 
