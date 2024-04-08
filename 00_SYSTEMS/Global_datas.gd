@@ -46,7 +46,8 @@ func _ready():
 	_orbe_visual_scene.clear()
 	_peon_oddity_following.clear()
 	
-	
+	_start_point = Vector3.ZERO
+	_end_point = Vector3.ZERO 
 	
 # input type
 signal using_pad(condition : bool)
@@ -115,6 +116,10 @@ var _photo_data_scene_list : Array[Node]
 # Orbe Points.Point.New
 signal _instance_stroke
 signal _instance_visual_Orbe
+
+var _start_point : Vector3 
+var _end_point : Vector3 
+
 var _orbe_stroke : Array
 var _strokeID : int
 

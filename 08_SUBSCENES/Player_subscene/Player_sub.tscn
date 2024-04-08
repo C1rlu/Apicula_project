@@ -775,6 +775,35 @@ shader_parameter/R = 0.11
 shader_parameter/Size = 0.7
 shader_parameter/flash_opacity = 0.5
 
+[sub_resource type="Curve" id="Curve_mwumu"]
+_data = [Vector2(0, 0.56015), 0.0, 0.0, 0, 0, Vector2(1, 0.181391), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_wj6vn"]
+curve = SubResource("Curve_mwumu")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_0ye1k"]
+emission_shape = 2
+emission_sphere_radius = 0.25
+direction = Vector3(0, 0, 0)
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+radial_accel_min = -0.5
+scale_min = 0.03
+scale_max = 0.05
+scale_curve = SubResource("CurveTexture_wj6vn")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_inbo0"]
+shading_mode = 0
+albedo_color = Color(0.52549, 0.52549, 0.52549, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_6ufqt"]
+material = SubResource("StandardMaterial3D_inbo0")
+radius = 0.25
+height = 0.5
+radial_segments = 8
+rings = 8
+
 [sub_resource type="SphereShape3D" id="SphereShape3D_g1ic5"]
 radius = 0.34261
 
@@ -1040,35 +1069,6 @@ turbulence_noise_scale = 0.1
 turbulence_noise_speed_random = 0.0
 turbulence_influence_min = 0.0
 turbulence_influence_max = 0.0
-
-[sub_resource type="Curve" id="Curve_mwumu"]
-_data = [Vector2(0, 0.56015), 0.0, 0.0, 0, 0, Vector2(1, 0.181391), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_wj6vn"]
-curve = SubResource("Curve_mwumu")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_0ye1k"]
-emission_shape = 2
-emission_sphere_radius = 0.25
-direction = Vector3(0, 0, 0)
-spread = 180.0
-gravity = Vector3(0, 0, 0)
-radial_accel_min = -0.5
-scale_min = 0.03
-scale_max = 0.05
-scale_curve = SubResource("CurveTexture_wj6vn")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_inbo0"]
-shading_mode = 0
-albedo_color = Color(0.52549, 0.52549, 0.52549, 1)
-
-[sub_resource type="SphereMesh" id="SphereMesh_6ufqt"]
-material = SubResource("StandardMaterial3D_inbo0")
-radius = 0.25
-height = 0.5
-radial_segments = 8
-rings = 8
 
 [node name="Player_Sub" type="RigidBody3D"]
 collision_layer = 2
@@ -1340,6 +1340,15 @@ surface_material_override/0 = SubResource("ShaderMaterial_mn4ca")
 [node name="Orbe_spawner_position" type="Node3D" parent="Render_mesh"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0341371, 0.137754, 0.194054)
 
+[node name="VFX_SPHERE_MIRROR" type="GPUParticles3D" parent="Render_mesh/Orbe_spawner_position"]
+transform = Transform3D(1.429, 0, 0, 0, 1.429, 0, 0, 0, 1.429, 0.00496598, -0.008692, -0.0181673)
+layers = 32768
+cast_shadow = 0
+amount = 15
+speed_scale = 2.0
+process_material = SubResource("ParticleProcessMaterial_0ye1k")
+draw_pass_1 = SubResource("SphereMesh_6ufqt")
+
 [node name="ZoneCollide" type="Area3D" parent="."]
 collision_layer = 4
 collision_mask = 4
@@ -1370,16 +1379,6 @@ interpolate = false
 fract_delta = false
 process_material = SubResource("ParticleProcessMaterial_snyp2")
 draw_pass_1 = ExtResource("4_6vpi7")
-
-[node name="VFX_SPHERE_MIRROR" type="GPUParticles3D" parent="."]
-transform = Transform3D(1.429, 0, 0, 0, 1.429, 0, 0, 0, 1.429, -0.00266938, 0.129062, -0.00987081)
-layers = 32768
-cast_shadow = 0
-emitting = false
-amount = 50
-speed_scale = 2.0
-process_material = SubResource("ParticleProcessMaterial_0ye1k")
-draw_pass_1 = SubResource("SphereMesh_6ufqt")
 
 [connection signal="timeout" from="Ini_subscene/Timer" to="Ini_subscene" method="_on_timer_timeout"]
 [connection signal="timeout" from="Flash_inputs/Timer" to="Flash_inputs" method="_on_timer_timeout"]

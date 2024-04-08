@@ -7,8 +7,8 @@ const LINER_PREFABS = preload("res://08_SUBSCENES/Orbe/Base_Orbe/Liner_prefabs.t
 
 @export var show_stroke_id_debug = false
 func _ready():
-	_global_datas._instance_visual_Orbe.connect(start)
-
+	#_global_datas._instance_visual_Orbe.connect(start)
+	_global_datas._instance_stroke.connect(start)
 	
 func start():	
 	timer.start()	

@@ -1,6 +1,6 @@
 extends Node
 
-@onready var vfx_sphere_mirror = $"../../VFX_SPHERE_MIRROR"
+@onready var vfx_sphere_mirror = $"../../Render_mesh/Orbe_spawner_position/VFX_SPHERE_MIRROR"
 var t
 
 @export var teleporter_data : tool_data
