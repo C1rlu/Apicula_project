@@ -16,31 +16,13 @@ func spawn_orbe(condition : bool):
 
 	if condition:
 		
-		var target = _global_datas._orbe_tool_origin_position
-		_global_datas._start_point = target
-		_global_datas._instance_visual_Orbe.emit()
-		#_global_datas._instance_stroke.emit()	
-		
-		#timer_orber.start()
-		#timer_stroke.start()
+		_global_datas._instance_start_visual_orbe.emit()
 		_global_datas._strokeID += 1	
 		
 	else :
-		
-		var target = _global_datas._orbe_tool_origin_position
-		_global_datas._end_point = target
-		_global_datas._instance_visual_Orbe.emit()
-		
-		_global_datas._instance_stroke.emit()	
-		
-		pass
-		#timer_stroke.stop()		
-		#timer_orber.stop()
+		_global_datas._instance_end_visual_orbe.emit()
+			
+
 		
 
-#func _on_timer_stroke_timeout():
-	#_global_datas._instance_stroke.emit()
 
-
-#func _on_timer_orber_timeout():
-	#_global_datas._instance_visual_Orbe.emit()

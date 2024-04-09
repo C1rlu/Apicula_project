@@ -21,9 +21,6 @@ func link_stroke():
 	if _global_datas._orbe_visual_scene.size() < 2:
 		return
 
-	# START LINE SHOULD BE THE CLOSEST IN THE LIST FROM PLAYER POSITION
-	#var start_line = closet_orbe(_global_datas._orbe_visual_scene)
-
 	var start_line_index = _global_datas._orbe_visual_scene.size()-2	
 	var start_line = _global_datas._orbe_visual_scene[start_line_index]
 	
