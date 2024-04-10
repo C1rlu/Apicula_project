@@ -12,16 +12,20 @@ func _ready():
 	_global_datas._open_dialogue.connect(_Darker_mainScene)
 	_global_datas._close_dialogue.connect(_NormalColor_mainScene)
 	_global_datas._backFrom_subscene.connect(_NormalColor_mainScene)
-	_global_datas._open_menu.connect(_open)
+	#_global_datas._open_menu.connect(_open)
 	_global_datas._active_progress_subscene.connect(_open)
 	#ACTIVE DITHER
 	RenderingServer.global_shader_parameter_set("active_Dither", true)
 	
 func _open(condition : bool):
+	
 	if condition:
 		
 		_Darker_mainScene()
 	else:
+		
+		if _global_datas.Player_InDialogue:
+			return
 		_NormalColor_mainScene()					
 
 	

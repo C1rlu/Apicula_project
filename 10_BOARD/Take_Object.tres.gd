@@ -32,6 +32,7 @@ func show_legend(condition : bool):
 		is_select.visible = false
 		_is_select = false		
 		_global_datas.selected_photoData = null
+		
 func close_inventory(condition : bool):
 	if !condition:
 		is_select.visible = false
@@ -39,6 +40,10 @@ func close_inventory(condition : bool):
 
 func _on_on_click(condition):
 	
+	if photo_data.scanner_prefab == null:
+	
+		return
+		
 	if condition:
 		_global_datas.show_on_scanner.emit(true)
 		
