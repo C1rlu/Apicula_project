@@ -11,6 +11,12 @@
 [sub_resource type="GDScript" id="GDScript_ebu32"]
 script/source = "extends Node
 
+
+const PHOTO_SQUARE_PREFABS = preload(\"res://12_INVENTORY/Behaviour/Photo_square_prefabs.tscn\")
+
+@onready var front_element = $\"../Front_element\"
+
+
 func _ready():
 	_global_datas._take_photo.connect(_check_npc_photo)
 
@@ -21,12 +27,15 @@ func _check_npc_photo():
 		
 		if check_photo_exist(photodata):
 			return
-		
+			
+		_global_datas._photo_flash.emit()	
+			
 		_global_datas.selected_photoData = photodata
-		_global_datas.show_on_scanner.emit(true)
+		instance_photo()
+		
 		_global_datas.photo_archives.append(photodata)
 		_global_datas._show_object_legend.emit(true,photodata.legend)
-		_global_datas._photo_flash.emit()
+	
 
 func check_photo_exist(photo_Data):
 	
@@ -34,6 +43,15 @@ func check_photo_exist(photo_Data):
 		if photo == photo_Data:
 			return true 	
 
+func instance_photo():
+	
+	var new_node = 	PHOTO_SQUARE_PREFABS.instantiate()
+	front_element.add_child(new_node)
+	
+	var screen_center = Vector2(1280.0 / 2.0, 720/ 2.0 )
+	var random_angle = randf_range(-6.0, 6.0)
+	new_node.rotation_degrees = random_angle
+	new_node.position = screen_center
 "
 
 [sub_resource type="GDScript" id="GDScript_cnn2b"]

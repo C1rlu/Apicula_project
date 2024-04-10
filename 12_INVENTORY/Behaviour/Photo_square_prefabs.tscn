@@ -1,6 +1,6 @@
 [gd_scene load_steps=62 format=3 uid="uid://clxvom4excx0p"]
 
-[ext_resource type="Script" path="res://12_INVENTORY/Behaviour/Movable_paper.tres.gd" id="1_hutrl"]
+[ext_resource type="Script" path="res://12_INVENTORY/Behaviour/Take_it_button.gd" id="2_bgg0n"]
 [ext_resource type="Script" path="res://12_INVENTORY/Behaviour/legend.tres.gd" id="2_jvqxf"]
 
 [sub_resource type="GDScript" id="GDScript_6ohgl"]
@@ -13,11 +13,10 @@ var is_denoise = false
 
 
 func _ready():
-	#_global_datas._backFrom_subscene.connect(_change_photo_shade)
-	_global_datas._subscene_fail.connect(_remove_photo)
-	_change_photo_shade()
-	
 
+	_change_photo_shade()
+	_apply_photo(_global_datas.selected_photoData)
+	
 func _remove_photo():
 	
 	if is_denoise:
@@ -43,11 +42,7 @@ func _apply_photo(photo_data : PhotoData):
 			
 func _change_photo_shade():
 	
-	if is_denoise:
-		return
 
-	is_denoise = true
-	
 	if t:
 		t.kill()
 	t = create_tween()
@@ -711,14 +706,10 @@ nodes/fragment/connections = PackedInt32Array(2, 0, 4, 1, 3, 0, 4, 0, 4, 0, 6, 1
 shader = SubResource("VisualShader_2kkwg")
 
 [node name="Photo_Square_prefabs" type="Node2D"]
-scale = Vector2(3, 3)
+scale = Vector2(4, 4)
 
 [node name="Change_photo" type="Node" parent="."]
 script = SubResource("GDScript_6ohgl")
-
-[node name="Take_object" type="Node" parent="."]
-script = ExtResource("1_hutrl")
-object_center_marge = Vector2(40, 40)
 
 [node name="Legend" type="Node" parent="."]
 script = ExtResource("2_jvqxf")
@@ -804,6 +795,7 @@ theme_override_styles/hover = SubResource("StyleBoxEmpty_3t3vd")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_67tgs")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_12j5a")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_2xjys")
+script = ExtResource("2_bgg0n")
 
 [node name="Select_border" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_f1ub3")
@@ -813,4 +805,4 @@ offset_right = 40.0
 offset_bottom = 40.0
 mouse_filter = 2
 
-[connection signal="pressed" from="Take_it_button" to="Take_object" method="_on_take_it_button_pressed"]
+[connection signal="pressed" from="Take_it_button" to="Take_it_button" method="_on_pressed"]
