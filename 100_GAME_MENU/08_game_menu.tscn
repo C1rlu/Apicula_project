@@ -35,7 +35,7 @@ func _fade_in():
 		t.kill()
 	t = create_tween()
 	
-	t .tween_method(set_shader_value,actual_value,0.5,0.5)
+	t .tween_method(set_shader_value,actual_value,0.8,0.5)
 
 func _fade_out():
 	
@@ -48,7 +48,7 @@ func _fade_out():
 
 func set_shader_value(value):
 
-	var clamp_y = clamp(value,0.0,0.5)
+	var clamp_y = clamp(value,0.0,0.8)
 	material_normal.set_shader_parameter(\"Opacity\",clamp_y)
 	actual_value = value
 
@@ -423,10 +423,14 @@ metadata/_edit_use_anchors_ = true
 clip_contents = true
 layout_direction = 1
 layout_mode = 1
-offset_left = -86.0
-offset_top = 85.0
-offset_right = 552.0
-offset_bottom = 154.0
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -319.0
+offset_top = 97.0
+offset_right = 319.0
+offset_bottom = 166.0
+grow_horizontal = 2
 theme_override_colors/font_color = Color(0.317647, 0.615686, 0.529412, 1)
 theme_override_font_sizes/font_size = 35
 text = "APICULA (PROTOTYPE)"
@@ -437,10 +441,17 @@ autowrap_mode = 3
 [node name="HBoxContainer" type="HBoxContainer" parent="Game_Menu_Root"]
 process_mode = 3
 layout_mode = 1
-offset_left = 43.0
-offset_top = 385.0
-offset_right = 483.0
-offset_bottom = 435.0
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -220.0
+offset_top = -98.0
+offset_right = 220.0
+offset_bottom = -48.0
+grow_horizontal = 2
+grow_vertical = 0
 theme_override_constants/separation = 50
 
 [node name="Resum_Button2" type="Button" parent="Game_Menu_Root/HBoxContainer"]
@@ -482,19 +493,25 @@ script = SubResource("GDScript_e1pe5")
 
 [node name="Options" type="Control" parent="Game_Menu_Root"]
 layout_mode = 1
-anchors_preset = 0
-offset_left = 43.0
-offset_top = 262.0
-offset_right = 543.0
-offset_bottom = 379.0
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -217.0
+offset_top = -187.0
+offset_right = 283.0
+offset_bottom = -70.0
+grow_horizontal = 2
+grow_vertical = 0
 mouse_filter = 2
 
 [node name="Label" type="Label" parent="Game_Menu_Root/Options"]
 layout_mode = 0
 offset_left = 387.0
-offset_top = -91.0
+offset_top = -55.0
 offset_right = 427.0
-offset_bottom = -68.0
+offset_bottom = -32.0
 text = "0.4"
 
 [node name="HSlider_dither" type="HSlider" parent="Game_Menu_Root/Options"]
@@ -506,9 +523,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -244.0
-offset_top = -140.5
+offset_top = -104.5
 offset_right = 122.0
-offset_bottom = -124.5
+offset_bottom = -88.5
 grow_horizontal = 2
 grow_vertical = 2
 focus_neighbor_bottom = NodePath("../VBoxContainer/Fullscreen_button")
@@ -520,6 +537,7 @@ value = 0.4
 script = ExtResource("5_7b61k")
 
 [node name="Label2" type="Label" parent="Game_Menu_Root/Options"]
+visible = false
 layout_mode = 0
 offset_left = 387.0
 offset_top = -50.0
@@ -530,6 +548,7 @@ text = "5
 
 [node name="HSlider_noise" type="HSlider" parent="Game_Menu_Root/Options"]
 process_mode = 2
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

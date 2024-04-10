@@ -71,7 +71,7 @@ func result_condition(result):
 			_global_datas.instance_orbe_result.emit(Remover,calculate_center)		
 			
 	
-		if result[0] == "Time":
+		if result[0] == "Portal":
 			
 			if !_global_datas.Player_InMirrorScene:
 				
