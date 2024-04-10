@@ -1,0 +1,48 @@
+[gd_scene load_steps=7 format=3 uid="uid://ci3se63750v7"]
+
+[ext_resource type="Shader" uid="uid://upo0fuo5sqgd" path="res://05_SHADER_TEST/Board/Board_sh.tres" id="3_3b48e"]
+[ext_resource type="Material" uid="uid://25obtp1blkk6" path="res://05_SHADER_TEST/Board/board_photo_texture.tres" id="4_4n2gj"]
+
+[sub_resource type="GDScript" id="GDScript_32kbr"]
+script/source = "extends Node
+
+@onready var photo = $\"../photo\"
+@onready var material : Material = photo.get_surface_override_material(0)
+
+func _ready():
+	
+	if _global_datas.selected_photoData:
+		var texture_data = _global_datas.selected_photoData.image
+		material.set_shader_parameter(\"Texture\",texture_data)
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4jhqi"]
+render_priority = 0
+shader = ExtResource("3_3b48e")
+shader_parameter/Dark_color = Color(0.423529, 0.380392, 0, 1)
+shader_parameter/ColorParameter = Color(0.027451, 0.14902, 0.156863, 1)
+shader_parameter/light_color = Color(0.580392, 0.545098, 0.439216, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_8e2mh"]
+material = SubResource("ShaderMaterial_4jhqi")
+
+[sub_resource type="QuadMesh" id="QuadMesh_ewu27"]
+resource_local_to_scene = true
+
+[node name="Photo_scanning_element" type="Node3D"]
+transform = Transform3D(1.2, 0, 0, 0, 0.730132, -0.952317, 0, 0.952317, 0.730132, 0, 0.0240289, -0.00304595)
+
+[node name="texture" type="Node" parent="."]
+script = SubResource("GDScript_32kbr")
+
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.0682586, 0, 0, 0, 0.00230959, 0, 0, 0, 0.0682586, 0, 0.00272226, 0)
+layers = 128
+mesh = SubResource("BoxMesh_8e2mh")
+
+[node name="photo" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.0598443, 0, 0, 0, -2.61588e-09, 0.0598444, 0, -0.0598443, -2.61588e-09, 0.000475392, 0.00402254, 0)
+layers = 128
+mesh = SubResource("QuadMesh_ewu27")
+skeleton = NodePath("")
+surface_material_override/0 = ExtResource("4_4n2gj")

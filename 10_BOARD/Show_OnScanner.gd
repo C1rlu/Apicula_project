@@ -19,6 +19,8 @@ func _show_scanner(condition : bool):
 	active_scene_viewports._active_viewports(condition)
 	
 	if condition:
+		
+		loader.rotation = Vector3.ZERO
 		stop_scanner()
 		if !_global_datas.selected_photoData:
 			return

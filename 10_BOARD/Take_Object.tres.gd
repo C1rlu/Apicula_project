@@ -40,9 +40,9 @@ func close_inventory(condition : bool):
 
 func _on_on_click(condition):
 	
-	if photo_data.scanner_prefab == null:
+	#if photo_data.scanner_prefab == null:
 	
-		return
+		#return
 		
 	if condition:
 		_global_datas.show_on_scanner.emit(true)
