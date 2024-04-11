@@ -1,4 +1,7 @@
 extends Node
+
+
+@export var speed : float
 @onready var root = $".."
 @onready var stop_follow_timer = $Stop_follow_timer
 
@@ -59,7 +62,7 @@ func _folow_player(delta):
 
 
 	var player_position = _global_datas.flash_subscene_position + random_offset	
-	root.global_position = lerp(root.global_position,player_position, 1 * delta)			
+	root.global_position = lerp(root.global_position,player_position, speed * delta)			
 	
 	root.global_rotation = lerp(root.global_rotation,rotation_target, 0.1 * delta)	
 

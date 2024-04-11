@@ -1,4 +1,4 @@
-[gd_scene load_steps=99 format=3 uid="uid://nigmie4bbn6"]
+[gd_scene load_steps=100 format=3 uid="uid://nigmie4bbn6"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/Grid_scene/Subscene_loader.gd" id="1_7uoo0"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="2_3srhu"]
@@ -9,23 +9,24 @@
 [ext_resource type="Material" uid="uid://dbu2q4lhlk8w5" path="res://05_SHADER_TEST/Full_screen/Subscene_screen/Main_subscene_dither.tres" id="3_w42nb"]
 [ext_resource type="Material" uid="uid://b7ffjkgpmtkc6" path="res://05_SHADER_TEST/Full_screen/Subscene_screen/Scanner_x_subscene_dither.tres" id="4_bkck3"]
 [ext_resource type="Resource" uid="uid://d11cl4f25dgwg" path="res://08_SUBSCENES/Tools/Flash_light.tres" id="4_h1r1k"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Teleport_Player.gd" id="4_jsgo0"]
 [ext_resource type="Resource" uid="uid://380xcgsxw62f" path="res://08_SUBSCENES/Tools/Orbe_spawner.tres" id="5_5xftw"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Tools/Play_Orber_tool.gd" id="6_51m8x"]
 [ext_resource type="Resource" uid="uid://vv3dws7dmhtd" path="res://08_SUBSCENES/Tools/Scanner.tres" id="6_b80v7"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Play_Orber_tool.gd" id="7_whguu"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Play_Scanner.gd" id="7_yn7q6"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Add_teleporter_inputs.gd" id="8_2kb68"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Orbe_Instancer.gd" id="11_dnajt"]
-[ext_resource type="Script" path="res://08_SUBSCENES/PhotoData_list_update.gd" id="11_uy3s0"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Tools/Play_Scanner.gd" id="7_7awji"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Tools/Add_teleporter_inputs.gd" id="8_203nw"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Tools/PhotoData_list_update.gd" id="10_w7dre"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Orbe_Instancer.gd" id="11_dnajt"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Base_Orbe/Link_stroke.gd" id="11_yi7j0"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Base_Orbe/Link_process.gd" id="12_gsnev"]
 [ext_resource type="Resource" uid="uid://cbbmkpkisxagn" path="res://08_SUBSCENES/Orbe/Orbe_datas/Orbe_Mirror.tres" id="12_l61c1"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Stroke_Filter/Orbe_Result_Instancer.gd" id="12_lg0wa"]
 [ext_resource type="Resource" uid="uid://cubpsapqnetwr" path="res://08_SUBSCENES/Orbe/Orbe_datas/Orbe_teleporter.tres" id="13_ywb87"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Stroke_Filter/Stroke_Filter.tres.gd" id="14_0roc3"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Active_scene_viewports.gd" id="14_28kqk"]
 [ext_resource type="Resource" uid="uid://drupv3acvl1k4" path="res://08_SUBSCENES/Orbe/Orbe_datas/Orbe_Mirror_Out.tres" id="14_dpsgd"]
 [ext_resource type="Resource" uid="uid://ncll7t2e5k5v" path="res://08_SUBSCENES/Orbe/Remover/RemoverOrbe_data.tres" id="15_2trwq"]
+[ext_resource type="Resource" uid="uid://boumbv1ixnqko" path="res://08_SUBSCENES/Orbe/Orbe_datas/Orbe_Xray_Oddity.tres" id="18_4kphq"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Teleporter/Teleport_Player.gd" id="20_mfhmv"]
+[ext_resource type="Script" path="res://03_CAMERA/Active_scene_viewports.gd" id="21_jai7k"]
 [ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_elements_mat.tres" id="27_e4bpc"]
 
 [sub_resource type="GDScript" id="GDScript_btuws"]
@@ -195,15 +196,23 @@ func _set_scanner_opacity_value( value : float):
 script/source = "extends Node
 @onready var subscenes_cam_scanner_x = $\"../Viewport/Scanner_x\"
 @onready var material : Material = subscenes_cam_scanner_x.get_material()
+@onready var timer = $Timer
 
 var t
 
 func _ready():
 	
-	_global_datas._take_photo.connect(_flash_mirror)
+	_global_datas._scan_mirror_xray.connect(_check_xray_oddity)
 
+
+func _check_xray_oddity():
+	
+	if _global_datas._xray_oddity.size() == 0:
+		return
+	
+	timer.start()	
+	
 func _flash_mirror():
-
 
 	if t:
 		t.kill()
@@ -215,7 +224,8 @@ func _set_opacity_value( value : float):
 
 	material.set_shader_parameter(\"Opacity\",value)	
 
-
+func _on_timer_timeout():
+	_flash_mirror()
 "
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_gasoh"]
@@ -928,20 +938,20 @@ script = ExtResource("3_2mtx3")
 tool_list = Array[Resource("res://08_SUBSCENES/Tools/Tools_Data.gd")]([ExtResource("5_5xftw"), ExtResource("6_b80v7")])
 
 [node name="Use_Orber_action_inputs" type="Node" parent="TOOLS"]
-script = ExtResource("7_whguu")
+script = ExtResource("6_51m8x")
 tool_type = ExtResource("5_5xftw")
 
 [node name="Use_Scanner_action_inputs" type="Node" parent="TOOLS"]
-script = ExtResource("7_yn7q6")
+script = ExtResource("7_7awji")
 tool_type = ExtResource("6_b80v7")
 tool_type_back = ExtResource("5_5xftw")
 
 [node name="Flash_action_inputs" type="Node" parent="TOOLS"]
-script = ExtResource("8_2kb68")
+script = ExtResource("8_203nw")
 Second_action_tool = ExtResource("4_h1r1k")
 
 [node name="PhotoData_list_update" type="Node" parent="."]
-script = ExtResource("11_uy3s0")
+script = ExtResource("10_w7dre")
 
 [node name="ORBE" type="Node" parent="."]
 
@@ -967,7 +977,7 @@ script = ExtResource("14_0roc3")
 Teleporter_Orbe = ExtResource("13_ywb87")
 Mirror_Orbe = ExtResource("12_l61c1")
 Mirror_Orbe_out = ExtResource("14_dpsgd")
-Movable_Oddity = ExtResource("13_ywb87")
+Xray_Oddity = ExtResource("18_4kphq")
 Remover = ExtResource("15_2trwq")
 
 [node name="Orbe_Result_Instancer" type="Node" parent="ORBE"]
@@ -976,13 +986,17 @@ script = ExtResource("12_lg0wa")
 [node name="SEE_MIRROR_FLASH" type="Node" parent="."]
 script = SubResource("GDScript_nvaxv")
 
+[node name="Timer" type="Timer" parent="SEE_MIRROR_FLASH"]
+wait_time = 0.15
+one_shot = true
+
 [node name="Teleport_Player" type="Node" parent="."]
-script = ExtResource("4_jsgo0")
+script = ExtResource("20_mfhmv")
 
 [node name="Viewport" type="Node" parent="."]
 
 [node name="Active_scene_viewports" type="Node" parent="Viewport" node_paths=PackedStringArray("viewports")]
-script = ExtResource("14_28kqk")
+script = ExtResource("21_jai7k")
 viewports = [NodePath("../Main_SubViewport"), NodePath("../Scanner_SubViewport"), NodePath("../Scanner_x_SubViewport"), NodePath("../Scanner_VORTEX_FX")]
 
 [node name="All_cam_follow" type="Node" parent="Viewport" node_paths=PackedStringArray("_all_cam_array")]
@@ -1138,4 +1152,5 @@ theme_override_font_sizes/font_size = 20
 [connection signal="timeout" from="FADE_OUT/Timer" to="FADE_OUT" method="_on_timer_timeout"]
 [connection signal="process_link" from="ORBE/Orbe_Instancer" to="ORBE/Orbe_Instancer/Link_process" method="_on_orbe_instancer_process_link"]
 [connection signal="timeout" from="ORBE/Orbe_Instancer/Link_stroke_done/Timer" to="ORBE/Orbe_Instancer/Link_stroke_done" method="_on_timer_timeout"]
+[connection signal="timeout" from="SEE_MIRROR_FLASH/Timer" to="SEE_MIRROR_FLASH" method="_on_timer_timeout"]
 [connection signal="area_shape_entered" from="Surface_trigger" to="GO_SURFACE" method="_on_surface_trigger_area_shape_entered"]

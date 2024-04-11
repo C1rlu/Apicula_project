@@ -20,7 +20,7 @@ func check_area(condition : bool):
 		return	
 		
 	timer.start()
-	_global_datas._take_photo.emit()
+	_global_datas._scan_mirror_xray.emit()
 	_global_datas._photo_flash.emit()
 
 	var overlap_areas_ = area.get_overlapping_areas()

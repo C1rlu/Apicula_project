@@ -3,7 +3,7 @@ extends Node
 @export var Teleporter_Orbe : orbe_data
 @export var Mirror_Orbe : orbe_data
 @export var Mirror_Orbe_out : orbe_data
-@export var Movable_Oddity : orbe_data
+@export var Xray_Oddity : orbe_data
 @export var Remover : orbe_data
 
 # CACHE ALL THE ACTUAL TEMPLATE
@@ -89,9 +89,9 @@ func result_condition(result):
 					
 					
 					
-		if result[0] == "teleporter":
+		if result[0] == "Scanner_oddity":
 
-			_global_datas.instance_orbe_result.emit(Movable_Oddity,calculate_center)
+			_global_datas.instance_orbe_result.emit(Xray_Oddity,calculate_center)
 			
 func center_of_mass_points()->Vector3:
 	

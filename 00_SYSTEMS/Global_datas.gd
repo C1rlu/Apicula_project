@@ -45,6 +45,7 @@ func _ready():
 	_strokeID = 0
 	_orbe_visual_scene.clear()
 	_peon_oddity_following.clear()
+	_xray_oddity.clear()
 	
 # input type
 signal using_pad(condition : bool)
@@ -88,15 +89,15 @@ signal _take_note(note_name : String)
 signal _take_Npc_photo(condition : bool)
 signal _show_object_legend(condtion : bool, text : String)
 
+signal _instance_photo(photoData : PhotoData)
+signal _take_photo
 
 
 #subsceneSignal
 signal _load_subscene(condition : bool)
 signal _go_Subscene
-
 var subbscene_playerPosition : Vector3
-signal _take_photo
-signal _instance_photo(photoData : PhotoData)
+signal _scan_mirror_xray
 signal _photo_flash
 signal _subscene_fail
 var flash_subscene_position : Vector3
@@ -130,6 +131,7 @@ signal instance_orbe_result(data : orbe_data, instance_position : Vector3)
 # Oddity # FOR ODDITY IN SCENE
 
 var _peon_oddity_following : Array
+var _xray_oddity : Array
 signal _use_peon_oddity(number : int)
 
 

@@ -8,4 +8,4 @@ func _ready():
 func reset_subcenes_photoData():
 	#clear photo dates list when leave subscene
 	_global_datas._photo_data_scene_list.clear()
-
+	

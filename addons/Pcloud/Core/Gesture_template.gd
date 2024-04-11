@@ -237,7 +237,7 @@ var predefined_point_cloud: Dictionary = {
 		],	
 		
 		
-		"teleporter" : 
+		"Scanner_oddity" : 
 			
 		[
 			Points.Pointa.new(-18.2869344949722,-290.62705039978,2),
