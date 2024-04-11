@@ -210,10 +210,14 @@ func _check_xray_oddity():
 	if _global_datas._xray_oddity.size() == 0:
 		return
 	
+	var random_start_time = randf_range(0.5,1.0)
+	timer.wait_time = random_start_time
 	timer.start()	
 	
 func _flash_mirror():
 
+	_global_datas.flash_x_ray_oddity.emit()
+	
 	if t:
 		t.kill()
 	t = create_tween()

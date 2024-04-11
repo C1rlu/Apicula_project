@@ -6,10 +6,12 @@ var active : bool
 @onready var light_position = $"."
 
 
-
 func _ready():
 	_global_datas._backFrom_subscene.connect(_disable)
 	_global_datas._go_Subscene.connect(_active)
+	
+	
+	
 func _active():
 	
 	active = true
