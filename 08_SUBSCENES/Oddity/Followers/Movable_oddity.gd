@@ -42,7 +42,7 @@ func move_oddity():
 		Photo_data.disable_photoData()
 	
 	_global_datas._peon_oddity_following.append(self)	
-	_global_datas.add_oddity_in_inventory.emit(Oddity_type)
+	#_global_datas.add_oddity_in_inventory.emit(Oddity_type)
 	
 	move = true	
 	
