@@ -1,8 +1,6 @@
 extends Node
 
-
 @export var Oddity_type : oddity_enum.Oddity_list
-
 @export var position_from_player : Vector3
 @export var speed : float
 @onready var root = $".."
@@ -18,8 +16,7 @@ var Photo_data : Node
 var rotation_target : Vector3
 
 func _ready():
-	
-	#_global_datas._photo_flash.connect(reload_follow)
+
 	idle_position = root.global_position
 
 	Mirror_element = get_node_or_null("../Mirror_elements")
@@ -41,11 +38,28 @@ func move_oddity():
 	if Photo_data:
 		Photo_data.disable_photoData()
 	
-	_global_datas._peon_oddity_following.append(self)	
-	#_global_datas.add_oddity_in_inventory.emit(Oddity_type)
+	_global_datas._peon_oddity_following.append(self)
+	_global_datas.add_oddity_in_inventory.emit(Oddity_type)
 	
 	move = true	
 	
+func follow_from_inventory():
+	
+	if move:
+		return
+		
+	random_offset = Vector3(randf_range(-0.5,0.5),randf_range(-0.5,0.5),0.0)
+
+	
+	if Mirror_element:
+		Mirror_element._follow_player = true
+	
+	if Photo_data:
+		Photo_data.disable_photoData()
+	
+	_global_datas._peon_oddity_following.append(self)
+
+	move = true		
 	
 func reload_follow():
 	
