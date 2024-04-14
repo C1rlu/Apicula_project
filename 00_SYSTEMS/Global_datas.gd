@@ -76,7 +76,7 @@ var photo_archives : Array[PhotoData]
 var note_archives : Array[Note_Data]
 var boue_archives : Array[BoueData]
 var tools_list : Array[tool_data]
-
+var oddity_in_inventory : Array[Oddity_data]
 
 signal _show_hand
 signal _hide_hand
@@ -105,6 +105,9 @@ var _selected_tool : tool_data
 signal switching_tool(tool : tool_data)
 
 
+# UPDATE INVENTORY ODDITY LIST BY TYPE
+signal add_oddity_in_inventory(oddity_type : oddity_enum.Oddity_list)
+
 # SUBSCENE ORBE previously teleporter
 signal _teleport_at_position(start_position: Vector3)
 var _teleporter_list : Array[Node] 
@@ -112,8 +115,6 @@ var _photo_data_scene_list : Array[Node]
 
 
 # Orbe Points.Point.New
-
-#signal _instance_visual_Orbe
 signal _instance_start_visual_orbe
 signal _instance_end_visual_orbe
 signal _instance_stroke
@@ -133,13 +134,7 @@ signal instance_orbe_result(data : orbe_data, instance_position : Vector3)
 var _peon_oddity_following : Array
 var _xray_oddity : Array
 signal flash_x_ray_oddity
-
-
 signal _use_peon_oddity(number : int)
-
-
-
-
 
 
 #board scene

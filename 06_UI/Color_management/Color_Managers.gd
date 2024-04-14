@@ -32,7 +32,7 @@ func _open(condition : bool):
 func _Darker_mainScene():
 	
 	
-	KeepInFocus.set_shader_parameter("stayGlobal",true)
+	KeepInFocus.set_shader_parameter("stayGlobal",false)
 
 	
 	if t:

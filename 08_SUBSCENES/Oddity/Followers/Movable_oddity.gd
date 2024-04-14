@@ -1,6 +1,9 @@
 extends Node
 
 
+@export var Oddity_type : oddity_enum.Oddity_list
+
+@export var position_from_player : Vector3
 @export var speed : float
 @onready var root = $".."
 @onready var stop_follow_timer = $Stop_follow_timer
@@ -22,6 +25,7 @@ func _ready():
 	Mirror_element = get_node_or_null("../Mirror_elements")
 	Photo_data = get_node_or_null("../Scanner_Area/Photo_data")
 	rotation_target = Vector3(randf_range(-90.0,90.0),randf_range(-90.0,90.0),randf_range(-90.0,90.0))
+	
 func move_oddity():
 	
 	
@@ -38,7 +42,7 @@ func move_oddity():
 		Photo_data.disable_photoData()
 	
 	_global_datas._peon_oddity_following.append(self)	
-	
+	_global_datas.add_oddity_in_inventory.emit(Oddity_type)
 	
 	move = true	
 	
@@ -60,8 +64,7 @@ func _process(delta):
 
 func _folow_player(delta):
 
-
-	var player_position = _global_datas.flash_subscene_position + random_offset	
+	var player_position = _global_datas.subbscene_playerPosition + position_from_player + random_offset	
 	root.global_position = lerp(root.global_position,player_position, speed * delta)			
 	
 	root.global_rotation = lerp(root.global_rotation,rotation_target, 0.1 * delta)	
