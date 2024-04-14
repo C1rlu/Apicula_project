@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://bwmu5iwushsl5"]
+[gd_scene load_steps=43 format=3 uid="uid://bwmu5iwushsl5"]
 
 [ext_resource type="Texture2D" uid="uid://d31xi5f7tan5w" path="res://05_SHADER_TEST/Full_screen/Dither_pattners/Blue_noise/HDR_LA_7.png" id="1_2l1ih"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/INSTANCE_NOTE.gd" id="1_fcb2u"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://13_TOOLS_UI/Front_element.gd" id="2_y4dp5"]
 [ext_resource type="Texture2D" uid="uid://dto78na6ad5o2" path="res://00_SYSTEMS/KeyOrPad/Key_inputs.png" id="4_c4v0f"]
 [ext_resource type="Material" uid="uid://bxikm4g1nkywk" path="res://06_UI/Disolved_simple_texture.tres" id="4_opffw"]
+[ext_resource type="Script" path="res://13_TOOLS_UI/PhotoFlash.gd" id="5_4ukpq"]
 [ext_resource type="Texture2D" uid="uid://4bq2l5jjm4r2" path="res://00_SYSTEMS/KeyOrPad/Pad_inputs.png" id="5_jufic"]
 
 [sub_resource type="GDScript" id="GDScript_ebu32"]
@@ -31,7 +32,9 @@ func _check_npc_photo():
 		_global_datas._photo_flash.emit()	
 			
 		_global_datas.selected_photoData = photodata
-		instance_photo()
+		_global_datas.ui_photo_flash.emit()
+		_global_datas.show_on_scanner.emit(true)
+		#instance_photo()
 		
 		_global_datas.photo_archives.append(photodata)
 		_global_datas._show_object_legend.emit(true,photodata.legend)
@@ -333,6 +336,183 @@ shader = SubResource("VisualShader_vokeb")
 shader_parameter/Opacity = 0.0
 shader_parameter/Noise = ExtResource("1_2l1ih")
 
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_hq125"]
+parameter_name = "Opacity"
+hint = 1
+default_value_enabled = true
+default_value = 0.5
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_n8xwv"]
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_sogwh"]
+size = Vector2(760, 540)
+expression = "vec2 n_uv = UV -0.5;
+float d = length(n_uv);
+float c = smoothstep(r,r + feather,d);
+color = vec4(vec3(c),1.0);"
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_swa47"]
+constant = -0.4
+
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_8mbkx"]
+default_input_values = [1, Vector2(0, 1), 2, Vector2(0, 0)]
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_kyp6d"]
+input_name = "uv"
+
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_djmbp"]
+default_input_values = [1, Vector2(1.8, 1), 2, Vector2(0.5, 0)]
+function = 1
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_68su6"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_uq8lp"]
+parameter_name = "Dither_size"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_w1a7y"]
+constant = 1.0
+
+[sub_resource type="VisualShader" id="VisualShader_5bryy"]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+uniform float Opacity : hint_range(0, 1) = 0.5;
+global uniform float Dither_size;
+
+
+
+void fragment() {
+// Input:78
+	vec2 n_out78p0 = UV;
+
+
+// UVFunc:79
+	vec2 n_in79p1 = vec2(1.80000, 1.00000);
+	vec2 n_in79p2 = vec2(0.50000, 0.00000);
+	vec2 n_out79p0 = (n_out78p0 - n_in79p2) * n_in79p1 + n_in79p2;
+
+
+// UVFunc:77
+	vec2 n_in77p1 = vec2(0.00000, 1.00000);
+	vec2 n_in77p2 = vec2(0.00000, 0.00000);
+	vec2 n_out77p0 = n_in77p2 * n_in77p1 + n_out79p0;
+
+
+// FloatConstant:75
+	float n_out75p0 = -0.400000;
+
+
+// FloatParameter:34
+	float n_out34p0 = Opacity;
+
+
+	vec4 n_out73p0;
+// Expression:73
+	n_out73p0 = vec4(0.0, 0.0, 0.0, 0.0);
+	{
+		vec2 n_uv = n_out77p0 -0.5;
+		float d = length(n_uv);
+		float c = smoothstep(n_out75p0,n_out75p0 + n_out34p0,d);
+		n_out73p0 = vec4(vec3(c),1.0);
+	}
+
+
+// FloatConstant:82
+	float n_out82p0 = 1.000000;
+
+
+// FloatParameter:81
+	float n_out81p0 = Dither_size;
+
+
+	float n_out80p0;
+// Expression:80
+	n_out80p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out81p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out80p0 = n_out82p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Step:49
+	float n_out49p0 = step(n_out73p0.x, n_out80p0);
+
+
+// Output:0
+	COLOR.a = n_out49p0;
+
+
+}
+"
+mode = 1
+flags/light_only = false
+nodes/fragment/0/position = Vector2(-400, 1800)
+nodes/fragment/34/node = SubResource("VisualShaderNodeFloatParameter_hq125")
+nodes/fragment/34/position = Vector2(-2700, 1540)
+nodes/fragment/49/node = SubResource("VisualShaderNodeStep_n8xwv")
+nodes/fragment/49/position = Vector2(-900, 1800)
+nodes/fragment/73/node = SubResource("VisualShaderNodeExpression_sogwh")
+nodes/fragment/73/position = Vector2(-2080, 1080)
+nodes/fragment/73/size = Vector2(760, 540)
+nodes/fragment/73/input_ports = "0,3,UV;1,0,r;2,0,feather;"
+nodes/fragment/73/output_ports = "0,5,color;"
+nodes/fragment/73/expression = "vec2 n_uv = UV -0.5;
+float d = length(n_uv);
+float c = smoothstep(r,r + feather,d);
+color = vec4(vec3(c),1.0);"
+nodes/fragment/75/node = SubResource("VisualShaderNodeFloatConstant_swa47")
+nodes/fragment/75/position = Vector2(-2560, 1100)
+nodes/fragment/77/node = SubResource("VisualShaderNodeUVFunc_8mbkx")
+nodes/fragment/77/position = Vector2(-2220, 700)
+nodes/fragment/78/node = SubResource("VisualShaderNodeInput_kyp6d")
+nodes/fragment/78/position = Vector2(-3000, 640)
+nodes/fragment/79/node = SubResource("VisualShaderNodeUVFunc_djmbp")
+nodes/fragment/79/position = Vector2(-2580, 780)
+nodes/fragment/80/node = SubResource("VisualShaderNodeExpression_68su6")
+nodes/fragment/80/position = Vector2(-1460, 2300)
+nodes/fragment/80/size = Vector2(724.789, 654.559)
+nodes/fragment/80/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/80/output_ports = "0,0,Dither_Node;"
+nodes/fragment/80/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/81/node = SubResource("VisualShaderNodeFloatParameter_uq8lp")
+nodes/fragment/81/position = Vector2(-1880, 2460)
+nodes/fragment/82/node = SubResource("VisualShaderNodeFloatConstant_w1a7y")
+nodes/fragment/82/position = Vector2(-1700, 2300)
+nodes/fragment/connections = PackedInt32Array(49, 0, 0, 1, 78, 0, 79, 0, 79, 0, 77, 0, 77, 0, 73, 0, 75, 0, 73, 1, 81, 0, 80, 1, 82, 0, 80, 0, 80, 0, 49, 1, 73, 0, 49, 0, 34, 0, 73, 2)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sbiv4"]
+shader = SubResource("VisualShader_5bryy")
+shader_parameter/Opacity = 0.0
+
 [sub_resource type="GDScript" id="GDScript_1c22g"]
 script/source = "extends Node
 
@@ -417,6 +597,19 @@ script = ExtResource("2_2br5g")
 
 [node name="Dots_scanner" type="ColorRect" parent="Photo_tools"]
 material = SubResource("ShaderMaterial_augab")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.784314, 0.709804, 0.513726, 1)
+
+[node name="PhotoFlash" type="Node" parent="."]
+script = ExtResource("5_4ukpq")
+
+[node name="Photo_Flash_2F_FX" type="ColorRect" parent="PhotoFlash"]
+material = SubResource("ShaderMaterial_sbiv4")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

@@ -21,6 +21,7 @@ func set_resolution(index):
 	var current_selected = index
 	
 	if current_selected == 0:
+		
 		get_window().content_scale_size = Vector2(1280,720)
 		_global_datas.set_resolution.emit(Vector2(1280,720))
 	

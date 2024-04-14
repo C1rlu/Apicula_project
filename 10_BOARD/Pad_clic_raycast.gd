@@ -19,7 +19,7 @@ func _input(event):
 	if _global_datas.in_scanner_mode:
 		return
 		
-	if event.is_action_released("Click"):
+	if event.is_action_released("Click_on_board"):
 		if selectable:
 			selectable.on_click.emit(false)
 		
@@ -27,7 +27,7 @@ func _input(event):
 	if !_global_datas.Player_In_Inventory:
 		return	
 			
-	if event.is_action_pressed("Click"):	
+	if event.is_action_pressed("Click_on_board"):	
 		if _pad: 
 	
 			var center_screen = Vector2i(640,360)

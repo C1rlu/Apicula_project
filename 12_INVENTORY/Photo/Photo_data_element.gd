@@ -10,11 +10,13 @@ signal scanner_effect_value(value : float)
 @onready var timer = $Timer
 
 
-
+@export var active_photo_data : bool = true
 var is_scanning : bool = false
 
 func  _ready():
-	_global_datas._photo_data_scene_list.append(self)	
+	
+	if active_photo_data:
+		_global_datas._photo_data_scene_list.append(self)	
 
 func get_PhotoData():
 	return photoData 
