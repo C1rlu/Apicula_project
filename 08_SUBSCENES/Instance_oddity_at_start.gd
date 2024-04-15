@@ -1,29 +1,25 @@
 extends Node
 
-@onready var load_scene = $"../LoadScene"
-
-
-@export var follower_data : Oddity_data
-@export var scannner_data : Oddity_data
+@onready var load_scene = $"../../LoadScene"
+@export var All_Oddity_scene : Array[Oddity_scene_data]
 
 func _ready():
 	_global_datas._end_ini_subscene.connect(instance_oddity)
 
-
-
 #TO INSTANCE IN SCENE
 func instance_oddity():
-	
-	var number_of_follower = _global_datas.oddity_in_inventory.Number_of_followers
-	var number_of_scanner = _global_datas.oddity_in_inventory.Number_of_scanner
-	
-	for i in number_of_follower:
-		instancer(follower_data)	
 
-	for i in number_of_scanner:
-		instancer(scannner_data)	
 	
-func instancer(_oddity : Oddity_data):
+	for o in _global_datas.oddity_list:
+		print(o, " result for oddity current list")
+	
+		for oddity_scene in All_Oddity_scene:	
+			var type = oddity_scene.Oddity_type 
+			if type == o.Oddity_type:
+				instancer(oddity_scene)	 		
+		
+	
+func instancer(_oddity : Oddity_scene_data):
 	
 	var oddity = _oddity.Oddity_prefabs.instantiate()
 	load_scene.add_child(oddity)

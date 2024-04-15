@@ -1,21 +1,23 @@
-[gd_scene load_steps=103 format=3 uid="uid://nigmie4bbn6"]
+[gd_scene load_steps=105 format=3 uid="uid://nigmie4bbn6"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/Grid_scene/Subscene_loader.gd" id="1_7uoo0"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="2_3srhu"]
 [ext_resource type="PackedScene" uid="uid://g7u8o55jrnyy" path="res://08_SUBSCENES/Player_subscene/Player_sub.tscn" id="2_ri8q1"]
 [ext_resource type="Script" path="res://03_CAMERA/CameraFollow_subscene.gd" id="2_tc6o2"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Tools/Switch_tools_input.gd" id="3_2mtx3"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Orbe_Oddity_List.gd" id="3_fuete"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Instance_oddity_at_start.gd" id="3_l4jt1"]
 [ext_resource type="Material" uid="uid://b1iqs8p4it3ni" path="res://05_SHADER_TEST/Full_screen/Subscene_screen/Scanner_subscene_dither.tres" id="3_rto3a"]
 [ext_resource type="Material" uid="uid://dbu2q4lhlk8w5" path="res://05_SHADER_TEST/Full_screen/Subscene_screen/Main_subscene_dither.tres" id="3_w42nb"]
 [ext_resource type="Material" uid="uid://b7ffjkgpmtkc6" path="res://05_SHADER_TEST/Full_screen/Subscene_screen/Scanner_x_subscene_dither.tres" id="4_bkck3"]
 [ext_resource type="Resource" uid="uid://d11cl4f25dgwg" path="res://08_SUBSCENES/Tools/Flash_light.tres" id="4_h1r1k"]
-[ext_resource type="Resource" uid="uid://bvrfmfy83ulsl" path="res://08_SUBSCENES/Oddity/Followers_oddity.tres" id="4_i08uq"]
-[ext_resource type="Resource" uid="uid://b4j40xtcg031c" path="res://08_SUBSCENES/Oddity/Scanner_oddity.tres" id="5_1njfj"]
+[ext_resource type="Resource" uid="uid://bmo1hih816upi" path="res://08_SUBSCENES/Oddity/Oddity_list_Inventory_Data.tres" id="4_y4of1"]
 [ext_resource type="Resource" uid="uid://380xcgsxw62f" path="res://08_SUBSCENES/Tools/Orbe_spawner.tres" id="5_5xftw"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Tools/Play_Orber_tool.gd" id="6_51m8x"]
+[ext_resource type="Resource" uid="uid://bvrfmfy83ulsl" path="res://08_SUBSCENES/Oddity/00_Scene_data/Followers_scene_data.tres" id="6_axwdn"]
 [ext_resource type="Resource" uid="uid://vv3dws7dmhtd" path="res://08_SUBSCENES/Tools/Scanner.tres" id="6_b80v7"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Tools/Play_Scanner.gd" id="7_7awji"]
+[ext_resource type="Resource" uid="uid://b4j40xtcg031c" path="res://08_SUBSCENES/Oddity/00_Scene_data/Scanner_scene_data.tres" id="7_84g34"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Tools/Add_teleporter_inputs.gd" id="8_203nw"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Tools/PhotoData_list_update.gd" id="10_w7dre"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Orbe_Instancer.gd" id="11_dnajt"]
@@ -930,10 +932,13 @@ script = SubResource("GDScript_4qsuv")
 script = ExtResource("2_3srhu")
 viewports = [NodePath("../Viewport/Main_SubViewport"), NodePath("../Viewport/Scanner_SubViewport"), NodePath("../Viewport/Scanner_x_SubViewport")]
 
-[node name="Instance_Oddity_At_Ini" type="Node" parent="."]
+[node name="Orbe_Oddity_List" type="Node" parent="."]
+script = ExtResource("3_fuete")
+oddity_in_inventory_data = ExtResource("4_y4of1")
+
+[node name="Instance_Oddity_At_Ini" type="Node" parent="Orbe_Oddity_List"]
 script = ExtResource("3_l4jt1")
-follower_data = ExtResource("4_i08uq")
-scannner_data = ExtResource("5_1njfj")
+All_Oddity_scene = Array[Resource]([ExtResource("6_axwdn"), ExtResource("7_84g34")])
 
 [node name="PhotoData_list_update" type="Node" parent="."]
 script = ExtResource("10_w7dre")

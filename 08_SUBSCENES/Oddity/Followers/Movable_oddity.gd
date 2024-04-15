@@ -1,6 +1,6 @@
 extends Node
 
-@export var Oddity_type : oddity_enum.Oddity_list
+@export var _Oddity_data : Oddity_data
 @export var position_from_player : Vector3
 @export var speed : float
 @onready var root = $".."
@@ -39,7 +39,7 @@ func move_oddity():
 		Photo_data.disable_photoData()
 	
 	_global_datas._peon_oddity_following.append(self)
-	_global_datas.add_oddity_in_inventory.emit(Oddity_type)
+	_global_datas.add_oddity_to_inventory.emit(_Oddity_data)
 	
 	move = true	
 	
@@ -58,7 +58,7 @@ func follow_from_inventory():
 		Photo_data.disable_photoData()
 	
 	_global_datas._peon_oddity_following.append(self)
-
+	
 	move = true		
 	
 func reload_follow():

@@ -17,8 +17,7 @@ func instance_orbe(orbe : orbe_data,instance_position : Vector3):
 	var oddity_following = _global_datas._peon_oddity_following.size()
 	
 	if oddity_following >= oddity_need:
-		
-
+	
 		var instance = orbe.Orbe_Result_prefabs.instantiate()
 		instance.position = instance_position
 		load_scene.add_child(instance)

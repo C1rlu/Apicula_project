@@ -6,7 +6,7 @@ extends RigidBody3D
 
 func _physics_process(_delta):
 	
-	move_a()
+	move_b()
 
 func move_a():
 	
@@ -52,6 +52,18 @@ func move_a():
 
 
 func move_b():
+	
+	
+	if _global_datas.Player_In_Inventory:
+		return
+	
+	if _global_datas.Player_InSubScene:
+		return
+	if _global_datas.Player_InMenu:
+		return
+		
+	if _global_datas.Player_InDialogue:
+		return	
 	
 	var direction = Vector3.ZERO;
 	var translation = get_global_transform().origin
