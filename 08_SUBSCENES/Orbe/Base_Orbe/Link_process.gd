@@ -13,11 +13,13 @@ var start_position : Vector3
 var curve
 
 func _ready():
-
+	
 	curve = path_3d.get_curve()
 	
 func _process(delta):
 	
+	if !_global_datas.Player_InSubScene:
+		return
 	if !_is_processing:
 		return
 
@@ -37,14 +39,14 @@ func check_distance():
 	#print(distance)
 	
 func _on_orbe_instancer_process_link(condition, start_point):
-	
+	print("emit_linker")
 	process_link.visible = condition
 	
 	_is_processing = condition
 	start_position = start_point
 
 func disable():
-	
+	print("disable_linker")
 	process_link.visible = false
 	_is_processing = false
 	orber_tool.cancel_action_signal.emit()

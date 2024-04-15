@@ -42,7 +42,7 @@ input_name = "vertex"
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_lpfcw"]
 noise_type = 0
-frequency = 0.0004
+frequency = 0.0001
 fractal_weighted_strength = 1.0
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_bm54w"]
@@ -57,7 +57,7 @@ texture = SubResource("NoiseTexture2D_bm54w")
 input_name = "time"
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_alpm2"]
-constant = 0.5
+constant = 0.25
 
 [sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_7cc3i"]
 
@@ -65,11 +65,11 @@ constant = 0.5
 operator = 2
 
 [sub_resource type="VisualShaderNodeSmoothStep" id="VisualShaderNodeSmoothStep_4ptmb"]
-default_input_values = [0, 0.0, 1, 0.49, 2, 0.415]
+default_input_values = [0, 0.0, 1, 0.0, 2, 0.5]
 
 [resource]
 code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded, shadows_disabled, ambient_light_disabled;
 
 uniform vec4 ColorParameter2 : source_color;
 global uniform float Dither_size;
@@ -131,7 +131,10 @@ void fragment() {
 
 }
 "
+graph_offset = Vector2(-898.594, -60.7131)
 flags/unshaded = true
+flags/shadows_disabled = true
+flags/ambient_light_disabled = true
 nodes/vertex/2/node = SubResource("VisualShaderNodeInput_r8px5")
 nodes/vertex/2/position = Vector2(-520, 380)
 nodes/vertex/3/node = SubResource("VisualShaderNodeTexture_jog4u")
@@ -148,7 +151,7 @@ nodes/vertex/8/node = SubResource("VisualShaderNodeFloatOp_wjmdw")
 nodes/vertex/8/position = Vector2(-1060, 300)
 nodes/vertex/9/node = SubResource("VisualShaderNodeSmoothStep_4ptmb")
 nodes/vertex/9/position = Vector2(-360, 140)
-nodes/vertex/connections = PackedInt32Array(6, 0, 8, 1, 7, 0, 3, 0, 2, 0, 4, 1, 5, 0, 8, 0, 8, 0, 7, 2, 3, 0, 9, 0, 9, 0, 4, 0)
+nodes/vertex/connections = PackedInt32Array(2, 0, 4, 1, 7, 0, 3, 0, 3, 0, 9, 0, 9, 0, 4, 0, 5, 0, 8, 0, 6, 0, 8, 1, 8, 0, 7, 2)
 nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_nos7h")
 nodes/fragment/2/position = Vector2(-860, -40)
 nodes/fragment/3/node = SubResource("VisualShaderNodeFresnel_rsvp0")

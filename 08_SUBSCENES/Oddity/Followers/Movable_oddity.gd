@@ -107,3 +107,7 @@ func _on_stop_follow_timer_timeout():
 	move = false
 	idle_position = root.global_position
 
+
+
+func _on_tree_exited():
+	_global_datas._peon_oddity_following.erase(self)

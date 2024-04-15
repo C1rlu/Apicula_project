@@ -19,6 +19,11 @@ func _ready():
 	_global_datas._instance_start_visual_orbe.connect(_instance_start_orbe)
 	_global_datas._instance_end_visual_orbe.connect(_instance_end_orbe)
 	
+	_global_datas._backFrom_subscene.connect(clear_orberSceneList)
+
+func clear_orberSceneList():
+	_global_datas._orbe_visual_scene.clear()
+	
 func _instance_start_orbe():
 	
 	if _global_datas._orbe_visual_scene.size() > orbe_stroke_maxLenght:
