@@ -76,7 +76,6 @@ var photo_archives : Array[PhotoData]
 var note_archives : Array[Note_Data]
 var boue_archives : Array[BoueData]
 var tools_list : Array[tool_data]
-var oddity_in_inventory : Oddity_list_data
 var oddity_list : Array[Oddity_data]
 
 
@@ -109,9 +108,9 @@ signal switching_tool(tool : tool_data)
 
 
 # UPDATE INVENTORY ODDITY LIST BY TYPE
-signal add_oddity_in_inventory(oddity_type : oddity_enum.Oddity_list)
-signal add_oddity_to_inventory(oddity : Oddity_data)
 
+signal add_oddity_to_inventory(oddity : Oddity_data)
+signal remove_oddity_to_inventory(oddity : Oddity_data)
 
 # SUBSCENE ORBE previously teleporter
 

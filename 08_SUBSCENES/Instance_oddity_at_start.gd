@@ -2,10 +2,11 @@ extends Node
 
 @onready var load_scene = $"../../LoadScene"
 @export var All_Oddity_scene : Array[Oddity_scene_data]
-
+@export var Oddity_inventory : Array[Oddity_data]
 func _ready():
 	_global_datas._end_ini_subscene.connect(instance_oddity)
-
+	_global_datas.oddity_list = Oddity_inventory
+	
 #TO INSTANCE IN SCENE
 func instance_oddity():
 
@@ -25,5 +26,5 @@ func instancer(_oddity : Oddity_scene_data):
 	load_scene.add_child(oddity)
 	
 	oddity.position = _global_datas.subbscene_playerPosition
-	oddity.follow_from_inventory()
+	oddity.follow.emit()
 

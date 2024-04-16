@@ -5,10 +5,11 @@ extends Node3D
 
 
 signal show_on_map
-var on_map = false
+@export var on_map = false
 func _ready():
-	flag.visible = false
-	flag_off.visible = true
+	pass
+	#flag.visible = false
+	#flag_off.visible = true
 	
 
 

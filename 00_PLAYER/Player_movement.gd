@@ -6,7 +6,7 @@ extends RigidBody3D
 
 func _physics_process(_delta):
 	
-	move_b()
+	move_a()
 
 func move_a():
 	
@@ -51,7 +51,7 @@ func move_a():
 	self.transform.origin.y = 0.0
 
 
-func move_b():
+func move_b(_delta):
 	
 	
 	if _global_datas.Player_In_Inventory:
@@ -81,7 +81,7 @@ func move_b():
 	# add movement	
 	if(translation + direction != translation):
 		look_at(translation + direction, Vector3.UP)
-		
+
 	if direction != Vector3.ZERO:
 		direction = direction.normalized()	
 		

@@ -15,6 +15,8 @@ var Photo_data : Node
 
 var rotation_target : Vector3
 
+signal kill_this
+
 func _ready():
 
 	idle_position = root.global_position
@@ -30,10 +32,9 @@ func move_oddity():
 		return
 		
 	random_offset = Vector3(randf_range(-0.5,0.5),randf_range(-0.5,0.5),0.0)
-	#stop_follow_timer.start()
-	
+
 	if Mirror_element:
-		Mirror_element._follow_player = true
+		Mirror_element._follow_player = true 
 	
 	if Photo_data:
 		Photo_data.disable_photoData()
@@ -77,6 +78,7 @@ func _process(delta):
 	
 
 func _folow_player(delta):
+	
 
 	var player_position = _global_datas.subbscene_playerPosition + position_from_player + random_offset	
 	root.global_position = lerp(root.global_position,player_position, speed * delta)			
@@ -91,11 +93,7 @@ func _idle(delta):
 
 	root.global_rotation = lerp(root.global_rotation,rotation_target, 0.05 * delta)
 	
-func kill_oddity():
-	_global_datas._peon_oddity_following.erase(self)
-	root.queue_free()
 
-	
 func _on_random_range_update_timeout():
 	
 	if !move:
@@ -110,4 +108,14 @@ func _on_stop_follow_timer_timeout():
 
 
 func _on_tree_exited():
+	
 	_global_datas._peon_oddity_following.erase(self)
+	
+	if !_global_datas.Player_InSubScene:
+		return
+	_global_datas.remove_oddity_to_inventory.emit(_Oddity_data)
+	
+
+
+func _on_movable_oddity_example_follow():
+	follow_from_inventory()

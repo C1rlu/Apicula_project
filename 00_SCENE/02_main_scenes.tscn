@@ -1,4 +1,4 @@
-[gd_scene load_steps=79 format=3 uid="uid://cnmptm7i0xxmj"]
+[gd_scene load_steps=82 format=3 uid="uid://cnmptm7i0xxmj"]
 
 [ext_resource type="Script" path="res://00_SCENE/Active_Decor_Scene.gd" id="1_ounvv"]
 [ext_resource type="PackedScene" uid="uid://vpdvl0v7dubd" path="res://00_PLAYER/Player_boat.tscn" id="1_qltht"]
@@ -18,7 +18,9 @@
 [ext_resource type="Material" uid="uid://b64juw612xqpu" path="res://05_SHADER_TEST/Sea_sh/Sea_mat.tres" id="7_4y8ld"]
 [ext_resource type="Texture2D" uid="uid://dafg2qvpi6wmk" path="res://06_UI/Loader_circle/Loader_circle.png" id="8_eaeqh"]
 [ext_resource type="PackedScene" uid="uid://dla1534gcagbl" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Pine/pine_prefabs.tscn" id="10_c6r5x"]
+[ext_resource type="Texture2D" uid="uid://dcw858b7ly30k" path="res://06_UI/Controller/x_pad.png" id="10_ftn2e"]
 [ext_resource type="PackedScene" uid="uid://cjp6vd8eetmyf" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Iceberg/ice_berg_03.tscn" id="10_h0nl5"]
+[ext_resource type="Shader" uid="uid://b4xbrp36syqmj" path="res://06_UI/Controller/Pad_ui_info_sh.tres" id="10_n0t7r"]
 [ext_resource type="PackedScene" uid="uid://cegdqm3et2y35" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Iceberg/ice_berg_02.tscn" id="11_086vv"]
 [ext_resource type="PackedScene" uid="uid://d3h77dy71bcme" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Iceberg/ice_berg_01.tscn" id="12_638yx"]
 [ext_resource type="PackedScene" uid="uid://biiofg53lwx38" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Mountain/Mountain_03.tscn" id="14_fqdgl"]
@@ -284,6 +286,10 @@ func active_buton():
 
 
 "
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_oj3lt"]
+shader = ExtResource("10_n0t7r")
+shader_parameter/Color = Color(0.721569, 0.580392, 0.407843, 1)
 
 [sub_resource type="GDScript" id="GDScript_mdv56"]
 script/source = "extends Node
@@ -842,6 +848,12 @@ text = "..."
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="XPad" type="Sprite2D" parent="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue/Button"]
+material = SubResource("ShaderMaterial_oj3lt")
+position = Vector2(54.1213, 11.5974)
+scale = Vector2(0.365326, 0.365326)
+texture = ExtResource("10_ftn2e")
+
 [node name="Go_subscene_progress" type="TextureProgressBar" parent="."]
 anchors_preset = 7
 anchor_left = 0.5
@@ -876,7 +888,7 @@ physics_material_override = SubResource("PhysicsMaterial_ituqr")
 max_contacts_reported = 10
 move_speed = 6.0
 maxSpeed = 5.0
-rotation_speed = 3.0
+rotation_speed = 5.0
 
 [node name="OmniLight3D2" type="OmniLight3D" parent="--DECOR--/Player_Boat"]
 transform = Transform3D(1, -3.55271e-15, 0, 2.11758e-22, 0.342545, 0.939501, 0, -0.939501, 0.342545, 0.130404, 3.19906, -0.0379682)
