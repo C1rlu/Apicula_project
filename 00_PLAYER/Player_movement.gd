@@ -6,7 +6,7 @@ extends RigidBody3D
 
 func _physics_process(_delta):
 	
-	move_a()
+	move_c()
 
 func move_a():
 	
@@ -51,7 +51,7 @@ func move_a():
 	self.transform.origin.y = 0.0
 
 
-func move_b(_delta):
+func move_b():
 	
 	
 	if _global_datas.Player_In_Inventory:
@@ -87,3 +87,19 @@ func move_b(_delta):
 		
 	apply_central_force(direction * move_speed)		
 	self.transform.origin.y = 0.0
+
+func move_c():
+	
+	
+	var translation = get_global_transform().origin
+	_global_datas.player_position = translation
+	_global_datas.player_boat_rotation = rotation
+	
+
+func _input(event):
+	
+	if event is InputEventJoypadMotion:
+		print(
+				"Device: %s. Joypad Axis Index: %s. Strength: %s."
+				% [event.device, event.axis, event.axis_value]
+		)
