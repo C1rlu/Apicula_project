@@ -6,7 +6,7 @@ extends RigidBody3D
 
 func _physics_process(_delta):
 	
-	move_c()
+	move_a()
 
 func move_a():
 	
@@ -95,11 +95,49 @@ func move_c():
 	_global_datas.player_position = translation
 	_global_datas.player_boat_rotation = rotation
 	
-
-func _input(event):
+	var velocity = Input.get_vector("move_right", "move_left","move_backward" , "move_forward")
+	#if velocity != Vector2.ZERO:
+		#print(velocity.length())
 	
-	if event is InputEventJoypadMotion:
-		print(
-				"Device: %s. Joypad Axis Index: %s. Strength: %s."
-				% [event.device, event.axis, event.axis_value]
-		)
+	#var engine : int
+	#if Input.is_action_pressed("boat_engine_forward"):
+		#engine = 1
+		#var forward_vector = -transform.basis.z
+		#apply_central_force(forward_vector * 5 * engine)	
+		#
+	#if Input.is_action_pressed("boat_engine_backward"):
+		#engine = -1	
+		#var forward_vector = transform.basis.z
+		#apply_central_force(-forward_vector * 5 * engine)			
+		
+	if velocity.length_squared() > 0.0:
+		# Calculate the angle of rotation based on input velocity
+		var target_rotation = atan2(velocity.x, velocity.y)
+		var velocity_magnitude = velocity.length()
+		# Smoothly rotate towards the target rotation
+		rotation.y = lerp_angle(rotation.y, target_rotation, 0.01)
+		self.transform.origin.y = 0.0
+		var forward_vector = transform.basis.z
+		apply_central_force(-forward_vector * 5 * velocity_magnitude)	
+		
+# Helper function to smoothly interpolate between angles
+func lerp_angle(from, to, weight):
+	var difference = wrap_angle(to - from)
+	return from + difference * weight
+
+# Helper function to wrap angle to -180 to 180 degrees range
+func wrap_angle(angle):
+	if angle > PI:
+		return angle - PI*2
+	elif angle < -PI:
+		return angle + PI*2
+	else:
+		return angle
+	#
+#func _input(event):
+	#
+	#if event is InputEventJoypadMotion:
+		#print(
+				#"Device: %s. Joypad Axis Index: %s. Strength: %s."
+				#% [event.device, event.axis, event.axis_value]
+		#)
