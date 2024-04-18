@@ -2,6 +2,7 @@ extends Node
 
 
 @export var orber_tool : tool_data 
+@export var scanner_spawner_tool : tool_data
 
 @onready var process_link = $"../../../Process_link"
 @onready var path_3d : Path3D = $"../../../Process_link/Path3D"
@@ -15,6 +16,8 @@ var curve
 func _ready():
 	
 	curve = path_3d.get_curve()
+	
+	scanner_spawner_tool.tool_active_signal.connect(disable)
 	
 func _process(delta):
 	
@@ -35,17 +38,20 @@ func check_distance():
 	var distance = start_position.distance_squared_to(end_position)
 	
 	if distance > 4.0:
-		disable()
+		disable(false)
 	#print(distance)
 	
 func _on_orbe_instancer_process_link(condition, start_point):
 	
+	
 	process_link.visible = condition
 	
 	_is_processing = condition
+	if !start_point:
+		return
 	start_position = start_point
 
-func disable():
+func disable(condition):
 
 	process_link.visible = false
 	_is_processing = false

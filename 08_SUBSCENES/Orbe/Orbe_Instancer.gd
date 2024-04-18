@@ -10,7 +10,7 @@ const BASE_ORBE_VISUAL_PREFABS = preload("res://08_SUBSCENES/Orbe/Base_Orbe/Base
 
 @export var orbe_stroke_maxLenght = 10;
 
-
+@export var orber_tool : tool_data 
 signal process_link(condition : bool, start_point : Vector3)
 
 
@@ -20,9 +20,15 @@ func _ready():
 	_global_datas._instance_end_visual_orbe.connect(_instance_end_orbe)
 	
 	_global_datas._backFrom_subscene.connect(clear_orberSceneList)
-
+	_global_datas._photo_flash.connect(clear_orberSceneList)
+	orber_tool.cancel_action_signal.connect(stop_tracing)
+	
 func clear_orberSceneList():
 	_global_datas._orbe_visual_scene.clear()
+	process_link.emit(false,null)
+	
+func stop_tracing():
+	process_link.emit(false,null)	
 	
 func _instance_start_orbe():
 	
@@ -48,7 +54,7 @@ func _instance_end_orbe():
 	load_scene.add_child(orbe)
 	_global_datas._orbe_visual_scene.append(orbe)				
 	orbe.position  = get_target()
-	process_link.emit(false,orbe.position)
+	process_link.emit(true,orbe.position)
 	# LINK ORBE AT THE END
 	_global_datas._instance_stroke.emit()
 	
