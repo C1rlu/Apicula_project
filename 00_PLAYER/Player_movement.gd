@@ -91,7 +91,7 @@ func move_b():
 	if velocity.length_squared() > 0.0:
 		var target_rotation = atan2(velocity.x, velocity.y)
 		var current_rotation = get_rotation().y
-
+		print(target_rotation)
 		# Calculate the difference in rotation
 		var rotation_difference = wrap_angle(target_rotation - current_rotation)
 
@@ -127,38 +127,40 @@ func move_c():
 		
 	if _global_datas.Player_InDialogue:
 		return	
-	
-	var direction = Vector3.ZERO;
+		
 	var translation = get_global_transform().origin
 	_global_datas.player_position = translation
 	
-	
-	# DIRECTION
-	
-	if Input.is_action_pressed(("move_right")):
-		direction.x += 1
-	if Input.is_action_pressed(("move_left")):  
-		direction.x -= 1
-	if Input.is_action_pressed(("move_forward")):
-		direction.z -= 1	
-	if Input.is_action_pressed(("move_backward")):
-		direction.z += 1	
-		
-	if direction != Vector3.ZERO:
-		direction = direction.normalized()	
-		
-	apply_central_force(direction * move_speed)		
 
-	# ROTATION
+
 	var velocity = Input.get_vector("move_right", "move_left","move_backward" , "move_forward")
 	 # Calculate the torque based on input velocity
 	if velocity.length_squared() > 0.0:
+		
+		
 		var target_rotation = atan2(velocity.x, velocity.y)
 		var current_rotation = get_rotation().y
 
+		# Calculate direction vector in X-Z plane based on rotation
+		var direction_x = sin(target_rotation)
+		var direction_z = cos(target_rotation)
+
+		# Create a 3D vector for the force direction (assuming Y-axis is up)
+		var force_direction = Vector3(-direction_x, 0.0, -direction_z).normalized()
+
+		# Apply central force in the calculated direction
+		apply_central_force(force_direction * move_speed)
+
+
+		var rotation_limit = abs(target_rotation - current_rotation)
+		var range_threshold = 0.1
+		if rotation_limit <= range_threshold:
+			print("ROTATION DONE")	
+			return
+	
 		# Calculate the difference in rotation
 		var rotation_difference = wrap_angle(target_rotation - current_rotation)
-
+		
 		 # Determine the direction of torque (1 or -1)
 		var torque_direction = 0.0
 		if rotation_difference > 0.0:
@@ -168,14 +170,15 @@ func move_c():
 		else:
 			torque_direction = 0.0  # No torque needed if rotation_difference is zero
 
-
 		var current_velocity = linear_velocity
 		var current_speed = current_velocity.length()
 		# Apply torque to rotate towards the target rotation
 		var torque_vector = Vector3(0.0, torque_direction * current_speed * rotation_speed, 0.0)
 		apply_torque(torque_vector)
 		
-	self.transform.origin.y = 0.0	
+	self.transform.origin.y = 0.0
+	
+		
 # Helper function to smoothly interpolate between angles
 func lerp_angle(from, to, weight):
 	var difference = wrap_angle(to - from)
@@ -189,11 +192,4 @@ func wrap_angle(angle):
 		return angle + PI*2
 	else:
 		return angle
-	#
-#func _input(event):
-	#
-	#if event is InputEventJoypadMotion:
-		#print(
-				#"Device: %s. Joypad Axis Index: %s. Strength: %s."
-				#% [event.device, event.axis, event.axis_value]
-		#)
+	

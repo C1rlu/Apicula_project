@@ -13,11 +13,19 @@ func disable():
 	
 func _input(event):
 	
+	
+	
+	
 	if !_global_datas.Player_InSubScene:
 		return
 	
 	if _global_datas.Player_InMenu:
 		return
+		
+	if _global_datas.Player_In_Inventory:
+		return
+	
+	
 	if event.is_action_pressed("Click"):
 		_global_datas.switching_tool.emit(tool_type)
 		tool_type.tool_active_signal.emit(true)

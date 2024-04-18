@@ -71,7 +71,7 @@ func result_condition(result):
 			_global_datas.instance_orbe_result.emit(Remover,calculate_center)		
 			
 	
-		if result[0] == "Portal":
+		if result[0] == "Time":
 			
 			if !_global_datas.Player_InMirrorScene:
 				
@@ -97,13 +97,14 @@ func center_of_mass_points()->Vector3:
 	
 	var center = Vector3.ZERO#_global_datas._orbe_stroke_scene[0].position
 	 # Calculate the sum of all points
+	
 	for point in _global_datas._orbe_visual_scene:
 		center += point.position
-	
+		
 	# Divide the sum by the number of points to get the average
 	if _global_datas._orbe_visual_scene.size() > 0:
 		center /= _global_datas._orbe_visual_scene.size()	
-	
+		
 	
 	return center
 	

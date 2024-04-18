@@ -20,7 +20,7 @@ func _ready():
 	_global_datas._instance_end_visual_orbe.connect(_instance_end_orbe)
 	
 	_global_datas._backFrom_subscene.connect(clear_orberSceneList)
-	_global_datas._photo_flash.connect(clear_orberSceneList)
+	_global_datas._photo_flash.connect(stop_tracing)
 	orber_tool.cancel_action_signal.connect(stop_tracing)
 	
 func clear_orberSceneList():
