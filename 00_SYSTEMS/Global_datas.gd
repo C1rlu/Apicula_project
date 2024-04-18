@@ -53,7 +53,7 @@ var move_right : String
 var move_left : String
 var move_forward : String
 var move_backward : String
-
+signal using_turnLogic(condition : bool)
 # scene signals
 
 signal _go_Mainscene

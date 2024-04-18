@@ -515,7 +515,7 @@ script/source = "extends Area3D
 @export var Npc_data : Npc_datas
 @export var hide_this : Node3D
 var _active : bool = false
-
+@export var disable = true
 func _ready():
 	_global_datas._open_dialogue.connect(_hide)
 	_global_datas._close_dialogue.connect(_show)
@@ -536,6 +536,9 @@ func _show():
 
 				
 func _on_area_entered(_area):
+	
+	if disable:
+		return
 	_active = true
 	_global_datas.Npc_Dialogue = Npc_data
 	
@@ -546,6 +549,8 @@ func _on_area_entered(_area):
 		_global_datas._show_object_legend.emit(true,Npc_data.zone_name)
 	
 func _on_area_exited(_area):
+	if disable:
+		return
 	_global_datas.Npc_Dialogue = null
 	_global_datas.out_dialogue_zone.emit()
 	_active = false
@@ -886,9 +891,9 @@ input_ray_pickable = false
 mass = 4.0
 physics_material_override = SubResource("PhysicsMaterial_ituqr")
 max_contacts_reported = 10
-move_speed = 3.0
+move_speed = 5.0
 maxSpeed = 4.0
-rotation_speed = 3.0
+rotation_speed = 5.0
 
 [node name="OmniLight3D2" type="OmniLight3D" parent="--DECOR--/Player_Boat"]
 transform = Transform3D(1, -3.55271e-15, 0, 2.11758e-22, 0.342545, 0.939501, 0, -0.939501, 0.342545, 0.130404, 3.19906, -0.0379682)
@@ -958,39 +963,6 @@ script = SubResource("GDScript_i66w8")
 [node name="Pine_prefabs" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_c6r5x")]
 transform = Transform3D(0.0545151, 0, 0.0545151, 0, 0.077096, 0, -0.0545151, 0, 0.0545151, 3.2319, 0.0817456, -2.66318)
 
-[node name="Pine_prefabs9" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_c6r5x")]
-transform = Transform3D(0.0545151, 0, 0.0545151, 0, 0.077096, 0, -0.0545151, 0, 0.0545151, 5.47213, 0.345963, 1.59928)
-
-[node name="Pine_prefabs10" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_c6r5x")]
-transform = Transform3D(0.0579629, 0, 0.0508339, 0, 0.077096, 0, -0.0508339, 0, 0.0579629, 5.78435, 0.603637, 0.491063)
-
-[node name="Pine_prefabs11" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_c6r5x")]
-transform = Transform3D(0.0660738, 0, -0.0397247, 0, 0.077096, 0, 0.0397247, 0, 0.0660738, 5.94377, 0.477386, 1.18782)
-
-[node name="Pine_prefabs12" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_c6r5x")]
-transform = Transform3D(0.016035, 0, -0.049225, 0, 0.0517709, 0, 0.049225, 0, 0.016035, 6.73643, 0.541952, 1.19464)
-
-[node name="Pine_prefabs13" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_c6r5x")]
-transform = Transform3D(0.016035, 0, -0.049225, 0, 0.0517709, 0, 0.049225, 0, 0.016035, 5.26729, 0.401321, 1.21414)
-
-[node name="Pine_prefabs14" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_c6r5x")]
-transform = Transform3D(0.016035, 0, -0.049225, 0, 0.0517709, 0, 0.049225, 0, 0.016035, 6.99264, 0.635002, 0.254115)
-
-[node name="Pine_prefabs15" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_c6r5x")]
-transform = Transform3D(-0.0289184, 0, -0.0429412, 0, 0.0517709, 0, 0.0429412, 0, -0.0289184, 6.49081, 0.446315, 1.27244)
-
-[node name="Pine_prefabs16" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_c6r5x")]
-transform = Transform3D(-0.038259, 0, -0.056811, 0, 0.0684926, 0, 0.056811, 0, -0.038259, 6.63197, 0.340055, 1.60303)
-
-[node name="Pine_prefabs17" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_c6r5x")]
-transform = Transform3D(-0.038259, 0, -0.056811, 0, 0.0684926, 0, 0.056811, 0, -0.038259, 7.39401, 0.561633, 0.471473)
-
-[node name="Pine_prefabs18" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_c6r5x")]
-transform = Transform3D(-0.0313252, 0, -0.046515, 0, 0.0560795, 0, 0.046515, 0, -0.0313252, 7.75434, 0.561633, 1.25328)
-
-[node name="Pine_prefabs19" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_c6r5x")]
-transform = Transform3D(-0.0264121, 0, -0.0392195, 0, 0.0472839, 0, 0.0392195, 0, -0.0264121, 7.96182, 0.62868, 0.739459)
-
 [node name="Pine_prefabs2" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_c6r5x")]
 transform = Transform3D(0.0758118, 0.000890531, -0.0139848, -0.000905554, 0.0770907, 0, 0.0139838, 0.000164263, 0.075817, 3.84225, 0.0817495, -2.88538)
 
@@ -1012,19 +984,58 @@ transform = Transform3D(0.0327151, 0, 0.0529868, 0, 0.0622726, 0, -0.0529868, 0,
 [node name="Pine_prefabs8" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_c6r5x")]
 transform = Transform3D(-0.018676, 0, 0.0594061, 0, 0.0622726, 0, -0.0594061, 0, -0.018676, 4.79783, 0.390122, -3.10797)
 
+[node name="Node3D" type="Node3D" parent="--DECOR--/WORLD_ELEMENTS"]
+transform = Transform3D(0.0545151, 0, 0.0545151, 0, 0.077096, 0, -0.0545151, 0, 0.0545151, 5.61599, 0.345963, -1.03435)
+
+[node name="Pine_prefabs9" parent="--DECOR--/WORLD_ELEMENTS/Node3D" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Pine_prefabs10" parent="--DECOR--/WORLD_ELEMENTS/Node3D" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(0.997859, 0, -0.0653855, 0, 1, 0, 0.0653855, 0, 0.997859, 13.0279, 3.34225, -7.3007)
+
+[node name="Pine_prefabs11" parent="--DECOR--/WORLD_ELEMENTS/Node3D" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(0.241668, 0, -0.970359, 0, 1, 0, 0.970359, 0, 0.241668, 8.09959, 1.70467, 0.551956)
+
+[node name="Pine_prefabs12" parent="--DECOR--/WORLD_ELEMENTS/Node3D" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(-0.304411, 0, -0.59855, 0, 0.671512, 0, 0.59855, 0, -0.304411, 15.3071, 2.54214, 7.88461)
+
+[node name="Pine_prefabs13" parent="--DECOR--/WORLD_ELEMENTS/Node3D" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(-0.304411, 0, -0.59855, 0, 0.671512, 0, 0.59855, 0, -0.304411, 1.65367, 0.71804, -5.41116)
+
+[node name="Pine_prefabs14" parent="--DECOR--/WORLD_ELEMENTS/Node3D" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(-0.304411, 0, -0.59855, 0, 0.671512, 0, 0.59855, 0, -0.304411, 26.2833, 3.74908, 1.60822)
+
+[node name="Pine_prefabs15" parent="--DECOR--/WORLD_ELEMENTS/Node3D" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(-0.65908, 0, -0.128614, 0, 0.671512, 0, 0.128614, 0, -0.65908, 12.3408, 1.30165, 6.3454)
+
+[node name="Pine_prefabs16" parent="--DECOR--/WORLD_ELEMENTS/Node3D" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(-0.87196, 0, -0.170155, 0, 0.888407, 0, 0.170155, 0, -0.87196, 10.6034, -0.0766315, 10.6722)
+
+[node name="Pine_prefabs17" parent="--DECOR--/WORLD_ELEMENTS/Node3D" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(-0.87196, 0, -0.170155, 0, 0.888407, 0, 0.170155, 0, -0.87196, 27.971, 2.79742, 7.28306)
+
+[node name="Pine_prefabs18" parent="--DECOR--/WORLD_ELEMENTS/Node3D" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(-0.713932, 0, -0.139317, 0, 0.727398, 0, 0.139317, 0, -0.713932, 24.1053, 2.79742, 17.7585)
+
+[node name="Pine_prefabs19" parent="--DECOR--/WORLD_ELEMENTS/Node3D" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(-0.601958, 0, -0.117467, 0, 0.613312, 0, 0.117467, 0, -0.601958, 30.7209, 3.66708, 14.9488)
+
+[node name="IceBerg_09" parent="--DECOR--/WORLD_ELEMENTS/Node3D" instance=ExtResource("15_bqwbg")]
+transform = Transform3D(-4.85638, 0, 4.85638, 0, 6.86796, 0, -4.85638, 0, -4.85638, 9.52378, -7.44586, 5.37502)
+
 [node name="IceBerg_06" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_h0nl5")]
-transform = Transform3D(0.437557, 0, -0.0971482, 0, 0.448212, 0, 0.0971482, 0, 0.437557, 0.379852, -0.479977, -4.6597)
+transform = Transform3D(0.437557, 0, -0.0971482, 0, 0.448212, 0, 0.0971482, 0, 0.437557, -0.559818, -0.479977, -5.12929)
 
 [node name="IceBerg_07" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_h0nl5")]
 transform = Transform3D(0.717731, 0, -0.0726512, 0, 0.721399, 0, 0.0726512, 0, 0.717731, -5.977, -0.656455, -3.08)
 
 [node name="IceBerg_05" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("11_086vv")]
-transform = Transform3D(0.256164, 0, 0.371844, 0, 0.45154, 0, -0.371844, 0, 0.256164, 5.18118, -0.477896, -2.15945)
+transform = Transform3D(-0.451264, 0, -0.0157661, 0, 0.45154, 0, 0.0157661, 0, -0.451264, 4.03894, -0.477896, -1.90279)
 layers = 1
 cast_shadow = 0
 
 [node name="IceBerg_04" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("12_638yx")]
-transform = Transform3D(-0.32981, 0, -0.246846, 0, 0.411956, 0, 0.246846, 0, -0.32981, 8.42354, -0.461466, -2.29614)
+transform = Transform3D(-0.398389, 0, -0.10485, 0, 0.411956, 0, 0.10485, 0, -0.398389, 6.93768, -0.461466, -1.98758)
 layers = 1
 
 [node name="IceBerg_08" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("12_638yx")]
@@ -1032,16 +1043,13 @@ transform = Transform3D(-0.334611, 0, 0.0349742, 0, 0.336434, 0, -0.0349742, 0, 
 layers = 1
 
 [node name="IceBerg_03" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("14_fqdgl")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0521567, -0.215266, -7.01901)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7709, -0.215266, -7.01901)
 
 [node name="IceBerg_01" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("15_bqwbg")]
 transform = Transform3D(-0.529492, 0, 2.98023e-08, 0, 0.529492, 0, -2.98023e-08, 0, -0.529492, 5.51049, -0.219669, -3.51967)
 
 [node name="IceBerg_10" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("15_bqwbg")]
 transform = Transform3D(-0.273803, 0, 2.84997e-08, 0, 0.386791, 0, -1.54109e-08, 0, -0.506349, 3.20761, -0.22111, -3.19881)
-
-[node name="IceBerg_09" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("15_bqwbg")]
-transform = Transform3D(-0.529492, 0, 2.98023e-08, 0, 0.529492, 0, -2.98023e-08, 0, -0.529492, 6.28434, -0.228083, 1.37311)
 
 [node name="IceBerg_11" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("15_bqwbg")]
 transform = Transform3D(-0.137043, 0, -0.51145, 0, 0.529492, 0, 0.51145, 0, -0.137043, -6.63411, -0.228083, 0.421727)
@@ -1105,6 +1113,7 @@ surface_material_override/0 = ExtResource("6_vcmny")
 
 [node name="NPC_AREA2" type="Area3D" parent="--DECOR--/NPC_TRIGGER_ZONE" node_paths=PackedStringArray("hide_this")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.98105, 1.07288e-06, 2.31768)
+visible = false
 input_ray_pickable = false
 script = SubResource("GDScript_w8xnd")
 Npc_data = ExtResource("1_trgwt")
@@ -1119,6 +1128,7 @@ shape = SubResource("SphereShape3D_jvty4")
 
 [node name="NPC_AREA3" type="Area3D" parent="--DECOR--/NPC_TRIGGER_ZONE" node_paths=PackedStringArray("hide_this")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.0813, 1.19209e-07, 5.71347)
+visible = false
 input_ray_pickable = false
 script = SubResource("GDScript_w8xnd")
 Npc_data = ExtResource("1_trgwt")

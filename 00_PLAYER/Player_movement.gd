@@ -6,12 +6,15 @@ extends RigidBody3D
 
 var using_pad : bool
 
-
+var _Turn_logic : bool = false
 
 func _ready():
 	
 	_global_datas.using_pad.connect(_using_pad)
+	_global_datas.using_turnLogic.connect(Turn_logic)
 	
+func Turn_logic(condition : bool):
+	_Turn_logic = condition	
 	
 func _using_pad(condition : bool):
 	
@@ -33,6 +36,10 @@ func _physics_process(_delta):
 	_global_datas.player_position = translation
 	_global_datas.player_boat_rotation = rotation
 	
+	
+	if _Turn_logic:
+		move_c()
+		return
 	
 	if !using_pad:
 		move_a()
@@ -105,6 +112,46 @@ func move_b():
 		apply_torque(torque_vector)
 
 	self.transform.origin.y = 0.0
+	
+	
+func move_c():
+	
+	
+	if _global_datas.Player_In_Inventory:
+		return
+	
+	if _global_datas.Player_InSubScene:
+		return
+	if _global_datas.Player_InMenu:
+		return
+		
+	if _global_datas.Player_InDialogue:
+		return	
+	
+	var direction = Vector3.ZERO;
+	var translation = get_global_transform().origin
+	_global_datas.player_position = translation
+	
+	if Input.is_action_pressed(("move_right")):
+		direction.x += 1
+	if Input.is_action_pressed(("move_left")):  
+		direction.x -= 1
+	if Input.is_action_pressed(("move_forward")):
+		direction.z -= 1	
+	if Input.is_action_pressed(("move_backward")):
+		direction.z += 1	
+		
+	# add movement	
+	if(translation + direction != translation):
+		look_at(translation + direction, Vector3.UP)
+
+	if direction != Vector3.ZERO:
+		direction = direction.normalized()	
+		
+	apply_central_force(direction * move_speed)		
+	self.transform.origin.y = 0.0	
+	
+	
 	
 # Helper function to smoothly interpolate between angles
 func lerp_angle(from, to, weight):

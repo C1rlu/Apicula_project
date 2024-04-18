@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://bemddl0bqqfwo"]
+[gd_scene load_steps=39 format=3 uid="uid://bemddl0bqqfwo"]
 
 [ext_resource type="Script" path="res://100_GAME_MENU/Open_Menu.gd" id="1_2jpo2"]
 [ext_resource type="Script" path="res://100_GAME_MENU/Option_panel.gd" id="2_gelwi"]
@@ -341,6 +341,17 @@ func _on_value_changed(new_value):
 	label_2.text = str(new_value)
 "
 
+[sub_resource type="GDScript" id="GDScript_lps7b"]
+script/source = "extends CheckBox
+
+@onready var checker_on = $Checker_off/Checker_on
+
+
+func _on_toggled(toggled_on):
+	_global_datas.using_turnLogic.emit(toggled_on)
+	checker_on.visible = toggled_on
+"
+
 [sub_resource type="GDScript" id="GDScript_7e2vg"]
 script/source = "extends CheckBox
 
@@ -569,6 +580,62 @@ step = 0.1
 value = 4.0
 script = SubResource("GDScript_ytjgd")
 
+[node name="SwitchLogic_button2" type="CheckBox" parent="Game_Menu_Root/Options"]
+process_mode = 2
+layout_mode = 2
+offset_left = 377.0
+offset_top = -95.0
+offset_right = 402.0
+offset_bottom = -71.0
+focus_neighbor_top = NodePath("../VBoxContainer/Fullscreen_button")
+focus_neighbor_bottom = NodePath("../../HBoxContainer/Resum_Button2")
+alignment = 2
+script = SubResource("GDScript_lps7b")
+
+[node name="Checker_off" type="ColorRect" parent="Game_Menu_Root/Options/SwitchLogic_button2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.180392, 0.388235, 0.329412, 1)
+
+[node name="Checker_on" type="ColorRect" parent="Game_Menu_Root/Options/SwitchLogic_button2/Checker_off"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -7.5
+offset_top = -7.5
+offset_right = 7.5
+offset_bottom = 7.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.745098, 0.6, 0.431373, 1)
+
+[node name="Label" type="Label" parent="Game_Menu_Root/Options/SwitchLogic_button2"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -364.0
+offset_top = -20.0
+offset_right = -36.0
+offset_bottom = 15.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.317647, 0.615686, 0.529412, 1)
+theme_override_font_sizes/font_size = 25
+text = "TurnLogic ...................................."
+
 [node name="VBoxContainer" type="VBoxContainer" parent="Game_Menu_Root/Options"]
 process_mode = 3
 custom_minimum_size = Vector2(25, 25)
@@ -716,6 +783,7 @@ text = "Resolution ..........................."
 [connection signal="pressed" from="Game_Menu_Root/HBoxContainer/Exit_Button" to="Game_Menu_Root/HBoxContainer/Exit_Button" method="_on_pressed"]
 [connection signal="value_changed" from="Game_Menu_Root/Options/HSlider_dither" to="Game_Menu_Root/Options/HSlider_dither" method="_on_value_changed"]
 [connection signal="value_changed" from="Game_Menu_Root/Options/HSlider_noise" to="Game_Menu_Root/Options/HSlider_noise" method="_on_value_changed"]
+[connection signal="toggled" from="Game_Menu_Root/Options/SwitchLogic_button2" to="Game_Menu_Root/Options/SwitchLogic_button2" method="_on_toggled"]
 [connection signal="toggled" from="Game_Menu_Root/Options/VBoxContainer/Fullscreen_button" to="Option_Panel" method="_on_fullscreen_button_toggled"]
 [connection signal="toggled" from="Game_Menu_Root/Options/VBoxContainer/Vsync_button" to="Option_Panel" method="_on_vsync_button_toggled"]
 [connection signal="item_selected" from="Game_Menu_Root/Options/OptionButton" to="Game_Menu_Root/Options/OptionButton" method="_on_item_selected"]
