@@ -38,7 +38,7 @@ func check_distance():
 	var distance = start_position.distance_squared_to(end_position)
 	
 	if distance > 4.0:
-		disable(false)
+		disable_ray()
 	#print(distance)
 	
 func _on_orbe_instancer_process_link(condition, start_point):
@@ -57,3 +57,11 @@ func disable(condition):
 	_is_processing = false
 	orber_tool.cancel_action_signal.emit()
 	
+
+
+func disable_ray():
+
+	process_link.visible = false
+	_is_processing = false
+	orber_tool.cancel_action_signal.emit()
+	_global_datas._photo_flash.emit()
