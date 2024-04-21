@@ -136,6 +136,7 @@ signal instance_orbe_result(data : orbe_data, instance_position : Vector3)
 
 # Oddity # FOR ODDITY IN SCENE
 
+
 var _peon_oddity_following : Array
 var _xray_oddity : Array
 signal flash_x_ray_oddity

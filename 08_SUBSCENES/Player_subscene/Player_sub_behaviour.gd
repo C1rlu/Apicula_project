@@ -91,8 +91,9 @@ func _physics_process(_delta):
 	if current_speed > maxSpeed:
 		current_velocity = current_velocity.normalized() * maxSpeed
 		linear_velocity = current_velocity
+	
 
-
+		
 func player_dir(_delta, angle,angle_x):
 	
 	var New_rotation = Vector3(angle_x,angle,0.0)
