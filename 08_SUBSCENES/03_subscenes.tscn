@@ -1,4 +1,4 @@
-[gd_scene load_steps=106 format=3 uid="uid://nigmie4bbn6"]
+[gd_scene load_steps=109 format=3 uid="uid://nigmie4bbn6"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/Grid_scene/Subscene_loader.gd" id="1_7uoo0"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="2_3srhu"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://08_SUBSCENES/Instance_oddity_at_start.gd" id="3_l4jt1"]
 [ext_resource type="Material" uid="uid://b1iqs8p4it3ni" path="res://05_SHADER_TEST/Full_screen/Subscene_screen/Scanner_subscene_dither.tres" id="3_rto3a"]
 [ext_resource type="Material" uid="uid://dbu2q4lhlk8w5" path="res://05_SHADER_TEST/Full_screen/Subscene_screen/Main_subscene_dither.tres" id="3_w42nb"]
+[ext_resource type="Resource" uid="uid://bn7ic0u3wdpiv" path="res://08_SUBSCENES/Oddity/Oddity_inventory_base.tres" id="4_7enbd"]
 [ext_resource type="Material" uid="uid://b7ffjkgpmtkc6" path="res://05_SHADER_TEST/Full_screen/Subscene_screen/Scanner_x_subscene_dither.tres" id="4_bkck3"]
 [ext_resource type="Resource" uid="uid://d11cl4f25dgwg" path="res://08_SUBSCENES/Tools/Flash_light.tres" id="4_h1r1k"]
 [ext_resource type="Resource" uid="uid://380xcgsxw62f" path="res://08_SUBSCENES/Tools/Orbe_spawner.tres" id="5_5xftw"]
@@ -24,15 +25,16 @@
 [ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Orbe_Instancer.gd" id="11_dnajt"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Base_Orbe/Link_stroke.gd" id="11_yi7j0"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Base_Orbe/Link_process.gd" id="12_gsnev"]
-[ext_resource type="Resource" uid="uid://cbbmkpkisxagn" path="res://08_SUBSCENES/Orbe/Orbe_datas/Orbe_Mirror.tres" id="12_l61c1"]
+[ext_resource type="Resource" uid="uid://cbbmkpkisxagn" path="res://08_SUBSCENES/Orbe/00_Orbe_datas/Orbe_Mirror.tres" id="12_l61c1"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Stroke_Filter/Orbe_Result_Instancer.gd" id="12_lg0wa"]
-[ext_resource type="Resource" uid="uid://cubpsapqnetwr" path="res://08_SUBSCENES/Orbe/Orbe_datas/Orbe_teleporter.tres" id="13_ywb87"]
+[ext_resource type="Resource" uid="uid://cubpsapqnetwr" path="res://08_SUBSCENES/Orbe/00_Orbe_datas/Orbe_teleporter.tres" id="13_ywb87"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Stroke_Filter/Stroke_Filter.tres.gd" id="14_0roc3"]
-[ext_resource type="Resource" uid="uid://drupv3acvl1k4" path="res://08_SUBSCENES/Orbe/Orbe_datas/Orbe_Mirror_Out.tres" id="14_dpsgd"]
+[ext_resource type="Resource" uid="uid://drupv3acvl1k4" path="res://08_SUBSCENES/Orbe/00_Orbe_datas/Orbe_Mirror_Out.tres" id="14_dpsgd"]
 [ext_resource type="Resource" uid="uid://ncll7t2e5k5v" path="res://08_SUBSCENES/Orbe/Remover/RemoverOrbe_data.tres" id="15_2trwq"]
-[ext_resource type="Resource" uid="uid://boumbv1ixnqko" path="res://08_SUBSCENES/Orbe/Orbe_datas/Orbe_Xray_Oddity.tres" id="18_4kphq"]
+[ext_resource type="Resource" uid="uid://boumbv1ixnqko" path="res://08_SUBSCENES/Orbe/Scanner_check/Scanner_Checker.tres" id="18_4kphq"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Teleporter/Teleport_Player.gd" id="20_mfhmv"]
 [ext_resource type="Script" path="res://03_CAMERA/Active_scene_viewports.gd" id="21_jai7k"]
+[ext_resource type="Resource" uid="uid://7ga31b1hxkul" path="res://08_SUBSCENES/Orbe/Medusa_checker/Medusa_checker_data.tres" id="25_t1c5o"]
 [ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_elements_mat.tres" id="27_e4bpc"]
 
 [sub_resource type="GDScript" id="GDScript_btuws"]
@@ -117,6 +119,48 @@ func _on_timer_timeout():
 	timer.stop()
 	subscenes_cam_scene.visible = false
 	
+"
+
+[sub_resource type="GDScript" id="GDScript_xe8mp"]
+script/source = "extends Node
+
+@export var Follower_scene_data : Oddity_scene_data
+@export var Scanner_scene_data : Oddity_scene_data
+
+@export var debug_this : bool = false
+
+func _input(event):
+	
+	
+	if !debug_this:
+		return
+		
+	if !_global_datas.Player_InSubScene:
+		return
+		
+	if event.is_action_pressed(\"debug_3\"):	
+		_global_datas.instance_scene_oddity.emit(Follower_scene_data,1)
+	if event.is_action_pressed(\"debug_4\"):	
+		if _global_datas._xray_oddity == null:
+			_global_datas.instance_scene_oddity.emit(Scanner_scene_data,1)
+		
+	if event.is_action_pressed(\"debug_5\"):
+		
+		
+		if _global_datas._xray_oddity != null:
+			var selected_scanner = _global_datas._xray_oddity 
+			selected_scanner.kill.emit()
+		
+		
+		if _global_datas._peon_oddity_following.size() < 1:
+			return
+	
+		var index_to_kill = _global_datas._peon_oddity_following.size()-1
+		var selected = _global_datas._peon_oddity_following[index_to_kill]
+		selected.kill.emit()
+
+
+		
 "
 
 [sub_resource type="GDScript" id="GDScript_71vlv"]
@@ -213,7 +257,7 @@ func _ready():
 
 func _check_xray_oddity():
 	
-	if _global_datas._xray_oddity.size() == 0:
+	if _global_datas._xray_oddity == null:
 		return
 	
 	var random_start_time = randf_range(0.5,1.0)
@@ -935,11 +979,21 @@ viewports = [NodePath("../Viewport/Main_SubViewport"), NodePath("../Viewport/Sca
 
 [node name="Orbe_Oddity_List" type="Node" parent="."]
 script = ExtResource("3_fuete")
+Oddity_inventory_base = ExtResource("4_7enbd")
+followers = ExtResource("7_g7xoh")
+scanner = ExtResource("8_dfd4r")
 
-[node name="Instance_Oddity_At_Ini" type="Node" parent="Orbe_Oddity_List"]
+[node name="Instance_Oddity" type="Node" parent="Orbe_Oddity_List"]
 script = ExtResource("3_l4jt1")
-All_Oddity_scene = Array[Resource("res://08_SUBSCENES/Oddity/00_Scene_data/00_Oddity_scene_data.gd")]([ExtResource("6_axwdn"), ExtResource("7_84g34")])
-Oddity_inventory = Array[Resource("res://08_SUBSCENES/Oddity/01_data/00_Oddity_data.gd")]([ExtResource("7_g7xoh"), ExtResource("8_dfd4r"), ExtResource("7_g7xoh"), ExtResource("7_g7xoh"), ExtResource("7_g7xoh")])
+Oddity_inventory_base = ExtResource("4_7enbd")
+Follower_scene_data = ExtResource("6_axwdn")
+Scanner_scene_data = ExtResource("7_84g34")
+
+[node name="instance_Debugger" type="Node" parent="Orbe_Oddity_List"]
+script = SubResource("GDScript_xe8mp")
+Follower_scene_data = ExtResource("6_axwdn")
+Scanner_scene_data = ExtResource("7_84g34")
+debug_this = true
 
 [node name="PhotoData_list_update" type="Node" parent="."]
 script = ExtResource("10_w7dre")
@@ -999,6 +1053,7 @@ Mirror_Orbe = ExtResource("12_l61c1")
 Mirror_Orbe_out = ExtResource("14_dpsgd")
 Xray_Oddity = ExtResource("18_4kphq")
 Remover = ExtResource("15_2trwq")
+Medusa = ExtResource("25_t1c5o")
 
 [node name="Orbe_Result_Instancer" type="Node" parent="ORBE"]
 script = ExtResource("12_lg0wa")

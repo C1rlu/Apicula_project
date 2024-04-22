@@ -45,7 +45,7 @@ func _ready():
 	_strokeID = 0
 	_orbe_visual_scene.clear()
 	_peon_oddity_following.clear()
-	_xray_oddity.clear()
+	_xray_oddity = null
 	
 # input type
 signal using_pad(condition : bool)
@@ -76,7 +76,7 @@ var photo_archives : Array[PhotoData]
 var note_archives : Array[Note_Data]
 var boue_archives : Array[BoueData]
 var tools_list : Array[tool_data]
-var oddity_list : Array[Oddity_data]
+
 
 
 
@@ -138,10 +138,11 @@ signal instance_orbe_result(data : orbe_data, instance_position : Vector3)
 
 
 var _peon_oddity_following : Array
-var _xray_oddity : Array
+var _xray_oddity : Node3D
 signal flash_x_ray_oddity
 signal _use_peon_oddity(number : int)
 
+signal instance_scene_oddity(oddity_scene : Oddity_scene_data)
 
 #board scene
 

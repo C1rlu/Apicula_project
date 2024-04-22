@@ -2,7 +2,7 @@ extends Node
 
 @onready var root = $"../.."
 
-@export var mirror_out : orbe_data
+@export var mirror_zone_limite : orbe_data
 @onready var mirror_root = $"../.."
 @onready var render_vortex_globe_effect = $"../Render_vortex_globe_effect"
 @onready var render_vortex = $"../Render_vortex"
@@ -26,7 +26,7 @@ func _scale_globe_effect(condition : bool):
 		if t:
 			t.kill()
 		t = create_tween()
-		t.tween_method(scale_value,1.0,10.0,0.5)	
+		t.tween_method(scale_value,1.0,5.0,0.5)	
 		t.connect("finished",hide)	
 	else :	
 		
@@ -35,7 +35,7 @@ func _scale_globe_effect(condition : bool):
 		if t:
 			t.kill()
 		t = create_tween()
-		t.tween_method(scale_value,10.0,1.0,0.5)	
+		t.tween_method(scale_value,5.0,1.0,0.5)	
 		t.connect("finished",show_end)
 
 
@@ -44,7 +44,7 @@ func hide():
 	render_vortex_globe_effect.visible = false	
 	render_vortex.visible = false
 	#var target = root.global_position
-	#_global_datas.instance_orbe_result.emit(mirror_out,target)
+	#_global_datas.instance_orbe_result.emit(mirror_zone_limite,target)
 	
 	mirror_root.queue_free()
 

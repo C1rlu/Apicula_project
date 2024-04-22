@@ -5,6 +5,9 @@ extends Node
 @export var Mirror_Orbe_out : orbe_data
 @export var Xray_Oddity : orbe_data
 @export var Remover : orbe_data
+@export var Medusa : orbe_data
+
+@export var Scanner_data_scene : Oddity_scene_data
 
 # CACHE ALL THE ACTUAL TEMPLATE
 var templates_clouds : Array[Gesture]
@@ -71,7 +74,7 @@ func result_condition(result):
 			_global_datas.instance_orbe_result.emit(Remover,calculate_center)		
 			
 	
-		if result[0] == "Time":
+		if result[0] == "Portal":
 			
 			if !_global_datas.Player_InMirrorScene:
 				
@@ -90,9 +93,12 @@ func result_condition(result):
 					
 					
 		if result[0] == "Scanner_oddity":
-
-			_global_datas.instance_orbe_result.emit(Xray_Oddity,calculate_center)
+			if _global_datas._xray_oddity == null:
+				_global_datas.instance_orbe_result.emit(Xray_Oddity,calculate_center)
 			
+		if result[0] == "Medusa":
+			_global_datas.instance_orbe_result.emit(Medusa,calculate_center)
+	
 func center_of_mass_points()->Vector3:
 	
 	var center = Vector3.ZERO#_global_datas._orbe_stroke_scene[0].position

@@ -13,11 +13,17 @@ signal scanner_effect_value(value : float)
 @export var active_photo_data : bool = true
 var is_scanning : bool = false
 
+
 func  _ready():
 	
 	if active_photo_data:
 		_global_datas._photo_data_scene_list.append(self)	
 
+
+
+func register_photoData():
+	_global_datas._photo_data_scene_list.append(self)	
+		
 func get_PhotoData():
 	return photoData 
 	

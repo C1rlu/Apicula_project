@@ -4,6 +4,8 @@ extends Node
 
 @export var render_scanning : MeshInstance3D
 var render_scanning_mat : Material 
+
+
 	
 func _ready():
 	

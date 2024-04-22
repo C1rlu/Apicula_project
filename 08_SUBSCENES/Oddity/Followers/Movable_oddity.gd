@@ -1,21 +1,15 @@
 extends Node
 
-@export var _Oddity_data : Oddity_data
+#@export var _Oddity_data : Oddity_data
 @export var position_from_player : Vector3
 @export var speed : float
 @onready var root = $".."
-@onready var stop_follow_timer = $Stop_follow_timer
 
 var move : bool = false
 var random_offset : Vector3
 var idle_position : Vector3
 
-var Mirror_element : Node
-var Photo_data : Node
-
 var rotation_target : Vector3
-
-signal kill_this
 
 var can_check_cloest_path = false
 
@@ -23,12 +17,11 @@ var path_index : int
 
 var close_to_player : bool  = false
 var path_to_player : Array[Vector3]
+
 func _ready():
 
 	idle_position = root.global_position
 
-	Mirror_element = get_node_or_null("../Mirror_elements")
-	Photo_data = get_node_or_null("../Scanner_Area/Photo_data")
 	rotation_target = Vector3(randf_range(-90.0,90.0),randf_range(-90.0,90.0),randf_range(-90.0,90.0))
 	
 func move_oddity():
@@ -39,40 +32,12 @@ func move_oddity():
 		
 	random_offset = Vector3(randf_range(-0.5,0.5),randf_range(-0.5,0.5),0.0)
 
-	if Mirror_element:
-		Mirror_element._follow_player = true 
-	
-	if Photo_data:
-		Photo_data.disable_photoData()
-	
-	_global_datas._peon_oddity_following.append(self)
-	_global_datas.add_oddity_to_inventory.emit(_Oddity_data)
-	
+
+	_global_datas._peon_oddity_following.append(root)
+
 	move = true	
 	
-func follow_from_inventory():
-	
-	if move:
-		return
-		
-	random_offset = Vector3(randf_range(-0.5,0.5),randf_range(-0.5,0.5),0.0)
 
-	
-	if Mirror_element:
-		Mirror_element._follow_player = true
-	
-	if Photo_data:
-		Photo_data.disable_photoData()
-	
-	_global_datas._peon_oddity_following.append(self)
-	
-	move = true		
-	
-func reload_follow():
-	
-	if move:
-		move_oddity()
-	
 func _process(delta):
 	
 	
@@ -85,7 +50,7 @@ func _process(delta):
 
 func _folow_player(delta):
 	
-	#_global_datas.player_paths
+
 	var player_position = _global_datas.subbscene_playerPosition + position_from_player + random_offset	
 	
 	if close_to_player :
@@ -115,6 +80,8 @@ func follow_path(delta):
 
 	root.global_position = lerp(root.global_position,target_point , speed * 2 * delta)	
 	root.global_rotation = lerp(root.global_rotation,rotation_target, 0.1 * delta)
+	
+	
 func closest_index_to_player():
 	var _index : int = 0
 	
@@ -142,25 +109,13 @@ func _on_random_range_update_timeout():
 		random_offset = Vector3(randf_range(-0.5,0.5),randf_range(-0.5,0.5),0.0)	
 		rotation_target = Vector3(randf_range(-90.0,90.0),randf_range(-90.0,90.0),randf_range(-90.0,90.0))
 		
-func _on_stop_follow_timer_timeout():
-	move = false
-	idle_position = root.global_position
 
 
 
 func _on_tree_exited():
 	
-	_global_datas._peon_oddity_following.erase(self)
+	_global_datas._peon_oddity_following.erase(root)
 	
-	if !_global_datas.Player_InSubScene:
-		return
-	_global_datas.remove_oddity_to_inventory.emit(_Oddity_data)
-	
-
-
-func _on_movable_oddity_example_follow():
-	follow_from_inventory()
-
 
 func _on_movable_oddity_example_body_entered(body):
 	
@@ -170,7 +125,7 @@ func _on_movable_oddity_example_body_entered(body):
 			
 			close_to_player = true
 			
-			print(player,"enter")
+			#print(player,"enter")
 			
 
 func _on_movable_oddity_example_body_exited(body):
@@ -180,4 +135,11 @@ func _on_movable_oddity_example_body_exited(body):
 			path_to_player.clear()
 			path_index = 0
 			close_to_player = false
-			print(player,"exist")
+			#print(player,"exist")
+
+
+
+
+
+func _follow():
+	move_oddity()
