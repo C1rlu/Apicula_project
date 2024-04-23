@@ -15,7 +15,7 @@ func _start():
 	if t:
 		t.kill()
 	t = create_tween()
-	t.tween_method(scale_value,5.0,1.0,20.0)	
+	t.tween_method(scale_value,5.0,1.0,30.0)	
 	t.connect("finished",done)		
 
 
