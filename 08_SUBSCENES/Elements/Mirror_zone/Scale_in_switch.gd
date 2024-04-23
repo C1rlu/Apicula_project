@@ -43,8 +43,8 @@ func _scale_globe_effect(condition : bool):
 func hide():
 	render_vortex_globe_effect.visible = false	
 	render_vortex.visible = false
-	#var target = root.global_position
-	#_global_datas.instance_orbe_result.emit(mirror_zone_limite,target)
+	var target = root.global_position
+	_global_datas.instance_orbe_result.emit(mirror_zone_limite,target)
 	
 	mirror_root.queue_free()
 

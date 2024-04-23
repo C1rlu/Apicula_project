@@ -6,7 +6,8 @@ var t
 
 
 func _ready():
-	_start()	
+	pass
+	#_start()	
 
 
 func _start():
