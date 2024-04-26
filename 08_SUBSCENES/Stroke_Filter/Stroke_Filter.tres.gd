@@ -6,8 +6,7 @@ extends Node
 @export var Xray_Oddity : orbe_data
 @export var Remover : orbe_data
 @export var Medusa : orbe_data
-
-@export var Scanner_data_scene : Oddity_scene_data
+@export var Rapatrier_check : orbe_data
 
 # CACHE ALL THE ACTUAL TEMPLATE
 var templates_clouds : Array[Gesture]
@@ -74,23 +73,24 @@ func result_condition(result):
 			_global_datas.instance_orbe_result.emit(Remover,calculate_center)		
 			
 	
-		if result[0] == "Portal":
-			
-			if !_global_datas.Player_InMirrorScene:
-				
-				if !_global_datas.Mirror_vortex_Node:
-					_global_datas.instance_orbe_result.emit(Mirror_Orbe,calculate_center)
+		#if result[0] == "Portal":
+			#
+			#if !_global_datas.Player_InMirrorScene:
+				#
+				#if !_global_datas.Mirror_vortex_Node:
+					#_global_datas.instance_orbe_result.emit(Mirror_Orbe,calculate_center)
+					#
+				#else:
+					#_global_datas.Mirror_vortex_Node.position = calculate_center		
+			#else:
+				#pass
+				#if !_global_datas.Mirror_vortex_out_Node:
+					#_global_datas.instance_orbe_result.emit(Mirror_Orbe_out,calculate_center)
+				#else:
+					#_global_datas.Mirror_vortex_out_Node.position = calculate_center	
 					
-				else:
-					_global_datas.Mirror_vortex_Node.position = calculate_center		
-			else:
-				pass
-				if !_global_datas.Mirror_vortex_out_Node:
-					_global_datas.instance_orbe_result.emit(Mirror_Orbe_out,calculate_center)
-				else:
-					_global_datas.Mirror_vortex_out_Node.position = calculate_center	
-					
-					
+		if result[0] == "Rapatrier":
+			_global_datas.instance_orbe_result.emit(Rapatrier_check,calculate_center)				
 					
 		if result[0] == "Scanner_oddity":
 			if _global_datas._xray_oddity == null:

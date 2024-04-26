@@ -1,6 +1,8 @@
 extends Node
 
 @export var elements_mesh : Array[MeshInstance3D]
+@export var elements_mesh_xray : Array[MeshInstance3D]
+
 @export var element_collision : Array[CollisionShape3D]
 
 var _follow_player : bool = false
@@ -25,3 +27,11 @@ func _active_mirror_Elements(condition : bool):
 
 	for col in element_collision:
 		col.set_deferred("disabled",!condition)	
+
+
+func _on_rapatrier_rapatrier():
+	_active_mirror_Elements(true)
+	print("RAPATRIER CALL OK")
+	
+	for e in elements_mesh_xray:
+		e.visible = false

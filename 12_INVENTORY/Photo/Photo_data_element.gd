@@ -85,3 +85,7 @@ func _on_tree_exited():
 
 	_global_datas._photo_data_scene_list.erase(self)	
 	
+
+
+func _on_rapatrier_rapatrier():
+	_global_datas._photo_data_scene_list.append(self)	
