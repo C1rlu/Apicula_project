@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cb8k68mtsigvd"]
+[gd_scene load_steps=20 format=3 uid="uid://cb8k68mtsigvd"]
 
 [ext_resource type="Script" path="res://00_SYSTEMS/Global_datas.gd" id="1_64l51"]
 [ext_resource type="Script" path="res://06_UI/Color_management/Color_Managers.gd" id="3_r6ky2"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://00_SYSTEMS/BackCall_return.gd" id="7_wpew2"]
 [ext_resource type="PackedScene" uid="uid://cein0q2eirkay" path="res://10_BOARD/04_board.tscn" id="8_musfb"]
 [ext_resource type="Script" path="res://100_GAME_MENU/Set_Resolution.gd" id="8_slpjd"]
+[ext_resource type="PackedScene" uid="uid://bo33th5yn61n1" path="res://08_SUBSCENES/00_Scene/BlackHole_zone.tscn" id="9_r3n1r"]
 [ext_resource type="PackedScene" uid="uid://dpl12cginnwpp" path="res://14_ON_SCANNER_PHOTO/06_on_scanner_photo.tscn" id="12_7ffm2"]
 [ext_resource type="PackedScene" uid="uid://bemddl0bqqfwo" path="res://100_GAME_MENU/08_game_menu.tscn" id="12_16nd2"]
 [ext_resource type="PackedScene" uid="uid://bwmu5iwushsl5" path="res://13_TOOLS_UI/07_screen_tools.tscn" id="18_akagp"]
@@ -50,11 +51,12 @@ func _ready():
 [sub_resource type="GDScript" id="GDScript_c11gh"]
 script/source = "extends Node
 
+@export var scene_test : PackedScene
 
 func _input(event):
 	
 	if event.is_action_pressed(\"Go_subscene_debug\"):
-		_global_datas.cell_name = \"E4\"
+		_global_datas.selected_subscene = scene_test
 		_global_datas._load_subscene.emit(true)
 		_global_datas._go_Subscene.emit()
 	
@@ -105,6 +107,7 @@ fps_target = 90
 
 [node name="Dev_shortcut" type="Node" parent="01_GAME_MANAGERS/Options"]
 script = SubResource("GDScript_c11gh")
+scene_test = ExtResource("9_r3n1r")
 
 [node name="02_MAIN_SCENES" parent="." instance=ExtResource("18_gvi4q")]
 

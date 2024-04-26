@@ -1,4 +1,4 @@
-[gd_scene load_steps=82 format=3 uid="uid://cnmptm7i0xxmj"]
+[gd_scene load_steps=83 format=3 uid="uid://cnmptm7i0xxmj"]
 
 [ext_resource type="Script" path="res://00_SCENE/Active_Decor_Scene.gd" id="1_ounvv"]
 [ext_resource type="PackedScene" uid="uid://vpdvl0v7dubd" path="res://00_PLAYER/Player_boat.tscn" id="1_qltht"]
@@ -32,8 +32,9 @@
 [ext_resource type="PackedScene" uid="uid://cp1aidnp626l4" path="res://04_SCENE_MAIN_MAP/Birds/Birds_prefabs.tscn" id="21_py3bv"]
 [ext_resource type="Material" uid="uid://dkpo8pe6k46g6" path="res://05_SHADER_TEST/All_Materials/Light_mat.tres" id="23_o3pq1"]
 [ext_resource type="PackedScene" uid="uid://dti7l20thp2rk" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Subscene_elements/epave_zone.tscn" id="23_txlwt"]
-[ext_resource type="Resource" uid="uid://bqtier24l2d58" path="res://10_BOARD/Boue/Boue_appicula.tres" id="26_blekg"]
-[ext_resource type="Resource" uid="uid://dyrjwnrw6plmp" path="res://10_BOARD/Boue/Boue_DarkHole.tres" id="27_id2vw"]
+[ext_resource type="Resource" uid="uid://bqtier24l2d58" path="res://10_BOARD/00_Boue_Zones/Boue_appicula.tres" id="31_p6n0u"]
+[ext_resource type="Resource" uid="uid://bgbdnk7mpw4vb" path="res://10_BOARD/00_Boue_Zones/TheOddity_zone.tres" id="32_tmg04"]
+[ext_resource type="Resource" uid="uid://dyrjwnrw6plmp" path="res://10_BOARD/00_Boue_Zones/Boue_DarkHole.tres" id="32_uxxuf"]
 
 [sub_resource type="GDScript" id="GDScript_ueh7h"]
 script/source = "extends Node
@@ -70,16 +71,15 @@ func _unlock(condition):
 func _input(event: InputEvent) -> void:
 	
 
+	if !_global_datas.selected_subscene:
+		return
+		
 	if !lock_tools:
 		return
 		
 	if _global_datas.Player_InSubScene:
 		return
 		
-	if _global_datas.cell_name == \"null\":
-		return				
-	
-	
 	if event.is_action_released(\"Push_to_subscene\"):
 		_global_datas._active_progress_subscene.emit(false)
 		_global_datas._load_subscene.emit(false)
@@ -635,7 +635,7 @@ size = Vector3(30, 0, 30)
 
 [node name="Prologue" type="Node" parent="GAME_STATE"]
 script = SubResource("GDScript_ueh7h")
-prologue_position = Vector3(-21, 0, 7)
+prologue_position = Vector3(-21, -3.995, 7)
 
 [node name="Active_Decor_Scene" type="Node" parent="." node_paths=PackedStringArray("viewports")]
 script = ExtResource("1_ounvv")
@@ -1148,13 +1148,19 @@ shape = SubResource("SphereShape3D_jvty4")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.70167, -0.174761, 1.01103)
 collision_layer = 2
 collision_mask = 2
-boue_data = ExtResource("26_blekg")
+boue_data = ExtResource("31_p6n0u")
+
+[node name="EPAVE_ZONE3" parent="--DECOR--/UNDER_WATER2" instance=ExtResource("23_txlwt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.57933, -0.174761, 4.35923)
+collision_layer = 2
+collision_mask = 2
+boue_data = ExtResource("32_tmg04")
 
 [node name="EPAVE_ZONE2" parent="--DECOR--/UNDER_WATER2" instance=ExtResource("23_txlwt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6219, -0.192537, -2.46462)
 collision_layer = 2
 collision_mask = 2
-boue_data = ExtResource("27_id2vw")
+boue_data = ExtResource("32_uxxuf")
 
 [node name="Clouds" type="MeshInstance3D" parent="--DECOR--"]
 transform = Transform3D(57.2458, 0, 0, 0, 57.2458, 0, 0, 0, 57.2458, 0, 6.93092, 0)

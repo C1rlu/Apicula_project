@@ -4,7 +4,7 @@ var Main_Camera : Camera3D
 var Subscene_Camera : Camera3D
 var player_position : Vector3
 var player_boat_rotation : Vector3
-var cell_name : String = "null"
+
 var Active_boue_position : Vector3
 
 var Player_In_Inventory : bool
@@ -96,6 +96,7 @@ signal _take_photo
 
 
 #subsceneSignal
+var selected_subscene : PackedScene
 signal _load_subscene(condition : bool)
 signal _go_Subscene
 var subbscene_playerPosition : Vector3
