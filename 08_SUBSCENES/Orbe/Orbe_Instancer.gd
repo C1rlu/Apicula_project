@@ -61,7 +61,7 @@ func _instance_end_orbe():
 
 func get_target():
 	# check if target is far enough from actual orbe	
-	var target = Vector3(_global_datas._orbe_tool_origin_position.x,_global_datas._orbe_tool_origin_position.y,0.0)
+	var target = Vector3(_global_datas._orbe_tool_origin_position.x,_global_datas._orbe_tool_origin_position.y,0.1)
 	var closest_orbe = closet_orbe(_global_datas._orbe_visual_scene)
 
 	if closest_orbe:
