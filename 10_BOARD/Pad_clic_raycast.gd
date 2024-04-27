@@ -68,6 +68,11 @@ func check_cast(targetPos : Vector2):
 		selectable.show_legend(false)	
 	selectable = result.collider.get_node_or_null("Select_this")	
 	
+	if result.collider.get_node_or_null("Turn_page"):
+		var right_page = result.collider.get_node_or_null("Turn_page") 
+		print(right_page)
+		right_page._turn_page()		
+			
 	if selectable:	
 		selectable.show_legend(true)
 		selectable = selectable

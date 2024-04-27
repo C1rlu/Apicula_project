@@ -1,6 +1,13 @@
-[gd_scene load_steps=17 format=3 uid="uid://cgb4c1n0bj2at"]
+[gd_scene load_steps=18 format=3 uid="uid://cgb4c1n0bj2at"]
 
 [ext_resource type="PackedScene" uid="uid://d1qrohq4a6bus" path="res://12_INVENTORY/Book/Page_flip/Page_flip_right.glb" id="1_75j24"]
+
+[sub_resource type="GDScript" id="GDScript_ahbli"]
+script/source = "extends Node3D
+
+
+signal turn_page
+"
 
 [sub_resource type="GDScript" id="GDScript_hjljc"]
 script/source = "extends Node
@@ -11,13 +18,16 @@ script/source = "extends Node
 func _turn_page():
 	page.visible = true
 	animation_player.play(\"Key_001Action\")	
-	#_global_datas.Book_group.visible = false
+
 
 func _on_animation_player_animation_finished(anim_name):
 	page.visible = false
-	#_global_datas.Book_group.visible = true	
-	_global_datas.flip_left_end.emit()
 
+
+
+
+func _on_page_flip_right_turn_page():
+	_turn_page()
 "
 
 [sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_gar6r"]
@@ -183,12 +193,12 @@ shader_parameter/Darker = Color(0.156863, 0.141176, 0.113725, 1)
 shader_parameter/Gradient = SubResource("GradientTexture2D_0y7vs")
 
 [node name="Page_flip_right" instance=ExtResource("1_75j24")]
+script = SubResource("GDScript_ahbli")
 
 [node name="Anim" type="Node" parent="." index="0"]
 script = SubResource("GDScript_hjljc")
 
 [node name="page" parent="." index="1"]
-visible = false
 layers = 2
 cast_shadow = 0
 surface_material_override/0 = SubResource("ShaderMaterial_4uk4y")
@@ -196,4 +206,5 @@ surface_material_override/0 = SubResource("ShaderMaterial_4uk4y")
 [node name="AnimationPlayer" parent="." index="2"]
 speed_scale = 2.0
 
+[connection signal="turn_page" from="." to="Anim" method="_on_page_flip_right_turn_page"]
 [connection signal="animation_finished" from="AnimationPlayer" to="Anim" method="_on_animation_player_animation_finished"]

@@ -9,7 +9,7 @@ var all_note : Array
 func _ready():
 	all_note = get_children()
 
-	#_global_datas.note_archives.append(test_data)
+	_global_datas.note_archives.append(test_data)
 	_global_datas.open_inventory.connect(_check_found)
 
 		

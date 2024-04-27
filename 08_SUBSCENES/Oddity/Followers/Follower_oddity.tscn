@@ -39,6 +39,10 @@ speed = 1.0
 wait_time = 0.5
 autostart = true
 
+[node name="Wait_before_follow" type="Timer" parent="Movable_oddity"]
+wait_time = 0.25
+one_shot = true
+
 [node name="col" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_adr80")
 
@@ -58,5 +62,6 @@ surface_material_override/0 = ExtResource("7_f6nym")
 [connection signal="register" from="." to="Register" method="_on_register"]
 [connection signal="tree_exited" from="Movable_oddity" to="Movable_oddity" method="_on_tree_exited"]
 [connection signal="timeout" from="Movable_oddity/Random_range_update" to="Movable_oddity" method="_on_random_range_update_timeout"]
+[connection signal="timeout" from="Movable_oddity/Wait_before_follow" to="Movable_oddity" method="_on_wait_before_follow_timeout"]
 
 [editable path="msh_oddity_peon"]
