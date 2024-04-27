@@ -197,8 +197,6 @@ func _Zoom(value : int):
 		target = max_zoom_pos	
 		rotation_target = Vector3(-50,-5.8,0)
 	
-	
-		
 	if t:
 		t.kill()
 	t = create_tween()
@@ -232,20 +230,18 @@ script/source = "extends Node
 
 var smooth_speed = 3.0
 var offset: Vector3
-var active_target : Vector3
 
 @onready var cam_target = $\"../3D_SCENE/CamTarget\"
 @export var _all_cam_array : Array[Node3D]
 @onready var camera_xray = $\"../3D_SCENE/Camp_root_XRay/Camera_xray\"
 @onready var camera_3d = $\"../3D_SCENE/SubViewport/Camp_root_Render/Camera3D\"
+@onready var camp_root_render = $\"../3D_SCENE/SubViewport/Camp_root_Render\"
+
 
 func _ready():
-	
 
 	offset = _all_cam_array[0].global_position - cam_target.global_position
-	active_target = offset
-	
-	
+
 	
 func _physics_process(_delta):
 	
@@ -254,12 +250,19 @@ func _physics_process(_delta):
 		
 	var playerPosition = cam_target.global_position
 	for cam in _all_cam_array:
-		cam.global_position= lerp(cam.global_position, playerPosition + active_target, smooth_speed * _delta)	
+		cam.global_position = lerp(cam.global_position, playerPosition + offset, smooth_speed * _delta)	
+	rotation_angle(_delta)
 	
 	camera_xray.global_position = camera_3d.global_position
 	camera_xray.global_rotation  = camera_3d.global_rotation 
 	camera_xray.fov = camera_3d.fov
 	
+		
+func rotation_angle(_delta):
+
+	var angle_target = cam_target.global_position.x
+	var angle_target_clamp = clampf(angle_target,-0.5,0.5)
+	camp_root_render.global_rotation = Vector3(0,-angle_target_clamp,0)
 
 "
 
@@ -477,10 +480,10 @@ expand_mode = 3
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.002, 0)
 script = ExtResource("1_janbq")
 move_speed = 1.0
-min_x = -0.5
-max_x = 0.5
-min_z = -0.5
-max_z = 0.5
+min_x = -1.0
+max_x = 1.0
+min_z = -1.0
+max_z = 1.0
 
 [node name="Player_on_map" type="Node3D" parent="3D_SCENE"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.000402212, 0.00895628, -0.00213873)

@@ -4,12 +4,9 @@ extends Node
 	
 
 signal scanner_effect_condition(condition : bool)
-signal scanner_effect_value(value : float)
 
 @onready var root =  $"../.."
 @onready var timer = $Timer
-
-
 @export var active_photo_data : bool = true
 var is_scanning : bool = false
 
@@ -40,7 +37,7 @@ func scanning():
 		timer.start()
 		
 	scanner_effect_condition.emit(true)
-
+	
 
 func stop_scanning():
 	
@@ -51,8 +48,6 @@ func stop_scanning():
 	scanner_effect_condition.emit(false)
 	
 
-func set_shader_value(value):
-	scanner_effect_value.emit(value)	
 
 	
 func scanning_done():

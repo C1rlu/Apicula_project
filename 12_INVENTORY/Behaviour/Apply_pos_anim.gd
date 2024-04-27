@@ -7,8 +7,6 @@ var dir : Vector2
 
 var t
 
-func _ready():
-	_global_datas._boat_contact.connect(_contact_anim)
 
 func _move_to(value : float):
 	

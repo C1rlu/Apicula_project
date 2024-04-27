@@ -1,4 +1,5 @@
 extends Node
+@onready var root = $".."
 
 @export var elements_mesh : Array[MeshInstance3D]
 @export var elements_mesh_xray : Array[MeshInstance3D]
@@ -32,6 +33,6 @@ func _active_mirror_Elements(condition : bool):
 func _on_rapatrier_rapatrier():
 	_active_mirror_Elements(true)
 	print("RAPATRIER CALL OK")
-	
+	#_global_datas.rapatrier_vfx.emit(root.position)
 	for e in elements_mesh_xray:
 		e.visible = false

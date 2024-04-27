@@ -106,7 +106,7 @@ signal _subscene_fail
 var flash_subscene_position : Vector3
 var _selected_tool : tool_data 
 signal switching_tool(tool : tool_data)
-
+signal rapatrier_vfx(position : Vector3)
 
 # UPDATE INVENTORY ODDITY LIST BY TYPE
 

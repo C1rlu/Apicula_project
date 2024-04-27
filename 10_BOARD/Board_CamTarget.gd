@@ -25,7 +25,7 @@ func _process(delta):
 		speed = move_speed
 		border_ratio = 42
 	if _global_datas.zoom_value == 2:
-		speed = move_speed/2
+		speed = move_speed/1.8
 		border_ratio = 22
 	if _global_datas.zoom_value == 3:
 		speed = move_speed / 4

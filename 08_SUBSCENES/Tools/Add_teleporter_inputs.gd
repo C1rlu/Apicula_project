@@ -11,5 +11,7 @@ func _input(event):
 		
 	if event.is_action_pressed("Flash_light"):
 		Second_action_tool.tool_active_signal.emit(true)	
+	
 	if event.is_action_released("Flash_light"):
 		Second_action_tool.tool_active_signal.emit(false)	
+		

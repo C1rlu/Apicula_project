@@ -27,7 +27,7 @@ func _ready():
 	if _global_datas.Player_InSubScene:
 		_Zoom_Object(true)
 	
-	take_it_button.grab_focus()
+
 func _Zoom_Object(condition:bool):
 	
 	if condition:
