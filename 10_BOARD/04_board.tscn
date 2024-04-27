@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://cein0q2eirkay"]
+[gd_scene load_steps=32 format=3 uid="uid://cein0q2eirkay"]
 
 [ext_resource type="Script" path="res://10_BOARD/FollowFocus.gd" id="1_2m7ey"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_g3pi7"]
@@ -367,6 +367,8 @@ func _ready():
 [sub_resource type="ViewportTexture" id="ViewportTexture_bjncg"]
 viewport_path = NodePath("3D_SCENE/SubViewport")
 
+[sub_resource type="BoxMesh" id="BoxMesh_dbip3"]
+
 [sub_resource type="ArrayMesh" id="ArrayMesh_i7f22"]
 resource_name = "Player_Boat_01-c9377ed3c1eb09ef00335a9606626fca_Cube_001"
 _surfaces = [{
@@ -482,8 +484,14 @@ script = ExtResource("1_janbq")
 move_speed = 1.0
 min_x = -1.0
 max_x = 1.0
-min_z = -1.0
-max_z = 1.0
+min_z = -0.5
+max_z = 0.5
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="3D_SCENE/CamTarget"]
+transform = Transform3D(0.0103559, 0, 0, 0, 0.0103559, 0, 0, 0, 0.0103559, 0, 0.00700663, 0)
+visible = false
+layers = 2
+mesh = SubResource("BoxMesh_dbip3")
 
 [node name="Player_on_map" type="Node3D" parent="3D_SCENE"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.000402212, 0.00895628, -0.00213873)

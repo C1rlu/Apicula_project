@@ -8,6 +8,7 @@ var selectable
 signal active_scanner(condition : bool)
 
 
+
 func _ready():
 	_global_datas.using_pad.connect(_active_raycast)
 	
@@ -67,15 +68,13 @@ func check_cast(targetPos : Vector2):
 	if selectable:
 		selectable.show_legend(false)	
 	selectable = result.collider.get_node_or_null("Select_this")	
-	
-	if result.collider.get_node_or_null("Turn_page"):
-		var right_page = result.collider.get_node_or_null("Turn_page") 
-		print(right_page)
-		right_page._turn_page()		
-			
+		
 	if selectable:	
 		selectable.show_legend(true)
 		selectable = selectable
-	
-		
 
+	if result.collider.get_node_or_null("Turn_page"):
+		var right_page = result.collider.get_node_or_null("Turn_page") 
+		print(right_page)
+		right_page._turn_page()			
+		

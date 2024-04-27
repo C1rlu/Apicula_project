@@ -19,7 +19,7 @@ func _focus_this(target : Vector3):
 	#if _global_datas.zoom_value == 1:
 		#return	
 		
-		
+
 	var offset = Vector3(0.0,0.0,0.025)	
 	if t:
 		t.kill()
