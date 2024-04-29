@@ -36,8 +36,8 @@ func _disable_object():
 [sub_resource type="GDScript" id="GDScript_4uwx0"]
 script/source = "extends Node
 
-@onready var note = $\"../SubViewport/text\"
-@onready var from = $\"../SubViewport/text/from\"
+@onready var note = $\"../Text_render/text\"
+@onready var from = $\"../Text_render/text/from\"
 
 func _set_note(_text : String, _from: String):
 	note.text = _text
@@ -195,7 +195,7 @@ shader_parameter/ColorParameter = Color(0.627451, 0.603922, 0.552941, 1)
 shader_parameter/light_color = Color(0.670588, 0.654902, 0.607843, 1)
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_lq3n1"]
-viewport_path = NodePath("SubViewport")
+viewport_path = NodePath("Text_render")
 
 [node name="Letter_area" type="Area3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.00272226, 0)
@@ -228,11 +228,11 @@ layers = 2
 modulate = Color(0.333333, 0.321569, 0.286275, 1)
 texture = SubResource("ViewportTexture_lq3n1")
 
-[node name="SubViewport" type="SubViewport" parent="."]
+[node name="Text_render" type="SubViewport" parent="."]
 transparent_bg = true
 size = Vector2i(600, 400)
 
-[node name="text" type="Label" parent="SubViewport"]
+[node name="text" type="Label" parent="Text_render"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -244,7 +244,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="from" type="Label" parent="SubViewport/text"]
+[node name="from" type="Label" parent="Text_render/text"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
