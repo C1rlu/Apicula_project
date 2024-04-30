@@ -76,7 +76,7 @@ func check_cast(targetPos : Vector2):
 	if result.collider.get_node_or_null("Turn_page"):
 		var right_page = result.collider.get_node_or_null("Turn_page") 
 		print(right_page)
-		right_page._turn_page()			
+		right_page._turn_page.emit()		
 		
 	if result.collider.get_node_or_null("Next_legend"):
 		var next_legend = result.collider.get_node_or_null("Next_legend") 

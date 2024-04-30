@@ -1,4 +1,4 @@
-[gd_scene load_steps=159 format=3 uid="uid://dr73p5vs0sixe"]
+[gd_scene load_steps=139 format=3 uid="uid://dr73p5vs0sixe"]
 
 [ext_resource type="Script" path="res://10_BOARD/photos_check.gd" id="1_bcxwj"]
 [ext_resource type="Shader" uid="uid://upo0fuo5sqgd" path="res://05_SHADER_TEST/Board/Board_sh.tres" id="1_k1enu"]
@@ -22,9 +22,10 @@
 [ext_resource type="Script" path="res://10_BOARD/Boue/Boue_check.gd" id="18_tu2nn"]
 [ext_resource type="PackedScene" uid="uid://b0j7tl0gn4vg8" path="res://10_BOARD/Boue/boue_map_prefab.tscn" id="19_bi3qi"]
 [ext_resource type="Resource" uid="uid://dyrjwnrw6plmp" path="res://10_BOARD/00_Boue_Zones/Boue_DarkHole.tres" id="20_ti4d8"]
+[ext_resource type="PackedScene" uid="uid://bh5a7fhvftxmm" path="res://10_BOARD/Symbols/Book_symbols/Book_symbols.tscn" id="22_peuec"]
 [ext_resource type="PackedScene" uid="uid://ckin6oiruwreh" path="res://10_BOARD/Symbols/Legend/Legend_symbols_prefab.tscn" id="23_3a7n3"]
 [ext_resource type="PackedScene" uid="uid://bdpldl31ejvat" path="res://10_BOARD/Symbols/Symbols_page_prefab.tscn" id="23_b4873"]
-[ext_resource type="PackedScene" uid="uid://cgb4c1n0bj2at" path="res://12_INVENTORY/Book/Page_flip/page_flip_right.tscn" id="23_grybm"]
+[ext_resource type="Resource" uid="uid://e8pswg5fypel" path="res://10_BOARD/Symbols/Book_symbols/Symbols_book_data_02.tres" id="23_qqyem"]
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_w37s1"]
 parameter_name = "Dark_color"
@@ -921,249 +922,6 @@ image = SubResource("CompressedTexture2D_4bs5a")
 legend = "Seems to beLOLOLO"
 name = "AHAHAHAH"
 
-[sub_resource type="GDScript" id="GDScript_4sg0y"]
-script/source = "extends Node
-
-
-@onready var page_flip_right = $\"../../Page_flip_right\"
-
-
-func _turn_page():
-	page_flip_right.turn_page.emit()	
-"
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_224re"]
-size = Vector3(2.69202, 0.19046, 2.289)
-
-[sub_resource type="GDScript" id="GDScript_66qc2"]
-script/source = "extends Node
-@onready var page_flip_left = $\"../../Page_flip_left\"
-
-
-
-func _turn_page():
-	page_flip_left.turn_page.emit()	
-"
-
-[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_0ehps"]
-parameter_name = "Dark_color"
-
-[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_h7sjk"]
-parameter_name = "light_color"
-default_value = Color(0.401313, 0.399257, 0, 1)
-
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_bw4ej"]
-input_name = "attenuation"
-
-[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_4t3on"]
-default_input_values = [0, 0.0, 1, 1.0]
-operator = 2
-
-[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_0nsk2"]
-operator = 2
-
-[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_atliq"]
-default_input_values = [0, Quaternion(0, 0, 0, 0), 1, Quaternion(0.125, 0.125, 0.125, 0.125), 2, Quaternion(0.5, 0.5, 0.5, 0.5)]
-op_type = 5
-
-[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_dmc5f"]
-parameter_name = "ColorParameter"
-default_value_enabled = true
-default_value = Color(0.027451, 0.14902, 0.156863, 1)
-
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_d36gc"]
-parameter_name = "Dither_size"
-qualifier = 1
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_bo2lt"]
-constant = 1.156
-
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_tii4r"]
-size = Vector2(724.789, 654.559)
-expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_ktbwg"]
-
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_wjweo"]
-input_name = "normal"
-
-[sub_resource type="VisualShaderNodeDotProduct" id="VisualShaderNodeDotProduct_avrd6"]
-default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1.325, 4.3, 2.415)]
-
-[sub_resource type="VisualShaderNodeClamp" id="VisualShaderNodeClamp_crpg4"]
-
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_3n1t5"]
-input_name = "light"
-
-[sub_resource type="VisualShader" id="VisualShader_dxwuv"]
-code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx;
-
-uniform vec4 Dark_color : source_color;
-uniform vec4 ColorParameter : source_color = vec4(0.027451, 0.149020, 0.156863, 1.000000);
-uniform vec4 light_color : source_color;
-global uniform float Dither_size;
-
-
-
-void fragment() {
-// ColorParameter:2
-	vec4 n_out2p0 = Dark_color;
-
-
-// Output:0
-	ALBEDO = vec3(n_out2p0.xyz);
-
-
-}
-
-void light() {
-// ColorParameter:23
-	vec4 n_out23p0 = ColorParameter;
-
-
-// ColorParameter:13
-	vec4 n_out13p0 = light_color;
-
-
-// FloatConstant:3
-	float n_out3p0 = 1.156000;
-
-
-// FloatParameter:24
-	float n_out24p0 = Dither_size;
-
-
-	float n_out4p0;
-// Expression:4
-	n_out4p0 = 0.0;
-	{
-		const float DITHER_THRESHOLDS[16] ={
-				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-			};
-			
-		vec2 uv = FRAGCOORD.xy * n_out24p0;
-		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-		n_out4p0 = n_out3p0 - DITHER_THRESHOLDS[index];
-	}
-
-
-// Input:6
-	vec3 n_out6p0 = NORMAL;
-
-
-// Input:9
-	vec3 n_out9p0 = LIGHT;
-
-
-// DotProduct:7
-	float n_out7p0 = dot(n_out6p0, n_out9p0);
-
-
-// Clamp:8
-	float n_in8p1 = 0.00000;
-	float n_in8p2 = 1.00000;
-	float n_out8p0 = clamp(n_out7p0, n_in8p1, n_in8p2);
-
-
-// Input:15
-	float n_out15p0 = ATTENUATION;
-
-
-// FloatOp:16
-	float n_in16p1 = 1.00000;
-	float n_out16p0 = n_out15p0 * n_in16p1;
-
-
-// VectorOp:17
-	vec3 n_out17p0 = vec3(n_out8p0) * vec3(n_out16p0);
-
-
-// Step:5
-	float n_out5p0 = step(n_out4p0, n_out17p0.x);
-
-
-// Mix:19
-	vec4 n_out19p0 = mix(n_out23p0, n_out13p0, vec4(n_out5p0));
-
-
-// Output:0
-	SPECULAR_LIGHT = vec3(n_out19p0.xyz);
-
-
-}
-"
-nodes/vertex/0/position = Vector2(400, 160)
-nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_0ehps")
-nodes/fragment/2/position = Vector2(-20, 160)
-nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0)
-nodes/light/0/position = Vector2(2440, 1640)
-nodes/light/3/node = SubResource("VisualShaderNodeFloatConstant_bo2lt")
-nodes/light/3/position = Vector2(-460, 1980)
-nodes/light/4/node = SubResource("VisualShaderNodeExpression_tii4r")
-nodes/light/4/position = Vector2(-180, 1980)
-nodes/light/4/size = Vector2(724.789, 654.559)
-nodes/light/4/input_ports = "0,0,In;1,0,Size;"
-nodes/light/4/output_ports = "0,0,Dither_Node;"
-nodes/light/4/expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/light/5/node = SubResource("VisualShaderNodeStep_ktbwg")
-nodes/light/5/position = Vector2(720, 1500)
-nodes/light/6/node = SubResource("VisualShaderNodeInput_wjweo")
-nodes/light/6/position = Vector2(-1160, 1320)
-nodes/light/7/node = SubResource("VisualShaderNodeDotProduct_avrd6")
-nodes/light/7/position = Vector2(-740, 1440)
-nodes/light/8/node = SubResource("VisualShaderNodeClamp_crpg4")
-nodes/light/8/position = Vector2(-540, 1320)
-nodes/light/9/node = SubResource("VisualShaderNodeInput_3n1t5")
-nodes/light/9/position = Vector2(-1160, 1620)
-nodes/light/13/node = SubResource("VisualShaderNodeColorParameter_h7sjk")
-nodes/light/13/position = Vector2(1120, 1620)
-nodes/light/15/node = SubResource("VisualShaderNodeInput_bw4ej")
-nodes/light/15/position = Vector2(-300, 1420)
-nodes/light/16/node = SubResource("VisualShaderNodeFloatOp_4t3on")
-nodes/light/16/position = Vector2(80, 1400)
-nodes/light/17/node = SubResource("VisualShaderNodeVectorOp_0nsk2")
-nodes/light/17/position = Vector2(260, 1280)
-nodes/light/19/node = SubResource("VisualShaderNodeMix_atliq")
-nodes/light/19/position = Vector2(1560, 1360)
-nodes/light/23/node = SubResource("VisualShaderNodeColorParameter_dmc5f")
-nodes/light/23/position = Vector2(1140, 1180)
-nodes/light/24/node = SubResource("VisualShaderNodeFloatParameter_d36gc")
-nodes/light/24/position = Vector2(-820, 2140)
-nodes/light/connections = PackedInt32Array(5, 0, 19, 2, 15, 0, 16, 0, 16, 0, 17, 1, 6, 0, 7, 0, 9, 0, 7, 1, 13, 0, 19, 1, 3, 0, 4, 0, 19, 0, 0, 1, 23, 0, 19, 0, 4, 0, 5, 0, 17, 0, 5, 1, 7, 0, 8, 0, 8, 0, 17, 0, 24, 0, 4, 1)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8vj56"]
-render_priority = 0
-shader = SubResource("VisualShader_dxwuv")
-shader_parameter/Dark_color = Color(0, 0, 0, 1)
-shader_parameter/ColorParameter = Color(0.0196078, 0.121569, 0.129412, 1)
-shader_parameter/light_color = Color(0.105882, 0.192157, 0.2, 1)
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_p4fuo"]
-material = SubResource("ShaderMaterial_8vj56")
-size = Vector2(1.21, 0.795)
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_isdhd"]
 render_priority = 0
 shader = ExtResource("1_k1enu")
@@ -1558,85 +1316,12 @@ shadow_opacity = 0.6
 omni_range = 1.6
 omni_attenuation = 1.14868
 
-[node name="Book" type="Node3D" parent="."]
-transform = Transform3D(0.0207861, -9.14465e-05, 0.0587662, 1.93573e-05, 0.062334, 9.01514e-05, -0.0587663, -1.18115e-05, 0.0207861, 0.41618, 0.00937034, 0.304159)
+[node name="Book" parent="." instance=ExtResource("22_peuec")]
+transform = Transform3D(-0.0161249, 0, -0.0602123, 0, 0.0623341, 0, 0.0602124, 0, -0.0161248, 0.422334, 0.00478163, 0.317699)
 
-[node name="Turn_Right" type="Area3D" parent="Book"]
-transform = Transform3D(1, 2.91038e-11, -7.45058e-09, 1.45519e-11, 1, 3.54703e-11, -7.45058e-09, 3.72893e-11, 1, 0, 0, 0)
-
-[node name="Turn_page" type="Node" parent="Book/Turn_Right"]
-script = SubResource("GDScript_4sg0y")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Book/Turn_Right"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0249052, 0.0589447, -1.17724)
-shape = SubResource("BoxShape3D_224re")
-
-[node name="Turn_Left" type="Area3D" parent="Book"]
-
-[node name="Turn_page" type="Node" parent="Book/Turn_Left"]
-script = SubResource("GDScript_66qc2")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Book/Turn_Left"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.113466, 0.0589447, 1.10359)
-shape = SubResource("BoxShape3D_224re")
-
-[node name="Page_flip_right" parent="Book" instance=ExtResource("23_grybm")]
-transform = Transform3D(1, 1.81899e-12, -1.49012e-08, -9.09495e-11, 1, -2.54659e-11, 1.49012e-08, 4.61569e-11, 1, -0.0474081, 0.0722982, -0.0544376)
-
-[node name="Page_flip_left" parent="Book" instance=ExtResource("23_grybm")]
-transform = Transform3D(1, 0, 5.96046e-08, 0, 0.999999, 0, 5.96046e-08, 0, -1, -0.0474076, 0.0722982, -0.0253177)
-
-[node name="Page_flip_right2" parent="Book" instance=ExtResource("23_grybm")]
-transform = Transform3D(1, 0, 1.49012e-08, 0, 0.999998, 0, 1.49012e-08, 0, -1, -0.0700197, 0.0569942, -0.0279927)
-
-[node name="Page_flip_left2" parent="Book" instance=ExtResource("23_grybm")]
-transform = Transform3D(1, 0, 0, 0, 0.999997, 0, 0, 0, 1, -0.0700188, 0.0569942, -0.0571136)
-
-[node name="MeshInstance3D13" type="MeshInstance3D" parent="Book"]
-transform = Transform3D(0.000976682, 0, -3.54225, 0, 9.34066, 0, 4.00592, 0, 0.000864863, -0.133353, 0.00743847, -0.0563836)
-layers = 2
-mesh = SubResource("PlaneMesh_p4fuo")
-skeleton = NodePath("../../..")
-
-[node name="Book2" type="Node3D" parent="."]
-transform = Transform3D(-0.0341127, -6.48593e-05, 0.0521715, 1.93573e-05, 0.062334, 9.01514e-05, -0.0521715, 6.55381e-05, -0.0341126, -0.532889, 0.00937031, 0.223404)
-
-[node name="Turn_Right" type="Area3D" parent="Book2"]
-transform = Transform3D(1, 2.91038e-11, -7.45058e-09, 1.45519e-11, 1, 3.54703e-11, -7.45058e-09, 3.72893e-11, 1, 0, 0, 0)
-
-[node name="Turn_page" type="Node" parent="Book2/Turn_Right"]
-script = SubResource("GDScript_4sg0y")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Book2/Turn_Right"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0249052, 0.0589447, -1.17724)
-shape = SubResource("BoxShape3D_224re")
-
-[node name="Turn_Left" type="Area3D" parent="Book2"]
-
-[node name="Turn_page" type="Node" parent="Book2/Turn_Left"]
-script = SubResource("GDScript_66qc2")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Book2/Turn_Left"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.113466, 0.0589447, 1.10359)
-shape = SubResource("BoxShape3D_224re")
-
-[node name="Page_flip_right" parent="Book2" instance=ExtResource("23_grybm")]
-transform = Transform3D(1, 1.81899e-12, -1.49012e-08, -9.09495e-11, 1, -2.54659e-11, 1.49012e-08, 4.61569e-11, 1, -0.0474081, 0.0722982, -0.0544376)
-
-[node name="Page_flip_left" parent="Book2" instance=ExtResource("23_grybm")]
-transform = Transform3D(1, 0, 5.96046e-08, 0, 0.999999, 0, 5.96046e-08, 0, -1, -0.0474076, 0.0722982, -0.0253177)
-
-[node name="Page_flip_right2" parent="Book2" instance=ExtResource("23_grybm")]
-transform = Transform3D(1, 0, 1.49012e-08, 0, 0.999998, 0, 1.49012e-08, 0, -1, -0.0700197, 0.0569942, -0.0279927)
-
-[node name="Page_flip_left2" parent="Book2" instance=ExtResource("23_grybm")]
-transform = Transform3D(1, 0, 0, 0, 0.999997, 0, 0, 0, 1, -0.0700188, 0.0569942, -0.0571136)
-
-[node name="MeshInstance3D13" type="MeshInstance3D" parent="Book2"]
-transform = Transform3D(0.000976682, 0, -3.54225, 0, 9.34066, 0, 4.00592, 0, 0.000864863, -0.133353, 0.00743847, -0.0563836)
-layers = 2
-mesh = SubResource("PlaneMesh_p4fuo")
-skeleton = NodePath("../../..")
+[node name="Book_other" parent="." instance=ExtResource("22_peuec")]
+transform = Transform3D(0.0317222, 0, -0.0536585, 0, 0.0623341, 0, 0.0536586, 0, 0.0317222, -0.527392, 0.00478163, 0.21038)
+_book_data = ExtResource("23_qqyem")
 
 [node name="Symbols" type="Node3D" parent="."]
 
