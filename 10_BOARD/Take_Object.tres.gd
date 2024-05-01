@@ -24,18 +24,19 @@ func show_legend(condition : bool):
 		var focus_pos = photo_area.global_position
 		_global_datas.focus_this_on_board.emit(focus_pos)
 		_is_select = true	
-		is_select.visible = true
+		#is_select.visible = true
 		_global_datas.selected_photoData = photo_data
 
 	else:
 		_global_datas._show_object_legend.emit(false,"")	
-		is_select.visible = false
+		#is_select.visible = false
 		_is_select = false		
 		_global_datas.selected_photoData = null
 		
 func close_inventory(condition : bool):
 	if !condition:
-		is_select.visible = false
+		pass
+		#is_select.visible = false
 
 
 func _on_on_click(condition):
