@@ -1,17 +1,12 @@
 extends Node
 
-@onready var options = $"../Game_Menu_Root/Options"
-@onready var checker_on_vsync = $"../Game_Menu_Root/Options/VBoxContainer/Vsync_button/Checker_off/Checker_on"
-@onready var checker_on_fullscreen = $"../Game_Menu_Root/Options/VBoxContainer/Fullscreen_button/Checker_off/Checker_on"
+@onready var checker_on_vsync = $"../Game_Menu_Root/MainMenu_Box/Options/VBoxContainer/Vsync_button/Checker_off/Checker_on"
+@onready var checker_on_fullscreen = $"../Game_Menu_Root/MainMenu_Box/Options/VBoxContainer/Fullscreen_button/Checker_off/Checker_on"
 
-signal open_option
 
 func _ready():
 	active_vsync(true)
 	checker_on_vsync.visible = true
-func _on_option_button_pressed():
-
-	open_option.emit()
 
 
 func go_full_screen(condition : bool):

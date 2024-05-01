@@ -1,11 +1,10 @@
-[gd_scene load_steps=39 format=3 uid="uid://bemddl0bqqfwo"]
+[gd_scene load_steps=36 format=3 uid="uid://bemddl0bqqfwo"]
 
 [ext_resource type="Script" path="res://100_GAME_MENU/Open_Menu.gd" id="1_2jpo2"]
 [ext_resource type="Script" path="res://100_GAME_MENU/Option_panel.gd" id="2_gelwi"]
 [ext_resource type="Script" path="res://100_GAME_MENU/Restart.gd" id="4_0detv"]
 [ext_resource type="Script" path="res://06_UI/Fps_counter.gd" id="4_86v10"]
 [ext_resource type="Script" path="res://100_GAME_MENU/HSlider.gd" id="5_7b61k"]
-[ext_resource type="Script" path="res://100_GAME_MENU/resolution_button.gd" id="5_rnqar"]
 
 [sub_resource type="GDScript" id="GDScript_8vnul"]
 script/source = "extends Node
@@ -323,35 +322,6 @@ func _on_pressed():
 	get_tree().quit()	
 "
 
-[sub_resource type="StyleBoxLine" id="StyleBoxLine_hcfes"]
-color = Color(0.180392, 0.388235, 0.329412, 1)
-thickness = 10
-
-[sub_resource type="GDScript" id="GDScript_ytjgd"]
-script/source = "extends HSlider
-
-@onready var label_2 = $\"../Label2\"
-
-func change_dither(c_value):
-	RenderingServer.global_shader_parameter_set(\"Dither_blue_noise_size\",c_value)
-
-func _on_value_changed(new_value):
-
-	change_dither(new_value)	
-	label_2.text = str(new_value)
-"
-
-[sub_resource type="GDScript" id="GDScript_lps7b"]
-script/source = "extends CheckBox
-
-@onready var checker_on = $Checker_off/Checker_on
-
-
-func _on_toggled(toggled_on):
-	_global_datas.using_turnLogic.emit(toggled_on)
-	checker_on.visible = toggled_on
-"
-
 [sub_resource type="GDScript" id="GDScript_7e2vg"]
 script/source = "extends CheckBox
 
@@ -368,6 +338,10 @@ script/source = "extends CheckBox
 #	var number : int = 0
 	#set_focus_mode(number)
 "
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_hcfes"]
+color = Color(0.180392, 0.388235, 0.329412, 1)
+thickness = 10
 
 [node name="08_GAME_MENU" type="Node"]
 
@@ -430,18 +404,20 @@ mouse_filter = 2
 color = Color(0.0156863, 0.0705882, 0.0823529, 1)
 metadata/_edit_use_anchors_ = true
 
-[node name="Title" type="Label" parent="Game_Menu_Root"]
+[node name="MainMenu_Box" type="Control" parent="Game_Menu_Root"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = -42.0
+offset_top = 40.0
+offset_right = -42.0
+offset_bottom = 40.0
+
+[node name="Title" type="Label" parent="Game_Menu_Root/MainMenu_Box"]
 clip_contents = true
 layout_direction = 1
 layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -319.0
-offset_top = 97.0
-offset_right = 319.0
-offset_bottom = 166.0
-grow_horizontal = 2
+offset_right = 638.0
+offset_bottom = 69.0
 theme_override_colors/font_color = Color(0.317647, 0.615686, 0.529412, 1)
 theme_override_font_sizes/font_size = 35
 text = "APICULA (PROTOTYPE)"
@@ -449,27 +425,20 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Game_Menu_Root"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Game_Menu_Root/MainMenu_Box"]
 process_mode = 3
 layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -220.0
-offset_top = -98.0
-offset_right = 220.0
-offset_bottom = -48.0
-grow_horizontal = 2
-grow_vertical = 0
+offset_left = 120.0
+offset_top = 78.0
+offset_right = 560.0
+offset_bottom = 128.0
 theme_override_constants/separation = 50
 
-[node name="Resum_Button2" type="Button" parent="Game_Menu_Root/HBoxContainer"]
+[node name="Resum_Button2" type="Button" parent="Game_Menu_Root/MainMenu_Box/HBoxContainer"]
 process_mode = 2
 layout_mode = 2
-focus_neighbor_top = NodePath("../../Options/VBoxContainer/Vsync_button")
 focus_neighbor_right = NodePath("../Restart_Button")
+focus_neighbor_bottom = NodePath("../../Options/VBoxContainer/Fullscreen_button")
 focus_mode = 1
 theme_type_variation = &"FlatButton"
 theme_override_colors/font_color = Color(0.721569, 0.580392, 0.407843, 1)
@@ -477,12 +446,12 @@ theme_override_font_sizes/font_size = 25
 text = "RESUME"
 script = SubResource("GDScript_rl0qu")
 
-[node name="Restart_Button" type="Button" parent="Game_Menu_Root/HBoxContainer"]
+[node name="Restart_Button" type="Button" parent="Game_Menu_Root/MainMenu_Box/HBoxContainer"]
 process_mode = 2
 layout_mode = 2
 focus_neighbor_left = NodePath("../Resum_Button2")
-focus_neighbor_top = NodePath("../../Options/VBoxContainer/Vsync_button")
 focus_neighbor_right = NodePath("../Exit_Button")
+focus_neighbor_bottom = NodePath("../../Options/VBoxContainer/Fullscreen_button")
 focus_mode = 1
 theme_type_variation = &"FlatButton"
 theme_override_colors/font_color = Color(0.721569, 0.580392, 0.407843, 1)
@@ -490,11 +459,11 @@ theme_override_font_sizes/font_size = 25
 text = "RESTART"
 script = SubResource("GDScript_r74c2")
 
-[node name="Exit_Button" type="Button" parent="Game_Menu_Root/HBoxContainer"]
+[node name="Exit_Button" type="Button" parent="Game_Menu_Root/MainMenu_Box/HBoxContainer"]
 process_mode = 2
 layout_mode = 2
 focus_neighbor_left = NodePath("../Resum_Button2")
-focus_neighbor_top = NodePath("../../Options/VBoxContainer/Vsync_button")
+focus_neighbor_bottom = NodePath("../../Options/VBoxContainer/Fullscreen_button")
 focus_mode = 1
 theme_type_variation = &"FlatButton"
 theme_override_colors/font_color = Color(0.721569, 0.580392, 0.407843, 1)
@@ -502,141 +471,16 @@ theme_override_font_sizes/font_size = 25
 text = "EXIT "
 script = SubResource("GDScript_e1pe5")
 
-[node name="Options" type="Control" parent="Game_Menu_Root"]
+[node name="Options" type="Control" parent="Game_Menu_Root/MainMenu_Box"]
 layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -217.0
-offset_top = -187.0
-offset_right = 283.0
-offset_bottom = -70.0
-grow_horizontal = 2
-grow_vertical = 0
+anchors_preset = 0
+offset_left = 124.0
+offset_top = 141.0
+offset_right = 624.0
+offset_bottom = 258.0
 mouse_filter = 2
 
-[node name="Label" type="Label" parent="Game_Menu_Root/Options"]
-layout_mode = 0
-offset_left = 387.0
-offset_top = -55.0
-offset_right = 427.0
-offset_bottom = -32.0
-text = "0.3"
-
-[node name="HSlider_dither" type="HSlider" parent="Game_Menu_Root/Options"]
-process_mode = 2
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -244.0
-offset_top = -104.5
-offset_right = 122.0
-offset_bottom = -88.5
-grow_horizontal = 2
-grow_vertical = 2
-focus_neighbor_bottom = NodePath("../VBoxContainer/Fullscreen_button")
-theme_override_styles/slider = SubResource("StyleBoxLine_hcfes")
-min_value = 0.1
-max_value = 1.0
-step = 0.05
-value = 0.4
-script = ExtResource("5_7b61k")
-
-[node name="Label2" type="Label" parent="Game_Menu_Root/Options"]
-visible = false
-layout_mode = 0
-offset_left = 387.0
-offset_top = -50.0
-offset_right = 427.0
-offset_bottom = -27.0
-text = "5
-"
-
-[node name="HSlider_noise" type="HSlider" parent="Game_Menu_Root/Options"]
-process_mode = 2
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -244.0
-offset_top = -104.5
-offset_right = 122.0
-offset_bottom = -88.5
-grow_horizontal = 2
-grow_vertical = 2
-focus_neighbor_bottom = NodePath("../VBoxContainer/Fullscreen_button")
-theme_override_styles/slider = SubResource("StyleBoxLine_hcfes")
-min_value = 1.0
-max_value = 10.0
-step = 0.1
-value = 4.0
-script = SubResource("GDScript_ytjgd")
-
-[node name="SwitchLogic_button2" type="CheckBox" parent="Game_Menu_Root/Options"]
-process_mode = 2
-layout_mode = 2
-offset_left = 377.0
-offset_top = -95.0
-offset_right = 402.0
-offset_bottom = -71.0
-focus_neighbor_top = NodePath("../VBoxContainer/Fullscreen_button")
-focus_neighbor_bottom = NodePath("../../HBoxContainer/Resum_Button2")
-alignment = 2
-script = SubResource("GDScript_lps7b")
-
-[node name="Checker_off" type="ColorRect" parent="Game_Menu_Root/Options/SwitchLogic_button2"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-color = Color(0.180392, 0.388235, 0.329412, 1)
-
-[node name="Checker_on" type="ColorRect" parent="Game_Menu_Root/Options/SwitchLogic_button2/Checker_off"]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -7.5
-offset_top = -7.5
-offset_right = 7.5
-offset_bottom = 7.5
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-color = Color(0.745098, 0.6, 0.431373, 1)
-
-[node name="Label" type="Label" parent="Game_Menu_Root/Options/SwitchLogic_button2"]
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -364.0
-offset_top = -20.0
-offset_right = -36.0
-offset_bottom = 15.0
-grow_horizontal = 0
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.317647, 0.615686, 0.529412, 1)
-theme_override_font_sizes/font_size = 25
-text = "TurnLogic ...................................."
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Game_Menu_Root/Options"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Game_Menu_Root/MainMenu_Box/Options"]
 process_mode = 3
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 1
@@ -650,15 +494,15 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 15
 
-[node name="Fullscreen_button" type="CheckBox" parent="Game_Menu_Root/Options/VBoxContainer"]
+[node name="Fullscreen_button" type="CheckBox" parent="Game_Menu_Root/MainMenu_Box/Options/VBoxContainer"]
 process_mode = 2
 layout_mode = 2
-focus_neighbor_top = NodePath("../../HSlider_dither")
+focus_neighbor_top = NodePath("../../../HBoxContainer/Resum_Button2")
 focus_neighbor_bottom = NodePath("../Vsync_button")
 alignment = 2
 script = SubResource("GDScript_7e2vg")
 
-[node name="Checker_off" type="ColorRect" parent="Game_Menu_Root/Options/VBoxContainer/Fullscreen_button"]
+[node name="Checker_off" type="ColorRect" parent="Game_Menu_Root/MainMenu_Box/Options/VBoxContainer/Fullscreen_button"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -668,7 +512,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.180392, 0.388235, 0.329412, 1)
 
-[node name="Checker_on" type="ColorRect" parent="Game_Menu_Root/Options/VBoxContainer/Fullscreen_button/Checker_off"]
+[node name="Checker_on" type="ColorRect" parent="Game_Menu_Root/MainMenu_Box/Options/VBoxContainer/Fullscreen_button/Checker_off"]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -685,7 +529,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.745098, 0.6, 0.431373, 1)
 
-[node name="Label" type="Label" parent="Game_Menu_Root/Options/VBoxContainer/Fullscreen_button"]
+[node name="Label" type="Label" parent="Game_Menu_Root/MainMenu_Box/Options/VBoxContainer/Fullscreen_button"]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -702,16 +546,16 @@ theme_override_colors/font_color = Color(0.317647, 0.615686, 0.529412, 1)
 theme_override_font_sizes/font_size = 25
 text = "Fullscreen ............................"
 
-[node name="Vsync_button" type="CheckBox" parent="Game_Menu_Root/Options/VBoxContainer"]
+[node name="Vsync_button" type="CheckBox" parent="Game_Menu_Root/MainMenu_Box/Options/VBoxContainer"]
 process_mode = 2
 layout_mode = 2
 focus_neighbor_top = NodePath("../Fullscreen_button")
-focus_neighbor_bottom = NodePath("../../../HBoxContainer/Resum_Button2")
+focus_neighbor_bottom = NodePath("../../HSlider_dither")
 button_pressed = true
 alignment = 2
 script = SubResource("GDScript_ihwu0")
 
-[node name="Checker_off" type="ColorRect" parent="Game_Menu_Root/Options/VBoxContainer/Vsync_button"]
+[node name="Checker_off" type="ColorRect" parent="Game_Menu_Root/MainMenu_Box/Options/VBoxContainer/Vsync_button"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -721,7 +565,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.180392, 0.388235, 0.329412, 1)
 
-[node name="Checker_on" type="ColorRect" parent="Game_Menu_Root/Options/VBoxContainer/Vsync_button/Checker_off"]
+[node name="Checker_on" type="ColorRect" parent="Game_Menu_Root/MainMenu_Box/Options/VBoxContainer/Vsync_button/Checker_off"]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -738,7 +582,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.745098, 0.6, 0.431373, 1)
 
-[node name="Label" type="Label" parent="Game_Menu_Root/Options/VBoxContainer/Vsync_button"]
+[node name="Label" type="Label" parent="Game_Menu_Root/MainMenu_Box/Options/VBoxContainer/Vsync_button"]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -755,35 +599,39 @@ theme_override_colors/font_color = Color(0.317647, 0.615686, 0.529412, 1)
 theme_override_font_sizes/font_size = 25
 text = "Vsync ...................................."
 
-[node name="OptionButton" type="OptionButton" parent="Game_Menu_Root/Options"]
-visible = false
-layout_mode = 2
+[node name="Label" type="Label" parent="Game_Menu_Root/MainMenu_Box/Options"]
+layout_mode = 0
 offset_left = 337.0
-offset_top = 78.0
-offset_right = 382.0
-offset_bottom = 98.0
-script = ExtResource("5_rnqar")
+offset_top = 81.0
+offset_right = 377.0
+offset_bottom = 104.0
+text = "0.3"
 
-[node name="Label2" type="Label" parent="Game_Menu_Root/Options/OptionButton"]
+[node name="HSlider_dither" type="HSlider" parent="Game_Menu_Root/MainMenu_Box/Options"]
+process_mode = 2
 layout_mode = 1
-anchors_preset = 4
+anchors_preset = 8
+anchor_left = 0.5
 anchor_top = 0.5
+anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -337.0
-offset_top = -17.5
-offset_right = -9.0
-offset_bottom = 17.5
+offset_left = -251.0
+offset_top = 31.5
+offset_right = 69.3
+offset_bottom = 47.5
+grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(0.317647, 0.615686, 0.529412, 1)
-theme_override_font_sizes/font_size = 25
-text = "Resolution ..........................."
+focus_neighbor_bottom = NodePath("../VBoxContainer/Fullscreen_button")
+theme_override_styles/slider = SubResource("StyleBoxLine_hcfes")
+min_value = 0.1
+max_value = 1.0
+step = 0.05
+value = 0.4
+script = ExtResource("5_7b61k")
 
-[connection signal="pressed" from="Game_Menu_Root/HBoxContainer/Resum_Button2" to="Game_Menu_Root/HBoxContainer/Resum_Button2" method="_on_pressed"]
-[connection signal="pressed" from="Game_Menu_Root/HBoxContainer/Restart_Button" to="Restart" method="_on_restart_button_pressed"]
-[connection signal="pressed" from="Game_Menu_Root/HBoxContainer/Exit_Button" to="Game_Menu_Root/HBoxContainer/Exit_Button" method="_on_pressed"]
-[connection signal="value_changed" from="Game_Menu_Root/Options/HSlider_dither" to="Game_Menu_Root/Options/HSlider_dither" method="_on_value_changed"]
-[connection signal="value_changed" from="Game_Menu_Root/Options/HSlider_noise" to="Game_Menu_Root/Options/HSlider_noise" method="_on_value_changed"]
-[connection signal="toggled" from="Game_Menu_Root/Options/SwitchLogic_button2" to="Game_Menu_Root/Options/SwitchLogic_button2" method="_on_toggled"]
-[connection signal="toggled" from="Game_Menu_Root/Options/VBoxContainer/Fullscreen_button" to="Option_Panel" method="_on_fullscreen_button_toggled"]
-[connection signal="toggled" from="Game_Menu_Root/Options/VBoxContainer/Vsync_button" to="Option_Panel" method="_on_vsync_button_toggled"]
-[connection signal="item_selected" from="Game_Menu_Root/Options/OptionButton" to="Game_Menu_Root/Options/OptionButton" method="_on_item_selected"]
+[connection signal="pressed" from="Game_Menu_Root/MainMenu_Box/HBoxContainer/Resum_Button2" to="Game_Menu_Root/MainMenu_Box/HBoxContainer/Resum_Button2" method="_on_pressed"]
+[connection signal="pressed" from="Game_Menu_Root/MainMenu_Box/HBoxContainer/Restart_Button" to="Restart" method="_on_restart_button_pressed"]
+[connection signal="pressed" from="Game_Menu_Root/MainMenu_Box/HBoxContainer/Exit_Button" to="Game_Menu_Root/MainMenu_Box/HBoxContainer/Exit_Button" method="_on_pressed"]
+[connection signal="toggled" from="Game_Menu_Root/MainMenu_Box/Options/VBoxContainer/Fullscreen_button" to="Option_Panel" method="_on_fullscreen_button_toggled"]
+[connection signal="toggled" from="Game_Menu_Root/MainMenu_Box/Options/VBoxContainer/Vsync_button" to="Option_Panel" method="_on_vsync_button_toggled"]
+[connection signal="value_changed" from="Game_Menu_Root/MainMenu_Box/Options/HSlider_dither" to="Game_Menu_Root/MainMenu_Box/Options/HSlider_dither" method="_on_value_changed"]

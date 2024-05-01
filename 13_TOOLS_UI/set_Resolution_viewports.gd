@@ -13,6 +13,6 @@ func set_resolution(resolution : Vector2i):
 		
 		v.scaling_3d_mode = Viewport.SCALING_3D_MODE_BILINEAR
 		v.scaling_3d_scale = 1.0
-		
+
 		v.render_target_update_mode = SubViewport.UPDATE_WHEN_VISIBLE
 	

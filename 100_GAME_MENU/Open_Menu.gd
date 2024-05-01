@@ -2,7 +2,7 @@ extends Node
 
 
 @onready var game_menu_root = $"../Game_Menu_Root"
-@onready var focus_button = $"../Game_Menu_Root/HBoxContainer/Resum_Button2"
+@onready var focus_button = $"../Game_Menu_Root/MainMenu_Box/HBoxContainer/Resum_Button2"
 
 func _ready():
 	_global_datas._open_menu.connect(_open_menu)

@@ -1,6 +1,6 @@
-[gd_resource type="ShaderMaterial" load_steps=12 format=3 uid="uid://25obtp1blkk6"]
+[gd_resource type="ShaderMaterial" load_steps=15 format=3 uid="uid://bs4xcdhvj0k0p"]
 
-[ext_resource type="Texture2D" uid="uid://dsmwbffwgaj4q" path="res://12_INVENTORY/Photo/PhotoTest_02.jpg" id="1_c2uan"]
+[ext_resource type="Texture2D" uid="uid://dsmwbffwgaj4q" path="res://12_INVENTORY/Photo/PhotoTest_02.jpg" id="1_853mq"]
 
 [sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_auibw"]
 source = 5
@@ -34,6 +34,16 @@ constant = Color(0.404588, 0.33011, 0.165636, 1)
 parameter_name = "Dither_size"
 qualifier = 1
 
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_73h11"]
+default_input_values = [1, Vector2(1, 1), 2, Vector2(-0.04, -0.205)]
+
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_tdgfp"]
+default_input_values = [1, Vector2(1, 1), 2, Vector2(-0.04, -0.205)]
+function = 1
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_m8o0b"]
+constant = 2.052
+
 [sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_p30pv"]
 default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
 op_type = 3
@@ -60,9 +70,24 @@ void fragment() {
 	vec4 n_out9p0 = vec4(0.007778, 0.052997, 0.059175, 1.000000);
 
 
+// FloatConstant:24
+	float n_out24p0 = 2.052000;
+
+
+// UVFunc:23
+	vec2 n_in23p2 = vec2(-0.04000, -0.20500);
+	vec2 n_out23p0 = (UV - n_in23p2) * vec2(n_out24p0) + n_in23p2;
+
+
+// UVFunc:22
+	vec2 n_in22p1 = vec2(1.00000, 1.00000);
+	vec2 n_in22p2 = vec2(-0.04000, -0.20500);
+	vec2 n_out22p0 = n_in22p2 * n_in22p1 + n_out23p0;
+
+
 	vec4 n_out11p0;
 // Texture2D:11
-	n_out11p0 = texture(Texture, UV);
+	n_out11p0 = texture(Texture, n_out22p0);
 
 
 // FloatParameter:13
@@ -104,7 +129,7 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-745.5, -189.926)
+graph_offset = Vector2(-2357.77, 110.874)
 flags/unshaded = true
 flags/shadows_disabled = true
 nodes/fragment/2/node = SubResource("VisualShaderNodeTexture2DParameter_ippto")
@@ -138,11 +163,17 @@ nodes/fragment/20/node = SubResource("VisualShaderNodeColorConstant_ctxdp")
 nodes/fragment/20/position = Vector2(-620, 240)
 nodes/fragment/21/node = SubResource("VisualShaderNodeFloatParameter_h161d")
 nodes/fragment/21/position = Vector2(-1429.2, 1573.92)
-nodes/fragment/connections = PackedInt32Array(19, 0, 8, 2, 13, 0, 18, 0, 18, 0, 19, 1, 2, 0, 11, 2, 11, 0, 19, 0, 21, 0, 18, 1, 8, 0, 0, 0, 20, 0, 8, 0, 9, 0, 8, 1)
+nodes/fragment/22/node = SubResource("VisualShaderNodeUVFunc_73h11")
+nodes/fragment/22/position = Vector2(-1920, 320)
+nodes/fragment/23/node = SubResource("VisualShaderNodeUVFunc_tdgfp")
+nodes/fragment/23/position = Vector2(-2240, 280)
+nodes/fragment/24/node = SubResource("VisualShaderNodeFloatConstant_m8o0b")
+nodes/fragment/24/position = Vector2(-2408.74, 372.762)
+nodes/fragment/connections = PackedInt32Array(19, 0, 8, 2, 13, 0, 18, 0, 18, 0, 19, 1, 11, 0, 19, 0, 21, 0, 18, 1, 8, 0, 0, 0, 20, 0, 8, 0, 9, 0, 8, 1, 2, 0, 11, 2, 22, 0, 11, 0, 23, 0, 22, 0, 24, 0, 23, 1)
 
 [resource]
 resource_local_to_scene = true
 render_priority = 0
 shader = SubResource("VisualShader_aph82")
 shader_parameter/Denoiser = 1.055
-shader_parameter/Texture = ExtResource("1_c2uan")
+shader_parameter/Texture = ExtResource("1_853mq")

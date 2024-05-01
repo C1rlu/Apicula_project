@@ -53,7 +53,6 @@ var move_right : String
 var move_left : String
 var move_forward : String
 var move_backward : String
-signal using_turnLogic(condition : bool)
 # scene signals
 
 signal _go_Mainscene
@@ -172,7 +171,6 @@ signal active_scanner_button(condition : bool)
 signal _mirror_switch(condition : bool)
 
 
-var scanner_mat : Material
 
 #-----------------------------
 # dialogue datas

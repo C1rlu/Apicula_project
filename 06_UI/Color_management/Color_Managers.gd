@@ -15,8 +15,8 @@ func _ready():
 	#_global_datas._open_menu.connect(_open)
 	_global_datas._active_progress_subscene.connect(_open)
 	#ACTIVE DITHER
+	RenderingServer.global_shader_parameter_set("Subscene_mirror_alpha", 0.0)
 	RenderingServer.global_shader_parameter_set("active_Dither", true)
-	
 func _open(condition : bool):
 	
 	if condition:

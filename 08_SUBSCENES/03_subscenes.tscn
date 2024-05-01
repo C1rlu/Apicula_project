@@ -1,4 +1,4 @@
-[gd_scene load_steps=101 format=3 uid="uid://nigmie4bbn6"]
+[gd_scene load_steps=96 format=3 uid="uid://nigmie4bbn6"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/Grid_scene/Subscene_loader.gd" id="1_7uoo0"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="2_3srhu"]
@@ -7,7 +7,6 @@
 [ext_resource type="Script" path="res://08_SUBSCENES/Tools/Switch_tools_input.gd" id="3_2mtx3"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Orbe_Oddity_List.gd" id="3_fuete"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Instance_oddity_at_start.gd" id="3_l4jt1"]
-[ext_resource type="Material" uid="uid://b1iqs8p4it3ni" path="res://05_SHADER_TEST/Full_screen/Subscene_screen/Scanner_subscene_dither.tres" id="3_rto3a"]
 [ext_resource type="Material" uid="uid://dbu2q4lhlk8w5" path="res://05_SHADER_TEST/Full_screen/Subscene_screen/Main_subscene_dither.tres" id="3_w42nb"]
 [ext_resource type="Resource" uid="uid://bn7ic0u3wdpiv" path="res://08_SUBSCENES/Oddity/Oddity_inventory_base.tres" id="4_7enbd"]
 [ext_resource type="Material" uid="uid://b7ffjkgpmtkc6" path="res://05_SHADER_TEST/Full_screen/Subscene_screen/Scanner_x_subscene_dither.tres" id="4_bkck3"]
@@ -37,7 +36,6 @@
 [ext_resource type="Script" path="res://03_CAMERA/Active_scene_viewports.gd" id="21_jai7k"]
 [ext_resource type="Resource" uid="uid://7ga31b1hxkul" path="res://08_SUBSCENES/Orbe/Medusa_checker/Medusa_checker_data.tres" id="25_t1c5o"]
 [ext_resource type="Resource" uid="uid://dfstosle1x85v" path="res://08_SUBSCENES/Orbe/Rapatrier/Rapatrier_check_data.tres" id="28_0sxkg"]
-[ext_resource type="PackedScene" uid="uid://bo33th5yn61n1" path="res://08_SUBSCENES/00_Scene/BlackHole_zone.tscn" id="38_6ppit"]
 
 [sub_resource type="GDScript" id="GDScript_btuws"]
 script/source = "extends Node
@@ -46,7 +44,6 @@ script/source = "extends Node
 @onready var timer = $Timer
 
 @onready var material : Material = subscenes_cam_scene.get_material()
-@onready var subscenes_cam_scanner = $\"../Viewport/Scanner\"
 @onready var subscenes_cam_scanner_x = $\"../Viewport/Scanner_x\"
 
 
@@ -58,7 +55,6 @@ func _ready():
 	
 func _fade_in():
 	subscenes_cam_scene.visible = true
-	subscenes_cam_scanner.visible = true
 	subscenes_cam_scanner_x.visible = true
 
 	timer.start()
@@ -89,7 +85,7 @@ script/source = "extends Node
 @onready var timer = $Timer
 
 @onready var material : Material = subscenes_cam_scene.get_material()
-@onready var subscenes_cam_scanner = $\"../Viewport/Scanner\"
+
 @onready var subscenes_cam_scanner_x = $\"../Viewport/Scanner_x\"
 
 @onready var active_scene_viewports = $\"../Viewport/Active_scene_viewports\"
@@ -99,7 +95,6 @@ func _ready():
 	
 func _fade_out():
 	timer.start()
-	subscenes_cam_scanner.visible = false
 	subscenes_cam_scanner_x.visible = false
 
 	
@@ -201,49 +196,6 @@ func _on_surface_trigger_area_shape_entered(area_rid, area, area_shape_index, lo
 
 "
 
-[sub_resource type="GDScript" id="GDScript_m1p72"]
-script/source = "extends Node
-var t
-
-func _ready():
-	_global_datas._go_Subscene.connect(_disable)
-	_global_datas._go_Mainscene.connect(_disable)
-	_global_datas._backFrom_subscene.connect(_disable)
-	_global_datas._mirror_switch.connect(_switch_mirror)
-		
-func _switch_mirror(condition : bool):
-	
-	
-	if _global_datas.in_scanner_mode:
-		return
-	if !_global_datas.Player_InSubScene:
-		return
-		
-	_mirror_switch(condition)
-	_global_datas.Player_InMirrorScene = condition
-	
-func _disable():
-	_mirror_switch(false)
-	
-func _mirror_switch(condition : bool):
-		
-	if t:
-		t.kill()
-	if !condition :
-		t = create_tween()
-		t .tween_method(_set_scanner_opacity_value,1.0,0.0,0.25).set_trans(Tween.TRANS_SINE)	
-	else:
-		t = create_tween()	
-		t .tween_method(_set_scanner_opacity_value,0.0,1.0,0.25).set_trans(Tween.TRANS_SINE)
-		
-	
-func _set_scanner_opacity_value( value : float):
-	
-	_global_datas.scanner_mat.set_shader_parameter(\"Circle\",value)	
-	RenderingServer.global_shader_parameter_set(\"Subscene_mirror_alpha\",value)	
-
-"
-
 [sub_resource type="GDScript" id="GDScript_nvaxv"]
 script/source = "extends Node
 @onready var subscenes_cam_scanner_x = $\"../Viewport/Scanner_x\"
@@ -286,18 +238,6 @@ func _on_timer_timeout():
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_gasoh"]
 viewport_path = NodePath("Viewport/Main_SubViewport")
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_6enrc"]
-viewport_path = NodePath("Viewport/Scanner_SubViewport")
-
-[sub_resource type="GDScript" id="GDScript_k733y"]
-script/source = "extends TextureRect
-
-
-func _ready():
-	_global_datas.scanner_mat = get_material()
-	
-"
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_dqppn"]
 viewport_path = NodePath("Viewport/Scanner_x_SubViewport")
@@ -918,7 +858,7 @@ script = SubResource("GDScript_4qsuv")
 
 [node name="set_Resolution" type="Node" parent="." node_paths=PackedStringArray("viewports")]
 script = ExtResource("2_3srhu")
-viewports = [NodePath("../Viewport/Main_SubViewport"), NodePath("../Viewport/Scanner_SubViewport"), NodePath("../Viewport/Scanner_x_SubViewport")]
+viewports = [NodePath("../Viewport/Main_SubViewport"), NodePath("../Viewport/Scanner_x_SubViewport")]
 
 [node name="Orbe_Oddity_List" type="Node" parent="."]
 script = ExtResource("3_fuete")
@@ -944,12 +884,9 @@ script = ExtResource("10_w7dre")
 [node name="GO_SURFACE" type="Node" parent="."]
 script = SubResource("GDScript_71vlv")
 
-[node name="MIRROR_switch" type="Node" parent="."]
+[node name="SCANNER_FX" type="Node" parent="."]
 
-[node name="Fade_in_mirror" type="Node" parent="MIRROR_switch"]
-script = SubResource("GDScript_m1p72")
-
-[node name="Rapatrier_VFX" type="Node" parent="MIRROR_switch"]
+[node name="Rapatrier_VFX" type="Node" parent="SCANNER_FX"]
 script = ExtResource("11_lxeli")
 
 [node name="TOOLS" type="Node" parent="."]
@@ -1019,11 +956,11 @@ script = ExtResource("20_mfhmv")
 
 [node name="Active_scene_viewports" type="Node" parent="Viewport" node_paths=PackedStringArray("viewports")]
 script = ExtResource("21_jai7k")
-viewports = [NodePath("../Main_SubViewport"), NodePath("../Scanner_SubViewport"), NodePath("../Scanner_x_SubViewport")]
+viewports = [NodePath("../Main_SubViewport"), NodePath("../Scanner_x_SubViewport")]
 
 [node name="All_cam_follow" type="Node" parent="Viewport" node_paths=PackedStringArray("_all_cam_array")]
 script = ExtResource("2_tc6o2")
-_all_cam_array = [NodePath("../Main_SubViewport/CAM_STATE_MAIN"), NodePath("../Scanner_SubViewport/CAM_STATE_BOAT"), NodePath("../Scanner_x_SubViewport/CAM_STATE_BOAT")]
+_all_cam_array = [NodePath("../Main_SubViewport/CAM_STATE_MAIN"), NodePath("../Scanner_x_SubViewport/CAM_STATE_BOAT")]
 basePos = Vector3(0, -0.35, 0)
 
 [node name="Main_SubViewport" type="SubViewport" parent="Viewport"]
@@ -1031,14 +968,6 @@ handle_input_locally = false
 size = Vector2i(1920, 1080)
 
 [node name="CAM_STATE_MAIN" type="Camera3D" parent="Viewport/Main_SubViewport"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 1.8)
-cull_mask = 4
-
-[node name="Scanner_SubViewport" type="SubViewport" parent="Viewport"]
-handle_input_locally = false
-size = Vector2i(1920, 1080)
-
-[node name="CAM_STATE_BOAT" type="Camera3D" parent="Viewport/Scanner_SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 1.8)
 cull_mask = 4
 
@@ -1052,6 +981,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 1.8)
 cull_mask = 4096
 
 [node name="Main" type="TextureRect" parent="Viewport"]
+visible = false
 material = ExtResource("3_w42nb")
 anchors_preset = 15
 anchor_right = 1.0
@@ -1061,19 +991,8 @@ grow_vertical = 2
 texture = SubResource("ViewportTexture_gasoh")
 expand_mode = 3
 
-[node name="Scanner" type="TextureRect" parent="Viewport"]
-visible = false
-material = ExtResource("3_rto3a")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = SubResource("ViewportTexture_6enrc")
-expand_mode = 3
-script = SubResource("GDScript_k733y")
-
 [node name="Scanner_x" type="TextureRect" parent="Viewport"]
+visible = false
 material = ExtResource("4_bkck3")
 anchors_preset = 15
 anchor_right = 1.0
@@ -1137,8 +1056,6 @@ input_ray_pickable = false
 shape = SubResource("BoxShape3D_qfjre")
 
 [node name="LoadScene" type="Node" parent="."]
-
-[node name="E4" parent="LoadScene" instance=ExtResource("38_6ppit")]
 
 [node name="load_sublevel" type="ProgressBar" parent="."]
 anchors_preset = 1
