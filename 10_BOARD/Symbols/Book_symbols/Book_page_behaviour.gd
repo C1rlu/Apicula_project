@@ -9,12 +9,12 @@ var page_index = 0
 
 @onready var timer = $Timer
 var is_turning = false
-
-
+@onready var auto_right : Timer = $Auto_right
 
 
 func _ready():
 	book_page.book_data = _book_data 
+
 
 func update_page_right():
 	
@@ -32,6 +32,9 @@ func update_page_right():
 	page_flip_right.turn_page.emit()		
 	book_page.set_content.emit(page_index)
 	
+	#auto_right.start()
+	
+		
 func update_page_left():
 	
 	if is_turning:
@@ -59,3 +62,8 @@ func turn_page_left():
 
 func _on_timer_timeout():
 	is_turning = false
+
+
+func _on_auto_right_timeout():
+	is_turning = false	
+	update_page_right()

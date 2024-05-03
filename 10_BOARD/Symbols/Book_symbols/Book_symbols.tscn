@@ -438,6 +438,9 @@ _book_data = ExtResource("2_fid32")
 wait_time = 0.25
 one_shot = true
 
+[node name="Auto_right" type="Timer" parent="."]
+wait_time = 0.35
+
 [node name="Turn_Right" type="Area3D" parent="."]
 transform = Transform3D(1, 2.91038e-11, -7.45058e-09, 1.45519e-11, 1, 3.54703e-11, -7.45058e-09, 3.72893e-11, 1, 0, 0, 0)
 
@@ -525,5 +528,6 @@ mesh = SubResource("PlaneMesh_p4fuo")
 skeleton = NodePath("../../..")
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="Auto_right" to="." method="_on_auto_right_timeout"]
 [connection signal="_turn_page" from="Turn_Right/Turn_page" to="." method="_turn_page_right"]
 [connection signal="_turn_page" from="Turn_Left/Turn_page" to="." method="turn_page_left"]
