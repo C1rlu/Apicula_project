@@ -1,10 +1,11 @@
-[gd_scene load_steps=49 format=3 uid="uid://bbp1ccoa6te1g"]
+[gd_scene load_steps=57 format=3 uid="uid://bbp1ccoa6te1g"]
 
 [ext_resource type="Script" path="res://11_SPEAKER/Open_Dialogue.gd" id="1_6gph5"]
 [ext_resource type="Script" path="res://09_NPC/NPC_DIVE_SELECTOR/Npc_loader.gd" id="2_gecf5"]
 [ext_resource type="Script" path="res://addons/ez_dialogue/ez_dialogue_node.gd" id="2_iqwu8"]
 [ext_resource type="Script" path="res://11_SPEAKER/Dialogue/Dialogue_asset/Ini_dialogue.gd" id="2_pxao7"]
 [ext_resource type="Script" path="res://11_SPEAKER/Dialogue_typing.gd" id="4_uwbqv"]
+[ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="6_m0hl7"]
 [ext_resource type="Material" uid="uid://dxkegh8ms5y46" path="res://06_UI/Panel_ui_disolved_mat.tres" id="7_mabi4"]
 [ext_resource type="Shader" uid="uid://i5hkaugkylpm" path="res://05_SHADER_TEST/Full_screen/Speaker_dither_convas.tres" id="9_8gj0l"]
 [ext_resource type="Script" path="res://11_SPEAKER/Dialogue/Dialogue_asset/Dialogue_box.gd" id="9_n4i7c"]
@@ -286,7 +287,7 @@ func _process(delta):
 	
 	var lerp_time = lerp(1.0,2.0,(timer.time_left / timer.wait_time ))
 	_material.set_shader_parameter(\"Opacity\",lerp_time)
-	var lerp_time_circle = lerp(0.5,0.0,(timer.time_left / timer.wait_time ))
+	var lerp_time_circle = lerp(1.0,0.0,(timer.time_left / timer.wait_time ))
 	_material_circle.set_shader_parameter(\"Opacity\",lerp_time_circle)
 	
 func check_photo_exist(photo_Data):
@@ -356,14 +357,35 @@ shader = SubResource("VisualShader_6uu1l")
 [sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_eqwof"]
 parameter_name = "Opacity"
 hint = 1
-max = 0.5
 default_value_enabled = true
-default_value = 0.5
+default_value = 1.0
 
 [sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_04s65"]
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_5ri30"]
 parameter_name = "Backdrop_color"
+
+[sub_resource type="Gradient" id="Gradient_t72in"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_tyr0r"]
+gradient = SubResource("Gradient_t72in")
+fill_from = Vector2(1, 1)
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_gnvk0"]
+texture = SubResource("GradientTexture2D_tyr0r")
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_5lymo"]
+parameter_name = "Backdrop_color2"
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_lpt25"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
+op_type = 3
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_kjlml"]
+parameter_name = "Dither_size"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_yukju"]
 
 [sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_2uwgk"]
 input_name = "uv"
@@ -380,9 +402,6 @@ constant = 0.5
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_f10hi"]
 constant = 0.25
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_e0uy7"]
-constant = 0.4
 
 [sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_hd7wn"]
 size = Vector2(724.789, 654.559)
@@ -402,7 +421,9 @@ code = "shader_type canvas_item;
 render_mode blend_mix;
 
 uniform vec4 Backdrop_color : source_color;
-uniform float Opacity : hint_range(0, 0.5) = 0.5;
+uniform sampler2D tex_frg_13;
+uniform float Opacity : hint_range(0, 1) = 1;
+global uniform float Dither_size;
 
 
 
@@ -411,35 +432,16 @@ void fragment() {
 	vec4 n_out12p0 = Backdrop_color;
 
 
-// Input:2
-	vec2 n_out2p0 = UV;
-
-
-// FloatConstant:7
-	float n_out7p0 = 0.250000;
-
-
-// FloatConstant:6
-	float n_out6p0 = 0.500000;
-
-
-	vec4 n_out5p0;
-// Expression:5
-	n_out5p0 = vec4(0.0, 0.0, 0.0, 0.0);
-	{
-		vec2 n_uv = n_out2p0 -0.5;
-		float d = length(n_uv);
-		float c = smoothstep(n_out7p0,n_out7p0 + n_out6p0,d);
-		n_out5p0 = vec4(vec3(c),1.0);
-	}
+// Texture2D:13
+	vec4 n_out13p0 = texture(tex_frg_13, UV);
 
 
 // FloatParameter:10
 	float n_out10p0 = Opacity;
 
 
-// FloatConstant:8
-	float n_out8p0 = 0.400000;
+// FloatParameter:16
+	float n_out16p0 = Dither_size;
 
 
 	float n_out9p0;
@@ -453,31 +455,31 @@ void fragment() {
 				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
 			};
 			
-		vec2 uv = FRAGCOORD.xy * n_out8p0;
+		vec2 uv = FRAGCOORD.xy * n_out16p0;
 		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 		n_out9p0 = n_out10p0 - DITHER_THRESHOLDS[index];
 	}
 
 
-// Step:11
-	float n_out11p0 = step(n_out5p0.x, n_out9p0);
+// Step:17
+	float n_out17p0 = step(n_out13p0.x, n_out9p0);
 
 
 // Output:0
 	COLOR.rgb = vec3(n_out12p0.xyz);
-	COLOR.a = n_out11p0;
+	COLOR.a = n_out17p0;
 
 
 }
 "
-graph_offset = Vector2(-220.614, -12.3233)
+graph_offset = Vector2(-135.937, -275.747)
 mode = 1
 flags/light_only = false
-nodes/fragment/0/position = Vector2(1240, 220)
+nodes/fragment/0/position = Vector2(1660, 220)
 nodes/fragment/2/node = SubResource("VisualShaderNodeInput_2uwgk")
-nodes/fragment/2/position = Vector2(-860, 320)
+nodes/fragment/2/position = Vector2(-1440, 20)
 nodes/fragment/5/node = SubResource("VisualShaderNodeExpression_sn1mh")
-nodes/fragment/5/position = Vector2(-380, 400)
+nodes/fragment/5/position = Vector2(-960, 100)
 nodes/fragment/5/size = Vector2(513.781, 284.487)
 nodes/fragment/5/input_ports = "0,3,UV;1,0,r;2,0,feather;"
 nodes/fragment/5/output_ports = "0,5,color;"
@@ -486,11 +488,9 @@ float d = length(n_uv);
 float c = smoothstep(r,r + feather,d);
 color = vec4(vec3(c),1.0);"
 nodes/fragment/6/node = SubResource("VisualShaderNodeFloatConstant_0xt40")
-nodes/fragment/6/position = Vector2(-920, 640)
+nodes/fragment/6/position = Vector2(-1500, 340)
 nodes/fragment/7/node = SubResource("VisualShaderNodeFloatConstant_f10hi")
-nodes/fragment/7/position = Vector2(-860, 400)
-nodes/fragment/8/node = SubResource("VisualShaderNodeFloatConstant_e0uy7")
-nodes/fragment/8/position = Vector2(100, 880)
+nodes/fragment/7/position = Vector2(-1440, 100)
 nodes/fragment/9/node = SubResource("VisualShaderNodeExpression_hd7wn")
 nodes/fragment/9/position = Vector2(420, 720)
 nodes/fragment/9/size = Vector2(724.789, 654.559)
@@ -511,13 +511,28 @@ nodes/fragment/10/position = Vector2(-380, 740)
 nodes/fragment/11/node = SubResource("VisualShaderNodeStep_04s65")
 nodes/fragment/11/position = Vector2(723.12, 352.651)
 nodes/fragment/12/node = SubResource("VisualShaderNodeColorParameter_5ri30")
-nodes/fragment/12/position = Vector2(780, 60)
-nodes/fragment/connections = PackedInt32Array(6, 0, 5, 2, 7, 0, 5, 1, 8, 0, 9, 1, 10, 0, 9, 0, 9, 0, 11, 1, 5, 0, 11, 0, 11, 0, 0, 1, 2, 0, 5, 0, 12, 0, 0, 0)
+nodes/fragment/12/position = Vector2(640, -380)
+nodes/fragment/13/node = SubResource("VisualShaderNodeTexture_gnvk0")
+nodes/fragment/13/position = Vector2(160, 100)
+nodes/fragment/14/node = SubResource("VisualShaderNodeColorParameter_5lymo")
+nodes/fragment/14/position = Vector2(300, -200)
+nodes/fragment/15/node = SubResource("VisualShaderNodeMix_lpt25")
+nodes/fragment/15/position = Vector2(1020, -180)
+nodes/fragment/16/node = SubResource("VisualShaderNodeFloatParameter_kjlml")
+nodes/fragment/16/position = Vector2(38.8687, 1178.49)
+nodes/fragment/17/node = SubResource("VisualShaderNodeStep_yukju")
+nodes/fragment/17/position = Vector2(847.281, 109.421)
+nodes/fragment/connections = PackedInt32Array(6, 0, 5, 2, 7, 0, 5, 1, 10, 0, 9, 0, 9, 0, 11, 1, 2, 0, 5, 0, 14, 0, 15, 1, 16, 0, 9, 1, 13, 0, 17, 0, 9, 0, 17, 1, 17, 0, 15, 2, 12, 0, 0, 0, 17, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1ca5o"]
+shader = SubResource("VisualShader_jx62j")
+shader_parameter/Backdrop_color = Color(0.721569, 0.580392, 0.407843, 1)
+shader_parameter/Opacity = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0ancs"]
 shader = SubResource("VisualShader_jx62j")
 shader_parameter/Backdrop_color = Color(0.243137, 0.494118, 0.423529, 1)
-shader_parameter/Opacity = 0.5
+shader_parameter/Opacity = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7ie5m"]
 shader = ExtResource("9_8gj0l")
@@ -561,6 +576,10 @@ script = ExtResource("4_uwbqv")
 
 [node name="Npc_loader" type="Node" parent="."]
 script = ExtResource("2_gecf5")
+
+[node name="set_Resolution" type="Node" parent="." node_paths=PackedStringArray("viewports")]
+script = ExtResource("6_m0hl7")
+viewports = [NodePath("../00_NPC_CREATOR/Npc_convas/SubViewport")]
 
 [node name="Random_FaceChanger" type="Node" parent="."]
 script = SubResource("GDScript_ktgfg")
@@ -618,24 +637,48 @@ mouse_filter = 2
 [node name="SubViewport" type="SubViewport" parent="00_NPC_CREATOR/Npc_convas"]
 transparent_bg = true
 handle_input_locally = false
+size = Vector2i(1920, 1080)
 
 [node name="Camera3D" type="Camera3D" parent="00_NPC_CREATOR/Npc_convas/SubViewport"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.12, 5.735)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.55, 15.45)
 cull_mask = 32
 current = true
 fov = 55.0
 
 [node name="CH_RENDER" type="Control" parent="00_NPC_CREATOR/Npc_convas"]
+custom_minimum_size = Vector2(500, 720)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -200.0
-offset_top = -275.0
-offset_right = 200.0
-offset_bottom = 125.0
+offset_left = -454.0
+offset_top = -360.0
+offset_right = 46.0
+offset_bottom = 360.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Circle_backdrop2" type="ColorRect" parent="00_NPC_CREATOR/Npc_convas/CH_RENDER"]
+material = SubResource("ShaderMaterial_1ca5o")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 500.0
+offset_right = 6.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Circle_backdrop3" type="ColorRect" parent="00_NPC_CREATOR/Npc_convas/CH_RENDER"]
+material = SubResource("ShaderMaterial_1ca5o")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -6.0
+offset_right = -500.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -657,9 +700,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("ViewportTexture_ah4ff")
-expand_mode = 4
 
 [node name="PhotoButton" parent="00_NPC_CREATOR/Npc_convas" instance=ExtResource("12_8wltn")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -674,20 +717,30 @@ texture_normal = null
 
 [node name="Dialogue_box" type="Control" parent="00_NPC_CREATOR/Npc_convas"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 1
+anchor_left = 1.0
 anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_left = -533.0
+offset_top = 148.0
+offset_right = -33.0
+offset_bottom = 348.0
+grow_horizontal = 0
 script = ExtResource("9_n4i7c")
 
 [node name="Leave_button" type="Button" parent="00_NPC_CREATOR/Npc_convas/Dialogue_box"]
 visible = false
-layout_mode = 0
-offset_left = 1071.0
-offset_top = 1027.0
-offset_right = 1144.0
-offset_bottom = 1058.0
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 175.0
+offset_top = 338.0
+offset_right = 248.0
+offset_bottom = 369.0
+grow_horizontal = 2
+grow_vertical = 0
 mouse_default_cursor_shape = 2
 theme = SubResource("Theme_g7433")
 theme_override_colors/font_color = Color(0.8, 0.698039, 0.494118, 1)
@@ -701,20 +754,12 @@ script = SubResource("GDScript_pev46")
 [node name="Dialogue_name" type="Label" parent="00_NPC_CREATOR/Npc_convas/Dialogue_box"]
 layout_direction = 1
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.58
-anchor_top = 0.403
-anchor_right = 0.58
-anchor_bottom = 0.403
-offset_left = -20.6
-offset_top = -160.16
-offset_right = 88.4
-offset_bottom = -118.16
-grow_horizontal = 2
-grow_vertical = 2
+offset_left = -16.0
+offset_right = 93.0
+offset_bottom = 42.0
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.764706, 0.752941, 0.584314, 1)
-theme_override_font_sizes/font_size = 25
+theme_override_font_sizes/font_size = 30
 text = "Mr Bird"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -745,28 +790,28 @@ offset_bottom = 22.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.764706, 0.752941, 0.584314, 1)
-theme_override_font_sizes/font_size = 25
+theme_override_font_sizes/font_size = 31
 text = "Mr Bird"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Dialogue_text" type="Label" parent="00_NPC_CREATOR/Npc_convas/Dialogue_box"]
+custom_minimum_size = Vector2(198.065, 0)
 layout_mode = 1
-anchors_preset = -1
+anchors_preset = 8
 anchor_left = 0.5
-anchor_top = 0.76
+anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 0.76
+anchor_bottom = 0.5
 offset_left = -259.0
-offset_top = -42.2
-offset_right = 259.0
-offset_bottom = 11.63
+offset_top = -31.5
+offset_right = 191.0
+offset_bottom = 31.5
 grow_horizontal = 2
-grow_vertical = 0
+grow_vertical = 2
 theme_override_colors/font_color = Color(0.682353, 0.92549, 0.847059, 1)
 theme_override_font_sizes/font_size = 21
 text = "Lorem ipsum lorali aticula"
-horizontal_alignment = 1
 autowrap_mode = 3
 
 [node name="dots" type="Label" parent="00_NPC_CREATOR/Npc_convas/Dialogue_box/Dialogue_text"]
@@ -775,32 +820,26 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = -57.0
-offset_top = -23.83
-offset_right = 581.0
-offset_bottom = 35.44
+offset_top = 0.499969
+offset_right = 248.0
+offset_bottom = 28.5
 grow_vertical = 0
 theme_override_colors/font_color = Color(0.317647, 0.615686, 0.529412, 1)
 theme_override_font_sizes/font_size = 20
 text = "............................................."
-horizontal_alignment = 1
 vertical_alignment = 1
-autowrap_mode = 3
+autowrap_mode = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="00_NPC_CREATOR/Npc_convas/Dialogue_box/Dialogue_text"]
 material = ExtResource("7_mabi4")
 layout_direction = 1
 layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
+anchors_preset = 2
 anchor_top = 1.0
-anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -56.0
-offset_top = 40.17
-offset_right = 76.0
-offset_bottom = 153.17
-grow_horizontal = 2
+offset_top = 73.5
+offset_right = 149.0
+offset_bottom = 223.5
 grow_vertical = 0
 mouse_filter = 2
 theme_override_constants/separation = 10
