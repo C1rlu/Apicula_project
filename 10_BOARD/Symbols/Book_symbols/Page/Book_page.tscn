@@ -1,11 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://db6k1p6qd826g"]
+[gd_scene load_steps=4 format=3 uid="uid://db6k1p6qd826g"]
 
 [ext_resource type="Script" path="res://10_BOARD/Symbols/Book_symbols/Page/Book_page_set.gd" id="1_oto3u"]
-[ext_resource type="Material" uid="uid://x843rfporykk" path="res://10_BOARD/Symbols/Symbols_drawing_mat.tres" id="2_5lpyk"]
 [ext_resource type="PackedScene" uid="uid://cotyiiewaqqpu" path="res://10_BOARD/Symbols/Book_symbols/Page/page_00.tscn" id="3_7xsf7"]
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_h7gm3"]
-size = Vector2(0.08, 0.1)
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_wygim"]
 viewport_path = NodePath("Page_Viewport_render")
@@ -21,13 +17,6 @@ one_shot = true
 wait_time = 0.25
 one_shot = true
 
-[node name="Render_symbols" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.001, 0)
-visible = false
-layers = 2
-mesh = SubResource("PlaneMesh_h7gm3")
-surface_material_override/0 = ExtResource("2_5lpyk")
-
 [node name="Render_text" type="Sprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.36044, 0)
 layers = 2
@@ -36,6 +25,8 @@ texture = SubResource("ViewportTexture_wygim")
 
 [node name="Page_Viewport_render" type="SubViewport" parent="."]
 transparent_bg = true
+scaling_3d_scale = 2.0
+fsr_sharpness = 2.0
 size = Vector2i(1000, 600)
 
 [node name="Page_00" parent="Page_Viewport_render" instance=ExtResource("3_7xsf7")]

@@ -9,7 +9,7 @@ var page_index = 0
 
 @onready var timer = $Timer
 var is_turning = false
-@onready var auto_right : Timer = $Auto_right
+
 
 
 func _ready():
@@ -64,6 +64,4 @@ func _on_timer_timeout():
 	is_turning = false
 
 
-func _on_auto_right_timeout():
-	is_turning = false	
-	update_page_right()
+
