@@ -69,7 +69,7 @@ signal out_dialogue_zone
 signal  _open_dialogue
 signal  _close_dialogue
 signal _type_text(count : int)
-
+signal _update_cam_focus(position : Vector3)
 # for save game
 var photo_archives : Array[PhotoData] 
 var note_archives : Array[Note_Data]
