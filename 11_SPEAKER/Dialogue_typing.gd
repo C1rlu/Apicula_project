@@ -53,7 +53,7 @@ func _input(event):
 	if !active:
 		return
 	if _is_typing:
-		if event.is_action_pressed("Push_to_subscene"):
+		if event.is_action_pressed("Back_call"):
 			if t:
 				t.kill()	
 			dialogue_text.visible_ratio = 1.0
