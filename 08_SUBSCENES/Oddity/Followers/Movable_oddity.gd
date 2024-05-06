@@ -146,8 +146,11 @@ func _on_movable_oddity_example_body_exited(body):
 		if player:
 			path_to_player.clear()
 			path_index = 0
-
-			wait_before_follow.start()
+		
+			var tree = is_inside_tree()
+	
+			if tree:
+				wait_before_follow.start()
 
 			#print(player,"exist")
 			
