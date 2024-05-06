@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://bdpldl31ejvat"]
+[gd_scene load_steps=8 format=3 uid="uid://bdpldl31ejvat"]
 
 [ext_resource type="Material" uid="uid://34l72f47cf51" path="res://10_BOARD/Symbols/Symbols_page_mat.tres" id="1_6mfeg"]
 [ext_resource type="Script" path="res://10_BOARD/Symbols/Symbols_page_setup.gd" id="1_ld7t3"]
 [ext_resource type="Material" uid="uid://x843rfporykk" path="res://10_BOARD/Symbols/Symbols_drawing_mat.tres" id="2_2ts6d"]
+[ext_resource type="Script" path="res://10_BOARD/Symbols/Show_this_page.gd" id="2_gkitr"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_6ne48"]
 size = Vector2(0.08, 0.1)
@@ -11,18 +12,19 @@ size = Vector2(0.08, 0.1)
 size = Vector2(0.08, 0.1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_dcs32"]
-size = Vector3(1, 0.199585, 0.887665)
+size = Vector3(0.81218, 0.199585, 1.09056)
 
 [node name="Symbols_page_prefab" type="Node3D"]
 script = ExtResource("1_ld7t3")
 
 [node name="Render_page" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)
 layers = 2
 mesh = SubResource("PlaneMesh_6ne48")
 surface_material_override/0 = ExtResource("1_6mfeg")
 
 [node name="Render_symbols" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.001, 0)
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0.001, 0)
 layers = 2
 mesh = SubResource("PlaneMesh_h7gm3")
 surface_material_override/0 = ExtResource("2_2ts6d")
@@ -31,6 +33,11 @@ surface_material_override/0 = ExtResource("2_2ts6d")
 
 [node name="Focus_here" type="Node" parent="Area3D"]
 
+[node name="Show_this_page" type="Node" parent="Area3D"]
+script = ExtResource("2_gkitr")
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
-transform = Transform3D(0.0719379, 0, 0, 0, 0.0719379, 0, 0, 0, 0.0719379, 0, 0.00676613, -0.0112458)
+transform = Transform3D(0.0719379, 0, 0, 0, 0.0719379, 0, 0, 0, 0.0719379, -0.00123325, 0.00676613, -0.000406366)
 shape = SubResource("BoxShape3D_dcs32")
+
+[connection signal="show_this_page" from="Area3D/Show_this_page" to="." method="_on_show_this_page_show_this_page"]
