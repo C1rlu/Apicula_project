@@ -203,12 +203,24 @@ script/source = "extends Node
 @onready var timer = $Timer
 
 var t
-
+var actual_value : float
 func _ready():
 	
 	_global_datas._scan_mirror_xray.connect(_check_xray_oddity)
-
-
+	#_global_datas._traceur_pause.connect(_set_paused)
+	
+	
+func _set_paused(condition : bool):
+	
+	if condition:
+		if t:
+			t.kill()
+	else :
+		if t:
+			t.kill()
+		t = create_tween()
+		t .tween_method(_set_opacity_value,actual_value,0,1.5)	
+					
 func _check_xray_oddity():
 	
 	if _global_datas._xray_oddity == null:
@@ -231,7 +243,7 @@ func _flash_mirror():
 func _set_opacity_value( value : float):
 
 	material.set_shader_parameter(\"Opacity\",value)	
-
+	actual_value = value
 func _on_timer_timeout():
 	_flash_mirror()
 "
@@ -972,6 +984,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 1.8)
 cull_mask = 4
 
 [node name="Scanner_x_SubViewport" type="SubViewport" parent="Viewport"]
+process_thread_group = 1
+process_thread_group_order = 2
+process_thread_messages = 0
 transparent_bg = true
 handle_input_locally = false
 size = Vector2i(1920, 1080)

@@ -19,12 +19,21 @@ var path_index : int
 var close_to_player : bool  = false
 var path_to_player : Array[Vector3]
 
+var is_paused : bool
+
 func _ready():
 
 	idle_position = root.global_position
 
 	rotation_target = Vector3(randf_range(-90.0,90.0),randf_range(-90.0,90.0),randf_range(-90.0,90.0))
 	actual_speed = speed
+	
+	#_global_datas._traceur_pause.connect(_set_paused)	
+	
+	
+func _set_paused(condition : bool):
+	is_paused = condition	
+	
 func move_oddity():
 	
 	
@@ -41,7 +50,9 @@ func move_oddity():
 
 func _process(delta):
 	
-	
+	if is_paused:
+		return
+		
 	if !move:
 		_idle(delta)
 		return	

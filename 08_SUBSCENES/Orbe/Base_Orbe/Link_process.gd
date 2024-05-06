@@ -45,7 +45,7 @@ func _on_orbe_instancer_process_link(condition, start_point):
 	
 	
 	process_link.visible = condition
-	
+	_global_datas._traceur_pause.emit(condition)
 	_is_processing = condition
 	if !start_point:
 		return

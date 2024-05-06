@@ -106,7 +106,7 @@ var flash_subscene_position : Vector3
 var _selected_tool : tool_data 
 signal switching_tool(tool : tool_data)
 signal rapatrier_vfx(position : Vector3)
-
+signal _traceur_pause(condition : bool)
 # UPDATE INVENTORY ODDITY LIST BY TYPE
 
 signal add_oddity_to_inventory(oddity : Oddity_data)
