@@ -14,6 +14,10 @@ const BASE_ORBE_VISUAL_PREFABS = preload("res://08_SUBSCENES/Orbe/Base_Orbe/Base
 signal process_link(condition : bool, start_point : Vector3)
 
 
+const TRACER_ZONE_PREFAB = preload("res://08_SUBSCENES/Orbe/Base_Orbe/Tracer_Zone_prefab.tscn")
+var is_tracing : bool
+var tracing_zone : Node3D
+
 func _ready():
 	
 	_global_datas._instance_start_visual_orbe.connect(_instance_start_orbe)
@@ -21,14 +25,25 @@ func _ready():
 	
 	_global_datas._backFrom_subscene.connect(clear_orberSceneList)
 	_global_datas._photo_flash.connect(stop_tracing)
+	_global_datas._photo_flash.connect(delete_tracing_zone)
 	orber_tool.cancel_action_signal.connect(stop_tracing)
 	
 func clear_orberSceneList():
 	_global_datas._orbe_visual_scene.clear()
 	process_link.emit(false,null)
-	
+	is_tracing = false
+	if tracing_zone != null:
+		tracing_zone.queue_free() 
+
+func delete_tracing_zone():
+	is_tracing = false
+	if tracing_zone != null:
+		tracing_zone.queue_free() 
+
 func stop_tracing():
 	process_link.emit(false,null)	
+
+	
 	
 func _instance_start_orbe():
 	
@@ -42,7 +57,20 @@ func _instance_start_orbe():
 	orbe.position  = get_target()	
 	process_link.emit(true,orbe.position)
 	
+	if !is_tracing:
+		print("INSTANCE TRACING ZONE")
+		instance_tracing_zone()
+		is_tracing = true	
+
+
+func instance_tracing_zone():
 	
+	
+	var _tracing_zone = TRACER_ZONE_PREFAB.instantiate()
+	load_scene.add_child(_tracing_zone)
+	var t_position = _global_datas.subbscene_playerPosition
+	_tracing_zone.position = t_position
+	tracing_zone = 	_tracing_zone
 func _instance_end_orbe():
 	
 	# HERE ONLY FOR VISUAL
