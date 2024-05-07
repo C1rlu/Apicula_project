@@ -222,6 +222,12 @@ _book_data = ExtResource("2_fid32")
 wait_time = 0.25
 one_shot = true
 
+[node name="Multiple_page_transition_right" type="Timer" parent="."]
+wait_time = 0.15
+
+[node name="Multiple_page_transition_left" type="Timer" parent="."]
+wait_time = 0.15
+
 [node name="Turn_Right" type="Area3D" parent="."]
 transform = Transform3D(1, 2.91038e-11, -7.45058e-09, 1.45519e-11, 1, 3.54703e-11, -7.45058e-09, 3.72893e-11, 1, 0, 0, 0)
 
@@ -242,13 +248,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.113466, 0.0589447, 1.10359
 shape = SubResource("BoxShape3D_224re")
 
 [node name="Book_page" parent="." instance=ExtResource("1_xf8in")]
-transform = Transform3D(-1.93005e-08, 0, 0.441544, 0, 0.441544, 0, -0.441544, 0, -1.93005e-08, -0.116236, -0.0607792, -0.0336795)
+transform = Transform3D(-1.93005e-08, 0, 0.441544, 0, 0.441544, 0, -0.441544, 0, -1.93005e-08, -0.116, -0.061, 0)
 
-[node name="Page_flip_right" parent="." instance=ExtResource("1_kxpxv")]
-transform = Transform3D(0.974894, 1.81899e-12, -1.37403e-08, -8.86662e-11, 1, -2.3482e-11, 1.45271e-08, 4.61569e-11, 0.922095, -0.048, 0.089, -0.0383036)
+[node name="Page_flip_right_ROOT" type="Node3D" parent="."]
+transform = Transform3D(0.975, 0, 0, 0, 1, 0, 0, 0, 0.922, -0.048, 0.089, 0)
 
-[node name="Page_flip_left" parent="." instance=ExtResource("1_kxpxv")]
-transform = Transform3D(0.974894, 0, 5.66157e-08, 0, 0.999999, 0, 5.81081e-08, 0, -0.949854, -0.048, 0.089, -0.0799838)
+[node name="Page_flip_right" parent="Page_flip_right_ROOT" instance=ExtResource("1_kxpxv")]
+
+[node name="Page_flip_left_ROOT" type="Node3D" parent="."]
+transform = Transform3D(0.974894, 8.74227e-08, 0, -8.52279e-08, 0.999999, 0, 0, 0, -0.949854, -0.048, 0.089, 0)
+
+[node name="Page_flip_left" parent="Page_flip_left_ROOT" instance=ExtResource("1_kxpxv")]
 
 [node name="page" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.977, 0, -7.40333e-15, 0, 1, 0, 3.55432e-15, 0, 2.035, -0.0503365, 0.0889318, 2.23909)
@@ -287,5 +297,7 @@ skeleton = NodePath("../../..")
 surface_material_override/0 = ExtResource("5_6t2bc")
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="Multiple_page_transition_right" to="." method="_on_multiple_page_transition_timeout"]
+[connection signal="timeout" from="Multiple_page_transition_left" to="." method="_on_multiple_page_transition_left_timeout"]
 [connection signal="_turn_page" from="Turn_Right/Turn_page" to="." method="_turn_page_right"]
 [connection signal="_turn_page" from="Turn_Left/Turn_page" to="." method="turn_page_left"]

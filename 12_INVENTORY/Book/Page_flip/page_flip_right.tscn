@@ -12,19 +12,14 @@ signal turn_page
 [sub_resource type="GDScript" id="GDScript_hjljc"]
 script/source = "extends Node
 
+@onready var root = $\"..\"
 @onready var animation_player = $\"../AnimationPlayer\"
-@onready var page = $\"../page\"
 
 func _turn_page():
-	page.visible = true
 	animation_player.play(\"Key_001Action\")	
-
-
-func _on_animation_player_animation_finished(anim_name):
-	page.visible = false
 	
-
-
+func _on_animation_player_animation_finished(anim_name):
+	root.queue_free()		
 
 func _on_page_flip_right_turn_page():
 	_turn_page()
