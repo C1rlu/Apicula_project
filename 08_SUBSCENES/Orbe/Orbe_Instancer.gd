@@ -50,6 +50,13 @@ func _instance_start_orbe():
 	if _global_datas._orbe_visual_scene.size() > orbe_stroke_maxLenght:
 		return	
 	
+	
+	if !is_tracing:
+		print("INSTANCE TRACING ZONE")
+		instance_tracing_zone()
+		is_tracing = true	
+		return
+		
 	#create orbe	
 	var orbe = BASE_ORBE_VISUAL_PREFABS.instantiate()
 	load_scene.add_child(orbe)
@@ -57,10 +64,7 @@ func _instance_start_orbe():
 	orbe.position  = get_target()	
 	process_link.emit(true,orbe.position)
 	
-	if !is_tracing:
-		print("INSTANCE TRACING ZONE")
-		instance_tracing_zone()
-		is_tracing = true	
+	
 
 
 func instance_tracing_zone():
@@ -68,9 +72,10 @@ func instance_tracing_zone():
 	
 	var _tracing_zone = TRACER_ZONE_PREFAB.instantiate()
 	load_scene.add_child(_tracing_zone)
-	var t_position = _global_datas.subbscene_playerPosition
+	var t_position = _global_datas.subbscene_playerPosition + Vector3(0.0,0.05,0.0)
 	_tracing_zone.position = t_position
-	tracing_zone = 	_tracing_zone
+	tracing_zone = _tracing_zone
+	
 func _instance_end_orbe():
 	
 	# HERE ONLY FOR VISUAL
