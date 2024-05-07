@@ -1,6 +1,7 @@
-[gd_scene load_steps=24 format=3 uid="uid://6es1hjenott2"]
+[gd_scene load_steps=30 format=3 uid="uid://6es1hjenott2"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Base_Orbe/Tracer_Zone_ini.gd" id="1_xigmd"]
+[ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_elements_mat.tres" id="3_18lbk"]
 [ext_resource type="Material" uid="uid://goq7y1lqdpxa" path="res://05_SHADER_TEST/Subscene_materials/element_subscene_x_ray_VFX_LIGHT.tres" id="9_8dxfx"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_y3wjt"]
@@ -182,6 +183,38 @@ shader_parameter/ColorParameter = Color(0.286275, 0.286275, 0.286275, 1)
 [sub_resource type="SphereShape3D" id="SphereShape3D_s4hpl"]
 radius = 0.363589
 
+[sub_resource type="Curve" id="Curve_kr3w6"]
+_data = [Vector2(0.00954654, 0.051224), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_plvsx"]
+curve = SubResource("Curve_kr3w6")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_p5bjq"]
+emission_shape = 2
+emission_sphere_radius = 0.53
+inherit_velocity_ratio = -0.525
+direction = Vector3(0, 0, 0)
+gravity = Vector3(0, 0, 0)
+radial_accel_min = -3.0
+scale_curve = SubResource("CurveTexture_plvsx")
+
+[sub_resource type="SphereMesh" id="SphereMesh_6nygj"]
+radius = 0.1
+height = 0.25
+radial_segments = 16
+rings = 16
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_pre6c"]
+emission_shape = 2
+emission_sphere_radius = 0.5
+inherit_velocity_ratio = -0.525
+direction = Vector3(0, 0, 0)
+gravity = Vector3(0, 0, 0)
+radial_accel_min = -0.5
+radial_accel_max = 0.5
+scale_curve = SubResource("CurveTexture_plvsx")
+
 [node name="TracerZone_root" type="Node3D"]
 transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, 0, 0, 0)
 
@@ -210,4 +243,29 @@ collision_mask = 4
 transform = Transform3D(1.42314, 0, 0, 0, 1.42314, 0, 0, 0, 1.42314, 0.0120305, 0.0105445, 0)
 shape = SubResource("SphereShape3D_s4hpl")
 
+[node name="GPU_Explosed" type="GPUParticles3D" parent="."]
+layers = 4
+material_override = ExtResource("3_18lbk")
+emitting = false
+amount = 100
+one_shot = true
+speed_scale = 2.0
+explosiveness = 1.0
+fixed_fps = 24
+interpolate = false
+fract_delta = false
+process_material = SubResource("ParticleProcessMaterial_p5bjq")
+draw_pass_1 = SubResource("SphereMesh_6nygj")
+
+[node name="GPU_normal" type="GPUParticles3D" parent="."]
+layers = 4
+material_override = ExtResource("3_18lbk")
+amount = 50
+fixed_fps = 24
+interpolate = false
+fract_delta = false
+process_material = SubResource("ParticleProcessMaterial_pre6c")
+draw_pass_1 = SubResource("SphereMesh_6nygj")
+
 [connection signal="body_shape_exited" from="AREA" to="Ini_etS" method="_on_area_body_shape_exited"]
+[connection signal="finished" from="GPU_Explosed" to="Ini_etS" method="_on_gpu_explosed_finished"]
