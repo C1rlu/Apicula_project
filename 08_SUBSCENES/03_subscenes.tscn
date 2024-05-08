@@ -263,13 +263,13 @@ _data = {
 }
 point_count = 2
 
-[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_njlf1"]
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_irhc4"]
 parameter_name = "ColorParameter2"
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_6b8hu"]
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_5g46n"]
 constant = 1.227
 
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_xd183"]
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_ojkbw"]
 size = Vector2(724.789, 654.559)
 expression = "const float DITHER_THRESHOLDS[16] ={
 		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
@@ -282,13 +282,13 @@ vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
 
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_w81q1"]
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_gmouf"]
 parameter_name = "Dither_size"
 qualifier = 1
 
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_wyiac"]
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_pwp6f"]
 
-[sub_resource type="VisualShader" id="VisualShader_ce8a4"]
+[sub_resource type="VisualShader" id="VisualShader_p2nw7"]
 code = "shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
 
@@ -339,11 +339,11 @@ void fragment() {
 }
 "
 flags/unshaded = true
-nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_njlf1")
+nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_irhc4")
 nodes/fragment/2/position = Vector2(-220, 120)
-nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_6b8hu")
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_5g46n")
 nodes/fragment/3/position = Vector2(-960, 400)
-nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_xd183")
+nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_ojkbw")
 nodes/fragment/4/position = Vector2(-720, 560)
 nodes/fragment/4/size = Vector2(724.789, 654.559)
 nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
@@ -358,16 +358,16 @@ nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
 vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/5/node = SubResource("VisualShaderNodeFloatParameter_w81q1")
+nodes/fragment/5/node = SubResource("VisualShaderNodeFloatParameter_gmouf")
 nodes/fragment/5/position = Vector2(-1100, 620)
-nodes/fragment/6/node = SubResource("VisualShaderNodeStep_wyiac")
+nodes/fragment/6/node = SubResource("VisualShaderNodeStep_pwp6f")
 nodes/fragment/6/position = Vector2(156.138, 356.532)
 nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0, 3, 0, 4, 0, 5, 0, 4, 1, 4, 0, 6, 1, 6, 0, 0, 1, 2, 0, 6, 0)
 nodes/light/0/position = Vector2(840, 240)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7hk5m"]
 render_priority = 1
-shader = SubResource("VisualShader_ce8a4")
+shader = SubResource("VisualShader_p2nw7")
 shader_parameter/ColorParameter2 = Color(0.780392, 0.627451, 0.396078, 1)
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_3w81f"]

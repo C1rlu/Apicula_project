@@ -1,4 +1,4 @@
-[gd_scene load_steps=148 format=3 uid="uid://dr73p5vs0sixe"]
+[gd_scene load_steps=156 format=3 uid="uid://dr73p5vs0sixe"]
 
 [ext_resource type="Script" path="res://10_BOARD/photos_check.gd" id="1_bcxwj"]
 [ext_resource type="Shader" uid="uid://upo0fuo5sqgd" path="res://05_SHADER_TEST/Board/Board_sh.tres" id="1_k1enu"]
@@ -8,7 +8,6 @@
 [ext_resource type="Material" uid="uid://dvbomu5aenq4x" path="res://05_SHADER_TEST/Board/board_candle.tres" id="5_8m368"]
 [ext_resource type="PackedScene" uid="uid://dxjn0mjuqebwy" path="res://10_BOARD/scanner_area.tscn" id="6_8iku8"]
 [ext_resource type="Material" uid="uid://5cye33kgwfo5" path="res://10_BOARD/Shading/Board_shading_base.tres" id="6_kkuc8"]
-[ext_resource type="Resource" uid="uid://ctxrmh1elpnm1" path="res://12_INVENTORY/Photo/Oddity_photoData/Follower_photoData.tres" id="8_0j6kn"]
 [ext_resource type="Texture2D" uid="uid://6cpkqsxbg2g8" path="res://09_NPC/Npc_data/Photo/Guy_01.png" id="8_4qqmu"]
 [ext_resource type="Resource" uid="uid://cxm7e48owjq7a" path="res://12_INVENTORY/Photo/Oddity_photoData/Scanner_photoData.tres" id="9_8tuuv"]
 [ext_resource type="PackedScene" uid="uid://qgyjfq88teq8" path="res://10_BOARD/letters_area.tscn" id="9_ajmma"]
@@ -920,6 +919,127 @@ legend = "Maurice the \"Grognard\""
 name = "SetaName"
 scanner_prefab = ExtResource("9_dmhu2")
 
+[sub_resource type="Curve3D" id="Curve3D_28u2e"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0.411, -0.099, 0.139, 0, 0, 0, 0, 0, 0, 0.37, -0.099, 0.079),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_njlf1"]
+parameter_name = "ColorParameter2"
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_6b8hu"]
+constant = 1.227
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_xd183"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_w81q1"]
+parameter_name = "Dither_size"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_wyiac"]
+
+[sub_resource type="VisualShader" id="VisualShader_ce8a4"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+
+uniform vec4 ColorParameter2 : source_color;
+global uniform float Dither_size;
+
+
+
+void fragment() {
+// ColorParameter:2
+	vec4 n_out2p0 = ColorParameter2;
+
+
+// FloatConstant:3
+	float n_out3p0 = 1.227000;
+
+
+// FloatParameter:5
+	float n_out5p0 = Dither_size;
+
+
+	float n_out4p0;
+// Expression:4
+	n_out4p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out5p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out4p0 = n_out3p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Step:6
+	float n_out6p0 = step(n_out2p0.x, n_out4p0);
+
+
+// Output:0
+	ALBEDO = vec3(n_out2p0.xyz);
+	ALPHA = n_out6p0;
+
+
+}
+"
+flags/unshaded = true
+nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_njlf1")
+nodes/fragment/2/position = Vector2(-220, 120)
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_6b8hu")
+nodes/fragment/3/position = Vector2(-960, 400)
+nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_xd183")
+nodes/fragment/4/position = Vector2(-720, 560)
+nodes/fragment/4/size = Vector2(724.789, 654.559)
+nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/4/output_ports = "0,0,Dither_Node;"
+nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/5/node = SubResource("VisualShaderNodeFloatParameter_w81q1")
+nodes/fragment/5/position = Vector2(-1100, 620)
+nodes/fragment/6/node = SubResource("VisualShaderNodeStep_wyiac")
+nodes/fragment/6/position = Vector2(156.138, 356.532)
+nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0, 3, 0, 4, 0, 5, 0, 4, 1, 4, 0, 6, 1, 6, 0, 0, 1, 2, 0, 6, 0)
+nodes/light/0/position = Vector2(840, 240)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6ndss"]
+render_priority = 1
+shader = SubResource("VisualShader_ce8a4")
+shader_parameter/ColorParameter2 = Color(0.780392, 0.627451, 0.396078, 1)
+
+[sub_resource type="Curve3D" id="Curve3D_elcof"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0.455, -0.098, 0.039, 0, 0, 0, 0, 0, 0, 0.37, -0.099, 0.044),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_isdhd"]
 render_priority = 0
 shader = ExtResource("1_k1enu")
@@ -1248,17 +1368,13 @@ surface_material_override/1 = ExtResource("6_kkuc8")
 transform = Transform3D(0.882135, 0, -0.470996, 0, 1, 0, 0.470996, 0, 0.882135, 0.16492, 0.00272226, 0.0156601)
 script = ExtResource("1_bcxwj")
 
+[node name="Scanner_area_book_change" parent="photos" instance=ExtResource("6_8iku8")]
+transform = Transform3D(0.737306, 0, 0.31045, 0, 0.8, 0, -0.31045, 0, 0.737306, 0.264751, 0.014297, 0.110034)
+photo_data = ExtResource("9_8tuuv")
+
 [node name="Scanner_area" parent="photos" instance=ExtResource("6_8iku8")]
 transform = Transform3D(0.737306, 0, 0.310451, 0, 0.8, 0, -0.310451, 0, 0.737306, -0.110192, 0.00272226, 0.460466)
 photo_data = ExtResource("13_fyymw")
-
-[node name="Scanner_area3" parent="photos" instance=ExtResource("6_8iku8")]
-transform = Transform3D(0.737306, 0, 0.31045, 0, 0.8, 0, -0.31045, 0, 0.737306, 0.180908, 0.00740878, -0.0041208)
-photo_data = ExtResource("8_0j6kn")
-
-[node name="Scanner_area4" parent="photos" instance=ExtResource("6_8iku8")]
-transform = Transform3D(0.737306, 0, 0.31045, 0, 0.8, 0, -0.31045, 0, 0.737306, 0.357739, 0.00740881, 0.037532)
-photo_data = ExtResource("9_8tuuv")
 
 [node name="Scanner_area2" parent="photos" instance=ExtResource("6_8iku8")]
 transform = Transform3D(0.775106, 0, 0.198019, 0, 0.8, 0, -0.198019, 0, 0.775106, -0.289282, 0.00272226, 0.445698)
@@ -1317,48 +1433,88 @@ _book_data = ExtResource("23_qqyem")
 
 [node name="Symbols" type="Node3D" parent="."]
 
+[node name="Process_link" type="Node3D" parent="Symbols"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.107011, 0)
+
+[node name="Path3D" type="Path3D" parent="Symbols/Process_link"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0971085, 0)
+curve = SubResource("Curve3D_28u2e")
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="Symbols/Process_link"]
+layers = 2
+gi_mode = 0
+polygon = PackedVector2Array(0, 0, 0, 0, 0.005, 0)
+mode = 2
+path_node = NodePath("../Path3D")
+path_interval_type = 0
+path_interval = 0.01
+path_simplify_angle = 0.0
+path_rotation = 2
+path_local = true
+path_continuous_u = false
+path_u_distance = 1.0
+path_joined = false
+material = SubResource("ShaderMaterial_6ndss")
+
+[node name="Process_link2" type="Node3D" parent="Symbols"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.107011, 0)
+
+[node name="Path3D" type="Path3D" parent="Symbols/Process_link2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0971085, 0)
+curve = SubResource("Curve3D_elcof")
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="Symbols/Process_link2"]
+layers = 2
+gi_mode = 0
+polygon = PackedVector2Array(0, 0, 0, 0, 0.005, 0)
+mode = 2
+path_node = NodePath("../Path3D")
+path_interval_type = 0
+path_interval = 0.01
+path_simplify_angle = 0.0
+path_rotation = 2
+path_local = true
+path_continuous_u = false
+path_u_distance = 1.0
+path_joined = false
+material = SubResource("ShaderMaterial_6ndss")
+
 [node name="Symbols_page_prefab" parent="Symbols" instance=ExtResource("23_b4873")]
-transform = Transform3D(0.939632, 0, -0.342185, 0, 1, 0, 0.342185, 0, 0.939632, 0.363267, 0.0081955, 0.0812391)
+transform = Transform3D(0.939632, 0, -0.342185, 0, 1, 0, 0.342185, 0, 0.939632, 0.35621, 0.0081955, 0.0572818)
 _book_data = ExtResource("25_6gq50")
 page_index = 1
 img_symbol = ExtResource("25_efejc")
 img_page_alpha = ExtResource("26_lkyw7")
 
 [node name="Symbols_page_prefab2" parent="Symbols" instance=ExtResource("23_b4873")]
-transform = Transform3D(0.776295, 0, -0.450184, 0, 0.897385, 0, 0.450184, 0, 0.776295, 0.486987, 0.00783472, 0.0454772)
+transform = Transform3D(0.830578, 0, -0.339765, 0, 0.897385, 0, 0.339765, 0, 0.830578, 0.476999, 0.00783472, 0.0282407)
 _book_data = ExtResource("25_6gq50")
 page_index = 2
 img_symbol = ExtResource("26_dvgci")
 img_page_alpha = ExtResource("28_nk3be")
 
 [node name="Symbols_page_prefab3" parent="Symbols" instance=ExtResource("23_b4873")]
-transform = Transform3D(0.995608, 0, -0.0936217, 0, 1, 0, 0.0936217, 0, 0.995608, 0.587268, 0.0078347, 0.0712966)
+transform = Transform3D(0.926778, 0, -0.37561, 0, 1, 0, 0.37561, 0, 0.926778, 0.565133, 0.0078347, 0.0614606)
 _book_data = ExtResource("25_6gq50")
 page_index = 1
 img_symbol = ExtResource("27_gm0n8")
 img_page_alpha = ExtResource("30_fjpg1")
 
 [node name="Symbols_page_prefab4" parent="Symbols" instance=ExtResource("23_b4873")]
-transform = Transform3D(0.967006, 0, -0.254754, 0, 1, 0, 0.254754, 0, 0.967006, 0.638393, 0.00783464, 0.247997)
+transform = Transform3D(0.920362, 0, -0.391069, 0, 1, 0, 0.391069, 0, 0.920362, 0.521234, 0.00788855, 0.202297)
 _book_data = ExtResource("25_6gq50")
 page_index = 3
 img_symbol = ExtResource("28_ee1hi")
 img_page_alpha = ExtResource("30_fjpg1")
 
-[node name="Symbols_page_prefab5" parent="Symbols" instance=ExtResource("23_b4873")]
-transform = Transform3D(0.945524, 0, -0.325552, 0, 1, 0, 0.325552, 0, 0.945524, 0.548876, 0.00783464, 0.151925)
-_book_data = ExtResource("25_6gq50")
-img_symbol = ExtResource("31_66jl0")
-img_page_alpha = ExtResource("26_lkyw7")
-
 [node name="Symbols_page_prefab6" parent="Symbols" instance=ExtResource("23_b4873")]
-transform = Transform3D(0.979712, 0, -0.200411, 0, 1, 0, 0.200411, 0, 0.979712, 0.676136, 0.00783469, 0.123763)
+transform = Transform3D(0.927171, 0, -0.374639, 0, 1, 0, 0.374639, 0, 0.927171, 0.65363, 0.00783469, 0.0975068)
 _book_data = ExtResource("25_6gq50")
 img_symbol = ExtResource("30_krl65")
 img_page_alpha = ExtResource("26_lkyw7")
 
 [node name="Symbols_page_prefab7" parent="Symbols" instance=ExtResource("23_b4873")]
-transform = Transform3D(0.969949, 0, -0.24331, 0, 1, 0, 0.24331, 0, 0.969949, 0.434828, 0.0078347, 0.179778)
+transform = Transform3D(0.938622, 0.0289628, -0.34373, -0.032405, 0.999466, -0.00427301, 0.343423, 0.0151493, 0.939059, 0.426029, 0.0078347, 0.163043)
 _book_data = ExtResource("25_6gq50")
 page_index = 2
 img_symbol = ExtResource("31_66jl0")
@@ -1391,19 +1547,19 @@ skeleton = NodePath("../../..")
 [node name="Bestiere_MyOddity" type="Node3D" parent="."]
 
 [node name="Apicula_maquette_v01blend" parent="Bestiere_MyOddity" instance=ExtResource("36_vg6xf")]
-transform = Transform3D(0.0201281, 0, 0.00886541, 0, 0.021994, 0, -0.00886541, 0, 0.0201281, -0.269194, 0.0955751, -0.358365)
+transform = Transform3D(0.0349872, 0, 0.0171287, 0, 0.0389551, 0, -0.0171287, 0, 0.0349872, -0.222081, 0.0956881, -0.395925)
 
 [node name="fregate_all_msh" parent="Bestiere_MyOddity/Apicula_maquette_v01blend" index="0"]
 layers = 2
 surface_material_override/0 = ExtResource("37_2kevv")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Bestiere_MyOddity"]
-transform = Transform3D(0.181413, 0, -0.000142479, 0, 0.0196438, 0, 0.000142479, 0, 0.181413, -0.268091, 0.0340066, -0.388895)
+transform = Transform3D(0.181413, 0, -0.000142479, 0, 0.0196438, 0, 0.000142479, 0, 0.181413, -0.217463, 0.0341196, -0.413394)
 layers = 2
 mesh = SubResource("CylinderMesh_xsjxl")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="Bestiere_MyOddity"]
-transform = Transform3D(0.064667, 0, -5.07906e-05, 0, 0.0050063, 0, 5.07906e-05, 0, 0.064667, -0.268091, 0.0510967, -0.388895)
+transform = Transform3D(0.064667, 0, -5.07906e-05, 0, 0.0050063, 0, 5.07906e-05, 0, 0.064667, -0.217463, 0.0512097, -0.413394)
 layers = 2
 mesh = SubResource("CylinderMesh_ujlj0")
 

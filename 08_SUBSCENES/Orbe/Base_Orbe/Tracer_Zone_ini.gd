@@ -35,7 +35,8 @@ func _on_area_body_shape_exited(body_rid, body, body_shape_index, local_shape_in
 		var player = body.get_node_or_null("Player") 
 		if player:
 			_global_datas._photo_flash.emit()
-
+			_global_datas._scan_mirror_xray.emit()
+			_global_datas._explosed_traceur_zone.emit()
 
 func _on_gpu_explosed_finished():
 	root.queue_free()

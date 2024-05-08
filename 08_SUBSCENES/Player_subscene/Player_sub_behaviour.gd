@@ -25,12 +25,19 @@ func _ready():
 	_global_datas._end_ini_subscene.connect(can_Move)
 	_global_datas._backFrom_subscene.connect(cant_Move)
 	orbe_tool.tool_active_signal.connect(_change_speed)	
+	_global_datas._explosed_traceur_zone.connect(push)
+	
 	
 func ini_Pos():
 	_canMove = true
 	transform.origin = startPos
 	PlayerMesh.rotation_degrees = Vector3.ZERO
 	splash()
+
+
+func push():
+	var current_velocity = linear_velocity	
+	apply_central_force(current_velocity * 200)
 
 func _change_speed(condition : bool):
 	
