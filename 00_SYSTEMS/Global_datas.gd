@@ -163,14 +163,11 @@ var In_Front_Node : Node
 var selected_photoData : PhotoData
 var in_scanner_mode : bool 
 
-
 #tools_ui
 var clock_timer : Timer
 signal active_photo_button(condition : bool)
 signal active_scanner_button(condition : bool)
 signal _mirror_switch(condition : bool)
-
-
 
 #-----------------------------
 # dialogue datas

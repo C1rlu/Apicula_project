@@ -11,7 +11,6 @@ func _ready():
 
 func _rapatrier(position : Vector3):
 	
-
 	var instance_vfx = RAPATRIER_VFX_PREFABS.instantiate() 
-	instance_vfx.global_position = position
+	instance_vfx.position = position
 	load_scene.add_child(instance_vfx)

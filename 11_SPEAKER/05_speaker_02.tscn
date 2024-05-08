@@ -303,13 +303,15 @@ func _on_timer_timeout():
 	if _global_datas.Npc_Dialogue != null:
 		var photo_Data = _global_datas.Npc_Dialogue.photo_data
 		if check_photo_exist(photo_Data):
-			photo_button.visible = false
+			#photo_button.visible = false
 			_global_datas._start_dialogue_box.emit()
 			_global_datas._show_dialogue_box.emit()	
 		else:
-			photo_button.visible = true	
-			photo_button.grab_focus()
-			
+			#photo_button.visible = true	
+			#photo_button.grab_focus()
+			_global_datas.photo_archives.append(photo_Data)
+			_global_datas._start_dialogue_box.emit()
+			_global_datas._show_dialogue_box.emit()	
 "
 
 [sub_resource type="GDScript" id="GDScript_hx3ow"]

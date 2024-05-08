@@ -51,6 +51,8 @@ func instancer_register(_oddity : Oddity_scene_data):
 	oddity.follow.emit()
 	oddity.register.emit()
 	
+	scene_oddity_element.append(oddity)
+	
 func instancer_multiple(_oddity : Oddity_scene_data, amount : int):
 	
 	for i in range(amount):
