@@ -37,6 +37,10 @@ func ini_Pos():
 
 func push():
 	var current_velocity = linear_velocity	
+	var current_speed = current_velocity.length()
+
+	if current_speed > 1.3:
+		return
 	apply_central_force(current_velocity * 200)
 
 func _change_speed(condition : bool):

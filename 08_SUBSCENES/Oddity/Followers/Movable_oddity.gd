@@ -28,7 +28,7 @@ func _ready():
 	rotation_target = Vector3(randf_range(-90.0,90.0),randf_range(-90.0,90.0),randf_range(-90.0,90.0))
 	actual_speed = speed
 	
-	#_global_datas._traceur_pause.connect(_set_paused)	
+	_global_datas._traceur_pause.connect(_set_paused)	
 	
 	
 func _set_paused(condition : bool):

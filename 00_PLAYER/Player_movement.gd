@@ -1,6 +1,7 @@
 extends RigidBody3D
 
 @export var move_speed: float = 5.0
+var speed : float
 @export var maxSpeed = 10.0
 @export var rotation_speed = 0.5
 
@@ -11,13 +12,19 @@ var using_pad : bool
 func _ready():
 	
 	_global_datas.using_pad.connect(_using_pad)
-
+	speed = move_speed
 
 func _using_pad(condition : bool):
 	
 	using_pad = condition	
 	
+func _input(event):
 	
+	if event.is_action_pressed("Board_zoom_in"):
+		speed = move_speed * 2	
+	if event.is_action_released("Board_zoom_in"):
+		speed = move_speed
+		
 func _physics_process(_delta):
 	
 	if _global_datas.Player_In_Inventory:
@@ -71,7 +78,7 @@ func move_c():
 		var force_direction = Vector3(-direction_x, 0.0, -direction_z).normalized()
 
 		# Apply central force in the calculated direction
-		apply_central_force(force_direction * move_speed)
+		apply_central_force(force_direction * speed)
 
 
 		var rotation_limit = abs(target_rotation - current_rotation)

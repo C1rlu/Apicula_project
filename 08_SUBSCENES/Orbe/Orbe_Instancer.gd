@@ -35,7 +35,7 @@ func clear_orberSceneList():
 
 func delete_tracing_zone():
 	is_tracing = false
-
+	_global_datas._traceur_pause.emit(false)
 func stop_tracing():
 	process_link.emit(false,null)	
 
@@ -50,7 +50,9 @@ func _instance_start_orbe():
 	if !is_tracing:
 		print("INSTANCE TRACING ZONE")
 		instance_tracing_zone()
-		is_tracing = true	
+		
+		is_tracing = true
+		_global_datas._traceur_pause.emit(true)	
 		return
 		
 	#create orbe	
@@ -68,7 +70,7 @@ func instance_tracing_zone():
 	
 	var _tracing_zone = TRACER_ZONE_PREFAB.instantiate()
 	load_scene.add_child(_tracing_zone)
-	var t_position = _global_datas.subbscene_playerPosition + Vector3(0.0,0.05,0.0)
+	var t_position = _global_datas._orbe_tool_origin_position #+ Vector3(0.0,0.05,0.0)
 	_tracing_zone.position = t_position
 
 	

@@ -12,10 +12,12 @@ func _ready():
 	_global_datas._photo_flash.connect(remover)
 	
 func remover():
+	
 	gpu_explosed.emitting = true
 	render_vortex.visible = false
 	is_removing = true
 	gpu_normal.emitting = false
+	
 func scale_up():
 	
 	if t:
