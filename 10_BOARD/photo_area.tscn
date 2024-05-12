@@ -1,13 +1,15 @@
 [gd_scene load_steps=23 format=3 uid="uid://uwg2qc3svu11"]
 
 [ext_resource type="Resource" uid="uid://bcid58kxecbk2" path="res://12_INVENTORY/Photo/Maurice_photoData.tres" id="1_2tgng"]
-[ext_resource type="Script" path="res://10_BOARD/Take_Object.tres.gd" id="2_vdbne"]
+[ext_resource type="Script" path="res://10_BOARD/Symbols/Show_this_page.gd" id="2_653je"]
 [ext_resource type="Shader" uid="uid://upo0fuo5sqgd" path="res://05_SHADER_TEST/Board/Board_sh.tres" id="3_ysgwd"]
 [ext_resource type="Material" uid="uid://25obtp1blkk6" path="res://05_SHADER_TEST/Board/board_photo_texture.tres" id="4_0radc"]
 
 [sub_resource type="GDScript" id="GDScript_2oe2p"]
 script/source = "extends Area3D
 
+@export var _book_data : book_page_data
+@export var page_index : int = 0
 @export var photo_data : PhotoData
 
 @onready var collision_shape_3d = $CollisionShape3D
@@ -32,21 +34,22 @@ func _disable_object():
 	photo.visible = false
 
 
-	
+func _on_show_this_page_show_this_page():
+	_book_data.book_node._show_from_index(page_index)
+	var book_position = _book_data.book_node.position
+	_global_datas.focus_this_on_board.emit(book_position)
 "
 
 [sub_resource type="GDScript" id="GDScript_32kbr"]
 script/source = "extends Node
-
-@onready var select_this = $\"../Select_this\"
+@onready var photo_area = $\"..\"
 
 @onready var photo = $\"../photo\"
-
 @onready var material : Material = photo.get_surface_override_material(0)
 
 func _ready():
 	
-	var texture_data = select_this.photo_data.image
+	var texture_data = photo_area.photo_data.image
 	material.set_shader_parameter(\"Texture\",texture_data)
 "
 
@@ -206,8 +209,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.00272226, 0)
 script = SubResource("GDScript_2oe2p")
 photo_data = ExtResource("1_2tgng")
 
-[node name="Select_this" type="Node" parent="."]
-script = ExtResource("2_vdbne")
+[node name="Show_this_page" type="Node" parent="."]
+script = ExtResource("2_653je")
 
 [node name="texture" type="Node" parent="."]
 script = SubResource("GDScript_32kbr")
@@ -237,4 +240,4 @@ mesh = SubResource("QuadMesh_ewu27")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("4_0radc")
 
-[connection signal="on_click" from="Select_this" to="Select_this" method="_on_on_click"]
+[connection signal="show_this_page" from="Show_this_page" to="." method="_on_show_this_page_show_this_page"]

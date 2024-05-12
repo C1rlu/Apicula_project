@@ -73,6 +73,11 @@ func check_cast(targetPos : Vector2):
 		selectable.show_legend(true)
 		selectable = selectable
 
+	if result.collider.get_node_or_null("Select_Tube"): 
+		var tube = result.collider.get_node_or_null("Select_Tube") 
+		print(tube)
+		tube._select_tube()		
+		
 	if result.collider.get_node_or_null("Turn_page"):
 		var right_page = result.collider.get_node_or_null("Turn_page") 
 		print(right_page)

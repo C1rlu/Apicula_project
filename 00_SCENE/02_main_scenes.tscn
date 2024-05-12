@@ -1,4 +1,4 @@
-[gd_scene load_steps=84 format=3 uid="uid://cnmptm7i0xxmj"]
+[gd_scene load_steps=92 format=3 uid="uid://cnmptm7i0xxmj"]
 
 [ext_resource type="Script" path="res://00_SCENE/Active_Decor_Scene.gd" id="1_ounvv"]
 [ext_resource type="PackedScene" uid="uid://vpdvl0v7dubd" path="res://00_PLAYER/Player_boat.tscn" id="1_qltht"]
@@ -298,10 +298,11 @@ script/source = "extends Node
 @onready var timer = $Timer
 @onready var go_subscene_progress = $\"..\"
 
+@onready var LOADER = $\"../../--DECOR--/UNDER_WATER2/LOADER_CIRCLE\"
 
 func _ready():
 	_global_datas._active_progress_subscene.connect(_active)
-
+	
 
 		
 func _active(condition : bool):
@@ -321,22 +322,28 @@ func _process(delta):
 
 func _update_clock():
 	var timeConvert = 1 - (timer.time_left / timer.wait_time ) 
-	go_subscene_progress.value = lerp(0.0,100.0,timeConvert)
+	var lerp_result = lerp(0.0,100.0,timeConvert) 
+	go_subscene_progress.value = lerp_result 
+	var convert_lerp =  (lerp_result / 100)
+	var lerp_scale = lerp(2.0,1.0,convert_lerp)
+	LOADER.scale = Vector3(lerp_scale,lerp_scale,lerp_scale)
 	
+	LOADER.position = _global_datas.Active_boue_position
 func _start_clock():
 	go_subscene_progress.value = 0.0
 	timer.start()
-	
+	LOADER.visible = true
 func _stop_clock():
 	
 	timer.stop()
 	go_subscene_progress.value = 0.0
+	LOADER.visible = false
 	
 func _on_timer_timeout():
 	_global_datas._active_progress_subscene.emit(false)
 	go_subscene_progress.value = 0.0
 	_global_datas._go_Subscene.emit()
-
+	LOADER.visible = false
 "
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ituqr"]
@@ -569,6 +576,118 @@ radius = 0.352078
 [sub_resource type="BoxMesh" id="BoxMesh_jmuil"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_ujnfl"]
+
+[sub_resource type="TorusMesh" id="TorusMesh_8vonl"]
+inner_radius = 0.501
+outer_radius = 0.55
+rings = 32
+ring_segments = 16
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_g0aus"]
+parameter_name = "Light_color_ui"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_ipfbe"]
+constant = 0.4
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_1hhps"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_vk34y"]
+default_input_values = [0, 0.3, 1, 0.0]
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_fv10g"]
+constant = 0.9
+
+[sub_resource type="VisualShader" id="VisualShader_w0qe3"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+
+global uniform vec4 Light_color_ui : source_color;
+
+
+
+void fragment() {
+// ColorParameter:2
+	vec4 n_out2p0 = Light_color_ui;
+
+
+// FloatConstant:7
+	float n_out7p0 = 0.900000;
+
+
+// FloatConstant:3
+	float n_out3p0 = 0.400000;
+
+
+	float n_out4p0;
+// Expression:4
+	n_out4p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out3p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out4p0 = n_out7p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Step:6
+	float n_out6p0 = step(n_out2p0.x, n_out4p0);
+
+
+// Output:0
+	ALBEDO = vec3(n_out2p0.xyz);
+	ALPHA = n_out6p0;
+
+
+}
+"
+graph_offset = Vector2(-2362.65, 490.918)
+flags/unshaded = true
+nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_g0aus")
+nodes/fragment/2/position = Vector2(-760, -40)
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_ipfbe")
+nodes/fragment/3/position = Vector2(-1380, 520)
+nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_1hhps")
+nodes/fragment/4/position = Vector2(-1200, 380)
+nodes/fragment/4/size = Vector2(724.789, 654.559)
+nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/4/output_ports = "0,0,Dither_Node;"
+nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/6/node = SubResource("VisualShaderNodeStep_vk34y")
+nodes/fragment/6/position = Vector2(-351.825, 215.819)
+nodes/fragment/7/node = SubResource("VisualShaderNodeFloatConstant_fv10g")
+nodes/fragment/7/position = Vector2(-1440, 360)
+nodes/fragment/connections = PackedInt32Array(3, 0, 4, 1, 4, 0, 6, 1, 6, 0, 0, 1, 7, 0, 4, 0, 2, 0, 0, 0, 2, 0, 6, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vldjc"]
+render_priority = 0
+shader = SubResource("VisualShader_w0qe3")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8p064"]
 render_priority = 0
@@ -864,6 +983,7 @@ scale = Vector2(0.365326, 0.365326)
 texture = ExtResource("10_ftn2e")
 
 [node name="Go_subscene_progress" type="TextureProgressBar" parent="."]
+visible = false
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -1201,6 +1321,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.484242, 0, 0.113853)
 shape = SubResource("SphereShape3D_jvty4")
 
 [node name="UNDER_WATER2" type="Node3D" parent="--DECOR--"]
+
+[node name="LOADER_CIRCLE" type="MeshInstance3D" parent="--DECOR--/UNDER_WATER2"]
+transform = Transform3D(1.08773, 0, 1.67835, 0, 2, 0, -1.67835, 0, 1.08773, -1.61348, -0.142532, -2.4279)
+visible = false
+mesh = SubResource("TorusMesh_8vonl")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("ShaderMaterial_vldjc")
 
 [node name="EPAVE_ZONE" parent="--DECOR--/UNDER_WATER2" instance=ExtResource("23_txlwt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.70167, -0.174761, 1.01103)

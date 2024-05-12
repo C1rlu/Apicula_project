@@ -1,0 +1,115 @@
+[gd_resource type="VisualShader" load_steps=7 format=3 uid="uid://cd5obrgn7uute"]
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_lauc1"]
+parameter_name = "ColorParameter"
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_3ylhc"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_gk0hj"]
+constant = 1.0
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_q12gd"]
+parameter_name = "Dither_size"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeFresnel" id="VisualShaderNodeFresnel_v011q"]
+default_input_values = [2, false, 3, 0.605]
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_j2hjp"]
+
+[resource]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, depth_prepass_alpha, unshaded;
+
+uniform vec4 ColorParameter : source_color;
+global uniform float Dither_size;
+
+
+
+void fragment() {
+// ColorParameter:2
+	vec4 n_out2p0 = ColorParameter;
+
+
+// Fresnel:6
+	float n_in6p3 = 0.60500;
+	float n_out6p0 = pow(1.0 - clamp(dot(NORMAL, VIEW), 0.0, 1.0), n_in6p3);
+
+
+// FloatConstant:4
+	float n_out4p0 = 1.000000;
+
+
+// FloatParameter:5
+	float n_out5p0 = Dither_size;
+
+
+	float n_out3p0;
+// Expression:3
+	n_out3p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out5p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out3p0 = n_out4p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Step:7
+	float n_out7p0 = step(n_out6p0, n_out3p0);
+
+
+// Output:0
+	ALBEDO = vec3(n_out2p0.xyz);
+	ALPHA = n_out7p0;
+
+
+}
+"
+graph_offset = Vector2(-1072.14, 430.624)
+flags/depth_prepass_alpha = true
+flags/unshaded = true
+nodes/fragment/0/position = Vector2(520, 140)
+nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_lauc1")
+nodes/fragment/2/position = Vector2(-200, 160)
+nodes/fragment/3/node = SubResource("VisualShaderNodeExpression_3ylhc")
+nodes/fragment/3/position = Vector2(-600, 560)
+nodes/fragment/3/size = Vector2(724.789, 654.559)
+nodes/fragment/3/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/3/output_ports = "0,0,Dither_Node;"
+nodes/fragment/3/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/4/node = SubResource("VisualShaderNodeFloatConstant_gk0hj")
+nodes/fragment/4/position = Vector2(-1120, 560)
+nodes/fragment/5/node = SubResource("VisualShaderNodeFloatParameter_q12gd")
+nodes/fragment/5/position = Vector2(-1000, 740)
+nodes/fragment/6/node = SubResource("VisualShaderNodeFresnel_v011q")
+nodes/fragment/6/position = Vector2(-580, 340)
+nodes/fragment/7/node = SubResource("VisualShaderNodeStep_j2hjp")
+nodes/fragment/7/position = Vector2(220, 340)
+nodes/fragment/connections = PackedInt32Array(4, 0, 3, 0, 5, 0, 3, 1, 6, 0, 7, 0, 3, 0, 7, 1, 7, 0, 0, 1, 2, 0, 0, 0)
