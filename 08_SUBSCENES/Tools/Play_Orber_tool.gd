@@ -14,8 +14,6 @@ func disable():
 func _input(event):
 	
 	
-	
-	
 	if !_global_datas.Player_InSubScene:
 		return
 	

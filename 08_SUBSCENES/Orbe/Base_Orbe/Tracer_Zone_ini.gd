@@ -4,9 +4,13 @@ extends Node
 @onready var gpu_explosed = $"../GPU_Explosed"
 @onready var render_vortex = $"../Render_vortex"
 @onready var gpu_normal = $"../GPU_normal"
+@onready var render_symbols = $"../Render_symbols"
 
 var t 
 var is_removing = false
+
+signal active_symbols
+
 func _ready():
 	scale_up()
 	_global_datas._photo_flash.connect(remover)
@@ -17,14 +21,16 @@ func remover():
 	render_vortex.visible = false
 	is_removing = true
 	gpu_normal.emitting = false
+	render_symbols.visible = false
 	
 func scale_up():
+	
 	
 	if t:
 		t.kill()
 	
 	t = create_tween()
-	t.tween_method(change_value,0.5,2.0,0.25).set_trans(Tween.TRANS_CUBIC)
+	t.tween_method(change_value,0.5,1.2,0.25).set_trans(Tween.TRANS_CUBIC)
 	
 func change_value(value):
 	root.scale = Vector3(value,value,value)
@@ -36,9 +42,11 @@ func _on_area_body_shape_exited(body_rid, body, body_shape_index, local_shape_in
 	if body:
 		var player = body.get_node_or_null("Player") 
 		if player:
+			active_symbols.emit()
 			_global_datas._photo_flash.emit()
 			_global_datas._scan_mirror_xray.emit()
 			_global_datas._explosed_traceur_zone.emit()
-
+			
+			
 func _on_gpu_explosed_finished():
 	root.queue_free()

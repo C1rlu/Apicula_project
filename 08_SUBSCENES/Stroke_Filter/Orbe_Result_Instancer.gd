@@ -8,7 +8,6 @@ func _ready():
 	_global_datas.instance_orbe_result.connect(instance_orbe)
 	
 	
-	
 func instance_orbe(orbe : orbe_data,instance_position : Vector3):
 	
 	

@@ -18,10 +18,11 @@ const TRACER_ZONE_PREFAB = preload("res://08_SUBSCENES/Orbe/Base_Orbe/Tracer_Zon
 var is_tracing : bool
 
 
+
 func _ready():
 	
 	_global_datas._instance_start_visual_orbe.connect(_instance_start_orbe)
-	_global_datas._instance_end_visual_orbe.connect(_instance_end_orbe)
+	#_global_datas._instance_end_visual_orbe.connect(_instance_end_orbe)
 	
 	_global_datas._backFrom_subscene.connect(clear_orberSceneList)
 	_global_datas._photo_flash.connect(stop_tracing)
@@ -36,6 +37,7 @@ func clear_orberSceneList():
 func delete_tracing_zone():
 	is_tracing = false
 	_global_datas._traceur_pause.emit(false)
+
 func stop_tracing():
 	process_link.emit(false,null)	
 
@@ -50,21 +52,19 @@ func _instance_start_orbe():
 	if !is_tracing:
 		print("INSTANCE TRACING ZONE")
 		instance_tracing_zone()
-		
+	
 		is_tracing = true
 		_global_datas._traceur_pause.emit(true)	
 		return
 		
 	#create orbe	
-	var orbe = BASE_ORBE_VISUAL_PREFABS.instantiate()
-	load_scene.add_child(orbe)
-	_global_datas._orbe_visual_scene.append(orbe)				
-	orbe.position  = get_target()	
-	process_link.emit(true,orbe.position)
+	#var orbe = BASE_ORBE_VISUAL_PREFABS.instantiate()
+	#load_scene.add_child(orbe)
+	#_global_datas._orbe_visual_scene.append(orbe)				
+	#orbe.position  = get_target()	
+	#process_link.emit(true,orbe.position)
 	
 	
-
-
 func instance_tracing_zone():
 	
 	

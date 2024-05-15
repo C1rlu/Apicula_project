@@ -2,9 +2,13 @@ extends Node
 
 
 @export var Second_action_tool : tool_data
-
+var disable = true
 func _input(event):
-		
+	
+	
+	if disable:
+		return
+			
 	if !_global_datas.Player_InSubScene:
 		return
 		

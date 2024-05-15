@@ -324,26 +324,28 @@ func _update_clock():
 	var timeConvert = 1 - (timer.time_left / timer.wait_time ) 
 	var lerp_result = lerp(0.0,100.0,timeConvert) 
 	go_subscene_progress.value = lerp_result 
-	var convert_lerp =  (lerp_result / 100)
-	var lerp_scale = lerp(2.0,1.0,convert_lerp)
-	LOADER.scale = Vector3(lerp_scale,lerp_scale,lerp_scale)
+	#var convert_lerp =  (lerp_result / 100)
+	#var lerp_scale = lerp(2.0,1.0,convert_lerp)
+	#LOADER.scale = Vector3(lerp_scale,lerp_scale,lerp_scale)
+	#
+	#LOADER.position = _global_datas.Active_boue_position
 	
-	LOADER.position = _global_datas.Active_boue_position
+	
 func _start_clock():
 	go_subscene_progress.value = 0.0
 	timer.start()
-	LOADER.visible = true
+	#LOADER.visible = true
 func _stop_clock():
 	
 	timer.stop()
 	go_subscene_progress.value = 0.0
-	LOADER.visible = false
+	#LOADER.visible = false
 	
 func _on_timer_timeout():
 	_global_datas._active_progress_subscene.emit(false)
 	go_subscene_progress.value = 0.0
 	_global_datas._go_Subscene.emit()
-	LOADER.visible = false
+	#LOADER.visible = false
 "
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ituqr"]
@@ -983,7 +985,6 @@ scale = Vector2(0.365326, 0.365326)
 texture = ExtResource("10_ftn2e")
 
 [node name="Go_subscene_progress" type="TextureProgressBar" parent="."]
-visible = false
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
