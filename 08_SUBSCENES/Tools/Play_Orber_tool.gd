@@ -2,7 +2,7 @@ extends Node
 
 
 @export var tool_type: tool_data
-@export var tool_type_back: tool_data
+
 
 var active : bool = true
 func _ready():
@@ -35,10 +35,10 @@ func _input(event):
 		return
 	
 	
-	if event.is_action_pressed("Click"):
+	if event.is_action_pressed("Flash_light"):
 		_global_datas.switching_tool.emit(tool_type)
 		tool_type.tool_active_signal.emit(true)
 		
-	if event.is_action_released("Click"):
+	if event.is_action_released("Flash_light"):
 		tool_type.tool_active_signal.emit(false)
 		_global_datas.switching_tool.emit(tool_type)

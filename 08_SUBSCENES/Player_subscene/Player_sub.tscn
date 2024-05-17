@@ -1109,7 +1109,11 @@ flash_tool_data = ExtResource("6_axu5t")
 script = SubResource("GDScript_mbf75")
 
 [node name="Timer" type="Timer" parent="Flash_inputs"]
+wait_time = 2.0
 one_shot = true
+
+[node name="Timer_process" type="Timer" parent="Flash_inputs"]
+wait_time = 0.1
 
 [node name="Scanne_element" type="Node" parent="."]
 script = ExtResource("5_jhkow")
@@ -1133,7 +1137,7 @@ scanner_spawner_tool = ExtResource("15_vswql")
 
 [node name="Magnet" type="Node" parent="."]
 script = ExtResource("9_7q7du")
-magnet_tool = ExtResource("17_iywa5")
+magnet_tool = ExtResource("6_axu5t")
 
 [node name="TELEPORTER" type="Node" parent="."]
 
@@ -1393,6 +1397,7 @@ draw_pass_1 = ExtResource("4_6vpi7")
 
 [connection signal="timeout" from="Ini_subscene/Timer" to="Ini_subscene" method="_on_timer_timeout"]
 [connection signal="timeout" from="Flash_inputs/Timer" to="Flash_inputs" method="_on_timer_timeout"]
+[connection signal="timeout" from="Flash_inputs/Timer_process" to="Flash_inputs" method="_on_timer_process_timeout"]
 [connection signal="timeout" from="Scanne_element/time_checker" to="Scanne_element" method="_on_time_checker_timeout"]
 [connection signal="timeout" from="Scanne_element/Active_scanner_visual_pulse/Timer" to="Scanne_element/Active_scanner_visual_pulse" method="_on_timer_timeout"]
 [connection signal="timeout" from="TELEPORTER/Closet_teleporter/Timer_Alarm" to="TELEPORTER/Closet_teleporter" method="_on_timer_alarm_timeout"]

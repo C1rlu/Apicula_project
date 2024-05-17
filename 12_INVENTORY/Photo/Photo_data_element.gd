@@ -5,11 +5,14 @@ extends Node
 
 signal scanner_effect_condition(condition : bool)
 
-@onready var root =  $"../.."
+@onready var root =  $".."
 @onready var timer = $Timer
-@export var active_photo_data : bool = true
+
 var is_scanning : bool = false
 
+func _ready():
+	_global_datas._photo_data_scene_list.append(self)	
+	
 func check_photo_exist(photo_Data):
 	
 	for photo in _global_datas.photo_archives:
@@ -21,11 +24,6 @@ func get_PhotoData():
 	
 func scanning():
 	
-	if check_photo_exist(photoData):
-		print("esit remove")
-		_global_datas._photo_data_scene_list.erase(self)	
-		return
-	
 	if is_scanning:
 		return
 		
@@ -35,6 +33,7 @@ func scanning():
 		timer.start()
 		
 	scanner_effect_condition.emit(true)
+
 	
 
 func stop_scanning():
@@ -53,7 +52,9 @@ func scanning_done():
 	_global_datas.selected_photoData = photoData
 	_global_datas.show_on_scanner.emit(true)
 	_global_datas._show_object_legend.emit(true,photoData.legend)
-	_global_datas.photo_archives.append(photoData)
+	
+	if !check_photo_exist(photoData):
+		_global_datas.photo_archives.append(photoData)
 	
 func get_node_position():
 	return 	root.position
@@ -72,8 +73,6 @@ func _on_timer_timeout():
 func _on_tree_exited():
 	_global_datas._photo_data_scene_list.erase(self)	
 	
-func _on_rapatrier_rapatrier():
-	_global_datas._photo_data_scene_list.append(self)	
 
-func _photoData_register():
-	_global_datas._photo_data_scene_list.append(self)
+
+
