@@ -1,7 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://dfr6blvyykeyu"]
+[gd_scene load_steps=10 format=3 uid="uid://dfr6blvyykeyu"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/Species/Meduse/Medusa.gd" id="1_5rq7u"]
 [ext_resource type="Shader" uid="uid://drchaj5fcdan0" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_sh.tres" id="1_hoso1"]
+[ext_resource type="Resource" uid="uid://dqpl0ihtab1su" path="res://08_SUBSCENES/Tools/Magnet.tres" id="2_2wj8k"]
+[ext_resource type="Resource" uid="uid://d11cl4f25dgwg" path="res://08_SUBSCENES/Tools/Flash_light.tres" id="3_jrl7x"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_5fk2t"]
 radius = 0.363462
@@ -27,6 +29,8 @@ collision_mask = 4
 
 [node name="Medusa" type="Node" parent="."]
 script = ExtResource("1_5rq7u")
+enter_selected_tool = ExtResource("2_2wj8k")
+exit_selected_tool = ExtResource("3_jrl7x")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000275697, -0.0032748, -0.0659428)
@@ -55,3 +59,6 @@ transform = Transform3D(0.17759, -0.0406772, 0.0143761, 0.043044, 0.171179, -0.0
 layers = 4
 mesh = SubResource("BoxMesh_uyqeh")
 surface_material_override/0 = SubResource("ShaderMaterial_vlnek")
+
+[connection signal="body_entered" from="." to="Medusa" method="_player_body_entered"]
+[connection signal="body_exited" from="." to="Medusa" method="_player_body_exited"]

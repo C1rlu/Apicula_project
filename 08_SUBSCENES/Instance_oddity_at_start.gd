@@ -1,5 +1,7 @@
 extends Node
 
+
+@export var active_oddity : bool = false
 @export var Oddity_inventory_base: Oddity_inventory
 
 
@@ -12,6 +14,9 @@ extends Node
 var scene_oddity_element : Array
 
 func _ready():
+	
+	if !active_oddity:
+		return
 	_global_datas._end_ini_subscene.connect(instance_oddity)
 	_global_datas.instance_scene_oddity.connect(instancer_multiple)
 	_global_datas._backFrom_subscene.connect(_delete_scene_oddity)

@@ -2,6 +2,7 @@ extends Node
 
 @export var tool_type: tool_data
 @export var tool_type_back: tool_data
+@export var tool_type_back_zone: tool_data
 func _ready():
 	
 	_global_datas._backFrom_subscene.connect(disable)
@@ -26,4 +27,8 @@ func _input(event):
 		
 	if event.is_action_released("Scanning"):
 		tool_type.tool_active_signal.emit(false)
-		_global_datas.switching_tool.emit(tool_type_back)
+		
+		if _global_datas.player_is_Interactive_Zone:
+			_global_datas.switching_tool.emit(tool_type_back_zone)
+		else:
+			_global_datas.switching_tool.emit(tool_type_back)	

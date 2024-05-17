@@ -1,5 +1,7 @@
 extends Node
 
+
+@export var active_orber : bool = false
 @export var minimum_closest_distance : float = 0.25
 
 const BASE_ORBE_VISUAL_PREFABS = preload("res://08_SUBSCENES/Orbe/Base_Orbe/Base_Orbe_Visual_prefabs.tscn")
@@ -21,6 +23,9 @@ var is_tracing : bool
 
 func _ready():
 	
+	if !active_orber:
+		return
+		
 	_global_datas._instance_start_visual_orbe.connect(_instance_start_orbe)
 	#_global_datas._instance_end_visual_orbe.connect(_instance_end_orbe)
 	

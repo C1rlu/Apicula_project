@@ -1,4 +1,4 @@
-[gd_scene load_steps=107 format=3 uid="uid://g7u8o55jrnyy"]
+[gd_scene load_steps=108 format=3 uid="uid://g7u8o55jrnyy"]
 
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="1_n1vw4"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Player_sub_behaviour.gd" id="1_o2v73"]
@@ -11,6 +11,7 @@
 [ext_resource type="Material" uid="uid://cdnmf431kgh7" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat_far.tres" id="6_ixu0h"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/active_tool_scene.gd" id="8_8bfcd"]
 [ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_elements_mat.tres" id="8_wvhjt"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Magnet_behaviour.gd" id="9_7q7du"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Teleporter/Teleporter_detection.gd" id="9_ve8gm"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Orbe_spawner.gd" id="9_ypfq5"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Active_scanner_visual_pulse.gd" id="10_ir8y2"]
@@ -783,7 +784,7 @@ curve = SubResource("Curve_mwumu")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_0ye1k"]
 emission_shape = 2
-emission_sphere_radius = 0.1
+emission_sphere_radius = 0.15
 direction = Vector3(0, 0, 0)
 spread = 180.0
 gravity = Vector3(0, 0, 0)
@@ -794,7 +795,7 @@ scale_curve = SubResource("CurveTexture_wj6vn")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_inbo0"]
 shading_mode = 0
-albedo_color = Color(0.52549, 0.52549, 0.52549, 1)
+albedo_color = Color(0.815686, 0.654902, 0.423529, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_6ufqt"]
 material = SubResource("StandardMaterial3D_inbo0")
@@ -1130,6 +1131,10 @@ script = ExtResource("9_ypfq5")
 orbe_spawner_tool = ExtResource("12_nmehd")
 scanner_spawner_tool = ExtResource("15_vswql")
 
+[node name="Magnet" type="Node" parent="."]
+script = ExtResource("9_7q7du")
+magnet_tool = ExtResource("17_iywa5")
+
 [node name="TELEPORTER" type="Node" parent="."]
 
 [node name="Closet_teleporter" type="Node" parent="TELEPORTER"]
@@ -1152,7 +1157,7 @@ script = SubResource("GDScript_8qwgp")
 [node name="active_light" type="Node" parent="Render_mesh/Active_visual_tools" node_paths=PackedStringArray("list_of_object")]
 script = ExtResource("8_8bfcd")
 _tool_data = ExtResource("6_axu5t")
-list_of_object = [NodePath("../../Photographe"), NodePath("../../Sonar")]
+list_of_object = [NodePath("../../Photographe")]
 
 [node name="active_scanner" type="Node" parent="Render_mesh/Active_visual_tools" node_paths=PackedStringArray("list_of_object")]
 script = ExtResource("8_8bfcd")
@@ -1162,7 +1167,7 @@ list_of_object = [NodePath("../../Scanner")]
 [node name="active_Orbe_Remover" type="Node" parent="Render_mesh/Active_visual_tools" node_paths=PackedStringArray("list_of_object")]
 script = ExtResource("8_8bfcd")
 _tool_data = ExtResource("12_nmehd")
-list_of_object = [NodePath("../../Magnet")]
+list_of_object = [NodePath("../../Orber")]
 
 [node name="active_magnet" type="Node" parent="Render_mesh/Active_visual_tools" node_paths=PackedStringArray("list_of_object")]
 script = ExtResource("8_8bfcd")
@@ -1206,6 +1211,26 @@ mesh = SubResource("TorusMesh_k0nng")
 skeleton = NodePath("../../../Player_sub_collider")
 surface_material_override/0 = ExtResource("1_n1vw4")
 
+[node name="Orber" type="MeshInstance3D" parent="Render_mesh"]
+transform = Transform3D(-1.33332e-09, -0.0298642, 0, 0.0305028, -1.30541e-09, 0, 0, 0, 0.0953704, 0.0349853, 0.140869, 0.0994924)
+visible = false
+layers = 4
+mesh = SubResource("BoxMesh_8vb5i")
+skeleton = NodePath("../../Player_sub_collider")
+surface_material_override/0 = ExtResource("1_n1vw4")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Render_mesh/Orber"]
+transform = Transform3D(2.57942, 2.20268e-13, 0, 9.9476e-14, 2.63458, 0, 0, 0, 0.82499, 0, 0, 0.201608)
+layers = 4
+mesh = SubResource("SphereMesh_w2scb")
+surface_material_override/0 = ExtResource("1_n1vw4")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Render_mesh/Orber"]
+transform = Transform3D(-5.4048e-08, 1.26292, 0, -1.23648, -5.52039e-08, 0, 0, 0, 0.395469, 0, 0, 0.523234)
+layers = 4
+mesh = SubResource("PrismMesh_5cv61")
+surface_material_override/0 = ExtResource("8_wvhjt")
+
 [node name="Magnet" type="MeshInstance3D" parent="Render_mesh"]
 transform = Transform3D(-1.33332e-09, -0.0298642, 0, 0.0305028, -1.30541e-09, 0, 0, 0, 0.0953704, 0.0349853, 0.140869, 0.0994924)
 layers = 4
@@ -1214,20 +1239,13 @@ skeleton = NodePath("../../Player_sub_collider")
 surface_material_override/0 = ExtResource("1_n1vw4")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Render_mesh/Magnet"]
-transform = Transform3D(2.57942, 2.20268e-13, 0, 9.9476e-14, 2.63458, 0, 0, 0, 0.82499, 0, 0, 0.201608)
+transform = Transform3D(3.97089, 3.69482e-13, 0, 1.42109e-13, 4.05581, 0, 0, 0, 1.27003, 0, 0, 0.201608)
 layers = 4
 mesh = SubResource("SphereMesh_w2scb")
 surface_material_override/0 = ExtResource("1_n1vw4")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="Render_mesh/Magnet"]
-transform = Transform3D(-5.4048e-08, 1.26292, 0, -1.23648, -5.52039e-08, 0, 0, 0, 0.395469, 0, 0, 0.523234)
-layers = 4
-mesh = SubResource("PrismMesh_5cv61")
-surface_material_override/0 = ExtResource("8_wvhjt")
-
 [node name="Photographe" type="Node3D" parent="Render_mesh"]
 transform = Transform3D(-3.47124e-09, -0.134331, 0, 0.0794125, -5.87181e-09, 0, 0, 0, 0.052318, 0.00787213, 0.139258, 0.07916)
-visible = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Render_mesh/Photographe"]
 transform = Transform3D(0.477894, -7.10543e-15, 0, 4.44089e-15, 0.477894, 0, 0, 0, 0.477894, 0, 0, 0.236441)
@@ -1334,7 +1352,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0341371, 0.137754, 0.194054
 
 [node name="VFX_SPHERE_MIRROR" type="GPUParticles3D" parent="Render_mesh/Orbe_spawner_position"]
 transform = Transform3D(1.429, 0, 0, 0, 1.429, 0, 0, 0, 1.429, 0.00496598, -0.008692, -0.0181673)
-layers = 32768
+layers = 4
 cast_shadow = 0
 emitting = false
 amount = 50

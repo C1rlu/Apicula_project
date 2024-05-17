@@ -105,6 +105,11 @@ signal _subscene_fail
 var flash_subscene_position : Vector3
 var _selected_tool : tool_data 
 signal switching_tool(tool : tool_data)
+
+#to lock input back to light if on zone
+var player_is_Interactive_Zone : bool 
+
+
 signal rapatrier_vfx(position : Vector3)
 signal _traceur_pause(condition : bool)
 signal _explosed_traceur_zone

@@ -21,6 +21,7 @@ func switch_active_tool(tool : tool_data):
 	#SELECT VISUAL TOOLS IN SCENE
 	for t in _global_datas.tools_list:
 		t.select_this_tool_scene_prefabs.emit(false)
+		t.cancel_action_signal.emit()
 		
 	_global_datas._selected_tool = tool	
 	
