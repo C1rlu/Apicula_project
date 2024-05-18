@@ -45,10 +45,10 @@ func _input(event):
 		Fusion_tool.tool_active_signal.emit(false)
 		_global_datas.switching_tool.emit(light_tool)
 	
-	if event.is_action_pressed("Flash_light"):
+	#if event.is_action_pressed("Flash_light"):
+		##_global_datas.switching_tool.emit(light_tool)
+		#light_tool.tool_active_signal.emit(true)
+		#
+	#if event.is_action_released("Flash_light"):
+		#light_tool.tool_active_signal.emit(false)
 		#_global_datas.switching_tool.emit(light_tool)
-		light_tool.tool_active_signal.emit(true)
-		
-	if event.is_action_released("Flash_light"):
-		light_tool.tool_active_signal.emit(false)
-		_global_datas.switching_tool.emit(light_tool)

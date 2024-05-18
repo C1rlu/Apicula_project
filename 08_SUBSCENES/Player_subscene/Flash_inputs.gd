@@ -9,9 +9,14 @@ extends Node
 
 
 func _ready():
-	flash_tool_data.tool_active_signal.connect(check_area)	
+	pass
+	#flash_tool_data.tool_active_signal.connect(check_area)	
+	#_global_datas._end_ini_subscene.connect(_start_light)
 
-					
+func _start_light():
+	timer.start()
+	check_area(true)	
+						
 func check_area(condition : bool):
 	
 
@@ -19,42 +24,35 @@ func check_area(condition : bool):
 		return
 	if !condition:
 		return
-	if !timer.is_stopped():
-		return	
-		
-
-	timer.start()
+	
+	print("CHECK END")
 	_global_datas._scan_mirror_xray.emit()
 	_global_datas._photo_flash.emit()
 
-	var overlap_areas_ = area.get_overlapping_areas()
-	
-	if overlap_areas_ == null:
-		return
-		
-	for areas in overlap_areas_:
-	
-		var mirror_node = areas.get_node_or_null("Mirror")
-		var mirror_destination = areas.get_node_or_null("Mirror_destination")
-		var Movable_oddity = areas.get_node_or_null("Movable_oddity")
-	
-		if mirror_destination:
-			if _global_datas.Player_InMirrorScene:
-				var desination = mirror_destination.destination
-				if desination:
-					_global_datas._load_mirror_subscene.emit(desination)
-					return
-	
-		if mirror_node:
-			if !_global_datas.Player_InMirrorScene:		
-				_global_datas._mirror_switch.emit(true)
-			else:
-				_global_datas._mirror_switch.emit(false)	
-	
-		if Movable_oddity:
-			Movable_oddity.move_oddity()
+	#var overlap_areas_ = area.get_overlapping_areas()
+	#
+	#if overlap_areas_ == null:
+		#return
+		#
+	#for areas in overlap_areas_:
+	#
+		#var mirror_node = areas.get_node_or_null("Mirror")
+		#var mirror_destination = areas.get_node_or_null("Mirror_destination")
+		#
+		#if mirror_destination:
+			#if _global_datas.Player_InMirrorScene:
+				#var desination = mirror_destination.destination
+				#if desination:
+					#_global_datas._load_mirror_subscene.emit(desination)
+					#return
+	#
+		#if mirror_node:
+			#if !_global_datas.Player_InMirrorScene:		
+				#_global_datas._mirror_switch.emit(true)
+			#else:
+				#_global_datas._mirror_switch.emit(false)	
 	
 					
 func _on_timer_timeout():
-	timer.stop()
-
+	timer.start()
+	check_area(true)

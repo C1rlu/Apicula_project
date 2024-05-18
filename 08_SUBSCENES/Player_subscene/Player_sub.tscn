@@ -69,7 +69,7 @@ func _start_flash():
 		
 	t = create_tween()
 	
-	t.tween_method(change_scale,1.0,0.0,1.5)
+	t.tween_method(change_scale,0.5,0.0,3.0)
 	t.connect(\"finished\",done)
 
 func change_scale(value : float):
@@ -97,7 +97,7 @@ func _take_photo():
 		t.kill()
 	t = create_tween()
 	
-	t .tween_method(set_shader_value,3.8,omny_range,1.0)
+	t .tween_method(set_shader_value,3.8,omny_range,2.0)
 
 func set_shader_value(value):
 	omni_light_3d.omni_range = value
@@ -1109,6 +1109,7 @@ flash_tool_data = ExtResource("6_axu5t")
 script = SubResource("GDScript_mbf75")
 
 [node name="Timer" type="Timer" parent="Flash_inputs"]
+wait_time = 3.0
 one_shot = true
 
 [node name="Scanne_element" type="Node" parent="."]
@@ -1160,7 +1161,7 @@ script = SubResource("GDScript_8qwgp")
 [node name="active_light" type="Node" parent="Render_mesh/Active_visual_tools" node_paths=PackedStringArray("list_of_object")]
 script = ExtResource("8_8bfcd")
 _tool_data = ExtResource("6_axu5t")
-list_of_object = [NodePath("../../Photographe")]
+list_of_object = [NodePath("../../Light")]
 
 [node name="active_scanner" type="Node" parent="Render_mesh/Active_visual_tools" node_paths=PackedStringArray("list_of_object")]
 script = ExtResource("8_8bfcd")
@@ -1172,10 +1173,10 @@ script = ExtResource("8_8bfcd")
 _tool_data = ExtResource("12_nmehd")
 list_of_object = [NodePath("../../Orber")]
 
-[node name="active_magnet" type="Node" parent="Render_mesh/Active_visual_tools" node_paths=PackedStringArray("list_of_object")]
+[node name="active_Fusion" type="Node" parent="Render_mesh/Active_visual_tools" node_paths=PackedStringArray("list_of_object")]
 script = ExtResource("8_8bfcd")
 _tool_data = ExtResource("13_bws7h")
-list_of_object = [NodePath("../../Magnet")]
+list_of_object = [NodePath("../../Fusion")]
 
 [node name="Scanner" type="MeshInstance3D" parent="Render_mesh"]
 transform = Transform3D(-1.7049e-09, -0.038187, 0, 0.0390036, -1.66921e-09, 0, 0, 0, 0.121949, 0.0349853, 0.140869, 0.0761496)
@@ -1234,21 +1235,47 @@ layers = 4
 mesh = SubResource("PrismMesh_5cv61")
 surface_material_override/0 = ExtResource("8_wvhjt")
 
-[node name="Magnet" type="MeshInstance3D" parent="Render_mesh"]
-transform = Transform3D(-1.33332e-09, -0.0298642, 0, 0.0305028, -1.30541e-09, 0, 0, 0, 0.0953704, 0.0349853, 0.140869, 0.0994924)
+[node name="Fusion" type="MeshInstance3D" parent="Render_mesh"]
+transform = Transform3D(-1.12055e-09, -0.0250984, 0, 0.0256351, -1.09709e-09, 0, 0, 0, 0.080151, 0.0349853, 0.140869, 0.0994924)
 layers = 4
 mesh = SubResource("BoxMesh_8vb5i")
 skeleton = NodePath("../../Player_sub_collider")
 surface_material_override/0 = ExtResource("1_n1vw4")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Render_mesh/Magnet"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Render_mesh/Fusion"]
 transform = Transform3D(3.97089, 3.69482e-13, 0, 1.42109e-13, 4.05581, 0, 0, 0, 1.27003, 0, 0, 0.201608)
 layers = 4
 mesh = SubResource("SphereMesh_w2scb")
 surface_material_override/0 = ExtResource("1_n1vw4")
 
+[node name="big" type="MeshInstance3D" parent="Render_mesh/Fusion"]
+transform = Transform3D(2.89946, 3.2685e-13, 0, 5.68434e-14, 2.96146, 0, 0, 0, 0.927348, 0, 0, 0.493481)
+layers = 4
+mesh = SubResource("SphereMesh_w2scb")
+surface_material_override/0 = ExtResource("8_wvhjt")
+
+[node name="Light" type="MeshInstance3D" parent="Render_mesh"]
+transform = Transform3D(-1.12055e-09, -0.0250984, 0, 0.0256351, -1.09709e-09, 0, 0, 0, 0.080151, 0.0349853, 0.140869, 0.0994924)
+layers = 4
+mesh = SubResource("BoxMesh_8vb5i")
+skeleton = NodePath("../../Player_sub_collider")
+surface_material_override/0 = ExtResource("1_n1vw4")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Render_mesh/Light"]
+transform = Transform3D(3.97089, 3.69482e-13, 0, 1.42109e-13, 4.05581, 0, 0, 0, 1.27003, 0, 0, 0.201608)
+layers = 4
+mesh = SubResource("SphereMesh_w2scb")
+surface_material_override/0 = ExtResource("1_n1vw4")
+
+[node name="small" type="MeshInstance3D" parent="Render_mesh/Light"]
+transform = Transform3D(2.56899, 2.84217e-13, 0, 5.68434e-14, 2.62393, 0, 0, 0, 0.821654, 0, 0, 0.493481)
+layers = 4
+mesh = SubResource("SphereMesh_w2scb")
+surface_material_override/0 = ExtResource("8_wvhjt")
+
 [node name="Photographe" type="Node3D" parent="Render_mesh"]
 transform = Transform3D(-3.47124e-09, -0.134331, 0, 0.0794125, -5.87181e-09, 0, 0, 0, 0.052318, 0.00787213, 0.139258, 0.07916)
+visible = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Render_mesh/Photographe"]
 transform = Transform3D(0.477894, -7.10543e-15, 0, 4.44089e-15, 0.477894, 0, 0, 0, 0.477894, 0, 0, 0.236441)
