@@ -7,10 +7,8 @@ extends Node
 @onready var keys_type = oddity_enum.Oddity_list.keys()
 
 func _ready():
-	
-	_global_datas.add_oddity_to_inventory.connect(add_to_list)
-	_global_datas.remove_oddity_to_inventory.connect(remove_from_list)
-		
+	pass
+
 # TO REGISTER IN LIST INVENTORY
 func add_to_list(oddity : Oddity_data):
 	

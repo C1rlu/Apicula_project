@@ -13,10 +13,9 @@ var Player_InMirrorScene : bool = false
 var Player_InMenu : bool
 var Player_InDialogue : bool
 var Player_InDialogue_zone : bool
-var Mirror_vortex_Node : Node3D
-var Mirror_vortex_out_Node : Node3D
-# menu signals
 
+
+# menu signals
 signal _start_ini_subscene
 signal _end_ini_subscene
 signal _open_menu(condition : bool)
@@ -44,8 +43,7 @@ func _ready():
 	_orbe_stroke.clear()
 	_strokeID = 0
 	_orbe_visual_scene.clear()
-	_peon_oddity_following.clear()
-	_xray_oddity = null
+
 	
 # input type
 signal using_pad(condition : bool)
@@ -70,6 +68,7 @@ signal  _open_dialogue
 signal  _close_dialogue
 signal _type_text(count : int)
 signal _update_cam_focus(position : Vector3)
+
 # for save game
 var photo_archives : Array[PhotoData] 
 var note_archives : Array[Note_Data]
@@ -108,16 +107,15 @@ signal switching_tool(tool : tool_data)
 
 #to lock input back to light if on zone
 var player_is_Interactive_Zone : bool 
+# Main Oddity 
 
+var Main_oddity_node : Node3D
 
 signal rapatrier_vfx(position : Vector3)
 signal _traceur_pause(condition : bool)
 signal _explosed_traceur_zone
 
-# UPDATE INVENTORY ODDITY LIST BY TYPE
 
-signal add_oddity_to_inventory(oddity : Oddity_data)
-signal remove_oddity_to_inventory(oddity : Oddity_data)
 
 # SUBSCENE ORBE previously teleporter
 
@@ -143,9 +141,6 @@ signal instance_orbe_result(data : orbe_data, instance_position : Vector3)
 
 # Oddity # FOR ODDITY IN SCENE
 
-
-var _peon_oddity_following : Array
-var _xray_oddity : Node3D
 signal flash_x_ray_oddity
 signal _use_peon_oddity(number : int)
 

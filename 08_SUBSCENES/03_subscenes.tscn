@@ -1,14 +1,12 @@
-[gd_scene load_steps=96 format=3 uid="uid://nigmie4bbn6"]
+[gd_scene load_steps=93 format=3 uid="uid://nigmie4bbn6"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/Grid_scene/Subscene_loader.gd" id="1_7uoo0"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="2_3srhu"]
 [ext_resource type="PackedScene" uid="uid://g7u8o55jrnyy" path="res://08_SUBSCENES/Player_subscene/Player_sub.tscn" id="2_ri8q1"]
 [ext_resource type="Script" path="res://03_CAMERA/CameraFollow_subscene.gd" id="2_tc6o2"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Tools/Switch_tools_input.gd" id="3_2mtx3"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Orbe_Oddity_List.gd" id="3_fuete"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Instance_oddity_at_start.gd" id="3_l4jt1"]
 [ext_resource type="Material" uid="uid://dbu2q4lhlk8w5" path="res://05_SHADER_TEST/Full_screen/Subscene_screen/Main_subscene_dither.tres" id="3_w42nb"]
-[ext_resource type="Resource" uid="uid://bn7ic0u3wdpiv" path="res://08_SUBSCENES/Oddity/Oddity_inventory_base.tres" id="4_7enbd"]
 [ext_resource type="Material" uid="uid://b7ffjkgpmtkc6" path="res://05_SHADER_TEST/Full_screen/Subscene_screen/Scanner_x_subscene_dither.tres" id="4_bkck3"]
 [ext_resource type="Resource" uid="uid://d11cl4f25dgwg" path="res://08_SUBSCENES/Tools/Flash_light.tres" id="4_h1r1k"]
 [ext_resource type="Resource" uid="uid://380xcgsxw62f" path="res://08_SUBSCENES/Tools/Orbe_spawner.tres" id="5_5xftw"]
@@ -17,8 +15,6 @@
 [ext_resource type="Resource" uid="uid://vv3dws7dmhtd" path="res://08_SUBSCENES/Tools/Scanner.tres" id="6_b80v7"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Tools/Play_Scanner.gd" id="7_7awji"]
 [ext_resource type="Resource" uid="uid://b4j40xtcg031c" path="res://08_SUBSCENES/Oddity/00_Scene_data/Scanner_scene_data.tres" id="7_84g34"]
-[ext_resource type="Resource" uid="uid://ci3v8jfejrgk6" path="res://08_SUBSCENES/Oddity/01_data/Followers_data.tres" id="7_g7xoh"]
-[ext_resource type="Resource" uid="uid://by2i8h1njw1qn" path="res://08_SUBSCENES/Oddity/01_data/Scanner_data.tres" id="8_dfd4r"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Tools/PhotoData_list_update.gd" id="10_w7dre"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Orbe_Instancer.gd" id="11_dnajt"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Rapatrier_VFX.gd" id="11_lxeli"]
@@ -36,6 +32,7 @@
 [ext_resource type="Script" path="res://03_CAMERA/Active_scene_viewports.gd" id="21_jai7k"]
 [ext_resource type="Resource" uid="uid://7ga31b1hxkul" path="res://08_SUBSCENES/Orbe/Medusa_checker/Medusa_checker_data.tres" id="25_t1c5o"]
 [ext_resource type="Resource" uid="uid://dfstosle1x85v" path="res://08_SUBSCENES/Orbe/Rapatrier/Rapatrier_check_data.tres" id="28_0sxkg"]
+[ext_resource type="PackedScene" uid="uid://50ubp7klhsex" path="res://08_SUBSCENES/Oddity/Main_Oddity/Main_oddity.tscn" id="36_2bm1k"]
 
 [sub_resource type="GDScript" id="GDScript_btuws"]
 script/source = "extends Node
@@ -202,16 +199,16 @@ func _on_surface_trigger_area_shape_entered(area_rid, area, area_shape_index, lo
 script/source = "extends Node
 @onready var subscenes_cam_scanner_x = $\"../Viewport/Scanner_x\"
 @onready var material : Material = subscenes_cam_scanner_x.get_material()
-@onready var timer = $Timer
 
 var t
 var actual_value : float
+
 func _ready():
 	
-	_global_datas._scan_mirror_xray.connect(_check_xray_oddity)
+	_global_datas._scan_mirror_xray.connect(_flash_mirror)
 	_global_datas._traceur_pause.connect(_set_paused)
 	
-	
+
 func _set_paused(condition : bool):
 	
 	if condition:
@@ -223,18 +220,8 @@ func _set_paused(condition : bool):
 		t = create_tween()
 		t .tween_method(_set_opacity_value,actual_value,0,1.5)	
 					
-func _check_xray_oddity():
-	
-	if _global_datas._xray_oddity == null:
-		return
-	
-	var random_start_time = randf_range(0.5,1.0)
-	timer.wait_time = random_start_time
-	timer.start()	
-	
 func _flash_mirror():
 
-	_global_datas.flash_x_ray_oddity.emit()
 	
 	if t:
 		t.kill()
@@ -246,8 +233,7 @@ func _set_opacity_value( value : float):
 
 	material.set_shader_parameter(\"Opacity\",value)	
 	actual_value = value
-func _on_timer_timeout():
-	_flash_mirror()
+
 "
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_gasoh"]
@@ -876,16 +862,9 @@ script = ExtResource("2_3srhu")
 viewports = [NodePath("../Viewport/Main_SubViewport"), NodePath("../Viewport/Scanner_x_SubViewport")]
 
 [node name="Orbe_Oddity_List" type="Node" parent="."]
-script = ExtResource("3_fuete")
-Oddity_inventory_base = ExtResource("4_7enbd")
-followers = ExtResource("7_g7xoh")
-scanner = ExtResource("8_dfd4r")
 
 [node name="Instance_Oddity" type="Node" parent="Orbe_Oddity_List"]
 script = ExtResource("3_l4jt1")
-Oddity_inventory_base = ExtResource("4_7enbd")
-Follower_scene_data = ExtResource("6_axwdn")
-Scanner_scene_data = ExtResource("7_84g34")
 
 [node name="instance_Debugger" type="Node" parent="Orbe_Oddity_List"]
 script = SubResource("GDScript_xe8mp")
@@ -958,10 +937,6 @@ script = ExtResource("12_lg0wa")
 [node name="SEE_MIRROR_FLASH" type="Node" parent="."]
 script = SubResource("GDScript_nvaxv")
 
-[node name="Timer" type="Timer" parent="SEE_MIRROR_FLASH"]
-wait_time = 0.15
-one_shot = true
-
 [node name="Teleport_Player" type="Node" parent="."]
 script = ExtResource("20_mfhmv")
 
@@ -997,7 +972,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 1.8)
 cull_mask = 4096
 
 [node name="Main" type="TextureRect" parent="Viewport"]
-visible = false
 material = ExtResource("3_w42nb")
 anchors_preset = 15
 anchor_right = 1.0
@@ -1008,7 +982,6 @@ texture = SubResource("ViewportTexture_gasoh")
 expand_mode = 3
 
 [node name="Scanner_x" type="TextureRect" parent="Viewport"]
-visible = false
 material = ExtResource("4_bkck3")
 anchors_preset = 15
 anchor_right = 1.0
@@ -1017,6 +990,8 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("ViewportTexture_dqppn")
 expand_mode = 3
+
+[node name="Main_Oddity" parent="." instance=ExtResource("36_2bm1k")]
 
 [node name="Player_Sub" parent="." instance=ExtResource("2_ri8q1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.334, 0)
@@ -1090,5 +1065,4 @@ theme_override_font_sizes/font_size = 20
 [connection signal="timeout" from="FADE_OUT/Timer" to="FADE_OUT" method="_on_timer_timeout"]
 [connection signal="process_link" from="ORBE/Orbe_Instancer" to="ORBE/Orbe_Instancer/Link_process" method="_on_orbe_instancer_process_link"]
 [connection signal="timeout" from="ORBE/Orbe_Instancer/Link_stroke_done/Timer" to="ORBE/Orbe_Instancer/Link_stroke_done" method="_on_timer_timeout"]
-[connection signal="timeout" from="SEE_MIRROR_FLASH/Timer" to="SEE_MIRROR_FLASH" method="_on_timer_timeout"]
 [connection signal="area_shape_entered" from="Surface_trigger" to="GO_SURFACE" method="_on_surface_trigger_area_shape_entered"]
