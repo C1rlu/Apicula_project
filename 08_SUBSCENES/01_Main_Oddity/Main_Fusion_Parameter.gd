@@ -5,7 +5,7 @@ extends Node
 var base_scale : Vector3
 
 @onready var parabol_mesh = $"../Render_root/Parabol_mesh"
-@onready var fash_timer = $"../Fade_flash/fash_timer"
+@onready var fade_flash = $"../Fade_flash"
 
 
 func _ready():
@@ -22,4 +22,4 @@ func _add_organic():
 
 func _add_sonar():
 	parabol_mesh.visible = true
-	fash_timer.start()
+	fade_flash.active = true

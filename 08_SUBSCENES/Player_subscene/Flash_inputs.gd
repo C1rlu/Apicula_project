@@ -7,15 +7,23 @@ extends Node
 
 @export var flash_tool_data : tool_data
 
-
 func _ready():
 
-	flash_tool_data.tool_active_signal.connect(check_area)	
-	_global_datas._end_ini_subscene.connect(_start_light)
+	flash_tool_data.tool_active_signal.connect(_start_light)	
+	#_global_datas._end_ini_subscene.connect(_start_light)
 
-func _start_light():
+func _start_light(condition):
+	
+	if !condition:
+		return
+		
+	if !timer.is_stopped():
+		return
+		
 	timer.start()
 	check_area(true)	
+		
+	
 						
 func check_area(condition : bool):
 	
@@ -25,10 +33,9 @@ func check_area(condition : bool):
 	if !condition:
 		return
 	
-	print("CHECK END")
-	_global_datas._scan_mirror_xray.emit()
+	#_global_datas._scan_mirror_xray.emit()
 	_global_datas._photo_flash.emit()
-
+	_global_datas.flash_x_ray_oddity.emit()
 	#var overlap_areas_ = area.get_overlapping_areas()
 	#
 	#if overlap_areas_ == null:

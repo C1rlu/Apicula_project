@@ -28,13 +28,15 @@ var t
 var actual_value : float 
 var is_paused : bool
 @onready var fash_timer = $fash_timer
-
+var active : bool
 
 func _ready():
-	_global_datas.flash_x_ray_oddity.connect(_start_flash)
+	_global_datas.flash_x_ray_oddity.connect(active_flash)
 	_global_datas._traceur_pause.connect(_set_paused)
 
-
+func active_flash():
+	fash_timer.start()	
+	
 func _set_paused(condition : bool):
 	
 	is_paused = condition
@@ -50,10 +52,11 @@ func _set_paused(condition : bool):
 
 func _start_flash():
 	
+	
 	if is_paused:
 		return
 	light_sphere.visible = true
-
+	
 	if t:
 		t.kill()
 		
@@ -70,9 +73,13 @@ func done():
 
 
 func _on_fash_timer_timeout():
+	
+	if !active:
+		return
+		
 	_start_flash()
 	_global_datas._scan_mirror_xray.emit()
-	fash_timer.wait_time = randf_range(1.0,3.0)
+	fash_timer.wait_time = randf_range(0.5,1.5)
 "
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_lls1c"]
@@ -348,6 +355,7 @@ script = SubResource("GDScript_7nn0l")
 
 [node name="fash_timer" type="Timer" parent="Fade_flash"]
 wait_time = 1.5
+one_shot = true
 
 [node name="Fusion_area" type="Area3D" parent="."]
 collision_layer = 4

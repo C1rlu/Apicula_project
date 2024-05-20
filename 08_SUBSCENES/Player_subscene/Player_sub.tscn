@@ -3,7 +3,7 @@
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="1_n1vw4"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Player_sub_behaviour.gd" id="1_o2v73"]
 [ext_resource type="PackedScene" uid="uid://d32pm6ao6u7gq" path="res://08_SUBSCENES/Player_subscene/POD/pod_prefabs.tscn" id="2_5t88l"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Tools/Scanning_effect.gd" id="3_ev2yp"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Flash_inputs.gd" id="3_p6pm7"]
 [ext_resource type="ArrayMesh" uid="uid://cm4cl6n84qj86" path="res://07_VFX/Boat_smoke/smoke_msh.obj" id="4_6vpi7"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Input_teleport.gd" id="4_bymul"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Tools/Scanne_element.gd" id="5_jhkow"]
@@ -69,7 +69,7 @@ func _start_flash():
 		
 	t = create_tween()
 	
-	t.tween_method(change_scale,0.5,0.0,3.0)
+	t.tween_method(change_scale,0.5,0.0,1.0)
 	t.connect(\"finished\",done)
 
 func change_scale(value : float):
@@ -1102,13 +1102,13 @@ script = SubResource("GDScript_lbkea")
 one_shot = true
 
 [node name="Flash_inputs" type="Node" parent="."]
-script = ExtResource("3_ev2yp")
+script = ExtResource("3_p6pm7")
+flash_tool_data = ExtResource("15_vswql")
 
 [node name="Fade_flash" type="Node" parent="Flash_inputs"]
 script = SubResource("GDScript_mbf75")
 
 [node name="Timer" type="Timer" parent="Flash_inputs"]
-wait_time = 3.0
 one_shot = true
 
 [node name="Scanne_element" type="Node" parent="."]
@@ -1421,7 +1421,6 @@ process_material = SubResource("ParticleProcessMaterial_snyp2")
 draw_pass_1 = ExtResource("4_6vpi7")
 
 [connection signal="timeout" from="Ini_subscene/Timer" to="Ini_subscene" method="_on_timer_timeout"]
-[connection signal="timeout" from="Flash_inputs/Timer" to="Flash_inputs" method="_on_timer_timeout"]
 [connection signal="timeout" from="Scanne_element/time_checker" to="Scanne_element" method="_on_time_checker_timeout"]
 [connection signal="timeout" from="Scanne_element/Active_scanner_visual_pulse/Timer" to="Scanne_element/Active_scanner_visual_pulse" method="_on_timer_timeout"]
 [connection signal="timeout" from="Fusion/Timer_process" to="Fusion" method="_on_timer_process_timeout"]
