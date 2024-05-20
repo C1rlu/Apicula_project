@@ -9,9 +9,9 @@ extends Node
 
 
 func _ready():
-	pass
-	#flash_tool_data.tool_active_signal.connect(check_area)	
-	#_global_datas._end_ini_subscene.connect(_start_light)
+
+	flash_tool_data.tool_active_signal.connect(check_area)	
+	_global_datas._end_ini_subscene.connect(_start_light)
 
 func _start_light():
 	timer.start()
