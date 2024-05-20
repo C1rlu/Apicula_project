@@ -136,7 +136,6 @@ var Cursor_mode : Node
 
 
 #update description on board
-signal ui_photo_flash
 signal focus_this_on_board(target : Vector3)
 signal Open_ui_dark_backdrop(condition : bool)
 signal show_on_scanner(condition : bool)

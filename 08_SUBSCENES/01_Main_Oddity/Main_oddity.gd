@@ -48,6 +48,10 @@ func move_oddity():
 
 func _process(delta):
 	
+	if !_global_datas.Player_InSubScene:
+		return
+	if _global_datas.Player_In_Inventory:
+		return	
 	if is_paused:
 		return
 	
