@@ -26,8 +26,6 @@ signal show_3D_MainScene(condition : bool)
 signal show_3D_BoardScene(condition : bool)
 signal show_3D_SubScene(condition : bool)
 signal show_3D_SpeackerScene(condition : bool)
-
-
 #backcalls
 signal _back_call
 signal _add_back_call(back_call)
@@ -35,7 +33,6 @@ var _back_call_list : Array
 
 func _ready():
 	_back_call_list.clear()
-	_teleporter_list.clear()
 	_selected_tool = null
 	_photo_data_scene_list.clear()
 	_orbe_stroke_scene.clear()
@@ -44,7 +41,6 @@ func _ready():
 	_strokeID = 0
 	_orbe_visual_scene.clear()
 
-	
 # input type
 signal using_pad(condition : bool)
 var move_right : String
@@ -75,23 +71,16 @@ var note_archives : Array[Note_Data]
 var boue_archives : Array[BoueData]
 var tools_list : Array[tool_data]
 
-
-
-
-signal _show_hand
-signal _hide_hand
 signal _start_dialogue_box
 signal _hide_dialogue_box
 signal _show_dialogue_box
-signal _bird_is_comming
 signal _give_letter( note_name : String)
 signal _take_note(note_name : String)
 signal _take_Npc_photo(condition : bool)
 signal _show_object_legend(condtion : bool, text : String)
 
 signal _instance_photo(photoData : PhotoData)
-signal _take_photo
-
+#signal _take_photo
 
 #subsceneSignal
 var selected_subscene : PackedScene
@@ -100,7 +89,6 @@ signal _go_Subscene
 var subbscene_playerPosition : Vector3
 signal _scan_mirror_xray
 signal _photo_flash
-signal _subscene_fail
 var flash_subscene_position : Vector3
 var _selected_tool : tool_data 
 signal switching_tool(tool : tool_data)
@@ -108,21 +96,16 @@ signal switching_tool(tool : tool_data)
 #to lock input back to light if on zone
 var player_is_Interactive_Zone : bool 
 # Main Oddity 
-
 var Main_oddity_node : Node3D
 
 signal rapatrier_vfx(position : Vector3)
+
 signal _traceur_pause(condition : bool)
 signal _explosed_traceur_zone
 
 
-
 # SUBSCENE ORBE previously teleporter
-
-signal _teleport_at_position(start_position: Vector3)
-var _teleporter_list : Array[Node] 
 var _photo_data_scene_list : Array[Node]
-
 
 # Orbe Points.Point.New
 signal _instance_start_visual_orbe
@@ -140,10 +123,7 @@ var _orbe_visual_scene : Array[Node3D]
 signal instance_orbe_result(data : orbe_data, instance_position : Vector3)
 
 # Oddity # FOR ODDITY IN SCENE
-
 signal flash_x_ray_oddity
-signal _use_peon_oddity(number : int)
-
 signal instance_scene_oddity(oddity_scene : Oddity_scene_data)
 
 #board scene

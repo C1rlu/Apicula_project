@@ -1,4 +1,4 @@
-[gd_scene load_steps=93 format=3 uid="uid://nigmie4bbn6"]
+[gd_scene load_steps=124 format=3 uid="uid://nigmie4bbn6"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/00_Scripts/Subscene_loader.gd" id="1_7uoo0"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="2_3srhu"]
@@ -22,14 +22,19 @@
 [ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Base_Orbe/Link_process.gd" id="12_gsnev"]
 [ext_resource type="Resource" uid="uid://cbbmkpkisxagn" path="res://08_SUBSCENES/Orbe/00_Orbe_datas/Orbe_Mirror.tres" id="12_l61c1"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Stroke_Filter/Orbe_Result_Instancer.gd" id="12_lg0wa"]
-[ext_resource type="Resource" uid="uid://cubpsapqnetwr" path="res://08_SUBSCENES/Orbe/00_Orbe_datas/Orbe_teleporter.tres" id="13_ywb87"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Stroke_Filter/Stroke_Filter.tres.gd" id="14_0roc3"]
 [ext_resource type="Resource" uid="uid://drupv3acvl1k4" path="res://08_SUBSCENES/Orbe/00_Orbe_datas/Orbe_Mirror_Out.tres" id="14_dpsgd"]
 [ext_resource type="Resource" uid="uid://dqpl0ihtab1su" path="res://08_SUBSCENES/Tools/Fusion_tool.tres" id="14_glnqv"]
 [ext_resource type="Resource" uid="uid://ncll7t2e5k5v" path="res://08_SUBSCENES/Orbe/Remover/RemoverOrbe_data.tres" id="15_2trwq"]
 [ext_resource type="Resource" uid="uid://boumbv1ixnqko" path="res://08_SUBSCENES/Orbe/Scanner_check/Scanner_Checker.tres" id="18_4kphq"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Teleporter/Teleport_Player.gd" id="20_mfhmv"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Tools/Scanning_effect.gd" id="19_ux0o6"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Remover/Line_remover.gd" id="20_bhx4v"]
 [ext_resource type="Script" path="res://03_CAMERA/Active_scene_viewports.gd" id="21_jai7k"]
+[ext_resource type="Script" path="res://12_INVENTORY/Photo/Photo_data_element.gd" id="21_tbjq6"]
+[ext_resource type="Resource" uid="uid://bc0a7b7fylqn4" path="res://12_INVENTORY/Photo/Teleporter_photoData.tres" id="22_oit8m"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Orbe_Magnet.gd" id="23_vngk1"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Orbe_Contact.gd" id="24_yrif3"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Orbe/00_Orbe_datas/Orbe_data.gd" id="25_04pyi"]
 [ext_resource type="Resource" uid="uid://7ga31b1hxkul" path="res://08_SUBSCENES/Orbe/Medusa_checker/Medusa_checker_data.tres" id="25_t1c5o"]
 [ext_resource type="Resource" uid="uid://dfstosle1x85v" path="res://08_SUBSCENES/Orbe/Rapatrier/Rapatrier_check_data.tres" id="28_0sxkg"]
 [ext_resource type="PackedScene" uid="uid://50ubp7klhsex" path="res://08_SUBSCENES/01_Main_Oddity/Main_oddity.tscn" id="36_2bm1k"]
@@ -194,6 +199,225 @@ func _on_surface_trigger_area_shape_entered(area_rid, area, area_shape_index, lo
 
 
 "
+
+[sub_resource type="GDScript" id="GDScript_pk56r"]
+script/source = "extends Node
+@onready var teleporter = $\"..\"
+
+var teleporter_position : Vector3
+
+func _ready():
+	teleporter_position = teleporter.position
+
+func _remove_teleporter():
+	teleporter.queue_free()	
+
+func set_position(_position : Vector3):
+	teleporter.position = _position	
+	teleporter_position = teleporter.position
+
+func magnet_end():
+	var player_position = _global_datas.subbscene_playerPosition	
+	teleporter_position = player_position	
+
+
+func _on_orbe_magnet_magnet_end():
+	magnet_end()
+"
+
+[sub_resource type="GDScript" id="GDScript_2l4kd"]
+script/source = "extends Node
+
+@onready var teleporter = $\"..\"
+
+func _on_orbe_contact_delete_node():
+	teleporter.queue_free()	
+"
+
+[sub_resource type="VisualShaderNodeFresnel" id="VisualShaderNodeFresnel_mw66r"]
+default_input_values = [2, true, 3, 10.0]
+
+[sub_resource type="VisualShader" id="VisualShader_vefdy"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+
+
+
+"
+graph_offset = Vector2(-164.667, 0)
+flags/unshaded = true
+nodes/fragment/2/node = SubResource("VisualShaderNodeFresnel_mw66r")
+nodes/fragment/2/position = Vector2(14.2265, 134.785)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ypguf"]
+render_priority = 0
+shader = SubResource("VisualShader_vefdy")
+
+[sub_resource type="Curve" id="Curve_khqj2"]
+_data = [Vector2(0.00550964, 0.902674), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_as00d"]
+curve = SubResource("Curve_khqj2")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_1ke37"]
+emission_shape = 1
+emission_sphere_radius = 0.25
+gravity = Vector3(0, 0, 0)
+scale_min = 0.03
+scale_max = 0.03
+scale_curve = SubResource("CurveTexture_as00d")
+
+[sub_resource type="BoxMesh" id="BoxMesh_pqfq1"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_m2ll2"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fieuw"]
+shading_mode = 0
+
+[sub_resource type="BoxMesh" id="BoxMesh_1cn5w"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_12daw"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_skf8y"]
+radius = 1.16933
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_fsn5p"]
+radius = 0.117408
+
+[sub_resource type="TorusMesh" id="TorusMesh_tvllk"]
+inner_radius = 2.289
+outer_radius = 1.5
+rings = 32
+ring_segments = 16
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_57a4m"]
+parameter_name = "Light_color_ui"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_ss4dw"]
+constant = 0.4
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_0ppx4"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_8j6a1"]
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_j2ocp"]
+constant = 0.814
+
+[sub_resource type="VisualShader" id="VisualShader_2h3k6"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+
+global uniform vec4 Light_color_ui : source_color;
+
+
+
+void fragment() {
+// ColorParameter:2
+	vec4 n_out2p0 = Light_color_ui;
+
+
+// FloatConstant:7
+	float n_out7p0 = 0.814000;
+
+
+// FloatConstant:3
+	float n_out3p0 = 0.400000;
+
+
+	float n_out4p0;
+// Expression:4
+	n_out4p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out3p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out4p0 = n_out7p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Step:6
+	float n_out6p0 = step(n_out2p0.x, n_out4p0);
+
+
+// Output:0
+	ALBEDO = vec3(n_out2p0.xyz);
+	ALPHA = n_out6p0;
+
+
+}
+"
+graph_offset = Vector2(-2592.23, 392.193)
+flags/unshaded = true
+nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_57a4m")
+nodes/fragment/2/position = Vector2(-760, -40)
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_ss4dw")
+nodes/fragment/3/position = Vector2(-1380, 520)
+nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_0ppx4")
+nodes/fragment/4/position = Vector2(-1200, 380)
+nodes/fragment/4/size = Vector2(724.789, 654.559)
+nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/4/output_ports = "0,0,Dither_Node;"
+nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/6/node = SubResource("VisualShaderNodeStep_8j6a1")
+nodes/fragment/6/position = Vector2(-351.825, 215.819)
+nodes/fragment/7/node = SubResource("VisualShaderNodeFloatConstant_j2ocp")
+nodes/fragment/7/position = Vector2(-1440, 360)
+nodes/fragment/connections = PackedInt32Array(3, 0, 4, 1, 4, 0, 6, 1, 6, 0, 0, 1, 7, 0, 4, 0, 2, 0, 6, 0, 2, 0, 0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_of2nf"]
+render_priority = 0
+shader = SubResource("VisualShader_2h3k6")
+
+[sub_resource type="TorusMesh" id="TorusMesh_rprlq"]
+inner_radius = 2.546
+outer_radius = 2.972
+rings = 32
+ring_segments = 16
+
+[sub_resource type="PackedScene" id="PackedScene_cfoox"]
+_bundled = {
+"conn_count": 9,
+"conns": PackedInt32Array(1073741847, 1073741846, 120, 119, 2, 0, 0, 1073741849, 1073741848, 122, 121, 2, 0, 0, 1073741851, 1073741850, 124, 123, 2, 0, 0, 1073741853, 1073741852, 126, 125, 2, 0, 0, 1073741855, 1073741854, 128, 127, 2, 0, 0, 1073741857, 1073741856, 130, 129, 2, 0, 0, 1073741859, 1073741858, 132, 131, 2, 0, 0, 1073741861, 1073741860, 134, 133, 2, 0, 0, 1073741863, 1073741862, 136, 135, 2, 0, 0),
+"editable_instances": [],
+"names": PackedStringArray("Teleporter", "Area3D", "collision_layer", "collision_mask", "Teleporter", "Node", "script", "Scanning_effect", "Node", "script", "Remover", "Node", "script", "Mirror_Particule", "GPUParticles3D", "transform", "layers", "material_override", "gi_mode", "emitting", "amount", "lifetime", "speed_scale", "fixed_fps", "process_material", "draw_pass_1", "Render_on", "Node3D", "MeshInstance3D3", "MeshInstance3D", "transform", "layers", "mesh", "skeleton", "surface_material_override/0", "MeshInstance3D4", "MeshInstance3D", "transform", "layers", "mesh", "skeleton", "surface_material_override/0", "MeshInstance3D5", "MeshInstance3D", "transform", "layers", "mesh", "skeleton", "surface_material_override/0", "MeshInstance3D5", "MeshInstance3D", "transform", "layers", "mesh", "skeleton", "surface_material_override/0", "MeshInstance3D5", "MeshInstance3D", "transform", "layers", "mesh", "skeleton", "surface_material_override/0", "MeshInstance3D6", "MeshInstance3D", "transform", "layers", "mesh", "skeleton", "surface_material_override/0", "MeshInstance3D5", "MeshInstance3D", "transform", "layers", "mesh", "skeleton", "surface_material_override/0", "CollisionShape3D", "CollisionShape3D", "shape", "Area_take_it", "Area3D", "collision_layer", "collision_mask", "Line_remover", "Node", "script", "Photo_data", "Node", "script", "photoData", "Timer", "Timer", "Orbe_Magnet", "Node", "script", "orbe_name", "Orbe_Contact", "Node", "script", "CollisionShape3D2", "CollisionShape3D", "shape", "teleporter_circle", "MeshInstance3D", "transform", "visible", "layers", "mesh", "skeleton", "surface_material_override/0", "teleporter_circle_close", "MeshInstance3D", "transform", "visible", "layers", "mesh", "skeleton", "surface_material_override/0", "_on_area_take_it_area_shape_entered", "area_shape_entered", "_on_area_take_it_area_shape_exited", "area_shape_exited", "_on_area_take_it_area_shape_exited", "area_shape_exited", "_on_photo_data_scanner_effect_condition", "scanner_effect_condition", "_on_photo_data_scanner_effect_value", "scanner_effect_value", "_on_tree_exited", "tree_exited", "_on_timer_timeout", "timeout", "_on_orbe_magnet_magnet_end", "magnet_end", "_on_orbe_contact_delete_node", "delete_node"),
+"node_count": 23,
+"node_paths": [NodePath("."), NodePath("."), NodePath("."), NodePath("."), NodePath("."), NodePath("./Render_on"), NodePath("./Render_on"), NodePath("./Render_on/MeshInstance3D4"), NodePath("./Render_on"), NodePath("./Render_on/MeshInstance3D5"), NodePath("./Render_on"), NodePath("./Render_on/MeshInstance3D6"), NodePath("."), NodePath("."), NodePath("./Area_take_it"), NodePath("./Area_take_it"), NodePath("./Area_take_it/Photo_data"), NodePath("./Area_take_it"), NodePath("./Area_take_it"), NodePath("./Area_take_it"), NodePath("."), NodePath("."), NodePath("Area_take_it/Orbe_Contact"), NodePath("Area_take_it"), NodePath("Area_take_it/Photo_data"), NodePath("Area_take_it"), NodePath("Area_take_it/Orbe_Contact"), NodePath("Area_take_it"), NodePath("Scanning_effect"), NodePath("Area_take_it/Photo_data"), NodePath("Scanning_effect"), NodePath("Area_take_it/Photo_data"), NodePath("Area_take_it/Photo_data"), NodePath("Area_take_it/Photo_data"), NodePath("Area_take_it/Photo_data"), NodePath("Area_take_it/Photo_data/Timer"), NodePath("Teleporter"), NodePath("Area_take_it/Orbe_Magnet"), NodePath("Remover"), NodePath("Area_take_it/Orbe_Contact")],
+"nodes": PackedInt32Array(-1, -1, 1, 0, -1, 2, 2, 0, 3, 1, 0, 1073741824, 0, 5, 4, -1, 1, 6, 2, 0, 1073741825, 0, 8, 7, -1, 1, 9, 3, 0, 1073741826, 0, 11, 10, -1, 1, 12, 4, 0, 1073741827, 0, 14, 13, -1, 11, 15, 5, 16, 6, 17, 7, 18, 8, 19, 9, 20, 10, 21, 11, 22, 12, 23, 13, 24, 14, 25, 15, 0, 1073741828, 0, 27, 26, -1, 0, 0, 1073741829, 0, 29, 28, -1, 5, 30, 16, 31, 17, 32, 18, 33, 19, 34, 20, 0, 1073741830, 0, 36, 35, -1, 5, 37, 21, 38, 22, 39, 23, 40, 24, 41, 25, 0, 1073741831, 0, 43, 42, -1, 5, 44, 26, 45, 27, 46, 28, 47, 29, 48, 30, 0, 1073741832, 0, 50, 49, -1, 5, 51, 31, 52, 32, 53, 33, 54, 34, 55, 35, 0, 1073741833, 0, 57, 56, -1, 5, 58, 36, 59, 37, 60, 38, 61, 39, 62, 40, 0, 1073741834, 0, 64, 63, -1, 5, 65, 41, 66, 42, 67, 43, 68, 44, 69, 45, 0, 1073741835, 0, 71, 70, -1, 5, 72, 46, 73, 47, 74, 48, 75, 49, 76, 50, 0, 1073741836, 0, 78, 77, -1, 1, 79, 51, 0, 1073741837, 0, 81, 80, -1, 2, 82, 52, 83, 53, 0, 1073741838, 0, 85, 84, -1, 1, 86, 54, 0, 1073741839, 0, 88, 87, -1, 2, 89, 55, 90, 56, 0, 1073741840, 0, 92, 91, -1, 0, 0, 1073741841, 0, 94, 93, -1, 2, 95, 57, 96, 58, 0, 1073741842, 0, 98, 97, -1, 1, 99, 59, 0, 1073741843, 0, 101, 100, -1, 1, 102, 60, 0, 1073741844, 0, 104, 103, -1, 6, 105, 61, 106, 62, 107, 63, 108, 64, 109, 65, 110, 66, 0, 1073741845, 0, 112, 111, -1, 6, 113, 67, 114, 68, 115, 69, 116, 70, 117, 71, 118, 72, 0),
+"variants": [6, 6, SubResource("GDScript_pk56r"), ExtResource("19_ux0o6"), SubResource("GDScript_2l4kd"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00202631, -0.00481871, 0), 32768, SubResource("ShaderMaterial_ypguf"), 0, false, 50, 0.25, 2.0, 12, SubResource("ParticleProcessMaterial_1ke37"), SubResource("BoxMesh_pqfq1"), Transform3D(0.123877, 0, 0, 0, 0.123877, 0, 0, 0, 0.123877, 0, 0, 0), 32768, SubResource("PrismMesh_m2ll2"), NodePath("../.."), SubResource("StandardMaterial3D_fieuw"), Transform3D(0.0770516, 0.00960436, 0, -0.0615601, 0.0120213, 0, 0, 0, 0.0153868, 0.0830994, -0.0836298, 0), 32768, SubResource("BoxMesh_1cn5w"), NodePath("../.."), SubResource("StandardMaterial3D_fieuw"), Transform3D(0.487528, -0.389509, 0, 2.4966, 3.12486, 0, 0, 0, 3.99972, 0.561219, 0.0423644, 0), 32768, SubResource("SphereMesh_12daw"), NodePath("../../.."), SubResource("StandardMaterial3D_fieuw"), Transform3D(-0.00139423, -0.0153853, 0, 0.0986137, -0.000217519, 0, 0, 0, 0.0153868, -0.00102393, 0.0847997, 0), 32768, SubResource("BoxMesh_1cn5w"), NodePath("../.."), SubResource("StandardMaterial3D_fieuw"), Transform3D(0.487528, -0.389509, 0, 2.4966, 3.12486, 0, 0, 0, 3.99972, 0.561219, 0.0423644, 0), 32768, SubResource("SphereMesh_12daw"), NodePath("../../.."), SubResource("StandardMaterial3D_fieuw"), Transform3D(-0.0682914, 0.0107822, 0.00264169, -0.0616903, -0.0107967, 0.00524897, 0.0354568, 0.00198222, 0.0142206, -0.0800687, -0.0843242, 0), 32768, SubResource("BoxMesh_1cn5w"), NodePath("../.."), SubResource("StandardMaterial3D_fieuw"), Transform3D(0.487528, -0.389509, 0, 2.4966, 3.12486, 0, 0, 0, 3.99972, 0.561219, 0.0423644, 0), 32768, SubResource("SphereMesh_12daw"), NodePath("../../.."), SubResource("StandardMaterial3D_fieuw"), SubResource("SphereShape3D_skf8y"), 6, 6, ExtResource("20_bhx4v"), ExtResource("21_tbjq6"), ExtResource("22_oit8m"), ExtResource("23_vngk1"), "Teleporter", ExtResource("24_yrif3"), SubResource("SphereShape3D_fsn5p"), Transform3D(0.0529083, -8.7878e-17, -6.44371e-15, -6.44371e-15, -2.1706e-10, -0.0529083, 9.3631e-16, 0.00496572, -2.31271e-09, 0, 0, 0), false, 4, SubResource("TorusMesh_tvllk"), NodePath("../../.."), SubResource("ShaderMaterial_of2nf"), Transform3D(0.0529083, -8.7878e-17, -6.44371e-15, -6.44371e-15, -2.1706e-10, -0.0529083, 9.3631e-16, 0.00496572, -2.31271e-09, 0, 0, 0), false, 4, SubResource("TorusMesh_rprlq"), NodePath("../../.."), SubResource("ShaderMaterial_of2nf")],
+"version": 3
+}
+
+[sub_resource type="Resource" id="Resource_ge1b6"]
+script = ExtResource("25_04pyi")
+Orbe_Result_prefabs = SubResource("PackedScene_cfoox")
 
 [sub_resource type="GDScript" id="GDScript_nvaxv"]
 script/source = "extends Node
@@ -923,7 +1147,7 @@ one_shot = true
 
 [node name="Stroke_Filter" type="Node" parent="ORBE"]
 script = ExtResource("14_0roc3")
-Teleporter_Orbe = ExtResource("13_ywb87")
+Teleporter_Orbe = SubResource("Resource_ge1b6")
 Mirror_Orbe = ExtResource("12_l61c1")
 Mirror_Orbe_out = ExtResource("14_dpsgd")
 Xray_Oddity = ExtResource("18_4kphq")
@@ -936,9 +1160,6 @@ script = ExtResource("12_lg0wa")
 
 [node name="SEE_MIRROR_FLASH" type="Node" parent="."]
 script = SubResource("GDScript_nvaxv")
-
-[node name="Teleport_Player" type="Node" parent="."]
-script = ExtResource("20_mfhmv")
 
 [node name="Viewport" type="Node" parent="."]
 
@@ -972,6 +1193,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 1.8)
 cull_mask = 4096
 
 [node name="Main" type="TextureRect" parent="Viewport"]
+visible = false
 material = ExtResource("3_w42nb")
 anchors_preset = 15
 anchor_right = 1.0
@@ -982,6 +1204,7 @@ texture = SubResource("ViewportTexture_gasoh")
 expand_mode = 3
 
 [node name="Scanner_x" type="TextureRect" parent="Viewport"]
+visible = false
 material = ExtResource("4_bkck3")
 anchors_preset = 15
 anchor_right = 1.0
