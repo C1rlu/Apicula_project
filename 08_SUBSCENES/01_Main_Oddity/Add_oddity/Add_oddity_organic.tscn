@@ -1,18 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://bsv6yt3q1qxg0"]
+[gd_scene load_steps=9 format=3 uid="uid://bsv6yt3q1qxg0"]
 
-[ext_resource type="Script" path="res://08_SUBSCENES/01_Main_Oddity/Add_oddity/Organic_oddity.gd" id="1_0jdfr"]
+[ext_resource type="Script" path="res://08_SUBSCENES/01_Main_Oddity/Add_oddity/Oddity_fusion_main.gd" id="1_mnjhy"]
+[ext_resource type="Resource" uid="uid://bn75vuf7cte04" path="res://08_SUBSCENES/01_Main_Oddity/00_Trigger_Effect_data/fusion_effect_ressource/scale_up.tres" id="2_43gw3"]
+[ext_resource type="Script" path="res://08_SUBSCENES/01_Main_Oddity/Add_oddity/Push_at_start.gd" id="3_ihlmp"]
+[ext_resource type="Script" path="res://08_SUBSCENES/01_Main_Oddity/Add_oddity/Fusion_node.gd" id="3_np7bw"]
 [ext_resource type="PackedScene" uid="uid://b3e0cgra0jrsb" path="res://08_SUBSCENES/Model/ODDITY/Peon_oddity_v01.blend" id="4_y7eg0"]
 [ext_resource type="Material" uid="uid://d2t0ju6dynwgf" path="res://05_SHADER_TEST/Subscene_materials/oddity_mirror.tres" id="5_4u6uv"]
-
-[sub_resource type="GDScript" id="GDScript_5d0kk"]
-script/source = "extends Area3D
-
-signal follow
-
-func _ready():
-	follow.emit()
-
-"
 
 [sub_resource type="GDScript" id="GDScript_uwy51"]
 script/source = "extends Node
@@ -20,7 +13,7 @@ script/source = "extends Node
 
 @export var speed : float
 @onready var root = $\"..\"
-var move : bool = true
+var move : bool = false
 
 var random_offset : Vector3
 var rotation_target : Vector3
@@ -32,6 +25,8 @@ func _ready():
 
 	rotation_target = Vector3(randf_range(-90.0,90.0),randf_range(-90.0,90.0),randf_range(-90.0,90.0))
 	_global_datas._traceur_pause.connect(_set_paused)	
+	
+	
 	
 func _set_paused(condition : bool):
 	is_paused = condition	
@@ -65,10 +60,14 @@ radius = 0.107008
 [node name="Organic_oddity_prefab" type="Area3D"]
 collision_layer = 4
 collision_mask = 4
-script = SubResource("GDScript_5d0kk")
+script = ExtResource("1_mnjhy")
+fusion_effect = Array[Resource]([ExtResource("2_43gw3")])
 
-[node name="Organic_oddity" type="Node" parent="."]
-script = ExtResource("1_0jdfr")
+[node name="Push_at_start" type="Node" parent="."]
+script = ExtResource("3_ihlmp")
+
+[node name="Fusion_node" type="Node" parent="."]
+script = ExtResource("3_np7bw")
 
 [node name="Movable_oddity" type="Node" parent="."]
 script = SubResource("GDScript_uwy51")
@@ -90,7 +89,9 @@ cast_shadow = 0
 gi_mode = 0
 surface_material_override/0 = ExtResource("5_4u6uv")
 
-[connection signal="fusion" from="Organic_oddity" to="Organic_oddity" method="_on_fusion"]
+[connection signal="push" from="." to="Push_at_start" method="_on_organic_oddity_prefab_push"]
+[connection signal="tree_exited" from="." to="." method="_on_tree_exited"]
+[connection signal="fusion" from="Fusion_node" to="Fusion_node" method="_on_fusion"]
 [connection signal="tree_exited" from="Movable_oddity" to="Movable_oddity" method="_on_tree_exited"]
 [connection signal="timeout" from="Movable_oddity/Random_range_update" to="Movable_oddity" method="_on_random_range_update_timeout"]
 

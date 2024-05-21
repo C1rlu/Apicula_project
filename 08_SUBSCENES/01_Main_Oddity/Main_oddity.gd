@@ -135,9 +135,5 @@ func _on_movable_oddity_example_body_exited(body):
 				wait_before_follow.start()
 
 	
-func _follow():
-	move_oddity()
-
-
 func _on_wait_before_follow_timeout():
 	close_to_player = false	

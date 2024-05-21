@@ -124,7 +124,7 @@ signal instance_orbe_result(data : orbe_data, instance_position : Vector3)
 
 # Oddity # FOR ODDITY IN SCENE
 signal flash_x_ray_oddity
-signal instance_scene_oddity(oddity_scene : Oddity_scene_data)
+signal instance_scene_oddity(oddity_scene : PackedScene, amount : int ,position : Vector3)
 
 #board scene
 

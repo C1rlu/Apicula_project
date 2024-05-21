@@ -1,8 +1,8 @@
 [gd_scene load_steps=30 format=3 uid="uid://50ubp7klhsex"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/01_Main_Oddity/Main_oddity.gd" id="1_1fc0u"]
-[ext_resource type="Script" path="res://08_SUBSCENES/01_Main_Oddity/Fusion_Oddity.gd" id="1_bfxfx"]
 [ext_resource type="Script" path="res://08_SUBSCENES/01_Main_Oddity/Main_Fusion_Parameter.gd" id="1_rlete"]
+[ext_resource type="Script" path="res://08_SUBSCENES/01_Main_Oddity/Fusion_area_entered.gd" id="2_8cjcp"]
 [ext_resource type="PackedScene" uid="uid://b3e0cgra0jrsb" path="res://08_SUBSCENES/Model/ODDITY/Peon_oddity_v01.blend" id="4_jvbw0"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/look_at_camera.gd" id="4_qf42y"]
 [ext_resource type="Material" uid="uid://d2t0ju6dynwgf" path="res://05_SHADER_TEST/Subscene_materials/oddity_mirror.tres" id="5_caks8"]
@@ -11,11 +11,9 @@
 [sub_resource type="GDScript" id="GDScript_u7ou3"]
 script/source = "extends Area3D
 
-signal follow
-
 func _ready():
-	_global_datas.Main_oddity_node = self
-	follow.emit()
+	_global_datas.Main_oddity_node = $Render_root
+
 "
 
 [sub_resource type="GDScript" id="GDScript_7nn0l"]
@@ -334,8 +332,8 @@ script = SubResource("GDScript_u7ou3")
 [node name="Main_Fusion_Parameter" type="Node" parent="."]
 script = ExtResource("1_rlete")
 
-[node name="Fusion_Oddity" type="Node" parent="."]
-script = ExtResource("1_bfxfx")
+[node name="Fusion_area_entered" type="Node" parent="."]
+script = ExtResource("2_8cjcp")
 
 [node name="Movable_Main_oddity" type="Node" parent="."]
 script = ExtResource("1_1fc0u")
@@ -407,14 +405,11 @@ surface_material_override/0 = ExtResource("5_caks8")
 
 [connection signal="body_entered" from="." to="Movable_Main_oddity" method="_on_movable_oddity_example_body_entered"]
 [connection signal="body_exited" from="." to="Movable_Main_oddity" method="_on_movable_oddity_example_body_exited"]
-[connection signal="follow" from="." to="Movable_Main_oddity" method="_follow"]
-[connection signal="add_organic" from="Fusion_Oddity" to="Main_Fusion_Parameter" method="_add_organic"]
-[connection signal="add_sonar" from="Fusion_Oddity" to="Main_Fusion_Parameter" method="_add_sonar"]
 [connection signal="tree_exited" from="Movable_Main_oddity" to="Movable_Main_oddity" method="_on_tree_exited"]
 [connection signal="timeout" from="Movable_Main_oddity/Random_range_update" to="Movable_Main_oddity" method="_on_random_range_update_timeout"]
 [connection signal="timeout" from="Movable_Main_oddity/Wait_before_follow" to="Movable_Main_oddity" method="_on_wait_before_follow_timeout"]
 [connection signal="timeout" from="Fade_flash/fash_timer" to="Fade_flash" method="_on_fash_timer_timeout"]
-[connection signal="area_entered" from="Fusion_area" to="Fusion_Oddity" method="_on_fusion_area_area_entered"]
+[connection signal="area_entered" from="Fusion_area" to="Fusion_area_entered" method="_on_fusion_area_area_entered"]
 
 [editable path="Render_root/msh_oddity_peon"]
 [editable path="Render_root/Parabol_mesh"]
