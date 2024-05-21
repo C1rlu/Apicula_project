@@ -9,6 +9,7 @@ func _ready():
 	
 func instancer_register(_oddity : PackedScene,position : Vector3):
 	 
+	
 	var oddity = _oddity.instantiate()
 	load_scene.add_child(oddity)
 	

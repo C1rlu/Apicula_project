@@ -1,12 +1,12 @@
 extends Node
 
-@export var Teleporter_Orbe : orbe_data
-@export var Mirror_Orbe : orbe_data
-@export var Mirror_Orbe_out : orbe_data
-@export var Xray_Oddity : orbe_data
-@export var Remover : orbe_data
-@export var Medusa : orbe_data
-@export var Rapatrier_check : orbe_data
+#@export var Teleporter_Orbe : orbe_data
+#@export var Mirror_Orbe : orbe_data
+#@export var Mirror_Orbe_out : orbe_data
+#@export var Xray_Oddity : orbe_data
+#@export var Remover : orbe_data
+#@export var Medusa : orbe_data
+#@export var Rapatrier_check : orbe_data
 
 # CACHE ALL THE ACTUAL TEMPLATE
 var templates_clouds : Array[Gesture]
@@ -43,8 +43,8 @@ func recognize_gesture(strokes):
 	var Recognizer = Recognizer_cloud.new()
 
 	var result = Recognizer.pRecognizer(normalized_current_stroke,templates_clouds)
-
-	result_condition(result)
+	print(result)
+	#result_condition(result)
 	reset_stroke()
 		
 func reset_stroke():
@@ -63,41 +63,41 @@ func reset_stroke():
 	
 	
 	
-func result_condition(result):
-	
-	if result[1] > 0.9:
-		print(result)
-		var calculate_center = center_of_mass_points()
-		
-		if result[0] == "line_1" or result[0] == "line_2" or result[0] == "line_3" or result[0] == "line_4":
-			_global_datas.instance_orbe_result.emit(Remover,calculate_center)		
-			
-	
-		#if result[0] == "Portal":
+#func result_condition(result):
+	#
+	#if result[1] > 0.9:
+		#print(result)
+		#var calculate_center = center_of_mass_points()
+		#
+		#if result[0] == "line_1" or result[0] == "line_2" or result[0] == "line_3" or result[0] == "line_4":
+			#_global_datas.instance_orbe_result.emit(Remover,calculate_center)		
 			#
-			#if !_global_datas.Player_InMirrorScene:
-				#
-				#if !_global_datas.Mirror_vortex_Node:
-					#_global_datas.instance_orbe_result.emit(Mirror_Orbe,calculate_center)
+	#
+		##if result[0] == "Portal":
+			##
+			##if !_global_datas.Player_InMirrorScene:
+				##
+				##if !_global_datas.Mirror_vortex_Node:
+					##_global_datas.instance_orbe_result.emit(Mirror_Orbe,calculate_center)
+					##
+				##else:
+					##_global_datas.Mirror_vortex_Node.position = calculate_center		
+			##else:
+				##pass
+				##if !_global_datas.Mirror_vortex_out_Node:
+					##_global_datas.instance_orbe_result.emit(Mirror_Orbe_out,calculate_center)
+				##else:
+					##_global_datas.Mirror_vortex_out_Node.position = calculate_center	
 					#
-				#else:
-					#_global_datas.Mirror_vortex_Node.position = calculate_center		
-			#else:
-				#pass
-				#if !_global_datas.Mirror_vortex_out_Node:
-					#_global_datas.instance_orbe_result.emit(Mirror_Orbe_out,calculate_center)
-				#else:
-					#_global_datas.Mirror_vortex_out_Node.position = calculate_center	
-					
-		if result[0] == "Rapatrier":
-			_global_datas.instance_orbe_result.emit(Rapatrier_check,calculate_center)				
-					
-		if result[0] == "Scanner_oddity":
-			if _global_datas._xray_oddity == null:
-				_global_datas.instance_orbe_result.emit(Xray_Oddity,calculate_center)
-			
-		if result[0] == "Medusa":
-			_global_datas.instance_orbe_result.emit(Medusa,calculate_center)
+		#if result[0] == "Rapatrier":
+			#_global_datas.instance_orbe_result.emit(Rapatrier_check,calculate_center)				
+					#
+		#if result[0] == "Scanner_oddity":
+			#if _global_datas._xray_oddity == null:
+				#_global_datas.instance_orbe_result.emit(Xray_Oddity,calculate_center)
+			#
+		#if result[0] == "Medusa":
+			#_global_datas.instance_orbe_result.emit(Medusa,calculate_center)
 	
 func center_of_mass_points()->Vector3:
 	

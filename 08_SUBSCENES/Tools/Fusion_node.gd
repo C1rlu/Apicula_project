@@ -10,6 +10,8 @@ var actual_value : float
 
 var _is_active : bool
 
+signal fusion_result
+
 func _ready():
 	if mesh:
 		mesh_mat = mesh.get_surface_override_material(0)		
@@ -35,6 +37,7 @@ func _fusion(condition):
 		_is_active = false
 		
 func _done():
+	fusion_result.emit()
 	meduse_species_prefab.queue_free()	
 				
 func _change_value(value):

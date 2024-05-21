@@ -95,8 +95,14 @@ signal switching_tool(tool : tool_data)
 
 #to lock input back to light if on zone
 var player_is_Interactive_Zone : bool 
-# Main Oddity 
+
+
+# Main Oddity ------------------------------------
 var Main_oddity_node : Node3D
+var Main_oddity_positions_data : Array[position_spot]
+signal add_element_to_main_Oddity(element : PackedScene)
+
+
 
 signal rapatrier_vfx(position : Vector3)
 
