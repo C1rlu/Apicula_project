@@ -96,13 +96,16 @@ signal switching_tool(tool : tool_data)
 #to lock input back to light if on zone
 var player_is_Interactive_Zone : bool 
 
+#Fusion element 
+var active_fusion_node_list : Array
 
-# Main Oddity ------------------------------------
+# Main Oddity & elements related ------------------------------------
 var Main_oddity_node : Node3D
 var Main_oddity_positions_data : Array[position_spot]
 signal add_element_to_main_Oddity(element : PackedScene)
-
-
+var scanner_element_list : Array #for scanner light list on oddity
+signal flash_x_ray_oddity # to call the scanner if exist in list
+var scanner_flash_isActive : bool 
 
 signal rapatrier_vfx(position : Vector3)
 
@@ -129,7 +132,6 @@ var _orbe_visual_scene : Array[Node3D]
 signal instance_orbe_result(data : orbe_data, instance_position : Vector3)
 
 # Oddity # FOR ODDITY IN SCENE
-signal flash_x_ray_oddity
 signal instance_scene_oddity(oddity_scene : PackedScene, amount : int ,position : Vector3)
 
 #board scene

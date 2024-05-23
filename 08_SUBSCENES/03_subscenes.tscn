@@ -1,4 +1,4 @@
-[gd_scene load_steps=85 format=3 uid="uid://nigmie4bbn6"]
+[gd_scene load_steps=86 format=3 uid="uid://nigmie4bbn6"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/00_Scripts/Subscene_loader.gd" id="1_7uoo0"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="2_3srhu"]
@@ -15,6 +15,7 @@
 [ext_resource type="Resource" uid="uid://vv3dws7dmhtd" path="res://08_SUBSCENES/Tools/Scanner.tres" id="6_b80v7"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Tools/Play_Scanner.gd" id="7_7awji"]
 [ext_resource type="Resource" uid="uid://b4j40xtcg031c" path="res://08_SUBSCENES/Oddity/00_Scene_data/Scanner_scene_data.tres" id="7_84g34"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Scanner_order_flash.gd" id="7_ex13a"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Tools/PhotoData_list_update.gd" id="10_w7dre"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Orbe_Instancer.gd" id="11_dnajt"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Rapatrier/Rapatrier_VFX.gd" id="11_lxeli"]
@@ -872,6 +873,12 @@ script = SubResource("GDScript_71vlv")
 
 [node name="SCANNER_FX" type="Node" parent="."]
 
+[node name="Scanner_order_flash" type="Node" parent="SCANNER_FX"]
+script = ExtResource("7_ex13a")
+
+[node name="Next_call" type="Timer" parent="SCANNER_FX/Scanner_order_flash"]
+one_shot = true
+
 [node name="Rapatrier_VFX" type="Node" parent="SCANNER_FX"]
 script = ExtResource("11_lxeli")
 
@@ -1045,6 +1052,7 @@ theme_override_font_sizes/font_size = 20
 
 [connection signal="timeout" from="FADE_IN/Timer" to="FADE_IN" method="_on_timer_timeout"]
 [connection signal="timeout" from="FADE_OUT/Timer" to="FADE_OUT" method="_on_timer_timeout"]
+[connection signal="timeout" from="SCANNER_FX/Scanner_order_flash/Next_call" to="SCANNER_FX/Scanner_order_flash" method="_on_next_call_timeout"]
 [connection signal="process_link" from="ORBE/Orbe_Instancer" to="ORBE/Orbe_Instancer/Link_process" method="_on_orbe_instancer_process_link"]
 [connection signal="timeout" from="ORBE/Orbe_Instancer/Link_stroke_done/Timer" to="ORBE/Orbe_Instancer/Link_stroke_done" method="_on_timer_timeout"]
 [connection signal="area_shape_entered" from="Surface_trigger" to="GO_SURFACE" method="_on_surface_trigger_area_shape_entered"]

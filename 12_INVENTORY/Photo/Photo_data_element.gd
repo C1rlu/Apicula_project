@@ -8,6 +8,7 @@ signal scanner_effect_condition(condition : bool)
 @onready var root =  $".."
 @onready var timer = $Timer
 
+
 var is_scanning : bool = false
 
 func _ready():
@@ -65,7 +66,7 @@ func _on_area_take_it_area_shape_exited(area_rid, area, area_shape_index, local_
 		var player_out = area.get_node_or_null("Player")	 
 		if player_out:
 			stop_scanning()		
-		
+			
 
 func _on_timer_timeout():
 	scanning_done()
