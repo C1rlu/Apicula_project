@@ -12,6 +12,3 @@ func _ready():
 		
 		_global_datas.Main_oddity_positions_data.append(position_data)
 		
-	#for p_data in position_spots_data:	
-		#print(p_data.Position)
-		#print(p_data.is_used)

@@ -6,7 +6,6 @@
 [ext_resource type="ArrayMesh" uid="uid://cm4cl6n84qj86" path="res://07_VFX/Boat_smoke/smoke_msh.obj" id="4_6vpi7"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Tools/Scanne_element.gd" id="5_jhkow"]
 [ext_resource type="Resource" uid="uid://d11cl4f25dgwg" path="res://08_SUBSCENES/Tools/Flash_light.tres" id="6_axu5t"]
-[ext_resource type="Material" uid="uid://cdnmf431kgh7" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat_far.tres" id="6_ixu0h"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/active_tool_scene.gd" id="8_8bfcd"]
 [ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_elements_mat.tres" id="8_wvhjt"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Magnet_behaviour.gd" id="9_7q7du"]
@@ -15,6 +14,7 @@
 [ext_resource type="Resource" uid="uid://380xcgsxw62f" path="res://08_SUBSCENES/Tools/Orbe_spawner.tres" id="12_nmehd"]
 [ext_resource type="Resource" uid="uid://dqpl0ihtab1su" path="res://08_SUBSCENES/Tools/Fusion_tool.tres" id="13_bws7h"]
 [ext_resource type="PackedScene" uid="uid://bktiy5sdjc87f" path="res://08_SUBSCENES/Player_subscene/Cosmo_Mod_01.blend" id="14_tdqlw"]
+[ext_resource type="Shader" uid="uid://df0b3qbvnktga" path="res://05_SHADER_TEST/Subscene_materials/Subscene_medusa.tres" id="15_tve5m"]
 [ext_resource type="Resource" uid="uid://vv3dws7dmhtd" path="res://08_SUBSCENES/Tools/Scanner.tres" id="15_vswql"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/look_at_camera.gd" id="17_mnoui"]
 
@@ -223,10 +223,12 @@ ring_segments = 16
 
 [sub_resource type="TorusMesh" id="TorusMesh_k0nng"]
 outer_radius = 0.702
+rings = 16
+ring_segments = 8
 
 [sub_resource type="SphereMesh" id="SphereMesh_w2scb"]
-
-[sub_resource type="PrismMesh" id="PrismMesh_5cv61"]
+radial_segments = 16
+rings = 16
 
 [sub_resource type="BoxMesh" id="BoxMesh_4k8qy"]
 
@@ -348,6 +350,12 @@ shader_parameter/Lighter = 1.4
 material = ExtResource("8_wvhjt")
 
 [sub_resource type="BoxMesh" id="BoxMesh_3nn6t"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3rxud"]
+render_priority = 0
+shader = ExtResource("15_tve5m")
+shader_parameter/Speed = 0.01
+shader_parameter/ColorParameter2 = Color(0.254902, 0.85098, 0.662745, 1)
 
 [sub_resource type="QuadMesh" id="QuadMesh_uqek7"]
 
@@ -967,11 +975,6 @@ script = ExtResource("8_8bfcd")
 _tool_data = ExtResource("15_vswql")
 list_of_object = [NodePath("../../Scanner")]
 
-[node name="active_Orbe_Remover" type="Node" parent="Render_mesh/Active_visual_tools" node_paths=PackedStringArray("list_of_object")]
-script = ExtResource("8_8bfcd")
-_tool_data = ExtResource("12_nmehd")
-list_of_object = [NodePath("../../Orber")]
-
 [node name="active_Fusion" type="Node" parent="Render_mesh/Active_visual_tools" node_paths=PackedStringArray("list_of_object")]
 script = ExtResource("8_8bfcd")
 _tool_data = ExtResource("13_bws7h")
@@ -1014,28 +1017,9 @@ mesh = SubResource("TorusMesh_k0nng")
 skeleton = NodePath("../../../Player_sub_collider")
 surface_material_override/0 = ExtResource("1_n1vw4")
 
-[node name="Orber" type="MeshInstance3D" parent="Render_mesh"]
-transform = Transform3D(-1.33332e-09, -0.0298642, 0, 0.0305028, -1.30541e-09, 0, 0, 0, 0.0953704, 0.0349853, 0.140869, 0.0994924)
-visible = false
-layers = 4
-mesh = SubResource("BoxMesh_8vb5i")
-skeleton = NodePath("../../Player_sub_collider")
-surface_material_override/0 = ExtResource("1_n1vw4")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Render_mesh/Orber"]
-transform = Transform3D(2.57942, 2.20268e-13, 0, 9.9476e-14, 2.63458, 0, 0, 0, 0.82499, 0, 0, 0.201608)
-layers = 4
-mesh = SubResource("SphereMesh_w2scb")
-surface_material_override/0 = ExtResource("1_n1vw4")
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="Render_mesh/Orber"]
-transform = Transform3D(-5.4048e-08, 1.26292, 0, -1.23648, -5.52039e-08, 0, 0, 0, 0.395469, 0, 0, 0.523234)
-layers = 4
-mesh = SubResource("PrismMesh_5cv61")
-surface_material_override/0 = ExtResource("8_wvhjt")
-
 [node name="Fusion" type="MeshInstance3D" parent="Render_mesh"]
 transform = Transform3D(-1.12055e-09, -0.0250984, 0, 0.0256351, -1.09709e-09, 0, 0, 0, 0.080151, 0.0349853, 0.140869, 0.0994924)
+visible = false
 layers = 4
 mesh = SubResource("BoxMesh_8vb5i")
 skeleton = NodePath("../../Player_sub_collider")
@@ -1135,6 +1119,7 @@ surface_material_override/0 = ExtResource("1_n1vw4")
 [node name="msh_right_foot" parent="Render_mesh/Cosmo_Mod_02" index="2"]
 layers = 4
 surface_material_override/0 = ExtResource("1_n1vw4")
+surface_material_override/1 = ExtResource("1_n1vw4")
 
 [node name="msh_airsuit" parent="Render_mesh/Cosmo_Mod_02" index="3"]
 layers = 4
@@ -1148,7 +1133,7 @@ surface_material_override/1 = ExtResource("1_n1vw4")
 
 [node name="msh_helmet_002" parent="Render_mesh/Cosmo_Mod_02" index="5"]
 layers = 4
-surface_material_override/0 = ExtResource("6_ixu0h")
+surface_material_override/0 = SubResource("ShaderMaterial_3rxud")
 
 [node name="msh_Pod" parent="Render_mesh/Cosmo_Mod_02" index="6"]
 layers = 4
