@@ -10,6 +10,9 @@ func _ready():
 	
 func call_scanner():
 	
+	if !_timer.is_stopped():
+		return	
+	
 	if _global_datas.scanner_element_list.size() > 0:
 		call_index = 0
 		_check_scanner_order()
@@ -20,7 +23,7 @@ func _check_scanner_order():
 	if _global_datas.scanner_element_list.size() > call_index:
 		_timer.start()
 		_global_datas.scanner_element_list[call_index].active_flash()
-		#print("FLASH SCANNER")
+		_global_datas._scan_mirror_xray.emit() # here for visual scanner world
 	else:
 		_timer.stop()	
 		_global_datas.scanner_flash_isActive = false	

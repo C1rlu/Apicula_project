@@ -4,8 +4,8 @@ extends Node
 @export var flash_tool_data : tool_data
 
 func _ready():
-
-	flash_tool_data.tool_active_signal.connect(_start_light)	
+	pass	
+	#flash_tool_data.tool_active_signal.connect(_start_light)	
 
 
 func _start_light(condition):

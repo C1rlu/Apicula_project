@@ -21,6 +21,10 @@ func _active_mirror_Elements(condition : bool):
 
 func _on_rapatrier_rapatrier():
 	_active_mirror_Elements(true)
+	
+	var vfx_pos = root.global_position
+	_global_datas.rapatrier_vfx.emit(vfx_pos)
+	
 	print("RAPATRIER CALL OK")
 	for e in elements_mesh_xray:
 		e.visible = false

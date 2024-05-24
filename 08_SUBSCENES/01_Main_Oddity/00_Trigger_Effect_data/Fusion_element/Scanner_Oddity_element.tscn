@@ -1,5 +1,6 @@
-[gd_scene load_steps=22 format=3 uid="uid://mus8uhfear1e"]
+[gd_scene load_steps=24 format=3 uid="uid://mus8uhfear1e"]
 
+[ext_resource type="Script" path="res://08_SUBSCENES/01_Main_Oddity/00_Trigger_Effect_data/Fusion_element/Start_Sonar.gd" id="1_5g1ig"]
 [ext_resource type="PackedScene" uid="uid://2sm6h4yiky2p" path="res://08_SUBSCENES/02_Fusionnable_elements/Parabol_object/Blender/Parabol_mesh.blend" id="1_kek72"]
 [ext_resource type="Material" uid="uid://d2t0ju6dynwgf" path="res://05_SHADER_TEST/Subscene_materials/oddity_mirror.tres" id="2_s688s"]
 
@@ -12,7 +13,7 @@ var t
 
 var actual_value : float 
 var is_paused : bool
-@onready var fash_timer = $fash_timer
+
 
 func _ready():
 	#_global_datas.flash_x_ray_oddity.connect(active_flash)
@@ -20,10 +21,7 @@ func _ready():
 	_global_datas.scanner_element_list.append(self)
 	
 func active_flash():
-	
-	if is_paused:
-		return
-	fash_timer.start()	
+	_start_flash()
 	
 func _set_paused(condition : bool):
 	
@@ -52,19 +50,15 @@ func _start_flash():
 	var randome_size = randf_range(0.8,1.0)
 	t.tween_method(change_scale,randome_size,0.0,1.5)
 	t.connect(\"finished\",done)
-
+	
 func change_scale(value : float):
 	light_sphere.scale = Vector3(value,value,value)		
 	actual_value = value 
+	
 func done():
 	light_sphere.visible = false
-
-
-func _on_fash_timer_timeout():
 	
-	_start_flash()
-	_global_datas._scan_mirror_xray.emit()
-	fash_timer.wait_time = randf_range(0.7,1.2)
+
 "
 
 [sub_resource type="SphereMesh" id="SphereMesh_m1c85"]
@@ -275,13 +269,20 @@ render_priority = 0
 shader = SubResource("VisualShader_t3o1v")
 shader_parameter/ColorParameter = Color(0.333333, 0.764706, 0.568627, 1)
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_1y1hn"]
+radius = 0.675611
+
 [node name="Scanner_Oddity_Element" type="Node3D"]
 
 [node name="Fade_flash" type="Node" parent="."]
 script = SubResource("GDScript_ktn5y")
 
-[node name="fash_timer" type="Timer" parent="Fade_flash"]
-one_shot = true
+[node name="Start_Sonar" type="Node" parent="."]
+script = ExtResource("1_5g1ig")
+
+[node name="Timer" type="Timer" parent="Start_Sonar"]
+wait_time = 0.25
+autostart = true
 
 [node name="Light_Position" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0347176, -0.00992643)
@@ -303,6 +304,13 @@ transform = Transform3D(1, 3.93484e-08, -1.86265e-09, 9.8953e-09, 1, 0, 1.86265e
 layers = 4
 surface_material_override/0 = ExtResource("2_s688s")
 
-[connection signal="timeout" from="Fade_flash/fash_timer" to="Fade_flash" method="_on_fash_timer_timeout"]
+[node name="Scanner_zone" type="Area3D" parent="."]
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Scanner_zone"]
+shape = SubResource("SphereShape3D_1y1hn")
+
+[connection signal="timeout" from="Start_Sonar/Timer" to="Start_Sonar" method="_on_timer_timeout"]
 
 [editable path="Parabol_mesh"]

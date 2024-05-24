@@ -1,6 +1,5 @@
 extends Node
-@onready var meduse_species_prefab = $".."
-
+@onready var root = $".."
 @export var mesh : MeshInstance3D
 @export var fusion_effect_range : Vector2
 var mesh_mat : Material
@@ -9,6 +8,7 @@ var mesh_mat : Material
 var t
 var actual_value : float
 
+@export var can_be_fusion : bool = true
 var _is_active : bool
 
 signal fusion_result
@@ -19,7 +19,9 @@ func _ready():
 	
 func _fusion(condition):
 	#print("FUSION ME ",condition)
-	
+
+	if !can_be_fusion:
+		return
 	if !is_inside_tree():
 		return
 	
@@ -52,8 +54,7 @@ func _stop_fusion():
 	
 func _done():
 	fusion_result.emit()
-	meduse_species_prefab.queue_free()	
-				
+	
 func _change_value(value):
 	if mesh_mat:
 		mesh_mat.set_shader_parameter("Speed",value)	

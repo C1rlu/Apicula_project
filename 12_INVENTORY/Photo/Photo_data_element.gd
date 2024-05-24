@@ -1,5 +1,6 @@
 extends Node
 
+@export var Active_scannable : bool = true
 @export var photoData : PhotoData
 	
 
@@ -25,6 +26,10 @@ func get_PhotoData():
 	
 func scanning():
 	
+	
+	if !Active_scannable:
+		return
+		
 	if is_scanning:
 		return
 		
