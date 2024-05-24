@@ -1,6 +1,5 @@
 extends Node
 
-@export var push_strengh : float
 @onready var root = $".."
 @onready var movable_oddity = $"../Movable_oddity"
 

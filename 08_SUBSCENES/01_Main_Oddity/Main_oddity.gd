@@ -9,9 +9,6 @@ var actual_speed : float
 var move : bool = false
 var random_offset : Vector3
 var idle_position : Vector3
-
-var rotation_target : Vector3
-
 var can_check_cloest_path = false
 
 var path_index : int
@@ -24,8 +21,6 @@ var is_paused : bool
 func _ready():
 
 	idle_position = root.global_position
-
-	rotation_target = Vector3(randf_range(-90.0,90.0),randf_range(-90.0,90.0),randf_range(-90.0,90.0))
 	actual_speed = speed
 	
 	_global_datas._traceur_pause.connect(_set_paused)	
@@ -65,8 +60,6 @@ func _folow_player(delta):
 	
 	if close_to_player :
 		root.global_position = lerp(root.global_position,player_position, actual_speed * delta)			
-		root.global_rotation = lerp(root.global_rotation,rotation_target, 0.05 * delta)
-		
 	else:	
 				
 		follow_path(delta)
@@ -89,7 +82,6 @@ func follow_path(delta):
 		
 
 	root.global_position = lerp(root.global_position,target_point , actual_speed * 2 * delta)	
-	root.global_rotation = lerp(root.global_rotation,rotation_target, 0.05 * delta)
 	
 	
 func closest_index_to_player():
@@ -108,7 +100,7 @@ func _on_random_range_update_timeout():
 		random_offset = Vector3(randf_range(-0.2,0.2),randf_range(-0.2,0.2),0.0)
 	else:
 		random_offset = Vector3(randf_range(-0.5,0.5),randf_range(-0.5,0.5),0.0)	
-		rotation_target = Vector3(randf_range(-90.0,90.0),randf_range(-90.0,90.0),randf_range(-90.0,90.0))
+		
 		
 	actual_speed = speed + randf_range(-0.2,0.2)
 

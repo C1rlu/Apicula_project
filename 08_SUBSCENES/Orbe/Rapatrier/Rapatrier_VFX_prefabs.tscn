@@ -34,8 +34,7 @@ func scale_value(value : float):
 default_input_values = [2, true, 3, 0.8]
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_u83qd"]
-parameter_name = "CyanGhost_color"
-qualifier = 1
+parameter_name = "Color"
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_ddbgh"]
 constant = 1.0
@@ -113,7 +112,7 @@ render_mode blend_mix, depth_draw_opaque, cull_front, diffuse_lambert, specular_
 
 uniform float Speed : hint_range(0.5, 1) = 0.5;
 uniform sampler2D tex_vtx_8;
-global uniform vec4 CyanGhost_color : source_color;
+uniform vec4 Color : source_color;
 global uniform float Dither_size;
 
 
@@ -176,7 +175,7 @@ void vertex() {
 
 void fragment() {
 // ColorParameter:5
-	vec4 n_out5p0 = CyanGhost_color;
+	vec4 n_out5p0 = Color;
 
 
 // Fresnel:4
@@ -220,7 +219,7 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-716.376, 85.6989)
+graph_offset = Vector2(-371, -34)
 modes/cull = 1
 flags/unshaded = true
 flags/shadows_disabled = true
@@ -281,6 +280,7 @@ nodes/light/0/position = Vector2(1060, 580)
 render_priority = 0
 shader = SubResource("VisualShader_v7vcm")
 shader_parameter/Speed = 1.0
+shader_parameter/Color = Color(0.8, 0.6, 0.352941, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_iskgr"]
 lightmap_size_hint = Vector2i(17, 9)
@@ -289,8 +289,7 @@ lightmap_size_hint = Vector2i(17, 9)
 default_input_values = [2, true, 3, 0.8]
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_ihias"]
-parameter_name = "CyanGhost_color"
-qualifier = 1
+parameter_name = "Color"
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_njf26"]
 constant = 0.25
@@ -351,7 +350,7 @@ code = "shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_front, diffuse_lambert, specular_schlick_ggx, unshaded;
 
 uniform sampler2D tex_vtx_8;
-global uniform vec4 CyanGhost_color : source_color;
+uniform vec4 Color : source_color;
 global uniform float Dither_size;
 
 
@@ -399,7 +398,7 @@ void vertex() {
 
 void fragment() {
 // ColorParameter:3
-	vec4 n_out3p0 = CyanGhost_color;
+	vec4 n_out3p0 = Color;
 
 
 // Fresnel:2
@@ -443,7 +442,7 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-745.408, 79.6868)
+graph_offset = Vector2(-565.958, -116.881)
 modes/cull = 1
 flags/unshaded = true
 nodes/vertex/2/node = SubResource("VisualShaderNodeInput_ovd8l")
@@ -493,6 +492,7 @@ nodes/fragment/connections = PackedInt32Array(4, 0, 6, 0, 5, 0, 6, 1, 2, 0, 7, 0
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rw8rk"]
 render_priority = 0
 shader = SubResource("VisualShader_vn78f")
+shader_parameter/Color = Color(0.8, 0.6, 0.352941, 1)
 
 [node name="Rapatrier_VFX_root" type="Node3D"]
 

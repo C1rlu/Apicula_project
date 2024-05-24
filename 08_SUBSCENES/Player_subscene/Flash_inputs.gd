@@ -24,5 +24,5 @@ func _start_light(condition):
 	timer.start()
 
 	_global_datas._photo_flash.emit()
-	_global_datas.flash_x_ray_oddity.emit()	
+	#_global_datas.flash_x_ray_oddity.emit()	
 	

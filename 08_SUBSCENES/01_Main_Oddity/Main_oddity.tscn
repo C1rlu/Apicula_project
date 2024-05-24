@@ -1,11 +1,13 @@
-[gd_scene load_steps=10 format=3 uid="uid://50ubp7klhsex"]
+[gd_scene load_steps=12 format=3 uid="uid://50ubp7klhsex"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/01_Main_Oddity/Main_oddity.gd" id="1_1fc0u"]
 [ext_resource type="Script" path="res://08_SUBSCENES/01_Main_Oddity/Fusion_area_entered.gd" id="2_8cjcp"]
+[ext_resource type="Script" path="res://08_SUBSCENES/01_Main_Oddity/Rotate_main.gd" id="3_fdgap"]
+[ext_resource type="Script" path="res://08_SUBSCENES/01_Main_Oddity/Bounce_engine.gd" id="4_8sgwq"]
 [ext_resource type="Script" path="res://08_SUBSCENES/01_Main_Oddity/Add_Element_to_spot.gd" id="4_a5au8"]
-[ext_resource type="PackedScene" uid="uid://b3e0cgra0jrsb" path="res://08_SUBSCENES/Model/ODDITY/Peon_oddity_v01.blend" id="4_jvbw0"]
-[ext_resource type="Material" uid="uid://d2t0ju6dynwgf" path="res://05_SHADER_TEST/Subscene_materials/oddity_mirror.tres" id="5_caks8"]
 [ext_resource type="Script" path="res://08_SUBSCENES/01_Main_Oddity/Position_spots.gd" id="5_e087c"]
+[ext_resource type="PackedScene" uid="uid://dwbkbudtp8nqf" path="res://08_SUBSCENES/01_Main_Oddity/00_Render_Main/Main_render_msh_01.blend" id="5_rn427"]
+[ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="7_4pwkf"]
 
 [sub_resource type="GDScript" id="GDScript_u7ou3"]
 script/source = "extends Area3D
@@ -31,11 +33,21 @@ script = ExtResource("2_8cjcp")
 
 [node name="Movable_Main_oddity" type="Node" parent="."]
 script = ExtResource("1_1fc0u")
-position_from_player = Vector3(0.25, 1, 0)
-speed = 1.0
+position_from_player = Vector3(0.25, 1.5, 0)
+speed = 1.5
+
+[node name="Rotate" type="Node" parent="Movable_Main_oddity"]
+script = ExtResource("3_fdgap")
+
+[node name="Bounce_engine" type="Node" parent="Movable_Main_oddity"]
+script = ExtResource("4_8sgwq")
+
+[node name="Timer" type="Timer" parent="Movable_Main_oddity/Bounce_engine"]
+wait_time = 2.0
+autostart = true
 
 [node name="Random_range_update" type="Timer" parent="Movable_Main_oddity"]
-wait_time = 2.0
+wait_time = 1.5
 autostart = true
 
 [node name="Wait_before_follow" type="Timer" parent="Movable_Main_oddity"]
@@ -67,14 +79,24 @@ position_spots = [NodePath("../Pos_01"), NodePath("../Pos_02"), NodePath("../Pos
 [node name="Add_Element_to_spot" type="Node" parent="Render_root"]
 script = ExtResource("4_a5au8")
 
-[node name="msh_oddity_peon" parent="Render_root" instance=ExtResource("4_jvbw0")]
-transform = Transform3D(0.0349114, 0, 0, 0, 0.0349114, 0, 0, 0, 0.0349114, 0, 0, 0)
+[node name="Main_render_msh_01" parent="Render_root" instance=ExtResource("5_rn427")]
+transform = Transform3D(0.213999, 0, 0, 0, 0.213999, 0, 0, 0, 0.213999, 0, 0, 0)
 
-[node name="msh_oddity_peon" parent="Render_root/msh_oddity_peon" index="0"]
+[node name="Engine_inside" parent="Render_root/Main_render_msh_01" index="0"]
+transform = Transform3D(0.726563, 0, 0, 0, 0.726563, 0, 0, 0, 0.726563, 0, 0, 0)
+visible = false
 layers = 4
-cast_shadow = 0
-gi_mode = 0
-surface_material_override/0 = ExtResource("5_caks8")
+surface_material_override/0 = ExtResource("7_4pwkf")
+
+[node name="Engine" parent="Render_root/Main_render_msh_01" index="1"]
+transform = Transform3D(-0.00584793, -0.12258, -0.992441, -0.783184, -0.616523, 0.080764, -0.621763, 0.777736, -0.0923977, 0, 0, 0)
+layers = 4
+surface_material_override/0 = ExtResource("7_4pwkf")
+
+[node name="Center" parent="Render_root/Main_render_msh_01" index="2"]
+transform = Transform3D(0.791951, 0, 0, 0, 0.791951, 0, 0, 0, 0.791951, 0, 0, 0)
+layers = 4
+surface_material_override/0 = ExtResource("7_4pwkf")
 
 [node name="Pos_01" type="Node3D" parent="Render_root"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0210313, -0.0338003)
@@ -109,8 +131,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0221373, 0.0345362, -0.0029
 [connection signal="body_entered" from="." to="Movable_Main_oddity" method="_on_movable_oddity_example_body_entered"]
 [connection signal="body_exited" from="." to="Movable_Main_oddity" method="_on_movable_oddity_example_body_exited"]
 [connection signal="tree_exited" from="Movable_Main_oddity" to="Movable_Main_oddity" method="_on_tree_exited"]
+[connection signal="timeout" from="Movable_Main_oddity/Bounce_engine/Timer" to="Movable_Main_oddity/Bounce_engine" method="_on_timer_timeout"]
 [connection signal="timeout" from="Movable_Main_oddity/Random_range_update" to="Movable_Main_oddity" method="_on_random_range_update_timeout"]
+[connection signal="timeout" from="Movable_Main_oddity/Random_range_update" to="Movable_Main_oddity/Rotate" method="_on_random_range_update_timeout"]
+[connection signal="timeout" from="Movable_Main_oddity/Random_range_update" to="Movable_Main_oddity/Bounce_engine" method="_on_random_range_update_timeout"]
 [connection signal="timeout" from="Movable_Main_oddity/Wait_before_follow" to="Movable_Main_oddity" method="_on_wait_before_follow_timeout"]
 [connection signal="area_entered" from="Fusion_area" to="Fusion_area_entered" method="_on_fusion_area_area_entered"]
 
-[editable path="Render_root/msh_oddity_peon"]
+[editable path="Render_root/Main_render_msh_01"]

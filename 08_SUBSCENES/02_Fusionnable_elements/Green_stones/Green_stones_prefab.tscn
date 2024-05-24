@@ -1,71 +1,81 @@
-[gd_scene load_steps=27 format=3 uid="uid://dfr6blvyykeyu"]
+[gd_scene load_steps=26 format=3 uid="uid://6wel7rbayeuf"]
 
-[ext_resource type="Script" path="res://08_SUBSCENES/02_Fusionnable_elements/Meduse/Medusa.gd" id="1_5rq7u"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Tools/Fusion_node.gd" id="1_acwnn"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Tools/Scanning_effect.gd" id="4_1nsh8"]
-[ext_resource type="Script" path="res://12_INVENTORY/Photo/Photo_data_element.gd" id="5_euy67"]
-[ext_resource type="PackedScene" uid="uid://bsv6yt3q1qxg0" path="res://08_SUBSCENES/01_Main_Oddity/Add_oddity/Add_oddity_organic.tscn" id="5_tpagp"]
-[ext_resource type="Resource" uid="uid://ctxrmh1elpnm1" path="res://12_INVENTORY/Photo/Oddity_photoData/Follower_photoData.tres" id="6_wq0sb"]
-[ext_resource type="PackedScene" uid="uid://bymjbb5nau8pk" path="res://08_SUBSCENES/02_Fusionnable_elements/Meduse/blender/Medusa_mesh_01.blend" id="8_03ocj"]
-[ext_resource type="Shader" uid="uid://df0b3qbvnktga" path="res://05_SHADER_TEST/Subscene_materials/Subscene_medusa.tres" id="9_x8rpq"]
+[ext_resource type="PackedScene" uid="uid://bp117q61pypnk" path="res://08_SUBSCENES/01_Main_Oddity/Add_oddity/Remove_oddity_organic.tscn" id="2_3tbpb"]
+[ext_resource type="Script" path="res://08_SUBSCENES/02_Fusionnable_elements/Meduse/Medusa.gd" id="2_x1qel"]
+[ext_resource type="Script" path="res://08_SUBSCENES/02_Fusionnable_elements/Green_stones/Follow_player.gd" id="3_w4opn"]
+[ext_resource type="Script" path="res://12_INVENTORY/Photo/Photo_data_element.gd" id="4_k415n"]
+[ext_resource type="Resource" uid="uid://ctxrmh1elpnm1" path="res://12_INVENTORY/Photo/Oddity_photoData/Follower_photoData.tres" id="5_bu3de"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Tools/Scanning_effect.gd" id="6_dom5c"]
+[ext_resource type="Material" uid="uid://bw5kv15s072f6" path="res://08_SUBSCENES/02_Fusionnable_elements/Fussionable_element_mat.tres" id="7_f4m3g"]
 
-[sub_resource type="GDScript" id="GDScript_uijy4"]
+[sub_resource type="GDScript" id="GDScript_q77nu"]
 script/source = "extends Node
-
-@export var speed : float
 @onready var root = $\"..\"
-var actual_speed : float
-var move : bool = false
-var random_offset : Vector3
-var idle_position : Vector3
+@export var mesh : MeshInstance3D
+@export var fusion_effect_range : Vector2
+var mesh_mat : Material
 
-var rotation_target : Vector3
 
-var can_check_cloest_path = false
+var t
+var actual_value : float
 
-var path_index : int
+@export var can_be_fusion : bool = true
+var _is_active : bool
 
-var close_to_player : bool  = false
-var path_to_player : Array[Vector3]
-
-var is_paused : bool
+signal fusion_result
+signal active_on_fusion(condition : bool)
 
 func _ready():
+	if mesh:
+		mesh_mat = mesh.get_surface_override_material(0)		
+	
+func _fusion(condition):
+	#print(\"FUSION ME \",condition)
 
-	idle_position = root.global_position
-
-	rotation_target = Vector3(randf_range(-90.0,90.0),randf_range(-90.0,90.0),randf_range(-90.0,90.0))
-	actual_speed = speed
-	
-	_global_datas._traceur_pause.connect(_set_paused)	
-	
-	
-func _set_paused(condition : bool):
-	is_paused = condition	
-	
-func _process(delta):
-	
-	if is_paused:
+	if !can_be_fusion:
 		return
-
-	_idle(delta)
-
-	
-func _idle(delta):
-
-	var target = idle_position + random_offset	
-	root.global_position = lerp(root.global_position,target , speed * delta)			
-
-	#root.global_rotation = lerp(root.global_rotation,rotation_target, 0.05 * delta)
-	
-
-func _on_random_range_update_timeout():
-	
-	random_offset = Vector3(randf_range(-0.5,0.5),randf_range(-0.5,0.5),0.0)	
-	rotation_target = Vector3(randf_range(-90.0,90.0),randf_range(-90.0,90.0),randf_range(-90.0,90.0))
+	if !is_inside_tree():
+		return
 		
-		
-	actual_speed = speed + randf_range(-0.2,0.2)
+	active_on_fusion.emit(condition)
+	
+	
+	if condition:
+		if !_is_active:
+			var r_time = randf_range(0.5,1.0)
+			if t:
+				t.kill()
+			t = create_tween()
+			t.tween_method(_change_value,fusion_effect_range.x,fusion_effect_range.y,r_time)
+			t.connect(\"finished\",_done)
+			_is_active = true
+	else:
+		if t:
+			t.kill()
+		var r_time = randf_range(0.5,1.0)
+		t = create_tween()
+		t.tween_method(_change_value,actual_value,fusion_effect_range.x,r_time)	
+		_is_active = false
+	
+	
+func _stop_fusion():
+	
+	if t:
+		t.kill()
+	var r_time = randf_range(0.5,1.0)
+	t = create_tween()
+	t.tween_method(_change_value,actual_value,0.0,r_time)	
+	_is_active = false			
+	
+func _done():
+	fusion_result.emit()
+	
+func _change_value(value):
+	if mesh_mat:
+		mesh_mat.set_shader_parameter(\"Speed\",value)	
+	actual_value = value
+
+
 
 "
 
@@ -226,68 +236,55 @@ scale_curve = SubResource("CurveTexture_igo3x")
 [sub_resource type="BoxMesh" id="BoxMesh_4a20y"]
 size = Vector3(1.25, 1.25, 1.25)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_mpn4f"]
-resource_local_to_scene = true
-render_priority = 0
-shader = ExtResource("9_x8rpq")
-shader_parameter/Speed = 0.05
-shader_parameter/ColorParameter2 = Color(0.290196, 0.556863, 0.47451, 1)
+[sub_resource type="SphereMesh" id="SphereMesh_nr1wi"]
 
-[node name="Meduse_species_prefab" type="Area3D"]
+[node name="Green_stone_prefab" type="Area3D"]
 collision_layer = 4
 collision_mask = 4
 
-[node name="Fusion" type="Node" parent="." node_paths=PackedStringArray("mesh")]
-script = ExtResource("1_acwnn")
-mesh = NodePath("../Medusa_mesh_012/Medusa_mesh_01")
+[node name="Fusion" type="Node" parent="."]
+script = SubResource("GDScript_q77nu")
 fusion_effect_range = Vector2(0.1, 1.5)
 
 [node name="Fusion_result" type="Node" parent="."]
-script = ExtResource("1_5rq7u")
-oddity_prefab = ExtResource("5_tpagp")
+script = ExtResource("2_x1qel")
+oddity_prefab = ExtResource("2_3tbpb")
+
+[node name="Follow_player" type="Node" parent="."]
+script = ExtResource("3_w4opn")
 
 [node name="Photo_data" type="Node" parent="."]
-script = ExtResource("5_euy67")
-photoData = ExtResource("6_wq0sb")
+script = ExtResource("4_k415n")
+photoData = ExtResource("5_bu3de")
 
 [node name="Timer" type="Timer" parent="Photo_data"]
 wait_time = 0.7
 
 [node name="Scanning_effect" type="Node" parent="Photo_data"]
-script = ExtResource("4_1nsh8")
-
-[node name="Movable_oddity" type="Node" parent="."]
-script = SubResource("GDScript_uijy4")
-speed = 0.25
-
-[node name="Random_range_update" type="Timer" parent="Movable_oddity"]
-wait_time = 0.5
-autostart = true
+script = ExtResource("6_dom5c")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000275697, -0.0032748, -0.0659428)
 shape = SubResource("SphereShape3D_5fk2t")
 
 [node name="Mirror_Particule" type="GPUParticles3D" parent="."]
-transform = Transform3D(0.0570516, 0, 0, 0, 0.0570516, 0, 0, 0, 0.0570516, 0.0214395, 0.0384485, -0.278326)
+transform = Transform3D(0.0570516, 0, 0, 0, 0.0570516, 0, 0, 0, 0.0570516, 0, 0, 0)
 layers = 4
 material_override = SubResource("ShaderMaterial_yfc4a")
 gi_mode = 0
 emitting = false
-amount = 25
+amount = 5
 lifetime = 0.25
 speed_scale = 2.0
 fixed_fps = 12
 process_material = SubResource("ParticleProcessMaterial_c5drg")
 draw_pass_1 = SubResource("BoxMesh_4a20y")
 
-[node name="Medusa_mesh_012" parent="." instance=ExtResource("8_03ocj")]
-transform = Transform3D(0.0635446, 0, 0, 0, 0.0635446, 0, 0, 0, 0.0635446, 0.0105593, 0.0537908, -0.278326)
-
-[node name="Medusa_mesh_01" parent="Medusa_mesh_012" index="0"]
-transform = Transform3D(-0.0614534, 0, -0.0976757, 0, 0.1154, 0, 0.0976757, 0, -0.0614534, -0.654114, -0.778208, -0.41539)
+[node name="Render" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.12682, 0, 0, 0, 0.0889, 0, 0, 0, 0.12682, 0, 0, 0)
 layers = 4
-surface_material_override/0 = SubResource("ShaderMaterial_mpn4f")
+mesh = SubResource("SphereMesh_nr1wi")
+surface_material_override/0 = ExtResource("7_f4m3g")
 
 [connection signal="area_shape_exited" from="." to="Photo_data" method="_on_area_take_it_area_shape_exited"]
 [connection signal="fusion_result" from="Fusion" to="Fusion_result" method="_on_fusion_fusion_result"]
@@ -295,6 +292,3 @@ surface_material_override/0 = SubResource("ShaderMaterial_mpn4f")
 [connection signal="scanner_effect_condition" from="Photo_data" to="Photo_data/Scanning_effect" method="_on_photo_data_scanner_effect_condition"]
 [connection signal="tree_exited" from="Photo_data" to="Photo_data" method="_on_tree_exited"]
 [connection signal="timeout" from="Photo_data/Timer" to="Photo_data" method="_on_timer_timeout"]
-[connection signal="timeout" from="Movable_oddity/Random_range_update" to="Movable_oddity" method="_on_random_range_update_timeout"]
-
-[editable path="Medusa_mesh_012"]
