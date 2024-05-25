@@ -1,6 +1,6 @@
 extends Node
 
-@onready var bounce_engine = $"../Movable_Main_oddity/Bounce_engine"
+@onready var bounce_engine = $"../../Movable_Main_oddity/Bounce_engine"
 
 func _on_fusion_area_area_entered(area):
 	if area:

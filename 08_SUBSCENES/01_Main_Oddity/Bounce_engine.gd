@@ -1,6 +1,6 @@
 extends Node
 
-@onready var engine = $"../../Render_root/Main_render_msh_01/Engine"
+@onready var engine = $"../../Main_Oddity/Render_root/Main_render_msh_01/Engine"
 
 var t 
 @onready var actual_scale = engine.scale.x 

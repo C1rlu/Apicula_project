@@ -1,6 +1,7 @@
 extends Node
 
-#@export var _Oddity_data : Oddity_data
+@onready var rapatrier_rg : RigidBody3D = $".."
+
 @export var position_from_player : Vector3
 @export var speed : float
 @onready var root = $".."
@@ -56,10 +57,13 @@ func _process(delta):
 func _folow_player(delta):
 	
 
-	var player_position = _global_datas.subbscene_playerPosition + position_from_player + random_offset	
+	#var player_position = _global_datas.subbscene_playerPosition + position_from_player + random_offset	
 	
 	if close_to_player :
-		root.global_position = lerp(root.global_position,player_position, actual_speed * delta)			
+		pass
+		#var direction = (player_position - rapatrier_rg.global_position).normalized()
+		#rapatrier_rg.apply_central_force(direction * speed/5)
+		#root.global_position = lerp(root.global_position,player_position, actual_speed * delta)			
 	else:	
 				
 		follow_path(delta)
@@ -74,14 +78,15 @@ func follow_path(delta):
 		return
 		
 	var target_point = path_to_player[path_index]
+	var direction = (target_point - rapatrier_rg.global_position).normalized()
 	
 	var distance_next_points = target_point.distance_to(root.position) 
 	
-	if distance_next_points < 0.5:
+	if distance_next_points < 1.0:
 		path_index += 1 
-		
-
-	root.global_position = lerp(root.global_position,target_point , actual_speed * 2 * delta)	
+	
+	rapatrier_rg.apply_central_force(direction * speed)
+	#root.global_position = lerp(root.global_position,target_point , actual_speed * 2 * delta)	
 	
 	
 func closest_index_to_player():
@@ -108,15 +113,15 @@ func _on_random_range_update_timeout():
 func _on_movable_oddity_example_body_entered(body):
 	
 	if body:
-		var player = body.get_node_or_null("Player")
+		var player = body.get_node_or_null("Player_rg")
 		if player:
-			
+			#print("CLOSE TO PLAYER")
 			close_to_player = true
 		
 
 func _on_movable_oddity_example_body_exited(body):
 	if body:
-		var player = body.get_node_or_null("Player")
+		var player = body.get_node_or_null("Player_rg")
 		if player:
 			path_to_player.clear()
 			path_index = 0
@@ -129,3 +134,4 @@ func _on_movable_oddity_example_body_exited(body):
 	
 func _on_wait_before_follow_timeout():
 	close_to_player = false	
+

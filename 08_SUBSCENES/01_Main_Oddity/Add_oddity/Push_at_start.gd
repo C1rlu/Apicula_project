@@ -23,6 +23,6 @@ func done():
 	movable_oddity.move = true
 	
 func _on_organic_oddity_prefab_push():
-	_push()
-
+	#_push()
+	movable_oddity.move = true
 

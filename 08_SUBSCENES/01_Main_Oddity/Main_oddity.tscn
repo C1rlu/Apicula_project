@@ -1,30 +1,34 @@
-[gd_scene load_steps=52 format=3 uid="uid://50ubp7klhsex"]
+[gd_scene load_steps=64 format=3 uid="uid://50ubp7klhsex"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/01_Main_Oddity/Main_oddity.gd" id="1_1fc0u"]
 [ext_resource type="Script" path="res://08_SUBSCENES/01_Main_Oddity/Fusion_area_entered.gd" id="2_8cjcp"]
 [ext_resource type="Script" path="res://08_SUBSCENES/01_Main_Oddity/Rotate_main.gd" id="3_fdgap"]
 [ext_resource type="Script" path="res://08_SUBSCENES/01_Main_Oddity/Bounce_engine.gd" id="4_8sgwq"]
 [ext_resource type="Script" path="res://08_SUBSCENES/01_Main_Oddity/Add_Element_to_spot.gd" id="4_a5au8"]
+[ext_resource type="Script" path="res://08_SUBSCENES/01_Main_Oddity/Add_oxygene.gd" id="4_usbqy"]
 [ext_resource type="Script" path="res://08_SUBSCENES/01_Main_Oddity/Position_spots.gd" id="5_e087c"]
 [ext_resource type="PackedScene" uid="uid://dwbkbudtp8nqf" path="res://08_SUBSCENES/01_Main_Oddity/00_Render_Main/Main_render_msh_01.blend" id="5_rn427"]
 [ext_resource type="Shader" uid="uid://dlgbv4x8iwnwg" path="res://05_SHADER_TEST/Subscene_materials/Subscene_oddity_mirror_sh.tres" id="7_2dkjm"]
 [ext_resource type="Shader" uid="uid://cx243vj1gf8pv" path="res://05_SHADER_TEST/Subscene_materials/Subscene_sh_far.tres" id="9_elclc"]
 [ext_resource type="Material" uid="uid://bw5kv15s072f6" path="res://08_SUBSCENES/02_Fusionnable_elements/Fussionable_element_mat.tres" id="10_8q2bm"]
 [ext_resource type="ArrayMesh" uid="uid://cm4cl6n84qj86" path="res://07_VFX/Boat_smoke/smoke_msh.obj" id="11_6cbb7"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/look_at_camera.gd" id="12_hi8u4"]
+[ext_resource type="Material" uid="uid://goq7y1lqdpxa" path="res://05_SHADER_TEST/Subscene_materials/element_subscene_x_ray_VFX_LIGHT.tres" id="13_etihy"]
+[ext_resource type="Shader" uid="uid://drchaj5fcdan0" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_sh.tres" id="14_astl3"]
 
 [sub_resource type="GDScript" id="GDScript_u7ou3"]
 script/source = "extends Area3D
 
 func _ready():
-	_global_datas.Main_oddity_node = $Render_root
+	_global_datas.Main_oddity_node = $\".\"
 
 "
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_lls1c"]
-radius = 0.0439911
+radius = 0.396553
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_tmaie"]
-radius = 0.315621
+radius = 0.554011
 
 [sub_resource type="SphereMesh" id="SphereMesh_ed151"]
 
@@ -121,26 +125,26 @@ render_priority = 1
 shader = SubResource("VisualShader_evqwk")
 shader_parameter/ColorParameter2 = Color(0.341176, 0.662745, 0.431373, 1)
 
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_5j6tu"]
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_uxigf"]
 
-[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_6mwdt"]
+[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_qqix0"]
 constant = Color(0.167591, 0.231187, 0.314371, 1)
 
-[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_6xw84"]
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_2u2d6"]
 default_input_values = [0, 0.0, 1, 1.0, 2, -0.135]
 
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_jkh5r"]
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_a8yva"]
 output_port_for_preview = 0
 expanded_output_ports = [0]
 input_name = "color"
 
-[sub_resource type="VisualShaderNodeFresnel" id="VisualShaderNodeFresnel_yhrbx"]
+[sub_resource type="VisualShaderNodeFresnel" id="VisualShaderNodeFresnel_beutw"]
 
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_d2fk7"]
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_j83xq"]
 parameter_name = "Subscene_mirror_alpha"
 qualifier = 1
 
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_erg5y"]
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_tf6yu"]
 size = Vector2(634.014, 470.339)
 expression = "const float DITHER_THRESHOLDS[16] ={
 		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
@@ -153,44 +157,44 @@ vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
 
-[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_q3087"]
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_ymim8"]
 
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_kui30"]
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_3b7ku"]
 output_port_for_preview = 0
 expanded_output_ports = [0]
 input_name = "color"
 
-[sub_resource type="VisualShaderNodeFresnel" id="VisualShaderNodeFresnel_hgf3l"]
+[sub_resource type="VisualShaderNodeFresnel" id="VisualShaderNodeFresnel_11blh"]
 default_input_values = [2, false, 3, 0.36]
 
-[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_ogr0p"]
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_h48ac"]
 default_input_values = [0, 0.0, 1, 3.885, 2, -0.135]
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_8j8qs"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_cnx48"]
 noise_type = 0
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_n5bsn"]
-noise = SubResource("FastNoiseLite_8j8qs")
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_66new"]
+noise = SubResource("FastNoiseLite_cnx48")
 
-[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_1rg5w"]
-texture = SubResource("NoiseTexture2D_n5bsn")
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_hcmrr"]
+texture = SubResource("NoiseTexture2D_66new")
 
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_kwxda"]
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_l03rj"]
 
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_x0mgy"]
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_72h5w"]
 input_name = "uv"
 
-[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_h6opy"]
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_ufr3b"]
 default_input_values = [0, 0.0, 1, 1.0, 2, 0.07]
 
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_4b3v3"]
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_ukg0d"]
 parameter_name = "Dither_size"
 qualifier = 1
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_n3ejf"]
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_b6ovb"]
 constant = 0.3
 
-[sub_resource type="VisualShader" id="VisualShader_k83oh"]
+[sub_resource type="VisualShader" id="VisualShader_r5mi6"]
 code = "shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
 
@@ -298,7 +302,7 @@ void fragment() {
 graph_offset = Vector2(-466.351, -75.4855)
 flags/unshaded = true
 nodes/fragment/0/position = Vector2(780, 160)
-nodes/fragment/2/node = SubResource("VisualShaderNodeExpression_erg5y")
+nodes/fragment/2/node = SubResource("VisualShaderNodeExpression_tf6yu")
 nodes/fragment/2/position = Vector2(-960, 820)
 nodes/fragment/2/size = Vector2(634.014, 470.339)
 nodes/fragment/2/input_ports = "0,4,noise;1,0,In;2,0,Size;"
@@ -313,58 +317,58 @@ nodes/fragment/2/expression = "const float DITHER_THRESHOLDS[16] ={
 vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/4/node = SubResource("VisualShaderNodeFloatConstant_n3ejf")
+nodes/fragment/4/node = SubResource("VisualShaderNodeFloatConstant_b6ovb")
 nodes/fragment/4/position = Vector2(-1180, 880)
-nodes/fragment/10/node = SubResource("VisualShaderNodeStep_5j6tu")
+nodes/fragment/10/node = SubResource("VisualShaderNodeStep_uxigf")
 nodes/fragment/10/position = Vector2(-100, 420)
-nodes/fragment/15/node = SubResource("VisualShaderNodeColorConstant_6mwdt")
+nodes/fragment/15/node = SubResource("VisualShaderNodeColorConstant_qqix0")
 nodes/fragment/15/position = Vector2(-18.1255, 46.3031)
-nodes/fragment/16/node = SubResource("VisualShaderNodeMix_6xw84")
+nodes/fragment/16/node = SubResource("VisualShaderNodeMix_2u2d6")
 nodes/fragment/16/position = Vector2(-260, 140)
-nodes/fragment/17/node = SubResource("VisualShaderNodeInput_jkh5r")
+nodes/fragment/17/node = SubResource("VisualShaderNodeInput_a8yva")
 nodes/fragment/17/position = Vector2(-840, 420)
-nodes/fragment/18/node = SubResource("VisualShaderNodeFresnel_yhrbx")
+nodes/fragment/18/node = SubResource("VisualShaderNodeFresnel_beutw")
 nodes/fragment/18/position = Vector2(-520, 100)
-nodes/fragment/19/node = SubResource("VisualShaderNodeFloatParameter_d2fk7")
+nodes/fragment/19/node = SubResource("VisualShaderNodeFloatParameter_j83xq")
 nodes/fragment/19/position = Vector2(20, 740)
-nodes/fragment/20/node = SubResource("VisualShaderNodeMix_q3087")
+nodes/fragment/20/node = SubResource("VisualShaderNodeMix_ymim8")
 nodes/fragment/20/position = Vector2(300, 460)
-nodes/fragment/21/node = SubResource("VisualShaderNodeInput_kui30")
+nodes/fragment/21/node = SubResource("VisualShaderNodeInput_3b7ku")
 nodes/fragment/21/position = Vector2(-280, 1200)
-nodes/fragment/22/node = SubResource("VisualShaderNodeFresnel_hgf3l")
+nodes/fragment/22/node = SubResource("VisualShaderNodeFresnel_11blh")
 nodes/fragment/22/position = Vector2(-160, 1000)
-nodes/fragment/23/node = SubResource("VisualShaderNodeMix_ogr0p")
+nodes/fragment/23/node = SubResource("VisualShaderNodeMix_h48ac")
 nodes/fragment/23/position = Vector2(220, 1020)
-nodes/fragment/24/node = SubResource("VisualShaderNodeTexture_1rg5w")
+nodes/fragment/24/node = SubResource("VisualShaderNodeTexture_hcmrr")
 nodes/fragment/24/position = Vector2(380, 1340)
-nodes/fragment/25/node = SubResource("VisualShaderNodeStep_kwxda")
+nodes/fragment/25/node = SubResource("VisualShaderNodeStep_l03rj")
 nodes/fragment/25/position = Vector2(580, 1020)
-nodes/fragment/26/node = SubResource("VisualShaderNodeInput_x0mgy")
+nodes/fragment/26/node = SubResource("VisualShaderNodeInput_72h5w")
 nodes/fragment/26/position = Vector2(-20, 1460)
-nodes/fragment/27/node = SubResource("VisualShaderNodeMix_h6opy")
+nodes/fragment/27/node = SubResource("VisualShaderNodeMix_ufr3b")
 nodes/fragment/27/position = Vector2(895.324, 959.374)
-nodes/fragment/28/node = SubResource("VisualShaderNodeFloatParameter_4b3v3")
+nodes/fragment/28/node = SubResource("VisualShaderNodeFloatParameter_ukg0d")
 nodes/fragment/28/position = Vector2(-1500.72, 1122.86)
 nodes/fragment/connections = PackedInt32Array(15, 0, 0, 0, 4, 0, 2, 1, 2, 0, 10, 1, 16, 0, 10, 0, 17, 0, 16, 2, 18, 0, 16, 0, 10, 0, 20, 0, 21, 0, 23, 2, 22, 0, 23, 0, 24, 0, 25, 1, 23, 0, 25, 0, 26, 0, 24, 0, 25, 0, 27, 1, 20, 0, 0, 1, 27, 0, 20, 1, 19, 0, 20, 2, 28, 0, 2, 2)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_f8k02"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_q4r7j"]
 render_priority = 3
-shader = SubResource("VisualShader_k83oh")
+shader = SubResource("VisualShader_r5mi6")
 
-[sub_resource type="Gradient" id="Gradient_ptofw"]
+[sub_resource type="Gradient" id="Gradient_27yjb"]
 offsets = PackedFloat32Array(0.142857, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_o5w0s"]
-gradient = SubResource("Gradient_ptofw")
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_6fw16"]
+gradient = SubResource("Gradient_27yjb")
 
-[sub_resource type="Curve" id="Curve_tv6oi"]
+[sub_resource type="Curve" id="Curve_d6em3"]
 _data = [Vector2(0, 0.968421), 0.0, 0.546851, 0, 0, Vector2(0.994118, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_0vc74"]
-curve = SubResource("Curve_tv6oi")
+[sub_resource type="CurveTexture" id="CurveTexture_ru083"]
+curve = SubResource("Curve_d6em3")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_pw8jw"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_panyc"]
 lifetime_randomness = 0.5
 particle_flag_rotate_y = true
 angle_min = -720.0
@@ -376,26 +380,63 @@ angular_velocity_max = 0.1
 gravity = Vector3(0, 0, 0)
 scale_min = 0.1
 scale_max = 0.15
-scale_curve = SubResource("CurveTexture_0vc74")
-color_ramp = SubResource("GradientTexture1D_o5w0s")
+scale_curve = SubResource("CurveTexture_ru083")
+color_ramp = SubResource("GradientTexture1D_6fw16")
 turbulence_noise_strength = 0.05
 turbulence_noise_scale = 0.1
 turbulence_noise_speed_random = 0.0
 turbulence_influence_min = 0.0
 turbulence_influence_max = 0.0
 
-[node name="Main_Oddity" type="Area3D"]
-collision_layer = 4
-collision_mask = 4
-script = SubResource("GDScript_u7ou3")
+[sub_resource type="BoxMesh" id="BoxMesh_ij0wm"]
 
-[node name="Fusion_area_entered" type="Node" parent="."]
-script = ExtResource("2_8cjcp")
+[sub_resource type="SphereMesh" id="SphereMesh_cyj1k"]
+lightmap_size_hint = Vector2i(17, 9)
+radius = 0.7
+height = 1.4
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_dtxdl"]
+radius = 0.258168
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f2b6c"]
+render_priority = 1
+shader = ExtResource("14_astl3")
+shader_parameter/ColorParameter2 = Color(0.435294, 0.792157, 0.552941, 1)
+
+[sub_resource type="Curve" id="Curve_rdhrd"]
+_data = [Vector2(0.00954654, 0.051224), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_plvsx"]
+curve = SubResource("Curve_rdhrd")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_0ni8x"]
+emission_shape = 2
+emission_sphere_radius = 0.5
+inherit_velocity_ratio = -0.525
+direction = Vector3(0, 0, 0)
+gravity = Vector3(0, 0, 0)
+radial_accel_min = -0.5
+radial_accel_max = 0.5
+scale_curve = SubResource("CurveTexture_plvsx")
+
+[sub_resource type="SphereMesh" id="SphereMesh_t73r3"]
+radius = 0.1
+height = 0.25
+radial_segments = 16
+rings = 16
+
+[node name="Main_Rapatrier" type="RigidBody3D"]
+collision_layer = 6
+collision_mask = 6
+mass = 7.0
+gravity_scale = 0.0
+linear_damp = 2.5
 
 [node name="Movable_Main_oddity" type="Node" parent="."]
 script = ExtResource("1_1fc0u")
 position_from_player = Vector3(0.25, 1.5, 0)
-speed = 1.5
+speed = 15.0
 
 [node name="Rotate" type="Node" parent="Movable_Main_oddity"]
 script = ExtResource("3_fdgap")
@@ -411,124 +452,162 @@ wait_time = 1.5
 autostart = true
 
 [node name="Wait_before_follow" type="Timer" parent="Movable_Main_oddity"]
-wait_time = 0.5
 one_shot = true
 
-[node name="Fusion_area" type="Area3D" parent="."]
+[node name="Main_Oddity" type="Area3D" parent="."]
+collision_layer = 4
+collision_mask = 4
+script = SubResource("GDScript_u7ou3")
+
+[node name="Add_oxygene" type="Node" parent="Main_Oddity"]
+script = ExtResource("4_usbqy")
+
+[node name="Fusion_area_entered" type="Node" parent="Main_Oddity"]
+script = ExtResource("2_8cjcp")
+
+[node name="Fusion_area" type="Area3D" parent="Main_Oddity"]
 collision_layer = 4
 collision_mask = 4
 
-[node name="col" type="CollisionShape3D" parent="Fusion_area"]
+[node name="col" type="CollisionShape3D" parent="Main_Oddity/Fusion_area"]
 transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
 shape = SubResource("SphereShape3D_lls1c")
 
-[node name="Light" type="OmniLight3D" parent="."]
+[node name="Light" type="OmniLight3D" parent="Main_Oddity"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0177747, 0)
 layers = 4096
 omni_range = 2.0
 
-[node name="Render_light" type="OmniLight3D" parent="."]
+[node name="Render_light" type="OmniLight3D" parent="Main_Oddity"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0177747, 0)
 visible = false
 layers = 4
 omni_range = 3.0
 
-[node name="col" type="CollisionShape3D" parent="."]
+[node name="col" type="CollisionShape3D" parent="Main_Oddity"]
 shape = SubResource("SphereShape3D_tmaie")
 
-[node name="Render_root" type="Node3D" parent="."]
+[node name="Render_root" type="Node3D" parent="Main_Oddity"]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 
-[node name="Position_spots" type="Node" parent="Render_root" node_paths=PackedStringArray("position_spots")]
+[node name="Position_spots" type="Node" parent="Main_Oddity/Render_root" node_paths=PackedStringArray("position_spots")]
 script = ExtResource("5_e087c")
 position_spots = [NodePath("../Main_render_msh_01/Engine/Pos_01"), NodePath("../Main_render_msh_01/Engine/Pos_02"), NodePath("../Main_render_msh_01/Engine/Pos_03"), NodePath("../Main_render_msh_01/Engine/Pos_04"), NodePath("../Main_render_msh_01/Engine/Pos_05"), NodePath("../Main_render_msh_01/Engine/Pos_06"), NodePath("../Main_render_msh_01/Engine/Pos_07"), NodePath("../Main_render_msh_01/Engine/Pos_08"), NodePath("../Main_render_msh_01/Engine/Pos_09"), NodePath("../Main_render_msh_01/Engine/Pos_10"), NodePath("../Main_render_msh_01/Engine/Pos_11"), NodePath("../Main_render_msh_01/Engine/Pos_12")]
 
-[node name="Add_Element_to_spot" type="Node" parent="Render_root"]
+[node name="Add_Element_to_spot" type="Node" parent="Main_Oddity/Render_root"]
 script = ExtResource("4_a5au8")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Render_root"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Main_Oddity/Render_root"]
 transform = Transform3D(0.175218, 0, 0, 0, 0.175218, 0, 0, 0, 0.175218, 0, 0, 0)
 visible = false
 layers = 4
 mesh = SubResource("SphereMesh_ed151")
 surface_material_override/0 = SubResource("ShaderMaterial_7jw6t")
 
-[node name="Main_render_msh_01" parent="Render_root" instance=ExtResource("5_rn427")]
+[node name="Main_render_msh_01" parent="Main_Oddity/Render_root" instance=ExtResource("5_rn427")]
 transform = Transform3D(0.213999, 0, 0, 0, 0.213999, 0, 0, 0, 0.213999, 0, 0, 0)
 
-[node name="Engine_inside" parent="Render_root/Main_render_msh_01" index="0"]
+[node name="Engine_inside" parent="Main_Oddity/Render_root/Main_render_msh_01" index="0"]
 transform = Transform3D(0.726563, 0, 0, 0, 0.726563, 0, 0, 0, 0.726563, 0, 0, 0)
 layers = 4
 surface_material_override/0 = SubResource("ShaderMaterial_x05mq")
 
-[node name="Engine" parent="Render_root/Main_render_msh_01" index="1"]
+[node name="Engine" parent="Main_Oddity/Render_root/Main_render_msh_01" index="1"]
 transform = Transform3D(-0.00584793, -0.12258, -0.992441, -0.783184, -0.616523, 0.080764, -0.621763, 0.777736, -0.0923977, 0, 0, 0)
 layers = 4
 surface_material_override/0 = SubResource("ShaderMaterial_0aupl")
 surface_material_override/1 = SubResource("ShaderMaterial_x05mq")
 
-[node name="Pos_01" type="Node3D" parent="Render_root/Main_render_msh_01/Engine" index="0"]
+[node name="Pos_01" type="Node3D" parent="Main_Oddity/Render_root/Main_render_msh_01/Engine" index="0"]
 transform = Transform3D(-0.0273261, -3.65975, -2.90545, -0.572809, -2.88096, 3.6343, -4.6376, 0.377403, -0.431765, -0.178092, -0.638202, 0.079876)
 
-[node name="Pos_05" type="Node3D" parent="Render_root/Main_render_msh_01/Engine" index="1"]
+[node name="Pos_05" type="Node3D" parent="Main_Oddity/Render_root/Main_render_msh_01/Engine" index="1"]
 transform = Transform3D(-0.0273261, -3.65975, -2.90545, -0.572809, -2.88096, 3.6343, -4.6376, 0.377403, -0.431765, -0.414974, -0.586323, 0.0748642)
 
-[node name="Pos_06" type="Node3D" parent="Render_root/Main_render_msh_01/Engine" index="2"]
+[node name="Pos_06" type="Node3D" parent="Main_Oddity/Render_root/Main_render_msh_01/Engine" index="2"]
 transform = Transform3D(-0.0273261, -3.65975, -2.90545, -0.572809, -2.88096, 3.6343, -4.6376, 0.377403, -0.431765, 0.0495995, -0.723859, 0.0891142)
 
-[node name="Pos_02" type="Node3D" parent="Render_root/Main_render_msh_01/Engine" index="3"]
+[node name="Pos_02" type="Node3D" parent="Main_Oddity/Render_root/Main_render_msh_01/Engine" index="3"]
 transform = Transform3D(-0.0273261, -3.65975, -2.90545, -0.572809, -2.88096, 3.6343, -4.6376, 0.377403, -0.431765, 0.0308619, -0.095153, -0.626625)
 
-[node name="Pos_07" type="Node3D" parent="Render_root/Main_render_msh_01/Engine" index="4"]
+[node name="Pos_07" type="Node3D" parent="Main_Oddity/Render_root/Main_render_msh_01/Engine" index="4"]
 transform = Transform3D(-0.0273261, -3.65975, -2.90545, -0.572809, -2.88096, 3.6343, -4.6376, 0.377403, -0.431765, -0.108854, 0.0796116, -0.647387)
 
-[node name="Pos_08" type="Node3D" parent="Render_root/Main_render_msh_01/Engine" index="5"]
+[node name="Pos_08" type="Node3D" parent="Main_Oddity/Render_root/Main_render_msh_01/Engine" index="5"]
 transform = Transform3D(-0.0273261, -3.65975, -2.90545, -0.572809, -2.88096, 3.6343, -4.6376, 0.377403, -0.431765, 0.172288, -0.272057, -0.605608)
 
-[node name="Pos_03" type="Node3D" parent="Render_root/Main_render_msh_01/Engine" index="6"]
+[node name="Pos_03" type="Node3D" parent="Main_Oddity/Render_root/Main_render_msh_01/Engine" index="6"]
 transform = Transform3D(-0.0273261, -3.65975, -2.90545, -0.572809, -2.88096, 3.6343, -4.6376, 0.377403, -0.431765, 0.575465, 0.403225, -0.0531947)
 
-[node name="Pos_09" type="Node3D" parent="Render_root/Main_render_msh_01/Engine" index="7"]
+[node name="Pos_09" type="Node3D" parent="Main_Oddity/Render_root/Main_render_msh_01/Engine" index="7"]
 transform = Transform3D(-0.0273261, -3.65975, -2.90545, -0.572809, -2.88096, 3.6343, -4.6376, 0.377403, -0.431765, 0.435418, 0.578404, -0.0740065)
 
-[node name="Pos_10" type="Node3D" parent="Render_root/Main_render_msh_01/Engine" index="8"]
+[node name="Pos_10" type="Node3D" parent="Main_Oddity/Render_root/Main_render_msh_01/Engine" index="8"]
 transform = Transform3D(-0.0273261, -3.65975, -2.90545, -0.572809, -2.88096, 3.6343, -4.6376, 0.377403, -0.431765, 0.700594, 0.246707, -0.0345999)
 
-[node name="Pos_04" type="Node3D" parent="Render_root/Main_render_msh_01/Engine" index="9"]
+[node name="Pos_04" type="Node3D" parent="Main_Oddity/Render_root/Main_render_msh_01/Engine" index="9"]
 transform = Transform3D(-0.0273261, -3.65975, -2.90545, -0.572809, -2.88096, 3.6343, -4.6376, 0.377403, -0.431765, 0.0227091, 0.176631, 0.6423)
 
-[node name="Pos_11" type="Node3D" parent="Render_root/Main_render_msh_01/Engine" index="10"]
+[node name="Pos_11" type="Node3D" parent="Main_Oddity/Render_root/Main_render_msh_01/Engine" index="10"]
 transform = Transform3D(-0.0273261, -3.65975, -2.90545, -0.572809, -2.88096, 3.6343, -4.6376, 0.377403, -0.431765, -0.0916773, 0.319712, 0.625301)
 
-[node name="Pos_12" type="Node3D" parent="Render_root/Main_render_msh_01/Engine" index="11"]
+[node name="Pos_12" type="Node3D" parent="Main_Oddity/Render_root/Main_render_msh_01/Engine" index="11"]
 transform = Transform3D(-0.0273261, -3.65975, -2.90545, -0.572809, -2.88096, 3.6343, -4.6376, 0.377403, -0.431765, 0.183801, -0.0248715, 0.666239)
 
-[node name="Center" parent="Render_root/Main_render_msh_01" index="2"]
+[node name="Center" parent="Main_Oddity/Render_root/Main_render_msh_01" index="2"]
 transform = Transform3D(0.769813, 0, 0, 0, 0.769813, 0, 0, 0, 0.769813, 0, 0, 0)
 visible = false
 layers = 4
 surface_material_override/0 = ExtResource("10_8q2bm")
 
-[node name="Fx_water" type="GPUParticles3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.0390157, 0.999239, 0, -0.999239, 0.0390157, 0.00288114, 0.191366, -0.344574)
+[node name="Fx_water" type="GPUParticles3D" parent="Main_Oddity"]
+transform = Transform3D(1, 0, 0, 0, 0.0390157, 0.999239, 0, -0.999239, 0.0390157, 0.00288114, 0.135205, -0.198425)
 layers = 4
-material_override = SubResource("ShaderMaterial_f8k02")
+material_override = SubResource("ShaderMaterial_q4r7j")
 cast_shadow = 0
 amount = 10
 lifetime = 2.5
 randomness = 0.14
 interpolate = false
 fract_delta = false
-process_material = SubResource("ParticleProcessMaterial_pw8jw")
+process_material = SubResource("ParticleProcessMaterial_panyc")
 draw_pass_1 = ExtResource("11_6cbb7")
 
-[connection signal="body_entered" from="." to="Movable_Main_oddity" method="_on_movable_oddity_example_body_entered"]
-[connection signal="body_exited" from="." to="Movable_Main_oddity" method="_on_movable_oddity_example_body_exited"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Main_Oddity"]
+transform = Transform3D(-2.21462e-08, 0.506647, 0, -0.506647, -2.21462e-08, 0, 0, 0, 0.506647, -0.00236672, -0.763165, 0.0504674)
+visible = false
+layers = 4
+mesh = SubResource("BoxMesh_ij0wm")
+skeleton = NodePath("../Oxygene_sphere")
+
+[node name="Oxygene_sphere" type="MeshInstance3D" parent="Main_Oddity"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+visible = false
+layers = 4
+mesh = SubResource("SphereMesh_cyj1k")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("13_etihy")
+script = ExtResource("12_hi8u4")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_dtxdl")
+
+[node name="GPU_normal" type="GPUParticles3D" parent="CollisionShape3D"]
+layers = 4
+material_override = SubResource("ShaderMaterial_f2b6c")
+amount = 10
+fixed_fps = 24
+interpolate = false
+fract_delta = false
+process_material = SubResource("ParticleProcessMaterial_0ni8x")
+draw_pass_1 = SubResource("SphereMesh_t73r3")
+
 [connection signal="timeout" from="Movable_Main_oddity/Bounce_engine/Timer" to="Movable_Main_oddity/Bounce_engine" method="_on_timer_timeout"]
 [connection signal="timeout" from="Movable_Main_oddity/Random_range_update" to="Movable_Main_oddity" method="_on_random_range_update_timeout"]
 [connection signal="timeout" from="Movable_Main_oddity/Random_range_update" to="Movable_Main_oddity/Rotate" method="_on_random_range_update_timeout"]
-[connection signal="timeout" from="Movable_Main_oddity/Random_range_update" to="Movable_Main_oddity/Bounce_engine" method="_on_random_range_update_timeout"]
 [connection signal="timeout" from="Movable_Main_oddity/Wait_before_follow" to="Movable_Main_oddity" method="_on_wait_before_follow_timeout"]
-[connection signal="area_entered" from="Fusion_area" to="Fusion_area_entered" method="_on_fusion_area_area_entered"]
+[connection signal="body_entered" from="Main_Oddity" to="Movable_Main_oddity" method="_on_movable_oddity_example_body_entered"]
+[connection signal="body_exited" from="Main_Oddity" to="Movable_Main_oddity" method="_on_movable_oddity_example_body_exited"]
+[connection signal="area_entered" from="Main_Oddity/Fusion_area" to="Main_Oddity/Fusion_area_entered" method="_on_fusion_area_area_entered"]
 
-[editable path="Render_root/Main_render_msh_01"]
+[editable path="Main_Oddity/Render_root/Main_render_msh_01"]

@@ -5,6 +5,7 @@ class_name add_scale
 
 func trigger_fusion() -> void:
 	
-	print("CHANGE SCALE")
-	var new_scale = _global_datas.Main_oddity_node.scale.x + scale_amnout
-	_global_datas.Main_oddity_node.scale = Vector3(new_scale,new_scale,new_scale)	
+	#print("CHANGE SCALE")
+	var oxygene_node = _global_datas.Main_oddity_node.get_node_or_null("Add_oxygene")
+	oxygene_node.add_oxygene(scale_amnout)
+

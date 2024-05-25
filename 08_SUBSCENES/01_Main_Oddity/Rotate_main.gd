@@ -1,5 +1,5 @@
 extends Node
-@onready var root = $"../../Render_root"
+@onready var root = $"../../Main_Oddity/Render_root"
 
 var rotation_target : Vector3
 var t
@@ -15,7 +15,7 @@ func rotate_target():
 	if t:
 		t.kill()
 	
-	var random_time = randf_range(0.25,0.5)	
+	var random_time = randf_range(1.0,3.0)	
 	t = create_tween()
 	t.tween_property(root,"rotation",rotation_target,random_time).set_trans(Tween.TRANS_SPRING)
 
