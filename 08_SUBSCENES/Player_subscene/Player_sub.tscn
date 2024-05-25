@@ -1,4 +1,4 @@
-[gd_scene load_steps=97 format=3 uid="uid://g7u8o55jrnyy"]
+[gd_scene load_steps=99 format=3 uid="uid://g7u8o55jrnyy"]
 
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="1_n1vw4"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Player_sub_behaviour.gd" id="1_o2v73"]
@@ -13,6 +13,7 @@
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Active_scanner_visual_pulse.gd" id="10_ir8y2"]
 [ext_resource type="Resource" uid="uid://380xcgsxw62f" path="res://08_SUBSCENES/Tools/Orbe_spawner.tres" id="12_nmehd"]
 [ext_resource type="Resource" uid="uid://dqpl0ihtab1su" path="res://08_SUBSCENES/Tools/Fusion_tool.tres" id="13_bws7h"]
+[ext_resource type="Shader" uid="uid://drchaj5fcdan0" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_sh.tres" id="14_sgtxo"]
 [ext_resource type="PackedScene" uid="uid://bktiy5sdjc87f" path="res://08_SUBSCENES/Player_subscene/Cosmo_Mod_01.blend" id="14_tdqlw"]
 [ext_resource type="Material" uid="uid://cdnmf431kgh7" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat_far.tres" id="15_evn0r"]
 [ext_resource type="Resource" uid="uid://vv3dws7dmhtd" path="res://08_SUBSCENES/Tools/Scanner.tres" id="15_vswql"]
@@ -351,7 +352,11 @@ shader_parameter/Lighter = 1.4
 [sub_resource type="BoxMesh" id="BoxMesh_8junt"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_gj0qo"]
-material = ExtResource("8_wvhjt")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bv1ia"]
+render_priority = 1
+shader = ExtResource("14_sgtxo")
+shader_parameter/ColorParameter2 = Color(0.294118, 0.701961, 0.458824, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_3nn6t"]
 
@@ -585,10 +590,10 @@ nodes/fragment/18/position = Vector2(-4200, -300)
 nodes/fragment/connections = PackedInt32Array(3, 0, 0, 0, 5, 0, 6, 0, 7, 0, 6, 1, 6, 0, 8, 0, 4, 0, 8, 1, 10, 0, 11, 0, 12, 0, 16, 1, 11, 0, 12, 0, 14, 0, 12, 1, 15, 0, 14, 0, 17, 0, 11, 2, 18, 0, 11, 1, 9, 0, 10, 0, 12, 0, 0, 1, 7, 0, 14, 1)
 nodes/light/0/position = Vector2(1060, 580)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_mn4ca"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4j2xv"]
 render_priority = 0
 shader = SubResource("VisualShader_75hiu")
-shader_parameter/ColorParameter = Color(1, 0.764706, 0.498039, 1)
+shader_parameter/ColorParameter = Color(0.294118, 0.701961, 0.458824, 1)
 shader_parameter/R = 0.11
 shader_parameter/Size = 0.7
 shader_parameter/flash_opacity = 0.5
@@ -1097,6 +1102,7 @@ transform = Transform3D(-0.0379565, -3.31825e-09, 0, 3.31825e-09, -0.0379565, 0,
 layers = 4
 mesh = SubResource("SphereMesh_gj0qo")
 skeleton = NodePath("../MeshInstance3D")
+surface_material_override/0 = SubResource("ShaderMaterial_bv1ia")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Render_mesh/Sonar"]
 transform = Transform3D(0.00832142, 0, 0, 0, 0.224506, 0, 0, 0, -0.0044408, 0.0590617, 0.266138, -0.0899213)
@@ -1149,7 +1155,7 @@ layers = 4
 cast_shadow = 0
 mesh = SubResource("QuadMesh_uqek7")
 skeleton = NodePath("")
-surface_material_override/0 = SubResource("ShaderMaterial_mn4ca")
+surface_material_override/0 = SubResource("ShaderMaterial_4j2xv")
 
 [node name="Orbe_spawner_position" type="Node3D" parent="Render_mesh"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0341371, 0.137754, 0.194054)

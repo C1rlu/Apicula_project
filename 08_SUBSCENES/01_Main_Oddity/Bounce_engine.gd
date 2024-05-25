@@ -12,8 +12,8 @@ func Bounce_engine():
 	if t:
 		t.kill()
 	
-	var random_bounce = randf_range(0.6,0.8)	
-	var random_time = randf_range(0.25,0.6)	
+	var random_bounce = randf_range(0.6,0.7)	
+	var random_time = randf_range(0.25,0.4)	
 	var new_size = Vector3(random_bounce,random_bounce,random_bounce)
 	t = create_tween()
 	t.tween_property(engine,"scale",new_size,random_time).set_trans(Tween.TRANS_SPRING)
