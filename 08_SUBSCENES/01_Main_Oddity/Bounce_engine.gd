@@ -6,8 +6,11 @@ var t
 @onready var actual_scale = engine.scale.x 
 
 @onready var timer = $Timer
+@onready var gpu_eat_vfx = $"../../CollisionShape3D/GPU_eat_vfx"
 
 func Bounce_engine():
+	
+	gpu_eat_vfx.emitting = true
 	
 	if t:
 		t.kill()

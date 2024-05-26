@@ -26,3 +26,8 @@ func _on_organic_oddity_prefab_push():
 	#_push()
 	movable_oddity.move = true
 
+func _on_organic_oddity_prefab_area_entered(area):
+	if area:
+		var main_rapatrier = area.get_node_or_null("Fusion_area_entered")
+		if main_rapatrier:
+			movable_oddity.move = true	

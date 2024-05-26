@@ -12,8 +12,8 @@ var target_position : Vector3
 
 func _ready():
 	_global_datas.focus_this_on_board.connect(_focus_this)
-	
-	
+
+
 func _process(delta):
 	
 	if _global_datas.Player_InMenu:

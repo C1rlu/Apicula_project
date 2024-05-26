@@ -7,22 +7,32 @@ var speed : float
 
 var using_pad : bool
 
-
+var _lock_speed : bool = false
 
 func _ready():
 	
 	_global_datas.using_pad.connect(_using_pad)
+	_global_datas._boat_inside_zone.connect(lock_speed)
 	speed = move_speed
 
 func _using_pad(condition : bool):
 	
 	using_pad = condition	
+func lock_speed(condition : bool):
 	
+	_lock_speed = condition
+	
+	if condition:
+		speed = move_speed
+				
 func _input(event):
 	
-	if event.is_action_pressed("Board_zoom_in"):
-		speed = move_speed * 2	
-	if event.is_action_released("Board_zoom_in"):
+	
+	if event.is_action_pressed("Speed_boat"):
+		if !_lock_speed:
+			speed = move_speed * 2	
+	
+	if event.is_action_released("Speed_boat"):
 		speed = move_speed
 		
 func _physics_process(_delta):

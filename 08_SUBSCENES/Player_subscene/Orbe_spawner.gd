@@ -4,7 +4,7 @@ extends Node
 @export var scanner_spawner_tool : tool_data
 
 
-@onready var vfx_sphere_mirror = $"../Render_mesh/Orbe_spawner_position/VFX_SPHERE_MIRROR"
+#@onready var vfx_sphere_mirror = $"../Render_mesh/Orbe_spawner_position/VFX_SPHERE_MIRROR"
 
 var cancel_action = false
 
@@ -31,7 +31,7 @@ func spawn_orbe(condition : bool):
 		cancel_action = false
 		if !is_tracing:
 			_global_datas._instance_start_visual_orbe.emit()
-			vfx_sphere_mirror.emitting = true
+			#vfx_sphere_mirror.emitting = true
 			is_tracing = true
 		else :
 			_global_datas._instance_end_visual_orbe.emit()		
@@ -48,4 +48,4 @@ func _cancel_action():
 	
 	is_tracing = false
 	cancel_action = true	
-	vfx_sphere_mirror.emitting = false
+	#vfx_sphere_mirror.emitting = false

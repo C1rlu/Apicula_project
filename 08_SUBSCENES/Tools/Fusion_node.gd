@@ -27,7 +27,7 @@ func _fusion(condition):
 	
 	if condition:
 		if !_is_active:
-			var r_time = randf_range(0.5,1.0)
+			var r_time = randf_range(0.35,0.6)
 			if t:
 				t.kill()
 			t = create_tween()

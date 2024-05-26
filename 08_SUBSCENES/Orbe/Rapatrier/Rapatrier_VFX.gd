@@ -11,8 +11,9 @@ func _ready():
 
 func _rapatrier(position : Vector3):
 	
+	var rapatrier_position = _global_datas.Main_oddity_node.global_position
 	var instance_vfx = RAPATRIER_VFX_PREFABS.instantiate() 
-	instance_vfx.position = position
+	instance_vfx.position = rapatrier_position
 	load_scene.add_child(instance_vfx)
 	_kill_one_scanner()
 

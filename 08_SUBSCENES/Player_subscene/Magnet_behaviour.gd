@@ -14,6 +14,7 @@ func _ready():
 func _check_area_process(condition):
 	
 	if condition:
+		print("check input")	
 		timer_process.start()			
 	else:
 		timer_process.stop()
@@ -22,7 +23,7 @@ func _check_area_process(condition):
 				if f != null:
 					f._fusion(false)
 			_global_datas.active_fusion_node_list.clear()	
-		
+	
 	vfx_sphere_mirror.emitting = condition					
 
 	

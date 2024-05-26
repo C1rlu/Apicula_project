@@ -56,23 +56,22 @@ func _process(delta):
 
 func _folow_player(delta):
 	
-
-	#var player_position = _global_datas.subbscene_playerPosition + position_from_player + random_offset	
+	
+	check_player_close()
 	
 	if close_to_player :
-		pass
-		#var direction = (player_position - rapatrier_rg.global_position).normalized()
-		#rapatrier_rg.apply_central_force(direction * speed/5)
-		#root.global_position = lerp(root.global_position,player_position, actual_speed * delta)			
+		pass		
 	else:	
 				
 		follow_path(delta)
-
-
+		
+	
+	
 func follow_path(delta):
 	
-	var player_position = _global_datas.subbscene_playerPosition + position_from_player/2 + random_offset/2	
-	path_to_player.append(player_position)
+	#var player_position = _global_datas.subbscene_playerPosition + position_from_player/2 + random_offset/2	
+	
+	path_to_player.append(_global_datas.subbscene_playerPosition)
 	
 	if path_to_player[path_index] == null:
 		return
@@ -82,13 +81,22 @@ func follow_path(delta):
 	
 	var distance_next_points = target_point.distance_to(root.position) 
 	
-	if distance_next_points < 1.0:
+	if distance_next_points < 2.0:
 		path_index += 1 
 	
 	rapatrier_rg.apply_central_force(direction * speed)
 	#root.global_position = lerp(root.global_position,target_point , actual_speed * 2 * delta)	
 	
 	
+	
+func check_player_close():
+	
+	var distance_to_player = rapatrier_rg.global_position.distance_to(_global_datas.subbscene_playerPosition) 	
+	
+	if distance_to_player < 0.7:
+		close_to_player = true 	
+
+		
 func closest_index_to_player():
 	var _index : int = 0
 	
