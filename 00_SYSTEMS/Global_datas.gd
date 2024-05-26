@@ -92,6 +92,7 @@ signal _photo_flash
 var flash_subscene_position : Vector3
 var _selected_tool : tool_data 
 signal switching_tool(tool : tool_data)
+var active_rapatrier_node : bool 
 
 #to lock input back to light if on zone
 var player_is_Interactive_Zone : bool 

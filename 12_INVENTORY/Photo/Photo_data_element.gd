@@ -1,8 +1,8 @@
 extends Node
 
-@export var Active_scannable : bool = true
+@export var is_in_mirror : bool = false
 @export var photoData : PhotoData
-	
+
 
 signal scanner_effect_condition(condition : bool)
 
@@ -26,9 +26,10 @@ func get_PhotoData():
 	
 func scanning():
 	
-	
-	if !Active_scannable:
-		return
+	if is_in_mirror:
+		if !_global_datas.active_rapatrier_node:
+			return
+
 		
 	if is_scanning:
 		return

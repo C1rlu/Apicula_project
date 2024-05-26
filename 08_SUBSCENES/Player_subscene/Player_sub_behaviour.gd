@@ -18,7 +18,6 @@ var _canMove = false
 @onready var orbe_spawner_position = $Render_mesh/Orbe_spawner_position
 
 
-
 func _ready():
 
 	_global_datas._start_ini_subscene.connect(ini_Pos)

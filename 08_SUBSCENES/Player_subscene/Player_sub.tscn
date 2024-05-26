@@ -1,4 +1,4 @@
-[gd_scene load_steps=99 format=3 uid="uid://g7u8o55jrnyy"]
+[gd_scene load_steps=97 format=3 uid="uid://g7u8o55jrnyy"]
 
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="1_n1vw4"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Player_sub_behaviour.gd" id="1_o2v73"]
@@ -13,7 +13,6 @@
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Active_scanner_visual_pulse.gd" id="10_ir8y2"]
 [ext_resource type="Resource" uid="uid://380xcgsxw62f" path="res://08_SUBSCENES/Tools/Orbe_spawner.tres" id="12_nmehd"]
 [ext_resource type="Resource" uid="uid://dqpl0ihtab1su" path="res://08_SUBSCENES/Tools/Fusion_tool.tres" id="13_bws7h"]
-[ext_resource type="Shader" uid="uid://drchaj5fcdan0" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_sh.tres" id="14_sgtxo"]
 [ext_resource type="PackedScene" uid="uid://bktiy5sdjc87f" path="res://08_SUBSCENES/Player_subscene/Cosmo_Mod_01.blend" id="14_tdqlw"]
 [ext_resource type="Material" uid="uid://cdnmf431kgh7" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat_far.tres" id="15_evn0r"]
 [ext_resource type="Resource" uid="uid://vv3dws7dmhtd" path="res://08_SUBSCENES/Tools/Scanner.tres" id="15_vswql"]
@@ -61,6 +60,8 @@ func _ready():
 
 func _start_flash():
 
+
+	
 	light_sphere.visible = true
 
 	if t:
@@ -68,7 +69,7 @@ func _start_flash():
 		
 	t = create_tween()
 	
-	t.tween_method(change_scale,0.25,0.0,2.0)
+	t.tween_method(change_scale,0.5,0.0,2.0)
 	t.connect(\"finished\",done)
 
 func change_scale(value : float):
@@ -78,8 +79,6 @@ func done():
 	light_sphere.visible = false
 
 
-func _on_timer_timeout():
-	_global_datas._photo_flash.emit()
 "
 
 [sub_resource type="GDScript" id="GDScript_8qwgp"]
@@ -91,7 +90,7 @@ script/source = "extends Node
 var t
 
 func _ready():
-	#_global_datas._photo_flash.connect(_take_photo)
+	_global_datas._photo_flash.connect(_take_photo)
 	omny_range = omni_light_3d.omni_range
 	
 func _take_photo():
@@ -353,11 +352,6 @@ shader_parameter/Lighter = 1.4
 
 [sub_resource type="SphereMesh" id="SphereMesh_gj0qo"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_bv1ia"]
-render_priority = 1
-shader = ExtResource("14_sgtxo")
-shader_parameter/ColorParameter2 = Color(0.294118, 0.701961, 0.458824, 1)
-
 [sub_resource type="BoxMesh" id="BoxMesh_3nn6t"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_uqek7"]
@@ -593,7 +587,7 @@ nodes/light/0/position = Vector2(1060, 580)
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4j2xv"]
 render_priority = 0
 shader = SubResource("VisualShader_75hiu")
-shader_parameter/ColorParameter = Color(0.294118, 0.701961, 0.458824, 1)
+shader_parameter/ColorParameter = Color(0.87451, 0.694118, 0.376471, 1)
 shader_parameter/R = 0.11
 shader_parameter/Size = 0.7
 shader_parameter/flash_opacity = 0.5
@@ -926,14 +920,14 @@ one_shot = true
 
 [node name="Flash_inputs" type="Node" parent="."]
 script = ExtResource("3_p6pm7")
-flash_tool_data = ExtResource("15_vswql")
+flash_tool_data = ExtResource("6_axu5t")
 
 [node name="Fade_flash" type="Node" parent="Flash_inputs"]
 script = SubResource("GDScript_mbf75")
 
 [node name="Timer" type="Timer" parent="Flash_inputs"]
-wait_time = 2.0
-autostart = true
+wait_time = 1.5
+one_shot = true
 
 [node name="Scanne_element" type="Node" parent="."]
 script = ExtResource("5_jhkow")
@@ -1102,7 +1096,7 @@ transform = Transform3D(-0.0379565, -3.31825e-09, 0, 3.31825e-09, -0.0379565, 0,
 layers = 4
 mesh = SubResource("SphereMesh_gj0qo")
 skeleton = NodePath("../MeshInstance3D")
-surface_material_override/0 = SubResource("ShaderMaterial_bv1ia")
+surface_material_override/0 = ExtResource("8_wvhjt")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Render_mesh/Sonar"]
 transform = Transform3D(0.00832142, 0, 0, 0, 0.224506, 0, 0, 0, -0.0044408, 0.0590617, 0.266138, -0.0899213)

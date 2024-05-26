@@ -7,12 +7,14 @@ extends Node
 @onready var area_player = $"../ZoneCollide"
 @onready var timer_process = $Timer_process
 
-
+var disable : bool = true
 func _ready():
 	fusion_tool.tool_active_signal.connect(_check_area_process)	
 	
 func _check_area_process(condition):
 	
+	if disable:
+		return
 	if condition:
 		print("check input")	
 		timer_process.start()			

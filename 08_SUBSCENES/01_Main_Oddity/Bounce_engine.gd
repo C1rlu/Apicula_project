@@ -1,5 +1,7 @@
 extends Node
 
+
+@onready var root = $"../.."
 @onready var engine = $"../../Main_Oddity/Render_root/Main_render_msh_01/Engine"
 
 var t 
@@ -8,6 +10,22 @@ var t
 @onready var timer = $Timer
 @onready var gpu_eat_vfx = $"../../CollisionShape3D/GPU_eat_vfx"
 
+signal active_flash_mirror
+signal active_rotation
+
+func _ready():
+	_global_datas._photo_flash.connect(check_distance)
+
+
+func check_distance():
+
+	var distance_to_player = root.global_position.distance_to(_global_datas.subbscene_playerPosition) 	
+	if distance_to_player < 2.0:
+		Bounce_engine()	
+		active_flash_mirror.emit()
+		active_rotation.emit()
+			
+	
 func Bounce_engine():
 	
 	gpu_eat_vfx.emitting = true

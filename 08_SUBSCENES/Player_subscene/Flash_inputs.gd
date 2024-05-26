@@ -4,8 +4,7 @@ extends Node
 @export var flash_tool_data : tool_data
 
 func _ready():
-	pass	
-	#flash_tool_data.tool_active_signal.connect(_start_light)	
+	flash_tool_data.tool_active_signal.connect(_start_light)	
 
 
 func _start_light(condition):
@@ -15,14 +14,15 @@ func _start_light(condition):
 	
 	if !condition:
 		return
-		
-	if !timer.is_stopped():
-		return
+	
+
 	if _global_datas.scanner_flash_isActive:
 		return
 			
+	if !timer.is_stopped():
+		return	
 	timer.start()
-
+	
 	_global_datas._photo_flash.emit()
-	#_global_datas.flash_x_ray_oddity.emit()	
+	
 	
