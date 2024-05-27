@@ -8,7 +8,7 @@ var t
 @onready var actual_scale = engine.scale.x 
 
 @onready var timer = $Timer
-@onready var gpu_eat_vfx = $"../../CollisionShape3D/GPU_eat_vfx"
+@onready var gpu_eat_vfx = $"../../GPU_eat_vfx"
 
 signal active_flash_mirror
 signal active_rotation

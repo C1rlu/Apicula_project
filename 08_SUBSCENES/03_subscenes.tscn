@@ -1,4 +1,4 @@
-[gd_scene load_steps=83 format=3 uid="uid://nigmie4bbn6"]
+[gd_scene load_steps=71 format=3 uid="uid://nigmie4bbn6"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/00_Scripts/Subscene_loader.gd" id="1_7uoo0"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="2_3srhu"]
@@ -15,10 +15,6 @@
 [ext_resource type="Resource" uid="uid://vv3dws7dmhtd" path="res://08_SUBSCENES/Tools/Scanner.tres" id="6_b80v7"]
 [ext_resource type="Resource" uid="uid://b4j40xtcg031c" path="res://08_SUBSCENES/Oddity/00_Scene_data/Scanner_scene_data.tres" id="7_84g34"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Tools/PhotoData_list_update.gd" id="10_w7dre"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Orbe_Instancer.gd" id="11_dnajt"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Rapatrier/Rapatrier_VFX.gd" id="11_lxeli"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Base_Orbe/Link_stroke.gd" id="11_yi7j0"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Base_Orbe/Link_process.gd" id="12_gsnev"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Stroke_Filter/Orbe_Result_Instancer.gd" id="12_lg0wa"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Stroke_Filter/Stroke_Filter.tres.gd" id="14_0roc3"]
 [ext_resource type="Resource" uid="uid://dqpl0ihtab1su" path="res://08_SUBSCENES/Tools/Fusion_tool.tres" id="14_glnqv"]
@@ -159,8 +155,6 @@ func _ready():
 	_global_datas._go_Mainscene.connect(disable)
 
 	
-	#_global_datas.active_mirror_switch.connect(in_mirror)
-
 func in_mirror(condition : bool):
 	active = !condition
 func is_active():
@@ -234,120 +228,6 @@ viewport_path = NodePath("Viewport/Main_SubViewport")
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_dqppn"]
 viewport_path = NodePath("Viewport/Scanner_x_SubViewport")
-
-[sub_resource type="Curve3D" id="Curve3D_ks50c"]
-_data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1.34, 0),
-"tilts": PackedFloat32Array(0, 0)
-}
-point_count = 2
-
-[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_irhc4"]
-parameter_name = "ColorParameter2"
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_5g46n"]
-constant = 1.227
-
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_ojkbw"]
-size = Vector2(724.789, 654.559)
-expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_gmouf"]
-parameter_name = "Dither_size"
-qualifier = 1
-
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_pwp6f"]
-
-[sub_resource type="VisualShader" id="VisualShader_p2nw7"]
-code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
-
-uniform vec4 ColorParameter2 : source_color;
-global uniform float Dither_size;
-
-
-
-void fragment() {
-// ColorParameter:2
-	vec4 n_out2p0 = ColorParameter2;
-
-
-// FloatConstant:3
-	float n_out3p0 = 1.227000;
-
-
-// FloatParameter:5
-	float n_out5p0 = Dither_size;
-
-
-	float n_out4p0;
-// Expression:4
-	n_out4p0 = 0.0;
-	{
-		const float DITHER_THRESHOLDS[16] ={
-				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-			};
-			
-		vec2 uv = FRAGCOORD.xy * n_out5p0;
-		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-		n_out4p0 = n_out3p0 - DITHER_THRESHOLDS[index];
-	}
-
-
-// Step:6
-	float n_out6p0 = step(n_out2p0.x, n_out4p0);
-
-
-// Output:0
-	ALBEDO = vec3(n_out2p0.xyz);
-	ALPHA = n_out6p0;
-
-
-}
-"
-flags/unshaded = true
-nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_irhc4")
-nodes/fragment/2/position = Vector2(-220, 120)
-nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_5g46n")
-nodes/fragment/3/position = Vector2(-960, 400)
-nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_ojkbw")
-nodes/fragment/4/position = Vector2(-720, 560)
-nodes/fragment/4/size = Vector2(724.789, 654.559)
-nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
-nodes/fragment/4/output_ports = "0,0,Dither_Node;"
-nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/5/node = SubResource("VisualShaderNodeFloatParameter_gmouf")
-nodes/fragment/5/position = Vector2(-1100, 620)
-nodes/fragment/6/node = SubResource("VisualShaderNodeStep_pwp6f")
-nodes/fragment/6/position = Vector2(156.138, 356.532)
-nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0, 3, 0, 4, 0, 5, 0, 4, 1, 4, 0, 6, 1, 6, 0, 0, 1, 2, 0, 6, 0)
-nodes/light/0/position = Vector2(840, 240)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_7hk5m"]
-render_priority = 1
-shader = SubResource("VisualShader_p2nw7")
-shader_parameter/ColorParameter2 = Color(0.780392, 0.627451, 0.396078, 1)
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_3w81f"]
 parameter_name = "Subscene_Darker_color"
@@ -871,11 +751,6 @@ script = ExtResource("10_w7dre")
 [node name="GO_SURFACE" type="Node" parent="."]
 script = SubResource("GDScript_71vlv")
 
-[node name="SCANNER_FX" type="Node" parent="."]
-
-[node name="Rapatrier_Event" type="Node" parent="SCANNER_FX"]
-script = ExtResource("11_lxeli")
-
 [node name="TOOLS" type="Node" parent="."]
 
 [node name="Switch_tools_input" type="Node" parent="TOOLS"]
@@ -887,31 +762,12 @@ script = ExtResource("6_51m8x")
 light_tool = ExtResource("4_h1r1k")
 Scanner_tool = ExtResource("6_b80v7")
 
-[node name="ORBE" type="Node" parent="."]
+[node name="Patern_recognizer" type="Node" parent="."]
 
-[node name="Orbe_Instancer" type="Node" parent="ORBE"]
-script = ExtResource("11_dnajt")
-minimum_closest_distance = 0.2
-show_stroke_id_debug = true
-orbe_stroke_maxLenght = 100
-orber_tool = ExtResource("5_5xftw")
-
-[node name="Link_process" type="Node" parent="ORBE/Orbe_Instancer"]
-script = ExtResource("12_gsnev")
-orber_tool = ExtResource("5_5xftw")
-scanner_spawner_tool = ExtResource("6_b80v7")
-
-[node name="Link_stroke_done" type="Node" parent="ORBE/Orbe_Instancer"]
-script = ExtResource("11_yi7j0")
-
-[node name="Timer" type="Timer" parent="ORBE/Orbe_Instancer/Link_stroke_done"]
-wait_time = 0.05
-one_shot = true
-
-[node name="Stroke_Filter" type="Node" parent="ORBE"]
+[node name="Stroke_Filter" type="Node" parent="Patern_recognizer"]
 script = ExtResource("14_0roc3")
 
-[node name="Orbe_Result_Instancer" type="Node" parent="ORBE"]
+[node name="Result_Instancer" type="Node" parent="Patern_recognizer"]
 script = ExtResource("12_lg0wa")
 
 [node name="SEE_MIRROR_FLASH" type="Node" parent="."]
@@ -981,28 +837,6 @@ hight_speed = 8.0
 normal_speed = 6.0
 maxSpeed = 5.0
 
-[node name="Process_link" type="Node3D" parent="."]
-visible = false
-
-[node name="Path3D" type="Path3D" parent="Process_link"]
-curve = SubResource("Curve3D_ks50c")
-
-[node name="CSGPolygon3D" type="CSGPolygon3D" parent="Process_link"]
-layers = 32772
-gi_mode = 0
-polygon = PackedVector2Array(0, 0, 0, 0.02, 0, 0, 0.02, 0)
-mode = 2
-path_node = NodePath("../Path3D")
-path_interval_type = 0
-path_interval = 11.95
-path_simplify_angle = 0.0
-path_rotation = 2
-path_local = false
-path_continuous_u = false
-path_u_distance = 1.0
-path_joined = false
-material = SubResource("ShaderMaterial_7hk5m")
-
 [node name="SubScene_back" type="MeshInstance3D" parent="."]
 transform = Transform3D(28.5013, 0, 0, 0, 2.38419e-07, -9.55943, 0, 7.74673, 2.94208e-07, 0, -0.6344, -7.22179)
 layers = 4
@@ -1038,6 +872,4 @@ theme_override_font_sizes/font_size = 20
 
 [connection signal="timeout" from="FADE_IN/Timer" to="FADE_IN" method="_on_timer_timeout"]
 [connection signal="timeout" from="FADE_OUT/Timer" to="FADE_OUT" method="_on_timer_timeout"]
-[connection signal="process_link" from="ORBE/Orbe_Instancer" to="ORBE/Orbe_Instancer/Link_process" method="_on_orbe_instancer_process_link"]
-[connection signal="timeout" from="ORBE/Orbe_Instancer/Link_stroke_done/Timer" to="ORBE/Orbe_Instancer/Link_stroke_done" method="_on_timer_timeout"]
 [connection signal="area_shape_entered" from="Surface_trigger" to="GO_SURFACE" method="_on_surface_trigger_area_shape_entered"]

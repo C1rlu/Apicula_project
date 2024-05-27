@@ -29,7 +29,7 @@ func check_scanning(condition : bool):
 				if !closet_photo.is_scanning:
 					_scanning_this(closet_photo)
 
-	#print(_global_datas._photo_data_scene_list)				
+	
 
 func _closest_element(array):
 	

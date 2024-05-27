@@ -1,4 +1,4 @@
-[gd_scene load_steps=97 format=3 uid="uid://g7u8o55jrnyy"]
+[gd_scene load_steps=96 format=3 uid="uid://g7u8o55jrnyy"]
 
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="1_n1vw4"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Player_sub_behaviour.gd" id="1_o2v73"]
@@ -8,7 +8,6 @@
 [ext_resource type="Resource" uid="uid://d11cl4f25dgwg" path="res://08_SUBSCENES/Tools/Flash_light.tres" id="6_axu5t"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/active_tool_scene.gd" id="8_8bfcd"]
 [ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_elements_mat.tres" id="8_wvhjt"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Magnet_behaviour.gd" id="9_7q7du"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Orbe_spawner.gd" id="9_ypfq5"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Active_scanner_visual_pulse.gd" id="10_ir8y2"]
 [ext_resource type="Resource" uid="uid://380xcgsxw62f" path="res://08_SUBSCENES/Tools/Orbe_spawner.tres" id="12_nmehd"]
@@ -926,7 +925,6 @@ flash_tool_data = ExtResource("6_axu5t")
 script = SubResource("GDScript_mbf75")
 
 [node name="Timer" type="Timer" parent="Flash_inputs"]
-wait_time = 1.5
 one_shot = true
 
 [node name="Scanne_element" type="Node" parent="."]
@@ -942,13 +940,6 @@ script = ExtResource("10_ir8y2")
 scanner_tool_data = ExtResource("15_vswql")
 
 [node name="Timer" type="Timer" parent="Scanne_element/Active_scanner_visual_pulse"]
-wait_time = 0.1
-
-[node name="Fusion" type="Node" parent="."]
-script = ExtResource("9_7q7du")
-fusion_tool = ExtResource("13_bws7h")
-
-[node name="Timer_process" type="Timer" parent="Fusion"]
 wait_time = 0.1
 
 [node name="Orbe_spawner" type="Node" parent="."]
@@ -1199,7 +1190,5 @@ draw_pass_1 = ExtResource("4_6vpi7")
 [connection signal="timeout" from="Flash_inputs/Timer" to="Flash_inputs/Fade_flash" method="_on_timer_timeout"]
 [connection signal="timeout" from="Scanne_element/time_checker" to="Scanne_element" method="_on_time_checker_timeout"]
 [connection signal="timeout" from="Scanne_element/Active_scanner_visual_pulse/Timer" to="Scanne_element/Active_scanner_visual_pulse" method="_on_timer_timeout"]
-[connection signal="timeout" from="Fusion/Timer_process" to="Fusion" method="_on_timer_process_timeout"]
-[connection signal="area_shape_exited" from="ZoneCollide" to="Fusion" method="_on_zone_collide_area_shape_exited"]
 
 [editable path="Render_mesh/Cosmo_Mod_02"]

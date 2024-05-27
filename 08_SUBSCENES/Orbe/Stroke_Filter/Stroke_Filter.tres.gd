@@ -14,10 +14,10 @@ var templates_clouds : Array[Gesture]
 
 # Example usage:
 func _ready():
-	
-	_global_datas._photo_flash.connect(check)
-	_global_datas._backFrom_subscene.connect(check)
-	ini_template()
+	pass
+	#_global_datas._photo_flash.connect(check)
+	#_global_datas._backFrom_subscene.connect(check)
+	#ini_template()
 
 func check():
 	

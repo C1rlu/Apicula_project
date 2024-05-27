@@ -6,7 +6,7 @@ extends Node
 
 signal scanner_effect_condition(condition : bool)
 
-@onready var root =  $".."
+@export var root : Node3D
 @onready var timer = $Timer
 
 
@@ -29,12 +29,10 @@ func scanning():
 	if is_in_mirror:
 		if !_global_datas.active_rapatrier_node:
 			return
-
-		
+			
 	if is_scanning:
 		return
 		
-
 	is_scanning = true
 	if timer:		
 		timer.start()
@@ -64,10 +62,10 @@ func scanning_done():
 		_global_datas.photo_archives.append(photoData)
 	
 func get_node_position():
-	return 	root.position
+	return 	root.global_position
 
 func _on_area_take_it_area_shape_exited(area_rid, area, area_shape_index, local_shape_index):
-	
+		
 	if area:
 		var player_out = area.get_node_or_null("Player")	 
 		if player_out:
