@@ -1,4 +1,4 @@
-[gd_scene load_steps=96 format=3 uid="uid://g7u8o55jrnyy"]
+[gd_scene load_steps=86 format=3 uid="uid://g7u8o55jrnyy"]
 
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="1_n1vw4"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Player_sub_behaviour.gd" id="1_o2v73"]
@@ -232,122 +232,6 @@ ring_segments = 8
 [sub_resource type="SphereMesh" id="SphereMesh_w2scb"]
 radial_segments = 16
 rings = 16
-
-[sub_resource type="BoxMesh" id="BoxMesh_4k8qy"]
-
-[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_irn40"]
-constant = Color(0.574833, 0.459803, 0.228215, 1)
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_lygi0"]
-constant = 0.4
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_0rwn3"]
-constant = 0.757
-
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_cygvy"]
-size = Vector2(724.789, 654.559)
-expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_merkm"]
-
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_1tmce"]
-parameter_name = "Lighter"
-default_value_enabled = true
-default_value = 0.757
-
-[sub_resource type="VisualShader" id="VisualShader_0pt0r"]
-code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
-
-uniform float Lighter = 0.75700002908707;
-
-
-
-void fragment() {
-// ColorConstant:2
-	vec4 n_out2p0 = vec4(0.574833, 0.459803, 0.228215, 1.000000);
-
-
-// FloatParameter:7
-	float n_out7p0 = Lighter;
-
-
-// FloatConstant:3
-	float n_out3p0 = 0.400000;
-
-
-	float n_out5p0;
-// Expression:5
-	n_out5p0 = 0.0;
-	{
-		const float DITHER_THRESHOLDS[16] ={
-				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-			};
-			
-		vec2 uv = FRAGCOORD.xy * n_out3p0;
-		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-		n_out5p0 = n_out7p0 - DITHER_THRESHOLDS[index];
-	}
-
-
-// Step:6
-	float n_out6p0 = step(n_out2p0.x, n_out5p0);
-
-
-// Output:0
-	ALBEDO = vec3(n_out2p0.xyz);
-	ALPHA = n_out6p0;
-
-
-}
-"
-graph_offset = Vector2(-1204.2, 102.581)
-flags/unshaded = true
-nodes/fragment/2/node = SubResource("VisualShaderNodeColorConstant_irn40")
-nodes/fragment/2/position = Vector2(-128, 185)
-nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_lygi0")
-nodes/fragment/3/position = Vector2(-920, 640)
-nodes/fragment/4/node = SubResource("VisualShaderNodeFloatConstant_0rwn3")
-nodes/fragment/4/position = Vector2(-920, 500)
-nodes/fragment/5/node = SubResource("VisualShaderNodeExpression_cygvy")
-nodes/fragment/5/position = Vector2(-640, 500)
-nodes/fragment/5/size = Vector2(724.789, 654.559)
-nodes/fragment/5/input_ports = "0,0,In;1,0,Size;"
-nodes/fragment/5/output_ports = "0,0,Dither_Node;"
-nodes/fragment/5/expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/6/node = SubResource("VisualShaderNodeStep_merkm")
-nodes/fragment/6/position = Vector2(21.9654, 343.579)
-nodes/fragment/7/node = SubResource("VisualShaderNodeFloatParameter_1tmce")
-nodes/fragment/7/position = Vector2(-1260, 480)
-nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0, 3, 0, 5, 1, 2, 0, 6, 0, 5, 0, 6, 1, 6, 0, 0, 1, 7, 0, 5, 0)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_vye54"]
-render_priority = 0
-shader = SubResource("VisualShader_0pt0r")
-shader_parameter/Lighter = 1.4
-
-[sub_resource type="BoxMesh" id="BoxMesh_8junt"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_gj0qo"]
 
@@ -970,14 +854,14 @@ _tool_data = ExtResource("13_bws7h")
 list_of_object = [NodePath("../../Fusion")]
 
 [node name="Scanner" type="MeshInstance3D" parent="Render_mesh"]
-transform = Transform3D(-1.7049e-09, -0.038187, 0, 0.0390036, -1.66921e-09, 0, 0, 0, 0.121949, 0.0349853, 0.140869, 0.0761496)
+transform = Transform3D(-1.7049e-09, -0.038187, 0, 0.0390036, -1.66921e-09, 0, 0, 0, 0.121949, 0.0349853, 0.140869, 0.0514166)
 layers = 4
 mesh = SubResource("BoxMesh_8vb5i")
 skeleton = NodePath("../../Player_sub_collider")
 surface_material_override/0 = ExtResource("1_n1vw4")
 
 [node name="01" type="MeshInstance3D" parent="Render_mesh/Scanner"]
-transform = Transform3D(-4.69226e-08, -4.40394e-09, -1.07347, -1.09643, 9.82716e-15, 4.79258e-08, 1.2518e-14, 0.0322237, -1.50076e-08, 0.0940733, 0.0775418, 0.510083)
+transform = Transform3D(-4.69226e-08, -4.40394e-09, -1.07347, -1.09643, 9.82716e-15, 4.79258e-08, 1.2518e-14, 0.0322237, -1.50076e-08, 0.0940733, 0.0775418, 0.676853)
 visible = false
 layers = 4
 mesh = SubResource("TorusMesh_507c3")
@@ -985,7 +869,7 @@ skeleton = NodePath("../../../..")
 surface_material_override/0 = SubResource("ShaderMaterial_8eybx")
 
 [node name="02" type="MeshInstance3D" parent="Render_mesh/Scanner"]
-transform = Transform3D(-1.48007e-08, -1.38915e-09, -0.338605, -0.345844, -7.55667e-16, 1.51173e-08, 3.41399e-16, 0.0101643, -4.73382e-09, 0.0940733, 0.0775418, 0.510083)
+transform = Transform3D(-1.48007e-08, -1.38915e-09, -0.338605, -0.345844, -7.55667e-16, 1.51173e-08, 3.41399e-16, 0.0101643, -4.73382e-09, 0.0940733, 0.0775418, 0.676853)
 visible = false
 layers = 4
 mesh = SubResource("TorusMesh_ljaqx")
@@ -993,14 +877,14 @@ skeleton = NodePath("../../../..")
 surface_material_override/0 = SubResource("ShaderMaterial_8eybx")
 
 [node name="Teleporter_msh2" type="MeshInstance3D" parent="Render_mesh/Scanner"]
-transform = Transform3D(1.22795, -5.36752e-08, -5.36757e-08, -5.48228e-08, -5.48228e-08, -1.2542, 1.71672e-08, 0.39274, -1.71672e-08, 0, 0.0100367, 0.261699)
+transform = Transform3D(1.22795, -5.36752e-08, -5.36757e-08, -5.48228e-08, -5.48228e-08, -1.2542, 1.71672e-08, 0.39274, -1.71672e-08, 0, 0.0100367, 0.438774)
 layers = 4
 mesh = SubResource("TorusMesh_k0nng")
 skeleton = NodePath("../../../Player_sub_collider")
 surface_material_override/0 = ExtResource("1_n1vw4")
 
 [node name="Teleporter_msh3" type="MeshInstance3D" parent="Render_mesh/Scanner"]
-transform = Transform3D(2.37343, -1.03746e-07, -1.03747e-07, -1.05964e-07, -1.05964e-07, -2.42418, 3.31816e-08, 0.759106, -3.31816e-08, 0, 0.0100367, 0.261699)
+transform = Transform3D(2.37343, -1.03746e-07, -1.03747e-07, -1.05964e-07, -1.05964e-07, -2.42418, 3.31816e-08, 0.759106, -3.31816e-08, 0, 0.0100367, 0.438774)
 layers = 4
 mesh = SubResource("TorusMesh_k0nng")
 skeleton = NodePath("../../../Player_sub_collider")
@@ -1027,41 +911,23 @@ mesh = SubResource("SphereMesh_w2scb")
 surface_material_override/0 = ExtResource("8_wvhjt")
 
 [node name="Light" type="MeshInstance3D" parent="Render_mesh"]
-transform = Transform3D(-1.12055e-09, -0.0250984, 0, 0.0256351, -1.09709e-09, 0, 0, 0, 0.080151, 0.0349853, 0.140869, 0.0994924)
+transform = Transform3D(-1.12055e-09, -0.0250984, 0, 0.0256351, -1.09709e-09, 0, 0, 0, 0.080151, 0.0349853, 0.140869, 0.0749943)
 layers = 4
 mesh = SubResource("BoxMesh_8vb5i")
 skeleton = NodePath("../../Player_sub_collider")
 surface_material_override/0 = ExtResource("1_n1vw4")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Render_mesh/Light"]
-transform = Transform3D(3.97089, 3.69482e-13, 0, 1.42109e-13, 4.05581, 0, 0, 0, 1.27003, 0, 0, 0.201608)
+transform = Transform3D(3.81761, 2.70006e-13, 0, 2.84217e-13, 3.89926, 0, 0, 0, 0.488128, -0.0416613, -0.133781, 0.380668)
 layers = 4
 mesh = SubResource("SphereMesh_w2scb")
 surface_material_override/0 = ExtResource("1_n1vw4")
 
 [node name="small" type="MeshInstance3D" parent="Render_mesh/Light"]
-transform = Transform3D(2.56899, 2.84217e-13, 0, 5.68434e-14, 2.62393, 0, 0, 0, 0.821654, 0, 0, 0.493481)
+transform = Transform3D(2.05953, 1.98952e-13, 0, 9.9476e-14, 2.10357, 0, 0, 0, 0.352518, 0.160108, -0.0396842, 0.524346)
 layers = 4
 mesh = SubResource("SphereMesh_w2scb")
 surface_material_override/0 = ExtResource("8_wvhjt")
-
-[node name="Photographe" type="Node3D" parent="Render_mesh"]
-transform = Transform3D(-3.47124e-09, -0.134331, 0, 0.0794125, -5.87181e-09, 0, 0, 0, 0.052318, 0.00787213, 0.139258, 0.07916)
-visible = false
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Render_mesh/Photographe"]
-transform = Transform3D(0.477894, -7.10543e-15, 0, 4.44089e-15, 0.477894, 0, 0, 0, 0.477894, 0, 0, 0.236441)
-layers = 4
-mesh = SubResource("BoxMesh_4k8qy")
-skeleton = NodePath("../../../Player_sub_collider")
-surface_material_override/0 = SubResource("ShaderMaterial_vye54")
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="Render_mesh/Photographe"]
-transform = Transform3D(0.690044, 0, 0, 0, 0.690044, 0, 0, 0, 0.690044, 0, 0, 0)
-layers = 4
-mesh = SubResource("BoxMesh_8junt")
-skeleton = NodePath("../../../Player_sub_collider")
-surface_material_override/0 = ExtResource("1_n1vw4")
 
 [node name="Sonar" type="Node3D" parent="Render_mesh"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00877953, -0.0123595, -0.0143354)
