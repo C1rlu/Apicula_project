@@ -20,15 +20,15 @@ func _process(delta):
 		return
 	
 	
-	if Input.is_action_pressed(_global_datas.move_forward):
-		var _magnitude = Input.get_action_strength(_global_datas.move_forward)
+	if Input.is_action_pressed("Board_zoom_in"):
+		var _magnitude = Input.get_action_strength("Board_zoom_in")
 		camera_3d.fov -= _magnitude * 50 * delta
 
-	if Input.is_action_pressed(_global_datas.move_backward):
-		var _magnitude = Input.get_action_strength(_global_datas.move_backward)
+	if Input.is_action_pressed("Board_zoom_out"):
+		var _magnitude = Input.get_action_strength("Board_zoom_out")
 		camera_3d.fov += _magnitude* 50* delta
 
-	camera_3d.fov = clampf(camera_3d.fov,30.0,40)
+	camera_3d.fov = clampf(camera_3d.fov,10.0,40)
 	camera_3d_noise.fov = camera_3d.fov
 	
 	

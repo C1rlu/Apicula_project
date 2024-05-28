@@ -94,7 +94,7 @@ func move_c():
 		var rotation_limit = abs(target_rotation - current_rotation)
 		var range_threshold = 0.1
 		if rotation_limit <= range_threshold:
-			print("ROTATION DONE")	
+			#print("ROTATION DONE")	
 			return
 	
 		# Calculate the difference in rotation

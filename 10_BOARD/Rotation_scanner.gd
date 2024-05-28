@@ -2,10 +2,14 @@ extends Node
 
 @onready var loader = $"../../InsidePhoto_scanner_scene/loader"
 
-
+@export var disable_rotations : bool = true
 	
 func _process(delta):
 	
+	
+	if disable_rotations:
+		return 
+		
 	if !_global_datas.in_scanner_mode:
 		return
 
