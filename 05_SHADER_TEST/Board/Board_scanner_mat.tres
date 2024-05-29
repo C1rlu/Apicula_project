@@ -1,4 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=30 format=3 uid="uid://cm2mrllr2dj10"]
+[gd_resource type="ShaderMaterial" load_steps=38 format=3 uid="uid://cm2mrllr2dj10"]
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_4nuu8"]
 parameter_name = "light_color"
@@ -27,8 +27,35 @@ default_value = Color(0.027451, 0.14902, 0.156863, 1)
 parameter_name = "Dither_size"
 qualifier = 1
 
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_872tj"]
+expanded_output_ports = [0]
+input_name = "view"
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_slxd6"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(0.54, 0.54, 0.54)]
+op_type = 3
+
+[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_756wa"]
+function = 31
+
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_a5vkk"]
 constant = 1.0
+
+[sub_resource type="Gradient" id="Gradient_nlmwc"]
+offsets = PackedFloat32Array(0, 0.956778)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_rcwtw"]
+gradient = SubResource("Gradient_nlmwc")
+fill_from = Vector2(1, 1)
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_qxtt8"]
+texture = SubResource("GradientTexture2D_rcwtw")
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_dx6ud"]
+
+[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_8ynbl"]
+function = 31
 
 [sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_7klbm"]
 size = Vector2(724.789, 654.559)
@@ -245,7 +272,7 @@ void light() {
 
 
 // Output:0
-	SPECULAR_LIGHT = vec3(n_out19p0.xyz);
+	DIFFUSE_LIGHT = vec3(n_out19p0.xyz);
 
 
 }
@@ -276,7 +303,7 @@ nodes/vertex/12/position = Vector2(-240, 260)
 nodes/vertex/13/node = SubResource("VisualShaderNodeFloatOp_70cpd")
 nodes/vertex/13/position = Vector2(-1180, 560)
 nodes/vertex/connections = PackedInt32Array(2, 0, 3, 1, 4, 0, 7, 0, 7, 0, 6, 2, 9, 0, 3, 0, 11, 0, 12, 0, 10, 0, 12, 1, 12, 0, 9, 1, 5, 0, 13, 0, 10, 0, 13, 1, 13, 0, 7, 1, 6, 0, 8, 0, 8, 0, 9, 0, 3, 0, 0, 0)
-nodes/light/0/position = Vector2(2440, 1640)
+nodes/light/0/position = Vector2(2700, 1620)
 nodes/light/3/node = SubResource("VisualShaderNodeFloatConstant_a5vkk")
 nodes/light/3/position = Vector2(-1700, 2260)
 nodes/light/4/node = SubResource("VisualShaderNodeExpression_7klbm")
@@ -318,7 +345,19 @@ nodes/light/23/node = SubResource("VisualShaderNodeColorParameter_ulvyk")
 nodes/light/23/position = Vector2(1140, 1180)
 nodes/light/24/node = SubResource("VisualShaderNodeFloatParameter_gog30")
 nodes/light/24/position = Vector2(-2060, 2420)
-nodes/light/connections = PackedInt32Array(5, 0, 19, 2, 15, 0, 16, 0, 16, 0, 17, 1, 9, 0, 7, 1, 3, 0, 4, 0, 4, 0, 5, 0, 17, 0, 5, 1, 24, 0, 4, 1, 13, 0, 19, 1, 23, 0, 19, 0, 6, 0, 7, 0, 8, 0, 17, 0, 7, 0, 8, 0, 19, 0, 0, 1)
+nodes/light/25/node = SubResource("VisualShaderNodeInput_872tj")
+nodes/light/25/position = Vector2(1180, 700)
+nodes/light/26/node = SubResource("VisualShaderNodeStep_slxd6")
+nodes/light/26/position = Vector2(2360, 1060)
+nodes/light/27/node = SubResource("VisualShaderNodeFloatFunc_756wa")
+nodes/light/27/position = Vector2(2040, 1240)
+nodes/light/30/node = SubResource("VisualShaderNodeTexture_qxtt8")
+nodes/light/30/position = Vector2(1320, 2240)
+nodes/light/31/node = SubResource("VisualShaderNodeStep_dx6ud")
+nodes/light/31/position = Vector2(1800, 2060)
+nodes/light/32/node = SubResource("VisualShaderNodeFloatFunc_8ynbl")
+nodes/light/32/position = Vector2(2244.3, 1780.21)
+nodes/light/connections = PackedInt32Array(5, 0, 19, 2, 15, 0, 16, 0, 16, 0, 17, 1, 9, 0, 7, 1, 3, 0, 4, 0, 4, 0, 5, 0, 17, 0, 5, 1, 24, 0, 4, 1, 13, 0, 19, 1, 23, 0, 19, 0, 6, 0, 7, 0, 8, 0, 17, 0, 7, 0, 8, 0, 4, 0, 26, 0, 27, 0, 26, 1, 25, 0, 27, 0, 30, 0, 31, 1, 31, 0, 32, 0, 4, 0, 31, 0, 19, 0, 0, 0)
 
 [resource]
 render_priority = 0
