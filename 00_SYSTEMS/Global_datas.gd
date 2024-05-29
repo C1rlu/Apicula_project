@@ -83,6 +83,9 @@ signal _instance_photo(photoData : PhotoData)
 #signal _take_photo
 
 #subsceneSignal
+
+var player_rg : RigidBody3D
+
 var selected_subscene : PackedScene
 signal _load_subscene(condition : bool)
 signal _go_Subscene
@@ -130,7 +133,6 @@ var _strokeID : int
 var _orbe_stroke_scene : Array[Node3D]
 var _orbe_tool_origin_position : Vector3
 var _orbe_visual_scene : Array[Node3D]
-signal instance_orbe_result(data : orbe_data, instance_position : Vector3)
 
 # Oddity # FOR ODDITY IN SCENE
 signal instance_scene_oddity(oddity_scene : PackedScene, amount : int ,position : Vector3)

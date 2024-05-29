@@ -1,10 +1,7 @@
 extends Node
 
-@export var ColorRessource : ColorData
 @export var KeepInFocus: Material
-
 var t
-
 var actual_isSubscene_value : float
 func _ready():
 	_NormalColor_mainScene()

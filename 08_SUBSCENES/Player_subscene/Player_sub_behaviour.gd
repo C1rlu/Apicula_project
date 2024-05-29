@@ -26,6 +26,7 @@ func _ready():
 	orbe_tool.tool_active_signal.connect(_change_speed)	
 	_global_datas._explosed_traceur_zone.connect(push)
 	
+	_global_datas.player_rg = self
 	
 func ini_Pos():
 	_canMove = true

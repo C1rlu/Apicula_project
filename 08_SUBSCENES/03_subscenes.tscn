@@ -1,22 +1,19 @@
-[gd_scene load_steps=71 format=3 uid="uid://nigmie4bbn6"]
+[gd_scene load_steps=67 format=3 uid="uid://nigmie4bbn6"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/00_Scripts/Subscene_loader.gd" id="1_7uoo0"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="2_3srhu"]
 [ext_resource type="PackedScene" uid="uid://g7u8o55jrnyy" path="res://08_SUBSCENES/Player_subscene/Player_sub.tscn" id="2_ri8q1"]
 [ext_resource type="Script" path="res://03_CAMERA/CameraFollow_subscene.gd" id="2_tc6o2"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Tools/Switch_tools_input.gd" id="3_2mtx3"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Oddity/Instance_oddity_at_start.gd" id="3_l4jt1"]
 [ext_resource type="Material" uid="uid://dbu2q4lhlk8w5" path="res://05_SHADER_TEST/Full_screen/Subscene_screen/Main_subscene_dither.tres" id="3_w42nb"]
 [ext_resource type="Material" uid="uid://b7ffjkgpmtkc6" path="res://05_SHADER_TEST/Full_screen/Subscene_screen/Scanner_x_subscene_dither.tres" id="4_bkck3"]
 [ext_resource type="Resource" uid="uid://d11cl4f25dgwg" path="res://08_SUBSCENES/Tools/Flash_light.tres" id="4_h1r1k"]
 [ext_resource type="Resource" uid="uid://380xcgsxw62f" path="res://08_SUBSCENES/Tools/Orbe_spawner.tres" id="5_5xftw"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Tools/Play_Orber_tool.gd" id="6_51m8x"]
-[ext_resource type="Resource" uid="uid://bvrfmfy83ulsl" path="res://08_SUBSCENES/Oddity/00_Scene_data/Followers_scene_data.tres" id="6_axwdn"]
 [ext_resource type="Resource" uid="uid://vv3dws7dmhtd" path="res://08_SUBSCENES/Tools/Scanner.tres" id="6_b80v7"]
-[ext_resource type="Resource" uid="uid://b4j40xtcg031c" path="res://08_SUBSCENES/Oddity/00_Scene_data/Scanner_scene_data.tres" id="7_84g34"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Tools/PhotoData_list_update.gd" id="10_w7dre"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Stroke_Filter/Orbe_Result_Instancer.gd" id="12_lg0wa"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Orbe/Stroke_Filter/Stroke_Filter.tres.gd" id="14_0roc3"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Stroke_Filter/Orbe_Result_Instancer.gd" id="12_lg0wa"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Stroke_Filter/Stroke_Filter.tres.gd" id="14_0roc3"]
 [ext_resource type="Resource" uid="uid://dqpl0ihtab1su" path="res://08_SUBSCENES/Tools/Fusion_tool.tres" id="14_glnqv"]
 [ext_resource type="Script" path="res://03_CAMERA/Active_scene_viewports.gd" id="21_jai7k"]
 
@@ -99,48 +96,6 @@ func _on_timer_timeout():
 	timer.stop()
 	subscenes_cam_scene.visible = false
 	
-"
-
-[sub_resource type="GDScript" id="GDScript_xe8mp"]
-script/source = "extends Node
-
-@export var Follower_scene_data : Oddity_scene_data
-@export var Scanner_scene_data : Oddity_scene_data
-
-@export var debug_this : bool = false
-
-func _input(event):
-	
-	
-	if !debug_this:
-		return
-		
-	if !_global_datas.Player_InSubScene:
-		return
-		
-	if event.is_action_pressed(\"debug_3\"):	
-		_global_datas.instance_scene_oddity.emit(Follower_scene_data,1)
-	if event.is_action_pressed(\"debug_4\"):	
-		if _global_datas._xray_oddity == null:
-			_global_datas.instance_scene_oddity.emit(Scanner_scene_data,1)
-		
-	if event.is_action_pressed(\"debug_5\"):
-		
-		
-		if _global_datas._xray_oddity != null:
-			var selected_scanner = _global_datas._xray_oddity 
-			selected_scanner.kill.emit()
-		
-		
-		if _global_datas._peon_oddity_following.size() < 1:
-			return
-	
-		var index_to_kill = _global_datas._peon_oddity_following.size()-1
-		var selected = _global_datas._peon_oddity_following[index_to_kill]
-		selected.kill.emit()
-
-
-		
 "
 
 [sub_resource type="GDScript" id="GDScript_71vlv"]
@@ -720,6 +675,13 @@ script = ExtResource("1_7uoo0")
 metadata/_edit_vertical_guides_ = [960.0]
 metadata/_edit_horizontal_guides_ = [540.0]
 
+[node name="set_Resolution" type="Node" parent="." node_paths=PackedStringArray("viewports")]
+script = ExtResource("2_3srhu")
+viewports = [NodePath("../Viewport/Main_SubViewport"), NodePath("../Viewport/Scanner_x_SubViewport")]
+
+[node name="PhotoData_list_update" type="Node" parent="."]
+script = ExtResource("10_w7dre")
+
 [node name="FADE_IN" type="Node" parent="."]
 script = SubResource("GDScript_btuws")
 
@@ -729,24 +691,6 @@ script = SubResource("GDScript_btuws")
 script = SubResource("GDScript_4qsuv")
 
 [node name="Timer" type="Timer" parent="FADE_OUT"]
-
-[node name="set_Resolution" type="Node" parent="." node_paths=PackedStringArray("viewports")]
-script = ExtResource("2_3srhu")
-viewports = [NodePath("../Viewport/Main_SubViewport"), NodePath("../Viewport/Scanner_x_SubViewport")]
-
-[node name="Orbe_Oddity_List" type="Node" parent="."]
-
-[node name="Instance_Oddity" type="Node" parent="Orbe_Oddity_List"]
-script = ExtResource("3_l4jt1")
-
-[node name="instance_Debugger" type="Node" parent="Orbe_Oddity_List"]
-script = SubResource("GDScript_xe8mp")
-Follower_scene_data = ExtResource("6_axwdn")
-Scanner_scene_data = ExtResource("7_84g34")
-debug_this = true
-
-[node name="PhotoData_list_update" type="Node" parent="."]
-script = ExtResource("10_w7dre")
 
 [node name="GO_SURFACE" type="Node" parent="."]
 script = SubResource("GDScript_71vlv")
