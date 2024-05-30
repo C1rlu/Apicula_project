@@ -106,7 +106,6 @@ var active_fusion_node_list : Array
 # Main Oddity & elements related ------------------------------------
 var Main_oddity_node : Node3D
 var Main_oddity_positions_data : Array[position_spot]
-signal add_element_to_main_Oddity(element : PackedScene)
 var scanner_element_list : Array #for scanner light list on oddity
 signal flash_x_ray_oddity # to call the scanner if exist in list
 var scanner_flash_isActive : bool 

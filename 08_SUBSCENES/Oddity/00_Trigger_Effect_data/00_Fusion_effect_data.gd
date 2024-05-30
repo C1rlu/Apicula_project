@@ -1,5 +1,5 @@
 extends Resource
-class_name Fusion_effect
+class_name _effect
 
-func trigger_fusion()-> void:
+func trigger_effect()-> void:
 	return

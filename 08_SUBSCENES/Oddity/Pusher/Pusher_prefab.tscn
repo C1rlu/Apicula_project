@@ -1,0 +1,37 @@
+[gd_scene load_steps=6 format=3 uid="uid://bp1lyf5im4jhc"]
+
+[ext_resource type="PackedScene" uid="uid://b3e0cgra0jrsb" path="res://08_SUBSCENES/Oddity/Peon_oddity_v01.blend" id="1_qwgyc"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Oddity/Pusher/Active_effect_on_area.gd" id="1_w0upq"]
+[ext_resource type="Material" uid="uid://cm2mrllr2dj10" path="res://05_SHADER_TEST/Board/Board_scanner_mat.tres" id="2_28ug6"]
+[ext_resource type="Resource" uid="uid://bjkxjuf7fernv" path="res://08_SUBSCENES/Oddity/00_Trigger_Effect_data/effect_ressource/push_player.tres" id="2_ff1wh"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_i0tp3"]
+radius = 0.218466
+
+[node name="Pusher_prefab" type="Node3D"]
+transform = Transform3D(0.705437, 0, 0, 0, 0.705437, 0, 0, 0, 0.705437, 0, 0.0231039, 0)
+
+[node name="Active_effect_on_area" type="Node" parent="."]
+script = ExtResource("1_w0upq")
+element_effect = ExtResource("2_ff1wh")
+
+[node name="msh_oddity_peon" parent="." instance=ExtResource("1_qwgyc")]
+transform = Transform3D(0.0244782, 0, 0, 0, 0.0244782, 0, 0, 0, 0.0244782, 0, 0, 0)
+
+[node name="msh_oddity_peon" parent="msh_oddity_peon" index="0"]
+transform = Transform3D(1.98262, 0, 0, 0, 1.98262, 0, 0, 0, 1.98262, 0, 0, 0)
+layers = 4
+cast_shadow = 0
+gi_mode = 0
+surface_material_override/0 = ExtResource("2_28ug6")
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 6
+collision_mask = 6
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("SphereShape3D_i0tp3")
+
+[connection signal="body_entered" from="Area3D" to="Active_effect_on_area" method="_on_area_3d_body_entered"]
+
+[editable path="msh_oddity_peon"]
