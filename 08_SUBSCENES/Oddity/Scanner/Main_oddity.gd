@@ -8,13 +8,12 @@ extends Node
 var target : Vector3
 var follow_target : bool  = false
 var real_speed : float
+
 func _ready():
 
 	_global_datas._photo_flash.connect(_check_if_player_is_close)
 	
 func _check_if_player_is_close():
-	
-	
 	
 	var distance_to_player = rapatrier_rg.global_position.distance_to(_global_datas.subbscene_playerPosition) 
 	if distance_to_player > min_distance_to_see :
@@ -22,7 +21,7 @@ func _check_if_player_is_close():
 		
 	real_speed = speed * (distance_to_player / 1.5)
 	if distance_to_player < 0.8:
-		real_speed = speed * (distance_to_player / 2.0)
+		real_speed = speed * (distance_to_player / 4.0)
 	follow_target = true	
 	target = _global_datas.subbscene_playerPosition
 
