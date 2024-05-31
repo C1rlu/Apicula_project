@@ -56,7 +56,7 @@ func scanning_done():
 	
 	_global_datas.selected_photoData = photoData
 	_global_datas.show_on_scanner.emit(true)
-	_global_datas._show_object_legend.emit(true,photoData.legend)
+	#_global_datas._show_object_legend.emit(true,photoData.legend)
 	
 	if !check_photo_exist(photoData):
 		_global_datas.photo_archives.append(photoData)
