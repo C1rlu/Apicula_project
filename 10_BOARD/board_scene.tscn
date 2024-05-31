@@ -11,6 +11,7 @@
 [ext_resource type="Resource" uid="uid://ctxrmh1elpnm1" path="res://12_INVENTORY/Photo/Oddity_photoData/Follower_photoData.tres" id="8_mk0a6"]
 [ext_resource type="PackedScene" uid="uid://qgyjfq88teq8" path="res://10_BOARD/letters_area.tscn" id="9_ajmma"]
 [ext_resource type="Resource" uid="uid://61umivwjjcjs" path="res://12_INVENTORY/Words_note/Birds_goLighthouse_note.tres" id="10_shcmw"]
+[ext_resource type="Resource" uid="uid://bnr5ucr2s173m" path="res://10_BOARD/Symbols/Book_symbols/Book_data_test.tres" id="11_6dndt"]
 [ext_resource type="PackedScene" uid="uid://b3i04ha2iqr4l" path="res://10_BOARD/Loupe/loupe_rg.tscn" id="12_alpcj"]
 [ext_resource type="Resource" uid="uid://dyh1qg1u652pl" path="res://12_INVENTORY/Photo/Epave_ch_photoData.tres" id="13_fyymw"]
 [ext_resource type="Script" path="res://10_BOARD/Letters_checks.gd" id="14_vbqye"]
@@ -24,7 +25,6 @@
 [ext_resource type="PackedScene" uid="uid://bh5a7fhvftxmm" path="res://10_BOARD/Symbols/Book_symbols/Book_symbols.tscn" id="22_peuec"]
 [ext_resource type="Texture2D" uid="uid://bb54ggwprwqi" path="res://10_BOARD/Symbols/00_img/Symbols_layout_01.png" id="23_4tivx"]
 [ext_resource type="PackedScene" uid="uid://bdpldl31ejvat" path="res://10_BOARD/Symbols/Symbols_page_prefab.tscn" id="23_b4873"]
-[ext_resource type="Resource" uid="uid://bnr5ucr2s173m" path="res://10_BOARD/Symbols/Book_symbols/Symbols_book_data.tres" id="25_6gq50"]
 [ext_resource type="Texture2D" uid="uid://bsdyr4r6tt1bw" path="res://10_BOARD/Symbols/00_img/Symbols_01 .png" id="25_efejc"]
 [ext_resource type="Texture2D" uid="uid://cqhyfwgmecews" path="res://10_BOARD/Symbols/00_img/Symbols_03.png" id="27_gm0n8"]
 [ext_resource type="Texture2D" uid="uid://b3ssyy5kwdrjl" path="res://10_BOARD/Symbols/00_img/Symbols_06.png" id="30_krl65"]
@@ -914,6 +914,7 @@ shadow_mesh = SubResource("ArrayMesh_1pbya")
 [sub_resource type="GDScript" id="GDScript_0g5yx"]
 script/source = "extends Node
 
+@export var selected_book : book_page_data
 @export var focus_node : Node3D
 var page_index_to_assign : int 
 
@@ -931,7 +932,9 @@ func _on_asign_to():
 	_global_datas.focus_this_on_board.emit(focus)
 	
 	_global_datas.in_legend_assign_mode = true
+	_global_datas.selected_book = selected_book
 	_global_datas.legend_page_index = page_index_to_assign
+	
 "
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_2temi"]
@@ -1350,30 +1353,30 @@ transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -1.49012
 
 [node name="legend_01" parent="Legends_group" instance=ExtResource("20_5c5s3")]
 transform = Transform3D(0.987973, 0, -0.154624, 0, 1, 0, 0.154624, 0, 0.987973, 0.336177, 0.00953624, 0.18731)
-_book_data = ExtResource("25_6gq50")
+_book_data = ExtResource("11_6dndt")
 
 [node name="legend_02" parent="Legends_group" instance=ExtResource("20_5c5s3")]
 transform = Transform3D(0.941034, 0, -0.338311, 0, 1, 0, 0.338311, 0, 0.941034, 0.461679, 0.00953624, 0.222219)
-_book_data = ExtResource("25_6gq50")
+_book_data = ExtResource("11_6dndt")
 page_index = 1
 
 [node name="legend_03" parent="Legends_group" instance=ExtResource("20_5c5s3")]
 transform = Transform3D(0.763074, 0, -0.64631, 0, 1, 0, 0.64631, 0, 0.763074, 0.570353, 0.00962973, 0.247687)
-_book_data = ExtResource("25_6gq50")
+_book_data = ExtResource("11_6dndt")
 page_index = 2
 
 [node name="legend_04" parent="Legends_group" instance=ExtResource("20_5c5s3")]
 transform = Transform3D(0.763074, 0, -0.64631, 0, 1, 0, 0.64631, 0, 0.763074, 0.638886, 0.00962973, 0.160277)
-_book_data = ExtResource("25_6gq50")
+_book_data = ExtResource("11_6dndt")
 page_index = 3
 
 [node name="legend_05" parent="Legends_group" instance=ExtResource("20_5c5s3")]
 transform = Transform3D(0.963784, 0, -0.266683, 0, 1, 0, 0.266683, 0, 0.963784, 0.50112, 0.00962976, 0.12282)
-_book_data = ExtResource("25_6gq50")
+_book_data = ExtResource("11_6dndt")
 
 [node name="legend_06" parent="Legends_group" instance=ExtResource("20_5c5s3")]
 transform = Transform3D(0.963705, 0, -0.266969, 0, 1, 0, 0.266969, 0, 0.963705, 0.380958, 0.00962975, 0.0674098)
-_book_data = ExtResource("25_6gq50")
+_book_data = ExtResource("11_6dndt")
 page_index = 3
 
 [node name="Symbols_07" parent="." instance=ExtResource("23_b4873")]
@@ -1438,6 +1441,7 @@ transform = Transform3D(0.0703083, -5.09317e-11, -4.65661e-10, 0, 0.00479312, 4.
 
 [node name="Focus_and_assign" type="Node" parent="Assign_to/Area3D" node_paths=PackedStringArray("focus_node")]
 script = SubResource("GDScript_0g5yx")
+selected_book = ExtResource("11_6dndt")
 focus_node = NodePath("../../../Focus_target/Species_focus")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Assign_to/Area3D"]

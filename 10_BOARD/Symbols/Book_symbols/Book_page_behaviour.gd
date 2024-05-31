@@ -1,6 +1,6 @@
 extends Node
 
-@onready var book_page = $Book_page
+@onready var _book_page = $Book_page
 @export var _book_data : book_page_data
 @export var focus_and_assign : Node
 var page_index = 0 
@@ -23,7 +23,7 @@ var multiple_page_index : int = 0
 
 func _ready():
 
-	book_page.book_data = _book_data 
+	_book_page.book_data = _book_data 
 	_book_data.book_node = $"." 
 	
 func update_page_right():
@@ -34,8 +34,8 @@ func update_page_right():
 	page_index += 1	
 	previous_page = page_index
 	
-	if page_index == _book_data.pages.size():
-		page_index = _book_data.pages.size()-1
+	if page_index == _book_data.book_pages.size():
+		page_index = _book_data.book_pages.size()-1
 		return
 		
 	is_turning = true	
@@ -44,7 +44,7 @@ func update_page_right():
 	var _page = PAGE_FLIP_PREFAB.instantiate()
 	page_flip_right_root.add_child(_page)
 	_page.turn_page.emit()		
-	book_page.set_content.emit(page_index)
+	_book_page.set_content.emit(page_index)
 	
 	if focus_and_assign:
 		focus_and_assign.update_page_index_to_assign(page_index)
@@ -68,7 +68,7 @@ func update_page_left():
 	page_flip_left_root.add_child(_page)
 	_page.turn_page.emit()		
 	
-	book_page.set_content.emit(page_index)
+	_book_page.set_content.emit(page_index)
 	
 	if focus_and_assign:
 		focus_and_assign.update_page_index_to_assign(page_index)
@@ -107,7 +107,7 @@ func _show_from_index(index):
 		_page.turn_page.emit()	
 
 	previous_page = index
-	book_page.set_content.emit(page_index)	
+	_book_page.set_content.emit(page_index)	
 				
 					
 	if focus_and_assign:
@@ -140,7 +140,7 @@ func _on_multiple_page_transition_timeout():
 	if multiple_page_index == 3:
 		multiple_page_index = 0
 		multiple_page_transition_right.stop()	
-		book_page.set_content.emit(page_index)
+		_book_page.set_content.emit(page_index)
 		
 
 
@@ -154,4 +154,4 @@ func _on_multiple_page_transition_left_timeout():
 	if multiple_page_index == 3:
 		multiple_page_index = 0
 		multiple_page_transition_left.stop()	
-		book_page.set_content.emit(page_index)
+		_book_page.set_content.emit(page_index)

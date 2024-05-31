@@ -1,6 +1,6 @@
 extends Node3D
 
-@export var book_data : book_page_data
+var book_data : book_page_data
 
 @onready var page_render = $Render_text
 @onready var page_viewport_render = $Page_Viewport_render
@@ -27,7 +27,7 @@ func show_this_page(page_index : int):
 	for p in child:
 		p.queue_free()
 		
-	var instance_this_page = book_data.pages[page_index].instantiate()
+	var instance_this_page = book_data.book_pages[page_index].pages.instantiate()
 	page_viewport_render.add_child(instance_this_page)
 
 

@@ -1,6 +1,6 @@
 extends Node
 
-@export var legend_data : Symbols_legend_data
+
 var selected_index : int = 0
 
 @onready var text = $"../Text_render/text"
@@ -20,11 +20,12 @@ func disable_at_start():
 		
 func _update_legend():	
 	
+	var book = _global_datas.selected_book
 	
-	if selected_index > legend_data.legends.size()-1:
+	if selected_index > book.book_pages.size()-1:
 		selected_index = 0  
 		
-	var selected_legend = legend_data.legends[_global_datas.legend_page_index] 	
+	var selected_legend = book.book_pages[_global_datas.legend_page_index].book_page_title 	
 	text.text = selected_legend
 	text_for_size.text = selected_legend
 
