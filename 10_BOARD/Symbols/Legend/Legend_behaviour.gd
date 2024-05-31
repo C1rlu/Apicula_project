@@ -9,6 +9,7 @@ var selected_index : int = 0
 @onready var legend_prefab = $".."
 @onready var collision_shape_3d = $"../Next_Zone/CollisionShape3D"
 
+signal update_index(page_index : int)
 
 func _ready():
 	disable_at_start()
@@ -28,7 +29,9 @@ func _update_legend():
 	var selected_legend = book.book_pages[_global_datas.legend_page_index].book_page_title 	
 	text.text = selected_legend
 	text_for_size.text = selected_legend
-
+	
+	update_index.emit(_global_datas.legend_page_index)
+	
 	if !legend_prefab.visible:
 		legend_prefab.visible = true
 		collision_shape_3d.disabled = false	

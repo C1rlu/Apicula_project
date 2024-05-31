@@ -11,3 +11,7 @@ func _on_show_this_page_show_this_page():
 	var book_position = _book_data.book_node.position
 	_global_datas.focus_this_on_board.emit(book_position)		
 
+
+
+func _on_legend_behaviour_update_index(_page_index):
+	page_index = _page_index
