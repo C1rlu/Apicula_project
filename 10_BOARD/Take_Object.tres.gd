@@ -1,8 +1,6 @@
 extends Node
 
 var photo_data : PhotoData
-@export var close_to_eyes_value : float = 0.7
-@onready var is_select = $"../IS_SELECT"
 
 @onready var photo_area = $".."
 
@@ -24,19 +22,19 @@ func show_legend(condition : bool):
 		var focus_pos = photo_area.global_position
 		_global_datas.focus_this_on_board.emit(focus_pos)
 		_is_select = true	
-		#is_select.visible = true
+	
 		_global_datas.selected_photoData = photo_data
 
 	else:
 		_global_datas._show_object_legend.emit(false,"")	
-		#is_select.visible = false
+	
 		_is_select = false		
 		_global_datas.selected_photoData = null
 		
 func close_inventory(condition : bool):
 	if !condition:
 		pass
-		#is_select.visible = false
+		
 
 
 func _on_on_click(condition):

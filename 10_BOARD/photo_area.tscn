@@ -1,17 +1,17 @@
-[gd_scene load_steps=23 format=3 uid="uid://uwg2qc3svu11"]
+[gd_scene load_steps=25 format=3 uid="uid://uwg2qc3svu11"]
 
 [ext_resource type="Resource" uid="uid://bcid58kxecbk2" path="res://12_INVENTORY/Photo/Maurice_photoData.tres" id="1_2tgng"]
+[ext_resource type="Script" path="res://10_BOARD/Assign_legend_page.gd" id="2_7tt1s"]
 [ext_resource type="Script" path="res://10_BOARD/Symbols/Show_this_page.gd" id="2_653je"]
+[ext_resource type="Script" path="res://10_BOARD/Take_Object.tres.gd" id="3_0e5dt"]
 [ext_resource type="Shader" uid="uid://upo0fuo5sqgd" path="res://05_SHADER_TEST/Board/Board_sh.tres" id="3_ysgwd"]
 [ext_resource type="Material" uid="uid://25obtp1blkk6" path="res://05_SHADER_TEST/Board/board_photo_texture.tres" id="4_0radc"]
 
 [sub_resource type="GDScript" id="GDScript_2oe2p"]
 script/source = "extends Area3D
 
-@export var _book_data : book_page_data
-@export var page_index : int = 0
 @export var photo_data : PhotoData
-
+@export var legend_node : Node3D
 @onready var collision_shape_3d = $CollisionShape3D
 @onready var mesh_instance_3d_7 = $MeshInstance3D7
 @onready var photo = $photo
@@ -26,18 +26,14 @@ func _active():
 	mesh_instance_3d_7.visible = true
 	photo.visible = true
 
-
 func _disable_object():
 	
 	collision_shape_3d.disabled = true
 	mesh_instance_3d_7.visible = false
 	photo.visible = false
 
-
-func _on_show_this_page_show_this_page():
-	_book_data.book_node._show_from_index(page_index)
-	var book_position = _book_data.book_node.position
-	_global_datas.focus_this_on_board.emit(book_position)
+func _on_assign_legend_page_assign_page():
+	legend_node.update_legend.emit() 	
 "
 
 [sub_resource type="GDScript" id="GDScript_32kbr"]
@@ -209,8 +205,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.00272226, 0)
 script = SubResource("GDScript_2oe2p")
 photo_data = ExtResource("1_2tgng")
 
+[node name="Assign_legend_page" type="Node" parent="."]
+script = ExtResource("2_7tt1s")
+
 [node name="Show_this_page" type="Node" parent="."]
 script = ExtResource("2_653je")
+
+[node name="Select_this" type="Node" parent="."]
+script = ExtResource("3_0e5dt")
 
 [node name="texture" type="Node" parent="."]
 script = SubResource("GDScript_32kbr")
@@ -240,4 +242,6 @@ mesh = SubResource("QuadMesh_ewu27")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("4_0radc")
 
+[connection signal="assign_page" from="Assign_legend_page" to="." method="_on_assign_legend_page_assign_page"]
 [connection signal="show_this_page" from="Show_this_page" to="." method="_on_show_this_page_show_this_page"]
+[connection signal="on_click" from="Select_this" to="Select_this" method="_on_on_click"]

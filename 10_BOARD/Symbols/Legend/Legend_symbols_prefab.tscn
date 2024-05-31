@@ -1,9 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://ckin6oiruwreh"]
+[gd_scene load_steps=10 format=3 uid="uid://ckin6oiruwreh"]
 
 [ext_resource type="Script" path="res://10_BOARD/Symbols/Legend/Legend_behaviour.gd" id="1_ljkqs"]
+[ext_resource type="Script" path="res://10_BOARD/Symbols/Legend/Page_assign.gd" id="1_x88k2"]
 [ext_resource type="Material" uid="uid://7dc0f1et6s32" path="res://10_BOARD/Symbols/Legend/Symbols_legend_page_mat.tres" id="2_53db7"]
 [ext_resource type="Resource" uid="uid://cngp0c2w7022i" path="res://10_BOARD/Symbols/Legend/Symbols_legend_list_en.tres" id="2_tjc2r"]
-[ext_resource type="Script" path="res://10_BOARD/Symbols/Legend/Next_legend.gd" id="4_xpcny"]
+[ext_resource type="Script" path="res://10_BOARD/Symbols/Show_this_page.gd" id="4_ip0gk"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_yifst"]
 size = Vector2(0.08, 0.1)
@@ -17,7 +18,8 @@ light_mode = 1
 [sub_resource type="BoxShape3D" id="BoxShape3D_53r4s"]
 size = Vector3(0.960846, 0.188416, 0.321474)
 
-[node name="legend_symbols_prefab" type="Node3D"]
+[node name="legend_prefab" type="Node3D"]
+script = ExtResource("1_x88k2")
 
 [node name="legend_behaviour" type="Node" parent="."]
 script = ExtResource("1_ljkqs")
@@ -91,11 +93,12 @@ vertical_alignment = 1
 
 [node name="Next_Zone" type="Area3D" parent="."]
 
+[node name="Show_this_page" type="Node" parent="Next_Zone"]
+script = ExtResource("4_ip0gk")
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Next_Zone"]
 transform = Transform3D(0.0839063, 0, 0, 0, 0.0839063, 0, 0, 0, 0.0839063, 0.00224182, 0.00665511, -0.00113734)
 shape = SubResource("BoxShape3D_53r4s")
 
-[node name="Next_legend" type="Node" parent="Next_Zone"]
-script = ExtResource("4_xpcny")
-
-[connection signal="active_next_legend" from="Next_Zone/Next_legend" to="legend_behaviour" method="_on_next_legend_active_next_legend"]
+[connection signal="update_legend" from="." to="legend_behaviour" method="_on_legend_prefab_update_legend"]
+[connection signal="show_this_page" from="Next_Zone/Show_this_page" to="." method="_on_show_this_page_show_this_page"]

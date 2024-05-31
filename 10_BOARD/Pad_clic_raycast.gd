@@ -65,6 +65,17 @@ func check_cast(targetPos : Vector2):
 				selectable = null	 		
 		return
 	
+	
+	
+	if _global_datas.in_legend_assign_mode:
+
+		if result.collider.get_node_or_null("Assign_legend_page"):
+			var assign_legend = result.collider.get_node_or_null("Assign_legend_page")
+			assign_legend.assign_page.emit()	
+		_global_datas.in_legend_assign_mode = false
+		return
+	
+	
 	if selectable:
 		selectable.show_legend(false)	
 	selectable = result.collider.get_node_or_null("Select_this")	
@@ -91,3 +102,8 @@ func check_cast(targetPos : Vector2):
 	if result.collider.get_node_or_null("Show_this_page"):
 		var page_index = result.collider.get_node_or_null("Show_this_page")
 		page_index.show_this_page.emit()	
+
+
+	if result.collider.get_node_or_null("Focus_and_assign"):
+		var page_index = result.collider.get_node_or_null("Focus_and_assign")
+		page_index.asign_to.emit()	
