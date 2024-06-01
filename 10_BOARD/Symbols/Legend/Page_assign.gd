@@ -4,14 +4,26 @@ extends Node3D
 @export var page_index : int = 0
 
 signal update_legend 
+signal ini_legend(_book_data : book_page_data,index : int)
+signal enable_legend(condition : bool)
 
+
+
+func _ready():
+	ini_legend.emit(_book_data,page_index)	
+	
+	
 func _on_show_this_page_show_this_page():
 	
 	_book_data.book_node._show_from_index(page_index)
 	var book_position = _book_data.book_node.position
 	_global_datas.focus_this_on_board.emit(book_position)		
 
-
-
 func _on_legend_behaviour_update_index(_page_index):
 	page_index = _page_index
+
+
+func _on_enable_legend(condition):
+	
+	$Render_text.visible = condition
+	$Next_Zone/CollisionShape3D.disabled = !condition

@@ -12,25 +12,36 @@ script/source = "extends Area3D
 
 @export var photo_data : PhotoData
 @export var legend_node : Node3D
+@export var is_a_scanner : bool = true
 @onready var collision_shape_3d = $CollisionShape3D
 @onready var mesh_instance_3d_7 = $MeshInstance3D7
 @onready var photo = $photo
 
+@onready var select_this = $Select_this
 
 
 func _ready():
 	_disable_object()
-		
+	
+	if !is_a_scanner:
+		select_this.free()
+			
 func _active():
 	collision_shape_3d.disabled = false	
 	mesh_instance_3d_7.visible = true
 	photo.visible = true
+	
+	if legend_node:
+		legend_node.enable_legend.emit(true)
 
 func _disable_object():
 	
 	collision_shape_3d.disabled = true
 	mesh_instance_3d_7.visible = false
 	photo.visible = false
+	
+	if legend_node:
+		legend_node.enable_legend.emit(false)
 
 func _on_assign_legend_page_assign_page():
 	legend_node.update_legend.emit() 	

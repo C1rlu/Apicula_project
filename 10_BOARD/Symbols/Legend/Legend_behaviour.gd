@@ -12,9 +12,8 @@ var selected_index : int = 0
 signal update_index(page_index : int)
 
 func _ready():
-	disable_at_start()
-	
-
+	pass
+	#disable_at_start()
 func disable_at_start():
 	legend_prefab.visible = false	
 	collision_shape_3d.disabled = true
@@ -35,8 +34,27 @@ func _update_legend():
 	if !legend_prefab.visible:
 		legend_prefab.visible = true
 		collision_shape_3d.disabled = false	
+		
+func _update_legend_ini(book_data,index):	
+	
+	var book = book_data
+	
+	if selected_index > book.book_pages.size()-1:
+		selected_index = 0  
+		
+	var selected_legend = book.book_pages[index].book_page_title 	
+	text.text = selected_legend
+	text_for_size.text = selected_legend
+	
+	update_index.emit(_global_datas.legend_page_index)
+	
+	if !legend_prefab.visible:
+		legend_prefab.visible = true
+		collision_shape_3d.disabled = false	
 
-	
-	
 func _on_legend_prefab_update_legend():
 	_update_legend()
+
+
+func _on_legend_prefab_ini_legend(_book_data, index):
+	_update_legend_ini(_book_data,index)	

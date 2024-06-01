@@ -6,8 +6,9 @@ var photo_data : PhotoData
 
 var can_be_scanne = true
 var _is_select : bool = false
-
 signal on_click(condition : bool)
+
+var is_a_scanner : bool = true
 
 func _ready():
 	photo_data =  $"..".photo_data
@@ -39,6 +40,8 @@ func close_inventory(condition : bool):
 
 func _on_on_click(condition):
 	
+	if !is_a_scanner:
+		return
 	#if photo_data.scanner_prefab == null:
 	
 		#return
