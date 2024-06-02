@@ -60,25 +60,17 @@ func check_cast(targetPos : Vector2):
 	#print(result)
 
 	if !result:
-		_global_datas.legend_active.emit(false,"null")
+	
+		if !_global_datas.book_idle_pos:
+			_global_datas.book_back_idle_position.emit()
+			_global_datas.book_fade_in.emit()
+			_global_datas.book_idle_pos = true
 		if selectable: # Deselect selected photo data if exist
 			if !_global_datas.in_scanner_mode:
 				selectable.show_legend(false)
 				selectable = null	 		
 		return
 	
-	
-	
-	if _global_datas.in_legend_assign_mode:
-
-		if result.collider.get_node_or_null("Assign_legend_page"):
-			var assign_legend = result.collider.get_node_or_null("Assign_legend_page")
-			assign_legend.assign_page.emit()	
-			_global_datas.legend_active.emit(false,"null")
-		_global_datas.in_legend_assign_mode = false
-		return
-	
-	_global_datas.legend_active.emit(false,"null")
 	if selectable:
 		selectable.show_legend(false)	
 	selectable = result.collider.get_node_or_null("Select_this")	
@@ -94,13 +86,9 @@ func check_cast(targetPos : Vector2):
 		
 	if result.collider.get_node_or_null("Turn_page"):
 		var right_page = result.collider.get_node_or_null("Turn_page") 
-		print(right_page)
+
 		right_page._turn_page.emit()		
-		
-	#if result.collider.get_node_or_null("Next_legend"):
-		#var next_legend = result.collider.get_node_or_null("Next_legend") 
-		#print(next_legend)
-		#next_legend.active_next_legend.emit()	
+
 
 	if result.collider.get_node_or_null("Show_this_page"):
 		var page_index = result.collider.get_node_or_null("Show_this_page")

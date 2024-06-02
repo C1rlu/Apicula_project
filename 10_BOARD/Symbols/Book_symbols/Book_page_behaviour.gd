@@ -1,4 +1,4 @@
-extends Node
+extends Node3D
 
 @onready var _book_page = $Book_page
 @export var _book_data : book_page_data
@@ -19,12 +19,18 @@ var previous_page : int = 0
 @onready var multiple_page_transition_right = $Multiple_page_transition_right
 @onready var multiple_page_transition_left = $Multiple_page_transition_left
 
+
+
+
 var multiple_page_index : int = 0
 
 func _ready():
 
 	_book_page.book_data = _book_data 
 	_book_data.book_node = $"." 
+
+	
+	
 	
 func update_page_right():
 	

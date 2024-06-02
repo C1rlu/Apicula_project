@@ -1,6 +1,6 @@
 [gd_resource type="ShaderMaterial" load_steps=12 format=3 uid="uid://25obtp1blkk6"]
 
-[ext_resource type="Texture2D" uid="uid://dsmwbffwgaj4q" path="res://12_INVENTORY/Photo/IMG/PhotoTest_02.jpg" id="1_c2uan"]
+[ext_resource type="Texture2D" uid="uid://38btbw60olcn" path="res://12_INVENTORY/Photo/IMG/Boat.png" id="1_0jkv1"]
 
 [sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_auibw"]
 source = 5
@@ -43,69 +43,29 @@ constant = Color(0.00777764, 0.0529966, 0.0591746, 1)
 
 [sub_resource type="VisualShader" id="VisualShader_aph82"]
 code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded, shadows_disabled;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert_wrap, specular_schlick_ggx, unshaded, shadows_disabled, fog_disabled;
 
 uniform sampler2D Texture;
-uniform float Denoiser = 0;
-global uniform float Dither_size;
 
 
 
 void fragment() {
-// ColorConstant:20
-	vec4 n_out20p0 = vec4(0.404588, 0.330110, 0.165636, 1.000000);
-
-
-// ColorConstant:9
-	vec4 n_out9p0 = vec4(0.007778, 0.052997, 0.059175, 1.000000);
-
-
 	vec4 n_out11p0;
 // Texture2D:11
 	n_out11p0 = texture(Texture, UV);
 
 
-// FloatParameter:13
-	float n_out13p0 = Denoiser;
-
-
-// FloatParameter:21
-	float n_out21p0 = Dither_size;
-
-
-	float n_out18p0;
-// Expression:18
-	n_out18p0 = 0.0;
-	{
-		const float DITHER_THRESHOLDS[16] ={
-				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-			};
-			
-		vec2 uv = FRAGCOORD.xy * n_out21p0;
-		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-		n_out18p0 = n_out13p0 - DITHER_THRESHOLDS[index];
-	}
-
-
-// Step:19
-	float n_out19p0 = step(n_out11p0.x, n_out18p0);
-
-
-// Mix:8
-	vec3 n_out8p0 = mix(vec3(n_out20p0.xyz), vec3(n_out9p0.xyz), vec3(n_out19p0));
-
-
 // Output:0
-	ALBEDO = n_out8p0;
+	ALBEDO = vec3(n_out11p0.xyz);
 
 
 }
 "
+graph_offset = Vector2(-517.679, 13.843)
+modes/diffuse = 1
 flags/unshaded = true
 flags/shadows_disabled = true
+flags/fog_disabled = true
 nodes/fragment/2/node = SubResource("VisualShaderNodeTexture2DParameter_ippto")
 nodes/fragment/2/position = Vector2(-2060, -100)
 nodes/fragment/8/node = SubResource("VisualShaderNodeMix_p30pv")
@@ -137,11 +97,10 @@ nodes/fragment/20/node = SubResource("VisualShaderNodeColorConstant_ctxdp")
 nodes/fragment/20/position = Vector2(-620, 240)
 nodes/fragment/21/node = SubResource("VisualShaderNodeFloatParameter_h161d")
 nodes/fragment/21/position = Vector2(-1429.2, 1573.92)
-nodes/fragment/connections = PackedInt32Array(19, 0, 8, 2, 13, 0, 18, 0, 18, 0, 19, 1, 2, 0, 11, 2, 11, 0, 19, 0, 21, 0, 18, 1, 20, 0, 8, 0, 9, 0, 8, 1, 8, 0, 0, 0)
+nodes/fragment/connections = PackedInt32Array(19, 0, 8, 2, 13, 0, 18, 0, 18, 0, 19, 1, 2, 0, 11, 2, 11, 0, 19, 0, 21, 0, 18, 1, 20, 0, 8, 0, 9, 0, 8, 1, 11, 0, 0, 0)
 
 [resource]
 resource_local_to_scene = true
 render_priority = 0
 shader = SubResource("VisualShader_aph82")
-shader_parameter/Denoiser = 1.055
-shader_parameter/Texture = ExtResource("1_c2uan")
+shader_parameter/Texture = ExtResource("1_0jkv1")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=155 format=3 uid="uid://dr73p5vs0sixe"]
+[gd_scene load_steps=149 format=3 uid="uid://dr73p5vs0sixe"]
 
 [ext_resource type="Script" path="res://10_BOARD/photos_check.gd" id="1_bcxwj"]
 [ext_resource type="Shader" uid="uid://upo0fuo5sqgd" path="res://05_SHADER_TEST/Board/Board_sh.tres" id="1_k1enu"]
@@ -7,7 +7,6 @@
 [ext_resource type="Resource" uid="uid://cooqi0giysm3w" path="res://12_INVENTORY/Photo/MrBirs_photoData.tres" id="4_t8cpb"]
 [ext_resource type="Material" uid="uid://dvbomu5aenq4x" path="res://05_SHADER_TEST/Board/board_candle.tres" id="5_8m368"]
 [ext_resource type="PackedScene" uid="uid://bru8c4c70eohg" path="res://10_BOARD/Decor/PLume_pot.blend" id="5_m8vsb"]
-[ext_resource type="PackedScene" uid="uid://dxjn0mjuqebwy" path="res://10_BOARD/scanner_area.tscn" id="6_8iku8"]
 [ext_resource type="Material" uid="uid://5cye33kgwfo5" path="res://10_BOARD/Shading/Board_shading_base.tres" id="6_kkuc8"]
 [ext_resource type="Resource" uid="uid://ctxrmh1elpnm1" path="res://12_INVENTORY/Photo/Oddity_photoData/Follower_photoData.tres" id="8_mk0a6"]
 [ext_resource type="PackedScene" uid="uid://qgyjfq88teq8" path="res://10_BOARD/letters_area.tscn" id="9_ajmma"]
@@ -20,7 +19,6 @@
 [ext_resource type="Resource" uid="uid://nb378vtwr23i" path="res://12_INVENTORY/Words_note/Find_The_Apicula_note.tres" id="17_3gp1t"]
 [ext_resource type="Resource" uid="uid://bvadwmoawvfs0" path="res://12_INVENTORY/Words_note/Meet_Ela_note.tres" id="17_onhpt"]
 [ext_resource type="Script" path="res://10_BOARD/Boue/Boue_check.gd" id="18_tu2nn"]
-[ext_resource type="Resource" uid="uid://e8pswg5fypel" path="res://10_BOARD/Symbols/Book_symbols/Npc_book_data.tres" id="19_0w8v3"]
 [ext_resource type="PackedScene" uid="uid://b0j7tl0gn4vg8" path="res://10_BOARD/Boue/boue_map_prefab.tscn" id="19_bi3qi"]
 [ext_resource type="PackedScene" uid="uid://ckin6oiruwreh" path="res://10_BOARD/Symbols/Legend/Legend_symbols_prefab.tscn" id="20_5c5s3"]
 [ext_resource type="Resource" uid="uid://dyrjwnrw6plmp" path="res://10_BOARD/00_Boue_Zones/Boue_DarkHole.tres" id="20_ti4d8"]
@@ -28,6 +26,7 @@
 [ext_resource type="Texture2D" uid="uid://bb54ggwprwqi" path="res://10_BOARD/Symbols/00_img/Symbols_layout_01.png" id="23_4tivx"]
 [ext_resource type="PackedScene" uid="uid://bdpldl31ejvat" path="res://10_BOARD/Symbols/Symbols_page_prefab.tscn" id="23_b4873"]
 [ext_resource type="Texture2D" uid="uid://bsdyr4r6tt1bw" path="res://10_BOARD/Symbols/00_img/Symbols_01 .png" id="25_efejc"]
+[ext_resource type="PackedScene" uid="uid://cgc02cx2l0ndw" path="res://10_BOARD/Symbols/Legend/Book_page_signets.tscn" id="26_k3qjv"]
 [ext_resource type="Texture2D" uid="uid://cqhyfwgmecews" path="res://10_BOARD/Symbols/00_img/Symbols_03.png" id="27_gm0n8"]
 [ext_resource type="Texture2D" uid="uid://b3ssyy5kwdrjl" path="res://10_BOARD/Symbols/00_img/Symbols_06.png" id="30_krl65"]
 [ext_resource type="PackedScene" uid="uid://b3e0cgra0jrsb" path="res://08_SUBSCENES/Oddity/Peon_oddity_v01.blend" id="34_4t7ek"]
@@ -920,45 +919,6 @@ shader_parameter/Dark_color = Color(0, 0, 0, 1)
 shader_parameter/ColorParameter = Color(0.164706, 0.145098, 0.101961, 1)
 shader_parameter/light_color = Color(0.396078, 0.360784, 0.266667, 1)
 
-[sub_resource type="GDScript" id="GDScript_0g5yx"]
-script/source = "extends Node
-
-@export var selected_book : book_page_data
-@export var focus_node : Node3D
-var page_index_to_assign : int 
-
-
-@export var disable : bool = true
-signal asign_to
-
-
-func update_page_index_to_assign(index : int):
-	page_index_to_assign = index	
-
-func _on_asign_to():
-	
-	if disable:
-		return
-	#var focus = focus_node.position
-	#_global_datas.focus_this_on_board.emit(focus)
-	
-
-	_global_datas.selected_book = selected_book
-	_global_datas.legend_page_index = page_index_to_assign
-	var legend = _global_datas.selected_book.book_pages[_global_datas.legend_page_index].book_page_title
-	_global_datas.legend_active.emit(true,legend)
-"
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_2temi"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_8avey"]
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_ig5bs"]
-viewport_path = NodePath("Assign_to/Text_render")
-
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_d7cvh"]
-light_mode = 1
-
 [sub_resource type="BoxMesh" id="BoxMesh_p7wk2"]
 material = SubResource("ShaderMaterial_isdhd")
 
@@ -1156,7 +1116,7 @@ mesh = SubResource("BoxMesh_dyvqk")
 skeleton = NodePath("../../..")
 
 [node name="Map_texture" type="MeshInstance3D" parent="Deco"]
-transform = Transform3D(0.527211, 0, 0, 0, 0.527211, 0, 0, 0, 0.527211, -0.0134336, 0.00272149, 0.00735982)
+transform = Transform3D(0.63031, 0, 0, 0, 0.63031, 0, 0, 0, 0.63031, -0.0134336, 0.00272149, 0.00735982)
 layers = 2
 mesh = SubResource("PlaneMesh_x8wfj")
 skeleton = NodePath("../../..")
@@ -1168,7 +1128,7 @@ mesh = SubResource("PlaneMesh_n7wwh")
 skeleton = NodePath("../../../..")
 
 [node name="Table" type="MeshInstance3D" parent="Deco"]
-transform = Transform3D(1.79114, 0, 0, 0, 0.066768, 0, 0, 0, 1, 0, -0.0336317, 0)
+transform = Transform3D(2.1172, 0, 0, 0, 0.066768, 0, 0, 0, 1.08416, 0, -0.0336317, 0)
 layers = 2
 mesh = SubResource("BoxMesh_1smid")
 skeleton = NodePath("../../..")
@@ -1246,9 +1206,6 @@ mesh = SubResource("BoxMesh_v3rv8")
 skeleton = NodePath("../..")
 surface_material_override/0 = ExtResource("6_kkuc8")
 
-[node name="Loupe_RG" parent="Deco" instance=ExtResource("12_alpcj")]
-transform = Transform3D(0.23921, 0.00614602, -0.535936, 0.00938926, 0.586752, 0.0109196, 0.535887, -0.0130239, 0.23904, 0.42318, 0.00293118, -0.102001)
-
 [node name="Lanterne" type="MeshInstance3D" parent="Deco"]
 transform = Transform3D(0.100064, 0, 0, 0, 0.100064, 0, 0, 0, 0.100064, 0.348657, 8.94069e-08, -0.365668)
 layers = 2
@@ -1295,20 +1252,6 @@ skeleton = NodePath("")
 surface_material_override/0 = ExtResource("5_8m368")
 surface_material_override/1 = ExtResource("6_kkuc8")
 
-[node name="PLume_pot" parent="Deco" instance=ExtResource("5_m8vsb")]
-transform = Transform3D(-0.0408631, 0, 0.0421086, 0, 0.0586765, 0, -0.0421086, 0, -0.0408631, 0.506263, -2.98024e-08, 0.432547)
-
-[node name="Plume" parent="Deco/PLume_pot" index="0"]
-transform = Transform3D(-0.0570273, 0.00625568, 0.0372705, 0.00120507, 0.0677358, -0.0095253, -0.0377726, -0.00728355, -0.0565731, 0.682453, 0.0551524, -1.02605)
-layers = 2
-surface_material_override/0 = SubResource("ShaderMaterial_isdhd")
-surface_material_override/1 = ExtResource("6_kkuc8")
-
-[node name="pot" parent="Deco/PLume_pot" index="1"]
-transform = Transform3D(0.924799, 0, 0.380457, 0, 1, 0, -0.380457, 0, 0.924799, 0.3498, 0, -0.753126)
-layers = 2
-surface_material_override/0 = ExtResource("6_kkuc8")
-
 [node name="Focus_target" type="Node3D" parent="."]
 
 [node name="Species_focus" type="Node3D" parent="Focus_target"]
@@ -1318,20 +1261,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.458365, 0, 0.126777)
 transform = Transform3D(0.882135, 0, -0.470996, 0, 1, 0, 0.470996, 0, 0.882135, 0.16492, 0.00272226, 0.0156601)
 script = ExtResource("1_bcxwj")
 
-[node name="Scanner_area" parent="SCANNER_PHOTO" instance=ExtResource("6_8iku8")]
-transform = Transform3D(0.737307, 0, 0.310451, 0, 0.8, 0, -0.310451, 0, 0.737307, -0.148063, 0.00272227, 0.513873)
-photo_data = ExtResource("13_fyymw")
-
-[node name="Scanner_area2" parent="SCANNER_PHOTO" instance=ExtResource("6_8iku8")]
-transform = Transform3D(0.775106, 0, 0.198019, 0, 0.8, 0, -0.198019, 0, 0.775106, -0.263861, 0.00272226, 0.50801)
-photo_data = ExtResource("13_fyymw")
-
 [node name="PHOTO" type="Node3D" parent="."]
 transform = Transform3D(0.882135, 0, -0.470996, 0, 1, 0, 0.470996, 0, 0.882135, 0.16492, 0.00272226, 0.0156601)
 script = ExtResource("1_bcxwj")
 
 [node name="01" parent="PHOTO" node_paths=PackedStringArray("legend_node") instance=ExtResource("1_mtaom")]
-transform = Transform3D(0.986606, 0, 0.163137, 0, 1, 0, -0.163137, 0, 0.986606, 0.222796, 0.00646129, 0.0247248)
+transform = Transform3D(0.88024, 0, 0.474535, 0, 1, 0, -0.474535, 0, 0.88024, -0.206593, 0.00646129, 0.464248)
 photo_data = ExtResource("11_ub6ec")
 legend_node = NodePath("../../Legends_group/legend_01")
 
@@ -1356,18 +1291,18 @@ photo_data = ExtResource("13_fyymw")
 legend_node = NodePath("../../Legends_group/legend_05")
 
 [node name="06" parent="PHOTO" node_paths=PackedStringArray("legend_node") instance=ExtResource("1_mtaom")]
-transform = Transform3D(0.986606, 0, 0.163137, 0, 1, 0, -0.163137, 0, 0.986606, 0.211072, 0.00646129, -0.104337)
+transform = Transform3D(0.986606, 0, 0.163137, 0, 1, 0, -0.163137, 0, 0.986606, -0.0508865, 0.00646129, 0.21126)
 photo_data = ExtResource("13_fyymw")
 legend_node = NodePath("../../Legends_group/legend_06")
 
 [node name="MrBird_Photo_area" parent="PHOTO" node_paths=PackedStringArray("legend_node") instance=ExtResource("1_mtaom")]
-transform = Transform3D(0.568204, 0, 0.82289, 0, 1, 0, -0.82289, 0, 0.568204, -0.610203, 0.00521401, 0.290431)
+transform = Transform3D(0.805321, 0, 0.592844, 0, 1, 0, -0.592844, 0, 0.805321, -0.424514, 0.00521401, 0.400369)
 photo_data = ExtResource("4_t8cpb")
 legend_node = NodePath("../../Legends_group/legend_08")
 is_a_scanner = false
 
 [node name="Maurice_Photo_area5" parent="PHOTO" node_paths=PackedStringArray("legend_node") instance=ExtResource("1_mtaom")]
-transform = Transform3D(0.608818, 0, 0.793313, 0, 1, 0, -0.793313, 0, 0.608818, -0.491794, 0.00405221, 0.275229)
+transform = Transform3D(0.877785, 0, 0.479061, 0, 1, 0, -0.479061, 0, 0.877785, -0.184069, 0.0040522, 0.226651)
 legend_node = NodePath("../../Legends_group/legend_07")
 is_a_scanner = false
 
@@ -1375,58 +1310,66 @@ is_a_scanner = false
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -1.49012e-08, 0, -7.45058e-09)
 
 [node name="legend_01" parent="Legends_group" instance=ExtResource("20_5c5s3")]
-transform = Transform3D(0.987973, 0, -0.154624, 0, 1, 0, 0.154624, 0, 0.987973, 0.336177, 0.00953624, 0.18731)
+transform = Transform3D(0.99971, 0, 0.0240484, 0, 1, 0, -0.0240484, 0, 0.99971, -0.246548, 0.00953624, 0.36164)
 _book_data = ExtResource("14_jfp6o")
 page_index = 2
+book_position_offset = Vector3(0.05, 0, 0.09)
 
 [node name="legend_02" parent="Legends_group" instance=ExtResource("20_5c5s3")]
-transform = Transform3D(0.941034, 0, -0.338311, 0, 1, 0, 0.338311, 0, 0.941034, 0.461679, 0.00953624, 0.222219)
+transform = Transform3D(0.941034, 0, -0.338311, 0, 1, 0, 0.338311, 0, 0.941034, 0.462, 0.00966259, 0.222)
 _book_data = ExtResource("14_jfp6o")
 page_index = 1
+book_position_offset = Vector3(0.05, 0, 0.09)
 
 [node name="legend_03" parent="Legends_group" instance=ExtResource("20_5c5s3")]
 transform = Transform3D(0.763074, 0, -0.64631, 0, 1, 0, 0.64631, 0, 0.763074, 0.570353, 0.00962973, 0.247687)
 _book_data = ExtResource("14_jfp6o")
 page_index = 2
+book_position_offset = Vector3(0.05, 0, 0.09)
 
 [node name="legend_04" parent="Legends_group" instance=ExtResource("20_5c5s3")]
 transform = Transform3D(0.763074, 0, -0.64631, 0, 1, 0, 0.64631, 0, 0.763074, 0.638886, 0.00962973, 0.160277)
 _book_data = ExtResource("14_jfp6o")
 page_index = 3
+book_position_offset = Vector3(0.05, 0, 0.09)
 
 [node name="legend_05" parent="Legends_group" instance=ExtResource("20_5c5s3")]
 transform = Transform3D(0.963784, 0, -0.266683, 0, 1, 0, 0.266683, 0, 0.963784, 0.50112, 0.00962976, 0.12282)
 _book_data = ExtResource("14_jfp6o")
+book_position_offset = Vector3(0.05, 0, 0.09)
 
 [node name="legend_06" parent="Legends_group" instance=ExtResource("20_5c5s3")]
-transform = Transform3D(0.961334, 0, -0.275385, 0, 1, 0, 0.275385, 0, 0.961334, 0.384283, 0.00962975, 0.0741976)
+transform = Transform3D(0.961334, 0, -0.275385, 0, 1, 0, 0.275385, 0, 0.961334, -0.00236841, 0.00962976, 0.204092)
 _book_data = ExtResource("14_jfp6o")
 page_index = 3
+book_position_offset = Vector3(0.05, 0, 0.09)
 
 [node name="legend_07" parent="Legends_group" instance=ExtResource("20_5c5s3")]
-transform = Transform3D(0.95097, 0, 0.309283, 0, 1, 0, -0.309283, 0, 0.95097, -0.380494, 0.00962975, 0.0716053)
-_book_data = ExtResource("19_0w8v3")
-page_index = 2
+transform = Transform3D(0.987716, 0, 0.156263, 0, 1, 0, -0.156263, 0, 0.987716, -0.108441, 0.00995364, 0.167339)
+_book_data = ExtResource("14_jfp6o")
+page_index = 4
+book_position_offset = Vector3(0.05, 0, 0.09)
 
 [node name="legend_08" parent="Legends_group" instance=ExtResource("20_5c5s3")]
-transform = Transform3D(0.93798, 0, 0.34669, 0, 1, 0, -0.34669, 0, 0.93798, -0.485004, 0.00962975, 0.0311446)
-_book_data = ExtResource("19_0w8v3")
+transform = Transform3D(0.946063, 0, 0.323983, 0, 1, 0, -0.323983, 0, 0.946063, -0.393602, 0.00962975, 0.208181)
+_book_data = ExtResource("14_jfp6o")
 page_index = 1
+book_position_offset = Vector3(0.05, 0, 0.09)
 
 [node name="Symbols_07" parent="." instance=ExtResource("23_b4873")]
-transform = Transform3D(0.999981, 0, 0.00607252, 0, 1, 0, -0.00607252, 0, 0.999981, 0.103562, 0.00610609, -0.317934)
+transform = Transform3D(0.548828, 0, 0.00333283, 0, 0.548838, 0, -0.00333283, 0, 0.548828, 0.206848, 0.00627879, -0.222583)
 photo_data = ExtResource("13_fyymw")
 img_symbol = ExtResource("25_efejc")
 img_page_alpha = ExtResource("23_4tivx")
 
 [node name="Symbols_08" parent="." instance=ExtResource("23_b4873")]
-transform = Transform3D(0.896897, 0, -0.0295969, 0, 0.897385, 0, 0.0295969, 0, 0.896897, -0.061496, 0.00718222, -0.338348)
+transform = Transform3D(0.514679, 0, -0.016984, 0, 0.514959, 0, 0.016984, 0, 0.514679, -0.11117, 0.00735396, -0.224862)
 photo_data = ExtResource("13_fyymw")
 img_symbol = ExtResource("30_krl65")
 img_page_alpha = ExtResource("23_4tivx")
 
 [node name="Symbols_09" parent="." instance=ExtResource("23_b4873")]
-transform = Transform3D(0.999558, 0, -0.0297364, 0, 1, 0, 0.0297364, 0, 0.999558, 0.0521001, 0.0078347, -0.400763)
+transform = Transform3D(0.526678, 0, -0.0156684, 0, 0.526911, 0, 0.0156684, 0, 0.526678, 0.0570637, 0.0078347, -0.15679)
 photo_data = ExtResource("13_fyymw")
 img_symbol = ExtResource("27_gm0n8")
 img_page_alpha = ExtResource("23_4tivx")
@@ -1436,15 +1379,15 @@ script = ExtResource("14_vbqye")
 test_data = ExtResource("10_shcmw")
 
 [node name="Letters_area" parent="Letters" instance=ExtResource("9_ajmma")]
-transform = Transform3D(0.982643, -0.00410419, -0.185459, 0.00417543, 0.999992, -6.49072e-06, 0.185457, -0.000767984, 0.982652, 0.124467, 0.0035602, 0.385227)
+transform = Transform3D(0.982643, -0.00410419, -0.185459, 0.00417543, 0.999992, -6.49072e-06, 0.185457, -0.000767984, 0.982652, 0.0411596, 0.0035602, 0.483328)
 Note_data = ExtResource("10_shcmw")
 
 [node name="Letters_area2" parent="Letters" instance=ExtResource("9_ajmma")]
-transform = Transform3D(0.969535, 0.015209, 0.24448, -0.0157503, 0.999876, 0.00025956, -0.244445, -0.00410229, 0.969654, 0.118207, 0.00267878, 0.365549)
+transform = Transform3D(0.969535, 0.015209, 0.24448, -0.0157503, 0.999876, 0.00025956, -0.244445, -0.00410229, 0.969654, 0.0348996, 0.00267878, 0.46365)
 Note_data = ExtResource("17_3gp1t")
 
 [node name="Letters_area3" parent="Letters" instance=ExtResource("9_ajmma")]
-transform = Transform3D(0.999557, -0.0223198, 0.0196714, 0.0223242, 0.999751, -6.49177e-06, -0.0196658, 0.000445632, 0.999807, 0.136077, 0.0053217, 0.371238)
+transform = Transform3D(0.999557, -0.0223198, 0.0196714, 0.0223242, 0.999751, -6.49177e-06, -0.0196658, 0.000445632, 0.999807, 0.0527696, 0.0053217, 0.469339)
 Note_data = ExtResource("17_onhpt")
 
 [node name="Boue" type="Node3D" parent="."]
@@ -1460,104 +1403,45 @@ Boue_Data = ExtResource("20_ti4d8")
 
 [node name="LIGHT_scene" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0245969, 0.196878, -0.033795)
-layers = 2
+layers = 514
 shadow_enabled = true
 shadow_bias = 0.025
 shadow_opacity = 0.6
 omni_range = 1.6
 omni_attenuation = 1.14868
 
-[node name="Assign_to" type="Node3D" parent="."]
-transform = Transform3D(1.04009, -0.0309981, -0.133523, -0.0582262, 0.867645, -0.0562544, 0.501226, 0.165117, 0.270537, 0.467846, 0.0131652, 0.429087)
-visible = false
+[node name="Loupe_RG" parent="." instance=ExtResource("12_alpcj")]
+transform = Transform3D(0.273787, 0.0069958, -0.482754, -0.0138885, 0.554856, 0.00016396, 0.482603, 0.0119991, 0.273877, 0.44235, 0.000565771, -0.0626625)
 
-[node name="Area3D" type="Area3D" parent="Assign_to"]
-transform = Transform3D(0.0703083, -5.09317e-11, -4.65661e-10, 0, 0.00479312, 4.65661e-10, 0, 1.16415e-10, 0.0703083, 0, 0, 0)
+[node name="ODDITIES_BOOK" parent="." instance=ExtResource("22_peuec")]
+transform = Transform3D(-0.0147714, 6.45393e-05, -0.0605585, -0.00195789, 0.062301, 0.00054396, 0.060527, 0.00203102, -0.0147615, 0.345533, 0.00756298, 0.432232)
 
-[node name="Focus_and_assign" type="Node" parent="Assign_to/Area3D" node_paths=PackedStringArray("focus_node")]
-script = SubResource("GDScript_0g5yx")
-selected_book = ExtResource("14_jfp6o")
-focus_node = NodePath("../../../Focus_target/Species_focus")
+[node name="signet_shortcut" parent="ODDITIES_BOOK" instance=ExtResource("26_k3qjv")]
+transform = Transform3D(15.3259, 1.84774e-06, -4.76837e-07, -1.19209e-07, 15.3258, -5.51343e-07, 1.19209e-06, 1.63913e-07, 15.3259, -1.56141, 0.0536942, 1.83738)
+_book_data = ExtResource("14_jfp6o")
+page_index = 1
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Assign_to/Area3D"]
-shape = SubResource("BoxShape3D_2temi")
+[node name="signet_shortcut2" parent="ODDITIES_BOOK" instance=ExtResource("26_k3qjv")]
+transform = Transform3D(15.3259, 2.17557e-06, -4.76837e-07, 1.19209e-07, 15.3258, -6.4075e-07, 2.86102e-06, 1.71363e-07, 15.3259, -1.5264, 0.0787622, -0.907693)
+_book_data = ExtResource("14_jfp6o")
+page_index = 3
 
-[node name="Assign_to" type="MeshInstance3D" parent="Assign_to"]
-transform = Transform3D(0.0703083, 0, 0, 0, 0.00479313, 0, 0, 0, 0.0703083, 0, 0, 0)
-visible = false
-layers = 2
-mesh = SubResource("BoxMesh_8avey")
+[node name="PLume_pot" parent="ODDITIES_BOOK" instance=ExtResource("5_m8vsb")]
+transform = Transform3D(-0.51951, -0.0293543, -0.784431, -0.0227651, 0.940831, -0.0201302, 0.784652, 0.00786111, -0.519949, -1.53768, 0.142551, -2.12512)
 
-[node name="Render_text" type="Sprite3D" parent="Assign_to"]
-transform = Transform3D(0.015273, -4.65661e-10, 0, 2.67755e-09, -3.37604e-09, 0.0272241, -1.86265e-09, -0.0537081, 4.65661e-10, -0.000216275, 0.00269851, 0.00325221)
-layers = 2
-texture = SubResource("ViewportTexture_ig5bs")
+[node name="Plume" parent="ODDITIES_BOOK/PLume_pot" index="0"]
+transform = Transform3D(0.0383682, 0.0108325, 0.0555957, -0.00603585, 0.0675498, -0.00899613, -0.0563187, 0.000140296, 0.0388398, 0, 0, 0)
+layers = 512
+surface_material_override/0 = SubResource("ShaderMaterial_isdhd")
+surface_material_override/1 = ExtResource("6_kkuc8")
 
-[node name="Text_render" type="SubViewport" parent="Assign_to"]
-transparent_bg = true
-size = Vector2i(600, 400)
-
-[node name="text_for_size" type="Label" parent="Assign_to/Text_render"]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -198.0
-offset_top = -41.5
-offset_right = 198.0
-offset_bottom = 41.5
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.360784, 0.341176, 0.294118, 1)
-theme_override_font_sizes/font_size = 80
-text = "My Legend "
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="ColorRect" type="ColorRect" parent="Assign_to/Text_render/text_for_size"]
-material = SubResource("CanvasItemMaterial_d7cvh")
-layout_direction = 1
-layout_mode = 1
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_top = -68.77
-offset_bottom = 56.2299
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.819608, 0.764706, 0.698039, 1)
-
-[node name="text" type="Label" parent="Assign_to/Text_render"]
-visible = false
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -198.0
-offset_top = -48.775
-offset_right = 198.0
-offset_bottom = 34.225
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.360784, 0.341176, 0.294118, 1)
-theme_override_font_sizes/font_size = 60
-text = "assign page to"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="ODDITIES_BOOK" parent="." node_paths=PackedStringArray("focus_and_assign") instance=ExtResource("22_peuec")]
-transform = Transform3D(-0.0161249, -1.74473e-10, -0.0602123, -0.00194384, 0.0623016, 0.000520557, 0.060181, 0.00201233, -0.0161164, 0.418005, 0.00632314, 0.336731)
-focus_and_assign = NodePath("../Assign_to/Area3D/Focus_and_assign")
-
-[node name="NPC_BOOK" parent="." instance=ExtResource("22_peuec")]
-transform = Transform3D(0.0204235, 0, -0.0588932, 0, 0.0623341, 0, 0.0588933, 0, 0.0204236, -0.530521, 0.00478163, 0.234189)
-_book_data = ExtResource("19_0w8v3")
+[node name="pot" parent="ODDITIES_BOOK/PLume_pot" index="1"]
+transform = Transform3D(0.924799, 0, 0.380457, 0, 1, 0, -0.380457, 0, 0.924799, 0, 0, 0)
+layers = 512
+surface_material_override/0 = ExtResource("6_kkuc8")
 
 [node name="MeshInstance3D16" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.121051, 0, 0.442688, 0, 0.00627754, 0, -0.288672, 0, 0.185635, 0.517336, 0.00372967, 0.142026)
+transform = Transform3D(0.121051, 0, 0.442688, 0, 0.00627754, 0, -0.288672, 0, 0.185635, 0.623376, 0.00372967, 0.193033)
 layers = 2
 mesh = SubResource("BoxMesh_p7wk2")
 skeleton = NodePath("../..")
@@ -1605,7 +1489,7 @@ layers = 2
 surface_material_override/0 = SubResource("ShaderMaterial_th3mc")
 
 [node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
-transform = Transform3D(-0.0786608, 0, 0.380802, 0, 0.00522373, 0, -0.248317, 0, -0.120629, -0.512486, 0.00372955, 0.0232981)
+transform = Transform3D(-0.0786608, 0, 0.380802, 0, 0.00522373, 0, -0.248317, 0, -0.120629, -0.692325, 0.00372955, 0.0582069)
 layers = 2
 mesh = SubResource("BoxMesh_thjsl")
 skeleton = NodePath("../..")
@@ -1636,9 +1520,7 @@ transform = Transform3D(0.064667, 0, -5.07906e-05, 0, 0.0050063, 0, 5.07906e-05,
 layers = 2
 mesh = SubResource("CylinderMesh_ujlj0")
 
-[connection signal="asign_to" from="Assign_to/Area3D/Focus_and_assign" to="Assign_to/Area3D/Focus_and_assign" method="_on_asign_to"]
-
-[editable path="Deco/PLume_pot"]
+[editable path="ODDITIES_BOOK/PLume_pot"]
 [editable path="TUBE_oddity/Peon_oddity_v01"]
 [editable path="TUBE_oddity/Tube_oddity"]
 [editable path="Bestiere_MyOddity/Apicula_maquette_v01blend"]

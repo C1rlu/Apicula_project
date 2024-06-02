@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://uwg2qc3svu11"]
+[gd_scene load_steps=26 format=3 uid="uid://uwg2qc3svu11"]
 
 [ext_resource type="Resource" uid="uid://bcid58kxecbk2" path="res://12_INVENTORY/Photo/Maurice_photoData.tres" id="1_2tgng"]
 [ext_resource type="Script" path="res://10_BOARD/Assign_legend_page.gd" id="2_7tt1s"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://10_BOARD/Take_Object.tres.gd" id="3_0e5dt"]
 [ext_resource type="Shader" uid="uid://upo0fuo5sqgd" path="res://05_SHADER_TEST/Board/Board_sh.tres" id="3_ysgwd"]
 [ext_resource type="Material" uid="uid://25obtp1blkk6" path="res://05_SHADER_TEST/Board/board_photo_texture.tres" id="4_0radc"]
+[ext_resource type="Texture2D" uid="uid://38btbw60olcn" path="res://12_INVENTORY/Photo/IMG/Boat.png" id="7_2ylay"]
 
 [sub_resource type="GDScript" id="GDScript_2oe2p"]
 script/source = "extends Area3D
@@ -53,12 +54,16 @@ script/source = "extends Node
 @onready var photo_area = $\"..\"
 
 @onready var photo = $\"../photo\"
-@onready var material : Material = photo.get_surface_override_material(0)
+#@onready var material : Material = photo_render.get_surface_override_material(0)
+
+@onready var photo_render  : Sprite3D = $\"../photo_render\"
 
 func _ready():
 	
 	var texture_data = photo_area.photo_data.image
-	material.set_shader_parameter(\"Texture\",texture_data)
+	#material.set_shader_parameter(\"Texture\",texture_data)
+
+	photo_render.texture = texture_data 
 "
 
 [sub_resource type="QuadMesh" id="QuadMesh_o8mkk"]
@@ -249,10 +254,18 @@ disabled = true
 
 [node name="photo" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.0598443, 0, 0, 0, -2.61588e-09, 0.0598444, 0, -0.0598443, -2.61588e-09, 0.000475392, 0.00130028, 0)
+visible = false
 layers = 2
 mesh = SubResource("QuadMesh_ewu27")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("4_0radc")
+
+[node name="photo_render" type="Sprite3D" parent="."]
+transform = Transform3D(0.0116926, 0, 0, 0, 8.27593e-10, 0.0116926, 0, -0.0116926, 8.27593e-10, 0.000372954, 0.00253178, 0)
+layers = 2
+texture = ExtResource("7_2ylay")
+region_enabled = true
+region_rect = Rect2(0, 0, 512, 512)
 
 [connection signal="assign_page" from="Assign_legend_page" to="." method="_on_assign_legend_page_assign_page"]
 [connection signal="show_this_page" from="Show_this_page" to="." method="_on_show_this_page_show_this_page"]

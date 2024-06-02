@@ -1,9 +1,10 @@
-[gd_scene load_steps=27 format=3 uid="uid://bh5a7fhvftxmm"]
+[gd_scene load_steps=28 format=3 uid="uid://bh5a7fhvftxmm"]
 
 [ext_resource type="Script" path="res://10_BOARD/Symbols/Book_symbols/Book_page_behaviour.gd" id="1_gx0mr"]
 [ext_resource type="PackedScene" uid="uid://cgb4c1n0bj2at" path="res://12_INVENTORY/Book/Page_flip/page_flip_right.tscn" id="1_kxpxv"]
 [ext_resource type="PackedScene" uid="uid://db6k1p6qd826g" path="res://10_BOARD/Symbols/Book_symbols/Page/Book_page.tscn" id="1_xf8in"]
 [ext_resource type="Resource" uid="uid://bnr5ucr2s173m" path="res://10_BOARD/Symbols/Book_symbols/Oddities_book.tres" id="2_lnffx"]
+[ext_resource type="Script" path="res://10_BOARD/Symbols/Book_symbols/Idle_position.gd" id="3_uqlyf"]
 [ext_resource type="Material" uid="uid://b5u3d7wosa00d" path="res://05_SHADER_TEST/Board/Flat_with_gradient.tres" id="5_6t2bc"]
 
 [sub_resource type="GDScript" id="GDScript_4sg0y"]
@@ -199,6 +200,9 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 
 script = ExtResource("1_gx0mr")
 _book_data = ExtResource("2_lnffx")
 
+[node name="Idle_position" type="Node" parent="."]
+script = ExtResource("3_uqlyf")
+
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.25
 one_shot = true
@@ -243,7 +247,7 @@ transform = Transform3D(0.974894, 8.74227e-08, 0, -8.52279e-08, 0.999999, 0, 0, 
 
 [node name="page" type="MeshInstance3D" parent="."]
 transform = Transform3D(2.65385, 1.96518e-07, 2.20912e-07, -1.16003e-07, -1.96518e-07, 5.05387, 1.16003e-07, -4.49581, -2.20912e-07, -0.103871, 0.0909873, -0.0437125)
-layers = 2
+layers = 512
 cast_shadow = 0
 mesh = SubResource("QuadMesh_l8pd8")
 skeleton = NodePath("")
@@ -251,13 +255,13 @@ surface_material_override/0 = SubResource("ShaderMaterial_ytwgf")
 
 [node name="book_page" type="MeshInstance3D" parent="."]
 transform = Transform3D(2.67039, 0, 1.84741e-13, 0, 0.078953, 0, 0, 0, 4.63623, -0.104716, 0.0503313, -0.0783752)
-layers = 2
+layers = 512
 mesh = SubResource("BoxMesh_1p7be")
 surface_material_override/0 = SubResource("StandardMaterial3D_axuf0")
 
 [node name="book_base" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.00116803, 0, -2.80743, 0, 0.0406598, 0, 4.79073, 0, 0.000685451, -0.106676, 0.00743847, -0.0563836)
-layers = 2
+layers = 512
 mesh = SubResource("BoxMesh_0xre3")
 skeleton = NodePath("../../..")
 surface_material_override/0 = ExtResource("5_6t2bc")

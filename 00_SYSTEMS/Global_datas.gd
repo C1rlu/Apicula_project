@@ -144,6 +144,11 @@ var board_camera : Camera3D
 var zoom_value : float
 var Cursor_mode : Node
 
+signal book_fade_in
+signal book_fade_out
+
+signal book_back_idle_position
+var book_idle_pos : bool = true
 
 #update description on board
 signal focus_this_on_board(target : Vector3)
@@ -151,8 +156,6 @@ signal Open_ui_dark_backdrop(condition : bool)
 signal show_on_scanner(condition : bool)
 signal show_ui_scanner_dots(condition : bool)
 
-signal legend_active(condition : bool, legend : String)
-var in_legend_assign_mode : bool = false
 var selected_book : book_page_data
 var legend_page_index : int
 
