@@ -71,6 +71,8 @@ func check_cast(targetPos : Vector2):
 				selectable = null	 		
 		return
 	
+
+	
 	if selectable:
 		selectable.show_legend(false)	
 	selectable = result.collider.get_node_or_null("Select_this")	
@@ -78,10 +80,17 @@ func check_cast(targetPos : Vector2):
 	if selectable:	
 		selectable.show_legend(true)
 		selectable = selectable
+		
+
+	if result.collider.get_node_or_null("Loupe"): 
+		var loupe = result.collider.get_node_or_null("Loupe") 
+		loupe._show_only_map()
+			
+		
+
 
 	if result.collider.get_node_or_null("Select_Tube"): 
 		var tube = result.collider.get_node_or_null("Select_Tube") 
-		print(tube)
 		tube._select_tube()		
 		
 	if result.collider.get_node_or_null("Turn_page"):
@@ -95,6 +104,4 @@ func check_cast(targetPos : Vector2):
 		page_index.show_this_page.emit()	
 
 
-	if result.collider.get_node_or_null("Focus_and_assign"):
-		var page_index = result.collider.get_node_or_null("Focus_and_assign")
-		page_index.asign_to.emit()	
+

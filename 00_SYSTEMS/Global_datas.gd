@@ -147,6 +147,10 @@ var Cursor_mode : Node
 signal book_fade_in
 signal book_fade_out
 
+signal photo_fade_in
+signal photo_fade_out
+
+
 signal book_back_idle_position
 var book_idle_pos : bool = true
 

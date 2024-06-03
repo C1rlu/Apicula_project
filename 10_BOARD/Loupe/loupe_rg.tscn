@@ -1,7 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://b3i04ha2iqr4l"]
+[gd_scene load_steps=11 format=3 uid="uid://b3i04ha2iqr4l"]
 
 [ext_resource type="Shader" uid="uid://upo0fuo5sqgd" path="res://05_SHADER_TEST/Board/Board_sh.tres" id="1_sxb3f"]
+[ext_resource type="Script" path="res://10_BOARD/Loupe/Loupe.gd" id="1_te7np"]
 [ext_resource type="Material" uid="uid://bs4xcdhvj0k0p" path="res://05_SHADER_TEST/Board/board_scanner_texture.tres" id="2_cwiti"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ynxbc"]
+size = Vector3(0.233276, 0.0619202, 0.188232)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_51n8l"]
 render_priority = 0
@@ -75,6 +79,15 @@ blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_kt0b6")
 
 [node name="Loupe_deco" type="Node3D"]
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="Loupe" type="Node" parent="Area3D"]
+script = ExtResource("1_te7np")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.09552, 0.0357208, 0.0057373)
+shape = SubResource("BoxShape3D_ynxbc")
 
 [node name="Loupe" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.244162, 0, 0, 0, 0.244162, 0, 0, 0, 0.244162, 0.0368108, 0.0161147, 0)
