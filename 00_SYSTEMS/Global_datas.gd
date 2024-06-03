@@ -144,6 +144,9 @@ var board_camera : Camera3D
 var zoom_value : float
 var Cursor_mode : Node
 
+signal map_fade(condition : bool) # true is in : false is out
+
+
 signal book_fade_in
 signal book_fade_out
 

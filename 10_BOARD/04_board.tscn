@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=3 uid="uid://cein0q2eirkay"]
+[gd_scene load_steps=49 format=3 uid="uid://cein0q2eirkay"]
 
 [ext_resource type="Script" path="res://10_BOARD/FollowFocus.gd" id="1_2m7ey"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_g3pi7"]
@@ -125,8 +125,6 @@ script/source = "extends Node
 
 @onready var Cam : Camera3D = $\"../3D_SCENE/SubViewport/Camp_root_Render/Camera3D\"
 
-
-
 var no_zoom_pos : Vector3
 var normal_zoom_pos : Vector3
 var max_zoom_pos : Vector3
@@ -140,8 +138,12 @@ var zoom_value : float
 
 var t 
 var r
+var all
 var origin_global_pos : Vector3
 var lock_action : bool = false
+
+
+
 func _ready():
 
 	_global_datas.zoom_value = 1
@@ -167,6 +169,10 @@ func _input(event):
 	if !_global_datas.Player_In_Inventory:
 		return
 	
+		#
+	#if lock_action:
+		#return	
+		
 		
 	if event.is_action_pressed(\"Board_zoom_in\"):
 		_Zoom(1)
@@ -214,14 +220,14 @@ func process_zoom():
 	if t:
 		t.kill()
 	t = create_tween()
-	
-	t.tween_property(Cam,\"position\",target,0.8).set_trans(Tween.TRANS_SINE)
+	t.tween_property(Cam,\"position\",target,0.8) #.set_trans(Tween.TRANS_SINE)
 	t.connect(\"finished\",done)
 	
 	if r:
 		r.kill()
 	r = create_tween()
-	r.tween_property(Cam,\"rotation_degrees\",rotation_target,0.8).set_trans(Tween.TRANS_SINE)
+	r.tween_property(Cam,\"rotation_degrees\",rotation_target,0.8)#.set_trans(Tween.TRANS_SINE)
+	
 
 func done():
 	lock_action = false	
@@ -270,20 +276,17 @@ func _physics_process(_delta):
 	var playerPosition = cam_target.global_position
 	for cam in _all_cam_array:
 		cam.global_position = lerp(cam.global_position, playerPosition + offset, smooth_speed * _delta)	
-	rotation_angle(_delta)
+		rotation_angle(_delta)	
 	
 	camera_xray.global_position = camera_3d.global_position
 	camera_xray.global_rotation  = camera_3d.global_rotation 
-	camera_xray.fov = camera_3d.fov
-	
 	camera_3d_book.global_position = camera_3d.global_position
 	camera_3d_book.global_rotation  = camera_3d.global_rotation 
-	camera_3d_book.fov = camera_3d.fov
-		
+
 	camera_3d_photo.global_position = camera_3d.global_position
 	camera_3d_photo.global_rotation  = camera_3d.global_rotation 
-	camera_3d_photo.fov = camera_3d.fov
-		
+
+
 func rotation_angle(_delta):
 
 	var angle_target = cam_target.global_position.x
@@ -302,14 +305,6 @@ func _ready():
 	_global_datas.board_camera = self
 
 "
-
-[sub_resource type="BoxMesh" id="BoxMesh_ixvf7"]
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_ej63r"]
-viewport_path = NodePath("3D_SCENE/SubViewport/Camp_root_Render/Camera3D/Assign_render/Text_render")
-
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_he64u"]
-light_mode = 1
 
 [sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_yrkdd"]
 size = Vector2(513.781, 284.487)
@@ -622,7 +617,8 @@ script = ExtResource("12_ahrkl")
 transform = Transform3D(0.994881, 0.0700726, -0.0728162, 0, 0.720551, 0.693402, 0.101056, -0.689852, 0.716862, -0.08, 0.945, 1.035)
 cull_mask = 0
 current = true
-fov = 42.0
+fov = 40.0
+far = 4.25
 
 [node name="SubViewport" type="SubViewport" parent="3D_SCENE"]
 handle_input_locally = false
@@ -639,74 +635,6 @@ current = true
 fov = 40.0
 far = 4.25
 script = SubResource("GDScript_l5hmx")
-
-[node name="Assign_render" type="Node3D" parent="3D_SCENE/SubViewport/Camp_root_Render/Camera3D"]
-transform = Transform3D(0.357211, -0.0378852, -0.0240325, -0.0621866, 0.121769, -0.0870059, 0.0831713, 0.253758, 0.038163, 0.011, -0.018, -0.063)
-visible = false
-
-[node name="Assign_to" type="MeshInstance3D" parent="3D_SCENE/SubViewport/Camp_root_Render/Camera3D/Assign_render"]
-transform = Transform3D(0.055661, 7.27596e-12, 4.65661e-10, 3.72529e-09, 0.00120276, 6.98492e-10, -8.9407e-08, 2.91038e-11, 0.0606871, -0.00175652, 1.97887e-05, -6.64592e-05)
-layers = 2
-mesh = SubResource("BoxMesh_ixvf7")
-
-[node name="Render_text" type="Sprite3D" parent="3D_SCENE/SubViewport/Camp_root_Render/Camera3D/Assign_render"]
-transform = Transform3D(0.015273, 0, 0, 2.50293e-09, -3.25963e-09, 0.0272241, -3.72529e-09, -0.0537081, 4.65661e-10, -0.000216246, 0.00269852, 0.00325215)
-layers = 2
-texture = SubResource("ViewportTexture_ej63r")
-
-[node name="Text_render" type="SubViewport" parent="3D_SCENE/SubViewport/Camp_root_Render/Camera3D/Assign_render"]
-transparent_bg = true
-size = Vector2i(600, 400)
-
-[node name="text_for_size" type="Label" parent="3D_SCENE/SubViewport/Camp_root_Render/Camera3D/Assign_render/Text_render"]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -198.0
-offset_top = -41.5
-offset_right = 198.0
-offset_bottom = 41.5
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.360784, 0.341176, 0.294118, 1)
-theme_override_font_sizes/font_size = 80
-text = "My Legend "
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="ColorRect" type="ColorRect" parent="3D_SCENE/SubViewport/Camp_root_Render/Camera3D/Assign_render/Text_render/text_for_size"]
-material = SubResource("CanvasItemMaterial_he64u")
-layout_direction = 1
-layout_mode = 1
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_top = -68.77
-offset_bottom = 56.2299
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.819608, 0.764706, 0.698039, 1)
-
-[node name="text" type="Label" parent="3D_SCENE/SubViewport/Camp_root_Render/Camera3D/Assign_render/Text_render"]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -198.0
-offset_top = -48.775
-offset_right = 198.0
-offset_bottom = 34.225
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.360784, 0.341176, 0.294118, 1)
-theme_override_font_sizes/font_size = 60
-text = "assign page to"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="SubViewport_book_render" type="SubViewport" parent="3D_SCENE"]
 transparent_bg = true

@@ -110,5 +110,9 @@ func check_cast(targetPos : Vector2):
 			_global_datas.photo_fade_in.emit()	
 			
 			_global_datas.book_fade_in.emit()	
+			
 	
+		_global_datas.map_fade.emit(!_global_datas.photo_are_active)
+
+
 

@@ -10,9 +10,11 @@ func _ready():
 	_global_datas.photo_fade_in.connect(fade_in)
 	_global_datas.photo_fade_out.connect(fade_out)	
 	
+	
+	
 func fade_in():
 	
-
+	
 	
 	if f:
 		f.kill()
