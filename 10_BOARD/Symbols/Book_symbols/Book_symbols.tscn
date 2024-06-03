@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://bh5a7fhvftxmm"]
+[gd_scene load_steps=30 format=3 uid="uid://bh5a7fhvftxmm"]
 
 [ext_resource type="Script" path="res://10_BOARD/Symbols/Book_symbols/Book_page_behaviour.gd" id="1_gx0mr"]
 [ext_resource type="PackedScene" uid="uid://cgb4c1n0bj2at" path="res://12_INVENTORY/Book/Page_flip/page_flip_right.tscn" id="1_kxpxv"]
@@ -17,10 +17,48 @@ signal  _turn_page
 [sub_resource type="BoxShape3D" id="BoxShape3D_224re"]
 size = Vector3(2.69202, 0.19046, 2.289)
 
+[sub_resource type="GDScript" id="GDScript_dsb8m"]
+script/source = "extends CollisionShape3D
+
+
+@onready var col = $\".\"
+
+func _ready():
+	
+	_global_datas.photo_fade_out.connect(active)	
+	_global_datas.photo_fade_in.connect(disable)	
+	
+	
+func active():
+	col.disabled = true
+	
+func disable():
+	col.disabled = false
+"
+
 [sub_resource type="GDScript" id="GDScript_66qc2"]
 script/source = "extends Node
 
 signal	_turn_page
+"
+
+[sub_resource type="GDScript" id="GDScript_q6dru"]
+script/source = "extends CollisionShape3D
+
+
+@onready var col = $\".\"
+
+func _ready():
+	
+	_global_datas.photo_fade_out.connect(active)	
+	_global_datas.photo_fade_in.connect(disable)	
+	
+	
+func active():
+	col.disabled = true
+	
+func disable():
+	col.disabled = false
 "
 
 [sub_resource type="QuadMesh" id="QuadMesh_l8pd8"]
@@ -222,6 +260,7 @@ script = SubResource("GDScript_4sg0y")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Turn_Right"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0249052, 0.0589447, -1.17724)
 shape = SubResource("BoxShape3D_224re")
+script = SubResource("GDScript_dsb8m")
 
 [node name="Turn_Left" type="Area3D" parent="."]
 
@@ -231,6 +270,7 @@ script = SubResource("GDScript_66qc2")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Turn_Left"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.113466, 0.0589447, 1.10359)
 shape = SubResource("BoxShape3D_224re")
+script = SubResource("GDScript_q6dru")
 
 [node name="Book_page" parent="." instance=ExtResource("1_xf8in")]
 transform = Transform3D(-1.93005e-08, 0, 0.441544, 0, 0.441544, 0, -0.441544, 0, -1.93005e-08, -0.116, -0.061, 0)

@@ -147,6 +147,8 @@ var Cursor_mode : Node
 signal book_fade_in
 signal book_fade_out
 
+
+var photo_are_active : bool = true
 signal photo_fade_in
 signal photo_fade_out
 

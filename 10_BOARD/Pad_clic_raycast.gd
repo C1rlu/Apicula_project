@@ -8,7 +8,6 @@ var selectable
 signal active_scanner(condition : bool)
 
 
-
 func _ready():
 	_global_datas.using_pad.connect(_active_raycast)
 	
@@ -57,22 +56,21 @@ func check_cast(targetPos : Vector2):
 	rayQuery.collide_with_areas = true
 	rayQuery.collide_with_bodies = false
 	var result = space.intersect_ray(rayQuery)
-	#print(result)
+
 
 	if !result:
-	
-		if !_global_datas.book_idle_pos:
-			_global_datas.book_back_idle_position.emit()
-			_global_datas.book_fade_in.emit()
-			_global_datas.book_idle_pos = true
 		if selectable: # Deselect selected photo data if exist
 			if !_global_datas.in_scanner_mode:
 				selectable.show_legend(false)
 				selectable = null	 		
 		return
 	
+		
+	if result.collider.get_node_or_null("Book_exit"): 
+		var _exit = result.collider.get_node_or_null("Book_exit") 
+		_exit._book_exit()
+		
 
-	
 	if selectable:
 		selectable.show_legend(false)	
 	selectable = result.collider.get_node_or_null("Select_this")	
@@ -86,7 +84,6 @@ func check_cast(targetPos : Vector2):
 		var loupe = result.collider.get_node_or_null("Loupe") 
 		loupe._show_only_map()
 			
-		
 
 
 	if result.collider.get_node_or_null("Select_Tube"): 
@@ -94,6 +91,8 @@ func check_cast(targetPos : Vector2):
 		tube._select_tube()		
 		
 	if result.collider.get_node_or_null("Turn_page"):
+		
+	
 		var right_page = result.collider.get_node_or_null("Turn_page") 
 
 		right_page._turn_page.emit()		
@@ -103,5 +102,16 @@ func check_cast(targetPos : Vector2):
 		var page_index = result.collider.get_node_or_null("Show_this_page")
 		page_index.show_this_page.emit()	
 
-
+	
+	if result.collider.get_node_or_null("map"): 
+		#for show map only are photo	
+		_global_datas.photo_are_active =!_global_datas.photo_are_active
+		if _global_datas.photo_are_active:
+			_global_datas.photo_fade_in.emit()
+			_global_datas.book_fade_in.emit()
+		else:
+			_global_datas.photo_fade_out.emit()	
+			
+			_global_datas.book_fade_out.emit()	
+	
 
