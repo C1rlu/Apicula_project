@@ -8,10 +8,20 @@ extends Node
 var cam_target : Vector3
 
 var offset : Vector3
-
+var base_position : Vector3
 func _ready():
 	offset = _all_cam_array[0].global_position - cam_target
-
+	base_position = _all_cam_array[0].global_position 
+	
+	_global_datas.show_on_scanner.connect(reset)
+	
+func reset(condition):
+	
+	cam_target = base_position
+	if condition:
+		for cam in _all_cam_array:
+			cam.global_position	= base_position 	
+			
 func _process(delta):
 	_move_cam(delta)	
 

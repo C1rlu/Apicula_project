@@ -148,7 +148,7 @@ signal book_fade_in
 signal book_fade_out
 
 
-var photo_are_active : bool = true
+var photo_are_active : bool 
 signal photo_fade_in
 signal photo_fade_out
 

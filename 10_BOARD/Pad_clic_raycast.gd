@@ -80,21 +80,17 @@ func check_cast(targetPos : Vector2):
 		selectable = selectable
 		
 
-	if result.collider.get_node_or_null("Loupe"): 
-		var loupe = result.collider.get_node_or_null("Loupe") 
-		loupe._show_only_map()
+	#if result.collider.get_node_or_null("Loupe"): 
+		#var loupe = result.collider.get_node_or_null("Loupe") 
+		#loupe._show_only_map()
 			
-
 
 	if result.collider.get_node_or_null("Select_Tube"): 
 		var tube = result.collider.get_node_or_null("Select_Tube") 
 		tube._select_tube()		
 		
 	if result.collider.get_node_or_null("Turn_page"):
-		
-	
 		var right_page = result.collider.get_node_or_null("Turn_page") 
-
 		right_page._turn_page.emit()		
 
 
@@ -106,12 +102,13 @@ func check_cast(targetPos : Vector2):
 	if result.collider.get_node_or_null("map"): 
 		#for show map only are photo	
 		_global_datas.photo_are_active =!_global_datas.photo_are_active
+		
 		if _global_datas.photo_are_active:
-			_global_datas.photo_fade_in.emit()
-			_global_datas.book_fade_in.emit()
+			_global_datas.photo_fade_out.emit()
+			_global_datas.book_fade_out.emit()
 		else:
-			_global_datas.photo_fade_out.emit()	
+			_global_datas.photo_fade_in.emit()	
 			
-			_global_datas.book_fade_out.emit()	
+			_global_datas.book_fade_in.emit()	
 	
 

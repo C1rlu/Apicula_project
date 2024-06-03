@@ -4,14 +4,15 @@ extends Node
 @onready var material : Material = _render .get_material()
 var f
 var current_value : float
+
 func _ready():
+	
 	_global_datas.photo_fade_in.connect(fade_in)
 	_global_datas.photo_fade_out.connect(fade_out)	
 	
 func fade_in():
 	
-	if current_value == 1.0:
-		return
+
 	
 	if f:
 		f.kill()
@@ -22,9 +23,7 @@ func fade_in():
 	
 func fade_out():
 
-	if current_value == 0.0:
-		return
-		
+
 	if f:
 		f.kill()
 		
