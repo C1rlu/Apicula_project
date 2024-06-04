@@ -2,7 +2,6 @@ extends Node3D
 
 @onready var _book_page = $Book_page
 @export var _book_data : book_page_data
-@export var focus_and_assign : Node
 var page_index = 0 
 
 @onready var page_flip_right_root = $Page_flip_right_ROOT
@@ -29,8 +28,8 @@ func _ready():
 	_book_page.book_data = _book_data 
 	_book_data.book_node = $"." 
 
-	
-	
+	_global_datas.turn_left.connect(update_page_left)
+	_global_datas.turn_right.connect(update_page_right)
 	
 func update_page_right():
 	
@@ -52,9 +51,6 @@ func update_page_right():
 	_page.turn_page.emit()		
 	_book_page.set_content.emit(page_index)
 	
-	if focus_and_assign:
-		focus_and_assign.update_page_index_to_assign(page_index)
-		
 func update_page_left():
 	
 	if is_turning:
@@ -76,9 +72,7 @@ func update_page_left():
 	
 	_book_page.set_content.emit(page_index)
 	
-	if focus_and_assign:
-		focus_and_assign.update_page_index_to_assign(page_index)
-		
+
 func _show_from_index(index):
 	
 	if is_turning:
@@ -116,8 +110,6 @@ func _show_from_index(index):
 	_book_page.set_content.emit(page_index)	
 				
 					
-	if focus_and_assign:
-		focus_and_assign.update_page_index_to_assign(page_index)
 func multiple_page_right():
 	multiple_page_transition_right.start()		
 func multiple_page_left():

@@ -14,14 +14,19 @@ var mouse_inside = false
 var last_mouse_pos_3D = null
 var last_mouse_pos_2D = null
 
-
+@export var disable = true
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	
+	if disable:
+		return
 	area.mouse_entered.connect(func(): mouse_entered = true)
 	viewport.set_process_input(true)
 	
 	
 func _unhandled_input(event):
+	if disable:
+		return
 	var is_mouse_event = false
 	if event is InputEventMouseMotion or event is InputEventMouseButton:
 		is_mouse_event = true
@@ -33,6 +38,9 @@ func _unhandled_input(event):
 	
 	
 func handle_mouse(event):
+	
+	if disable:
+		return
 	mesh_size = display.mesh.size
 	
 	if event is InputEventMouseButton or event is InputEventScreenTouch:

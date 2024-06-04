@@ -146,6 +146,8 @@ var Cursor_mode : Node
 
 signal map_fade(condition : bool) # true is in : false is out
 
+signal turn_left
+signal turn_right
 
 signal book_fade_in
 signal book_fade_out

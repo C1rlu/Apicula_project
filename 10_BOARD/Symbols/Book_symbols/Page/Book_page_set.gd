@@ -3,7 +3,7 @@ extends Node3D
 var book_data : book_page_data
 
 @onready var page_render = $Render_text
-@onready var page_viewport_render = $Page_Viewport_render
+@onready var page_viewport_render = $Book_inputViewports/SubViewport
 @onready var init_timer = $Init_timer
 
 

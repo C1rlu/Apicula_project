@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://cw0cpw07inbdx"]
+[gd_scene load_steps=5 format=3 uid="uid://cw0cpw07inbdx"]
 
 [ext_resource type="PackedScene" uid="uid://c2xru5it6u2xg" path="res://00_SCENE/Scene_Test/Test_ui_2d_3d/Ui.tscn" id="1_wph57"]
 
@@ -42,8 +42,8 @@ func handle_mouse(event):
 	if event is InputEventMouseButton or event is InputEventScreenTouch:
 		mouse_held = event.pressed
 	
-	#if find_mouse(event.global_position) == null:
-		#return
+	if !mouse_entered:
+		return
 	var mouse_pos3D = find_mouse(event.global_position)
 	
 	mouse_inside = mouse_pos3D != null
@@ -83,13 +83,13 @@ func handle_mouse(event):
 
 func find_mouse(pos:Vector2):
 	
-	var camera = _global_datas.board_camera
-	#var camera = get_viewport().get_camera_3d()
+	#var camera = _global_datas.board_camera
+	var camera = get_viewport().get_camera_3d()
 	var dss:PhysicsDirectSpaceState3D = camera.get_world_3d().direct_space_state
 	
 	var rayparam = PhysicsRayQueryParameters3D.new()
 	rayparam.from = camera.project_ray_origin(pos)
-	var dis = 5
+	var dis = 100
 	rayparam.to = rayparam.from + camera.project_ray_normal(pos) * dis
 	rayparam.collide_with_bodies = false
 	rayparam.collide_with_areas = true
@@ -105,16 +105,8 @@ func find_mouse(pos:Vector2):
 
 [sub_resource type="QuadMesh" id="QuadMesh_xhsor"]
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_5vds7"]
-viewport_path = NodePath("SubViewport")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tttx7"]
-resource_local_to_scene = true
-shading_mode = 0
-albedo_texture = SubResource("ViewportTexture_5vds7")
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_rbi75"]
-size = Vector3(1.00029, 0.999625, 0.0987244)
+size = Vector3(0.989746, 0.999625, 0.0659904)
 
 [node name="TestUi" type="Node3D"]
 
@@ -122,16 +114,15 @@ size = Vector3(1.00029, 0.999625, 0.0987244)
 script = SubResource("GDScript_hjfak")
 
 [node name="Render" type="MeshInstance3D" parent="."]
-transform = Transform3D(1.6, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0.40383)
-layers = 513
+transform = Transform3D(1.6, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+layers = 512
 mesh = SubResource("QuadMesh_xhsor")
-surface_material_override/0 = SubResource("StandardMaterial3D_tttx7")
 
 [node name="Area3D" type="Area3D" parent="Render"]
 priority = 1
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Render/Area3D"]
-transform = Transform3D(1, 0, 0, 0, 1, -2.98023e-08, 0, 2.98023e-08, 1, 0, -5.6616e-10, 0.0189972)
+transform = Transform3D(1, 0, 0, 0, 1, -2.98023e-08, 0, 2.98023e-08, 1, 0.00527191, -3.85342e-10, 0.0129299)
 shape = SubResource("BoxShape3D_rbi75")
 
 [node name="SubViewport" type="SubViewport" parent="."]
