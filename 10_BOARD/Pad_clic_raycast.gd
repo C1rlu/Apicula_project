@@ -65,10 +65,15 @@ func check_cast(targetPos : Vector2):
 				selectable = null	 		
 		return
 	
-		
 	if result.collider.get_node_or_null("Book_exit"): 
 		var _exit = result.collider.get_node_or_null("Book_exit") 
 		_exit._book_exit()
+		
+			
+	if result.collider.get_node_or_null("Page_event"): 
+		var page = result.collider.get_node_or_null("Page_event")
+		page.trigger_page_event.emit()	 
+
 		
 
 	if selectable:

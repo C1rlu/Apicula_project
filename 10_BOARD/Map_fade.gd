@@ -7,7 +7,8 @@ var f
 var fade_value : float = 1.2
 
 func _ready():
-	_global_datas.map_fade.connect(map_fade)
+	pass
+	#_global_datas.map_fade.connect(map_fade)
 	
 func map_fade(condition : bool):
 	

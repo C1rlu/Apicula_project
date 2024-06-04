@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://cotyiiewaqqpu"]
+[gd_scene load_steps=3 format=3 uid="uid://cotyiiewaqqpu"]
 
 [sub_resource type="GDScript" id="GDScript_6ohfl"]
 script/source = "extends Node
@@ -10,6 +10,14 @@ func _ready():
 	
 	color_rect.queue_free()	
 	color_rect_2.queue_free()
+"
+
+[sub_resource type="GDScript" id="GDScript_cxftw"]
+script/source = "extends Button
+
+
+func _on_pressed():
+	print(\"PRESSED\")
 "
 
 [node name="Page_00" type="Control"]
@@ -84,6 +92,7 @@ theme_override_font_sizes/font_size = 31
 text = "FIRST OBSERVATION"
 
 [node name="Label4" type="Label" parent="."]
+visible = false
 layout_mode = 0
 offset_left = 562.0
 offset_top = 115.0
@@ -121,3 +130,31 @@ offset_right = 3.0
 grow_horizontal = 0
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
+
+[node name="Button2" type="Button" parent="."]
+offset_left = 552.0
+offset_top = 126.0
+offset_right = 966.0
+offset_bottom = 221.0
+text = "..................... ? ............................."
+script = SubResource("GDScript_cxftw")
+
+[node name="Button2" type="Button" parent="Button2"]
+offset_left = 4.0
+offset_top = 140.0
+offset_right = 418.0
+offset_bottom = 235.0
+text = "..................... ? ............................."
+script = SubResource("GDScript_cxftw")
+
+[node name="Button" type="Button" parent="."]
+offset_left = 41.0
+offset_top = 469.0
+offset_right = 455.0
+offset_bottom = 564.0
+text = "..................... ? ............................."
+script = SubResource("GDScript_cxftw")
+
+[connection signal="pressed" from="Button2" to="Button2" method="_on_pressed"]
+[connection signal="pressed" from="Button2/Button2" to="Button2/Button2" method="_on_pressed"]
+[connection signal="pressed" from="Button" to="Button" method="_on_pressed"]
