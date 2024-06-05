@@ -20,11 +20,10 @@ func _focus_this(target : Vector3):
 		#return	
 		
 
-	var offset = Vector3(0.0,0.0,0.025)	
 	if t:
 		t.kill()
 	t = create_tween()
 	
-	t.tween_property(cam_target,"position",target + offset,0.5).set_trans(Tween.TRANS_SINE)
+	t.tween_property(cam_target,"position",target,0.5).set_trans(Tween.TRANS_SINE)
 	previous_photoTarget = target
 

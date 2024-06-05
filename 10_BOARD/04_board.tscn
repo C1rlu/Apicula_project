@@ -201,11 +201,11 @@ func _Zoom(value : int):
 	
 	if zoom_index == 2:
 		target = normal_zoom_pos
-		rotation_target = Vector3(-45,-5.8,0)
+		rotation_target = Vector3(-50,-5.8,0)
 		
 	if zoom_index == 3:
 		target = max_zoom_pos	
-		rotation_target = Vector3(-55,-5.8,0)
+		rotation_target = Vector3(-60,-5.8,0)
 		
 
 	process_zoom()
@@ -305,96 +305,6 @@ func _ready():
 	_global_datas.board_camera = self
 
 "
-
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_yrkdd"]
-size = Vector2(513.781, 284.487)
-expression = "vec2 n_uv = UV -0.5;
-float d = length(n_uv);
-float c = smoothstep(r,r + feather,d);
-color = vec4(vec3(c),1.0);"
-
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_fxvjj"]
-input_name = "uv"
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_xdogs"]
-constant = 0.5
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_wb6mp"]
-
-[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_evu1d"]
-function = 31
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_5pf1n"]
-constant = 0.1
-
-[sub_resource type="VisualShader" id="VisualShader_elssd"]
-code = "shader_type canvas_item;
-render_mode blend_mix;
-
-
-
-
-void fragment() {
-// Input:3
-	vec2 n_out3p0 = UV;
-
-
-// FloatConstant:4
-	float n_out4p0 = 0.500000;
-
-
-// FloatConstant:5
-	float n_out5p0 = 0.000000;
-
-
-	vec4 n_out2p0;
-// Expression:2
-	n_out2p0 = vec4(0.0, 0.0, 0.0, 0.0);
-	{
-		vec2 n_uv = n_out3p0 -0.5;
-		float d = length(n_uv);
-		float c = smoothstep(n_out4p0,n_out4p0 + n_out5p0,d);
-		n_out2p0 = vec4(vec3(c),1.0);
-	}
-
-
-// FloatFunc:6
-	float n_out6p0 = 1.0 - n_out2p0.x;
-
-
-// Output:0
-	COLOR.a = n_out6p0;
-
-
-}
-"
-graph_offset = Vector2(-507.845, 108.253)
-mode = 1
-flags/light_only = false
-nodes/fragment/0/position = Vector2(820, 140)
-nodes/fragment/2/node = SubResource("VisualShaderNodeExpression_yrkdd")
-nodes/fragment/2/position = Vector2(-82.4779, 287.841)
-nodes/fragment/2/size = Vector2(513.781, 284.487)
-nodes/fragment/2/input_ports = "0,3,UV;1,0,r;2,0,feather;"
-nodes/fragment/2/output_ports = "0,5,color;"
-nodes/fragment/2/expression = "vec2 n_uv = UV -0.5;
-float d = length(n_uv);
-float c = smoothstep(r,r + feather,d);
-color = vec4(vec3(c),1.0);"
-nodes/fragment/3/node = SubResource("VisualShaderNodeInput_fxvjj")
-nodes/fragment/3/position = Vector2(-482.478, 227.841)
-nodes/fragment/4/node = SubResource("VisualShaderNodeFloatConstant_xdogs")
-nodes/fragment/4/position = Vector2(-362.478, 387.841)
-nodes/fragment/5/node = SubResource("VisualShaderNodeFloatConstant_wb6mp")
-nodes/fragment/5/position = Vector2(-282.478, 487.841)
-nodes/fragment/6/node = SubResource("VisualShaderNodeFloatFunc_evu1d")
-nodes/fragment/6/position = Vector2(654.179, 36.3039)
-nodes/fragment/7/node = SubResource("VisualShaderNodeFloatConstant_5pf1n")
-nodes/fragment/7/position = Vector2(57.5221, -12.1591)
-nodes/fragment/connections = PackedInt32Array(3, 0, 2, 0, 4, 0, 2, 1, 5, 0, 2, 2, 2, 0, 6, 0, 6, 0, 0, 1)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_blt4p"]
-shader = SubResource("VisualShader_elssd")
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_gpfe8"]
 viewport_path = NodePath("3D_SCENE/SubViewport")
@@ -545,6 +455,96 @@ shader_parameter/Opacity = 1.0
 [sub_resource type="ViewportTexture" id="ViewportTexture_bjncg"]
 viewport_path = NodePath("3D_SCENE/SubViewport_book_render")
 
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_yrkdd"]
+size = Vector2(513.781, 284.487)
+expression = "vec2 n_uv = UV -0.5;
+float d = length(n_uv);
+float c = smoothstep(r,r + feather,d);
+color = vec4(vec3(c),1.0);"
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_fxvjj"]
+input_name = "uv"
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_xdogs"]
+constant = 0.5
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_wb6mp"]
+
+[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_evu1d"]
+function = 31
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_5pf1n"]
+constant = 0.1
+
+[sub_resource type="VisualShader" id="VisualShader_elssd"]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+
+
+
+void fragment() {
+// Input:3
+	vec2 n_out3p0 = UV;
+
+
+// FloatConstant:4
+	float n_out4p0 = 0.500000;
+
+
+// FloatConstant:5
+	float n_out5p0 = 0.000000;
+
+
+	vec4 n_out2p0;
+// Expression:2
+	n_out2p0 = vec4(0.0, 0.0, 0.0, 0.0);
+	{
+		vec2 n_uv = n_out3p0 -0.5;
+		float d = length(n_uv);
+		float c = smoothstep(n_out4p0,n_out4p0 + n_out5p0,d);
+		n_out2p0 = vec4(vec3(c),1.0);
+	}
+
+
+// FloatFunc:6
+	float n_out6p0 = 1.0 - n_out2p0.x;
+
+
+// Output:0
+	COLOR.a = n_out6p0;
+
+
+}
+"
+graph_offset = Vector2(-507.845, 108.253)
+mode = 1
+flags/light_only = false
+nodes/fragment/0/position = Vector2(820, 140)
+nodes/fragment/2/node = SubResource("VisualShaderNodeExpression_yrkdd")
+nodes/fragment/2/position = Vector2(-82.4779, 287.841)
+nodes/fragment/2/size = Vector2(513.781, 284.487)
+nodes/fragment/2/input_ports = "0,3,UV;1,0,r;2,0,feather;"
+nodes/fragment/2/output_ports = "0,5,color;"
+nodes/fragment/2/expression = "vec2 n_uv = UV -0.5;
+float d = length(n_uv);
+float c = smoothstep(r,r + feather,d);
+color = vec4(vec3(c),1.0);"
+nodes/fragment/3/node = SubResource("VisualShaderNodeInput_fxvjj")
+nodes/fragment/3/position = Vector2(-482.478, 227.841)
+nodes/fragment/4/node = SubResource("VisualShaderNodeFloatConstant_xdogs")
+nodes/fragment/4/position = Vector2(-362.478, 387.841)
+nodes/fragment/5/node = SubResource("VisualShaderNodeFloatConstant_wb6mp")
+nodes/fragment/5/position = Vector2(-282.478, 487.841)
+nodes/fragment/6/node = SubResource("VisualShaderNodeFloatFunc_evu1d")
+nodes/fragment/6/position = Vector2(654.179, 36.3039)
+nodes/fragment/7/node = SubResource("VisualShaderNodeFloatConstant_5pf1n")
+nodes/fragment/7/position = Vector2(57.5221, -12.1591)
+nodes/fragment/connections = PackedInt32Array(3, 0, 2, 0, 4, 0, 2, 1, 5, 0, 2, 2, 2, 0, 6, 0, 6, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_blt4p"]
+shader = SubResource("VisualShader_elssd")
+
 [sub_resource type="ArrayMesh" id="ArrayMesh_i7f22"]
 resource_name = "Player_Boat_01-c9377ed3c1eb09ef00335a9606626fca_Cube_001"
 _surfaces = [{
@@ -640,24 +640,6 @@ handle_input_locally = false
 scaling_3d_scale = 0.9
 size = Vector2i(1920, 1080)
 
-[node name="Pad_target" type="ColorRect" parent="3D_SCENE/SubViewport_book_render"]
-visible = false
-material = SubResource("ShaderMaterial_blt4p")
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 6.47998
-offset_top = 1.48999
-offset_right = 26.48
-offset_bottom = 21.49
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(0.89, 0.89)
-mouse_filter = 2
-color = Color(0.721569, 0.635294, 0.439216, 1)
-
 [node name="Camp_root_Render" type="Node3D" parent="3D_SCENE/SubViewport_book_render"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.38419e-07)
 
@@ -715,6 +697,24 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("ViewportTexture_bjncg")
 expand_mode = 3
+
+[node name="Pad_target" type="ColorRect" parent="3D_SCENE"]
+visible = false
+material = SubResource("ShaderMaterial_blt4p")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.89, 0.89)
+mouse_filter = 2
+color = Color(0.721569, 0.635294, 0.439216, 1)
 
 [node name="Board_scene" parent="3D_SCENE" instance=ExtResource("2_6c571")]
 

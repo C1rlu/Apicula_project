@@ -1,0 +1,47 @@
+[gd_scene load_steps=7 format=3 uid="uid://db6k1p6qd826g"]
+
+[ext_resource type="Script" path="res://10_BOARD/00_BOOK/Book_symbols/Page/Book_page_set.gd" id="1_oto3u"]
+[ext_resource type="PackedScene" uid="uid://dmqvkk6j7g1ri" path="res://10_BOARD/00_BOOK/Book_symbols/Page/page_01.tscn" id="3_vseyv"]
+[ext_resource type="PackedScene" uid="uid://cotyiiewaqqpu" path="res://10_BOARD/00_BOOK/Book_symbols/Page/page_00.tscn" id="3_ybf1m"]
+[ext_resource type="PackedScene" uid="uid://olyejd2flb2q" path="res://10_BOARD/00_BOOK/Book_symbols/Page/page_02.tscn" id="4_oy232"]
+[ext_resource type="PackedScene" uid="uid://cfm6sxydm88tm" path="res://10_BOARD/00_BOOK/Book_symbols/Page/page_03.tscn" id="5_rg3ml"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_wygim"]
+viewport_path = NodePath("Book_inputViewports/SubViewport")
+
+[node name="Book_page" type="Node3D"]
+script = ExtResource("1_oto3u")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.25
+one_shot = true
+
+[node name="Init_timer" type="Timer" parent="."]
+wait_time = 0.25
+one_shot = true
+
+[node name="Render_text" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.366, 0)
+layers = 512
+texture = SubResource("ViewportTexture_wygim")
+
+[node name="Book_inputViewports" type="Node3D" parent="."]
+transform = Transform3D(5.83591, 0, 0, 0, 5.83591, 0, 0, 0, 5.83591, 0, 0.462836, 0)
+
+[node name="SubViewport" type="SubViewport" parent="Book_inputViewports"]
+disable_3d = true
+transparent_bg = true
+size = Vector2i(1000, 600)
+
+[node name="pages" parent="Book_inputViewports/SubViewport" instance=ExtResource("3_ybf1m")]
+
+[node name="Page_01" parent="Book_inputViewports/SubViewport" instance=ExtResource("3_vseyv")]
+
+[node name="Page_02" parent="Book_inputViewports/SubViewport" instance=ExtResource("4_oy232")]
+
+[node name="Page_03" parent="Book_inputViewports/SubViewport" instance=ExtResource("5_rg3ml")]
+
+[connection signal="set_content" from="." to="." method="_on_set_content"]
+[connection signal="show_content" from="." to="." method="_on_show_content"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="Init_timer" to="." method="_on_init_timer_timeout"]

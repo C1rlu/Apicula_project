@@ -5,6 +5,7 @@ var _pad : bool = false
 @onready var  Camera = $"../3D_SCENE/Camp_root_XRay/Camera_xray"
 
 var selectable
+var previous_on_over
 signal active_scanner(condition : bool)
 
 
@@ -15,9 +16,18 @@ func _active_raycast(condition : bool):
 	_pad = condition			
 
 func _input(event):
-
+	
 	if _global_datas.in_scanner_mode:
 		return
+		
+		
+	if _pad: 
+		var center_screen = Vector2i(640,360)
+		check_on_over(center_screen)		
+	else:
+		var target = get_viewport().get_mouse_position()
+		check_on_over(target)	
+		
 		
 	if event.is_action_released("Click_on_board"):
 		if selectable:
@@ -28,6 +38,7 @@ func _input(event):
 		return	
 			
 	if event.is_action_pressed("Click_on_board"):	
+
 		if _pad: 
 	
 			var center_screen = Vector2i(640,360)
@@ -84,6 +95,10 @@ func check_cast(targetPos : Vector2):
 		selectable.show_legend(true)
 		selectable = selectable
 		
+	
+	if result.collider.get_node_or_null("push_button"): 
+		var button = result.collider.get_node_or_null("push_button")
+		button.push()	 
 
 	#if result.collider.get_node_or_null("Loupe"): 
 		#var loupe = result.collider.get_node_or_null("Loupe") 
@@ -119,5 +134,29 @@ func check_cast(targetPos : Vector2):
 	
 		_global_datas.map_fade.emit(!_global_datas.photo_are_active)
 
+func check_on_over(targetPos : Vector2):
+	
+	var rayLengh = 250.0
+	var from = Camera.project_ray_origin(targetPos)
+	var to = from + Camera.project_ray_normal(targetPos) * rayLengh
+	var space = Camera.get_world_3d().direct_space_state
+	var rayQuery = PhysicsRayQueryParameters3D.new()
+	rayQuery.collision_mask = 7
+	rayQuery.from = from
+	rayQuery.to = to
+	
+	rayQuery.collide_with_areas = true
+	rayQuery.collide_with_bodies = false
+	var result = space.intersect_ray(rayQuery)
 
-
+	if !result:
+		return
+		
+	if previous_on_over:
+		previous_on_over.on_over(false)
+		previous_on_over = null	
+	
+	if result.collider.get_node_or_null("push_button"): 
+		var button = result.collider.get_node_or_null("push_button")
+		previous_on_over = button
+		button.on_over(true)	 	

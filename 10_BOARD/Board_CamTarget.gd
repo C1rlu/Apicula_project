@@ -68,7 +68,7 @@ func _process(delta):
 	position = target_position
 	
 func _focus_this(_position):
-	var offset = Vector3(0.0,0.0,0.025)
-	target_position = _position + offset
+
+	target_position = _position 
 
 

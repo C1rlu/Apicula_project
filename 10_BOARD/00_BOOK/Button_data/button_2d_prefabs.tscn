@@ -1,0 +1,63 @@
+[gd_scene load_steps=3 format=3 uid="uid://cgb01ku2od671"]
+
+[ext_resource type="Resource" uid="uid://fbr0i6tyrrjn" path="res://10_BOARD/00_BOOK/Button_data/button_01.tres" id="1_f1hyy"]
+
+[sub_resource type="GDScript" id="GDScript_xj44o"]
+script/source = "extends Button
+
+@export var button_data : book_button_data
+
+
+@export var on_over : Control
+
+func _ready():
+
+	button_data.button_on_over.connect(_on_over)
+	button_data.button_signal.connect(push_button)
+	
+	var col : CollisionShape3D = button_data.button_area.get_node(\"col\")
+	col.disabled = false
+
+func _on_over(condition):
+	on_over.visible = condition		
+	
+	
+func push_button():
+
+	emit_signal(\"button_down\")
+	
+func _on_tree_exiting():
+	var col : CollisionShape3D = button_data.button_area.get_node(\"col\")
+	col.disabled = true
+
+
+
+func _on_button_down():
+	print(\"PUSH PUSH PUSHHH\")	
+
+"
+
+[node name="Button_1" type="Button" node_paths=PackedStringArray("on_over")]
+offset_left = 41.0
+offset_top = 457.0
+offset_right = 455.0
+offset_bottom = 552.0
+focus_mode = 0
+text = "..................... ? ............................."
+script = SubResource("GDScript_xj44o")
+button_data = ExtResource("1_f1hyy")
+on_over = NodePath("On_Over")
+
+[node name="On_Over" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 0.870588, 0.760784, 0.309804)
+
+[connection signal="button_down" from="." to="." method="_on_button_down"]
+[connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
