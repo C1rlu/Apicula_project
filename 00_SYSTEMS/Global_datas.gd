@@ -137,7 +137,7 @@ var _orbe_visual_scene : Array[Node3D]
 signal instance_scene_oddity(oddity_scene : PackedScene, amount : int ,position : Vector3)
 
 #board scene
-
+var book_data : book_page_data
 signal open_inventory(condition : bool)
 signal mouse_raycast
 var board_camera : Camera3D

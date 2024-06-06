@@ -1,67 +1,49 @@
-[gd_scene load_steps=13 format=3 uid="uid://uwg2qc3svu11"]
+[gd_scene load_steps=12 format=3 uid="uid://uwg2qc3svu11"]
 
 [ext_resource type="Resource" uid="uid://bcid58kxecbk2" path="res://12_INVENTORY/Photo/Maurice_photoData.tres" id="1_2tgng"]
-[ext_resource type="Script" path="res://10_BOARD/Assign_legend_page.gd" id="2_7tt1s"]
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Show_this_page.gd" id="2_653je"]
-[ext_resource type="Script" path="res://10_BOARD/Take_Object.tres.gd" id="3_0e5dt"]
 [ext_resource type="Shader" uid="uid://upo0fuo5sqgd" path="res://05_SHADER_TEST/Board/Board_sh.tres" id="3_ysgwd"]
 [ext_resource type="Texture2D" uid="uid://38btbw60olcn" path="res://12_INVENTORY/Photo/IMG/Boat.png" id="7_2ylay"]
+[ext_resource type="PackedScene" uid="uid://ckin6oiruwreh" path="res://10_BOARD/00_BOOK/Legend/Legend_symbols_prefab.tscn" id="8_dqpog"]
 
 [sub_resource type="GDScript" id="GDScript_2oe2p"]
 script/source = "extends Area3D
 
+
+
 @export var photo_data : PhotoData
-@export var legend_node : Node3D
+
 @export var is_a_scanner : bool = true
 @onready var collision_shape_3d = $CollisionShape3D
 @onready var mesh_instance_3d_7 = $MeshInstance3D7
 
+@onready var legend_prefab = $legend_prefab
 
-@onready var select_this = $Select_this
 
-
-func _ready():
-	_disable_object()
-	
-	if !is_a_scanner:
-		select_this.free()
-			
 func _active():
 	collision_shape_3d.disabled = false	
 	mesh_instance_3d_7.visible = true
-
-	
-	if legend_node:
-		legend_node.enable_legend.emit(true)
+	var book = _global_datas.book_data
+	legend_prefab.ini_legend.emit(book,photo_data.page_index)
 
 func _disable_object():
 	
 	collision_shape_3d.disabled = true
 	mesh_instance_3d_7.visible = false
 
-	
-	if legend_node:
-		legend_node.enable_legend.emit(false)
 
-func _on_assign_legend_page_assign_page():
-	legend_node.update_legend.emit() 	
-	
 "
 
 [sub_resource type="GDScript" id="GDScript_32kbr"]
 script/source = "extends Node
+
+
 @onready var photo_area = $\"..\"
-
-
-#@onready var material : Material = photo_render.get_surface_override_material(0)
-
 @onready var photo_render  : Sprite3D = $\"../photo_render\"
 
 func _ready():
 	
 	var texture_data = photo_area.photo_data.image
-	#material.set_shader_parameter(\"Texture\",texture_data)
-
 	photo_render.texture = texture_data 
 "
 
@@ -102,14 +84,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.00272226, 0)
 script = SubResource("GDScript_2oe2p")
 photo_data = ExtResource("1_2tgng")
 
-[node name="Assign_legend_page" type="Node" parent="."]
-script = ExtResource("2_7tt1s")
-
 [node name="Show_this_page" type="Node" parent="."]
 script = ExtResource("2_653je")
-
-[node name="Select_this" type="Node" parent="."]
-script = ExtResource("3_0e5dt")
+book_position_offset = Vector3(0.05, 0, 0.12)
 
 [node name="texture" type="Node" parent="."]
 script = SubResource("GDScript_32kbr")
@@ -133,6 +110,7 @@ texture = ExtResource("7_2ylay")
 region_enabled = true
 region_rect = Rect2(0, 0, 512, 512)
 
-[connection signal="assign_page" from="Assign_legend_page" to="." method="_on_assign_legend_page_assign_page"]
-[connection signal="show_this_page" from="Show_this_page" to="." method="_on_show_this_page_show_this_page"]
-[connection signal="on_click" from="Select_this" to="Select_this" method="_on_on_click"]
+[node name="legend_prefab" parent="." instance=ExtResource("8_dqpog")]
+transform = Transform3D(0.977467, 0, -0.211086, 0, 1, 0, 0.211086, 0, 0.977467, 0, 0.000268519, 0.0309599)
+
+[connection signal="on_click" from="Show_this_page" to="Show_this_page" method="_on_on_click"]

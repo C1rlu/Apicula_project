@@ -27,7 +27,8 @@ func _ready():
 
 	_book_page.book_data = _book_data 
 	_book_data.book_node = $"." 
-
+	_global_datas.book_data = _book_data
+	
 	_global_datas.turn_left.connect(update_page_left)
 	_global_datas.turn_right.connect(update_page_right)
 	

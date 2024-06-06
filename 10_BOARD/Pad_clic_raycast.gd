@@ -4,7 +4,6 @@ var _pad : bool = false
 
 @onready var  Camera = $"../3D_SCENE/Camp_root_XRay/Camera_xray"
 
-var selectable
 var previous_on_over
 signal active_scanner(condition : bool)
 
@@ -29,10 +28,10 @@ func _input(event):
 		check_on_over(target)	
 		
 		
-	if event.is_action_released("Click_on_board"):
-		if selectable:
-			selectable.on_click.emit(false)
-		
+	#if event.is_action_released("Click_on_board"):
+		#if selectable:
+			#selectable.on_click.emit(false)
+		#
 			
 	if !_global_datas.Player_In_Inventory:
 		return	
@@ -48,8 +47,8 @@ func _input(event):
 			var target = get_viewport().get_mouse_position()
 			check_cast(target)
 	
-		if selectable:
-			selectable.on_click.emit(true)
+		#if selectable:
+			#selectable.on_click.emit(true)
 		
 
 		
@@ -69,11 +68,7 @@ func check_cast(targetPos : Vector2):
 	var result = space.intersect_ray(rayQuery)
 
 
-	if !result:
-		if selectable: # Deselect selected photo data if exist
-			if !_global_datas.in_scanner_mode:
-				selectable.show_legend(false)
-				selectable = null	 		
+	if !result:	
 		return
 	
 	if result.collider.get_node_or_null("Book_exit"): 
@@ -86,24 +81,11 @@ func check_cast(targetPos : Vector2):
 		page.trigger_page_event.emit()	 
 
 		
-
-	if selectable:
-		selectable.show_legend(false)	
-	selectable = result.collider.get_node_or_null("Select_this")	
-		
-	if selectable:	
-		selectable.show_legend(true)
-		selectable = selectable
 		
 	
 	if result.collider.get_node_or_null("push_button"): 
 		var button = result.collider.get_node_or_null("push_button")
 		button.push()	 
-
-	#if result.collider.get_node_or_null("Loupe"): 
-		#var loupe = result.collider.get_node_or_null("Loupe") 
-		#loupe._show_only_map()
-			
 
 	if result.collider.get_node_or_null("Select_Tube"): 
 		var tube = result.collider.get_node_or_null("Select_Tube") 
@@ -116,9 +98,17 @@ func check_cast(targetPos : Vector2):
 
 	if result.collider.get_node_or_null("Show_this_page"):
 		var page_index = result.collider.get_node_or_null("Show_this_page")
-		page_index.show_this_page.emit()	
+		page_index.on_click.emit(true)	
 
-	
+	if result.collider.get_node_or_null("Loupe"):
+		var Loupe = result.collider.get_node_or_null("Loupe")
+		Loupe._show_scanner()	
+		
+	if result.collider.get_node_or_null("Signet"):
+		var Signet = result.collider.get_node_or_null("Signet")
+		Signet.show_this_page.emit()	
+		
+		
 	if result.collider.get_node_or_null("map"): 
 		#for show map only are photo	
 		_global_datas.photo_are_active =!_global_datas.photo_are_active
