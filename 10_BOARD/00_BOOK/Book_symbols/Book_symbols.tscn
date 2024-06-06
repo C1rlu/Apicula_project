@@ -1,8 +1,11 @@
-[gd_scene load_steps=40 format=3 uid="uid://bh5a7fhvftxmm"]
+[gd_scene load_steps=52 format=3 uid="uid://bh5a7fhvftxmm"]
 
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Book_symbols/Book_page_behaviour.gd" id="1_oj3kp"]
 [ext_resource type="Resource" uid="uid://bnr5ucr2s173m" path="res://10_BOARD/00_BOOK/Book_symbols/Main_Book.tres" id="2_skv6l"]
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Book_symbols/Idle_position.gd" id="3_1o6ej"]
+[ext_resource type="Script" path="res://10_BOARD/00_BOOK/Book_symbols/Open_Choice.gd" id="3_whbe4"]
+[ext_resource type="Script" path="res://10_BOARD/00_BOOK/Book_symbols/Anwser_panel_choice_root.gd" id="4_b1sdy"]
+[ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="4_kuj33"]
 [ext_resource type="PackedScene" uid="uid://db6k1p6qd826g" path="res://10_BOARD/00_BOOK/Book_symbols/Page/Book_page.tscn" id="5_0380u"]
 [ext_resource type="Resource" uid="uid://fbr0i6tyrrjn" path="res://10_BOARD/00_BOOK/Button_data/button_01.tres" id="5_dkdpb"]
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Button_data/Button_area_set.gd" id="5_njsas"]
@@ -12,6 +15,118 @@
 [ext_resource type="Resource" uid="uid://ccap5kr10wdkg" path="res://10_BOARD/00_BOOK/Button_data/button_03.tres" id="7_74geh"]
 [ext_resource type="Material" uid="uid://b5u3d7wosa00d" path="res://05_SHADER_TEST/Board/Flat_with_gradient.tres" id="7_n6d7t"]
 [ext_resource type="PackedScene" uid="uid://cgc02cx2l0ndw" path="res://10_BOARD/00_BOOK/Legend/Book_page_signets.tscn" id="8_n2vim"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_vkvy6"]
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_ul1nu"]
+constant = 1.0
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_3ewes"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_ccwpb"]
+parameter_name = "Dither_size"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_pr2lv"]
+default_input_values = [0, 0.83, 1, 0.0]
+
+[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_qjd8d"]
+constant = Color(0.73, 0.47377, 0.1606, 1)
+
+[sub_resource type="VisualShader" id="VisualShader_pduv4"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+
+global uniform float Dither_size;
+
+
+
+void fragment() {
+// ColorConstant:7
+	vec4 n_out7p0 = vec4(0.730000, 0.473770, 0.160600, 1.000000);
+
+
+// FloatConstant:3
+	float n_out3p0 = 1.000000;
+
+
+// FloatParameter:5
+	float n_out5p0 = Dither_size;
+
+
+	float n_out4p0;
+// Expression:4
+	n_out4p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out5p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out4p0 = n_out3p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Step:6
+	float n_in6p0 = 0.83000;
+	float n_out6p0 = step(n_in6p0, n_out4p0);
+
+
+// Output:0
+	ALBEDO = vec3(n_out7p0.xyz);
+	ALPHA = n_out6p0;
+
+
+}
+"
+graph_offset = Vector2(-324.067, -87.7248)
+flags/unshaded = true
+nodes/fragment/0/position = Vector2(580, 220)
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_ul1nu")
+nodes/fragment/3/position = Vector2(-1180, 460)
+nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_3ewes")
+nodes/fragment/4/position = Vector2(-900, 460)
+nodes/fragment/4/size = Vector2(724.789, 654.559)
+nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/4/output_ports = "0,0,Dither_Node;"
+nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/5/node = SubResource("VisualShaderNodeFloatParameter_ccwpb")
+nodes/fragment/5/position = Vector2(-1540, 620)
+nodes/fragment/6/node = SubResource("VisualShaderNodeStep_pr2lv")
+nodes/fragment/6/position = Vector2(130.23, 516.22)
+nodes/fragment/7/node = SubResource("VisualShaderNodeColorConstant_qjd8d")
+nodes/fragment/7/position = Vector2(226.136, 51.1274)
+nodes/fragment/connections = PackedInt32Array(3, 0, 4, 0, 5, 0, 4, 1, 4, 0, 6, 1, 6, 0, 0, 1, 7, 0, 0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ko5cd"]
+render_priority = 0
+shader = SubResource("VisualShader_pduv4")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_clcyt"]
 
 [sub_resource type="GDScript" id="GDScript_4sg0y"]
 script/source = "extends Node
@@ -256,6 +371,9 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 
 script = ExtResource("1_oj3kp")
 _book_data = ExtResource("2_skv6l")
 
+[node name="Open_Choice" type="Node" parent="."]
+script = ExtResource("3_whbe4")
+
 [node name="Idle_position" type="Node" parent="."]
 script = ExtResource("3_1o6ej")
 
@@ -269,11 +387,41 @@ wait_time = 0.15
 [node name="Multiple_page_transition_left" type="Timer" parent="."]
 wait_time = 0.15
 
+[node name="On_Over" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.32499, 5.0307e-17, 0.00345762, 3.98986e-17, 0.588891, 1.39591e-18, -0.0143616, 4.4245e-17, 0.319001, -0.114884, 0.0900068, -2.09456)
+visible = false
+layers = 512
+mesh = SubResource("PlaneMesh_vkvy6")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("ShaderMaterial_ko5cd")
+
+[node name="On_Over2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.32499, 1.7139e-11, 0.00345762, 1.87718e-11, 0.588891, 1.13654e-11, -0.0143616, 2.19594e-11, 0.319001, -0.115, 0.09, 2.002)
+visible = false
+layers = 512
+mesh = SubResource("PlaneMesh_vkvy6")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("ShaderMaterial_ko5cd")
+
+[node name="Anwser_panel_choice_root" type="Node3D" parent="."]
+transform = Transform3D(0.986751, 0, -0.162241, 0, 1, 0, 0.162241, 0, 0.986751, 0.228846, -0.0225728, -1.27893)
+visible = false
+script = ExtResource("4_b1sdy")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Anwser_panel_choice_root"]
+transform = Transform3D(1.14789, 0, -1.49012e-07, 0, 0.869473, 0, 1.49012e-07, 0, 0.93308, 0.369538, 0.248199, 0.350978)
+layers = 512
+mesh = SubResource("PlaneMesh_clcyt")
+
 [node name="Turn_Right" type="Area3D" parent="."]
 transform = Transform3D(1, 2.91038e-11, -7.45058e-09, 1.45519e-11, 1, 3.54703e-11, -7.45058e-09, 3.72893e-11, 1, 0, 0, 0)
 
 [node name="Turn_page" type="Node" parent="Turn_Right"]
 script = SubResource("GDScript_4sg0y")
+
+[node name="On_Over" type="Node" parent="Turn_Right" node_paths=PackedStringArray("_on_over")]
+script = ExtResource("4_kuj33")
+_on_over = NodePath("../../On_Over")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Turn_Right"]
 transform = Transform3D(1, 0, 0, 0, 1, -5.27664e-19, 0, 1.48901e-18, 1, -0.0249052, 0.090931, -1.16268)
@@ -285,6 +433,10 @@ script = SubResource("GDScript_dsb8m")
 
 [node name="Turn_page" type="Node" parent="Turn_Left"]
 script = SubResource("GDScript_66qc2")
+
+[node name="On_Over" type="Node" parent="Turn_Left" node_paths=PackedStringArray("_on_over")]
+script = ExtResource("4_kuj33")
+_on_over = NodePath("../../On_Over2")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Turn_Left"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.113466, 0.0935526, 1.1877)

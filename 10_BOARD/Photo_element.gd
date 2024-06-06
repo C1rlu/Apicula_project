@@ -2,7 +2,6 @@ extends Node3D
 
 
 @export var Photo_data : PhotoData
-@export var Photo_index : int
 
 @export var book_position_offset : Vector3
 @export var book_rotation_angle : float = -90.0
@@ -34,7 +33,8 @@ func _disable():
 func show_this_on_book():
 	
 	_global_datas.selected_photoData = Photo_data
-	_global_datas.book_data.book_node._show_from_index(Photo_index)
+
+	_global_datas.book_data.book_node._show_from_index(Photo_data.page_index)
 	var book = _global_datas.book_data.book_node
 	book.position = global_position + book_position_offset
 	var real_offset = book_rotation_angle + (-position.x * 40)
