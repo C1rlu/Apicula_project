@@ -6,6 +6,7 @@ var _pad : bool = false
 
 var previous_on_over
 var On_Over
+var Close_choice
 signal active_scanner(condition : bool)
 
 
@@ -112,7 +113,7 @@ func check_cast(targetPos : Vector2):
 	if result.collider.get_node_or_null("Signet"):
 		var Signet = result.collider.get_node_or_null("Signet")
 		Signet.show_this_page.emit()	
-		
+
 		
 	if result.collider.get_node_or_null("map"): 
 		#for show map only are photo	
@@ -155,6 +156,14 @@ func check_on_over(targetPos : Vector2):
 		var button = result.collider.get_node_or_null("push_button")
 		previous_on_over = button
 		button.on_over(true)	
+	
+	if Close_choice:
+		Close_choice._close_choice()
+		Close_choice = null
+			
+	if result.collider.get_node_or_null("Close_choice"):
+		Close_choice = result.collider.get_node_or_null("Close_choice")
+		
 	
 	if On_Over:
 		On_Over.on_over(false)	

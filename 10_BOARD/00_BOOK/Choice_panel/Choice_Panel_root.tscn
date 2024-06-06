@@ -1,0 +1,93 @@
+[gd_scene load_steps=14 format=3 uid="uid://bs32groi0tedy"]
+
+[ext_resource type="Script" path="res://10_BOARD/00_BOOK/Book_symbols/Anwser_panel_choice_root.gd" id="1_wgt8q"]
+[ext_resource type="Script" path="res://10_BOARD/00_BOOK/Button_data/Button_area_set.gd" id="2_mytae"]
+[ext_resource type="PackedScene" uid="uid://csa7dst63eq2m" path="res://10_BOARD/00_BOOK/Choice_panel/panel_choice_ui.tscn" id="2_vq4bx"]
+[ext_resource type="Resource" uid="uid://bwsbxg7mjb5br" path="res://10_BOARD/00_BOOK/Button_data/Choice/button_choice_01.tres" id="3_x42hh"]
+[ext_resource type="Resource" uid="uid://dvufnq0now1q8" path="res://10_BOARD/00_BOOK/Button_data/Choice/button_choice_03.tres" id="4_d7dj8"]
+[ext_resource type="Resource" uid="uid://cgxu2qfew1msc" path="res://10_BOARD/00_BOOK/Button_data/Choice/button_choice_02.tres" id="4_gitjn"]
+[ext_resource type="Resource" uid="uid://dq2j2eru7uol1" path="res://10_BOARD/00_BOOK/Button_data/Choice/button_choice_04.tres" id="4_yiv4c"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_utkuj"]
+size = Vector3(0.530925, 0.312309, 1.83496)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ea5n5"]
+size = Vector3(0.429006, 0.312309, 1.83496)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rjbi5"]
+size = Vector3(0.576987, 0.312309, 1.83496)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_hu8g4"]
+viewport_path = NodePath("Render_choice")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ecxd5"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mi8rn"]
+shading_mode = 0
+albedo_color = Color(0.705882, 0.666667, 0.592157, 1)
+
+[node name="Choice_panel_root" type="Node3D"]
+script = ExtResource("1_wgt8q")
+
+[node name="01" type="Area3D" parent="."]
+
+[node name="push_button" type="Node" parent="01"]
+script = ExtResource("2_mytae")
+button_data = ExtResource("3_x42hh")
+
+[node name="col" type="CollisionShape3D" parent="01"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.85015, -0.0513246, 0.0227922)
+shape = SubResource("BoxShape3D_utkuj")
+disabled = true
+
+[node name="02" type="Area3D" parent="."]
+
+[node name="push_button" type="Node" parent="02"]
+script = ExtResource("2_mytae")
+button_data = ExtResource("4_gitjn")
+
+[node name="col" type="CollisionShape3D" parent="02"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.376726, -0.0513246, 0.0227922)
+shape = SubResource("BoxShape3D_ea5n5")
+disabled = true
+
+[node name="03" type="Area3D" parent="."]
+
+[node name="push_button" type="Node" parent="03"]
+script = ExtResource("2_mytae")
+button_data = ExtResource("4_d7dj8")
+
+[node name="col" type="CollisionShape3D" parent="03"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0994502, -0.0513246, 0.0227922)
+shape = SubResource("BoxShape3D_rjbi5")
+disabled = true
+
+[node name="04" type="Area3D" parent="."]
+
+[node name="push_button" type="Node" parent="04"]
+script = ExtResource("2_mytae")
+button_data = ExtResource("4_yiv4c")
+
+[node name="col" type="CollisionShape3D" parent="04"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.652496, -0.0513246, 0.0227922)
+shape = SubResource("BoxShape3D_utkuj")
+disabled = true
+
+[node name="Panel_choice" type="Node3D" parent="."]
+
+[node name="Render" type="Sprite3D" parent="Panel_choice"]
+transform = Transform3D(3.915e-16, -0.2049, -8.95648e-09, -8.95648e-09, -8.95648e-09, 0.2049, -0.2049, 0, -8.95648e-09, 0, 0, 0)
+layers = 512
+texture = SubResource("ViewportTexture_hu8g4")
+
+[node name="z_problem" type="MeshInstance3D" parent="Panel_choice"]
+transform = Transform3D(1.23996, 0, 0, 0, 1.0138, 0, 0, 0, 0.929433, 0, -0.00607705, 0)
+layers = 512
+mesh = SubResource("PlaneMesh_ecxd5")
+surface_material_override/0 = SubResource("StandardMaterial3D_mi8rn")
+
+[node name="Render_choice" type="SubViewport" parent="."]
+disable_3d = true
+size = Vector2i(900, 1200)
+
+[node name="Panel_choice_ui" parent="Render_choice" instance=ExtResource("2_vq4bx")]
