@@ -15,7 +15,7 @@ func _ready():
 	var col : CollisionShape3D = button_data.button_area.get_node("col")
 	col.disabled = false
 
-	_global_datas.open_panel_choice.connect(_activation)
+	_global_datas.start_choice.connect(_activation)
 	
 func update_responce_receiver(_responce_data : book_button_data):
 	responce_data = _responce_data	
@@ -28,9 +28,9 @@ func push_button():
 	print("PUSH PUSH PUSHHH")
 	if responce_data:
 		responce_data.update_text.emit(label.text)
-		_global_datas.open_panel_choice.emit(false)
-		
 
-func _activation(condition,responce):
+		_global_datas.start_choice.emit(false)
+
+func _activation(condition):
 	var col : CollisionShape3D = button_data.button_area.get_node("col")
 	col.disabled = !condition

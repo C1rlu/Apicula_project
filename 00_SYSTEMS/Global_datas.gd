@@ -143,7 +143,7 @@ signal mouse_raycast
 var board_camera : Camera3D
 var zoom_value : float
 var Cursor_mode : Node
-signal open_panel_choice(condition : bool)
+signal start_choice(condition : bool)
 
 signal responce_receiver_data(book_button_data)
 signal map_fade(condition : bool) # true is in : false is out

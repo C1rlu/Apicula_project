@@ -119,11 +119,13 @@ func multiple_page_left():
 		
 func _turn_page_right():
 	update_page_right()
-	#_global_datas.open_awsner_choice.emit(false)
+	_global_datas.start_choice.emit(false)
+
 
 func turn_page_left():
 	update_page_left()
-	#_global_datas.open_awsner_choice.emit(false)
+	_global_datas.start_choice.emit(false)
+
 
 func _on_timer_timeout():
 	is_turning = false
