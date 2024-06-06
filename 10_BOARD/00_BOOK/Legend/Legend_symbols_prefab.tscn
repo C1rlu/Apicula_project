@@ -1,13 +1,17 @@
-[gd_scene load_steps=5 format=3 uid="uid://ckin6oiruwreh"]
+[gd_scene load_steps=7 format=3 uid="uid://ckin6oiruwreh"]
 
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Legend/Legend_behaviour.gd" id="1_ljkqs"]
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Legend/Page_assign.gd" id="1_x88k2"]
+[ext_resource type="Script" path="res://10_BOARD/00_BOOK/Show_this_page.gd" id="3_a5wyl"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_ink2k"]
 viewport_path = NodePath("Text_render")
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_mf2vu"]
 light_mode = 1
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nnxyu"]
+size = Vector3(0.0735859, 0.0125059, 0.035)
 
 [node name="legend_prefab" type="Node3D"]
 script = ExtResource("1_x88k2")
@@ -74,4 +78,15 @@ text = "My Legend "
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="Show_this_page" type="Node" parent="Area3D"]
+script = ExtResource("3_a5wyl")
+book_position_offset = Vector3(0.05, 0, 0.12)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000850344, 0.00736335, -6.03101e-05)
+shape = SubResource("BoxShape3D_nnxyu")
+
 [connection signal="ini_legend" from="." to="legend_behaviour" method="_on_legend_prefab_ini_legend"]
+[connection signal="on_click" from="Area3D/Show_this_page" to="Area3D/Show_this_page" method="_on_on_click"]

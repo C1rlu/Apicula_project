@@ -1,49 +1,24 @@
-[gd_scene load_steps=12 format=3 uid="uid://uwg2qc3svu11"]
+[gd_scene load_steps=25 format=3 uid="uid://uwg2qc3svu11"]
 
-[ext_resource type="Resource" uid="uid://bcid58kxecbk2" path="res://12_INVENTORY/Photo/Maurice_photoData.tres" id="1_2tgng"]
+[ext_resource type="Script" path="res://10_BOARD/Photo_element.gd" id="1_0a8jl"]
+[ext_resource type="Script" path="res://10_BOARD/00_BOOK/Legend/Legend_behaviour.gd" id="1_f7rkq"]
+[ext_resource type="Resource" uid="uid://dyh1qg1u652pl" path="res://12_INVENTORY/Photo/Epave_ch_photoData.tres" id="2_8x1kk"]
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Show_this_page.gd" id="2_653je"]
+[ext_resource type="Script" path="res://10_BOARD/Show_scanner.gd" id="3_btmm2"]
 [ext_resource type="Shader" uid="uid://upo0fuo5sqgd" path="res://05_SHADER_TEST/Board/Board_sh.tres" id="3_ysgwd"]
 [ext_resource type="Texture2D" uid="uid://38btbw60olcn" path="res://12_INVENTORY/Photo/IMG/Boat.png" id="7_2ylay"]
-[ext_resource type="PackedScene" uid="uid://ckin6oiruwreh" path="res://10_BOARD/00_BOOK/Legend/Legend_symbols_prefab.tscn" id="8_dqpog"]
-
-[sub_resource type="GDScript" id="GDScript_2oe2p"]
-script/source = "extends Area3D
-
-
-
-@export var photo_data : PhotoData
-
-@export var is_a_scanner : bool = true
-@onready var collision_shape_3d = $CollisionShape3D
-@onready var mesh_instance_3d_7 = $MeshInstance3D7
-
-@onready var legend_prefab = $legend_prefab
-
-
-func _active():
-	collision_shape_3d.disabled = false	
-	mesh_instance_3d_7.visible = true
-	var book = _global_datas.book_data
-	legend_prefab.ini_legend.emit(book,photo_data.page_index)
-
-func _disable_object():
-	
-	collision_shape_3d.disabled = true
-	mesh_instance_3d_7.visible = false
-
-
-"
+[ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="7_vd1wc"]
 
 [sub_resource type="GDScript" id="GDScript_32kbr"]
 script/source = "extends Node
 
 
-@onready var photo_area = $\"..\"
+@onready var photo_area = $\"../..\"
 @onready var photo_render  : Sprite3D = $\"../photo_render\"
 
 func _ready():
 	
-	var texture_data = photo_area.photo_data.image
+	var texture_data = photo_area.Photo_data.image
 	photo_render.texture = texture_data 
 "
 
@@ -56,6 +31,116 @@ shader_parameter/light_color = Color(0.580392, 0.545098, 0.439216, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_8e2mh"]
 material = SubResource("ShaderMaterial_4jhqi")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_seomj"]
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_wi33d"]
+constant = 1.0
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_a88ye"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_vhkce"]
+parameter_name = "Dither_size"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_rmg71"]
+default_input_values = [0, 0.83, 1, 0.0]
+
+[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_iw8sq"]
+constant = Color(0.73, 0.47377, 0.1606, 1)
+
+[sub_resource type="VisualShader" id="VisualShader_5u4by"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+
+global uniform float Dither_size;
+
+
+
+void fragment() {
+// ColorConstant:7
+	vec4 n_out7p0 = vec4(0.730000, 0.473770, 0.160600, 1.000000);
+
+
+// FloatConstant:3
+	float n_out3p0 = 1.000000;
+
+
+// FloatParameter:5
+	float n_out5p0 = Dither_size;
+
+
+	float n_out4p0;
+// Expression:4
+	n_out4p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out5p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out4p0 = n_out3p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Step:6
+	float n_in6p0 = 0.83000;
+	float n_out6p0 = step(n_in6p0, n_out4p0);
+
+
+// Output:0
+	ALBEDO = vec3(n_out7p0.xyz);
+	ALPHA = n_out6p0;
+
+
+}
+"
+graph_offset = Vector2(-324.067, -87.7248)
+flags/unshaded = true
+nodes/fragment/0/position = Vector2(580, 220)
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_wi33d")
+nodes/fragment/3/position = Vector2(-1180, 460)
+nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_a88ye")
+nodes/fragment/4/position = Vector2(-900, 460)
+nodes/fragment/4/size = Vector2(724.789, 654.559)
+nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/4/output_ports = "0,0,Dither_Node;"
+nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/5/node = SubResource("VisualShaderNodeFloatParameter_vhkce")
+nodes/fragment/5/position = Vector2(-1540, 620)
+nodes/fragment/6/node = SubResource("VisualShaderNodeStep_rmg71")
+nodes/fragment/6/position = Vector2(130.23, 516.22)
+nodes/fragment/7/node = SubResource("VisualShaderNodeColorConstant_iw8sq")
+nodes/fragment/7/position = Vector2(226.136, 51.1274)
+nodes/fragment/connections = PackedInt32Array(3, 0, 4, 0, 5, 0, 4, 1, 4, 0, 6, 1, 6, 0, 0, 1, 7, 0, 0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gfhbg"]
+render_priority = 0
+shader = SubResource("VisualShader_5u4by")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mdprb"]
 size = Vector3(0.0690674, 0.0105576, 0.0662781)
@@ -79,38 +164,149 @@ func disable():
 	col.disabled = false
 "
 
-[node name="Photo_area" type="Area3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.00272226, 0)
-script = SubResource("GDScript_2oe2p")
-photo_data = ExtResource("1_2tgng")
+[sub_resource type="BoxShape3D" id="BoxShape3D_nnxyu"]
+size = Vector3(0.0735859, 0.0125059, 0.035)
 
-[node name="Show_this_page" type="Node" parent="."]
-script = ExtResource("2_653je")
-book_position_offset = Vector3(0.05, 0, 0.12)
+[sub_resource type="ViewportTexture" id="ViewportTexture_lyxt3"]
+viewport_path = NodePath("legend/legend_render")
 
-[node name="texture" type="Node" parent="."]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_mf2vu"]
+light_mode = 1
+
+[node name="Photo_element_root" type="Node3D"]
+script = ExtResource("1_0a8jl")
+Photo_data = ExtResource("2_8x1kk")
+book_position_offset = Vector3(0.025, 0, 0.125)
+
+[node name="Photo" type="Node3D" parent="."]
+
+[node name="texture" type="Node" parent="Photo"]
 script = SubResource("GDScript_32kbr")
 
-[node name="MeshInstance3D7" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.0682586, 0, 0, 0, 0.00230959, 0, 0, 0, 0.0682586, 0, 0, 0)
-layers = 16384
-mesh = SubResource("BoxMesh_8e2mh")
-skeleton = NodePath("../..")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000622556, 0.00481491, -0.000192255)
-shape = SubResource("BoxShape3D_mdprb")
-disabled = true
-script = SubResource("GDScript_dibr8")
-
-[node name="photo_render" type="Sprite3D" parent="."]
-transform = Transform3D(0.0116926, 0, 0, 0, 8.27593e-10, 0.0116926, 0, -0.0116926, 8.27593e-10, 0.000372954, 0.00253178, 0)
+[node name="photo_render" type="Sprite3D" parent="Photo"]
+transform = Transform3D(0.0116926, 0, 0, 0, 8.27593e-10, 0.0116926, 0, -0.0116926, 8.27593e-10, 0.000372954, 0.0040003, 0)
 layers = 16384
 texture = ExtResource("7_2ylay")
 region_enabled = true
 region_rect = Rect2(0, 0, 512, 512)
 
-[node name="legend_prefab" parent="." instance=ExtResource("8_dqpog")]
-transform = Transform3D(0.977467, 0, -0.211086, 0, 1, 0, 0.211086, 0, 0.977467, 0, 0.000268519, 0.0309599)
+[node name="render_base" type="MeshInstance3D" parent="Photo"]
+transform = Transform3D(0.0682586, 0, 0, 0, 0.00230959, 0, 0, 0, 0.0682586, 0, 0.00272226, 0)
+layers = 16384
+mesh = SubResource("BoxMesh_8e2mh")
+skeleton = NodePath("../..")
 
-[connection signal="on_click" from="Show_this_page" to="Show_this_page" method="_on_on_click"]
+[node name="On_Over" type="MeshInstance3D" parent="Photo"]
+transform = Transform3D(0.0396476, 0, 0.000431277, 0, 0.034558, 0, -0.000429739, 0, 0.0397897, 0.00034634, 0.00326981, 0)
+visible = false
+layers = 16384
+mesh = SubResource("PlaneMesh_seomj")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("ShaderMaterial_gfhbg")
+
+[node name="Photo_area" type="Area3D" parent="Photo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.00272226, 0)
+
+[node name="Show_scanner" type="Node" parent="Photo/Photo_area"]
+script = ExtResource("3_btmm2")
+
+[node name="On_Over" type="Node" parent="Photo/Photo_area" node_paths=PackedStringArray("_on_over")]
+script = ExtResource("7_vd1wc")
+_on_over = NodePath("../../On_Over")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Photo/Photo_area"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000622556, 0.00481491, -0.000192255)
+shape = SubResource("BoxShape3D_mdprb")
+disabled = true
+script = SubResource("GDScript_dibr8")
+
+[node name="legend" type="Node3D" parent="."]
+transform = Transform3D(0.981737, 0, 0.190244, 0, 1, 0, -0.190244, 0, 0.981737, 0.0102955, 0.00516227, 0.0389719)
+
+[node name="legend_behaviour" type="Node" parent="legend"]
+script = ExtResource("1_f7rkq")
+
+[node name="Legend_area" type="Area3D" parent="legend"]
+
+[node name="On_Over" type="Node" parent="legend/Legend_area" node_paths=PackedStringArray("_on_over")]
+script = ExtResource("7_vd1wc")
+_on_over = NodePath("../../On_Over")
+
+[node name="Show_this_page" type="Node" parent="legend/Legend_area"]
+script = ExtResource("2_653je")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="legend/Legend_area"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000850344, 0.00736335, -6.03101e-05)
+shape = SubResource("BoxShape3D_nnxyu")
+
+[node name="Render_text" type="Sprite3D" parent="legend"]
+transform = Transform3D(0.0165207, 4.65661e-10, 0, 0, -7.22143e-10, 0.0165207, 4.65661e-10, -0.0165207, -7.22143e-10, 0, 0, 0)
+layers = 16384
+texture = SubResource("ViewportTexture_lyxt3")
+
+[node name="On_Over" type="MeshInstance3D" parent="legend"]
+transform = Transform3D(0.0417257, 0, 0.000179212, 0, 0.0357813, 0, -0.000452262, 0, 0.016534, 0, -0.000693947, 0)
+visible = false
+layers = 16384
+mesh = SubResource("PlaneMesh_seomj")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("ShaderMaterial_gfhbg")
+
+[node name="legend_render" type="SubViewport" parent="legend"]
+transparent_bg = true
+size = Vector2i(600, 400)
+
+[node name="text_for_size" type="Label" parent="legend/legend_render"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -198.0
+offset_top = -41.5
+offset_right = 198.0
+offset_bottom = 41.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.360784, 0.341176, 0.294118, 1)
+theme_override_font_sizes/font_size = 80
+text = "?
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ColorRect" type="ColorRect" parent="legend/legend_render/text_for_size"]
+material = SubResource("CanvasItemMaterial_mf2vu")
+layout_direction = 1
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -68.77
+offset_bottom = 56.2299
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.819608, 0.764706, 0.698039, 1)
+
+[node name="text" type="Label" parent="legend/legend_render"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -198.0
+offset_top = -48.775
+offset_right = 198.0
+offset_bottom = 34.225
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.360784, 0.341176, 0.294118, 1)
+theme_override_font_sizes/font_size = 60
+text = "?
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="show_scanner" from="Photo/Photo_area/Show_scanner" to="." method="_on_show_scanner_show_scanner"]
+[connection signal="show_this_page" from="legend/Legend_area/Show_this_page" to="." method="_on_show_this_page_show_this_page"]

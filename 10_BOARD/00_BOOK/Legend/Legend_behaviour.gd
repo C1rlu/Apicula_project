@@ -1,21 +1,22 @@
 extends Node
 
+@onready var photo_element_root = $"../.."
+
+@onready var text = $"../legend_render/text"
+@onready var text_for_size = $"../legend_render/text_for_size"
 
 
+func _ready():
+	_global_datas.open_inventory.connect(_legend_ini)
 
-@onready var text = $"../Text_render/text"
-@onready var text_for_size = $"../Text_render/text_for_size"
-@onready var legend_prefab = $".."
-
-
-func _update_legend_ini(book_data,index):	
+func _legend_ini(condition):	
 	
-	var selected_legend = book_data.book_pages[index].book_page_title 	
+	var index = photo_element_root.Photo_data.page_index 
+	var book = _global_datas.book_data
+	
+	if !book.book_pages[index].page_is_solved:
+		return	
+	var selected_legend = book.book_pages[index].book_page_title 	
 	text.text = selected_legend
 	text_for_size.text = selected_legend
 	
-
-	
-
-func _on_legend_prefab_ini_legend(_book_data, index):
-	_update_legend_ini(_book_data,index)	

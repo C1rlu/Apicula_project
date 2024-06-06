@@ -5,6 +5,7 @@ var _pad : bool = false
 @onready var  Camera = $"../3D_SCENE/Camp_root_XRay/Camera_xray"
 
 var previous_on_over
+var On_Over
 signal active_scanner(condition : bool)
 
 
@@ -98,7 +99,11 @@ func check_cast(targetPos : Vector2):
 
 	if result.collider.get_node_or_null("Show_this_page"):
 		var page_index = result.collider.get_node_or_null("Show_this_page")
-		page_index.on_click.emit(true)	
+		page_index.show_this_page.emit()	
+
+	if result.collider.get_node_or_null("Show_scanner"):
+		var Show_scanner = result.collider.get_node_or_null("Show_scanner")
+		Show_scanner.show_scanner.emit()	
 
 	if result.collider.get_node_or_null("Loupe"):
 		var Loupe = result.collider.get_node_or_null("Loupe")
@@ -149,4 +154,13 @@ func check_on_over(targetPos : Vector2):
 	if result.collider.get_node_or_null("push_button"): 
 		var button = result.collider.get_node_or_null("push_button")
 		previous_on_over = button
-		button.on_over(true)	 	
+		button.on_over(true)	
+	
+	if On_Over:
+		On_Over.on_over(false)	
+		On_Over = false
+		 	
+	#On_Over
+	if result.collider.get_node_or_null("On_Over"): 
+		On_Over = result.collider.get_node_or_null("On_Over")
+		On_Over.on_over(true)	
