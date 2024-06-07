@@ -1,59 +1,32 @@
-[gd_scene load_steps=3 format=3 uid="uid://cgb01ku2od671"]
+[gd_scene load_steps=4 format=3 uid="uid://cgb01ku2od671"]
 
 [ext_resource type="Resource" uid="uid://fbr0i6tyrrjn" path="res://10_BOARD/00_BOOK/Button_data/button_01.tres" id="1_f1hyy"]
+[ext_resource type="Script" path="res://10_BOARD/00_BOOK/Button_data/Question_label.gd" id="1_wkhad"]
 
-[sub_resource type="GDScript" id="GDScript_xj44o"]
-script/source = "extends Button
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ify0u"]
+content_margin_left = 20.0
+content_margin_top = 10.0
+bg_color = Color(0.541176, 0.501961, 0.427451, 0.109804)
+border_width_left = 10
+border_color = Color(0.427363, 0.391351, 0.291323, 1)
 
-@export var button_data : book_button_data
-
-
-@export var on_over : Control
-@onready var button = $\".\"
-
-func _ready():
-
-	button_data.button_on_over.connect(_on_over)
-	button_data.button_signal.connect(push_button)
-	button_data.update_text.connect(_update_text)
-	
-	var col : CollisionShape3D = button_data.button_area.get_node(\"col\")
-	col.disabled = false
-
-func _on_over(condition):
-	on_over.visible = condition		
-	
-func _update_text(new_text : String):
-		button.text = new_text	
-	
-func push_button():
-	emit_signal(\"button_down\")
-
-func _on_tree_exiting():
-	var col : CollisionShape3D = button_data.button_area.get_node(\"col\")
-	col.disabled = true
-
-
-
-func _on_button_down():
-	print(\"PUSH PUSH PUSHHH\")	
-	_global_datas.responce_receiver_data.emit(button_data)
-	_global_datas.start_choice.emit(true)
-"
-
-[node name="Button_1" type="Button" node_paths=PackedStringArray("on_over")]
-offset_left = 41.0
-offset_top = 457.0
-offset_right = 455.0
-offset_bottom = 552.0
-focus_mode = 0
-text = "..................... ? ............................."
-script = SubResource("GDScript_xj44o")
+[node name="Question_label" type="Label" node_paths=PackedStringArray("on_over")]
+custom_minimum_size = Vector2(414, 100)
+offset_right = 414.0
+offset_bottom = 100.0
+theme_override_colors/font_color = Color(0.184314, 0.164706, 0.141176, 1)
+theme_override_font_sizes/font_size = 21
+theme_override_styles/normal = SubResource("StyleBoxFlat_ify0u")
+text = "choose a responce"
+vertical_alignment = 1
+autowrap_mode = 3
+script = ExtResource("1_wkhad")
 button_data = ExtResource("1_f1hyy")
 on_over = NodePath("On_Over")
 
 [node name="On_Over" type="ColorRect" parent="."]
 visible = false
+modulate = Color(1, 1, 1, 0.529412)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -63,5 +36,4 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(1, 0.870588, 0.760784, 0.309804)
 
-[connection signal="button_down" from="." to="." method="_on_button_down"]
-[connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
+[connection signal="tree_exited" from="." to="." method="_on_tree_exited"]
