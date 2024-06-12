@@ -159,7 +159,7 @@ signal photo_fade_in
 signal photo_fade_out
 
 
-signal book_back_idle_position
+signal book_back_idle_position(condition : bool)
 var book_idle_pos : bool = true
 
 #update description on board

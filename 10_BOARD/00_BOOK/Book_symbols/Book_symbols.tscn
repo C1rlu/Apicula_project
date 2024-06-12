@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://bh5a7fhvftxmm"]
+[gd_scene load_steps=64 format=3 uid="uid://bh5a7fhvftxmm"]
 
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Book_symbols/Book_page_behaviour.gd" id="1_oj3kp"]
 [ext_resource type="Resource" uid="uid://bnr5ucr2s173m" path="res://10_BOARD/00_BOOK/Book_symbols/Main_Book.tres" id="2_skv6l"]
@@ -15,6 +15,7 @@
 [ext_resource type="Resource" uid="uid://ccap5kr10wdkg" path="res://10_BOARD/00_BOOK/Button_data/button_03.tres" id="7_74geh"]
 [ext_resource type="Material" uid="uid://b5u3d7wosa00d" path="res://05_SHADER_TEST/Board/Flat_with_gradient.tres" id="7_n6d7t"]
 [ext_resource type="PackedScene" uid="uid://cgc02cx2l0ndw" path="res://10_BOARD/00_BOOK/Legend/Book_page_signets.tscn" id="8_n2vim"]
+[ext_resource type="Texture2D" uid="uid://bm6lex6ah3vx" path="res://10_BOARD/00_BOOK/00_img/Cross.png" id="16_3gnwj"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_vkvy6"]
 
@@ -364,6 +365,155 @@ albedo_color = Color(0.541176, 0.501961, 0.427451, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_0xre3"]
 
+[sub_resource type="GDScript" id="GDScript_cxgqg"]
+script/source = "extends Node
+
+@onready var col = $\"../col\"
+@onready var on_over_ = $\"../On_Over_\"
+@onready var render = $\"../render\"
+
+func _ready():
+	_global_datas.book_back_idle_position.connect(active_back_idle_book)
+
+
+func _book_exit():
+	
+	_global_datas.book_back_idle_position.emit(false)
+	#if !_global_datas.book_idle_pos:
+		#_global_datas.book_back_idle_position.emit(true)
+		#_global_datas.book_fade_in.emit()
+		#_global_datas.book_idle_pos = true
+
+
+func active_back_idle_book(condition):
+	
+	col.disabled = !condition
+	on_over_.visible = false
+	render.visible = condition	
+		
+	
+"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5t87k"]
+size = Vector3(1.0807, 0.152875, 0.426018)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_3mud5"]
+size = Vector2(0.57, 1.26)
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_ucx3w"]
+constant = 1.0
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_o283a"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_trkt7"]
+parameter_name = "Dither_size"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_bv03p"]
+default_input_values = [0, 0.83, 1, 0.0]
+
+[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_4oa3g"]
+constant = Color(0.73, 0.47377, 0.1606, 1)
+
+[sub_resource type="VisualShader" id="VisualShader_mof41"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+
+global uniform float Dither_size;
+
+
+
+void fragment() {
+// ColorConstant:7
+	vec4 n_out7p0 = vec4(0.730000, 0.473770, 0.160600, 1.000000);
+
+
+// FloatConstant:3
+	float n_out3p0 = 1.000000;
+
+
+// FloatParameter:5
+	float n_out5p0 = Dither_size;
+
+
+	float n_out4p0;
+// Expression:4
+	n_out4p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out5p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out4p0 = n_out3p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Step:6
+	float n_in6p0 = 0.83000;
+	float n_out6p0 = step(n_in6p0, n_out4p0);
+
+
+// Output:0
+	ALBEDO = vec3(n_out7p0.xyz);
+	ALPHA = n_out6p0;
+
+
+}
+"
+graph_offset = Vector2(-324.067, -87.7248)
+flags/unshaded = true
+nodes/fragment/0/position = Vector2(580, 220)
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_ucx3w")
+nodes/fragment/3/position = Vector2(-1180, 460)
+nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_o283a")
+nodes/fragment/4/position = Vector2(-900, 460)
+nodes/fragment/4/size = Vector2(724.789, 654.559)
+nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/4/output_ports = "0,0,Dither_Node;"
+nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/5/node = SubResource("VisualShaderNodeFloatParameter_trkt7")
+nodes/fragment/5/position = Vector2(-1540, 620)
+nodes/fragment/6/node = SubResource("VisualShaderNodeStep_bv03p")
+nodes/fragment/6/position = Vector2(130.23, 516.22)
+nodes/fragment/7/node = SubResource("VisualShaderNodeColorConstant_4oa3g")
+nodes/fragment/7/position = Vector2(226.136, 51.1274)
+nodes/fragment/connections = PackedInt32Array(3, 0, 4, 0, 5, 0, 4, 1, 4, 0, 6, 1, 6, 0, 0, 1, 7, 0, 0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1ailg"]
+render_priority = 0
+shader = SubResource("VisualShader_mof41")
+
+[sub_resource type="QuadMesh" id="QuadMesh_22o7c"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qcmbn"]
+shading_mode = 0
+albedo_color = Color(0.768627, 0.721569, 0.658824, 1)
+
 [node name="Book" type="Node3D"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
 script = ExtResource("1_oj3kp")
@@ -518,6 +668,40 @@ transform = Transform3D(15.3259, 1.84774e-06, -4.76837e-07, -1.19209e-07, 15.325
 [node name="Anwser_panel_choice_root" parent="." instance=ExtResource("5_ryh6q")]
 transform = Transform3D(0.978162, 0, -0.207843, 0, 1, 0, 0.207843, 0, 0.978162, 0.343302, 0.307948, -0.879038)
 visible = false
+
+[node name="Area3D" type="Area3D" parent="."]
+transform = Transform3D(-0.768857, 0.000348793, 0.639421, 0.000437544, 1, -1.93689e-05, -0.639421, 0.000264883, -0.768857, -1.01959, 0.00855701, -2.12741)
+
+[node name="Book_exit" type="Node" parent="Area3D"]
+script = SubResource("GDScript_cxgqg")
+
+[node name="On_Over" type="Node" parent="Area3D" node_paths=PackedStringArray("_on_over")]
+script = ExtResource("4_kuj33")
+_on_over = NodePath("../On_Over_")
+
+[node name="col" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(0.271244, -0.00103544, -0.962512, 0.00288097, 1, -0.000263933, 0.962516, -0.00270135, 0.271238, 0.145912, 0.172357, -0.0930764)
+shape = SubResource("BoxShape3D_5t87k")
+
+[node name="On_Over_" type="MeshInstance3D" parent="Area3D"]
+transform = Transform3D(0.966053, 1.61471e-05, 0.258348, 1.00341e-05, 0.875001, -0.000108952, -0.258347, 9.43656e-05, 0.966053, 0.128937, 0.0956356, -0.0974309)
+visible = false
+layers = 512
+mesh = SubResource("PlaneMesh_3mud5")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("ShaderMaterial_1ailg")
+
+[node name="render" type="MeshInstance3D" parent="Area3D"]
+transform = Transform3D(0.272286, 0.389058, 1.42682e-08, 5.82077e-11, -1.75933e-08, 0.337622, 1.01618, -0.104248, -3.77622e-09, 0.133937, 0.102308, -0.0890034)
+layers = 512
+mesh = SubResource("QuadMesh_22o7c")
+surface_material_override/0 = SubResource("StandardMaterial3D_qcmbn")
+
+[node name="Sprite3D" type="Sprite3D" parent="Area3D/render"]
+transform = Transform3D(0.219803, -7.45058e-09, 1.38243e-10, -1.49012e-08, -0.425521, 3.71947e-08, 1.45519e-11, -4.4296e-08, -0.508542, -0.0203209, 0.0127583, 0.0642731)
+layers = 515
+modulate = Color(0.396078, 0.290196, 0.168627, 1)
+texture = ExtResource("16_3gnwj")
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="timeout" from="Multiple_page_transition_right" to="." method="_on_multiple_page_transition_timeout"]

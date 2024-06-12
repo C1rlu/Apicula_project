@@ -16,10 +16,12 @@ func _ready():
 func _check_if_player_is_close():
 	
 	var distance_to_player = rapatrier_rg.global_position.distance_to(_global_datas.subbscene_playerPosition) 
+	
 	if distance_to_player > min_distance_to_see :
 		return
 	if distance_to_player < 0.8:
 		return	
+		
 	real_speed = speed * (distance_to_player / 1.5)
 	if distance_to_player < 0.8:
 		real_speed = speed * (distance_to_player / 8.0)

@@ -1,7 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://cfm6sxydm88tm"]
+[gd_scene load_steps=4 format=3 uid="uid://cfm6sxydm88tm"]
 
-[ext_resource type="Shader" uid="uid://bq6yeo133jlpr" path="res://10_BOARD/00_BOOK/Book_symbols/Page/Page_symbol_alpha.tres" id="1_f813d"]
-[ext_resource type="Texture2D" uid="uid://b3ssyy5kwdrjl" path="res://10_BOARD/00_BOOK/00_img/Symbols_06.png" id="2_svqhf"]
+[ext_resource type="PackedScene" uid="uid://cx7k4grvoqu2b" path="res://10_BOARD/00_BOOK/Photo_2d_book/Photo_2D.tscn" id="3_5sk7w"]
+[ext_resource type="Texture2D" uid="uid://81fqjbnarlkw" path="res://12_INVENTORY/Photo/IMG/Ghost_eyes_art.png" id="4_g4lsa"]
 
 [sub_resource type="GDScript" id="GDScript_mnex3"]
 script/source = "extends Node
@@ -14,9 +14,6 @@ func _ready():
 	color_rect.queue_free()	
 	color_rect_2.queue_free()
 "
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_eibeu"]
-shader = ExtResource("1_f813d")
 
 [node name="Page_02" type="Control"]
 layout_mode = 3
@@ -66,13 +63,13 @@ Lorem ipsum darius olalal
 
 [node name="Label2" type="Label" parent="."]
 layout_mode = 0
-offset_left = 564.0
-offset_top = 421.0
-offset_right = 854.0
-offset_bottom = 465.0
+offset_left = 595.0
+offset_top = 442.0
+offset_right = 885.0
+offset_bottom = 486.0
 theme_override_colors/font_color = Color(0.0235294, 0.176471, 0.2, 1)
 theme_override_font_sizes/font_size = 31
-text = "the bubble medusa"
+text = "The mirror scanner"
 
 [node name="Label5" type="Label" parent="."]
 layout_mode = 0
@@ -96,18 +93,14 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ColorRect3" type="ColorRect" parent="."]
-layout_mode = 0
-offset_left = 661.633
-offset_top = 96.5357
-offset_right = 947.633
-offset_bottom = 382.536
-rotation = 0.127717
-color = Color(0.635294, 0.584314, 0.521569, 1)
+[node name="Photo2d" parent="." instance=ExtResource("3_5sk7w")]
+offset_left = 678.0
+offset_top = 125.0
+offset_right = 920.0
+offset_bottom = 367.0
+rotation = 0.156151
 
-[node name="Symbols05" type="Sprite2D" parent="."]
-material = SubResource("ShaderMaterial_eibeu")
-position = Vector2(778.047, 267.986)
-rotation = 0.262232
-scale = Vector2(0.416231, 0.416231)
-texture = ExtResource("2_svqhf")
+[node name="TextureRect" parent="Photo2d" index="1"]
+texture = ExtResource("4_g4lsa")
+
+[editable path="Photo2d"]
