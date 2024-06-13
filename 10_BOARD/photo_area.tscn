@@ -1,16 +1,17 @@
-[gd_scene load_steps=25 format=3 uid="uid://uwg2qc3svu11"]
+[gd_scene load_steps=24 format=3 uid="uid://uwg2qc3svu11"]
 
 [ext_resource type="Script" path="res://10_BOARD/Photo_element.gd" id="1_0a8jl"]
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Legend/Legend_behaviour.gd" id="1_f7rkq"]
 [ext_resource type="Resource" uid="uid://dyh1qg1u652pl" path="res://12_INVENTORY/Photo/Epave_ch_photoData.tres" id="2_8x1kk"]
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Show_this_page.gd" id="2_653je"]
 [ext_resource type="Script" path="res://10_BOARD/Show_scanner.gd" id="3_btmm2"]
+[ext_resource type="Texture2D" uid="uid://dsmwbffwgaj4q" path="res://12_INVENTORY/Photo/IMG/PhotoTest_02.jpg" id="3_c0uts"]
 [ext_resource type="Shader" uid="uid://upo0fuo5sqgd" path="res://05_SHADER_TEST/Board/Board_sh.tres" id="3_ysgwd"]
-[ext_resource type="Texture2D" uid="uid://38btbw60olcn" path="res://12_INVENTORY/Photo/IMG/Boat.png" id="7_2ylay"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="7_vd1wc"]
 
 [sub_resource type="GDScript" id="GDScript_32kbr"]
-script/source = "extends Node
+script/source = "@tool
+extends Node
 
 
 @onready var photo_area = $\"../..\"
@@ -20,6 +21,10 @@ func _ready():
 	
 	var texture_data = photo_area.Photo_data.image
 	photo_render.texture = texture_data 
+
+func _run():
+	var texture_data = photo_area.Photo_data.image
+	photo_render.texture = texture_data 	
 "
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_aof41"]
@@ -145,25 +150,6 @@ shader = SubResource("VisualShader_wy8lo")
 [sub_resource type="BoxShape3D" id="BoxShape3D_mdprb"]
 size = Vector3(0.0690674, 0.0105576, 0.0662781)
 
-[sub_resource type="GDScript" id="GDScript_dibr8"]
-script/source = "extends CollisionShape3D
-
-
-@onready var col = $\".\"
-
-func _ready():
-	
-	_global_datas.photo_fade_out.connect(active)	
-	_global_datas.photo_fade_in.connect(disable)	
-	
-	
-func active():
-	col.disabled = true
-	
-func disable():
-	col.disabled = false
-"
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_nnxyu"]
 size = Vector3(0.0735859, 0.0125059, 0.035)
 
@@ -186,7 +172,7 @@ script = SubResource("GDScript_32kbr")
 [node name="photo_render" type="Sprite3D" parent="Photo"]
 transform = Transform3D(0.0116926, 0, 0, 0, 8.27593e-10, 0.0116926, 0, -0.0116926, 8.27593e-10, 0.000372954, 0.0040003, 0)
 layers = 16384
-texture = ExtResource("7_2ylay")
+texture = ExtResource("3_c0uts")
 region_enabled = true
 region_rect = Rect2(0, 0, 512, 512)
 
@@ -218,7 +204,6 @@ _on_over = NodePath("../../On_Over")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000622556, 0.00481491, -0.000192255)
 shape = SubResource("BoxShape3D_mdprb")
 disabled = true
-script = SubResource("GDScript_dibr8")
 
 [node name="legend" type="Node3D" parent="."]
 transform = Transform3D(0.981737, 0, 0.190244, 0, 1, 0, -0.190244, 0, 0.981737, 0.0102955, 0.00516227, 0.0389719)
@@ -238,6 +223,7 @@ script = ExtResource("2_653je")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="legend/Legend_area"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000850344, 0.00736335, -6.03101e-05)
 shape = SubResource("BoxShape3D_nnxyu")
+disabled = true
 
 [node name="Render_text" type="Sprite3D" parent="legend"]
 transform = Transform3D(0.0165207, 4.65661e-10, 0, 0, -7.22143e-10, 0.0165207, 4.65661e-10, -0.0165207, -7.22143e-10, 0, 0, 0)
@@ -308,5 +294,6 @@ text = "?
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[connection signal="update_legend" from="." to="legend/legend_behaviour" method="_on_photo_element_root_update_legend"]
 [connection signal="show_scanner" from="Photo/Photo_area/Show_scanner" to="." method="_on_show_scanner_show_scanner"]
 [connection signal="show_this_page" from="legend/Legend_area/Show_this_page" to="." method="_on_show_this_page_show_this_page"]

@@ -9,6 +9,9 @@ func _ready():
 	_global_datas.book_fade_out.connect(fade_out)	
 	
 func fade_in():
+	
+	if _global_datas.book_idle_pos:
+		return
 	if f:
 		f.kill()
 		
@@ -17,7 +20,10 @@ func fade_in():
 	#f.connect("finished",fade_in)
 	
 func fade_out():
-
+	
+	if _global_datas.book_idle_pos:
+		return
+		
 	if f:
 		f.kill()
 		

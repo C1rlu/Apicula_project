@@ -14,7 +14,7 @@ func _check_found(condition : bool):
 		if check_photo_exist(e.Photo_data):
 	
 			e._active()	
-	
+		
 func check_photo_exist(photo_Data):	
 
 	for photo in _global_datas.photo_archives:

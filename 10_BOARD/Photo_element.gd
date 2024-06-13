@@ -3,25 +3,61 @@ extends Node3D
 
 @export var Photo_data : PhotoData
 
+@export var links_list : Array[Node3D]
+@export var next_photo_data : Array[Node3D]
+
+
 @export var book_position_offset : Vector3
 @export var book_rotation_angle : float = -90.0
-
 @onready var legend = $legend
 @onready var photo = $Photo
 @onready var collision_shape_3d_p = $Photo/Photo_area/CollisionShape3D
 @onready var collision_shape_3d_l = $legend/Legend_area/CollisionShape3D
 
+signal update_legend( legend : String)
 func _ready():
+	_global_datas.photo_fade_out.connect(_disable)	
+	_global_datas.photo_fade_in.connect(_active)
+			
+func _active():	
+	check_state()
+	
+func check_state():
+		
 	_disable()	
 	
+	if Photo_data.information_state == 0:
+		return
+		
+	if Photo_data.information_state == 1:
+		show_interogation()		
+		return	
+				
+	if Photo_data.information_state == 2:
+		show_interogation()
+		show_all_info()	
+		return			
 	
-func _active():
+func show_interogation():
+	legend.visible = true
+	collision_shape_3d_l.disabled = false		
+		
+func show_all_info():
 	
-	legend.visible = true	
+	#active photo on board
 	photo.visible = true	
-	collision_shape_3d_p.disabled = false	
-	collision_shape_3d_l.disabled = false
-	
+	collision_shape_3d_p.disabled = false
+		
+	#active next ? of the intrigue
+	for p in next_photo_data:    
+		if p.Photo_data.information_state == 0:
+			p.Photo_data.information_state = 1
+		
+	for l in links_list:
+		l.visible = true		
+		
+	# update legend:
+	update_legend.emit(Photo_data.legend)
 	
 func _disable():
 	
@@ -29,6 +65,10 @@ func _disable():
 	photo.visible = false
 	collision_shape_3d_p.disabled = true	
 	collision_shape_3d_l.disabled = true	
+	
+	for l in links_list:
+			l.visible = false	
+	
 	
 func show_this_on_book():
 	
@@ -38,20 +78,19 @@ func show_this_on_book():
 	var book = _global_datas.book_data.book_node
 	book.position = global_position + book_position_offset
 	var real_offset = book_rotation_angle + (-position.x * 40)
-	book.rotation_degrees = Vector3(0.0,real_offset,0.0)
-			
+	book.rotation_degrees = Vector3(0.0,real_offset,0.0)		
 	var offset = Vector3(-0.02,0.0,-0.05)
 	var book_position = book.position + offset
 	_global_datas.focus_this_on_board.emit(book_position)		
 	_global_datas.book_fade_in.emit()
 	_global_datas.book_idle_pos = false		
-
 	_global_datas.book_back_idle_position.emit(true)
+	
 func _on_show_this_page_show_this_page():
 	show_this_on_book()	
 	
 
 func _on_show_scanner_show_scanner():
-	_global_datas.selected_photoData = Photo_data
 	
+	_global_datas.selected_photoData = Photo_data
 	_global_datas.show_on_scanner.emit(true)
