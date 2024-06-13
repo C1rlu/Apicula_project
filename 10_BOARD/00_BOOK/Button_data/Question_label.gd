@@ -2,6 +2,7 @@ extends Label
 
 @export var button_data : book_button_data
 @export var on_over : Control
+@export var on_over_seconde : Node2D
 @onready var button = $"."
 
 func _ready():
@@ -15,7 +16,7 @@ func _ready():
 
 func _on_over(condition):
 	on_over.visible = condition		
-	
+	#on_over_seconde.visible = condition
 func _update_text(new_text : String):
 		button.text = new_text	
 	

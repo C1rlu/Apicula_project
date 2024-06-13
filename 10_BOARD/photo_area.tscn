@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://uwg2qc3svu11"]
+[gd_scene load_steps=26 format=3 uid="uid://uwg2qc3svu11"]
 
 [ext_resource type="Script" path="res://10_BOARD/Photo_element.gd" id="1_0a8jl"]
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Legend/Legend_behaviour.gd" id="1_f7rkq"]
@@ -8,6 +8,8 @@
 [ext_resource type="Texture2D" uid="uid://dsmwbffwgaj4q" path="res://12_INVENTORY/Photo/IMG/PhotoTest_02.jpg" id="3_c0uts"]
 [ext_resource type="Shader" uid="uid://upo0fuo5sqgd" path="res://05_SHADER_TEST/Board/Board_sh.tres" id="3_ysgwd"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="7_vd1wc"]
+[ext_resource type="Texture2D" uid="uid://dff72hp5k3p01" path="res://10_BOARD/00_BOOK/01_UI/cursor_plume.png" id="9_w8jnf"]
+[ext_resource type="Texture2D" uid="uid://dtyhegc0wsj1h" path="res://10_BOARD/00_BOOK/01_UI/cursor_scan.png" id="10_fkyuy"]
 
 [sub_resource type="GDScript" id="GDScript_32kbr"]
 script/source = "@tool
@@ -190,15 +192,31 @@ mesh = SubResource("PlaneMesh_seomj")
 skeleton = NodePath("../../..")
 surface_material_override/0 = SubResource("ShaderMaterial_gfhbg")
 
+[node name="Render_ui_scan" type="Sprite3D" parent="Photo"]
+transform = Transform3D(0.0163116, 0.000434548, -7.60632e-05, 7.58006e-05, 1.08666e-05, 0.0163174, 0.000434588, -0.0163117, 8.84402e-06, 0.0250836, 0.0059832, -0.0266915)
+visible = false
+layers = 16384
+sorting_offset = 3.0
+modulate = Color(0.796078, 0.768627, 0.639216, 1)
+texture = ExtResource("10_fkyuy")
+
+[node name="Render_ui_scan" type="Sprite3D" parent="Photo/Render_ui_scan"]
+transform = Transform3D(1, 2.04891e-08, -2.13367e-09, -2.38419e-07, 1, 5.23869e-10, 5.81167e-10, 3.49246e-10, 1, -0.00988793, -0.135393, -0.00247461)
+layers = 16384
+sorting_offset = 2.0
+modulate = Color(0.0392157, 0.172549, 0.184314, 1)
+texture = ExtResource("10_fkyuy")
+
 [node name="Photo_area" type="Area3D" parent="Photo"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.00272226, 0)
 
 [node name="Show_scanner" type="Node" parent="Photo/Photo_area"]
 script = ExtResource("3_btmm2")
 
-[node name="On_Over" type="Node" parent="Photo/Photo_area" node_paths=PackedStringArray("_on_over")]
+[node name="On_Over" type="Node" parent="Photo/Photo_area" node_paths=PackedStringArray("_on_over", "_on_over_second")]
 script = ExtResource("7_vd1wc")
-_on_over = NodePath("../../On_Over")
+_on_over = NodePath("../../Render_ui_scan")
+_on_over_second = NodePath("../../On_Over")
 icon_type = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Photo/Photo_area"]
@@ -214,9 +232,9 @@ script = ExtResource("1_f7rkq")
 
 [node name="Legend_area" type="Area3D" parent="legend"]
 
-[node name="On_Over" type="Node" parent="legend/Legend_area" node_paths=PackedStringArray("_on_over")]
+[node name="On_Over" type="Node" parent="legend/Legend_area" node_paths=PackedStringArray("_on_over_second")]
 script = ExtResource("7_vd1wc")
-_on_over = NodePath("../../On_Over")
+_on_over_second = NodePath("../../On_Over")
 icon_type = 1
 
 [node name="Show_this_page" type="Node" parent="legend/Legend_area"]
@@ -230,7 +248,23 @@ disabled = true
 [node name="Render_text" type="Sprite3D" parent="legend"]
 transform = Transform3D(0.0165207, 4.65661e-10, 0, 0, -7.22143e-10, 0.0165207, 4.65661e-10, -0.0165207, -7.22143e-10, 0, 0, 0)
 layers = 16384
+sorting_offset = 1.0
 texture = SubResource("ViewportTexture_lyxt3")
+
+[node name="Render_ui_plume" type="Sprite3D" parent="legend"]
+transform = Transform3D(0.0147266, -0.000532025, -2.32557e-11, -6.1952e-17, -6.44141e-10, 0.0147362, -0.000532025, -0.0147266, -6.43721e-10, 0.0344471, -5.52684e-05, -0.0111229)
+visible = false
+layers = 16384
+sorting_offset = 3.0
+modulate = Color(0.701961, 0.670588, 0.52549, 1)
+texture = ExtResource("9_w8jnf")
+
+[node name="Render_ui_plume2" type="Sprite3D" parent="legend/Render_ui_plume"]
+transform = Transform3D(0.995147, 0.0982902, -0.00480037, -0.0982846, 0.995158, 0.00140261, 0.004915, -0.000923993, 0.999989, 0.146564, -0.0300059, -0.0461623)
+layers = 16384
+sorting_offset = 2.0
+modulate = Color(0.0993426, 0.205263, 0.199366, 1)
+texture = ExtResource("9_w8jnf")
 
 [node name="On_Over" type="MeshInstance3D" parent="legend"]
 transform = Transform3D(0.0417257, 0, 0.000179212, 0, 0.0357813, 0, -0.000452262, 0, 0.016534, 0, -0.000693947, 0)
