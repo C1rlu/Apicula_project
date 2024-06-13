@@ -162,6 +162,9 @@ signal photo_fade_out
 signal book_back_idle_position(condition : bool)
 var book_idle_pos : bool = true
 
+
+signal switch_icon_cursor(icon_type : icon_class.icon_list)
+
 #update description on board
 signal focus_this_on_board(target : Vector3)
 signal Open_ui_dark_backdrop(condition : bool)

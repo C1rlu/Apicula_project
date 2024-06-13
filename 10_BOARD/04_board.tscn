@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=3 uid="uid://cein0q2eirkay"]
+[gd_scene load_steps=52 format=3 uid="uid://cein0q2eirkay"]
 
 [ext_resource type="Script" path="res://10_BOARD/FollowFocus.gd" id="1_2m7ey"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_g3pi7"]
@@ -18,6 +18,10 @@
 [ext_resource type="Material" uid="uid://t4qtyso7w6ee" path="res://05_SHADER_TEST/Board/board_boat.tres" id="8_et36p"]
 [ext_resource type="Script" path="res://10_BOARD/Fade_book.gd" id="12_3bkt6"]
 [ext_resource type="Script" path="res://10_BOARD/Fade_photo.gd" id="12_ahrkl"]
+[ext_resource type="Script" path="res://10_BOARD/Switch_Cursor_icon.gd" id="19_t6o6e"]
+[ext_resource type="Texture2D" uid="uid://bb53vqhy3jx8j" path="res://10_BOARD/00_BOOK/01_UI/cursor_eyes.png" id="20_cuebq"]
+[ext_resource type="Script" path="res://10_BOARD/Follow_cursor.gd" id="20_vjjnn"]
+[ext_resource type="Texture2D" uid="uid://d1kttlfg1wwvk" path="res://10_BOARD/00_BOOK/01_UI/cursor_Circle.png" id="21_qhnbf"]
 
 [sub_resource type="GDScript" id="GDScript_w13ry"]
 script/source = "extends Node
@@ -708,8 +712,8 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -10.0
 offset_top = -10.0
-offset_right = 10.0
-offset_bottom = 10.0
+offset_right = 5.0
+offset_bottom = 5.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.89, 0.89)
@@ -740,11 +744,34 @@ mesh = SubResource("ArrayMesh_i7f22")
 skeleton = NodePath("")
 
 [node name="Cursor_icon" type="Control" parent="."]
+visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="Switch_Cursor_icon" type="Node" parent="Cursor_icon"]
+script = ExtResource("19_t6o6e")
+
+[node name="Follow_cursor" type="Node" parent="Cursor_icon"]
+script = ExtResource("20_vjjnn")
+
+[node name="Icon_circle" type="Sprite2D" parent="Cursor_icon"]
+visible = false
+modulate = Color(0.0235294, 0.129412, 0.137255, 1)
+position = Vector2(21, -14)
+scale = Vector2(0.145649, 0.145649)
+texture = ExtResource("21_qhnbf")
+
+[node name="Icon_sh" type="Sprite2D" parent="Cursor_icon"]
+modulate = Color(0.0235294, 0.129412, 0.137255, 1)
+position = Vector2(24, -15)
+scale = Vector2(0.119691, 0.119691)
+texture = ExtResource("20_cuebq")
+
+[node name="Icon_render" type="Sprite2D" parent="Cursor_icon"]
+position = Vector2(23.6249, -16.3751)
+scale = Vector2(0.12207, 0.12207)
+texture = ExtResource("20_cuebq")
 
 [connection signal="active_scanner" from="Pad_clic_raycast" to="ZOOM_Behaviour" method="_on_pad_clic_raycast_active_scanner"]

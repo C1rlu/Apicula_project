@@ -30,7 +30,7 @@ func _run():
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_aof41"]
 render_priority = 0
 shader = ExtResource("3_ysgwd")
-shader_parameter/Dark_color = Color(0.423529, 0.380392, 0, 1)
+shader_parameter/Dark_color = Color(0.294118, 0.262745, 0, 1)
 shader_parameter/ColorParameter = Color(0.431373, 0.4, 0.309804, 1)
 shader_parameter/light_color = Color(0.580392, 0.545098, 0.439216, 1)
 
@@ -39,10 +39,10 @@ material = SubResource("ShaderMaterial_aof41")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_seomj"]
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_5flbu"]
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_shisn"]
 constant = 1.0
 
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_x0jdi"]
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_y3hi8"]
 size = Vector2(724.789, 654.559)
 expression = "const float DITHER_THRESHOLDS[16] ={
 		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
@@ -55,17 +55,17 @@ vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
 
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_qlk34"]
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_fdada"]
 parameter_name = "Dither_size"
 qualifier = 1
 
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_cxwre"]
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_qmaqj"]
 default_input_values = [0, 0.83, 1, 0.0]
 
-[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_hkqnr"]
+[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_w2suj"]
 constant = Color(0.73, 0.47377, 0.1606, 1)
 
-[sub_resource type="VisualShader" id="VisualShader_wy8lo"]
+[sub_resource type="VisualShader" id="VisualShader_tl2py"]
 code = "shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
 
@@ -118,9 +118,9 @@ void fragment() {
 graph_offset = Vector2(-324.067, -87.7248)
 flags/unshaded = true
 nodes/fragment/0/position = Vector2(580, 220)
-nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_5flbu")
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_shisn")
 nodes/fragment/3/position = Vector2(-1180, 460)
-nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_x0jdi")
+nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_y3hi8")
 nodes/fragment/4/position = Vector2(-900, 460)
 nodes/fragment/4/size = Vector2(724.789, 654.559)
 nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
@@ -135,17 +135,17 @@ nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
 vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/5/node = SubResource("VisualShaderNodeFloatParameter_qlk34")
+nodes/fragment/5/node = SubResource("VisualShaderNodeFloatParameter_fdada")
 nodes/fragment/5/position = Vector2(-1540, 620)
-nodes/fragment/6/node = SubResource("VisualShaderNodeStep_cxwre")
+nodes/fragment/6/node = SubResource("VisualShaderNodeStep_qmaqj")
 nodes/fragment/6/position = Vector2(130.23, 516.22)
-nodes/fragment/7/node = SubResource("VisualShaderNodeColorConstant_hkqnr")
+nodes/fragment/7/node = SubResource("VisualShaderNodeColorConstant_w2suj")
 nodes/fragment/7/position = Vector2(226.136, 51.1274)
 nodes/fragment/connections = PackedInt32Array(3, 0, 4, 0, 5, 0, 4, 1, 4, 0, 6, 1, 6, 0, 0, 1, 7, 0, 0, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gfhbg"]
 render_priority = 0
-shader = SubResource("VisualShader_wy8lo")
+shader = SubResource("VisualShader_tl2py")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mdprb"]
 size = Vector3(0.0690674, 0.0105576, 0.0662781)
@@ -199,6 +199,7 @@ script = ExtResource("3_btmm2")
 [node name="On_Over" type="Node" parent="Photo/Photo_area" node_paths=PackedStringArray("_on_over")]
 script = ExtResource("7_vd1wc")
 _on_over = NodePath("../../On_Over")
+icon_type = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Photo/Photo_area"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000622556, 0.00481491, -0.000192255)
@@ -216,6 +217,7 @@ script = ExtResource("1_f7rkq")
 [node name="On_Over" type="Node" parent="legend/Legend_area" node_paths=PackedStringArray("_on_over")]
 script = ExtResource("7_vd1wc")
 _on_over = NodePath("../../On_Over")
+icon_type = 1
 
 [node name="Show_this_page" type="Node" parent="legend/Legend_area"]
 script = ExtResource("2_653je")
@@ -273,7 +275,7 @@ offset_top = -68.77
 offset_bottom = 56.2299
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.819608, 0.764706, 0.698039, 1)
+color = Color(0.796078, 0.768627, 0.639216, 1)
 
 [node name="text" type="Label" parent="legend/legend_render"]
 anchors_preset = 8

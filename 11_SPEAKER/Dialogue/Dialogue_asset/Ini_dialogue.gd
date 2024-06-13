@@ -70,3 +70,6 @@ func _on_ez_dialogue_end_of_dialogue_reached():
 
 func _on_up_dialogue_index():
 	_global_datas.Npc_Dialogue.Dialogue_start_index =+ 1
+	if _global_datas.Npc_Dialogue.photo_data.information_state == 3:
+		return
+	_global_datas.Npc_Dialogue.photo_data.information_state = 2		
