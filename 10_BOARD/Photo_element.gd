@@ -14,6 +14,9 @@ extends Node3D
 @onready var collision_shape_3d_p = $Photo/Photo_area/CollisionShape3D
 @onready var collision_shape_3d_l = $legend/Legend_area/CollisionShape3D
 
+@onready var board_icon = $Chavet_part
+
+
 signal update_legend( legend : String)
 func _ready():
 	_global_datas.photo_fade_out.connect(_disable)	
@@ -21,7 +24,8 @@ func _ready():
 			
 func _active():	
 	check_state()
-	
+	board_icon.visible = false
+		
 func check_state():
 		
 	_disable()	
@@ -66,10 +70,10 @@ func _disable():
 	collision_shape_3d_p.disabled = true	
 	collision_shape_3d_l.disabled = true	
 	
-	for l in links_list:
-			l.visible = false	
+	#for l in links_list:
+			#l.visible = false	
 	
-	
+	board_icon.visible = true
 func show_this_on_book():
 	
 	_global_datas.selected_photoData = Photo_data

@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://uwg2qc3svu11"]
+[gd_scene load_steps=28 format=3 uid="uid://uwg2qc3svu11"]
 
 [ext_resource type="Script" path="res://10_BOARD/Photo_element.gd" id="1_0a8jl"]
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Legend/Legend_behaviour.gd" id="1_f7rkq"]
@@ -9,6 +9,7 @@
 [ext_resource type="Shader" uid="uid://upo0fuo5sqgd" path="res://05_SHADER_TEST/Board/Board_sh.tres" id="3_ysgwd"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="7_vd1wc"]
 [ext_resource type="Texture2D" uid="uid://dtyhegc0wsj1h" path="res://10_BOARD/00_BOOK/01_UI/cursor_scan.png" id="10_fkyuy"]
+[ext_resource type="PackedScene" uid="uid://dgvsf84egy43d" path="res://10_BOARD/Decor/Chavet_part.blend" id="10_kn0vh"]
 
 [sub_resource type="GDScript" id="GDScript_32kbr"]
 script/source = "@tool
@@ -164,6 +165,13 @@ size = Vector2(1.8, 1.8)
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_mf2vu"]
 light_mode = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fiutw"]
+render_priority = 0
+shader = ExtResource("3_ysgwd")
+shader_parameter/Dark_color = Color(0.247059, 0.247059, 0.247059, 1)
+shader_parameter/ColorParameter = Color(0.282353, 0.254902, 0.180392, 1)
+shader_parameter/light_color = Color(0.678431, 0.529412, 0.286275, 1)
 
 [node name="Photo_element_root" type="Node3D"]
 script = ExtResource("1_0a8jl")
@@ -321,7 +329,17 @@ text = "?"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Chavet_part" parent="." instance=ExtResource("10_kn0vh")]
+transform = Transform3D(0.0117306, 0, 0, 0, 0.0117306, 0, 0, 0, 0.0117306, 0.0113865, 0.00455034, 0.036176)
+
+[node name="parts" parent="Chavet_part" index="0"]
+transform = Transform3D(0.651676, 0, 0, 0, 0.651676, 0, 0, 0, 0.651676, 0, 0, 0)
+layers = 2
+surface_material_override/0 = SubResource("ShaderMaterial_fiutw")
+
 [connection signal="update_legend" from="." to="legend/legend_behaviour" method="_on_photo_element_root_update_legend"]
 [connection signal="show_scanner" from="Photo/Photo_area/Show_scanner" to="." method="_on_show_scanner_show_scanner"]
 [connection signal="timeout" from="legend/legend_behaviour/Timer" to="legend/legend_behaviour" method="_on_timer_timeout"]
 [connection signal="show_this_page" from="legend/Legend_area/Show_this_page" to="." method="_on_show_this_page_show_this_page"]
+
+[editable path="Chavet_part"]

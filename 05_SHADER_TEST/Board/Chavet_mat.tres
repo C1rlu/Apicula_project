@@ -1,8 +1,7 @@
-[gd_resource type="ShaderMaterial" load_steps=32 format=3 uid="uid://cndqni443mbf"]
+[gd_resource type="VisualShader" load_steps=29 format=3 uid="uid://4yb4psbu336u"]
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_fxhmh"]
 parameter_name = "Dark_color"
-qualifier = 1
 
 [sub_resource type="VisualShaderNodeClamp" id="VisualShaderNodeClamp_u3q1m"]
 
@@ -104,16 +103,15 @@ op_type = 3
 parameter_name = "Dither_size"
 qualifier = 1
 
-[sub_resource type="VisualShader" id="VisualShader_iqp7a"]
+[resource]
 code = "shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx;
 
-global uniform vec4 Dark_color : source_color;
+uniform vec4 Dark_color : source_color;
 global uniform bool active_Dither;
 uniform bool stayGlobal = false;
 uniform vec4 Color : source_color;
 global uniform float isSubscene_value;
-global uniform float Dither_size;
 uniform sampler2D tex_lgt_16;
 uniform sampler2D Texture2DParameter;
 
@@ -157,29 +155,10 @@ void light() {
 	n_out38p0 = mix(vec3(n_out26p0.xyz), n_out35p0, float(n_out37p0));
 
 
-// FloatConstant:3
-	float n_out3p0 = 1.000000;
-
-
-// FloatParameter:42
-	float n_out42p0 = Dither_size;
-
-
-	float n_out4p0;
-// Expression:4
-	n_out4p0 = 0.0;
-	{
-		const float DITHER_THRESHOLDS[16] ={
-				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-			};
-			
-		vec2 uv = FRAGCOORD.xy * n_out42p0;
-		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-		n_out4p0 = n_out3p0 - DITHER_THRESHOLDS[index];
-	}
+// Mix:25
+	vec3 n_in25p0 = vec3(0.00000, 0.00000, 0.00000);
+	vec3 n_in25p2 = vec3(0.50000, 0.50000, 0.50000);
+	vec3 n_out25p0 = mix(n_in25p0, n_out38p0, n_in25p2);
 
 
 // Texture2D:16
@@ -232,15 +211,6 @@ void light() {
 	float n_out22p0 = mix(n_out10p0, n_in22p1, n_out23p0);
 
 
-// Step:11
-	float n_out11p0 = step(n_out4p0, n_out22p0);
-
-
-// Mix:25
-	vec3 n_in25p0 = vec3(0.00000, 0.00000, 0.00000);
-	vec3 n_out25p0 = mix(n_in25p0, n_out38p0, vec3(n_out11p0));
-
-
 // Mix:41
 	vec3 n_in41p0 = vec3(0.00000, 0.00000, 0.00000);
 	vec3 n_out41p0 = mix(n_in41p0, n_out38p0, vec3(n_out22p0));
@@ -257,7 +227,7 @@ void light() {
 
 }
 "
-graph_offset = Vector2(-415.684, 11.082)
+graph_offset = Vector2(831.581, 306.671)
 nodes/vertex/0/position = Vector2(400, 160)
 nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_fxhmh")
 nodes/fragment/2/position = Vector2(-340, 100)
@@ -326,17 +296,4 @@ nodes/light/41/node = SubResource("VisualShaderNodeMix_knqx8")
 nodes/light/41/position = Vector2(1710.14, 1126.07)
 nodes/light/42/node = SubResource("VisualShaderNodeFloatParameter_40cy3")
 nodes/light/42/position = Vector2(-360, 1980)
-nodes/light/connections = PackedInt32Array(12, 0, 13, 0, 17, 0, 21, 0, 20, 0, 21, 1, 21, 0, 23, 0, 3, 0, 4, 0, 26, 0, 35, 1, 32, 0, 35, 2, 35, 0, 38, 1, 26, 0, 38, 2, 38, 0, 25, 1, 27, 0, 28, 2, 10, 0, 22, 0, 23, 0, 22, 2, 22, 0, 11, 1, 19, 0, 13, 1, 13, 0, 17, 0, 4, 0, 11, 0, 25, 0, 40, 1, 22, 0, 41, 2, 38, 0, 41, 1, 41, 0, 40, 2, 28, 0, 10, 0, 16, 0, 28, 0, 42, 0, 4, 1, 37, 0, 38, 0, 39, 0, 40, 0, 40, 0, 0, 1, 11, 0, 25, 2)
-
-[sub_resource type="Gradient" id="Gradient_mtt02"]
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_4me54"]
-gradient = SubResource("Gradient_mtt02")
-fill_from = Vector2(1, 0.995726)
-
-[resource]
-render_priority = 2
-shader = SubResource("VisualShader_iqp7a")
-shader_parameter/stayGlobal = false
-shader_parameter/Color = Color(0.94902, 0.654902, 0.360784, 1)
-shader_parameter/Texture2DParameter = SubResource("GradientTexture2D_4me54")
+nodes/light/connections = PackedInt32Array(12, 0, 13, 0, 17, 0, 21, 0, 20, 0, 21, 1, 21, 0, 23, 0, 3, 0, 4, 0, 26, 0, 35, 1, 32, 0, 35, 2, 35, 0, 38, 1, 26, 0, 38, 2, 38, 0, 25, 1, 27, 0, 28, 2, 10, 0, 22, 0, 23, 0, 22, 2, 22, 0, 11, 1, 19, 0, 13, 1, 13, 0, 17, 0, 4, 0, 11, 0, 25, 0, 40, 1, 22, 0, 41, 2, 38, 0, 41, 1, 41, 0, 40, 2, 28, 0, 10, 0, 16, 0, 28, 0, 42, 0, 4, 1, 37, 0, 38, 0, 39, 0, 40, 0, 40, 0, 0, 1)
