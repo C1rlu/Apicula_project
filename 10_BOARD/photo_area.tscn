@@ -8,7 +8,6 @@
 [ext_resource type="Texture2D" uid="uid://dsmwbffwgaj4q" path="res://12_INVENTORY/Photo/IMG/PhotoTest_02.jpg" id="3_c0uts"]
 [ext_resource type="Shader" uid="uid://upo0fuo5sqgd" path="res://05_SHADER_TEST/Board/Board_sh.tres" id="3_ysgwd"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="7_vd1wc"]
-[ext_resource type="Texture2D" uid="uid://dff72hp5k3p01" path="res://10_BOARD/00_BOOK/01_UI/cursor_plume.png" id="9_w8jnf"]
 [ext_resource type="Texture2D" uid="uid://dtyhegc0wsj1h" path="res://10_BOARD/00_BOOK/01_UI/cursor_scan.png" id="10_fkyuy"]
 
 [sub_resource type="GDScript" id="GDScript_32kbr"]
@@ -39,7 +38,8 @@ shader_parameter/light_color = Color(0.580392, 0.545098, 0.439216, 1)
 [sub_resource type="BoxMesh" id="BoxMesh_8e2mh"]
 material = SubResource("ShaderMaterial_aof41")
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_seomj"]
+[sub_resource type="PlaneMesh" id="PlaneMesh_l1221"]
+resource_local_to_scene = true
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_shisn"]
 constant = 1.0
@@ -117,7 +117,7 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-324.067, -87.7248)
+graph_offset = Vector2(-573.321, -129.617)
 flags/unshaded = true
 nodes/fragment/0/position = Vector2(580, 220)
 nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_shisn")
@@ -158,6 +158,10 @@ size = Vector3(0.0735859, 0.0125059, 0.035)
 [sub_resource type="ViewportTexture" id="ViewportTexture_lyxt3"]
 viewport_path = NodePath("legend/legend_render")
 
+[sub_resource type="PlaneMesh" id="PlaneMesh_seomj"]
+resource_local_to_scene = true
+size = Vector2(1.8, 1.8)
+
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_mf2vu"]
 light_mode = 1
 
@@ -188,7 +192,7 @@ skeleton = NodePath("../..")
 transform = Transform3D(0.0396476, 0, 0.000431277, 0, 0.034558, 0, -0.000429739, 0, 0.0397897, 0.00034634, 0.00326981, 0)
 visible = false
 layers = 16384
-mesh = SubResource("PlaneMesh_seomj")
+mesh = SubResource("PlaneMesh_l1221")
 skeleton = NodePath("../../..")
 surface_material_override/0 = SubResource("ShaderMaterial_gfhbg")
 
@@ -230,6 +234,10 @@ transform = Transform3D(0.981737, 0, 0.190244, 0, 1, 0, -0.190244, 0, 0.981737, 
 [node name="legend_behaviour" type="Node" parent="legend"]
 script = ExtResource("1_f7rkq")
 
+[node name="Timer" type="Timer" parent="legend/legend_behaviour"]
+wait_time = 0.1
+one_shot = true
+
 [node name="Legend_area" type="Area3D" parent="legend"]
 
 [node name="On_Over" type="Node" parent="legend/Legend_area" node_paths=PackedStringArray("_on_over_second")]
@@ -251,21 +259,6 @@ layers = 16384
 sorting_offset = 1.0
 texture = SubResource("ViewportTexture_lyxt3")
 
-[node name="Render_ui_plume" type="Sprite3D" parent="legend"]
-transform = Transform3D(0.0147266, -0.000532025, -2.32557e-11, -6.1952e-17, -6.44141e-10, 0.0147362, -0.000532025, -0.0147266, -6.43721e-10, 0.0344471, -5.52684e-05, -0.0111229)
-visible = false
-layers = 16384
-sorting_offset = 3.0
-modulate = Color(0.701961, 0.670588, 0.52549, 1)
-texture = ExtResource("9_w8jnf")
-
-[node name="Render_ui_plume2" type="Sprite3D" parent="legend/Render_ui_plume"]
-transform = Transform3D(0.995147, 0.0982902, -0.00480037, -0.0982846, 0.995158, 0.00140261, 0.004915, -0.000923993, 0.999989, 0.146564, -0.0300059, -0.0461623)
-layers = 16384
-sorting_offset = 2.0
-modulate = Color(0.0993426, 0.205263, 0.199366, 1)
-texture = ExtResource("9_w8jnf")
-
 [node name="On_Over" type="MeshInstance3D" parent="legend"]
 transform = Transform3D(0.0417257, 0, 0.000179212, 0, 0.0357813, 0, -0.000452262, 0, 0.016534, 0, -0.000693947, 0)
 visible = false
@@ -285,15 +278,14 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -198.0
-offset_top = -41.5
+offset_top = -55.0
 offset_right = 198.0
-offset_bottom = 41.5
+offset_bottom = 55.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.360784, 0.341176, 0.294118, 1)
 theme_override_font_sizes/font_size = 80
-text = "?
-"
+text = "?"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -309,7 +301,7 @@ offset_top = -68.77
 offset_bottom = 56.2299
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.796078, 0.768627, 0.639216, 1)
+color = Color(0.831373, 0.819608, 0.764706, 1)
 
 [node name="text" type="Label" parent="legend/legend_render"]
 anchors_preset = 8
@@ -325,11 +317,11 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.360784, 0.341176, 0.294118, 1)
 theme_override_font_sizes/font_size = 60
-text = "?
-"
+text = "?"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [connection signal="update_legend" from="." to="legend/legend_behaviour" method="_on_photo_element_root_update_legend"]
 [connection signal="show_scanner" from="Photo/Photo_area/Show_scanner" to="." method="_on_show_scanner_show_scanner"]
+[connection signal="timeout" from="legend/legend_behaviour/Timer" to="legend/legend_behaviour" method="_on_timer_timeout"]
 [connection signal="show_this_page" from="legend/Legend_area/Show_this_page" to="." method="_on_show_this_page_show_this_page"]

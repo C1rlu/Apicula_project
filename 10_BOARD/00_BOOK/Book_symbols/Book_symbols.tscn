@@ -6,15 +6,15 @@
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Book_symbols/Open_Choice.gd" id="3_whbe4"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="4_kuj33"]
 [ext_resource type="PackedScene" uid="uid://db6k1p6qd826g" path="res://10_BOARD/00_BOOK/Book_symbols/Page/Book_page.tscn" id="5_0380u"]
-[ext_resource type="Resource" uid="uid://fbr0i6tyrrjn" path="res://10_BOARD/00_BOOK/Button_data/button_01.tres" id="5_dkdpb"]
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Button_data/Button_area_set.gd" id="5_njsas"]
 [ext_resource type="PackedScene" uid="uid://bs32groi0tedy" path="res://10_BOARD/00_BOOK/Choice_panel/Choice_Panel_root.tscn" id="5_ryh6q"]
-[ext_resource type="Resource" uid="uid://m16g4pi641qs" path="res://10_BOARD/00_BOOK/Button_data/button_02.tres" id="6_7arii"]
 [ext_resource type="PackedScene" uid="uid://cgb4c1n0bj2at" path="res://12_INVENTORY/Book/Page_flip/page_flip_right.tscn" id="6_ignqh"]
-[ext_resource type="Resource" uid="uid://bc0al5v16mi2c" path="res://10_BOARD/00_BOOK/Button_data/button_04.tres" id="7_7o884"]
-[ext_resource type="Resource" uid="uid://ccap5kr10wdkg" path="res://10_BOARD/00_BOOK/Button_data/button_03.tres" id="7_74geh"]
+[ext_resource type="Resource" uid="uid://ccap5kr10wdkg" path="res://10_BOARD/00_BOOK/Button_data/Responce_data/Maurice_question_button_01.tres" id="7_4yc58"]
 [ext_resource type="Material" uid="uid://b5u3d7wosa00d" path="res://05_SHADER_TEST/Board/Flat_with_gradient.tres" id="7_n6d7t"]
+[ext_resource type="Resource" uid="uid://bc0al5v16mi2c" path="res://10_BOARD/00_BOOK/Button_data/Responce_data/Maurice_question_button_02.tres" id="8_kfnot"]
 [ext_resource type="PackedScene" uid="uid://cgc02cx2l0ndw" path="res://10_BOARD/00_BOOK/Legend/Book_page_signets.tscn" id="8_n2vim"]
+[ext_resource type="Resource" uid="uid://bdydt2ko8pr0t" path="res://10_BOARD/00_BOOK/Button_data/Responce_data/Maurice_question_button_03.tres" id="9_4r2du"]
+[ext_resource type="Resource" uid="uid://ckwue46oguqkj" path="res://10_BOARD/00_BOOK/Button_data/Responce_data/ScannerOddities_question_button_01.tres" id="10_5l1m7"]
 [ext_resource type="Texture2D" uid="uid://bm6lex6ah3vx" path="res://10_BOARD/00_BOOK/00_img/Cross.png" id="16_3gnwj"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_vkvy6"]
@@ -40,7 +40,7 @@ parameter_name = "Dither_size"
 qualifier = 1
 
 [sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_pr2lv"]
-default_input_values = [0, 0.83, 1, 0.0]
+default_input_values = [0, 0.79, 1, 0.0]
 
 [sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_qjd8d"]
 constant = Color(0.73, 0.47377, 0.1606, 1)
@@ -84,7 +84,7 @@ void fragment() {
 
 
 // Step:6
-	float n_in6p0 = 0.83000;
+	float n_in6p0 = 0.79000;
 	float n_out6p0 = step(n_in6p0, n_out4p0);
 
 
@@ -95,7 +95,7 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-324.067, -87.7248)
+graph_offset = Vector2(-632.453, 286.075)
 flags/unshaded = true
 nodes/fragment/0/position = Vector2(580, 220)
 nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_ul1nu")
@@ -184,14 +184,14 @@ func disable():
 	col.disabled = false
 "
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_ru888"]
-size = Vector3(0.440361, 0.230331, 1.83478)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_06827"]
-size = Vector3(0.50259, 0.230331, 1.85864)
+[sub_resource type="BoxShape3D" id="BoxShape3D_nfqob"]
+size = Vector3(0.493483, 0.329155, 1.85864)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_khjkf"]
-size = Vector3(0.424667, 0.312309, 1.87305)
+size = Vector3(0.436943, 0.312309, 1.8291)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_smuay"]
+size = Vector3(0.436943, 0.312309, 1.8291)
 
 [sub_resource type="QuadMesh" id="QuadMesh_l8pd8"]
 
@@ -521,6 +521,10 @@ _book_data = ExtResource("2_skv6l")
 
 [node name="Open_Choice" type="Node" parent="."]
 script = ExtResource("3_whbe4")
+right_position = Vector3(0.2, 0.4, -0.9)
+right_rotation = Vector3(0, -6, 0)
+left_position = Vector3(0.2, 0.4, 1)
+left_rotation = Vector3(0, 3, 0)
 
 [node name="Idle_position" type="Node" parent="."]
 script = ExtResource("3_1o6ej")
@@ -586,65 +590,54 @@ script = SubResource("GDScript_q6dru")
 
 [node name="Button_list" type="Node3D" parent="."]
 
-[node name="01" type="Area3D" parent="Button_list"]
+[node name="Maurice_page" type="Node3D" parent="Button_list"]
+visible = false
 
-[node name="push_button" type="Node" parent="Button_list/01"]
+[node name="01" type="Area3D" parent="Button_list/Maurice_page"]
+
+[node name="push_button" type="Node" parent="Button_list/Maurice_page/01"]
 script = ExtResource("5_njsas")
-button_data = ExtResource("5_dkdpb")
+button_data = ExtResource("7_4yc58")
 
-[node name="On_Over" type="Node" parent="Button_list/01"]
-script = ExtResource("4_kuj33")
-icon_type = 5
-
-[node name="col" type="CollisionShape3D" parent="Button_list/01"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.880212, 0.253045, 1.11614)
-shape = SubResource("BoxShape3D_ru888")
+[node name="col" type="CollisionShape3D" parent="Button_list/Maurice_page/01"]
+transform = Transform3D(0.996858, 0, 0.0792072, 0, 1, 0, -0.0792072, 0, 0.996858, -0.540611, 0.26485, 1.09752)
+shape = SubResource("BoxShape3D_nfqob")
 disabled = true
 
-[node name="02" type="Area3D" parent="Button_list"]
+[node name="02" type="Area3D" parent="Button_list/Maurice_page"]
 
-[node name="push_button" type="Node" parent="Button_list/02"]
+[node name="push_button" type="Node" parent="Button_list/Maurice_page/02"]
 script = ExtResource("5_njsas")
-button_data = ExtResource("6_7arii")
+button_data = ExtResource("8_kfnot")
 
-[node name="col" type="CollisionShape3D" parent="Button_list/02"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.576051, 0.181542, -1.11046)
-shape = SubResource("BoxShape3D_ru888")
-disabled = true
-
-[node name="On_Over" type="Node" parent="Button_list/02"]
-script = ExtResource("4_kuj33")
-icon_type = 5
-
-[node name="03" type="Area3D" parent="Button_list"]
-
-[node name="push_button" type="Node" parent="Button_list/03"]
-script = ExtResource("5_njsas")
-button_data = ExtResource("7_74geh")
-
-[node name="col" type="CollisionShape3D" parent="Button_list/03"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.437123, 0.181542, 1.09752)
-shape = SubResource("BoxShape3D_06827")
-disabled = true
-
-[node name="On_Over" type="Node" parent="Button_list/03"]
-script = ExtResource("4_kuj33")
-icon_type = 5
-
-[node name="04" type="Area3D" parent="Button_list"]
-
-[node name="push_button" type="Node" parent="Button_list/04"]
-script = ExtResource("5_njsas")
-button_data = ExtResource("7_7o884")
-
-[node name="col" type="CollisionShape3D" parent="Button_list/04"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.711901, 0.222531, 1.11569)
+[node name="col" type="CollisionShape3D" parent="Button_list/Maurice_page/02"]
+transform = Transform3D(0.999813, 0, -0.0193196, 0, 1, 0, 0.0193196, 0, 0.999813, 0.711901, 0.222531, 1.11569)
 shape = SubResource("BoxShape3D_khjkf")
 disabled = true
 
-[node name="On_Over" type="Node" parent="Button_list/04"]
-script = ExtResource("4_kuj33")
-icon_type = 5
+[node name="03" type="Area3D" parent="Button_list/Maurice_page"]
+
+[node name="push_button" type="Node" parent="Button_list/Maurice_page/03"]
+script = ExtResource("5_njsas")
+button_data = ExtResource("9_4r2du")
+
+[node name="col" type="CollisionShape3D" parent="Button_list/Maurice_page/03"]
+transform = Transform3D(0.998155, 0, 0.0607175, 0, 1, 0, -0.0607175, 0, 0.998155, 0.711901, 0.222531, -1.1617)
+shape = SubResource("BoxShape3D_smuay")
+disabled = true
+
+[node name="Scanner_page" type="Node3D" parent="Button_list"]
+
+[node name="01" type="Area3D" parent="Button_list/Scanner_page"]
+
+[node name="push_button" type="Node" parent="Button_list/Scanner_page/01"]
+script = ExtResource("5_njsas")
+button_data = ExtResource("10_5l1m7")
+
+[node name="col" type="CollisionShape3D" parent="Button_list/Scanner_page/01"]
+transform = Transform3D(0.999257, 0, 0.0385448, 0, 1, 0, -0.0385448, 0, 0.999257, 0.801162, 0.26485, 1.09734)
+shape = SubResource("BoxShape3D_nfqob")
+disabled = true
 
 [node name="Book_page" parent="." instance=ExtResource("5_0380u")]
 transform = Transform3D(-1.93005e-08, 0, 0.441544, 0, 0.441544, 0, -0.441544, 0, -1.93005e-08, -0.116, -0.061, 0)
@@ -684,7 +677,7 @@ surface_material_override/0 = ExtResource("7_n6d7t")
 transform = Transform3D(15.3259, 1.84774e-06, -4.76837e-07, -1.19209e-07, 15.3258, -5.51343e-07, 1.19209e-06, 1.63913e-07, 15.3259, -1.56141, 0.0536942, 1.83738)
 
 [node name="Anwser_panel_choice_root" parent="." instance=ExtResource("5_ryh6q")]
-transform = Transform3D(0.978162, 0, -0.207843, 0, 1, 0, 0.207843, 0, 0.978162, 0.343302, 0.307948, -0.879038)
+transform = Transform3D(0.978133, 0, 0.20798, 0, 1, 0, -0.20798, 0, 0.978133, -0.162, 0.4, 0.789)
 visible = false
 
 [node name="Area3D" type="Area3D" parent="."]
@@ -700,6 +693,7 @@ _on_over = NodePath("../On_Over_")
 [node name="col" type="CollisionShape3D" parent="Area3D"]
 transform = Transform3D(0.271244, -0.00103544, -0.962512, 0.00288097, 1, -0.000263933, 0.962516, -0.00270135, 0.271238, 0.145912, 0.172357, -0.0930764)
 shape = SubResource("BoxShape3D_5t87k")
+disabled = true
 
 [node name="On_Over_" type="MeshInstance3D" parent="Area3D"]
 transform = Transform3D(0.966053, 1.61471e-05, 0.258348, 1.00341e-05, 0.875001, -0.000108952, -0.258347, 9.43656e-05, 0.966053, 0.128937, 0.0956356, -0.0974309)
@@ -711,6 +705,7 @@ surface_material_override/0 = SubResource("ShaderMaterial_1ailg")
 
 [node name="render" type="MeshInstance3D" parent="Area3D"]
 transform = Transform3D(0.272286, 0.389058, 1.42682e-08, 5.82077e-11, -1.75933e-08, 0.337622, 1.01618, -0.104248, -3.77622e-09, 0.133937, 0.102308, -0.0890034)
+visible = false
 layers = 512
 mesh = SubResource("QuadMesh_22o7c")
 surface_material_override/0 = SubResource("StandardMaterial3D_qcmbn")

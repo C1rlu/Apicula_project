@@ -1,7 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://cotyiiewaqqpu"]
-
-[ext_resource type="PackedScene" uid="uid://cgb01ku2od671" path="res://10_BOARD/00_BOOK/Button_data/button_2d_prefabs.tscn" id="1_nl2ou"]
-[ext_resource type="Resource" uid="uid://m16g4pi641qs" path="res://10_BOARD/00_BOOK/Button_data/button_02.tres" id="2_qm0l5"]
+[gd_scene load_steps=2 format=3 uid="uid://cotyiiewaqqpu"]
 
 [sub_resource type="GDScript" id="GDScript_6ohfl"]
 script/source = "extends Node
@@ -13,46 +10,6 @@ func _ready():
 	
 	color_rect.queue_free()	
 	color_rect_2.queue_free()
-"
-
-[sub_resource type="GDScript" id="GDScript_xj44o"]
-script/source = "extends Button
-
-@export var button_data : book_button_data
-
-
-@export var on_over : Control
-
-func _ready():
-
-
-	button_data.button_on_over.connect(_on_over)
-	button_data.button_signal.connect(push_button)
-	
-	
-	
-	
-	var col : CollisionShape3D = button_data.button_area.get_node(\"col\")
-	col.disabled = false
-	
-	
-func _on_over(condition):
-	on_over.visible = condition		
-	
-	
-func push_button():
-
-	emit_signal(\"button_down\")
-	
-func _on_tree_exiting():
-	var col : CollisionShape3D = button_data.button_area.get_node(\"col\")
-	col.disabled = true
-
-
-
-func _on_button_down():
-	print(\"PUSH PUSH PUSHHH\")	
-
 "
 
 [node name="Page_00" type="Control"]
@@ -136,36 +93,3 @@ offset_right = 3.0
 grow_horizontal = 0
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
-
-[node name="Button_1" parent="." instance=ExtResource("1_nl2ou")]
-layout_mode = 0
-offset_left = 39.0
-offset_top = 475.0
-offset_right = 453.0
-offset_bottom = 570.0
-
-[node name="Button_2" type="Button" parent="." node_paths=PackedStringArray("on_over")]
-layout_mode = 0
-offset_left = 541.0
-offset_top = 150.0
-offset_right = 955.0
-offset_bottom = 245.0
-focus_mode = 0
-text = "..................... ? ............................."
-script = SubResource("GDScript_xj44o")
-button_data = ExtResource("2_qm0l5")
-on_over = NodePath("On_Over")
-
-[node name="On_Over" type="ColorRect" parent="Button_2"]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-color = Color(1, 0.870588, 0.760784, 0.309804)
-
-[connection signal="button_down" from="Button_2" to="Button_2" method="_on_button_down"]
-[connection signal="tree_exiting" from="Button_2" to="Button_2" method="_on_tree_exiting"]

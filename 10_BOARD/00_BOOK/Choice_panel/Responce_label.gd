@@ -19,7 +19,7 @@ func _ready():
 	_global_datas.start_choice.connect(_activation)
 	
 func update_responce_receiver(_responce_data : book_button_data):
-	print()
+
 	responce_data = _responce_data	
 	label.text = _responce_data.responce_list[responce_index]
 func _on_over(condition):
@@ -29,10 +29,12 @@ func _on_over(condition):
 func push_button():
 	if responce_data == null:
 		return
+		
 	responce_data.update_text.emit(label.text)
+	responce_data.response_index = responce_index
+	#close choice panel
+	_global_datas.start_choice.emit(false,0)
 
-	_global_datas.start_choice.emit(false)
-
-func _activation(condition):
+func _activation(condition,index):
 	var col : CollisionShape3D = button_data.button_area.get_node("col")
 	col.disabled = !condition

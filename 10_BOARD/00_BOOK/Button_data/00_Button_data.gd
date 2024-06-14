@@ -9,3 +9,6 @@ signal update_text(_new_text:String)
 
 @export var responce_list : Array[String]
 
+@export var choice_side : int = 0
+@export var response_index : int = 100
+
