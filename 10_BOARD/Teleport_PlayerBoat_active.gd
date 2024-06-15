@@ -1,7 +1,8 @@
 extends Node
 
 @onready var teleport_scale_visual = $"../../Teleport_scale_visual"
-@onready var select_this = $"../Select_this"
+@onready var boue_map_prefab = $"../.."
+
 
 var t 
 
@@ -25,7 +26,7 @@ func done():
 	_global_datas.Player_In_Inventory = !_global_datas.Player_In_Inventory
 	_global_datas.open_inventory.emit(_global_datas.Player_In_Inventory)
 	
-	var n_position = select_this.boue_data.world_position
+	var n_position = boue_map_prefab.boue_data.world_position
 	_global_datas._teleport_boat_at_pos.emit(n_position)
 	
 	

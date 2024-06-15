@@ -173,3 +173,8 @@ func check_on_over(targetPos : Vector2):
 	if result.collider.get_node_or_null("On_Over"): 
 		On_Over = result.collider.get_node_or_null("On_Over")
 		On_Over.on_over(true)	
+	
+	if result.collider.get_node_or_null("Select_this"): 
+		var button = result.collider.get_node_or_null("Select_this")
+		#previous_on_over = button
+		button.show_legend(true)	
