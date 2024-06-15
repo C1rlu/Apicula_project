@@ -6,16 +6,20 @@ extends Control
 @onready var responce_text = $Text
 
 signal type_text(responce : String)
+var disable = true
 
 func _ready():
-
+	
+	if disable:
+		return
+		
 	button_data.button_on_over.connect(_on_over)
 	button_data.button_signal.connect(push_button)
 	button_data.update_text.connect(_update_text)
 	
 	var col : CollisionShape3D = button_data.button_area.get_node("col")
 	col.disabled = false
-	print("INO DONE")
+	
 	if button_data.response_index !=100:
 		var responce = button_data.responce_list[button_data.response_index]
 		responce_text.text = responce 
