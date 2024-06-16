@@ -53,7 +53,7 @@ func show_all_info():
 	for p in next_photo_data:    
 		if p.Photo_data.board_information_state == 0:
 			p.Photo_data.board_information_state = 1
-		
+			p.Photo_data.page_information_state = 1
 	for l in links_list:
 		l.visible = true		
 		
