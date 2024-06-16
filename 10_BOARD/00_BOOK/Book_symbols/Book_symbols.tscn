@@ -142,12 +142,6 @@ script/source = "extends CollisionShape3D
 
 @onready var col = $\".\"
 
-func _ready():
-	
-	_global_datas.photo_fade_out.connect(active)	
-	_global_datas.photo_fade_in.connect(disable)	
-	
-	
 func active():
 	col.disabled = true
 	
@@ -171,10 +165,10 @@ script/source = "extends CollisionShape3D
 @onready var col = $\".\"
 
 func _ready():
-	
-	_global_datas.photo_fade_out.connect(active)	
-	_global_datas.photo_fade_in.connect(disable)	
-	
+	pass
+	#_global_datas.photo_fade_out.connect(active)	
+	#_global_datas.photo_fade_in.connect(disable)	
+	#
 	
 func active():
 	col.disabled = true
@@ -357,6 +351,7 @@ shader_parameter/Darker = Color(0.364706, 0.337255, 0.286275, 1)
 shader_parameter/Gradient = SubResource("GradientTexture2D_xxg5j")
 
 [sub_resource type="BoxMesh" id="BoxMesh_1p7be"]
+size = Vector3(1, 1, 0.963)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_axuf0"]
 shading_mode = 0
@@ -663,11 +658,7 @@ func _ready():
 func _book_exit():
 	
 	_global_datas.book_back_idle_position.emit(false)
-	#if !_global_datas.book_idle_pos:
-		#_global_datas.book_back_idle_position.emit(true)
-		#_global_datas.book_fade_in.emit()
-		#_global_datas.book_idle_pos = true
-
+	_global_datas.book_idle_pos = true
 
 func active_back_idle_book(condition):
 	
@@ -824,17 +815,17 @@ wait_time = 0.15
 wait_time = 0.15
 
 [node name="On_Over" type="MeshInstance3D" parent="."]
-transform = Transform3D(1.32499, 5.0307e-17, 0.00345762, 3.98986e-17, 0.588891, 1.39591e-18, -0.0143616, 4.4245e-17, 0.319001, -0.114884, 0.0900068, -2.09456)
+transform = Transform3D(1.32499, 5.0307e-17, 0.00345762, 3.98986e-17, 0.588891, 1.39591e-18, -0.0143616, 4.4245e-17, 0.319001, -0.114884, 0.0382367, -2.08823)
 visible = false
-layers = 512
+layers = 2
 mesh = SubResource("PlaneMesh_vkvy6")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("ShaderMaterial_ko5cd")
 
 [node name="On_Over2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1.32499, 1.7139e-11, 0.00345762, 1.87718e-11, 0.588891, 1.13654e-11, -0.0143616, 2.19594e-11, 0.319001, -0.115, 0.09, 2.002)
+transform = Transform3D(1.32499, 1.7139e-11, 0.00345762, 1.87718e-11, 0.588891, 1.13654e-11, -0.0143616, 2.19594e-11, 0.319001, -0.115, 0.0549962, 2.08184)
 visible = false
-layers = 512
+layers = 2
 mesh = SubResource("PlaneMesh_vkvy6")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("ShaderMaterial_ko5cd")
@@ -853,7 +844,6 @@ icon_type = 3
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Turn_Right"]
 transform = Transform3D(1, 0, 0, 0, 1, -5.27664e-19, 0, 1.48901e-18, 1, -0.0249052, 0.090931, -1.16268)
 shape = SubResource("BoxShape3D_224re")
-disabled = true
 script = SubResource("GDScript_dsb8m")
 
 [node name="Turn_Left" type="Area3D" parent="."]
@@ -869,7 +859,6 @@ icon_type = 4
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Turn_Left"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.113466, 0.0935526, 1.1877)
 shape = SubResource("BoxShape3D_aaupl")
-disabled = true
 script = SubResource("GDScript_q6dru")
 
 [node name="Button_list" type="Node3D" parent="."]
@@ -924,7 +913,7 @@ shape = SubResource("BoxShape3D_nfqob")
 disabled = true
 
 [node name="Book_page" parent="." instance=ExtResource("5_0380u")]
-transform = Transform3D(-1.93005e-08, 0, 0.441544, 0, 0.441544, 0, -0.441544, 0, -1.93005e-08, -0.116, -0.061, 0)
+transform = Transform3D(-9.73829e-09, 0, 0.222786, 0, 0.222786, 0, -0.222786, 0, -9.73829e-09, -0.116, 0.0158086, 0)
 
 [node name="Page_flip_right_ROOT" type="Node3D" parent="."]
 transform = Transform3D(0.975, 0, 0, 0, 1, 0, 0, 0, 0.922, -0.048, 0.089, 0)
@@ -937,22 +926,23 @@ transform = Transform3D(0.974894, 8.74227e-08, 0, -8.52279e-08, 0.999999, 0, 0, 
 [node name="Page_flip_left" parent="Page_flip_left_ROOT" instance=ExtResource("6_ignqh")]
 
 [node name="page" type="MeshInstance3D" parent="."]
-transform = Transform3D(2.65385, 1.96518e-07, 2.20912e-07, -1.16003e-07, -1.96518e-07, 5.05387, 1.16003e-07, -4.49581, -2.20912e-07, -0.103871, 0.0909873, -0.0437125)
-layers = 512
+transform = Transform3D(2.65385, 1.96148e-07, 2.20912e-07, -1.16003e-07, -1.96148e-07, 5.05387, 1.16003e-07, -4.48736, -2.20912e-07, -0.103871, 0.0909873, -0.0348951)
+visible = false
+layers = 2
 cast_shadow = 0
 mesh = SubResource("QuadMesh_l8pd8")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("ShaderMaterial_ytwgf")
 
 [node name="book_page" type="MeshInstance3D" parent="."]
-transform = Transform3D(2.67039, 0, 1.84741e-13, 0, 0.078953, 0, 0, 0, 4.63623, -0.104716, 0.0503313, -0.0783752)
-layers = 512
+transform = Transform3D(2.67039, 0, 1.84741e-13, 0, 0.078953, 0, 0, 0, 4.63623, -0.105, 0.05, 0)
+layers = 2
 mesh = SubResource("BoxMesh_1p7be")
 surface_material_override/0 = SubResource("StandardMaterial3D_axuf0")
 
 [node name="book_base" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.00116803, 0, -2.80743, 0, 0.0406598, 0, 4.79073, 0, 0.000685451, -0.106676, 0.00743847, -0.0563836)
-layers = 512
+transform = Transform3D(0.00116803, 0, -2.80743, 0, 0.0406598, 0, 4.79073, 0, 0.000685451, -0.107, 0.007, 0)
+layers = 2
 mesh = SubResource("BoxMesh_0xre3")
 skeleton = NodePath("../../..")
 surface_material_override/0 = SubResource("ShaderMaterial_t44i5")
@@ -982,7 +972,7 @@ disabled = true
 [node name="On_Over_" type="MeshInstance3D" parent="Area3D"]
 transform = Transform3D(0.966053, 1.61471e-05, 0.258348, 1.00341e-05, 0.875001, -0.000108952, -0.258347, 9.43656e-05, 0.966053, 0.128937, 0.0956356, -0.0974309)
 visible = false
-layers = 512
+layers = 2
 mesh = SubResource("PlaneMesh_3mud5")
 skeleton = NodePath("../../..")
 surface_material_override/0 = SubResource("ShaderMaterial_1ailg")
@@ -990,13 +980,13 @@ surface_material_override/0 = SubResource("ShaderMaterial_1ailg")
 [node name="render" type="MeshInstance3D" parent="Area3D"]
 transform = Transform3D(0.272286, 0.389058, 1.42682e-08, 5.82077e-11, -1.75933e-08, 0.337622, 1.01618, -0.104248, -3.77622e-09, 0.133937, 0.102308, -0.0890034)
 visible = false
-layers = 512
+layers = 2
 mesh = SubResource("QuadMesh_22o7c")
 surface_material_override/0 = SubResource("StandardMaterial3D_qcmbn")
 
 [node name="Sprite3D" type="Sprite3D" parent="Area3D/render"]
 transform = Transform3D(0.145499, 0, 8.91305e-11, -1.04308e-07, -0.281675, 2.46218e-08, 1.45519e-11, -2.92639e-08, -0.336631, -0.020321, 0.0127583, 0.0642729)
-layers = 512
+layers = 2
 modulate = Color(0.396078, 0.290196, 0.168627, 1)
 texture = ExtResource("16_3gnwj")
 

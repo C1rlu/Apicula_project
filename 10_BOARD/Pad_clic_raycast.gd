@@ -114,7 +114,10 @@ func check_cast(targetPos : Vector2):
 		var Signet = result.collider.get_node_or_null("Signet")
 		Signet.show_this_page.emit()	
 
-		
+	if result.collider.get_node_or_null("Book_exit"):
+		var Book_exit = result.collider.get_node_or_null("Book_exit")
+		Book_exit._book_exit()	
+			
 	if result.collider.get_node_or_null("map"): 
 		#for show map only are photo	
 		_global_datas.photo_are_active =!_global_datas.photo_are_active

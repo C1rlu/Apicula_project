@@ -14,30 +14,27 @@ extends Node3D
 @onready var collision_shape_3d_p = $Photo/Photo_area/CollisionShape3D
 @onready var collision_shape_3d_l = $legend/Legend_area/CollisionShape3D
 
-@onready var board_icon = $Chavet_part
 
 
 signal update_legend( legend : String)
 func _ready():
-	_global_datas.photo_fade_out.connect(_disable)	
-	_global_datas.photo_fade_in.connect(_active)
-			
+	_active()		
 func _active():	
 	check_state()
-	board_icon.visible = false
+
 		
 func check_state():
 		
 	_disable()	
 	
-	if Photo_data.information_state == 0:
+	if Photo_data.board_information_state == 0:
 		return
 		
-	if Photo_data.information_state == 1:
+	if Photo_data.board_information_state == 1:
 		show_interogation()		
 		return	
 				
-	if Photo_data.information_state == 2:
+	if Photo_data.board_information_state == 2:
 		show_interogation()
 		show_all_info()	
 		return			
@@ -45,7 +42,7 @@ func check_state():
 func show_interogation():
 	legend.visible = true
 	collision_shape_3d_l.disabled = false		
-		
+
 func show_all_info():
 	
 	#active photo on board
@@ -54,8 +51,8 @@ func show_all_info():
 		
 	#active next ? of the intrigue
 	for p in next_photo_data:    
-		if p.Photo_data.information_state == 0:
-			p.Photo_data.information_state = 1
+		if p.Photo_data.board_information_state == 0:
+			p.Photo_data.board_information_state = 1
 		
 	for l in links_list:
 		l.visible = true		
@@ -70,10 +67,10 @@ func _disable():
 	collision_shape_3d_p.disabled = true	
 	collision_shape_3d_l.disabled = true	
 	
-	#for l in links_list:
-			#l.visible = false	
+	for l in links_list:
+			l.visible = false	
 	
-	board_icon.visible = true
+
 func show_this_on_book():
 	
 	_global_datas.selected_photoData = Photo_data
@@ -81,12 +78,14 @@ func show_this_on_book():
 	_global_datas.book_data.book_node._show_from_index(Photo_data.page_index)
 	var book = _global_datas.book_data.book_node
 	book.position = global_position + book_position_offset
-	var real_offset = book_rotation_angle + (-position.x * 40)
-	book.rotation_degrees = Vector3(0.0,real_offset,0.0)		
-	var offset = Vector3(-0.02,0.0,-0.05)
+	
+	if position.x > 0.0:
+		var real_offset = book_rotation_angle + (-position.x * 40)
+		#print(position.x)
+		book.rotation_degrees = Vector3(0.0,real_offset,0.0)		
+	var offset = Vector3(-0.02,0.0,-0.07)
 	var book_position = book.position + offset
 	_global_datas.focus_this_on_board.emit(book_position)		
-	_global_datas.book_fade_in.emit()
 	_global_datas.book_idle_pos = false		
 	_global_datas.book_back_idle_position.emit(true)
 	

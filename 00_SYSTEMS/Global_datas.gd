@@ -151,13 +151,7 @@ signal map_fade(condition : bool) # true is in : false is out
 signal turn_left
 signal turn_right
 
-signal book_fade_in
-signal book_fade_out
-
 var photo_are_active : bool 
-signal photo_fade_in
-signal photo_fade_out
-
 
 signal book_back_idle_position(condition : bool)
 var book_idle_pos : bool = true

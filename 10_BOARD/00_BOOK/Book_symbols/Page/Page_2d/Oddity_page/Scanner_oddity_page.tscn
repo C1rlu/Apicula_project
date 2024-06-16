@@ -1,6 +1,8 @@
-[gd_scene load_steps=16 format=3 uid="uid://cfm6sxydm88tm"]
+[gd_scene load_steps=18 format=3 uid="uid://cfm6sxydm88tm"]
 
+[ext_resource type="Script" path="res://10_BOARD/00_BOOK/Book_symbols/Page/Page_information_state.gd" id="1_bxymp"]
 [ext_resource type="PackedScene" uid="uid://cgb01ku2od671" path="res://10_BOARD/00_BOOK/Button_data/Book_responce_button.tscn" id="1_xx6hy"]
+[ext_resource type="Resource" uid="uid://dlm0knnql1e6h" path="res://12_INVENTORY/Photo/Oddity_photoData/Ghost_Scanner_photoData.tres" id="2_skg33"]
 [ext_resource type="Texture2D" uid="uid://ga5yb54aj2kv" path="res://10_BOARD/00_BOOK/00_img/question_back_alpha.png" id="3_5pcx0"]
 [ext_resource type="PackedScene" uid="uid://cx7k4grvoqu2b" path="res://10_BOARD/00_BOOK/Photo_2d_book/Photo_2D.tscn" id="3_5sk7w"]
 [ext_resource type="Texture2D" uid="uid://81fqjbnarlkw" path="res://12_INVENTORY/Photo/IMG/Ghost_eyes_art.png" id="4_g4lsa"]
@@ -143,8 +145,13 @@ shader_parameter/Texture2DParameter = ExtResource("3_5pcx0")
 [node name="Page_02" type="Control"]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 1000.0
-offset_bottom = 600.0
+offset_right = 2000.0
+offset_bottom = 1200.0
+
+[node name="Page_information_state" type="Node" parent="." node_paths=PackedStringArray("state_page_info")]
+script = ExtResource("1_bxymp")
+page_photo_data = ExtResource("2_skg33")
+state_page_info = [NodePath("../Info_01"), NodePath("../Info_02")]
 
 [node name="Hide_repaire" type="Node" parent="."]
 script = SubResource("GDScript_mnex3")
@@ -180,16 +187,21 @@ offset_bottom = 568.0
 rotation = -0.0382214
 button_data = ExtResource("4_op5os")
 
-[node name="Info5" type="Control" parent="."]
+[node name="Info_01" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Info5" type="Control" parent="Info_01"]
 layout_mode = 3
 anchors_preset = 0
-offset_left = 18.0
-offset_top = 49.0
-offset_right = 459.0
-offset_bottom = 231.0
+offset_left = 79.0
+offset_top = 108.0
+offset_right = 750.0
+offset_bottom = 459.0
 rotation = -0.0217575
 
-[node name="back" type="ColorRect" parent="Info5"]
+[node name="back" type="ColorRect" parent="Info_01/Info5"]
 material = SubResource("ShaderMaterial_5jsli")
 layout_mode = 1
 anchors_preset = 15
@@ -200,31 +212,50 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.811765, 0.745098, 0.67451, 1)
 
-[node name="Text" type="Label" parent="Info5"]
+[node name="Text" type="Label" parent="Info_01/Info5"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 32.0
+offset_top = 33.0
+offset_right = -43.0
+offset_bottom = -24.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.25098, 0.211765, 0.117647, 1)
-theme_override_font_sizes/font_size = 21
+theme_override_font_sizes/font_size = 35
 text = "Maurice indicate me that the lost fisher boat was last seen in this area, i should start there.
 "
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="Info6" type="Control" parent="."]
+[node name="Info_02" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Photo2d" parent="Info_02" instance=ExtResource("3_5sk7w")]
+offset_left = 555.0
+offset_top = 367.0
+offset_right = 955.0
+offset_bottom = 767.0
+rotation = 0.156151
+
+[node name="TextureRect" parent="Info_02/Photo2d" index="1"]
+texture = ExtResource("4_g4lsa")
+
+[node name="Info6" type="Control" parent="Info_02"]
 layout_mode = 3
 anchors_preset = 0
-offset_left = 37.0
-offset_top = 466.0
-offset_right = 461.0
-offset_bottom = 560.0
+offset_left = 309.0
+offset_top = 770.0
+offset_right = 827.0
+offset_bottom = 953.0
 rotation = -0.0217575
 
-[node name="back" type="ColorRect" parent="Info6"]
+[node name="back" type="ColorRect" parent="Info_02/Info6"]
 material = SubResource("ShaderMaterial_5jsli")
 layout_mode = 1
 anchors_preset = 15
@@ -235,32 +266,26 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.811765, 0.745098, 0.67451, 1)
 
-[node name="Text" type="Label" parent="Info6"]
+[node name="Text" type="Label" parent="Info_02/Info6"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 19.0
+offset_top = 25.0
+offset_right = -27.0
+offset_bottom = -18.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.25098, 0.211765, 0.117647, 1)
-theme_override_font_sizes/font_size = 21
+theme_override_font_sizes/font_size = 35
 text = "i meet a strange thing in this area:
 "
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="Photo2d" parent="." instance=ExtResource("3_5sk7w")]
-offset_left = 220.0
-offset_top = 197.0
-offset_right = 462.0
-offset_bottom = 439.0
-rotation = 0.156151
+[connection signal="tree_exited" from="Info_01/Info5" to="Info_01/Info5" method="_on_tree_exited"]
+[connection signal="tree_exited" from="Info_02/Info6" to="Info_02/Info6" method="_on_tree_exited"]
 
-[node name="TextureRect" parent="Photo2d" index="1"]
-texture = ExtResource("4_g4lsa")
-
-[connection signal="tree_exited" from="Info5" to="Info5" method="_on_tree_exited"]
-[connection signal="tree_exited" from="Info6" to="Info6" method="_on_tree_exited"]
-
-[editable path="Photo2d"]
+[editable path="Info_02/Photo2d"]
