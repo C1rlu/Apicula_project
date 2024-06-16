@@ -71,7 +71,7 @@ func check_cast(targetPos : Vector2):
 	rayQuery.collide_with_bodies = false
 	var result = space.intersect_ray(rayQuery)
 
-	print(result.position)
+
 	if !result:	
 		return
 	
