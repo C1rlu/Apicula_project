@@ -8,6 +8,9 @@ var t
 
 func lunch_teleport(condition : bool):
 	
+	if _global_datas.Player_InSubScene:
+		return
+	
 	if t:
 		t.kill()
 	
@@ -26,10 +29,10 @@ func done():
 	_global_datas.Player_In_Inventory = !_global_datas.Player_In_Inventory
 	_global_datas.open_inventory.emit(_global_datas.Player_In_Inventory)
 	
-	var n_position = boue_map_prefab.boue_data.world_position
+	var n_position = boue_map_prefab.Boue_Data.world_position
 	_global_datas._teleport_boat_at_pos.emit(n_position)
 	
-	
+	teleport_scale_visual.visible = false
 func change_value(value : float):
 	teleport_scale_visual.scale = Vector3(value,value,value)	
 		

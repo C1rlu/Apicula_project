@@ -8,7 +8,7 @@ extends Node3D
 
 func _ready():
 	_global_datas.open_inventory.connect(_updade_playerMapPosition)
-	#_global_datas.open_inventory.connect(_focus_player_when_open)
+
 
 func _focus_player_when_open(condition: bool):
 	
@@ -28,4 +28,4 @@ func _updade_playerMapPosition(condition : bool):
 	rotation = _global_datas.player_boat_rotation
 	position = PlayerMapPosition
 	
-	#cam_target.position = position
+

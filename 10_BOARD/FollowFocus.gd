@@ -16,9 +16,6 @@ func _focus_this(target : Vector3):
 	if !_global_datas.Player_In_Inventory:
 		return
 		
-	#if _global_datas.zoom_value == 1:
-		#return	
-		
 
 	if t:
 		t.kill()

@@ -80,7 +80,7 @@ func show_this_on_book():
 	book.position = global_position + book_position_offset
 	
 	if position.x > 0.0:
-		var real_offset = book_rotation_angle + (-position.x * 40)
+		var real_offset = book_rotation_angle + (-position.x * 50)
 		#print(position.x)
 		book.rotation_degrees = Vector3(0.0,real_offset,0.0)		
 	var offset = Vector3(-0.02,0.0,-0.07)
@@ -91,8 +91,9 @@ func show_this_on_book():
 	
 func _on_show_this_page_show_this_page():
 	show_this_on_book()	
-	
-
+	_global_datas._add_back_call.emit(back_call)
+func back_call():
+		_global_datas.book_back_idle_position.emit(false)	
 func _on_show_scanner_show_scanner():
 	
 	_global_datas.selected_photoData = Photo_data
