@@ -1,4 +1,10 @@
-[gd_resource type="ShaderMaterial" load_steps=22 format=3 uid="uid://pvr0u5gwh5ek"]
+[gd_resource type="ShaderMaterial" load_steps=24 format=3 uid="uid://pvr0u5gwh5ek"]
+
+[sub_resource type="VisualShaderNodeBooleanParameter" id="VisualShaderNodeBooleanParameter_jwu6u"]
+parameter_name = "active_Dither"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeSwitch" id="VisualShaderNodeSwitch_gfrb5"]
 
 [sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_tf6yy"]
 
@@ -63,12 +69,12 @@ noise_type = 2
 frequency = 0.3
 fractal_weighted_strength = 1.0
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1d3jq"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_xij0p"]
 bump_strength = 27.2
 noise = SubResource("FastNoiseLite_75nlw")
 
 [sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_1bhus"]
-texture = SubResource("NoiseTexture2D_1d3jq")
+texture = SubResource("NoiseTexture2D_xij0p")
 
 [sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_emt3f"]
 default_input_values = [0, 0.0, 1, 0.075]
@@ -80,7 +86,6 @@ render_mode blend_mix, depth_draw_always, cull_disabled, diffuse_lambert, specul
 
 uniform float Speed : hint_range(0, 1) = 0.5;
 uniform sampler2D tex_vtx_8;
-global uniform float Dither_size;
 
 
 
@@ -150,38 +155,9 @@ void fragment() {
 	float n_out8p0 = pow(clamp(dot(NORMAL, VIEW), 0.0, 1.0), n_in8p3);
 
 
-// FloatConstant:5
-	float n_out5p0 = 1.000000;
-
-
-// FloatParameter:9
-	float n_out9p0 = Dither_size;
-
-
-	float n_out6p0;
-// Expression:6
-	n_out6p0 = 0.0;
-	{
-		const float DITHER_THRESHOLDS[16] ={
-				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-			};
-			
-		vec2 uv = FRAGCOORD.xy * n_out9p0;
-		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-		n_out6p0 = n_out5p0 - DITHER_THRESHOLDS[index];
-	}
-
-
-// Step:7
-	float n_out7p0 = step(n_out8p0, n_out6p0);
-
-
 // Output:0
 	ALBEDO = vec3(n_out3p0.xyz);
-	ALPHA = n_out7p0;
+	ALPHA = n_out8p0;
 
 
 }
@@ -235,12 +211,16 @@ vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
 nodes/fragment/7/node = SubResource("VisualShaderNodeStep_6t5si")
-nodes/fragment/7/position = Vector2(-454.384, 214.793)
+nodes/fragment/7/position = Vector2(-780, 160)
 nodes/fragment/8/node = SubResource("VisualShaderNodeFresnel_egxv0")
-nodes/fragment/8/position = Vector2(-1480, -40)
+nodes/fragment/8/position = Vector2(-1460, 100)
 nodes/fragment/9/node = SubResource("VisualShaderNodeFloatParameter_e4a5h")
 nodes/fragment/9/position = Vector2(-1760, 800)
-nodes/fragment/connections = PackedInt32Array(5, 0, 6, 0, 6, 0, 7, 1, 8, 0, 7, 0, 3, 0, 0, 0, 9, 0, 6, 1, 7, 0, 0, 1)
+nodes/fragment/10/node = SubResource("VisualShaderNodeBooleanParameter_jwu6u")
+nodes/fragment/10/position = Vector2(-1020, -120)
+nodes/fragment/11/node = SubResource("VisualShaderNodeSwitch_gfrb5")
+nodes/fragment/11/position = Vector2(-620, -100)
+nodes/fragment/connections = PackedInt32Array(5, 0, 6, 0, 6, 0, 7, 1, 8, 0, 7, 0, 3, 0, 0, 0, 9, 0, 6, 1, 10, 0, 11, 0, 7, 0, 11, 1, 8, 0, 11, 2, 8, 0, 0, 1)
 nodes/light/0/position = Vector2(1060, 580)
 
 [resource]

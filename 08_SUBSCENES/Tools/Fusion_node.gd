@@ -19,10 +19,7 @@ func _ready():
 		mesh_mat = mesh.get_surface_override_material(0)		
 	
 func _fusion(condition):
-	print("FUSION ME ",condition)
-
-
-
+	
 	if _global_datas.active_rapatrier_node:
 		return
 		

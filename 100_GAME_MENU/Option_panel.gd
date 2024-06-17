@@ -27,9 +27,16 @@ func active_vsync(condition : bool):
 	
 	checker_on_vsync.visible = condition
 
+func active_dither(condition : bool):
+	
+	RenderingServer.global_shader_parameter_set("active_Dither",condition)
+
 func _on_fullscreen_button_toggled(toggled_on):
 	go_full_screen(toggled_on)
 
 
 func _on_vsync_button_toggled(toggled_on):
 	active_vsync(toggled_on)
+	
+func _on_active_dither_button_toggled(toggled_on):
+	active_dither(toggled_on)

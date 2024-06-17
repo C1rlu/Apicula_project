@@ -1,6 +1,6 @@
 extends HSlider
 
-@onready var label = $"../Label"
+@onready var label = $".."
 
 func change_dither(c_value):
 	RenderingServer.global_shader_parameter_set("Dither_size",c_value)
