@@ -156,7 +156,7 @@ signal	_turn_page
 "
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_aaupl"]
-size = Vector3(2.69202, 0.259675, 4.64773)
+size = Vector3(2.69202, 0.259675, 2.33119)
 
 [sub_resource type="GDScript" id="GDScript_q6dru"]
 script/source = "extends CollisionShape3D
@@ -680,20 +680,20 @@ icon_type = 3
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Turn_Right"]
 transform = Transform3D(1, 0, 0, 0, 1, -5.27664e-19, 0, 1.48901e-18, 1, -0.0249052, 0.090931, -1.16268)
 shape = SubResource("BoxShape3D_224re")
-disabled = true
 script = SubResource("GDScript_dsb8m")
 
 [node name="Turn_Left" type="Area3D" parent="."]
 
-[node name="Turn_page_off" type="Node" parent="Turn_Left"]
+[node name="Turn_page" type="Node" parent="Turn_Left"]
 script = SubResource("GDScript_66qc2")
 
-[node name="On_Over" type="Node" parent="Turn_Left"]
+[node name="On_Over" type="Node" parent="Turn_Left" node_paths=PackedStringArray("_on_over")]
 script = ExtResource("4_kuj33")
+_on_over = NodePath("../../On_Over2")
 icon_type = 4
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Turn_Left"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.113466, 0.0935526, -0.000374561)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.113466, 0.0935526, 1.1579)
 shape = SubResource("BoxShape3D_aaupl")
 script = SubResource("GDScript_q6dru")
 
@@ -824,4 +824,4 @@ texture = ExtResource("16_3gnwj")
 [connection signal="timeout" from="Multiple_page_transition_right" to="." method="_on_multiple_page_transition_timeout"]
 [connection signal="timeout" from="Multiple_page_transition_left" to="." method="_on_multiple_page_transition_left_timeout"]
 [connection signal="_turn_page" from="Turn_Right/Turn_page" to="." method="_turn_page_right"]
-[connection signal="_turn_page" from="Turn_Left/Turn_page_off" to="." method="turn_page_left"]
+[connection signal="_turn_page" from="Turn_Left/Turn_page" to="." method="turn_page_left"]

@@ -8,8 +8,8 @@ var t
 
 func lunch_teleport(condition : bool):
 	
-	if _global_datas.Player_InSubScene:
-		return
+	#if _global_datas.Player_InSubScene:
+		#return
 	
 	if t:
 		t.kill()
