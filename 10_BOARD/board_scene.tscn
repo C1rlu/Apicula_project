@@ -1,4 +1,4 @@
-[gd_scene load_steps=226 format=3 uid="uid://dr73p5vs0sixe"]
+[gd_scene load_steps=223 format=3 uid="uid://dr73p5vs0sixe"]
 
 [ext_resource type="Script" path="res://10_BOARD/photos_check.gd" id="1_bcxwj"]
 [ext_resource type="Shader" uid="uid://upo0fuo5sqgd" path="res://05_SHADER_TEST/Board/Board_sh.tres" id="1_k1enu"]
@@ -16,8 +16,10 @@
 [ext_resource type="Resource" uid="uid://dlm0knnql1e6h" path="res://12_INVENTORY/Photo/Oddity_photoData/Ghost_Scanner_photoData.tres" id="11_ub6ec"]
 [ext_resource type="PackedScene" uid="uid://b3i04ha2iqr4l" path="res://10_BOARD/Loupe/loupe_rg.tscn" id="12_alpcj"]
 [ext_resource type="Script" path="res://10_BOARD/Letters_checks.gd" id="14_vbqye"]
+[ext_resource type="Resource" uid="uid://ccap5kr10wdkg" path="res://10_BOARD/00_BOOK/Button_data/Responce_data/Maurice_question_button_01.tres" id="15_hv7lm"]
 [ext_resource type="Resource" uid="uid://nb378vtwr23i" path="res://12_INVENTORY/Words_note/Find_The_Apicula_note.tres" id="17_3gp1t"]
 [ext_resource type="Resource" uid="uid://bvadwmoawvfs0" path="res://12_INVENTORY/Words_note/Meet_Ela_note.tres" id="17_onhpt"]
+[ext_resource type="Resource" uid="uid://bc0al5v16mi2c" path="res://10_BOARD/00_BOOK/Button_data/Responce_data/Maurice_question_button_02.tres" id="18_7et6x"]
 [ext_resource type="Script" path="res://10_BOARD/Boue/Boue_check.gd" id="18_tu2nn"]
 [ext_resource type="PackedScene" uid="uid://b0j7tl0gn4vg8" path="res://10_BOARD/Boue/boue_map_prefab.tscn" id="19_bi3qi"]
 [ext_resource type="PackedScene" uid="uid://dgvsf84egy43d" path="res://10_BOARD/Decor/Chavet_part.blend" id="20_d7w3e"]
@@ -30,6 +32,7 @@
 [ext_resource type="PackedScene" uid="uid://cug6bgsx45p6l" path="res://10_BOARD/Tube/Tube_oddity.blend" id="34_16txa"]
 [ext_resource type="Script" path="res://10_BOARD/Select_Tube.gd" id="34_dvua7"]
 [ext_resource type="Material" uid="uid://mqx4i5esml54" path="res://10_BOARD/Tube/Transparency_tube.tres" id="35_jujjk"]
+[ext_resource type="PackedScene" uid="uid://bs32groi0tedy" path="res://10_BOARD/00_BOOK/Choice_panel/Choice_Panel_root.tscn" id="35_p5mrm"]
 [ext_resource type="Shader" uid="uid://cd5obrgn7uute" path="res://05_SHADER_TEST/Board/Oddity_in_tube.tres" id="35_wnb4t"]
 [ext_resource type="Material" uid="uid://b5u3d7wosa00d" path="res://05_SHADER_TEST/Board/Flat_with_gradient.tres" id="35_xg8pc"]
 [ext_resource type="Shader" uid="uid://cctu1rugloxjc" path="res://05_SHADER_TEST/Board/Tube_liquide_sh.tres" id="36_p5f84"]
@@ -1730,36 +1733,6 @@ render_priority = 0
 shader = ExtResource("36_p5f84")
 shader_parameter/ColorParameter = Color(0.0431373, 0.192157, 0.203922, 1)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_iinfi"]
-render_priority = 0
-shader = ExtResource("1_k1enu")
-shader_parameter/Dark_color = Color(0, 0, 0, 1)
-shader_parameter/ColorParameter = Color(0.0117647, 0.0901961, 0.0980392, 1)
-shader_parameter/light_color = Color(0.0823529, 0.152941, 0.160784, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_thjsl"]
-material = SubResource("ShaderMaterial_iinfi")
-
-[sub_resource type="Gradient" id="Gradient_4ak5l"]
-colors = PackedColorArray(0.219501, 0.219501, 0.219501, 1, 1, 1, 1, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_pdrtn"]
-gradient = SubResource("Gradient_4ak5l")
-fill = 1
-fill_from = Vector2(0.525641, 0.470085)
-fill_to = Vector2(1, 1)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_bvum1"]
-resource_local_to_scene = true
-render_priority = 0
-shader = SubResource("VisualShader_ndmq4")
-shader_parameter/Dark_color = Color(0.321569, 0.298039, 0.25098, 1)
-shader_parameter/Gradient = SubResource("GradientTexture2D_pdrtn")
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_y3u42"]
-material = SubResource("ShaderMaterial_bvum1")
-size = Vector2(1.21, 0.795)
-
 [sub_resource type="CylinderMesh" id="CylinderMesh_xsjxl"]
 material = ExtResource("6_kkuc8")
 radial_segments = 8
@@ -1887,7 +1860,7 @@ radial_segments = 8
 [node name="Board_scene" type="Node3D"]
 
 [node name="LIGHT_scene" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0245969, 0.196878, -0.033795)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0245969, 0.225876, -0.033795)
 layers = 16898
 shadow_enabled = true
 shadow_bias = 0.025
@@ -2024,7 +1997,7 @@ skeleton = NodePath("../..")
 surface_material_override/0 = ExtResource("6_kkuc8")
 
 [node name="Lanterne" type="MeshInstance3D" parent="Deco"]
-transform = Transform3D(0.100064, 0, 0, 0, 0.100064, 0, 0, 0, 0.100064, 0.307125, 1.49012e-07, -0.261634)
+transform = Transform3D(0.100064, 0, 0, 0, 0.100064, 0, 0, 0, 0.100064, 0.302254, 1.49012e-07, -0.25513)
 layers = 2
 mesh = SubResource("ArrayMesh_jn8g7")
 skeleton = NodePath("")
@@ -2120,22 +2093,57 @@ book_position_offset = Vector3(0.025, 0.008, 0.125)
 
 [node name="Letters" type="Node3D" parent="."]
 script = ExtResource("14_vbqye")
-test_data = ExtResource("10_shcmw")
+all_question_note = Array[Resource("res://12_INVENTORY/Words_note/Note_data.gd")]([ExtResource("10_shcmw"), ExtResource("17_3gp1t"), ExtResource("17_onhpt")])
 
 [node name="Letters_area" parent="Letters" instance=ExtResource("9_ajmma")]
-transform = Transform3D(0.999983, -0.00417541, -0.00385533, 0.00417543, 0.999992, -6.4909e-06, 0.00385503, -9.59972e-06, 0.999993, -0.371431, 0.00452815, 0.354337)
-visible = false
+transform = Transform3D(0.990536, -0.00413683, -0.137183, 0.00417543, 0.999992, -6.49092e-06, 0.137182, -0.000566361, 0.990546, 0.256334, 0.00327861, 0.40459)
 Note_data = ExtResource("10_shcmw")
+question_button = ExtResource("15_hv7lm")
 
 [node name="Letters_area2" parent="Letters" instance=ExtResource("9_ajmma")]
-transform = Transform3D(0.908994, 0.0142107, 0.416568, -0.0157503, 0.999876, 0.000259559, -0.416512, -0.00679704, 0.909104, -0.381162, 0.00364673, 0.336123)
-visible = false
+transform = Transform3D(0.988652, 0.0156124, -0.149413, -0.0157503, 0.999876, 0.000259559, 0.149399, 0.00209673, 0.988774, 0.154982, 0.00405905, 0.410329)
 Note_data = ExtResource("17_3gp1t")
+question_button = ExtResource("18_7et6x")
 
 [node name="Letters_area3" parent="Letters" instance=ExtResource("9_ajmma")]
-transform = Transform3D(0.979351, -0.0218674, 0.200978, 0.0223242, 0.999751, -6.49089e-06, -0.200927, 0.00449303, 0.979596, -0.362556, 0.00628965, 0.338471)
-visible = false
+transform = Transform3D(0.999685, 0, 0.0250778, 0, 1, 0, -0.0250777, 0, 0.999686, 0.0571297, 0.00365072, 0.382144)
 Note_data = ExtResource("17_onhpt")
+question_button = ExtResource("18_7et6x")
+
+[node name="Letters_area4" parent="Letters" instance=ExtResource("9_ajmma")]
+transform = Transform3D(0.999685, 0, 0.0250778, 0, 1, 0, -0.0250777, 0, 0.999686, 0.361034, 0.00365072, 0.428278)
+Note_data = ExtResource("17_onhpt")
+question_button = ExtResource("18_7et6x")
+
+[node name="Letters_area5" parent="Letters" instance=ExtResource("9_ajmma")]
+transform = Transform3D(0.957273, 0, -0.289182, 0, 1, 0, 0.289182, 0, 0.957274, 0.469974, 0.00365072, 0.450685)
+Note_data = ExtResource("17_onhpt")
+question_button = ExtResource("18_7et6x")
+
+[node name="Letters_area6" parent="Letters" instance=ExtResource("9_ajmma")]
+transform = Transform3D(0.968138, 0, -0.250414, 0, 1, 0, 0.250414, 0, 0.968139, 0.570361, 0.00365072, 0.466381)
+Note_data = ExtResource("17_onhpt")
+question_button = ExtResource("18_7et6x")
+
+[node name="Letters_area7" parent="Letters" instance=ExtResource("9_ajmma")]
+transform = Transform3D(0.968138, 0, -0.250414, 0, 1, 0, 0.250414, 0, 0.968139, 0.0872294, 0.00365072, 0.466255)
+Note_data = ExtResource("17_onhpt")
+question_button = ExtResource("18_7et6x")
+
+[node name="Letters_area8" parent="Letters" instance=ExtResource("9_ajmma")]
+transform = Transform3D(0.998928, 0, -0.0462696, 0, 1, 0, 0.0462696, 0, 0.99893, 0.196085, 0.00365069, 0.489744)
+Note_data = ExtResource("17_onhpt")
+question_button = ExtResource("18_7et6x")
+
+[node name="Letters_area9" parent="Letters" instance=ExtResource("9_ajmma")]
+transform = Transform3D(0.998928, 0, -0.0462696, 0, 1, 0, 0.0462696, 0, 0.99893, 0.30092, 0.00365072, 0.500144)
+Note_data = ExtResource("17_onhpt")
+question_button = ExtResource("18_7et6x")
+
+[node name="Letters_area10" parent="Letters" instance=ExtResource("9_ajmma")]
+transform = Transform3D(0.998928, 0, -0.0462696, 0, 1, 0, 0.0462696, 0, 0.99893, 0.410881, 0.00365072, 0.503866)
+Note_data = ExtResource("17_onhpt")
+question_button = ExtResource("18_7et6x")
 
 [node name="Chavet_part" parent="." instance=ExtResource("20_d7w3e")]
 transform = Transform3D(0.0117306, 0, 0, 0, 0.0117306, 0, 0, 0, 0.0117306, -0.27688, 0.00290923, 0.169765)
@@ -2181,10 +2189,10 @@ transform = Transform3D(-2.95986e-10, 0, -0.00677136, 0, 0.00677136, 0, 0.006771
 Boue_Data = ExtResource("20_ti4d8")
 
 [node name="Loupe_RG" parent="." instance=ExtResource("12_alpcj")]
-transform = Transform3D(-0.200324, 0.00309218, -0.462515, -0.00763931, 0.503941, 0.0066779, 0.462463, 0.00966387, -0.200237, -0.201055, -0.00497455, 0.431072)
+transform = Transform3D(-0.200324, 0.00309218, -0.462515, -0.00763931, 0.503941, 0.0066779, 0.462463, 0.00966387, -0.200237, -0.320381, -0.00497455, 0.423577)
 
 [node name="BOOK" parent="." instance=ExtResource("23_cxuy4")]
-transform = Transform3D(-0.00632662, 0.000524652, -0.0620099, -0.00193464, 0.0622999, 0.000724488, 0.061982, 0.00199811, -0.00630685, -0.0217382, 0.00750356, 0.402931)
+transform = Transform3D(-0.00182235, 0.000667944, -0.0623038, -0.00193464, 0.0622999, 0.000724488, 0.0622774, 0.00195488, -0.00180062, -0.258666, 0.00750356, 0.415461)
 visible = false
 
 [node name="PLume_pot" parent="BOOK" instance=ExtResource("5_m8vsb")]
@@ -2207,34 +2215,34 @@ surface_material_override/0 = ExtResource("6_kkuc8")
 script = ExtResource("24_4lsou")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Book_Close_root"]
-transform = Transform3D(0.995922, 0, 0.0902154, 0, 1, 0, -0.0902154, 0, 0.995922, -0.0172283, 0.0192151, 0.392794)
+transform = Transform3D(0.956269, 0, -0.292489, 0, 1, 0, 0.292489, 0, 0.956269, -0.141899, 0.0192151, 0.369546)
 layers = 2
 mesh = SubResource("BoxMesh_qjco4")
 surface_material_override/0 = SubResource("ShaderMaterial_246wt")
 
 [node name="MeshInstance3D4" type="MeshInstance3D" parent="Book_Close_root"]
-transform = Transform3D(0.995922, 0, 0.0902154, 0, 1, 0, -0.0902154, 0, 0.995922, -0.0784784, 0.0116655, 0.398397)
+transform = Transform3D(0.956269, 0, -0.292489, 0, 1, 0, 0.292489, 0, 0.956269, -0.200731, 0.0116655, 0.351608)
 layers = 2
 mesh = SubResource("BoxMesh_7afxs")
 surface_material_override/0 = SubResource("ShaderMaterial_246wt")
 
 [node name="MeshInstance3D3" type="MeshInstance3D" parent="Book_Close_root"]
-transform = Transform3D(0.995922, 0, 0.0902154, 0, 1, 0, -0.0902154, 0, 0.995922, -0.0172283, 0.00507214, 0.392794)
+transform = Transform3D(0.956269, 0, -0.292489, 0, 1, 0, 0.292489, 0, 0.956269, -0.141899, 0.00507217, 0.369546)
 layers = 2
 mesh = SubResource("BoxMesh_qjco4")
 surface_material_override/0 = SubResource("ShaderMaterial_246wt")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="Book_Close_root"]
-transform = Transform3D(0.995922, 0, 0.0902154, 0, 0.446438, 0, -0.0902154, 0, 0.995922, -0.0183707, 0.012075, 0.392794)
+transform = Transform3D(0.956269, 0, -0.292488, 0, 0.446438, 0, 0.292488, 0, 0.956269, -0.142957, 0.012075, 0.369114)
 layers = 2
 mesh = SubResource("BoxMesh_f58ta")
 surface_material_override/0 = SubResource("StandardMaterial3D_u2gl4")
 
 [node name="PLume_pot" parent="Book_Close_root" instance=ExtResource("5_m8vsb")]
-transform = Transform3D(0.0470112, -2.67389e-06, -0.0409267, -0.00132096, 0.0622976, -0.0015214, 0.0409054, 0.00201484, 0.0469866, 0.132899, 0.00909848, 0.415149)
+transform = Transform3D(0.0280871, -0.000763211, -0.055638, -0.00132096, 0.0622976, -0.0015214, 0.0556275, 0.0018647, 0.0280562, -0.0113243, 0.0064059, 0.446929)
 
 [node name="Plume" parent="Book_Close_root/PLume_pot" index="0"]
-transform = Transform3D(0.0319128, 0.00366014, 0.0604029, -0.00872107, 0.067853, 0.000496091, -0.059882, -0.00793137, 0.0321181, -0.801064, -0.0265761, 0.543012)
+transform = Transform3D(0.0319128, 0.00366014, 0.0604029, -0.00872107, 0.067853, 0.000496091, -0.059882, -0.00793137, 0.0321181, -0.801478, -0.00708967, 0.542536)
 layers = 2
 surface_material_override/0 = SubResource("ShaderMaterial_isdhd")
 surface_material_override/1 = ExtResource("6_kkuc8")
@@ -2277,7 +2285,7 @@ transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -1.86265e-08, 0, 1, 0, 1.079
 shape = SubResource("BoxShape3D_7xld8")
 
 [node name="TUBE_oddity" type="Node3D" parent="."]
-transform = Transform3D(-0.00525478, 0, 0.39937, 0, 0.00522373, 0, -0.260425, 0, -0.00805836, 0.6268, 0.00372955, -0.139951)
+transform = Transform3D(-0.00525478, 0, 0.39937, 0, 0.00522373, 0, -0.260425, 0, -0.00805836, 0.642994, 0.00372949, -0.191009)
 
 [node name="Area3D" type="Area3D" parent="TUBE_oddity"]
 transform = Transform3D(-1.15935, 0, -3.65986, 0, 191.434, 0, 2.38655, 0, -0.756002, -0.0537217, 25.6755, 0.0456088)
@@ -2313,21 +2321,8 @@ surface_material_override/0 = ExtResource("35_jujjk")
 layers = 2
 surface_material_override/0 = SubResource("ShaderMaterial_th3mc")
 
-[node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
-transform = Transform3D(-0.0786608, 0, 0.380802, 0, 0.00522373, 0, -0.248317, 0, -0.120629, -0.692325, 0.00372955, 0.0582069)
-visible = false
-layers = 2
-mesh = SubResource("BoxMesh_thjsl")
-skeleton = NodePath("../..")
-
-[node name="MeshInstance3D5" type="MeshInstance3D" parent="MeshInstance3D4"]
-transform = Transform3D(0.000874668, 0, -1.07023, 0, 69.5124, 0, 0.725917, 0, 0.000548393, -0.00648192, 0.53237, -0.0156645)
-layers = 2
-mesh = SubResource("PlaneMesh_y3u42")
-skeleton = NodePath("../../..")
-
 [node name="Apicula_maquette_v01blend" parent="." instance=ExtResource("31_xntsl")]
-transform = Transform3D(0.0349872, 0, 0.0171287, 0, 0.0389551, 0, -0.0171287, 0, 0.0349872, -0.340255, 0.0956881, -0.310294)
+transform = Transform3D(0.0349872, 0, 0.0171287, 0, 0.0389551, 0, -0.0171287, 0, 0.0349872, -0.340182, 0.0960339, -0.311156)
 
 [node name="fregate_all_msh" parent="Apicula_maquette_v01blend" index="0"]
 transform = Transform3D(0.830466, 0, 0, 0, 0.830466, 0, 0, 0, 0.830466, 0, 0, 0)
@@ -2345,6 +2340,11 @@ transform = Transform3D(1.49038, 0, -0.731098, 0, 0.128515, 0, 0.731098, 0, 1.49
 layers = 2
 mesh = SubResource("CylinderMesh_ujlj0")
 skeleton = NodePath("")
+
+[node name="Choice_panel_root" parent="." instance=ExtResource("35_p5mrm")]
+transform = Transform3D(-0.0232954, 0, -0.059248, 0, 0.0636632, 0, 0.059248, 0, -0.0232954, 0.45228, 0.0301014, 0.497925)
+visible = false
+offset = Vector3(0.11, 0.01, 0.025)
 
 [editable path="Chavet_part"]
 [editable path="Chavet_part2"]

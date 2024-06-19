@@ -33,8 +33,8 @@ func push_button():
 	responce_data.update_text.emit(label.text)
 	responce_data.response_index = responce_index
 	#close choice panel
-	_global_datas.start_choice.emit(false,0)
+	_global_datas.start_choice.emit(false,null)
 
-func _activation(condition,index):
+func _activation(condition, pos : Vector3):
 	var col : CollisionShape3D = button_data.button_area.get_node("col")
 	col.disabled = !condition

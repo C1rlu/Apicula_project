@@ -84,7 +84,9 @@ func check_cast(targetPos : Vector2):
 		var page = result.collider.get_node_or_null("Page_event")
 		page.trigger_page_event.emit()	 
 
-		
+	if result.collider.get_node_or_null("Open_Question"): 
+		var Open_Question = result.collider.get_node_or_null("Open_Question")
+		Open_Question._open_question()	 	
 		
 	
 	if result.collider.get_node_or_null("push_button"): 

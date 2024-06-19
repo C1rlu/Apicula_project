@@ -21,7 +21,7 @@ func check_state(pos):
 	
 	var state_number = page_photo_data.page_information_state
 	for i in range(state_number):
-		if i > state_page_info.size():
+		if i >= state_page_info.size():
 			return
 		state_page_info[i].visible = true		
 	

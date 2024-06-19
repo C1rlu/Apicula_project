@@ -119,12 +119,12 @@ func multiple_page_left():
 		
 func _turn_page_right():
 	update_page_right()
-	_global_datas.start_choice.emit(false,0)
+	_global_datas.start_choice.emit(false,Vector3.ZERO)
 
 
 func turn_page_left():
 	update_page_left()
-	_global_datas.start_choice.emit(false,0)
+	_global_datas.start_choice.emit(false,Vector3.ZERO)
 
 
 func _on_timer_timeout():
