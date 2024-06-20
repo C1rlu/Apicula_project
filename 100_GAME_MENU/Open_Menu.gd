@@ -4,6 +4,7 @@ extends Node
 @onready var game_menu_root = $"../Game_Menu_Root"
 @onready var focus_button = $"../Game_Menu_Root/MainMenu_Box/HBoxContainer/Resum_Button2"
 
+
 func _ready():
 	_global_datas._open_menu.connect(_open_menu)
 	_open_menu(false)
@@ -19,7 +20,7 @@ func _input(event):
 		_global_datas.Player_InMenu =! _global_datas.Player_InMenu
 		_global_datas._open_menu.emit(_global_datas.Player_InMenu)	
 		focus_button.grab_focus()
-		
+
 		#set back call
 		_global_datas._back_call_list.append(set_back_call)	
 		get_tree().paused = true

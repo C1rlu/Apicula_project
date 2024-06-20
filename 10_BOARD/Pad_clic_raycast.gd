@@ -20,7 +20,9 @@ func _active_raycast(condition : bool):
 
 func _input(event):
 	
-
+	if _global_datas.in_text_type_mod:
+		return
+		
 	if _global_datas.in_scanner_mode:
 		return
 	
@@ -131,7 +133,7 @@ func check_cast(targetPos : Vector2):
 		
 func check_on_over(targetPos : Vector2):
 	
-
+	
 	var rayLengh = 250.0
 	var from = Camera.project_ray_origin(targetPos)
 	var to = from + Camera.project_ray_normal(targetPos) * rayLengh

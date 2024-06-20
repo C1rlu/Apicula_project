@@ -151,6 +151,11 @@ signal map_fade(condition : bool) # true is in : false is out
 signal turn_left
 signal turn_right
 
+#type text responce
+signal type_text_mod(condition : bool)
+var selected_question : Node = null
+var in_text_type_mod : bool = false
+
 var photo_are_active : bool 
 
 signal book_back_idle_position(condition : bool)
