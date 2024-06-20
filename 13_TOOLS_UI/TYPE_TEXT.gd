@@ -24,3 +24,9 @@ func back_call():
 func _on_type_texte_text_submitted(new_text):
 	_global_datas.type_text_mod.emit(false)
 	_global_datas.selected_question.change_responce(new_text)
+
+
+func _on_submit_text_pressed():
+	_global_datas.type_text_mod.emit(false)
+	
+	_global_datas.selected_question.change_responce(type_texte.text)

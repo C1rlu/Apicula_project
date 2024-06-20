@@ -1,18 +1,24 @@
-[gd_resource type="ShaderMaterial" load_steps=13 format=3 uid="uid://cwdathot7k12h"]
+[gd_resource type="ShaderMaterial" load_steps=14 format=3 uid="uid://cwdathot7k12h"]
 
 [sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_7ol46"]
 default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
 op_type = 3
 
-[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_5ewgk"]
-constant = Color(0.00470651, 0.0633496, 0.0753792, 1)
-
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_ssj45"]
 parameter_name = "ColorParameter"
 
-[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_gf6ub"]
-parameter_name = "Dark_color"
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_bc0ip"]
+parameter_name = "link_opacity"
 qualifier = 1
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_y112k"]
+size = Vector2(620, 200)
+expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
+grey_value = luminance;"
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_elicc"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
+op_type = 3
 
 [sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_7ywm1"]
 constant = Color(0.461686, 0.318787, 0.144089, 1)
@@ -52,6 +58,7 @@ render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_s
 
 uniform vec4 ColorParameter : source_color;
 uniform float Distance = 1;
+global uniform float link_opacity;
 
 
 
@@ -106,16 +113,32 @@ void fragment() {
 	vec3 n_out10p0 = mix(vec3(n_out3p0.xyz), vec3(n_out12p0.xyz), vec3(n_out4p0));
 
 
+	float n_out14p0;
+// Expression:14
+	n_out14p0 = 0.0;
+	{
+		float luminance = 0.299 * n_out10p0.x + 0.587 * n_out10p0.y + 0.114 * n_out10p0.z;
+		n_out14p0 = luminance;
+	}
+
+
+// FloatParameter:13
+	float n_out13p0 = link_opacity;
+
+
+// Mix:15
+	vec3 n_out15p0 = mix(n_out10p0, vec3(n_out14p0), vec3(n_out13p0));
+
+
 // Output:0
-	ALBEDO = n_out10p0;
+	ALBEDO = n_out15p0;
 
 
 }
 "
 flags/unshaded = true
 nodes/vertex/0/position = Vector2(400, 160)
-nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_gf6ub")
-nodes/fragment/2/position = Vector2(-640, 100)
+nodes/fragment/0/position = Vector2(1420, 180)
 nodes/fragment/3/node = SubResource("VisualShaderNodeColorConstant_7ywm1")
 nodes/fragment/3/position = Vector2(-737.498, -39.0981)
 nodes/fragment/4/node = SubResource("VisualShaderNodeSmoothStep_7vj1q")
@@ -145,11 +168,20 @@ nodes/fragment/9/node = SubResource("VisualShaderNodeFloatParameter_0y8ka")
 nodes/fragment/9/position = Vector2(-600, 380)
 nodes/fragment/10/node = SubResource("VisualShaderNodeMix_7ol46")
 nodes/fragment/10/position = Vector2(-68.347, -89.6873)
-nodes/fragment/11/node = SubResource("VisualShaderNodeColorConstant_5ewgk")
-nodes/fragment/11/position = Vector2(-380, 40)
 nodes/fragment/12/node = SubResource("VisualShaderNodeColorParameter_ssj45")
 nodes/fragment/12/position = Vector2(-580, -200)
-nodes/fragment/connections = PackedInt32Array(5, 0, 7, 1, 6, 0, 7, 0, 8, 0, 4, 0, 7, 0, 4, 1, 9, 0, 8, 3, 3, 0, 10, 0, 4, 0, 10, 2, 10, 0, 0, 0, 12, 0, 10, 1)
+nodes/fragment/13/node = SubResource("VisualShaderNodeFloatParameter_bc0ip")
+nodes/fragment/13/position = Vector2(400, -220)
+nodes/fragment/14/node = SubResource("VisualShaderNodeExpression_y112k")
+nodes/fragment/14/position = Vector2(380, -500)
+nodes/fragment/14/size = Vector2(620, 200)
+nodes/fragment/14/input_ports = "0,4,color;"
+nodes/fragment/14/output_ports = "0,0,grey_value;"
+nodes/fragment/14/expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
+grey_value = luminance;"
+nodes/fragment/15/node = SubResource("VisualShaderNodeMix_elicc")
+nodes/fragment/15/position = Vector2(1080, -220)
+nodes/fragment/connections = PackedInt32Array(5, 0, 7, 1, 6, 0, 7, 0, 8, 0, 4, 0, 7, 0, 4, 1, 9, 0, 8, 3, 3, 0, 10, 0, 4, 0, 10, 2, 12, 0, 10, 1, 13, 0, 15, 2, 14, 0, 15, 1, 10, 0, 14, 0, 15, 0, 0, 0, 10, 0, 15, 0)
 nodes/light/0/position = Vector2(2740, 1260)
 
 [resource]
