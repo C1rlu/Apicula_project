@@ -151,7 +151,11 @@ signal map_fade(condition : bool) # true is in : false is out
 
 
 signal responce_link_mode(condition : bool, text : String)
+var link_mode : bool = false
 var question_node : Node3D = null
+signal responce_chose(text : String)
+
+
 signal turn_left
 signal turn_right
 

@@ -88,9 +88,16 @@ func check_cast(targetPos : Vector2):
 
 	if result.collider.get_node_or_null("Open_Question"): 
 		var Open_Question = result.collider.get_node_or_null("Open_Question")
-		Open_Question._open_question()	 	
+		Open_Question._open_question()	 
+			
+	if _global_datas.link_mode:	
+		if result.collider.get_node_or_null("Link_info"): 
+			var link_info = result.collider.get_node_or_null("Link_info")
+			link_info._link_info()
+			return 	
 		
-	
+		
+			
 	if result.collider.get_node_or_null("push_button"): 
 		var button = result.collider.get_node_or_null("push_button")
 		button.push()	 
@@ -103,10 +110,10 @@ func check_cast(targetPos : Vector2):
 		var right_page = result.collider.get_node_or_null("Turn_page") 
 		right_page._turn_page.emit()		
 
-
-	if result.collider.get_node_or_null("Show_this_page"):
-		var page_index = result.collider.get_node_or_null("Show_this_page")
-		page_index.show_this_page.emit()	
+	if !_global_datas.link_mode:	
+		if result.collider.get_node_or_null("Show_this_page"):
+			var page_index = result.collider.get_node_or_null("Show_this_page")
+			page_index.show_this_page.emit()	
 
 	if result.collider.get_node_or_null("Show_scanner"):
 		var Show_scanner = result.collider.get_node_or_null("Show_scanner")
