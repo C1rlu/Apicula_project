@@ -43,8 +43,9 @@ func link_mode(condition : bool, _text : String):
 	_global_datas.show_ui_scanner_dots.emit(condition)
 
 func chose_responce(_text):
-	_global_datas.question_node.responce_link.emit(_text)	
-	type_responce.emit(_text)
+	if _global_datas.link_mode:	
+		_global_datas.question_node.responce_link.emit(_text)	
+		type_responce.emit(_text)
 
 	
 func _leave_link_mode():

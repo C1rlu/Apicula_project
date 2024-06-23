@@ -24,7 +24,7 @@ func _ready():
 	var texture_data = photo_area.Photo_data.image
 	var mat = img.get_surface_override_material(0)
 	mat.set_shader_parameter(\"t_render\", texture_data)
-	print(texture_data)
+	
 	
 	
 func _run():
@@ -93,7 +93,6 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-309.694, -193.302)
 flags/unshaded = true
 nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_ray7x")
 nodes/fragment/2/position = Vector2(-540, 160)
@@ -304,7 +303,7 @@ texture = ExtResource("10_fkyuy")
 [node name="Photo_area" type="Area3D" parent="Photo"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.00272226, 0)
 
-[node name="Show_scanner" type="Node" parent="Photo/Photo_area"]
+[node name="On_click" type="Node" parent="Photo/Photo_area"]
 script = ExtResource("3_btmm2")
 
 [node name="On_Over" type="Node" parent="Photo/Photo_area" node_paths=PackedStringArray("_on_over", "_on_over_second")]
@@ -312,6 +311,7 @@ script = ExtResource("7_vd1wc")
 _on_over = NodePath("../../Render_ui_scan")
 _on_over_second = NodePath("../../On_Over")
 icon_type = 2
+lock_in_link = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Photo/Photo_area"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000622556, 0.00481491, -0.000192255)
@@ -335,7 +335,7 @@ script = ExtResource("7_vd1wc")
 _on_over_second = NodePath("../../On_Over")
 icon_type = 1
 
-[node name="Show_this_page" type="Node" parent="legend/Legend_area"]
+[node name="On_click" type="Node" parent="legend/Legend_area"]
 script = ExtResource("2_653je")
 
 [node name="Link_info" type="Node" parent="legend/Legend_area"]
@@ -394,7 +394,7 @@ offset_top = -68.77
 offset_bottom = 56.2299
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.831373, 0.819608, 0.764706, 1)
+color = Color(0.831373, 0.796078, 0.639216, 1)
 
 [node name="text" type="Label" parent="legend/legend_render"]
 anchors_preset = 8
@@ -415,6 +415,6 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [connection signal="update_legend" from="." to="legend/legend_behaviour" method="_on_photo_element_root_update_legend"]
-[connection signal="show_scanner" from="Photo/Photo_area/Show_scanner" to="." method="_on_show_scanner_show_scanner"]
+[connection signal="On_click" from="Photo/Photo_area/On_click" to="." method="_on_show_scanner"]
 [connection signal="timeout" from="legend/legend_behaviour/Timer" to="legend/legend_behaviour" method="_on_timer_timeout"]
-[connection signal="show_this_page" from="legend/Legend_area/Show_this_page" to="." method="_on_show_this_page_show_this_page"]
+[connection signal="On_click" from="legend/Legend_area/On_click" to="." method="_on_show_this_page"]

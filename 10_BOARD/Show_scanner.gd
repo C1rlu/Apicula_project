@@ -1,4 +1,4 @@
 extends Node
 
-signal show_scanner
+signal On_click
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=97 format=3 uid="uid://bh5a7fhvftxmm"]
+[gd_scene load_steps=101 format=3 uid="uid://bh5a7fhvftxmm"]
 
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Book_symbols/Book_page_behaviour.gd" id="1_0cs10"]
 [ext_resource type="Resource" uid="uid://bnr5ucr2s173m" path="res://10_BOARD/00_BOOK/Book_symbols/Main_Book.tres" id="2_f5f3b"]
@@ -8,8 +8,11 @@
 [ext_resource type="Resource" uid="uid://ccap5kr10wdkg" path="res://10_BOARD/00_BOOK/Button_data/Responce_data/Maurice_info_01.tres" id="6_8wv1r"]
 [ext_resource type="Resource" uid="uid://bc0al5v16mi2c" path="res://10_BOARD/00_BOOK/Button_data/Responce_data/Maurice_info_02.tres" id="7_w8jo1"]
 [ext_resource type="Resource" uid="uid://bdydt2ko8pr0t" path="res://10_BOARD/00_BOOK/Button_data/Responce_data/Maurice_info_03.tres" id="8_jji0t"]
+[ext_resource type="Resource" uid="uid://dd8e3o64rukh1" path="res://10_BOARD/00_BOOK/Button_data/Responce_data/Maurice_info_04.tres" id="9_hem7m"]
 [ext_resource type="Resource" uid="uid://ckwue46oguqkj" path="res://10_BOARD/00_BOOK/Button_data/Responce_data/ScannerOddities_question_button_01.tres" id="9_msqir"]
 [ext_resource type="PackedScene" uid="uid://db6k1p6qd826g" path="res://10_BOARD/00_BOOK/Book_symbols/Page/Book_page.tscn" id="10_3mtn2"]
+[ext_resource type="Resource" uid="uid://6rs8i8k72180" path="res://10_BOARD/00_BOOK/Button_data/Responce_data/Maurice_info_05.tres" id="10_ayon4"]
+[ext_resource type="Resource" uid="uid://cefwrijjwchpo" path="res://10_BOARD/00_BOOK/Button_data/Responce_data/Maurice_info_06.tres" id="11_8wcvx"]
 [ext_resource type="PackedScene" uid="uid://cgb4c1n0bj2at" path="res://12_INVENTORY/Book/Page_flip/page_flip_right.tscn" id="11_jf82s"]
 [ext_resource type="PackedScene" uid="uid://cgc02cx2l0ndw" path="res://10_BOARD/00_BOOK/Legend/Book_page_signets.tscn" id="12_c5tnk"]
 [ext_resource type="Texture2D" uid="uid://bm6lex6ah3vx" path="res://10_BOARD/00_BOOK/00_img/Cross.png" id="13_y788i"]
@@ -127,7 +130,7 @@ shader = SubResource("VisualShader_0d64j")
 [sub_resource type="GDScript" id="GDScript_4sg0y"]
 script/source = "extends Node
 
-signal  _turn_page
+signal  On_click
 
 "
 
@@ -150,7 +153,7 @@ func disable():
 [sub_resource type="GDScript" id="GDScript_66qc2"]
 script/source = "extends Node
 
-signal	_turn_page
+signal	On_click
 "
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_aaupl"]
@@ -179,10 +182,13 @@ func disable():
 size = Vector3(0.638448, 0.201185, 1.13141)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_khjkf"]
-size = Vector3(0.514213, 0.193312, 0.97998)
+size = Vector3(0.606825, 0.193312, 1.17029)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_smuay"]
-size = Vector3(0.656965, 0.216139, 1.14441)
+size = Vector3(0.557218, 0.216139, 1.14441)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_v6k31"]
+size = Vector3(0.584892, 0.216139, 1.24254)
 
 [sub_resource type="BoxMesh" id="BoxMesh_1p7be"]
 size = Vector3(1, 1, 0.963)
@@ -901,7 +907,7 @@ surface_material_override/0 = SubResource("ShaderMaterial_ko5cd")
 [node name="Turn_Right" type="Area3D" parent="."]
 transform = Transform3D(1, 2.91038e-11, -7.45058e-09, 1.45519e-11, 1, 3.54703e-11, -7.45058e-09, 3.72893e-11, 1, 0, 0, 0)
 
-[node name="Turn_page" type="Node" parent="Turn_Right"]
+[node name="On_click" type="Node" parent="Turn_Right"]
 script = SubResource("GDScript_4sg0y")
 
 [node name="On_Over" type="Node" parent="Turn_Right" node_paths=PackedStringArray("_on_over")]
@@ -916,7 +922,7 @@ script = SubResource("GDScript_dsb8m")
 
 [node name="Turn_Left" type="Area3D" parent="."]
 
-[node name="Turn_page" type="Node" parent="Turn_Left"]
+[node name="On_click" type="Node" parent="Turn_Left"]
 script = SubResource("GDScript_66qc2")
 
 [node name="On_Over" type="Node" parent="Turn_Left" node_paths=PackedStringArray("_on_over")]
@@ -935,34 +941,67 @@ script = SubResource("GDScript_q6dru")
 
 [node name="01" type="Area3D" parent="Button_list/Maurice_page"]
 
-[node name="push_button" type="Node" parent="Button_list/Maurice_page/01"]
+[node name="On_click_link" type="Node" parent="Button_list/Maurice_page/01"]
 script = ExtResource("5_5q0cc")
 button_data = ExtResource("6_8wv1r")
 
 [node name="col" type="CollisionShape3D" parent="Button_list/Maurice_page/01"]
-transform = Transform3D(0.999975, 0, 0.00699867, 0, 1, 0, -0.00699867, 0, 0.999975, -0.141185, 0.206751, 1.43946)
+transform = Transform3D(0.999975, 0, 0.00699867, 0, 1, 0, -0.00699867, 0, 0.999975, -0.973462, 0.206751, 1.43946)
 shape = SubResource("BoxShape3D_nfqob")
 disabled = true
 
 [node name="02" type="Area3D" parent="Button_list/Maurice_page"]
 
-[node name="push_button" type="Node" parent="Button_list/Maurice_page/02"]
+[node name="On_click_link" type="Node" parent="Button_list/Maurice_page/02"]
 script = ExtResource("5_5q0cc")
 button_data = ExtResource("7_w8jo1")
 
 [node name="col" type="CollisionShape3D" parent="Button_list/Maurice_page/02"]
-transform = Transform3D(0.999849, 0, 0.0173477, 0, 1, 0, -0.0173477, 0, 0.999849, 0.667804, 0.191305, 1.45391)
+transform = Transform3D(0.999849, 0, 0.0173477, 0, 1, 0, -0.0173477, 0, 0.999849, -0.133045, 0.191305, 1.46052)
 shape = SubResource("BoxShape3D_khjkf")
 disabled = true
 
 [node name="03" type="Area3D" parent="Button_list/Maurice_page"]
 
-[node name="push_button" type="Node" parent="Button_list/Maurice_page/03"]
+[node name="On_click_link" type="Node" parent="Button_list/Maurice_page/03"]
 script = ExtResource("5_5q0cc")
 button_data = ExtResource("8_jji0t")
 
 [node name="col" type="CollisionShape3D" parent="Button_list/Maurice_page/03"]
-transform = Transform3D(0.999983, 0, 0.00588168, 0, 1, 0, -0.00588168, 0, 0.999983, -0.956348, 0.201206, 1.42222)
+transform = Transform3D(0.999983, 0, 0.00588168, 0, 1, 0, -0.00588168, 0, 0.999983, 0.621594, 0.201206, 1.42222)
+shape = SubResource("BoxShape3D_smuay")
+disabled = true
+
+[node name="04" type="Area3D" parent="Button_list/Maurice_page"]
+
+[node name="On_click_link" type="Node" parent="Button_list/Maurice_page/04"]
+script = ExtResource("5_5q0cc")
+button_data = ExtResource("9_hem7m")
+
+[node name="col" type="CollisionShape3D" parent="Button_list/Maurice_page/04"]
+transform = Transform3D(0.994794, 0, 0.101907, 0, 1, 0, -0.101907, 0, 0.994794, -0.836591, 0.201206, -0.88126)
+shape = SubResource("BoxShape3D_smuay")
+disabled = true
+
+[node name="05" type="Area3D" parent="Button_list/Maurice_page"]
+
+[node name="On_click_link" type="Node" parent="Button_list/Maurice_page/05"]
+script = ExtResource("5_5q0cc")
+button_data = ExtResource("10_ayon4")
+
+[node name="col" type="CollisionShape3D" parent="Button_list/Maurice_page/05"]
+transform = Transform3D(0.997425, 0, 0.0717237, 0, 1, 0, -0.0717237, 0, 0.997425, -0.431316, 0.201206, -1.38109)
+shape = SubResource("BoxShape3D_v6k31")
+disabled = true
+
+[node name="06" type="Area3D" parent="Button_list/Maurice_page"]
+
+[node name="On_click_link" type="Node" parent="Button_list/Maurice_page/06"]
+script = ExtResource("5_5q0cc")
+button_data = ExtResource("11_8wcvx")
+
+[node name="col" type="CollisionShape3D" parent="Button_list/Maurice_page/06"]
+transform = Transform3D(0.999764, 0, 0.0217451, 0, 1, 0, -0.0217451, 0, 0.999764, 0.425411, 0.201206, -1.23875)
 shape = SubResource("BoxShape3D_smuay")
 disabled = true
 
@@ -1052,5 +1091,11 @@ texture = ExtResource("13_y788i")
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="timeout" from="Multiple_page_transition_right" to="." method="_on_multiple_page_transition_timeout"]
 [connection signal="timeout" from="Multiple_page_transition_left" to="." method="_on_multiple_page_transition_left_timeout"]
-[connection signal="_turn_page" from="Turn_Right/Turn_page" to="." method="_turn_page_right"]
-[connection signal="_turn_page" from="Turn_Left/Turn_page" to="." method="turn_page_left"]
+[connection signal="On_click" from="Turn_Right/On_click" to="." method="_turn_page_right"]
+[connection signal="On_click" from="Turn_Left/On_click" to="." method="_turn_page_left"]
+[connection signal="On_click" from="Button_list/Maurice_page/01/On_click_link" to="Button_list/Maurice_page/01/On_click_link" method="_on_on_click"]
+[connection signal="On_click" from="Button_list/Maurice_page/02/On_click_link" to="Button_list/Maurice_page/02/On_click_link" method="_on_on_click"]
+[connection signal="On_click" from="Button_list/Maurice_page/03/On_click_link" to="Button_list/Maurice_page/03/On_click_link" method="_on_on_click"]
+[connection signal="On_click" from="Button_list/Maurice_page/04/On_click_link" to="Button_list/Maurice_page/04/On_click_link" method="_on_on_click"]
+[connection signal="On_click" from="Button_list/Maurice_page/05/On_click_link" to="Button_list/Maurice_page/05/On_click_link" method="_on_on_click"]
+[connection signal="On_click" from="Button_list/Maurice_page/06/On_click_link" to="Button_list/Maurice_page/06/On_click_link" method="_on_on_click"]

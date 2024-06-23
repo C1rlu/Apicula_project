@@ -2,6 +2,7 @@ extends Node
 
 @export var photo_data_first : PhotoData 
 
+signal On_click
 
 func show_this_on_book():
 	
@@ -24,3 +25,7 @@ func show_this_on_book():
 	
 func back_call():
 		_global_datas.book_back_idle_position.emit(false)	
+
+
+func _on_on_click():
+	show_this_on_book()

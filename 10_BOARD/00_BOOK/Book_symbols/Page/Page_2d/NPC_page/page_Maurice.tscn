@@ -1,11 +1,16 @@
-[gd_scene load_steps=26 format=3 uid="uid://olyejd2flb2q"]
+[gd_scene load_steps=32 format=3 uid="uid://olyejd2flb2q"]
 
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Book_symbols/Page/Page_information_state.gd" id="1_q7xup"]
 [ext_resource type="Resource" uid="uid://bcid58kxecbk2" path="res://12_INVENTORY/Photo/Maurice_photoData.tres" id="2_porlq"]
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Button_data/info_label_link.gd" id="3_xjk84"]
 [ext_resource type="Resource" uid="uid://bdydt2ko8pr0t" path="res://10_BOARD/00_BOOK/Button_data/Responce_data/Maurice_info_03.tres" id="4_3mm72"]
 [ext_resource type="PackedScene" uid="uid://cx7k4grvoqu2b" path="res://10_BOARD/00_BOOK/Photo_2d_book/Photo_2D.tscn" id="4_pi5e5"]
+[ext_resource type="Resource" uid="uid://ccap5kr10wdkg" path="res://10_BOARD/00_BOOK/Button_data/Responce_data/Maurice_info_01.tres" id="4_tfdsf"]
+[ext_resource type="Resource" uid="uid://bc0al5v16mi2c" path="res://10_BOARD/00_BOOK/Button_data/Responce_data/Maurice_info_02.tres" id="7_f3pgj"]
 [ext_resource type="Texture2D" uid="uid://ga5yb54aj2kv" path="res://10_BOARD/00_BOOK/00_img/question_back_alpha.png" id="8_edeh0"]
+[ext_resource type="Resource" uid="uid://dd8e3o64rukh1" path="res://10_BOARD/00_BOOK/Button_data/Responce_data/Maurice_info_04.tres" id="9_1gcqj"]
+[ext_resource type="Resource" uid="uid://6rs8i8k72180" path="res://10_BOARD/00_BOOK/Button_data/Responce_data/Maurice_info_05.tres" id="10_sf4bb"]
+[ext_resource type="Resource" uid="uid://cefwrijjwchpo" path="res://10_BOARD/00_BOOK/Button_data/Responce_data/Maurice_info_06.tres" id="11_rmvfr"]
 
 [sub_resource type="GDScript" id="GDScript_v4jor"]
 script/source = "extends Node
@@ -162,17 +167,20 @@ parameter_name = "Dither_size"
 qualifier = 1
 
 [sub_resource type="Gradient" id="Gradient_7vib2"]
+offsets = PackedFloat32Array(0.822034, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_3ko2c"]
 gradient = SubResource("Gradient_7vib2")
 fill = 1
 fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(1, 0.106838)
 
 [sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_cdnfw"]
 texture = SubResource("GradientTexture2D_3ko2c")
 
 [sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_tuypb"]
+
+[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_oyb7m"]
+function = 31
 
 [sub_resource type="VisualShader" id="VisualShader_72w2g"]
 code = "shader_type canvas_item;
@@ -186,6 +194,10 @@ global uniform float Dither_size;
 void fragment() {
 // Texture2D:5
 	vec4 n_out5p0 = texture(tex_frg_5, UV);
+
+
+// FloatFunc:7
+	float n_out7p0 = 1.0 - n_out5p0.x;
 
 
 // FloatConstant:3
@@ -214,7 +226,7 @@ void fragment() {
 
 
 // Step:6
-	float n_out6p0 = step(n_out5p0.x, n_out2p0);
+	float n_out6p0 = step(n_out7p0, n_out2p0);
 
 
 // Output:0
@@ -223,7 +235,7 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-369.333, -98.9599)
+graph_offset = Vector2(-362.653, 10.229)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(660, 220)
@@ -250,7 +262,9 @@ nodes/fragment/5/node = SubResource("VisualShaderNodeTexture_cdnfw")
 nodes/fragment/5/position = Vector2(-180, 80)
 nodes/fragment/6/node = SubResource("VisualShaderNodeStep_tuypb")
 nodes/fragment/6/position = Vector2(230.298, 224.7)
-nodes/fragment/connections = PackedInt32Array(3, 0, 2, 0, 4, 0, 2, 1, 6, 0, 0, 1, 5, 0, 6, 0, 2, 0, 6, 1)
+nodes/fragment/7/node = SubResource("VisualShaderNodeFloatFunc_oyb7m")
+nodes/fragment/7/position = Vector2(242.704, 132.074)
+nodes/fragment/connections = PackedInt32Array(3, 0, 2, 0, 4, 0, 2, 1, 6, 0, 0, 1, 2, 0, 6, 1, 5, 0, 7, 0, 7, 0, 6, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_64ryc"]
 shader = SubResource("VisualShader_72w2g")
@@ -307,7 +321,7 @@ offset_right = 208.0
 offset_bottom = 201.0
 rotation = 0.00252468
 script = ExtResource("3_xjk84")
-link_data = ExtResource("4_3mm72")
+link_data = ExtResource("4_tfdsf")
 on_over = NodePath("On_Over")
 
 [node name="back" type="ColorRect" parent="State_00/Info2"]
@@ -319,7 +333,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.811765, 0.745098, 0.67451, 1)
+color = Color(0.831373, 0.796078, 0.639216, 1)
 
 [node name="On_Over" type="ColorRect" parent="State_00/Info2"]
 visible = false
@@ -363,7 +377,7 @@ offset_right = 574.0
 offset_bottom = 1069.0
 rotation = -0.0120299
 
-[node name="Info" type="Control" parent="State_01"]
+[node name="Info" type="Control" parent="State_01" node_paths=PackedStringArray("on_over")]
 layout_mode = 3
 anchors_preset = 0
 offset_left = -52.0878
@@ -371,6 +385,9 @@ offset_top = -408.656
 offset_right = 490.912
 offset_bottom = -116.656
 rotation = 0.00252468
+script = ExtResource("3_xjk84")
+link_data = ExtResource("7_f3pgj")
+on_over = NodePath("On_Over")
 
 [node name="back" type="ColorRect" parent="State_01/Info"]
 material = SubResource("ShaderMaterial_4d7dv")
@@ -381,7 +398,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.811765, 0.745098, 0.67451, 1)
+color = Color(0.831373, 0.796078, 0.639216, 1)
 
 [node name="Text" type="Label" parent="State_01/Info"]
 layout_mode = 1
@@ -399,6 +416,23 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
+[node name="On_Over" type="ColorRect" parent="State_01/Info"]
+visible = false
+material = SubResource("ShaderMaterial_64ryc")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -24.0277
+offset_top = -10.9394
+offset_right = -24.0277
+offset_bottom = -10.9394
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.08758, 1.08758)
+mouse_filter = 2
+color = Color(0.929412, 0.85098, 0.568627, 1)
+
 [node name="Photo2d" parent="State_01" instance=ExtResource("4_pi5e5")]
 offset_left = 438.893
 offset_top = -154.731
@@ -406,7 +440,19 @@ offset_right = 838.893
 offset_bottom = 245.269
 rotation = 0.130874
 
-[node name="back" type="ColorRect" parent="State_01"]
+[node name="Info2" type="Control" parent="State_01" node_paths=PackedStringArray("on_over")]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -56.2741
+offset_top = -60.6813
+offset_right = 486.726
+offset_bottom = 231.319
+rotation = 0.00252468
+script = ExtResource("3_xjk84")
+link_data = ExtResource("4_3mm72")
+on_over = NodePath("On_Over")
+
+[node name="back" type="ColorRect" parent="State_01/Info2"]
 material = SubResource("ShaderMaterial_4d7dv")
 layout_mode = 1
 anchors_preset = 15
@@ -415,23 +461,40 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.811765, 0.745098, 0.67451, 1)
+color = Color(0.831373, 0.796078, 0.639216, 1)
 
-[node name="Text" type="Label" parent="State_01"]
+[node name="Text" type="Label" parent="State_01/Info2"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 18.0
-offset_right = -31.0
+offset_left = 22.0
+offset_right = -26.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.25098, 0.211765, 0.117647, 1)
 theme_override_font_sizes/font_size = 35
-text = "People are calling him the \"Grognard\""
+text = "People call him \"The grognard\""
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
+
+[node name="On_Over" type="ColorRect" parent="State_01/Info2"]
+visible = false
+material = SubResource("ShaderMaterial_64ryc")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -24.0059
+offset_top = -13.2288
+offset_right = -24.0059
+offset_bottom = -13.2288
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.08758, 1.08758)
+mouse_filter = 2
+color = Color(0.929412, 0.85098, 0.568627, 1)
 
 [node name="State_02" type="Control" parent="."]
 anchors_preset = 0
@@ -440,7 +503,7 @@ offset_top = 510.0
 offset_right = 1543.0
 offset_bottom = 550.0
 
-[node name="Info4" type="Control" parent="State_02"]
+[node name="Info4" type="Control" parent="State_02" node_paths=PackedStringArray("on_over")]
 layout_mode = 3
 anchors_preset = 0
 offset_left = -379.0
@@ -448,6 +511,9 @@ offset_top = -349.104
 offset_right = 163.0
 offset_bottom = -83.1045
 rotation = -0.0958952
+script = ExtResource("3_xjk84")
+link_data = ExtResource("9_1gcqj")
+on_over = NodePath("On_Over")
 
 [node name="back" type="ColorRect" parent="State_02/Info4"]
 material = SubResource("ShaderMaterial_4d7dv")
@@ -458,7 +524,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.811765, 0.745098, 0.67451, 1)
+color = Color(0.831373, 0.796078, 0.639216, 1)
 
 [node name="Text" type="Label" parent="State_02/Info4"]
 layout_mode = 1
@@ -476,7 +542,24 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="Info2" type="Control" parent="State_02"]
+[node name="On_Over" type="ColorRect" parent="State_02/Info4"]
+visible = false
+material = SubResource("ShaderMaterial_64ryc")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -24.0059
+offset_top = -13.2288
+offset_right = -24.0059
+offset_bottom = -13.2288
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.08758, 1.08758)
+mouse_filter = 2
+color = Color(0.929412, 0.85098, 0.568627, 1)
+
+[node name="Info2" type="Control" parent="State_02" node_paths=PackedStringArray("on_over")]
 layout_mode = 3
 anchors_preset = 0
 offset_left = -188.0
@@ -484,6 +567,9 @@ offset_top = -176.104
 offset_right = 406.0
 offset_bottom = 103.896
 rotation = -0.061173
+script = ExtResource("3_xjk84")
+link_data = ExtResource("10_sf4bb")
+on_over = NodePath("On_Over")
 
 [node name="back" type="ColorRect" parent="State_02/Info2"]
 material = SubResource("ShaderMaterial_4d7dv")
@@ -494,7 +580,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.811765, 0.745098, 0.67451, 1)
+color = Color(0.831373, 0.796078, 0.639216, 1)
 
 [node name="Text" type="Label" parent="State_02/Info2"]
 layout_mode = 1
@@ -513,7 +599,24 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="Info5" type="Control" parent="State_02"]
+[node name="On_Over" type="ColorRect" parent="State_02/Info2"]
+visible = false
+material = SubResource("ShaderMaterial_64ryc")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -24.0059
+offset_top = -13.2288
+offset_right = -24.0059
+offset_bottom = -13.2288
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.08758, 1.08758)
+mouse_filter = 2
+color = Color(0.929412, 0.85098, 0.568627, 1)
+
+[node name="Info5" type="Control" parent="State_02" node_paths=PackedStringArray("on_over")]
 layout_mode = 3
 anchors_preset = 0
 offset_left = -219.0
@@ -521,6 +624,9 @@ offset_top = 200.896
 offset_right = 316.0
 offset_bottom = 480.896
 rotation = -0.0217575
+script = ExtResource("3_xjk84")
+link_data = ExtResource("11_rmvfr")
+on_over = NodePath("On_Over")
 
 [node name="back" type="ColorRect" parent="State_02/Info5"]
 material = SubResource("ShaderMaterial_4d7dv")
@@ -531,7 +637,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.811765, 0.745098, 0.67451, 1)
+color = Color(0.831373, 0.796078, 0.639216, 1)
 
 [node name="Text" type="Label" parent="State_02/Info5"]
 layout_mode = 1
@@ -547,10 +653,28 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
+[node name="On_Over" type="ColorRect" parent="State_02/Info5"]
+visible = false
+material = SubResource("ShaderMaterial_64ryc")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -24.0059
+offset_top = -13.2288
+offset_right = -24.0059
+offset_bottom = -13.2288
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.08758, 1.08758)
+mouse_filter = 2
+color = Color(0.929412, 0.85098, 0.568627, 1)
+
 [connection signal="visibility_changed" from="." to="Page_information_state" method="_on_page_02_visibility_changed"]
 [connection signal="tree_exited" from="State_00/Info2" to="State_00/Info2" method="_on_tree_exited"]
 [connection signal="tree_exited" from="State_01" to="State_01" method="_on_tree_exited"]
 [connection signal="tree_exited" from="State_01/Info" to="State_01/Info" method="_on_tree_exited"]
+[connection signal="tree_exited" from="State_01/Info2" to="State_01/Info2" method="_on_tree_exited"]
 [connection signal="tree_exited" from="State_02/Info4" to="State_02/Info4" method="_on_tree_exited"]
 [connection signal="tree_exited" from="State_02/Info2" to="State_02/Info2" method="_on_tree_exited"]
 [connection signal="tree_exited" from="State_02/Info5" to="State_02/Info5" method="_on_tree_exited"]

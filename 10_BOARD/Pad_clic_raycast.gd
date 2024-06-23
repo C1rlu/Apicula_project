@@ -7,7 +7,6 @@ var _pad : bool = false
 
 var previous_on_over
 var On_Over
-var Close_choice
 var boue_click
 signal active_scanner(condition : bool)
 
@@ -79,71 +78,25 @@ func check_cast(targetPos : Vector2):
 	if !result:	
 		return
 	
-	if result.collider.get_node_or_null("Book_exit"): 
-		var _exit = result.collider.get_node_or_null("Book_exit") 
-		_exit._book_exit()
-		
-			
-	if result.collider.get_node_or_null("Page_event"): 
-		var page = result.collider.get_node_or_null("Page_event")
-		page.trigger_page_event.emit()	 
+	
+	if result.collider.get_node_or_null("On_click"): 
+		var _On_click = result.collider.get_node_or_null("On_click")
+		_On_click.On_click.emit()
 
-	if result.collider.get_node_or_null("Open_Question"): 
-		var Open_Question = result.collider.get_node_or_null("Open_Question")
-		Open_Question._open_question()	 
-	
-	if result.collider.get_node_or_null("Open_book"):
-		var book = result.collider.get_node_or_null("Open_book")
-		book.show_this_on_book()
-	
-	
-	if result.collider.get_node_or_null("Show_this_page"):
-		var page_index = result.collider.get_node_or_null("Show_this_page")
-		page_index.show_this_page.emit()	
-	
-	
-			
+
 	if _global_datas.link_mode:	
-		
-		if result.collider.get_node_or_null("push_button"): 
-			var button = result.collider.get_node_or_null("push_button")
-			button.push()	 	
-			return 	
-		
-		
-			
+		if result.collider.get_node_or_null("On_click_link"): 
+			var _On_click = result.collider.get_node_or_null("On_click_link")
+			_On_click.On_click.emit()
 
-
-
-		
-	if result.collider.get_node_or_null("Turn_page"):
-		var right_page = result.collider.get_node_or_null("Turn_page") 
-		right_page._turn_page.emit()		
-
-
-
-	if result.collider.get_node_or_null("Show_scanner"):
-		var Show_scanner = result.collider.get_node_or_null("Show_scanner")
-		Show_scanner.show_scanner.emit()	
-
-
-	if result.collider.get_node_or_null("Signet"):
-		var Signet = result.collider.get_node_or_null("Signet")
-		Signet.show_this_page.emit()	
-
-	if result.collider.get_node_or_null("Book_exit"):
-		var Book_exit = result.collider.get_node_or_null("Book_exit")
-		Book_exit._book_exit()	
-			
-			
-	
 	if result.collider.get_node_or_null("Teleport_PlayerBoat"):
 		var Teleport_PlayerBoat	= result.collider.get_node_or_null("Teleport_PlayerBoat")
 		Teleport_PlayerBoat.lunch_teleport(true)
 		boue_click = Teleport_PlayerBoat
 		
+		
+		
 func check_on_over(targetPos : Vector2):
-	
 	
 	var rayLengh = 250.0
 	var from = Camera.project_ray_origin(targetPos)
@@ -153,9 +106,9 @@ func check_on_over(targetPos : Vector2):
 	rayQuery.collision_mask = 7
 	rayQuery.from = from
 	rayQuery.to = to
-	
 	rayQuery.collide_with_areas = true
 	rayQuery.collide_with_bodies = false
+	
 	var result = space.intersect_ray(rayQuery)
 
 	if !result:
@@ -167,20 +120,13 @@ func check_on_over(targetPos : Vector2):
 	if previous_on_over:
 		previous_on_over.on_over(false)
 		previous_on_over = null	
-	
-	if result.collider.get_node_or_null("push_button"): 
-		var button = result.collider.get_node_or_null("push_button")
-		previous_on_over = button
-		button.on_over(true)	
-	
-	if Close_choice:
-		Close_choice._close_choice()
-		Close_choice = null
-			
-	if result.collider.get_node_or_null("Close_choice"):
-		Close_choice = result.collider.get_node_or_null("Close_choice")
 		
-	
+	if _global_datas.link_mode:	
+		if result.collider.get_node_or_null("On_click_link"): 
+			var button = result.collider.get_node_or_null("On_click_link")
+			previous_on_over = button
+			button.on_over(true)	
+
 	if On_Over:
 		On_Over.on_over(false)	
 		On_Over = false
@@ -190,9 +136,6 @@ func check_on_over(targetPos : Vector2):
 		On_Over = result.collider.get_node_or_null("On_Over")
 		On_Over.on_over(true)	
 	
-	if result.collider.get_node_or_null("Select_this"): 
-		var button = result.collider.get_node_or_null("Select_this")
-		button.show_legend(true)	
 
 
 

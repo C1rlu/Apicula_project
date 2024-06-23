@@ -14,6 +14,7 @@ func _ready():
 	
 
 func _on_over(condition):
+	
 	on_over.visible = condition		
 
 

@@ -14,8 +14,6 @@ extends Node3D
 @onready var collision_shape_3d_p = $Photo/Photo_area/CollisionShape3D
 @onready var collision_shape_3d_l = $legend/Legend_area/CollisionShape3D
 
-
-
 signal update_legend( legend : String)
 func _ready():
 	_active()		
@@ -78,28 +76,23 @@ func show_this_on_book():
 	_global_datas.book_data.book_node._show_from_index(Photo_data.page_index)
 	
 	var book = _global_datas.book_data.book_node
-	#book.position = global_position + book_position_offset
-	#if position.x > 0.0:
-		#var real_offset = book_rotation_angle + (-position.x * 50)
-		##print(position.x)
-		#book.rotation_degrees = Vector3(0.0,real_offset,0.0)	
-			
 	var offset = Vector3(-0.02,0.0,-0.07)
 	var book_position = book.position + offset
 	_global_datas.focus_this_on_board.emit(book_position)		
 	_global_datas.book_idle_pos = false		
 	_global_datas.book_back_idle_position.emit(true)
 	
-func _on_show_this_page_show_this_page():
+func _on_show_this_page():
 
 	show_this_on_book()	
 	_global_datas._add_back_call.emit(back_call)
 	
-	
-	
 func back_call():
 		_global_datas.book_back_idle_position.emit(false)	
-func _on_show_scanner_show_scanner():
-	
+		
+func _on_show_scanner():
+	if _global_datas.link_mode:
+		return
 	_global_datas.selected_photoData = Photo_data
 	_global_datas.show_on_scanner.emit(true)
+
