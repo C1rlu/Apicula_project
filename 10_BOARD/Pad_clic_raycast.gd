@@ -73,7 +73,9 @@ func check_cast(targetPos : Vector2):
 	rayQuery.collide_with_bodies = false
 	var result = space.intersect_ray(rayQuery)
 
-
+	# IMPROVEMENT MAKE USE THE SAME EVENT NAME OF NODE LIKE "CLICK EVENT" AND USE SIGNAL ONLY AFTER
+	# THEN THIS WILL WORK FOR EVERY CLICK EVENT AND WILL BE EASL EXTENSIBLE
+	
 	if !result:	
 		return
 	
@@ -89,40 +91,42 @@ func check_cast(targetPos : Vector2):
 	if result.collider.get_node_or_null("Open_Question"): 
 		var Open_Question = result.collider.get_node_or_null("Open_Question")
 		Open_Question._open_question()	 
+	
+	if result.collider.get_node_or_null("Open_book"):
+		var book = result.collider.get_node_or_null("Open_book")
+		book.show_this_on_book()
+	
+	
+	if result.collider.get_node_or_null("Show_this_page"):
+		var page_index = result.collider.get_node_or_null("Show_this_page")
+		page_index.show_this_page.emit()	
+	
+	
 			
 	if _global_datas.link_mode:	
-		if result.collider.get_node_or_null("Link_info"): 
-			var link_info = result.collider.get_node_or_null("Link_info")
-			link_info._link_info()
+		
+		if result.collider.get_node_or_null("push_button"): 
+			var button = result.collider.get_node_or_null("push_button")
+			button.push()	 	
 			return 	
 		
 		
 			
-	if result.collider.get_node_or_null("push_button"): 
-		var button = result.collider.get_node_or_null("push_button")
-		button.push()	 
 
-	if result.collider.get_node_or_null("Select_Tube"): 
-		var tube = result.collider.get_node_or_null("Select_Tube") 
-		tube._select_tube()		
+
+
 		
 	if result.collider.get_node_or_null("Turn_page"):
 		var right_page = result.collider.get_node_or_null("Turn_page") 
 		right_page._turn_page.emit()		
 
-	if !_global_datas.link_mode:	
-		if result.collider.get_node_or_null("Show_this_page"):
-			var page_index = result.collider.get_node_or_null("Show_this_page")
-			page_index.show_this_page.emit()	
+
 
 	if result.collider.get_node_or_null("Show_scanner"):
 		var Show_scanner = result.collider.get_node_or_null("Show_scanner")
 		Show_scanner.show_scanner.emit()	
 
-	if result.collider.get_node_or_null("Loupe"):
-		var Loupe = result.collider.get_node_or_null("Loupe")
-		Loupe._show_scanner()	
-		
+
 	if result.collider.get_node_or_null("Signet"):
 		var Signet = result.collider.get_node_or_null("Signet")
 		Signet.show_this_page.emit()	
@@ -155,6 +159,9 @@ func check_on_over(targetPos : Vector2):
 	var result = space.intersect_ray(rayQuery)
 
 	if !result:
+		if On_Over:
+			On_Over.on_over(false)	
+			On_Over = null	
 		return
 		
 	if previous_on_over:

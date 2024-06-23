@@ -47,4 +47,13 @@ func _move_cam(_delta):
 	cam_target.z = clamp(cam_target.z, clamp_cam_z.x, clamp_cam_z.y)
 
 	for cam in _all_cam_array:
-		cam.global_position = lerp(cam.global_position, cam_target + offset, smooth_speed * _delta)	
+			cam.global_position = lerp(cam.global_position, cam_target + offset, smooth_speed * _delta)	
+		
+	#rotation_angle(_delta)
+	
+func rotation_angle(_delta):
+
+	var angle_target = cam_target.x
+
+	for cam in _all_cam_array:
+		cam.global_rotation = Vector3(0,angle_target*10,0)

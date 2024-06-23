@@ -145,7 +145,6 @@ var zoom_value : float
 var Cursor_mode : Node
 signal start_choice(condition : bool, position : Vector3)
 signal ui_noted_taked
-signal responce_receiver_data(book_button_data)
 signal map_fade(condition : bool) # true is in : false is out
 
 

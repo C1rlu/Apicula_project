@@ -9,13 +9,16 @@ var speed
 var border_ratio : float = 42
 
 var target_position : Vector3
-
+var f
+var on_auto_move = false
 func _ready():
 	_global_datas.focus_this_on_board.connect(_focus_this)
 
 
 func _process(delta):
 	
+	if on_auto_move:
+		return
 	if _global_datas.Player_InMenu:
 		return
 	
@@ -71,7 +74,17 @@ func _process(delta):
 	position = target_position
 	
 func _focus_this(_position):
-
-	target_position = _position 
-
-
+	
+	on_auto_move = true
+	
+	if f:
+		f.kill()
+	
+	f = create_tween()
+	f.tween_property(self,"position",_position,0.25)
+	f.connect("finished",done)
+	
+func done():
+	target_position = position
+	on_auto_move = false
+	

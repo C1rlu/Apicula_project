@@ -1,11 +1,122 @@
-[gd_scene load_steps=7 format=3 uid="uid://cgc02cx2l0ndw"]
+[gd_scene load_steps=16 format=3 uid="uid://cgc02cx2l0ndw"]
 
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Legend/Book_page_signets.gd" id="1_bftuy"]
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Signet_goPage.gd" id="3_hs7bl"]
 [ext_resource type="Material" uid="uid://7dc0f1et6s32" path="res://10_BOARD/00_BOOK/Legend/Symbols_legend_page_mat.tres" id="3_ogdm8"]
+[ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="4_1wicc"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_yifst"]
 size = Vector2(0.08, 0.1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_2cwu7"]
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_ul1nu"]
+constant = 1.0
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_3ewes"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_ccwpb"]
+parameter_name = "Dither_size"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_pr2lv"]
+default_input_values = [0, 0.79, 1, 0.0]
+
+[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_qjd8d"]
+constant = Color(0.73, 0.47377, 0.1606, 1)
+
+[sub_resource type="VisualShader" id="VisualShader_pduv4"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+
+global uniform float Dither_size;
+
+
+
+void fragment() {
+// ColorConstant:7
+	vec4 n_out7p0 = vec4(0.730000, 0.473770, 0.160600, 1.000000);
+
+
+// FloatConstant:3
+	float n_out3p0 = 1.000000;
+
+
+// FloatParameter:5
+	float n_out5p0 = Dither_size;
+
+
+	float n_out4p0;
+// Expression:4
+	n_out4p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out5p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out4p0 = n_out3p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Step:6
+	float n_in6p0 = 0.79000;
+	float n_out6p0 = step(n_in6p0, n_out4p0);
+
+
+// Output:0
+	ALBEDO = vec3(n_out7p0.xyz);
+	ALPHA = n_out6p0;
+
+
+}
+"
+graph_offset = Vector2(-632.453, 286.075)
+flags/unshaded = true
+nodes/fragment/0/position = Vector2(580, 220)
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_ul1nu")
+nodes/fragment/3/position = Vector2(-1180, 460)
+nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_3ewes")
+nodes/fragment/4/position = Vector2(-900, 460)
+nodes/fragment/4/size = Vector2(724.789, 654.559)
+nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/4/output_ports = "0,0,Dither_Node;"
+nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/5/node = SubResource("VisualShaderNodeFloatParameter_ccwpb")
+nodes/fragment/5/position = Vector2(-1540, 620)
+nodes/fragment/6/node = SubResource("VisualShaderNodeStep_pr2lv")
+nodes/fragment/6/position = Vector2(130.23, 516.22)
+nodes/fragment/7/node = SubResource("VisualShaderNodeColorConstant_qjd8d")
+nodes/fragment/7/position = Vector2(226.136, 51.1274)
+nodes/fragment/connections = PackedInt32Array(3, 0, 4, 0, 5, 0, 4, 1, 4, 0, 6, 1, 6, 0, 0, 1, 7, 0, 0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wkvmi"]
+render_priority = 0
+shader = SubResource("VisualShader_pduv4")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_53r4s"]
 size = Vector3(0.341774, 0.188416, 0.321474)
@@ -34,14 +145,27 @@ script = ExtResource("1_bftuy")
 
 [node name="Render_page" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.313478, 0, 0, 0, 1, 0, 0, 0, 0.257497, 0, 0, 0)
-layers = 512
+layers = 2
 mesh = SubResource("PlaneMesh_yifst")
 surface_material_override/0 = ExtResource("3_ogdm8")
+
+[node name="On_Over2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.0174016, 9.20598e-13, 0.000184201, 2.46537e-13, 0.0316315, 6.05478e-13, -0.000188616, 1.17952e-12, 0.0169944, 0, 0.000370286, 0)
+visible = false
+layers = 2
+mesh = SubResource("PlaneMesh_2cwu7")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("ShaderMaterial_wkvmi")
 
 [node name="Next_Zone" type="Area3D" parent="."]
 
 [node name="Signet" type="Node" parent="Next_Zone"]
 script = ExtResource("3_hs7bl")
+
+[node name="On_Over" type="Node" parent="Next_Zone" node_paths=PackedStringArray("_on_over")]
+script = ExtResource("4_1wicc")
+_on_over = NodePath("../../On_Over2")
+icon_type = 4
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Next_Zone"]
 transform = Transform3D(0.0839063, 0, 0, 0, 0.0839063, 0, 0, 0, 0.0839063, -0.000215415, 0.00665511, -0.00113734)

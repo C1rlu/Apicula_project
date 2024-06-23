@@ -37,7 +37,7 @@ func _on_show_content(condition):
 
 func _on_set_content(page_index):
 
-	print(page_index)
+
 	page_new_index = page_index	
 	
 	if fade_in:

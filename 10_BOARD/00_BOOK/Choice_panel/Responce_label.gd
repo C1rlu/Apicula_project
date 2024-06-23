@@ -9,7 +9,7 @@ extends Label
 var responce_data : book_button_data
 
 func _ready():
-	_global_datas.responce_receiver_data.connect(update_responce_receiver)
+	#_global_datas.responce_receiver_data.connect(update_responce_receiver)
 	button_data.button_on_over.connect(_on_over)
 	button_data.button_signal.connect(push_button)
 	

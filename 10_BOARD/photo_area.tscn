@@ -1,12 +1,12 @@
-[gd_scene load_steps=27 format=3 uid="uid://uwg2qc3svu11"]
+[gd_scene load_steps=35 format=3 uid="uid://uwg2qc3svu11"]
 
 [ext_resource type="Script" path="res://10_BOARD/Photo_element.gd" id="1_0a8jl"]
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Legend/Legend_behaviour.gd" id="1_f7rkq"]
 [ext_resource type="Resource" uid="uid://dyh1qg1u652pl" path="res://12_INVENTORY/Photo/Epave_ch_photoData.tres" id="2_8x1kk"]
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Show_this_page.gd" id="2_653je"]
 [ext_resource type="Script" path="res://10_BOARD/Show_scanner.gd" id="3_btmm2"]
-[ext_resource type="Texture2D" uid="uid://dsmwbffwgaj4q" path="res://12_INVENTORY/Photo/IMG/PhotoTest_02.jpg" id="3_c0uts"]
 [ext_resource type="Shader" uid="uid://upo0fuo5sqgd" path="res://05_SHADER_TEST/Board/Board_sh.tres" id="3_ysgwd"]
+[ext_resource type="Texture2D" uid="uid://38btbw60olcn" path="res://12_INVENTORY/Photo/IMG/Boat.png" id="4_wljme"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="7_vd1wc"]
 [ext_resource type="Texture2D" uid="uid://dtyhegc0wsj1h" path="res://10_BOARD/00_BOOK/01_UI/cursor_scan.png" id="10_fkyuy"]
 [ext_resource type="Script" path="res://10_BOARD/Link_this_info.gd" id="10_m8k0p"]
@@ -17,17 +17,106 @@ extends Node
 
 
 @onready var photo_area = $\"../..\"
-@onready var photo_render  : Sprite3D = $\"../photo_render\"
+@onready var img = $\"../IMG\"
 
 func _ready():
 	
 	var texture_data = photo_area.Photo_data.image
-	photo_render.texture = texture_data 
-
+	var mat = img.get_surface_override_material(0)
+	mat.set_shader_parameter(\"t_render\", texture_data)
+	print(texture_data)
+	
+	
 func _run():
 	var texture_data = photo_area.Photo_data.image
-	photo_render.texture = texture_data 	
+	var mat  : Material = img.get_surface_override_material(0)
+	mat.set_shader_parameter(\"t_render\", texture_data)
 "
+
+[sub_resource type="QuadMesh" id="QuadMesh_1i4du"]
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_ray7x"]
+source = 5
+
+[sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_h3fqg"]
+parameter_name = "t_render"
+texture_type = 1
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_bu5au"]
+size = Vector2(620, 200)
+expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
+grey_value = luminance;"
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_jd3py"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
+op_type = 3
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_cia5x"]
+parameter_name = "link_opacity"
+qualifier = 1
+
+[sub_resource type="VisualShader" id="VisualShader_f12d4"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+
+uniform sampler2D t_render : source_color;
+global uniform float link_opacity;
+
+
+
+void fragment() {
+	vec4 n_out2p0;
+// Texture2D:2
+	n_out2p0 = texture(t_render, UV);
+
+
+	float n_out4p0;
+// Expression:4
+	n_out4p0 = 0.0;
+	{
+		float luminance = 0.299 * vec3(n_out2p0.xyz).x + 0.587 * vec3(n_out2p0.xyz).y + 0.114 * vec3(n_out2p0.xyz).z;
+		n_out4p0 = luminance;
+	}
+
+
+// FloatParameter:6
+	float n_out6p0 = link_opacity;
+
+
+// Mix:5
+	vec3 n_out5p0 = mix(vec3(n_out2p0.xyz), vec3(n_out4p0), vec3(n_out6p0));
+
+
+// Output:0
+	ALBEDO = n_out5p0;
+
+
+}
+"
+graph_offset = Vector2(-309.694, -193.302)
+flags/unshaded = true
+nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_ray7x")
+nodes/fragment/2/position = Vector2(-540, 160)
+nodes/fragment/3/node = SubResource("VisualShaderNodeTexture2DParameter_h3fqg")
+nodes/fragment/3/position = Vector2(-1140, 60)
+nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_bu5au")
+nodes/fragment/4/position = Vector2(-660, -440)
+nodes/fragment/4/size = Vector2(620, 200)
+nodes/fragment/4/input_ports = "0,4,color;"
+nodes/fragment/4/output_ports = "0,0,grey_value;"
+nodes/fragment/4/expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
+grey_value = luminance;"
+nodes/fragment/5/node = SubResource("VisualShaderNodeMix_jd3py")
+nodes/fragment/5/position = Vector2(80, -120)
+nodes/fragment/6/node = SubResource("VisualShaderNodeFloatParameter_cia5x")
+nodes/fragment/6/position = Vector2(-540, -160)
+nodes/fragment/connections = PackedInt32Array(3, 0, 2, 2, 6, 0, 5, 2, 4, 0, 5, 1, 2, 0, 5, 0, 2, 0, 4, 0, 5, 0, 0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_trilb"]
+resource_local_to_scene = true
+render_priority = 0
+shader = SubResource("VisualShader_f12d4")
+shader_parameter/t_render = ExtResource("4_wljme")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_aof41"]
 render_priority = 0
@@ -176,12 +265,12 @@ book_position_offset = Vector3(0.025, 0, 0.125)
 [node name="texture" type="Node" parent="Photo"]
 script = SubResource("GDScript_32kbr")
 
-[node name="photo_render" type="Sprite3D" parent="Photo"]
-transform = Transform3D(0.0116926, 0, 0, 0, 8.27593e-10, 0.0116926, 0, -0.0116926, 8.27593e-10, 0.000372954, 0.0040003, 0)
-layers = 16386
-texture = ExtResource("3_c0uts")
-region_enabled = true
-region_rect = Rect2(0, 0, 512, 512)
+[node name="IMG" type="MeshInstance3D" parent="Photo"]
+transform = Transform3D(0.0595463, 0, 0, 0, -2.60285e-09, 0.0595463, 0, -0.0595463, -2.60285e-09, 0, 0.00427736, 0)
+layers = 2
+mesh = SubResource("QuadMesh_1i4du")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("ShaderMaterial_trilb")
 
 [node name="render_base" type="MeshInstance3D" parent="Photo"]
 transform = Transform3D(0.0682586, 0, 0, 0, 0.00230959, 0, 0, 0, 0.0682586, 0, 0.00272226, 0)
