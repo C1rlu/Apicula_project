@@ -45,7 +45,7 @@ func _close_dialogue():
 	_global_datas.in_dialogue_zone.emit()
 	dialogue.visible =  false
 	_global_datas.Player_InDialogue = false
-
+	_global_datas.Npc_Dialogue = null
 	
 
 	$Random_FaceChanger/Timer.stop()

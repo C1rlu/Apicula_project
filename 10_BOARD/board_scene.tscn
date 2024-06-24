@@ -1,4 +1,4 @@
-[gd_scene load_steps=209 format=3 uid="uid://dr73p5vs0sixe"]
+[gd_scene load_steps=211 format=3 uid="uid://dr73p5vs0sixe"]
 
 [ext_resource type="Script" path="res://10_BOARD/photos_check.gd" id="1_bcxwj"]
 [ext_resource type="Shader" uid="uid://upo0fuo5sqgd" path="res://05_SHADER_TEST/Board/Board_sh.tres" id="1_k1enu"]
@@ -24,6 +24,7 @@
 [ext_resource type="PackedScene" uid="uid://dgvsf84egy43d" path="res://10_BOARD/Decor/Chavet_part.blend" id="20_d7w3e"]
 [ext_resource type="Resource" uid="uid://dyrjwnrw6plmp" path="res://10_BOARD/00_Boue_Zones/Boue_DarkHole.tres" id="20_ti4d8"]
 [ext_resource type="PackedScene" uid="uid://bi5gcavnclfud" path="res://10_BOARD/Decor/Bell.blend" id="22_4fabq"]
+[ext_resource type="Script" path="res://10_BOARD/On_Click_bell.gd" id="23_2poma"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="23_4ws66"]
 [ext_resource type="Script" path="res://10_BOARD/Close_book.gd" id="24_4lsou"]
 [ext_resource type="PackedScene" uid="uid://bh5a7fhvftxmm" path="res://10_BOARD/00_BOOK/Book_symbols/00_Book_journal.tscn" id="24_yo2tw"]
@@ -1291,6 +1292,8 @@ shader_parameter/Dark_color = Color(0, 0, 0, 1)
 shader_parameter/ColorParameter = Color(0.0156863, 0.109804, 0.113725, 1)
 shader_parameter/light_color = Color(0.0470588, 0.207843, 0.227451, 1)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_a213g"]
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_isdhd"]
 render_priority = 0
 shader = ExtResource("1_k1enu")
@@ -2184,6 +2187,16 @@ layers = 2
 surface_material_override/0 = SubResource("ShaderMaterial_sn3g6")
 surface_material_override/1 = SubResource("ShaderMaterial_jka2s")
 
+[node name="Area3D" type="Area3D" parent="Bell"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.91859, 0, 2.05673)
+
+[node name="On_click" type="Node" parent="Bell/Area3D"]
+script = ExtResource("23_2poma")
+
+[node name="Col" type="CollisionShape3D" parent="Bell/Area3D"]
+transform = Transform3D(0.367208, 0, 0, 0, 0.367208, 0, 0, 0, 0.367208, 0, 0.0858023, 0)
+shape = SubResource("BoxShape3D_a213g")
+
 [node name="Loupe_RG" parent="." instance=ExtResource("12_alpcj")]
 transform = Transform3D(-0.200324, 0.00309218, -0.462515, -0.00763931, 0.503941, 0.0066779, 0.462463, 0.00966387, -0.200237, -0.320381, -0.00497455, 0.423577)
 
@@ -2342,6 +2355,7 @@ layers = 2
 mesh = SubResource("CylinderMesh_xsjxl")
 skeleton = NodePath("")
 
+[connection signal="On_click" from="Bell/Area3D/On_click" to="Bell/Area3D/On_click" method="_on_on_click"]
 [connection signal="On_click" from="Book_Close_root/Area3D/On_click" to="Book_Close_root/Area3D/On_click" method="_on_on_click"]
 
 [editable path="Chavet_part"]

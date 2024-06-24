@@ -13,7 +13,7 @@ var Player_InMirrorScene : bool = false
 var Player_InMenu : bool
 var Player_InDialogue : bool
 var Player_InDialogue_zone : bool
-
+var Waiting_bird : bool = false
 
 # menu signals
 signal _start_ini_subscene
@@ -137,6 +137,7 @@ var _orbe_visual_scene : Array[Node3D]
 signal instance_scene_oddity(oddity_scene : PackedScene, amount : int ,position : Vector3)
 
 #board scene
+
 var book_data : book_page_data
 signal open_inventory(condition : bool)
 signal mouse_raycast
@@ -146,7 +147,7 @@ var Cursor_mode : Node
 
 signal ui_noted_taked
 signal map_fade(condition : bool) # true is in : false is out
-
+signal send_bird_responce
 
 
 signal responce_link_mode(condition : bool, text : String)
