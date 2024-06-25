@@ -1,5 +1,6 @@
 extends Node3D
 
+@onready var photo_element_root = $"."
 
 @export var Photo_data : PhotoData
 
@@ -72,15 +73,19 @@ func _disable():
 func show_this_on_book():
 	
 	_global_datas.selected_photoData = Photo_data
-
 	_global_datas.book_data.book_node._show_from_index(Photo_data.page_index)
 	
 	var book = _global_datas.book_data.book_node
+	#book.position = photo_element_root.global_position  + book_position_offset
+	#var rotation_offset = book_rotation_angle - book.position.x * 25
+	#book.rotation_degrees = Vector3(0,rotation_offset,0)
 	var offset = Vector3(-0.02,0.0,-0.07)
+	
 	var book_position = book.position + offset
 	_global_datas.focus_this_on_board.emit(book_position)		
 	_global_datas.book_idle_pos = false		
 	_global_datas.book_back_idle_position.emit(true)
+	
 	
 func _on_show_this_page():
 

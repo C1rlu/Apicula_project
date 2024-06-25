@@ -6,5 +6,6 @@ extends Node
 signal On_click
 
 func _on_on_click():
-	_global_datas.question_node = letter_area	
-	_global_datas.responce_link_mode.emit(true,n_text.text)
+	pass
+	#_global_datas.question_node = letter_area	
+	#_global_datas.responce_link_mode.emit(true,n_text.text)
