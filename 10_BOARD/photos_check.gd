@@ -13,7 +13,7 @@ func _check_found(condition : bool):
 	for e in all_photos:
 		if check_photo_exist(e.Photo_data):
 	
-			e._active()	
+			e.check_state()
 		
 func check_photo_exist(photo_Data):	
 

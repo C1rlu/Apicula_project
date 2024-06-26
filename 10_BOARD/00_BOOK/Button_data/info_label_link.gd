@@ -9,8 +9,8 @@ func _ready():
 	link_data.button_on_over.connect(_on_over)
 	link_data.button_signal.connect(push_button)
 
-	var col : CollisionShape3D = link_data.button_area.get_node("col")
-	col.disabled = false
+	#var col : CollisionShape3D = link_data.button_area.get_node("col")
+	#col.disabled = false
 	
 
 func _on_over(condition):

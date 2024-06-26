@@ -154,7 +154,7 @@ signal responce_link_mode(condition : bool, text : String)
 var link_mode : bool = false
 var question_node : Node3D = null
 signal responce_chose(text : String)
-
+var active_quest : Note_Data = null
 
 signal turn_left
 signal turn_right

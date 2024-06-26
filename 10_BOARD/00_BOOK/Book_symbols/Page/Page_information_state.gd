@@ -26,6 +26,5 @@ func check_state(pos):
 		state_page_info[i].visible = true		
 	
 
-
-func _on_page_02_visibility_changed():
+func _on_page_visibility_changed():
 	check_state(null)

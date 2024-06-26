@@ -21,7 +21,7 @@ signal responce_link(text : String)
 
 func _ready():
 	note._set_note(Note_data.note_text,Note_data.from)
-	
+	_global_datas.active_quest = Note_data
 		
 func _active():
 	collision_shape_3d.disabled = false	
@@ -261,12 +261,12 @@ script = SubResource("GDScript_ypp87")
 [node name="Note" type="Node" parent="."]
 script = SubResource("GDScript_4uwx0")
 
-[node name="On_Over" type="Node" parent="." node_paths=PackedStringArray("_on_over")]
+[node name="On_Over_off" type="Node" parent="." node_paths=PackedStringArray("_on_over")]
 script = ExtResource("1_48ie6")
 _on_over = NodePath("../IS_SELECT")
 icon_type = 1
 
-[node name="On_click" type="Node" parent="."]
+[node name="On_click_off" type="Node" parent="."]
 script = ExtResource("1_d47fj")
 
 [node name="Link_responce" type="Node" parent="."]
@@ -379,4 +379,4 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [connection signal="responce_link" from="." to="Link_responce" method="_on_letter_area_responce_link"]
-[connection signal="On_click" from="On_click" to="On_click" method="_on_on_click"]
+[connection signal="On_click" from="On_click_off" to="On_click_off" method="_on_on_click"]

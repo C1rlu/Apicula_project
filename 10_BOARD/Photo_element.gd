@@ -16,10 +16,9 @@ extends Node3D
 @onready var collision_shape_3d_l = $legend/Legend_area/CollisionShape3D
 
 signal update_legend( legend : String)
+
 func _ready():
-	_active()		
-func _active():	
-	check_state()
+	check_state()	
 
 		
 func check_state():

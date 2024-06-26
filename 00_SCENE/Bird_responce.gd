@@ -14,6 +14,9 @@ func _ready():
 	_global_datas.send_bird_responce.connect(send_bird)
 	
 func send_bird():
+	
+	if !_global_datas.active_quest.done:
+		return	
 	print("SEND BIRD")
 	
 	_global_datas.open_inventory.emit(false)
