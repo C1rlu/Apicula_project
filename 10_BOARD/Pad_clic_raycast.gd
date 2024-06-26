@@ -75,10 +75,10 @@ func check_cast(targetPos : Vector2):
 	rayQuery.collide_with_bodies = false
 	var result = space.intersect_ray(rayQuery)
 
-	# IMPROVEMENT MAKE USE THE SAME EVENT NAME OF NODE LIKE "CLICK EVENT" AND USE SIGNAL ONLY AFTER
-	# THEN THIS WILL WORK FOR EVERY CLICK EVENT AND WILL BE EASL EXTENSIBLE
 	
+	#print(result)
 	if !result:	
+		
 		return
 	
 	
@@ -113,7 +113,7 @@ func check_on_over(targetPos : Vector2):
 	rayQuery.collide_with_bodies = false
 	
 	var result = space.intersect_ray(rayQuery)
-
+	
 	if !result:
 		if On_Over:
 			On_Over.on_over(false)	

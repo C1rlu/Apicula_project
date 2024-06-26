@@ -156,9 +156,6 @@ signal responce_link_mode(condition : bool, text : String)
 var link_mode : bool = false
 var question_node : Node3D = null
 signal responce_chose(text : String)
-var active_quest : Note_Data = null
-
-
 
 #type text responce
 signal type_text_mod(condition : bool)

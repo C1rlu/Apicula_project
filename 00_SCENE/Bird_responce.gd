@@ -15,8 +15,6 @@ func _ready():
 	
 func send_bird():
 	
-	if !_global_datas.active_quest.done:
-		return	
 	print("SEND BIRD")
 	
 	_global_datas.open_inventory.emit(false)
