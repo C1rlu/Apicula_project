@@ -4,14 +4,14 @@ extends Node
 @onready var loader = $"../InsidePhoto_scanner_scene/loader"
 @onready var backdrop_focus = $"../BACKDROP_FOCUS"
 @onready var active_scene_viewports = $"../Active_scene_viewports"
-@onready var omni_light_3d = $"../InsidePhoto_scanner_scene/OmniLight3D"
+
 
 func _ready():
 	_global_datas.show_on_scanner.connect(_show_scanner)
 
 	render_scanner.visible = true
 	backdrop_focus.visible = true
-	omni_light_3d.visible = false
+
 	stop_scanner()
 	
 func _show_scanner(condition : bool):
@@ -19,8 +19,7 @@ func _show_scanner(condition : bool):
 	_global_datas.in_scanner_mode = condition
 	
 	active_scene_viewports._active_viewports(condition)
-	
-	omni_light_3d.visible = condition
+
 	if condition:
 		
 		#loader.rotation = Vector3.ZERO

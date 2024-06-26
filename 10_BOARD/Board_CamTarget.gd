@@ -28,11 +28,7 @@ func _process(delta):
 		
 	if _global_datas.in_scanner_mode:
 		return
-
-	
-	if _global_datas.in_scanner_board_mode:
-		return
-			
+		
 	if _global_datas.zoom_value == 1:
 		speed = move_speed
 		border_ratio = 42
