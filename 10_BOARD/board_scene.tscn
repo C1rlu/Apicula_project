@@ -1,4 +1,4 @@
-[gd_scene load_steps=211 format=3 uid="uid://dr73p5vs0sixe"]
+[gd_scene load_steps=213 format=3 uid="uid://dr73p5vs0sixe"]
 
 [ext_resource type="Script" path="res://10_BOARD/photos_check.gd" id="1_bcxwj"]
 [ext_resource type="Shader" uid="uid://upo0fuo5sqgd" path="res://05_SHADER_TEST/Board/Board_sh.tres" id="1_k1enu"]
@@ -38,6 +38,8 @@
 [ext_resource type="Material" uid="uid://b5u3d7wosa00d" path="res://05_SHADER_TEST/Board/Flat_with_gradient.tres" id="35_xg8pc"]
 [ext_resource type="Shader" uid="uid://cctu1rugloxjc" path="res://05_SHADER_TEST/Board/Tube_liquide_sh.tres" id="36_p5f84"]
 [ext_resource type="Material" uid="uid://cwdathot7k12h" path="res://05_SHADER_TEST/Board/Maquette_sh.tres" id="37_2kevv"]
+[ext_resource type="Script" path="res://10_BOARD/Scanner_position.gd" id="37_uvhhd"]
+[ext_resource type="PackedScene" uid="uid://cjo5e1hq7bpmk" path="res://14_ON_SCANNER_PHOTO/00_Scanner_perfabs/Ghost_eyes_scanner_prefab.tscn" id="39_cgt4d"]
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_24mnb"]
 parameter_name = "Dark_color"
@@ -1882,7 +1884,7 @@ radial_segments = 8
 
 [node name="LIGHT_scene" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0245969, 0.225876, -0.033795)
-layers = 16898
+layers = 2
 shadow_enabled = true
 shadow_bias = 0.0
 shadow_normal_bias = 0.793
@@ -2022,7 +2024,7 @@ skeleton = NodePath("../..")
 surface_material_override/0 = ExtResource("6_kkuc8")
 
 [node name="Lanterne" type="MeshInstance3D" parent="Deco"]
-transform = Transform3D(0.100064, 0, 0, 0, 0.100064, 0, 0, 0, 0.100064, 0.302254, 1.49012e-07, -0.25513)
+transform = Transform3D(0.100064, 0, 0, 0, 0.100064, 0, 0, 0, 0.100064, 0.645281, 3.27826e-07, -0.133722)
 layers = 2
 mesh = SubResource("ArrayMesh_jn8g7")
 skeleton = NodePath("")
@@ -2070,19 +2072,19 @@ surface_material_override/1 = ExtResource("6_kkuc8")
 [node name="LINKS" type="Node3D" parent="."]
 
 [node name="link_01" type="MeshInstance3D" parent="LINKS"]
-transform = Transform3D(0.00109952, -0.00864698, 0.0634014, 0.000444627, 0.0735535, -2.15426e-09, -0.00171742, 0.0135064, 0.0405905, 0.271413, 0.00428109, 0.183694)
+transform = Transform3D(0.00109952, -0.00864698, 0.0634014, 0.000444627, 0.0735535, -2.15426e-09, -0.00171742, 0.0135064, 0.0405905, 0.313128, 0.00428109, 0.313905)
 layers = 2
 mesh = SubResource("PlaneMesh_a362u")
 surface_material_override/0 = SubResource("ShaderMaterial_ev73a")
 
 [node name="link_02" type="MeshInstance3D" parent="LINKS"]
-transform = Transform3D(-0.00165986, 0, 0.0422592, 0, 0.0752815, 0, -0.000810323, 0, -0.0865638, 0.208095, 0.00408486, 0.0599039)
+transform = Transform3D(-0.00165986, 0, 0.0422592, 0, 0.0752815, 0, -0.000810323, 0, -0.0865638, 0.24981, 0.00408486, 0.190115)
 layers = 2
 mesh = SubResource("PlaneMesh_nh317")
 surface_material_override/0 = SubResource("ShaderMaterial_ev73a")
 
 [node name="link_03" type="MeshInstance3D" parent="LINKS"]
-transform = Transform3D(0.000652058, -0.00521407, 0.071323, 0.000451741, 0.0734971, 9.93216e-10, -0.00193053, 0.0154371, 0.0240902, 0.159631, 0.00487708, -0.0119521)
+transform = Transform3D(0.000652058, -0.00521407, 0.071323, 0.000451741, 0.0734971, 9.93216e-10, -0.00193053, 0.0154371, 0.0240902, 0.201346, 0.00487708, 0.118259)
 layers = 2
 mesh = SubResource("PlaneMesh_5heux")
 surface_material_override/0 = SubResource("ShaderMaterial_ev73a")
@@ -2092,28 +2094,28 @@ transform = Transform3D(0.882135, 0, -0.470996, 0, 1, 0, 0.470996, 0, 0.882135, 
 script = ExtResource("1_bcxwj")
 
 [node name="MrBird_Photo_area" parent="PHOTO" node_paths=PackedStringArray("links_list", "next_photo_data") instance=ExtResource("1_mtaom")]
-transform = Transform3D(0.838361, 0, 0.545123, 0, 1, 0, -0.545123, 0, 0.838361, -0.102846, -2.98023e-08, -0.041147)
+transform = Transform3D(0.838361, 0, 0.545123, 0, 1, 0, -0.545123, 0, 0.838361, -0.00471941, -2.98023e-08, 0.054069)
 Photo_data = ExtResource("4_t8cpb")
 links_list = [NodePath("../../LINKS/link_03")]
 next_photo_data = [NodePath("../Maurice_Photo_area5")]
 book_rotation_angle = -100.0
 
 [node name="Maurice_Photo_area5" parent="PHOTO" node_paths=PackedStringArray("links_list", "next_photo_data") instance=ExtResource("1_mtaom")]
-transform = Transform3D(0.940239, 0.00134326, 0.340524, -0.00136849, 0.999999, -0.000166074, -0.340524, -0.000309871, 0.940241, 0.0314718, 0, -0.0777913)
+transform = Transform3D(0.940239, 0.00134326, 0.340524, -0.00136849, 0.999999, -0.000166074, -0.340524, -0.000309871, 0.940241, 0.129599, 0, 0.0174247)
 Photo_data = ExtResource("10_f1pwj")
 links_list = [NodePath("../../LINKS/link_02")]
 next_photo_data = [NodePath("../MrBird_Photo_area"), NodePath("../01")]
 book_rotation_angle = -100.0
 
 [node name="01" parent="PHOTO" node_paths=PackedStringArray("links_list", "next_photo_data") instance=ExtResource("1_mtaom")]
-transform = Transform3D(0.9315, 0, 0.363756, 0, 1, 0, -0.363756, 0, 0.9315, 0.040406, -0.00197421, 0.0606507)
+transform = Transform3D(0.931501, 0, 0.363756, 0, 1, 0, -0.363756, 0, 0.931501, 0.138533, -0.00197421, 0.155867)
 Photo_data = ExtResource("11_ub6ec")
 links_list = [NodePath("../../LINKS/link_01")]
 next_photo_data = [NodePath("../06")]
 book_rotation_angle = -100.0
 
 [node name="06" parent="PHOTO" instance=ExtResource("1_mtaom")]
-transform = Transform3D(0.953555, 0, 0.301239, 0, 1, 0, -0.301239, 0, 0.953555, 0.256897, -2.98023e-08, 0.0723137)
+transform = Transform3D(0.953555, 0, 0.301239, 0, 1, 0, -0.301239, 0, 0.953555, 0.355024, -2.98023e-08, 0.16753)
 book_rotation_angle = -100.0
 
 [node name="Letters" type="Node3D" parent="."]
@@ -2203,7 +2205,7 @@ shape = SubResource("BoxShape3D_a213g")
 transform = Transform3D(-0.200324, 0.00309218, -0.462515, -0.00763931, 0.503941, 0.0066779, 0.462463, 0.00966387, -0.200237, -0.320381, -0.00497455, 0.423577)
 
 [node name="BOOK" parent="." instance=ExtResource("24_yo2tw")]
-transform = Transform3D(-0.00381237, 0.000605107, -0.0622144, -0.00193464, 0.0622999, 0.000724488, 0.0621873, 0.00197523, -0.00379149, 0.0059235, 0.00750356, 0.303972)
+transform = Transform3D(-0.00381237, 0.000605107, -0.0622144, -0.00193464, 0.0622999, 0.000724488, 0.0621873, 0.00197523, -0.00379149, 0.0059235, 0.00750356, 0.272232)
 visible = false
 
 [node name="PLume_pot" parent="BOOK" instance=ExtResource("5_m8vsb")]
@@ -2236,7 +2238,7 @@ layers = 2
 surface_material_override/0 = ExtResource("6_kkuc8")
 
 [node name="Book_Close_root" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0286603, 0.000346512, 0.228803)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0374565, 0.000346512, 0.244821)
 
 [node name="Close_book" type="Node" parent="Book_Close_root"]
 script = ExtResource("24_4lsou")
@@ -2307,7 +2309,7 @@ skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("ShaderMaterial_u4lgv")
 
 [node name="TUBE_oddity" type="Node3D" parent="."]
-transform = Transform3D(-0.00525478, 0, 0.39937, 0, 0.00522373, 0, -0.260425, 0, -0.00805836, 0.642994, 0.00372949, -0.191009)
+transform = Transform3D(-0.00525478, 0, 0.39937, 0, 0.00522373, 0, -0.260425, 0, -0.00805836, 0.509559, 0.00372949, -0.401705)
 
 [node name="Area3D" type="Area3D" parent="TUBE_oddity"]
 transform = Transform3D(-1.15935, 0, -3.65986, 0, 191.434, 0, 2.38655, 0, -0.756002, -0.0537217, 25.6755, 0.0456088)
@@ -2342,6 +2344,36 @@ surface_material_override/0 = ExtResource("35_jujjk")
 [node name="liquide" parent="TUBE_oddity/Tube_oddity" index="2"]
 layers = 2
 surface_material_override/0 = SubResource("ShaderMaterial_th3mc")
+
+[node name="Scanner" type="Node3D" parent="."]
+transform = Transform3D(0.952518, 0, 0.304482, 0, 1, 0, -0.304482, 0, 0.952518, 0.187925, -5.96046e-08, -0.105613)
+
+[node name="Scanner_position" type="Node" parent="Scanner"]
+script = ExtResource("37_uvhhd")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Scanner"]
+transform = Transform3D(0.672948, 0, -2.98023e-08, 0, 0.672948, 0, 2.98023e-08, 0, 0.672948, 0, 0.199, 0)
+layers = 128
+omni_range = 0.240332
+
+[node name="base" type="MeshInstance3D" parent="Scanner"]
+transform = Transform3D(0.175219, 0, -0.000137575, 0, 0.0189731, 0, 0.000137575, 0, 0.175219, 0, 0.017, 0)
+layers = 2
+mesh = SubResource("CylinderMesh_xsjxl")
+skeleton = NodePath("")
+
+[node name="base2" type="MeshInstance3D" parent="Scanner"]
+transform = Transform3D(0.0774053, 0, -6.07874e-05, 0, 0.00436467, 0, 6.07874e-05, 0, 0.0774053, 0, 0.038, 0)
+visible = false
+layers = 2
+mesh = SubResource("CylinderMesh_xsjxl")
+skeleton = NodePath("")
+surface_material_override/0 = ExtResource("5_8m368")
+
+[node name="Scanner_pos" type="Node3D" parent="Scanner"]
+transform = Transform3D(-1, 0, 1.49012e-07, 0, 1, 0, -1.49012e-07, 0, -1, -0.00278953, 0.0288415, -0.0008917)
+
+[node name="Render_root" parent="Scanner/Scanner_pos" instance=ExtResource("39_cgt4d")]
 
 [node name="Apicula_maquette_v01blend" parent="." instance=ExtResource("31_xntsl")]
 transform = Transform3D(0.0349872, 0, 0.0171287, 0, 0.0389551, 0, -0.0171287, 0, 0.0349872, -0.340182, 0.0960339, -0.311156)

@@ -145,6 +145,15 @@ var board_camera : Camera3D
 var zoom_value : float
 var Cursor_mode : Node
 
+
+# OPEN_board_scanner
+
+
+signal open_board_scanner(condition : bool, scanner_data : PackedScene)
+var in_scanner_board_mode : bool = false
+var scanner_position : Vector3
+
+
 signal ui_noted_taked
 signal map_fade(condition : bool) # true is in : false is out
 signal send_bird_responce
@@ -156,8 +165,7 @@ var question_node : Node3D = null
 signal responce_chose(text : String)
 var active_quest : Note_Data = null
 
-signal turn_left
-signal turn_right
+
 
 #type text responce
 signal type_text_mod(condition : bool)

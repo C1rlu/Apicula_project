@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=3 uid="uid://cein0q2eirkay"]
+[gd_scene load_steps=53 format=3 uid="uid://cein0q2eirkay"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_g3pi7"]
 [ext_resource type="Script" path="res://10_BOARD/Board_CamTarget.gd" id="1_janbq"]
@@ -15,6 +15,7 @@
 [ext_resource type="Material" uid="uid://5qv6cc3a63nt" path="res://05_SHADER_TEST/Full_screen/04_board_simple_disolved.tres" id="7_fiqjo"]
 [ext_resource type="Script" path="res://10_BOARD/Player_onMap.gd" id="7_vhvc2"]
 [ext_resource type="Material" uid="uid://t4qtyso7w6ee" path="res://05_SHADER_TEST/Board/board_boat.tres" id="8_et36p"]
+[ext_resource type="Script" path="res://10_BOARD/Board_Sanner.gd" id="10_v23j0"]
 [ext_resource type="Script" path="res://10_BOARD/Link_Opacity.gd" id="12_vtjlf"]
 [ext_resource type="Script" path="res://10_BOARD/type_responce_hand.gd" id="13_qhohh"]
 [ext_resource type="Script" path="res://10_BOARD/Switch_Cursor_icon.gd" id="19_t6o6e"]
@@ -258,29 +259,50 @@ var offset: Vector3
 
 @onready var cam_target = $\"../3D_SCENE/CamTarget\"
 @export var _all_cam_array : Array[Node3D]
-@onready var camera_xray = $\"../3D_SCENE/Camp_root_XRay/Camera_xray\"
-@onready var camera_3d = $\"../3D_SCENE/SubViewport/Camp_root_Render/Camera3D\"
+
+
 @onready var camp_root_render = $\"../3D_SCENE/SubViewport/Camp_root_Render\"
 
+@onready var camera_xray = $\"../3D_SCENE/Camp_root_XRay/Camera_xray\"
+@onready var camera_3d = $\"../3D_SCENE/SubViewport/Camp_root_Render/Camera3D\"
+
+@onready var cam_scanner = $\"../3D_SCENE/SubViewport_scanner/Camp_root_Render_scanner/Camera3D_scanner\"
+
+@onready var camera_3d_scanner_value = $\"../3D_SCENE/SCANNER_se/Camera3D_scanner_value\"
+
+
+var cam_focus : Vector3
 
 func _ready():
 
 	offset = _all_cam_array[0].global_position - cam_target.global_position
-
+	
+	
 func _physics_process(_delta):
+	
+	
 	
 	if !_global_datas.Player_In_Inventory:
 		return
 		
-	var playerPosition = cam_target.global_position
-	for cam in _all_cam_array:
-		cam.global_position = lerp(cam.global_position, playerPosition + offset, smooth_speed * _delta)	
+	if _global_datas.in_scanner_board_mode:
+		cam_focus = camera_3d_scanner_value.global_position	
+		for cam in _all_cam_array:
+			cam.global_position = lerp(cam.global_position, cam_focus, smooth_speed * _delta)		
+	else:
+		cam_focus = cam_target.global_position	
+		for cam in _all_cam_array:
+			cam.global_position = lerp(cam.global_position, cam_focus + offset, smooth_speed * _delta)		
+	
+	
 		
 	rotation_angle(_delta)	
 	
 	camera_xray.global_position = camera_3d.global_position
 	camera_xray.global_rotation  = camera_3d.global_rotation 
 	
+	cam_scanner.global_position = camera_3d.global_position
+	cam_scanner.global_rotation  = camera_3d.global_rotation 	
 
 func rotation_angle(_delta):
 
@@ -422,6 +444,12 @@ shader = SubResource("VisualShader_js3pr")
 [sub_resource type="ViewportTexture" id="ViewportTexture_gpfe8"]
 viewport_path = NodePath("3D_SCENE/SubViewport")
 
+[sub_resource type="ViewportTexture" id="ViewportTexture_3wj7s"]
+viewport_path = NodePath("3D_SCENE/SubViewport_scanner")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_nk8dl"]
+viewport_path = NodePath("3D_SCENE/SCANNER_se")
+
 [sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_yrkdd"]
 size = Vector2(513.781, 284.487)
 expression = "vec2 n_uv = UV -0.5;
@@ -543,24 +571,27 @@ script = SubResource("GDScript_1a2yk")
 
 [node name="Active_3D_scene" type="Node" parent="." node_paths=PackedStringArray("viewports")]
 script = ExtResource("1_n6a4y")
-viewports = [NodePath("../3D_SCENE/SubViewport")]
+viewports = [NodePath("../3D_SCENE/SubViewport"), NodePath("../3D_SCENE/SubViewport_scanner")]
 
 [node name="Fade" type="Node" parent="."]
 script = SubResource("GDScript_52477")
 
 [node name="set_Resolution" type="Node" parent="." node_paths=PackedStringArray("viewports")]
 script = ExtResource("1_g3pi7")
-viewports = [NodePath("../3D_SCENE/SubViewport")]
+viewports = [NodePath("../3D_SCENE/SubViewport"), NodePath("../3D_SCENE/SubViewport_scanner")]
 
 [node name="ZOOM_Behaviour" type="Node" parent="."]
 script = SubResource("GDScript_00hwt")
 
 [node name="Cam_follow" type="Node" parent="." node_paths=PackedStringArray("_all_cam_array")]
 script = SubResource("GDScript_q7x8f")
-_all_cam_array = [NodePath("../3D_SCENE/SubViewport/Camp_root_Render"), NodePath("../3D_SCENE/Camp_root_XRay")]
+_all_cam_array = [NodePath("../3D_SCENE/SubViewport/Camp_root_Render"), NodePath("../3D_SCENE/Camp_root_XRay"), NodePath("../3D_SCENE/SubViewport_scanner/Camp_root_Render_scanner")]
 
 [node name="Input_switch" type="Node" parent="."]
 script = ExtResource("2_00g5f")
+
+[node name="Board_Sanner" type="Node" parent="."]
+script = ExtResource("10_v23j0")
 
 [node name="Pad_clic_raycast" type="Node" parent="."]
 script = ExtResource("3_rqf42")
@@ -684,6 +715,23 @@ text = "..."
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="SubViewport_scanner" type="SubViewport" parent="3D_SCENE"]
+transparent_bg = true
+handle_input_locally = false
+scaling_3d_scale = 0.9
+size = Vector2i(1920, 1080)
+
+[node name="Camp_root_Render_scanner" type="Node3D" parent="3D_SCENE/SubViewport_scanner"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.38419e-07)
+
+[node name="Camera3D_scanner" type="Camera3D" parent="3D_SCENE/SubViewport_scanner/Camp_root_Render_scanner"]
+transform = Transform3D(0.994881, 0.0700724, -0.072816, 0, 0.720551, 0.693402, 0.101056, -0.689852, 0.716862, -0.08, 0.945, 1.035)
+cull_mask = 384
+current = true
+fov = 40.0
+far = 4.25
+script = SubResource("GDScript_l5hmx")
+
 [node name="RENDER" type="TextureRect" parent="3D_SCENE"]
 material = ExtResource("7_fiqjo")
 anchors_preset = 15
@@ -692,6 +740,40 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("ViewportTexture_gpfe8")
+expand_mode = 3
+
+[node name="SCANNER" type="TextureRect" parent="3D_SCENE"]
+material = ExtResource("7_fiqjo")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("ViewportTexture_3wj7s")
+expand_mode = 3
+
+[node name="SCANNER_se" type="SubViewport" parent="3D_SCENE"]
+transparent_bg = true
+handle_input_locally = false
+scaling_3d_scale = 0.9
+size = Vector2i(1920, 1080)
+
+[node name="Camera3D_scanner_value" type="Camera3D" parent="3D_SCENE/SCANNER_se"]
+transform = Transform3D(0.964557, 0.106485, -0.241433, 0, 0.91496, 0.403545, 0.263873, -0.389243, 0.882531, 0.119, 0.17, 0.143)
+cull_mask = 130
+current = true
+fov = 40.0
+far = 4.25
+
+[node name="SCANNER_se2" type="TextureRect" parent="3D_SCENE"]
+visible = false
+material = ExtResource("7_fiqjo")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("ViewportTexture_nk8dl")
 expand_mode = 3
 
 [node name="Pad_target" type="ColorRect" parent="3D_SCENE"]

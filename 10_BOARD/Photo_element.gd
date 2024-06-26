@@ -98,5 +98,5 @@ func _on_show_scanner():
 	if _global_datas.link_mode:
 		return
 	_global_datas.selected_photoData = Photo_data
-	_global_datas.show_on_scanner.emit(true)
-
+	#_global_datas.show_on_scanner.emit(true)
+	_global_datas.open_board_scanner.emit(true,Photo_data.scanner_prefab)
