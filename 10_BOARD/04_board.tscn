@@ -258,9 +258,6 @@ var smooth_speed = 3.0
 var offset: Vector3
 
 @onready var cam_target = $\"../3D_SCENE/CamTarget\"
-@export var _all_cam_array : Array[Node3D]
-
-
 @onready var camp_root_render = $\"../3D_SCENE/SubViewport/Camp_root_Render\"
 
 @onready var camera_xray = $\"../3D_SCENE/Camp_root_XRay/Camera_xray\"
@@ -275,7 +272,7 @@ var cam_focus : Vector3
 
 func _ready():
 
-	offset = _all_cam_array[0].global_position - cam_target.global_position
+	offset = camp_root_render.global_position - cam_target.global_position
 	
 	
 func _physics_process(_delta):
@@ -286,14 +283,15 @@ func _physics_process(_delta):
 		return
 		
 	if _global_datas.in_scanner_board_mode:
+		
 		cam_focus = camera_3d_scanner_value.global_position	
-		for cam in _all_cam_array:
-			cam.global_position = lerp(cam.global_position, cam_focus, smooth_speed * _delta)		
+		camp_root_render.global_position = lerp(camp_root_render.global_position, cam_focus, smooth_speed * _delta)
+		camera_3d.global_rotation = camera_3d_scanner_value.global_rotation
+		return
 	else:
 		cam_focus = cam_target.global_position	
-		for cam in _all_cam_array:
-			cam.global_position = lerp(cam.global_position, cam_focus + offset, smooth_speed * _delta)		
-	
+		camp_root_render.global_position = lerp(camp_root_render.global_position, cam_focus + offset, smooth_speed * _delta)		
+
 	
 		
 	rotation_angle(_delta)	
@@ -583,9 +581,8 @@ viewports = [NodePath("../3D_SCENE/SubViewport"), NodePath("../3D_SCENE/SubViewp
 [node name="ZOOM_Behaviour" type="Node" parent="."]
 script = SubResource("GDScript_00hwt")
 
-[node name="Cam_follow" type="Node" parent="." node_paths=PackedStringArray("_all_cam_array")]
+[node name="Cam_follow" type="Node" parent="."]
 script = SubResource("GDScript_q7x8f")
-_all_cam_array = [NodePath("../3D_SCENE/SubViewport/Camp_root_Render"), NodePath("../3D_SCENE/Camp_root_XRay"), NodePath("../3D_SCENE/SubViewport_scanner/Camp_root_Render_scanner")]
 
 [node name="Input_switch" type="Node" parent="."]
 script = ExtResource("2_00g5f")
