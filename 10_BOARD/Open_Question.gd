@@ -10,7 +10,9 @@ signal On_click
 func _on_on_click():
 	
 	_global_datas.selected_question = link_responce
-	_global_datas.type_text_mod.emit(true)
+	
+	var note_data = $"..".Note_data
+	_global_datas.type_text_mod.emit(true,note_data)
 	
 	var offset = Vector3(0,0,-0.05)
 	_global_datas.focus_this_on_board.emit(letter_area.position +offset)

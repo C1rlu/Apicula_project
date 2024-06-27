@@ -158,7 +158,7 @@ var question_node : Node3D = null
 signal responce_chose(text : String)
 
 #type text responce
-signal type_text_mod(condition : bool)
+signal type_text_mod(condition : bool,note_data : Note_Data)
 var selected_question : Node = null
 var in_text_type_mod : bool = false
 
