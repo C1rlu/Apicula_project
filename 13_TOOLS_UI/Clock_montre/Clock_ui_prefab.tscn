@@ -1,0 +1,84 @@
+[gd_scene load_steps=4 format=3 uid="uid://clc3sbquuu1us"]
+
+[ext_resource type="PackedScene" uid="uid://6pkqjlcwbqu1" path="res://13_TOOLS_UI/Clock_montre/clock_3d_prefab.tscn" id="1_jit7w"]
+
+[sub_resource type="GDScript" id="GDScript_uwuod"]
+script/source = "extends Node
+
+@onready var render = $\"../Render\"
+@onready var clock_root = $\"../SubViewport/clock_3d_prefab/clock_3d/root_equille\"
+
+
+var t 
+
+func _ready():
+	_global_datas.send_bird_responce.connect(_start_clock)
+	_global_datas._open_dialogue.connect(_done)	
+
+
+func _start_clock():
+	
+	render.visible = true
+	
+	if t:
+		t.kill()
+		
+	t = create_tween()
+	t.tween_method(_value,0.0,1440,10.0)
+	
+
+func _done():
+	
+	render.visible = false
+	if t:
+		t.kill()	
+				
+func _value(value : float):
+	clock_root.rotation_degrees.y = value
+
+"
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_t3k0a"]
+viewport_path = NodePath("SubViewport")
+
+[node name="Clock" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Time" type="Node" parent="."]
+script = SubResource("GDScript_uwuod")
+
+[node name="Render" type="TextureRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -122.0
+offset_top = -128.0
+offset_right = 134.0
+offset_bottom = 128.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.8, 0.8)
+texture = SubResource("ViewportTexture_t3k0a")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(256, 256)
+
+[node name="clock_3d_prefab" parent="SubViewport" instance=ExtResource("1_jit7w")]
+
+[node name="Camera3D" type="Camera3D" parent="SubViewport"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1, -0.11)
+cull_mask = 524288
+projection = 1
+fov = 40.7
+size = 2.0
+
+[editable path="SubViewport/clock_3d_prefab"]
+[editable path="SubViewport/clock_3d_prefab/clock_3d"]

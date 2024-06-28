@@ -145,8 +145,8 @@ signal mouse_raycast
 var board_camera : Camera3D
 var zoom_value : float
 var Cursor_mode : Node
-
-
+signal close_all_over_ui
+signal show_element_on_board(value : int)
 
 signal ui_noted_taked
 signal map_fade(condition : bool) # true is in : false is out

@@ -1,17 +1,18 @@
-[gd_scene load_steps=201 format=3 uid="uid://dr73p5vs0sixe"]
+[gd_scene load_steps=217 format=3 uid="uid://dr73p5vs0sixe"]
 
 [ext_resource type="PackedScene" uid="uid://cyb6my1srlcpw" path="res://10_BOARD/Candle/Candle_set.blend" id="1_3ummb"]
 [ext_resource type="Script" path="res://10_BOARD/photos_check.gd" id="1_bcxwj"]
 [ext_resource type="Shader" uid="uid://upo0fuo5sqgd" path="res://05_SHADER_TEST/Board/Board_sh.tres" id="1_k1enu"]
 [ext_resource type="PackedScene" uid="uid://c1a6gtlbfww5v" path="res://10_BOARD/Map/Lanterne/Lanterne.blend" id="1_l5l52"]
 [ext_resource type="PackedScene" uid="uid://uwg2qc3svu11" path="res://10_BOARD/photo_area.tscn" id="1_mtaom"]
-[ext_resource type="Script" path="res://10_BOARD/Map_fade.gd" id="2_0hc6q"]
 [ext_resource type="Shader" uid="uid://cw0x3o7tvvdcv" path="res://12_INVENTORY/Map/Map_board_sh.tres" id="3_vh83x"]
 [ext_resource type="Resource" uid="uid://cooqi0giysm3w" path="res://12_INVENTORY/Photo/MrBirs_photoData.tres" id="4_t8cpb"]
 [ext_resource type="Material" uid="uid://dvbomu5aenq4x" path="res://05_SHADER_TEST/Board/board_candle.tres" id="5_8m368"]
 [ext_resource type="PackedScene" uid="uid://bru8c4c70eohg" path="res://10_BOARD/Decor/PLume_pot.blend" id="5_m8vsb"]
+[ext_resource type="Script" path="res://10_BOARD/Active_scene_object.gd" id="6_20hrj"]
 [ext_resource type="Material" uid="uid://5cye33kgwfo5" path="res://10_BOARD/Shading/Board_shading_base.tres" id="6_kkuc8"]
 [ext_resource type="Resource" uid="uid://ctxrmh1elpnm1" path="res://12_INVENTORY/Photo/Oddity_photoData/Follower_photoData.tres" id="8_mk0a6"]
+[ext_resource type="PackedScene" uid="uid://6pkqjlcwbqu1" path="res://13_TOOLS_UI/Clock_montre/clock_3d_prefab.tscn" id="8_x5b6k"]
 [ext_resource type="PackedScene" uid="uid://qgyjfq88teq8" path="res://10_BOARD/letters_area.tscn" id="9_ajmma"]
 [ext_resource type="Resource" uid="uid://bcid58kxecbk2" path="res://12_INVENTORY/Photo/Maurice_photoData.tres" id="10_f1pwj"]
 [ext_resource type="Resource" uid="uid://61umivwjjcjs" path="res://12_INVENTORY/Words_note/Birds_goLighthouse_note.tres" id="10_shcmw"]
@@ -1034,12 +1035,177 @@ shader = SubResource("VisualShader_qmtsp")
 shader_parameter/ColorParameter = Color(0.0235294, 0.176471, 0.2, 1)
 shader_parameter/light_color = Color(0.678431, 0.529412, 0.286275, 1)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_sn3g6"]
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_ktulk"]
+constant = 0.826
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_rq8vc"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_7t568"]
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_5mi3t"]
+input_name = "uv"
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_047s3"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
+op_type = 3
+
+[sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_ig1jx"]
+parameter_name = "Gradiant"
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_ekqq1"]
+parameter_name = "Main_color"
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_0kx8l"]
+parameter_name = "Main_color_02"
+
+[sub_resource type="Gradient" id="Gradient_o0krw"]
+offsets = PackedFloat32Array(0, 0.528875, 0.547112, 0.984802)
+colors = PackedColorArray(1, 1, 1, 1, 0.0102558, 0.0102558, 0.0102558, 1, 0.0243161, 0.0243161, 0.0243161, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_2xai1"]
+gradient = SubResource("Gradient_o0krw")
+fill_from = Vector2(0, 1)
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_mohdy"]
+source = 5
+texture = SubResource("GradientTexture2D_2xai1")
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_j2fv7"]
+constant = 0.4
+
+[sub_resource type="VisualShader" id="VisualShader_wyc5y"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+
+uniform vec4 Main_color : source_color;
+uniform sampler2D Gradiant;
+uniform vec4 Main_color_02 : source_color;
+
+
+
+void fragment() {
+// ColorParameter:17
+	vec4 n_out17p0 = Main_color;
+
+
+// Input:13
+	vec2 n_out13p0 = UV;
+
+
+	vec4 n_out8p0;
+// Texture2D:8
+	n_out8p0 = texture(Gradiant, n_out13p0);
+
+
+// FloatConstant:10
+	float n_out10p0 = 0.826000;
+
+
+// FloatConstant:9
+	float n_out9p0 = 0.400000;
+
+
+	float n_out11p0;
+// Expression:11
+	n_out11p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out9p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out11p0 = n_out10p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Step:12
+	float n_out12p0 = step(n_out8p0.x, n_out11p0);
+
+
+// ColorParameter:18
+	vec4 n_out18p0 = Main_color_02;
+
+
+// Mix:14
+	vec3 n_out14p0 = mix(vec3(n_out17p0.xyz), vec3(n_out12p0), vec3(n_out18p0.xyz));
+
+
+// Output:0
+	ALBEDO = n_out14p0;
+
+
+}
+"
+graph_offset = Vector2(-1086.16, -364.74)
+flags/unshaded = true
+nodes/fragment/8/node = SubResource("VisualShaderNodeTexture_mohdy")
+nodes/fragment/8/position = Vector2(-1500, -380)
+nodes/fragment/9/node = SubResource("VisualShaderNodeFloatConstant_j2fv7")
+nodes/fragment/9/position = Vector2(-3000, -20)
+nodes/fragment/10/node = SubResource("VisualShaderNodeFloatConstant_ktulk")
+nodes/fragment/10/position = Vector2(-3000, -160)
+nodes/fragment/11/node = SubResource("VisualShaderNodeExpression_rq8vc")
+nodes/fragment/11/position = Vector2(-2680, 60)
+nodes/fragment/11/size = Vector2(724.789, 654.559)
+nodes/fragment/11/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/11/output_ports = "0,0,Dither_Node;"
+nodes/fragment/11/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/12/node = SubResource("VisualShaderNodeStep_7t568")
+nodes/fragment/12/position = Vector2(-1240, 400)
+nodes/fragment/13/node = SubResource("VisualShaderNodeInput_5mi3t")
+nodes/fragment/13/position = Vector2(-2080, -620)
+nodes/fragment/14/node = SubResource("VisualShaderNodeMix_047s3")
+nodes/fragment/14/position = Vector2(-220, 220)
+nodes/fragment/16/node = SubResource("VisualShaderNodeTexture2DParameter_ig1jx")
+nodes/fragment/16/position = Vector2(-2040, -420)
+nodes/fragment/17/node = SubResource("VisualShaderNodeColorParameter_ekqq1")
+nodes/fragment/17/position = Vector2(-660, -20)
+nodes/fragment/18/node = SubResource("VisualShaderNodeColorParameter_0kx8l")
+nodes/fragment/18/position = Vector2(-516.535, 450.105)
+nodes/fragment/connections = PackedInt32Array(9, 0, 11, 1, 10, 0, 11, 0, 11, 0, 12, 1, 16, 0, 8, 2, 12, 0, 14, 1, 17, 0, 14, 0, 14, 0, 0, 0, 8, 0, 12, 0, 18, 0, 14, 2, 13, 0, 8, 0)
+
+[sub_resource type="Gradient" id="Gradient_7iarl"]
+offsets = PackedFloat32Array(0, 0.544513, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_mglkp"]
+resource_local_to_scene = true
+gradient = SubResource("Gradient_7iarl")
+fill = 1
+fill_from = Vector2(0.461538, 0.602564)
+fill_to = Vector2(0, 0)
+repeat = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kqq05"]
 render_priority = 0
-shader = ExtResource("1_k1enu")
-shader_parameter/Dark_color = Color(0, 0, 0, 1)
-shader_parameter/ColorParameter = Color(0.239216, 0.207843, 0.12549, 1)
-shader_parameter/light_color = Color(0.701961, 0.580392, 0.286275, 1)
+shader = SubResource("VisualShader_wyc5y")
+shader_parameter/Main_color = Color(0.27451, 0.203922, 0.121569, 1)
+shader_parameter/Main_color_02 = Color(0.568627, 0.447059, 0.294118, 1)
+shader_parameter/Gradiant = SubResource("GradientTexture2D_mglkp")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jka2s"]
 render_priority = 0
@@ -1667,6 +1833,10 @@ omni_range = 1.6
 omni_attenuation = 1.14868
 omni_shadow_mode = 0
 
+[node name="Active_scene_object" type="Node" parent="." node_paths=PackedStringArray("object_list")]
+script = ExtResource("6_20hrj")
+object_list = [NodePath("../Deco/MAP")]
+
 [node name="Deco" type="Node3D" parent="."]
 
 [node name="Lanterne2" parent="Deco" instance=ExtResource("1_l5l52")]
@@ -1741,17 +1911,14 @@ layers = 2
 mesh = SubResource("BoxMesh_dyvqk")
 skeleton = NodePath("../../..")
 
-[node name="Map_texture" type="MeshInstance3D" parent="Deco"]
+[node name="MAP" type="MeshInstance3D" parent="Deco"]
 transform = Transform3D(0.41324, 0, 0.0460164, 0, 0.415794, 0, -0.0460164, 0, 0.41324, -0.224119, 0.00343798, -0.0120672)
 layers = 2
 mesh = SubResource("PlaneMesh_x8wfj")
 skeleton = NodePath("../../..")
 surface_material_override/0 = SubResource("ShaderMaterial_ok24o")
 
-[node name="Map_fade" type="Node" parent="Deco/Map_texture"]
-script = ExtResource("2_0hc6q")
-
-[node name="On_Over" type="MeshInstance3D" parent="Deco/Map_texture"]
+[node name="On_Over" type="MeshInstance3D" parent="Deco/MAP"]
 transform = Transform3D(0.44437, 0, -0.000342503, 0, 0.387303, 0, 0.000341229, 0, 0.445962, 0, 0.00562999, 0)
 visible = false
 layers = 2
@@ -1759,20 +1926,18 @@ mesh = SubResource("PlaneMesh_lnc1b")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("ShaderMaterial_3gbmy")
 
-[node name="Map_border" type="MeshInstance3D" parent="Deco/Map_texture"]
+[node name="Map_border" type="MeshInstance3D" parent="Deco/MAP"]
 transform = Transform3D(1.87617, 0, 0, 0, 1.87617, 0, 0, 0, 1.87617, 0, -0.00448075, 0)
 layers = 2
 mesh = SubResource("PlaneMesh_n7wwh")
 skeleton = NodePath("../../../..")
 
-[node name="Area3D" type="Area3D" parent="Deco/Map_texture"]
+[node name="Area3D" type="Area3D" parent="Deco/MAP"]
 
-[node name="On_Over" type="Node" parent="Deco/Map_texture/Area3D"]
+[node name="On_Over" type="Node" parent="Deco/MAP/Area3D"]
 script = ExtResource("23_4ws66")
 
-[node name="map_disable" type="Node" parent="Deco/Map_texture/Area3D"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Deco/Map_texture/Area3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Deco/MAP/Area3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000610292, 0.00323869, -0.000259392)
 shape = SubResource("BoxShape3D_cov0w")
 
@@ -1855,6 +2020,19 @@ mesh = SubResource("BoxMesh_v3rv8")
 skeleton = NodePath("../..")
 surface_material_override/0 = ExtResource("6_kkuc8")
 
+[node name="clock_3d" type="Node3D" parent="Deco"]
+transform = Transform3D(0.027966, 0, -0.00898967, 0, 0.0293754, 0, 0.00898967, 0, 0.027966, 0.000952188, 2.98023e-08, 0.446909)
+
+[node name="clock_3d_prefab" parent="Deco" instance=ExtResource("8_x5b6k")]
+transform = Transform3D(0.0286346, -1.44512e-05, -0.00768743, 1.43001e-05, 0.0296485, -2.46867e-06, 0.00768743, -1.32337e-06, 0.0286346, -0.00647841, -0.00191151, 0.476101)
+
+[node name="clock_all" parent="Deco/clock_3d_prefab/clock_3d" index="0"]
+transform = Transform3D(0.0662028, -4.54747e-13, 1.86265e-09, -3.9222e-12, 0.0662028, 1.13687e-12, 0, 4.54747e-13, 0.0662028, 0, 0, 0)
+layers = 2
+
+[node name="root_equille" parent="Deco/clock_3d_prefab/clock_3d" index="1"]
+layers = 2
+
 [node name="LINKS" type="Node3D" parent="."]
 
 [node name="link_01" type="MeshInstance3D" parent="LINKS"]
@@ -1922,6 +2100,7 @@ Note_data = ExtResource("17_3gp1t")
 
 [node name="Chavet_part" parent="." instance=ExtResource("20_d7w3e")]
 transform = Transform3D(0.0117306, 0, 0, 0, 0.0117306, 0, 0, 0, 0.0117306, -0.27688, 0.00290923, 0.169765)
+visible = false
 
 [node name="parts" parent="Chavet_part" index="0"]
 transform = Transform3D(0.651676, 0, 0, 0, 0.651676, 0, 0, 0, 0.651676, 0, 0, 0)
@@ -1930,6 +2109,7 @@ surface_material_override/0 = SubResource("ShaderMaterial_5i6u2")
 
 [node name="Chavet_part2" parent="." instance=ExtResource("20_d7w3e")]
 transform = Transform3D(0.0117306, 0, 0, 0, 0.0117306, 0, 0, 0, 0.0117306, -0.14054, 0.00290923, -0.0905033)
+visible = false
 
 [node name="parts" parent="Chavet_part2" index="0"]
 transform = Transform3D(0.651676, 0, 0, 0, 0.651676, 0, 0, 0, 0.651676, 0, 0, 0)
@@ -1938,6 +2118,7 @@ surface_material_override/0 = SubResource("ShaderMaterial_5i6u2")
 
 [node name="Chavet_part3" parent="." instance=ExtResource("20_d7w3e")]
 transform = Transform3D(0.0117306, 0, 0, 0, 0.0117306, 0, 0, 0, 0.0117306, -0.318234, 0.00290923, -0.140063)
+visible = false
 
 [node name="parts" parent="Chavet_part3" index="0"]
 transform = Transform3D(0.651676, 0, 0, 0, 0.651676, 0, 0, 0, 0.651676, 0, 0, 0)
@@ -1946,6 +2127,7 @@ surface_material_override/0 = SubResource("ShaderMaterial_5i6u2")
 
 [node name="Chavet_part4" parent="." instance=ExtResource("20_d7w3e")]
 transform = Transform3D(0.0117306, 0, 0, 0, 0.0117306, 0, 0, 0, 0.0117306, -0.394746, 0.00290923, -0.013626)
+visible = false
 
 [node name="parts" parent="Chavet_part4" index="0"]
 transform = Transform3D(0.651676, 0, 0, 0, 0.651676, 0, 0, 0, 0.651676, 0, 0, 0)
@@ -1969,7 +2151,7 @@ transform = Transform3D(0.178537, 0, 0, 0, 0.178537, 0, 0, 0, 0.178537, -0.01676
 [node name="bell" parent="Bell" index="0"]
 transform = Transform3D(0.765345, 0, 0.146205, 0, 0.779185, 0, -0.146205, 0, 0.765345, 1.27864, 0.0411412, 1.89254)
 layers = 2
-surface_material_override/0 = SubResource("ShaderMaterial_sn3g6")
+surface_material_override/0 = SubResource("ShaderMaterial_kqq05")
 surface_material_override/1 = SubResource("ShaderMaterial_jka2s")
 
 [node name="Area3D" type="Area3D" parent="Bell"]
@@ -2148,6 +2330,8 @@ skeleton = NodePath("")
 [editable path="Deco/Candle_set"]
 [editable path="Deco/Candle_set3"]
 [editable path="Deco/Candle_set2"]
+[editable path="Deco/clock_3d_prefab"]
+[editable path="Deco/clock_3d_prefab/clock_3d"]
 [editable path="Chavet_part"]
 [editable path="Chavet_part2"]
 [editable path="Chavet_part3"]

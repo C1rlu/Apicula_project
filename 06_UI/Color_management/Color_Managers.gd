@@ -11,6 +11,7 @@ func _ready():
 	_global_datas._backFrom_subscene.connect(_NormalColor_mainScene)
 	#_global_datas._open_menu.connect(_open)
 	_global_datas._active_progress_subscene.connect(_open)
+	_global_datas.send_bird_responce.connect(_Darker_mainScene)
 	#ACTIVE DITHER
 	RenderingServer.global_shader_parameter_set("Subscene_mirror_alpha", 0.0)
 	RenderingServer.global_shader_parameter_set("active_Dither", true)
