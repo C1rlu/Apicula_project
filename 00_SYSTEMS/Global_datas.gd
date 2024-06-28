@@ -57,6 +57,7 @@ signal _active_go_subscene_button(condition : bool)
 signal _active_world_grid(condition : bool)
 signal _teleport_boat_at_pos(position : Vector3)
 signal _boat_inside_zone(condition : bool)
+
 # dialogue signals
 signal in_dialogue_zone
 signal out_dialogue_zone
@@ -67,7 +68,7 @@ signal _update_cam_focus(position : Vector3)
 
 # for save game
 var photo_archives : Array[PhotoData] 
-var note_archives : Array[Note_Data]
+var active_queste : Note_Data
 var boue_archives : Array[BoueData]
 var tools_list : Array[tool_data]
 

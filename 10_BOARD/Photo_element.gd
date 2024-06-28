@@ -87,7 +87,8 @@ func show_this_on_book():
 	
 	
 func _on_show_this_page():
-
+	if _global_datas.link_mode:
+		return	
 	show_this_on_book()	
 	_global_datas._add_back_call.emit(back_call)
 	

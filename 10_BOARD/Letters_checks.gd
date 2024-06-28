@@ -1,17 +1,14 @@
 extends Node3D
 
-@export var all_question_note : Array[Note_Data]
+@export var active_quest : Note_Data
 
 var all_note : Array
 
 func _ready():
 	all_note = get_children()
 
-	for n in all_question_note:
-		_global_datas.note_archives.append(n)	
-		
 	_global_datas.open_inventory.connect(_check_found)
-
+	_global_datas.active_queste = active_quest
 	disable()	
 	
 func disable():
@@ -25,9 +22,9 @@ func _check_found(condition : bool):
 	if !condition:
 		return
 		
-	for e in all_note:
-		if check_photo_exist(e.Note_data):
-			e._active()	
+	#disable()
+	if _global_datas.active_queste:
+		_global_datas.active_queste.scene_node_3d._active()
 	
 func check_photo_exist(note_Data):
 

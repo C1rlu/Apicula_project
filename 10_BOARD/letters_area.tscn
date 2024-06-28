@@ -1,10 +1,7 @@
-[gd_scene load_steps=27 format=3 uid="uid://qgyjfq88teq8"]
+[gd_scene load_steps=26 format=3 uid="uid://qgyjfq88teq8"]
 
-[ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="1_48ie6"]
-[ext_resource type="Script" path="res://10_BOARD/Open_Question.gd" id="1_d47fj"]
 [ext_resource type="Script" path="res://10_BOARD/Link_responce.gd" id="3_54k2s"]
 [ext_resource type="Shader" uid="uid://upo0fuo5sqgd" path="res://05_SHADER_TEST/Board/Board_sh.tres" id="3_ydeap"]
-[ext_resource type="Texture2D" uid="uid://bdjajva1q5ylp" path="res://10_BOARD/00_BOOK/01_UI/cursor_link.png" id="4_nsa85"]
 
 [sub_resource type="GDScript" id="GDScript_ypp87"]
 script/source = "extends Area3D
@@ -15,13 +12,14 @@ script/source = "extends Area3D
 @onready var photo = $photo
 @onready var note_text = $Render_text
 @onready var note = $Note
-@export var question_button : book_button_data
+
+@onready var render_responce = $Render_responce
 
 signal responce_link(text : String)
 
 func _ready():
 	note._set_note(Note_data.note_text,Note_data.from)
-	
+	Note_data.scene_node_3d = self
 func _active():
 	collision_shape_3d.disabled = false	
 
@@ -34,7 +32,7 @@ func _disable_object():
 
 	photo.visible = false
 	note_text.visible = false
-
+	render_responce.visible = false
 	
 "
 
@@ -47,6 +45,52 @@ script/source = "extends Node
 func _set_note(_text : String, _from: String):
 	note.text = _text
 	from.text = _from
+"
+
+[sub_resource type="GDScript" id="GDScript_cd8np"]
+script/source = "extends Node
+
+@export var _on_over : Node3D
+@export var _on_over_second: Node3D
+@export var icon_type : icon_class.icon_list
+
+
+func on_over(condition):
+	
+	
+	if _on_over:
+		_on_over.visible = condition	
+	if _on_over_second:
+		_on_over_second.visible = condition
+		
+	_global_datas.switch_icon_cursor.emit(icon_type)
+"
+
+[sub_resource type="GDScript" id="GDScript_crmjj"]
+script/source = "extends Node
+
+@onready var letter_area = $\"..\"
+@onready var n_text = $\"../Text_render/text\"
+
+@onready var link_responce = $\"../Link_responce\"
+
+signal On_click
+
+func _on_on_click():
+	
+
+		
+	_global_datas.book_back_idle_position.emit(false)
+	_global_datas.selected_question = link_responce
+	
+	#var note_data = $\"..\".Note_data
+	#_global_datas.type_text_mod.emit(true,note_data)
+	#var offset = Vector3(0,0,-0.05)
+	#_global_datas.focus_this_on_board.emit(letter_area.position +offset)
+	
+
+	_global_datas.question_node = letter_area	
+	_global_datas.responce_link_mode.emit(true,n_text.text)
 "
 
 [sub_resource type="QuadMesh" id="QuadMesh_2j3jf"]
@@ -260,13 +304,13 @@ script = SubResource("GDScript_ypp87")
 [node name="Note" type="Node" parent="."]
 script = SubResource("GDScript_4uwx0")
 
-[node name="On_Over" type="Node" parent="." node_paths=PackedStringArray("_on_over")]
-script = ExtResource("1_48ie6")
+[node name="On_Over_off" type="Node" parent="." node_paths=PackedStringArray("_on_over")]
+script = SubResource("GDScript_cd8np")
 _on_over = NodePath("../IS_SELECT")
 icon_type = 1
 
-[node name="On_click" type="Node" parent="."]
-script = ExtResource("1_d47fj")
+[node name="On_click_off" type="Node" parent="."]
+script = SubResource("GDScript_crmjj")
 
 [node name="Link_responce" type="Node" parent="."]
 script = ExtResource("3_54k2s")
@@ -289,21 +333,6 @@ mesh = SubResource("QuadMesh_4umhe")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("ShaderMaterial_e1a31")
 
-[node name="Render_ui_scan" type="Sprite3D" parent="."]
-transform = Transform3D(0.00829436, -0.000544659, -3.81677e-05, 3.86134e-05, 5.53553e-06, 0.00831224, -0.000544633, -0.00829436, 8.05369e-06, 0.0325171, 0.0059832, -0.0310347)
-visible = false
-layers = 2
-sorting_offset = 3.0
-modulate = Color(0.796078, 0.768627, 0.639216, 1)
-texture = ExtResource("4_nsa85")
-
-[node name="Render_ui_scan" type="Sprite3D" parent="Render_ui_scan"]
-transform = Transform3D(1, 2.04891e-08, -2.13367e-09, -2.38419e-07, 1, 5.23869e-10, 5.81167e-10, 3.49246e-10, 1, -0.00988793, -0.135393, -0.00247461)
-layers = 2
-sorting_offset = 2.0
-modulate = Color(0.0392157, 0.172549, 0.184314, 1)
-texture = ExtResource("4_nsa85")
-
 [node name="Render_text" type="Sprite3D" parent="."]
 transform = Transform3D(0.0136498, 0, 0, 0, -5.96652e-10, 0.0136498, 0, -0.0136498, -5.96652e-10, 0.000475392, 0.0021256, 0)
 layers = 2
@@ -312,6 +341,7 @@ texture = SubResource("ViewportTexture_lq3n1")
 
 [node name="Render_responce" type="Sprite3D" parent="."]
 transform = Transform3D(0.0136338, -0.000659889, -2.88447e-11, -2.93582e-18, -5.96652e-10, 0.0136498, -0.000659889, -0.0136338, -5.95954e-10, 0.00944054, 0.0021256, 0.0300797)
+visible = false
 layers = 2
 modulate = Color(0.929412, 0.92549, 0.909804, 1)
 texture = SubResource("ViewportTexture_trjqt")
@@ -377,4 +407,4 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [connection signal="responce_link" from="." to="Link_responce" method="_on_letter_area_responce_link"]
-[connection signal="On_click" from="On_click" to="On_click" method="_on_on_click"]
+[connection signal="On_click" from="On_click_off" to="On_click_off" method="_on_on_click"]

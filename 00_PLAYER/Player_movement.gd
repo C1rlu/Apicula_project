@@ -45,7 +45,8 @@ func _physics_process(_delta):
 		return	
 	if _global_datas.Player_InDialogue:
 		return	
-		
+	if _global_datas.Waiting_bird:
+		return	
 	var translation = get_global_transform().origin
 	_global_datas.player_position = translation
 	_global_datas.player_boat_rotation = rotation

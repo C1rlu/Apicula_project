@@ -19,14 +19,14 @@ func link_mode(condition : bool, _text : String):
 	
 	
 				
-	#card.visible = condition	
-	#text.text = _text	
-	#_global_datas.link_mode = condition
-		#
-	#if previous_note:
-		#previous_note.visible = true
-		#previous_note = null
-	#_global_datas.question_node.visible = !condition
+	card.visible = condition	
+	text.text = _text	
+	_global_datas.link_mode = condition
+		
+	if previous_note:
+		previous_note.visible = true
+		previous_note = null
+	_global_datas.question_node.visible = !condition
 
 	if t:
 		t.kill()
@@ -35,7 +35,7 @@ func link_mode(condition : bool, _text : String):
 		t = create_tween()
 		t.tween_method(change_value,current_value,1.0,0.5)
 		_global_datas._add_back_call.emit(_leave_link_mode)
-		#previous_note = _global_datas.question_node
+		previous_note = _global_datas.question_node
 	else:
 		t = create_tween()
 		t.tween_method(change_value,current_value,0.0,0.5)	
@@ -49,8 +49,8 @@ func chose_responce(_text):
 
 	
 func _leave_link_mode():
-	link_mode(false,"null")	
-	
+	#link_mode(false,"null")	
+	_global_datas.responce_link_mode.emit(false,"null")
 		
 func change_value(value : float):
 	RenderingServer.global_shader_parameter_set("link_opacity", value)

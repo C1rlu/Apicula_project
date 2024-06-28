@@ -27,5 +27,5 @@ func _intance_letter(note_name: String):
 	var text = new_node.get_node_or_null("Update_words")	
 	var load_data : Note_Data = load(constant_string)
 	text._update_words(load_data.note_text,load_data.from)
-	_global_datas.note_archives.append(load_data)
-
+	#_global_datas.note_archives.append(load_data)
+	_global_datas.active_queste = load_data

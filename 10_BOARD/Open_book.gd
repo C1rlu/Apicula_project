@@ -4,7 +4,13 @@ extends Node
 
 signal On_click
 
+
+
 func show_this_on_book():
+	
+	
+	if _global_datas.link_mode:
+			return	
 	
 	if _global_datas.selected_photoData == null:
 		_global_datas.selected_photoData = photo_data_first
