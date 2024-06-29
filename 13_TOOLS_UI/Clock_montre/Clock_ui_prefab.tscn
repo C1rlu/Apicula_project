@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://clc3sbquuu1us"]
 
-[ext_resource type="PackedScene" uid="uid://6pkqjlcwbqu1" path="res://13_TOOLS_UI/Clock_montre/clock_3d_prefab.tscn" id="1_jit7w"]
+[ext_resource type="PackedScene" uid="uid://b04qmdjf73spd" path="res://13_TOOLS_UI/Clock_montre/clock_3d_ui_prefab.tscn" id="1_71jwj"]
 
 [sub_resource type="GDScript" id="GDScript_uwuod"]
 script/source = "extends Node
@@ -34,7 +34,7 @@ func _done():
 		t.kill()	
 				
 func _value(value : float):
-	clock_root.rotation_degrees.y = value
+	clock_root.rotation_degrees.y = -value
 
 "
 
@@ -71,7 +71,7 @@ texture = SubResource("ViewportTexture_t3k0a")
 transparent_bg = true
 size = Vector2i(256, 256)
 
-[node name="clock_3d_prefab" parent="SubViewport" instance=ExtResource("1_jit7w")]
+[node name="clock_3d_prefab" parent="SubViewport" instance=ExtResource("1_71jwj")]
 
 [node name="Camera3D" type="Camera3D" parent="SubViewport"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1, -0.11)
@@ -79,6 +79,3 @@ cull_mask = 524288
 projection = 1
 fov = 40.7
 size = 2.0
-
-[editable path="SubViewport/clock_3d_prefab"]
-[editable path="SubViewport/clock_3d_prefab/clock_3d"]

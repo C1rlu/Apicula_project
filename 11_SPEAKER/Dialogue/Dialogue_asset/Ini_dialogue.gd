@@ -7,11 +7,11 @@ signal up_dialogue_index
 @onready var state = {
 	
 	"give_letter" : _global_datas._give_letter,	
-	"take_note":_global_datas._take_note,
 	"up_dialogue_index" : up_dialogue_index,
 	"cam_focus" : _global_datas._update_cam_focus,
 	"up_page_info_state" : null,
-	"give_board_item" : _global_datas.show_element_on_board
+	"give_board_item" : _global_datas.show_element_on_board,
+	"active_queste_done" : null,
 }
 
 func _ready():
@@ -57,15 +57,15 @@ func _on_ez_dialogue_custom_signal_received(value):
 			var camera_state = variable_value.to_int()	
 			state[variable_name].emit(camera_state)
 			
-		if variable_name == "give_letter":
-				var note_name = params[2]
-				state[variable_name].emit(note_name)
-				_global_datas._hide_dialogue_box.emit()
+		if variable_name == "active_queste_done":
+				_global_datas.active_queste.done = true
+				print(_global_datas.active_queste.done)
 				
-		if variable_name == "take_note":
-				var _note_name = params[2]
-				state[variable_name].emit(_note_name)
-				_global_datas._hide_dialogue_box.emit()
+		if variable_name == "give_letter":
+				var index = params[2]
+				var _index_int : int = int(index)
+				state[variable_name].emit(_index_int)	
+				
 		if variable_name == "up_dialogue_index":
 			up_dialogue_index.emit()	
 		

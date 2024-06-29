@@ -1,12 +1,8 @@
-[gd_scene load_steps=39 format=3 uid="uid://6pkqjlcwbqu1"]
+[gd_scene load_steps=37 format=3 uid="uid://b04qmdjf73spd"]
 
-[ext_resource type="Script" path="res://10_BOARD/On_Click_clock.gd" id="1_4hlwm"]
-[ext_resource type="PackedScene" uid="uid://c50aeg7d1nugi" path="res://13_TOOLS_UI/Clock_montre/clock_3d.blend" id="1_rylyw"]
-[ext_resource type="Material" uid="uid://6wrt67enhwi2" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_mat_01.tres" id="2_3cdak"]
-[ext_resource type="Shader" uid="uid://db5bcfw5o30ce" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_01.tres" id="3_tbtff"]
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_t0fwk"]
-size = Vector3(1.59534, 0.703857, 1.86029)
+[ext_resource type="PackedScene" uid="uid://c50aeg7d1nugi" path="res://13_TOOLS_UI/Clock_montre/clock_3d.blend" id="2_uga6o"]
+[ext_resource type="Material" uid="uid://6wrt67enhwi2" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_mat_01.tres" id="3_4prou"]
+[ext_resource type="Shader" uid="uid://db5bcfw5o30ce" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_01.tres" id="4_q0hqm"]
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_ch0br"]
 constant = 0.826
@@ -348,28 +344,18 @@ fill_to = Vector2(0.555556, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_xpub6"]
 render_priority = 0
-shader = ExtResource("3_tbtff")
+shader = ExtResource("4_q0hqm")
 shader_parameter/Main_color = Color(0.0588235, 0.141176, 0.145098, 1)
 shader_parameter/Main_color_02 = Color(0.444546, 0.342102, 0.216623, 1)
 shader_parameter/Gradiant = SubResource("GradientTexture2D_bbkqx")
 
 [node name="clock_3d_prefab" type="Node3D"]
 
-[node name="Area3D" type="Area3D" parent="."]
-transform = Transform3D(1, -2.36469e-11, 0, 4.09273e-11, 1, -7.27596e-12, 2.98023e-08, -7.27596e-12, 1, 0, 0, 0)
-
-[node name="On_click" type="Node" parent="Area3D"]
-script = ExtResource("1_4hlwm")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
-transform = Transform3D(1, -1.25185e-33, 0, 2.1684e-19, 1, 0, 0, 0, 1, 0.00177002, 0.325073, -0.0660095)
-shape = SubResource("BoxShape3D_t0fwk")
-
-[node name="clock_3d" parent="." instance=ExtResource("1_rylyw")]
+[node name="clock_3d" parent="." instance=ExtResource("2_uga6o")]
 
 [node name="clock_all" parent="clock_3d" index="0"]
 layers = 524288
-surface_material_override/0 = ExtResource("2_3cdak")
+surface_material_override/0 = ExtResource("3_4prou")
 surface_material_override/1 = SubResource("ShaderMaterial_iu6qs")
 surface_material_override/2 = SubResource("ShaderMaterial_48ov1")
 surface_material_override/3 = SubResource("ShaderMaterial_xpub6")

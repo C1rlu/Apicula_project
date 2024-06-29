@@ -3,29 +3,29 @@ extends Node
 @onready var letter_prefab = preload("res://12_INVENTORY/Letter/Start_note.tscn")
 @onready var front_element = $"../Front_element"
 
+@export var all_N_note : Array[Note_Data]
+
+
 func _ready():
 	_global_datas._give_letter.connect(_intance_letter)
-		
-func _intance_letter(note_name: String):
+	_global_datas.active_queste = all_N_note[0]
 	
-	var constant_string = "res://12_INVENTORY/Words_note/" + note_name + ".tres"
+func _input(event):
 	
-	if !ResourceLoader.exists(constant_string):
-		print("EMPTY NOTE IN WORDS NOTE OR LINK ERROR ")
-		return
+	if Input.is_action_just_pressed("debug_3"):
+		_intance_letter(0)	
+
+func _intance_letter(index : int):
+	
+	_global_datas._hide_dialogue_box.emit()
 	
 	var new_node = 	letter_prefab.instantiate()
-	
+	new_node.scale = Vector2.ONE
 	front_element.add_child(new_node)
 	
-	var screen_center = Vector2(1280.0 / 2.0, 720/ 2.0 )
-	var random_angle = randf_range(-96.0, -84.0)
-	
-	new_node.rotation_degrees = random_angle
-	new_node.position = screen_center
-	
 	var text = new_node.get_node_or_null("Update_words")	
-	var load_data : Note_Data = load(constant_string)
+	var load_data : Note_Data = all_N_note[index]
+	load_data.is_onBoard = true
 	text._update_words(load_data.note_text,load_data.from)
-	#_global_datas.note_archives.append(load_data)
+
 	_global_datas.active_queste = load_data

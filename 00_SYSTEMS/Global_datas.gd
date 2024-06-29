@@ -75,7 +75,7 @@ var tools_list : Array[tool_data]
 signal _start_dialogue_box
 signal _hide_dialogue_box
 signal _show_dialogue_box
-signal _give_letter( note_name : String)
+signal _give_letter( index : int)
 signal _take_note(note_name : String)
 signal _take_Npc_photo(condition : bool)
 signal _show_object_legend(condtion : bool, text : String)
@@ -180,7 +180,7 @@ signal show_ui_scanner_dots(condition : bool)
 var selected_book : book_page_data
 var legend_page_index : int
 
-var In_Front_Node : Node
+
 var selected_photoData : PhotoData
 var in_scanner_mode : bool 
 

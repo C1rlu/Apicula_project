@@ -1,4 +1,6 @@
-[gd_scene load_steps=19 format=3 uid="uid://cjgga2j23u4wl"]
+[gd_scene load_steps=20 format=3 uid="uid://cjgga2j23u4wl"]
+
+[ext_resource type="Script" path="res://12_INVENTORY/Letter/Move_note.gd" id="1_ksak5"]
 
 [sub_resource type="GDScript" id="GDScript_w53jh"]
 script/source = "extends Node
@@ -13,58 +15,37 @@ func _update_words(_words : String, _from : String):
 
 [sub_resource type="GDScript" id="GDScript_np607"]
 script/source = "extends Node
+@onready var start_note = $\"..\"
 
-@export var scale_in_loupe = 1.5
 @onready var control = $\"..\"
-
-var size : float
-
-@export var object_center_marge : Vector2
-@onready var take_it_button = $\"../Take_it_button\"
-
-func _ready():
-	
-	size = control.scale.x
-	
-	if _global_datas.Npc_Dialogue != null:
-		_Zoom_Object(true)
-		
-	if _global_datas.Player_InSubScene:
-		_Zoom_Object(true)
-	
-
-
-func _Zoom_Object(condition:bool):
-	
-	if condition:
-		_scale_change(size * scale_in_loupe)
-
-		var select_parent = _global_datas.In_Front_Node
-		control.reparent(select_parent)
-		control.move_to_front()
-		#_global_datas.Open_ui_dark_backdrop.emit(true)
-	else:
-		_scale_change(size)
-		_global_datas._show_object_legend.emit(false,\"\")
-
-	take_it_button.grab_focus()
-		
-		
-		
-func _scale_change(value):
-	
-	control.set_scale(Vector2(value,value))
-
-func _take_it():
-	_Zoom_Object(false)
-#	_global_datas.Open_ui_dark_backdrop.emit(false)
-	_global_datas._show_dialogue_box.emit()
-
-	control.queue_free()
-
-
+var t
+var r
 func _on_take_it_button_pressed():
-	_take_it()
+	move()
+	
+	
+func move():
+	
+	var target_position = Vector2(1280.0, 720/ 2.0 )
+	var random_angle = randf_range(-6.0, -90.0)
+
+	if t:
+		t.kill()
+		
+	t = create_tween()
+	t.tween_property(start_note,\"position\",target_position,0.3).set_trans(Tween.TRANS_SINE)
+	t.connect(\"finished\",done)
+	
+	if r:
+		r.kill()
+		
+	r = create_tween()
+	r.tween_property(start_note,\"rotation_degrees\",random_angle,0.3).set_trans(Tween.TRANS_SINE)	
+	
+func done():
+	control.queue_free()	
+	_global_datas._show_dialogue_box.emit()
+	_global_datas.ui_noted_taked.emit()
 "
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_53eg5"]
@@ -209,21 +190,31 @@ shader = SubResource("VisualShader_nra2i")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f8kkv"]
 
-[node name="Start_note" type="Node2D"]
-rotation = -1.5708
+[node name="Start_note" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_ksak5")
 
 [node name="Update_words" type="Node" parent="."]
 script = SubResource("GDScript_w53jh")
 
 [node name="Take_object" type="Node" parent="."]
 script = SubResource("GDScript_np607")
-object_center_marge = Vector2(153, 190)
 
 [node name="ColorRect" type="ColorRect" parent="."]
-offset_left = -72.9995
-offset_top = -124.0
-offset_right = 85.0005
-offset_bottom = 121.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -201.0
+offset_top = 118.0
+offset_right = 49.0
+offset_bottom = 518.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -1.5708
 color = Color(0.807843, 0.780392, 0.733333, 1)
 
 [node name="Select_border" type="ColorRect" parent="ColorRect"]
@@ -232,36 +223,40 @@ layout_mode = 1
 mouse_filter = 2
 
 [node name="Label" type="Label" parent="."]
-offset_left = 84.0
-offset_top = -126.0
-offset_right = 330.0
-offset_bottom = 31.0
-rotation = 1.57079
+layout_mode = 0
+offset_left = -199.0
+offset_top = -133.0
+offset_right = 198.0
+offset_bottom = 118.0
 theme_override_colors/font_color = Color(0.301961, 0.278431, 0.235294, 1)
-theme_override_font_sizes/font_size = 21
+theme_override_font_sizes/font_size = 26
 text = "\" Rendez-vous at the lighthouse \""
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
 [node name="Label2" type="Label" parent="."]
-offset_left = -36.0
-offset_top = 66.0
-offset_right = 17.0
-offset_bottom = 104.0
-rotation = 1.57079
+layout_mode = 0
+offset_left = 144.0
+offset_top = 80.0
+offset_right = 197.0
+offset_bottom = 118.0
 theme_override_colors/font_color = Color(0.301961, 0.278431, 0.235294, 1)
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 26
 text = "A"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
 [node name="Take_it_button" type="Button" parent="."]
-offset_left = -74.0
-offset_top = -124.0
-offset_right = 85.0
-offset_bottom = 121.0
+layout_mode = 1
+anchors_preset = -1
+anchor_top = -0.037
+anchor_bottom = -0.037
+offset_left = -201.0
+offset_top = -132.0
+offset_right = 200.0
+offset_bottom = 118.0
 theme_override_styles/normal = SubResource("StyleBoxEmpty_puuhu")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_bgxp4")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_nbbnl")
