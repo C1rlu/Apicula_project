@@ -12,6 +12,7 @@ signal up_dialogue_index
 	"up_page_info_state" : null,
 	"give_board_item" : _global_datas.show_element_on_board,
 	"active_queste_done" : null,
+	"wait_otis" : null
 }
 
 func _ready():
@@ -59,7 +60,7 @@ func _on_ez_dialogue_custom_signal_received(value):
 			
 		if variable_name == "active_queste_done":
 				_global_datas.active_queste.done = true
-				print(_global_datas.active_queste.done)
+	
 				
 		if variable_name == "give_letter":
 				var index = params[2]
@@ -67,14 +68,26 @@ func _on_ez_dialogue_custom_signal_received(value):
 				state[variable_name].emit(_index_int)	
 				
 		if variable_name == "up_dialogue_index":
+	
 			up_dialogue_index.emit()	
 		
 		if variable_name == "give_board_item":
 			var _index = params[2]
 			var _index_int : int = int(_index)
 			state[variable_name].emit(_index_int)
+	
 		
-			
+		if variable_name == "wait_otis":
+			_global_datas.Waiting_bird = true
+			_global_datas.wait_for_otis.emit()
+		
+		if variable_name == "open_inventory":
+			var bool_str = params[2]
+			if bool_str == "true":
+				_global_datas.open_inventory.emit(true)
+			if bool_str == "false":
+				_global_datas.open_inventory.emit(false)
+
 func _on_ez_dialogue_end_of_dialogue_reached():
 	dialogue_box.is_dialogue_done = true	
 	_global_datas._close_dialogue.emit()

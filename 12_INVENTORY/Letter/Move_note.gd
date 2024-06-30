@@ -9,9 +9,11 @@ func _ready():
 	
 	
 func move():
-	
-	var start_position = Vector2(1280.0 / 2.0, 720.0)
-	var target_position = Vector2(1280.0 / 2.0, 720/ 2.0 )
+	var resolution : Vector2 = get_viewport_rect().size
+		
+	var start_position = Vector2(resolution.x / 2.0, resolution.y)
+
+	var target_position = Vector2(resolution.x / 2.0, resolution.y/ 2)
 	var random_angle = randf_range(-6.0, -4.0)
 	position = start_position
 	

@@ -1,6 +1,8 @@
-[gd_scene load_steps=20 format=3 uid="uid://cjgga2j23u4wl"]
+[gd_scene load_steps=15 format=3 uid="uid://cjgga2j23u4wl"]
 
 [ext_resource type="Script" path="res://12_INVENTORY/Letter/Move_note.gd" id="1_ksak5"]
+[ext_resource type="Shader" uid="uid://bbxdwa2b412rx" path="res://12_INVENTORY/Letter/Start_note_OnOver_sh.tres" id="2_lymtg"]
+[ext_resource type="Shader" uid="uid://c38pab15ywxmh" path="res://12_INVENTORY/Letter/Start_note_sh.tres" id="3_0anhr"]
 
 [sub_resource type="GDScript" id="GDScript_w53jh"]
 script/source = "extends Node
@@ -18,15 +20,26 @@ script/source = "extends Node
 @onready var start_note = $\"..\"
 
 @onready var control = $\"..\"
+
+@onready var on_over = $\"../On_Over\"
+
+
 var t
 var r
+
+var lock : bool = false
+
 func _on_take_it_button_pressed():
 	move()
 	
 	
 func move():
+	on_over.visible = false
+	lock = true
 	
-	var target_position = Vector2(1280.0, 720/ 2.0 )
+	var resolution : Vector2 = start_note.get_viewport_rect().size
+	
+	var target_position = Vector2(resolution.x+100, resolution.y/ 2.0)
 	var random_angle = randf_range(-6.0, -90.0)
 
 	if t:
@@ -46,139 +59,31 @@ func done():
 	control.queue_free()	
 	_global_datas._show_dialogue_box.emit()
 	_global_datas.ui_noted_taked.emit()
+
+
+func _on_take_it_button_mouse_entered():
+	if lock:
+		return
+	on_over.visible = true
+
+
+func _on_take_it_button_mouse_exited():
+	if lock:
+		return
+	on_over.visible = false
 "
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_53eg5"]
-constant = 0.4
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lj5fv"]
+shader = ExtResource("2_lymtg")
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_6nv15"]
-constant = 1.0
+[sub_resource type="Gradient" id="Gradient_xeln1"]
 
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_6eq8q"]
-size = Vector2(724.789, 654.559)
-expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_qyyf2"]
+gradient = SubResource("Gradient_xeln1")
 
-[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_uquas"]
-constant = Color(0.98551, 0.77733, 0.57116, 1)
-
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_co8rp"]
-
-[sub_resource type="Gradient" id="Gradient_754lt"]
-offsets = PackedFloat32Array(0, 0.966337, 1)
-colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 1, 0.212305, 0.212305, 0.212305, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_5b6u3"]
-gradient = SubResource("Gradient_754lt")
-fill = 2
-fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(0.987179, 0.0641026)
-
-[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_i2yly"]
-texture = SubResource("GradientTexture2D_5b6u3")
-
-[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_e5esv"]
-function = 31
-
-[sub_resource type="VisualShader" id="VisualShader_nra2i"]
-code = "shader_type canvas_item;
-render_mode blend_mix;
-
-uniform sampler2D tex_frg_7;
-
-
-
-void fragment() {
-// ColorConstant:5
-	vec4 n_out5p0 = vec4(0.985510, 0.777330, 0.571160, 1.000000);
-
-
-// Texture2D:7
-	vec4 n_out7p0 = texture(tex_frg_7, UV);
-
-
-// FloatFunc:8
-	float n_out8p0 = 1.0 - n_out7p0.x;
-
-
-// FloatConstant:3
-	float n_out3p0 = 1.000000;
-
-
-// FloatConstant:2
-	float n_out2p0 = 0.400000;
-
-
-	float n_out4p0;
-// Expression:4
-	n_out4p0 = 0.0;
-	{
-		const float DITHER_THRESHOLDS[16] ={
-				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-			};
-			
-		vec2 uv = FRAGCOORD.xy * n_out2p0;
-		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-		n_out4p0 = n_out3p0 - DITHER_THRESHOLDS[index];
-	}
-
-
-// Step:6
-	float n_out6p0 = step(n_out8p0, n_out4p0);
-
-
-// Output:0
-	COLOR.rgb = vec3(n_out5p0.xyz);
-	COLOR.a = n_out6p0;
-
-
-}
-"
-graph_offset = Vector2(-1222.74, -92.749)
-mode = 1
-flags/light_only = false
-nodes/fragment/2/node = SubResource("VisualShaderNodeFloatConstant_53eg5")
-nodes/fragment/2/position = Vector2(-1020, 940)
-nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_6nv15")
-nodes/fragment/3/position = Vector2(-1020, 800)
-nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_6eq8q")
-nodes/fragment/4/position = Vector2(-720, 920)
-nodes/fragment/4/size = Vector2(724.789, 654.559)
-nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
-nodes/fragment/4/output_ports = "0,0,Dither_Node;"
-nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/5/node = SubResource("VisualShaderNodeColorConstant_uquas")
-nodes/fragment/5/position = Vector2(20, -100)
-nodes/fragment/6/node = SubResource("VisualShaderNodeStep_co8rp")
-nodes/fragment/6/position = Vector2(40, 100)
-nodes/fragment/7/node = SubResource("VisualShaderNodeTexture_i2yly")
-nodes/fragment/7/position = Vector2(-680, -60)
-nodes/fragment/8/node = SubResource("VisualShaderNodeFloatFunc_e5esv")
-nodes/fragment/8/position = Vector2(-260, 80)
-nodes/fragment/connections = PackedInt32Array(2, 0, 4, 1, 3, 0, 4, 0, 4, 0, 6, 1, 7, 0, 8, 0, 8, 0, 6, 0, 6, 0, 0, 1, 5, 0, 0, 0)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8xb81"]
-shader = SubResource("VisualShader_nra2i")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_viuge"]
+shader = ExtResource("3_0anhr")
+shader_parameter/Gradient = SubResource("GradientTexture2D_qyyf2")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_puuhu"]
 
@@ -201,7 +106,26 @@ script = SubResource("GDScript_w53jh")
 [node name="Take_object" type="Node" parent="."]
 script = SubResource("GDScript_np607")
 
+[node name="On_Over" type="ColorRect" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_lj5fv")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -214.0
+offset_top = 133.0
+offset_right = 65.0
+offset_bottom = 563.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -1.5708
+color = Color(0.886275, 0.764706, 0.580392, 1)
+
 [node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_viuge")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -216,11 +140,6 @@ grow_horizontal = 2
 grow_vertical = 2
 rotation = -1.5708
 color = Color(0.807843, 0.780392, 0.733333, 1)
-
-[node name="Select_border" type="ColorRect" parent="ColorRect"]
-material = SubResource("ShaderMaterial_8xb81")
-layout_mode = 1
-mouse_filter = 2
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 0
@@ -263,4 +182,6 @@ theme_override_styles/pressed = SubResource("StyleBoxEmpty_nbbnl")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_vwehn")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_f8kkv")
 
+[connection signal="mouse_entered" from="Take_it_button" to="Take_object" method="_on_take_it_button_mouse_entered"]
+[connection signal="mouse_exited" from="Take_it_button" to="Take_object" method="_on_take_it_button_mouse_exited"]
 [connection signal="pressed" from="Take_it_button" to="Take_object" method="_on_take_it_button_pressed"]

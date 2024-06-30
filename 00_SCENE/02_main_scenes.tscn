@@ -1,4 +1,4 @@
-[gd_scene load_steps=94 format=3 uid="uid://cnmptm7i0xxmj"]
+[gd_scene load_steps=96 format=3 uid="uid://cnmptm7i0xxmj"]
 
 [ext_resource type="Script" path="res://00_SCENE/Active_Decor_Scene.gd" id="1_ounvv"]
 [ext_resource type="PackedScene" uid="uid://vpdvl0v7dubd" path="res://00_PLAYER/Player_boat.tscn" id="1_qltht"]
@@ -29,13 +29,16 @@
 [ext_resource type="PackedScene" uid="uid://bjfuwgxyiffs4" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Mountain/Mountain_01.tscn" id="15_bqwbg"]
 [ext_resource type="PackedScene" uid="uid://fcjcvy77lg0o" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Lighthouse/lighthouse_prefabs.tscn" id="16_u78ww"]
 [ext_resource type="PackedScene" uid="uid://dnxexehkt6k6v" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Banquise/banquise_01_prefabs.tscn" id="17_4pwgg"]
+[ext_resource type="Script" path="res://00_PLAYER/Check_zone.gd" id="17_unqeu"]
 [ext_resource type="Resource" uid="uid://xuxu60afj84h" path="res://11_SPEAKER/00_NPC/Npc_data/Guy_02_data.tres" id="18_3k0t8"]
 [ext_resource type="Material" uid="uid://dgl2um0yp8e3c" path="res://05_SHADER_TEST/All_Materials/Building_mat.tres" id="20_24d3w"]
 [ext_resource type="PackedScene" uid="uid://cp1aidnp626l4" path="res://04_SCENE_MAIN_MAP/Birds/Birds_prefabs.tscn" id="21_py3bv"]
 [ext_resource type="PackedScene" uid="uid://bw5vovfbghh6f" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Mountain/Moutain_set/mountain_set_02_prefab.tscn" id="23_e4he1"]
 [ext_resource type="Material" uid="uid://dkpo8pe6k46g6" path="res://05_SHADER_TEST/All_Materials/Light_mat.tres" id="23_o3pq1"]
 [ext_resource type="PackedScene" uid="uid://dti7l20thp2rk" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Subscene_elements/epave_zone.tscn" id="23_txlwt"]
+[ext_resource type="Script" path="res://00_SCENE/Npc_zone.gd" id="30_ki3ay"]
 [ext_resource type="Resource" uid="uid://bqtier24l2d58" path="res://10_BOARD/00_Boue_Zones/Boue_appicula.tres" id="31_p6n0u"]
+[ext_resource type="Resource" uid="uid://c6jw6ja2xggvh" path="res://11_SPEAKER/00_NPC/Npc_data/Otis_Coast_guard_data.tres" id="32_pt30g"]
 [ext_resource type="Resource" uid="uid://bgbdnk7mpw4vb" path="res://10_BOARD/00_Boue_Zones/TheOddity_zone.tres" id="32_tmg04"]
 [ext_resource type="Resource" uid="uid://dyrjwnrw6plmp" path="res://10_BOARD/00_Boue_Zones/Boue_DarkHole.tres" id="32_uxxuf"]
 
@@ -73,6 +76,9 @@ func _unlock(condition):
 
 func _input(event: InputEvent) -> void:
 	
+	
+	if _global_datas.Player_InDialogue:
+		return
 	
 	if _global_datas.Waiting_bird:
 		return
@@ -163,12 +169,13 @@ func _input(event):
 		return
 	if _global_datas.Player_In_Inventory:
 		return
-
+	
 	if _global_datas.Player_InDialogue:
 		return
 	if event.is_action_pressed(\"Push_to_subscene\"):
 		if _global_datas.Npc_Dialogue == null:
 			return
+		
 		_global_datas._open_dialogue.emit()	
 		print(\"OPEN DIALOGUE\")
 "
@@ -272,11 +279,10 @@ script/source = "extends Node
 @onready var button = $Button
 
 func _ready():
-	pass
-	#_global_datas.in_dialogue_zone.connect(active_buton)
-	#_global_datas.out_dialogue_zone.connect(disable_buton)
-	#_global_datas._open_dialogue.connect(disable_buton)
-	
+	_global_datas.in_dialogue_zone.connect(active_buton)
+	_global_datas.out_dialogue_zone.connect(disable_buton)
+	_global_datas._open_dialogue.connect(disable_buton)
+	_global_datas.hide_open_dialogue.connect(disable_buton)
 
 func disable_buton():
 	button.visible = false
@@ -284,6 +290,9 @@ func disable_buton():
 
 	
 func active_buton():
+	
+	if _global_datas.Waiting_bird:
+		return
 
 	button.visible = true
 	_global_datas.Player_InDialogue_zone = true
@@ -356,22 +365,6 @@ func _on_timer_timeout():
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ituqr"]
 bounce = 500.0
-
-[sub_resource type="GDScript" id="GDScript_yt3v2"]
-script/source = "extends Area3D
-
-
-@onready var collision_shape_3d = $CollisionShape3D
-
-
-
-func _ready():
-	_global_datas.open_inventory.connect(active_enter_dialogue)
-
-
-func active_enter_dialogue(condition : bool):
-	collision_shape_3d.disabled = condition	
-"
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_yt2xy"]
 radius = 0.990634
@@ -530,48 +523,8 @@ script/source = "extends Node
 script/source = "extends Area3D
 
 @export var Npc_data : Npc_datas
-@export var hide_this : Node3D
-var _active : bool = false
-@export var disable = true
-func _ready():
-	_global_datas._open_dialogue.connect(_hide)
-	_global_datas._close_dialogue.connect(_show)
 
-func _hide():
-	if _active:
-		if hide_this:
-			hide_this.visible = false
 
-func _show():
-	
-	if _active:
-		if hide_this:
-			hide_this.visible = true	
-			
-		if Npc_data.name == \"MrBird\":
-			queue_free()
-
-				
-func _on_area_entered(_area):
-	
-	if disable:
-		return
-	_active = true
-	_global_datas.Npc_Dialogue = Npc_data
-	
-	if Npc_data.name == \"MrBird\":
-		_global_datas._open_dialogue.emit()
-	else :
-		_global_datas.in_dialogue_zone.emit()
-		_global_datas._show_object_legend.emit(true,Npc_data.zone_name)
-	
-func _on_area_exited(_area):
-	if disable:
-		return
-	_global_datas.Npc_Dialogue = null
-	_global_datas.out_dialogue_zone.emit()
-	_active = false
-	_global_datas._show_object_legend.emit(false,\"\")
 "
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_jvty4"]
@@ -937,13 +890,13 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 28.0
-offset_top = -71.0
-offset_right = 28.0
-offset_bottom = -71.0
+offset_left = 25.0001
+offset_top = -43.0
+offset_right = 25.0001
+offset_bottom = -43.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(0.776034, 0.776034)
+scale = Vector2(0.471, 0.471)
 mouse_filter = 2
 
 [node name="ColorRect2" type="ColorRect" parent="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue/Button"]
@@ -1037,6 +990,9 @@ move_speed = 5.0
 maxSpeed = 6.0
 rotation_speed = 4.0
 
+[node name="Check_zone" type="Node" parent="--DECOR--/Player_Boat"]
+script = ExtResource("17_unqeu")
+
 [node name="Node3D" type="Node3D" parent="--DECOR--/Player_Boat"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 4, 0, 4)
 
@@ -1052,9 +1008,8 @@ omni_attenuation = 0.258817
 collision_layer = 3
 collision_mask = 3
 input_ray_pickable = false
-script = SubResource("GDScript_yt3v2")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="--DECOR--/Player_Boat/Enter_dialogue_zone"]
+[node name="Col" type="CollisionShape3D" parent="--DECOR--/Player_Boat/Enter_dialogue_zone"]
 shape = SubResource("SphereShape3D_yt2xy")
 
 [node name="Sonar" type="Node3D" parent="--DECOR--"]
@@ -1279,46 +1234,83 @@ transform = Transform3D(-0.271044, 0, 2.89823e-08, 0, 0.271044, 0, -2.89823e-08,
 
 [node name="NPC_TRIGGER_ZONE" type="Node3D" parent="--DECOR--"]
 
-[node name="NPC_AREA" type="Area3D" parent="--DECOR--/NPC_TRIGGER_ZONE"]
+[node name="Maurice_NPC_Area" type="Area3D" parent="--DECOR--/NPC_TRIGGER_ZONE"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.61404, 1.19209e-07, -2.30636)
 input_ray_pickable = false
 script = SubResource("GDScript_w8xnd")
 Npc_data = ExtResource("18_3k0t8")
-disable = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA"]
+[node name="Npc_zone" type="Node" parent="--DECOR--/NPC_TRIGGER_ZONE/Maurice_NPC_Area"]
+script = ExtResource("30_ki3ay")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="--DECOR--/NPC_TRIGGER_ZONE/Maurice_NPC_Area"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.422843, 0, 0.0136065)
 shape = SubResource("SphereShape3D_jvty4")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA/CollisionShape3D"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="--DECOR--/NPC_TRIGGER_ZONE/Maurice_NPC_Area/CollisionShape3D"]
 transform = Transform3D(-5.76091e-10, 0.127663, 1.29577e-09, 0, 1.52236e-09, -0.108661, -0.0131794, -5.58032e-09, -5.66399e-17, -0.163318, 0.169142, 0.0421472)
 mesh = SubResource("PrismMesh_3vidt")
 surface_material_override/0 = ExtResource("23_o3pq1")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA/CollisionShape3D"]
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="--DECOR--/NPC_TRIGGER_ZONE/Maurice_NPC_Area/CollisionShape3D"]
 transform = Transform3D(-5.76091e-10, 0.0143792, 4.42475e-09, 0, 1.7147e-10, -0.371052, -0.0131794, -6.28535e-10, -1.93412e-16, -0.219283, 0.0534687, 0.0421472)
 mesh = SubResource("BoxMesh_hq5l7")
 surface_material_override/0 = ExtResource("23_o3pq1")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="--DECOR--/NPC_TRIGGER_ZONE/Maurice_NPC_Area"]
 transform = Transform3D(0.803273, 0, 0.156978, 0, 0.068, 0, -0.803273, 0, 0.156978, -0.178382, -0.155468, -0.2644)
 mesh = SubResource("BoxMesh_jmuil")
 surface_material_override/0 = ExtResource("20_24d3w")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA/MeshInstance3D"]
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="--DECOR--/NPC_TRIGGER_ZONE/Maurice_NPC_Area/MeshInstance3D"]
 layers = 1032
 mesh = SubResource("BoxMesh_ujnfl")
 skeleton = NodePath("../..")
 surface_material_override/0 = ExtResource("6_vcmny")
 
-[node name="NPC_AREA2" type="Area3D" parent="--DECOR--/NPC_TRIGGER_ZONE" node_paths=PackedStringArray("hide_this")]
+[node name="GardeCote_NPC_Area" type="Area3D" parent="--DECOR--/NPC_TRIGGER_ZONE"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.36054, 1.19209e-07, 2.59297)
+input_ray_pickable = false
+script = SubResource("GDScript_w8xnd")
+Npc_data = ExtResource("32_pt30g")
+
+[node name="Npc_zone" type="Node" parent="--DECOR--/NPC_TRIGGER_ZONE/GardeCote_NPC_Area"]
+script = ExtResource("30_ki3ay")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="--DECOR--/NPC_TRIGGER_ZONE/GardeCote_NPC_Area"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.422843, 0, 0.0136065)
+shape = SubResource("SphereShape3D_jvty4")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="--DECOR--/NPC_TRIGGER_ZONE/GardeCote_NPC_Area/CollisionShape3D"]
+transform = Transform3D(-5.76091e-10, 0.127663, 1.29577e-09, 0, 1.52236e-09, -0.108661, -0.0131794, -5.58032e-09, -5.66399e-17, -0.163318, 0.169142, 0.0421472)
+mesh = SubResource("PrismMesh_3vidt")
+surface_material_override/0 = ExtResource("23_o3pq1")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="--DECOR--/NPC_TRIGGER_ZONE/GardeCote_NPC_Area/CollisionShape3D"]
+transform = Transform3D(-5.76091e-10, 0.0143792, 4.42475e-09, 0, 1.7147e-10, -0.371052, -0.0131794, -6.28535e-10, -1.93412e-16, -0.219283, 0.0534687, 0.0421472)
+mesh = SubResource("BoxMesh_hq5l7")
+surface_material_override/0 = ExtResource("23_o3pq1")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="--DECOR--/NPC_TRIGGER_ZONE/GardeCote_NPC_Area"]
+transform = Transform3D(0.803273, 0, 0.156978, 0, 0.068, 0, -0.803273, 0, 0.156978, -0.178382, -0.155468, -0.2644)
+mesh = SubResource("BoxMesh_jmuil")
+surface_material_override/0 = ExtResource("20_24d3w")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="--DECOR--/NPC_TRIGGER_ZONE/GardeCote_NPC_Area/MeshInstance3D"]
+layers = 1032
+mesh = SubResource("BoxMesh_ujnfl")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("6_vcmny")
+
+[node name="NPC_AREA2" type="Area3D" parent="--DECOR--/NPC_TRIGGER_ZONE"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.98105, 1.07288e-06, 2.31768)
 visible = false
 input_ray_pickable = false
 script = SubResource("GDScript_w8xnd")
 Npc_data = ExtResource("1_trgwt")
-hide_this = NodePath("Birds")
-disable = false
+
+[node name="Npc_zone" type="Node" parent="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA2"]
+script = ExtResource("30_ki3ay")
 
 [node name="Birds" parent="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA2" instance=ExtResource("21_py3bv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.643425, 0, 0.626134)
@@ -1328,13 +1320,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.484242, 0, 0.113853)
 shape = SubResource("SphereShape3D_jvty4")
 disabled = true
 
-[node name="NPC_AREA3" type="Area3D" parent="--DECOR--/NPC_TRIGGER_ZONE" node_paths=PackedStringArray("hide_this")]
+[node name="NPC_AREA3" type="Area3D" parent="--DECOR--/NPC_TRIGGER_ZONE"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.0813, 1.19209e-07, 5.71347)
 input_ray_pickable = false
 script = SubResource("GDScript_w8xnd")
 Npc_data = ExtResource("1_trgwt")
-hide_this = NodePath("Birds")
-disable = false
 
 [node name="Birds" parent="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA3" instance=ExtResource("21_py3bv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.643425, 0, 0.626134)
@@ -1353,7 +1343,7 @@ skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("ShaderMaterial_vldjc")
 
 [node name="EPAVE_ZONE" parent="--DECOR--/UNDER_WATER2" instance=ExtResource("23_txlwt")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.70167, -0.174761, 1.01103)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.39698, -0.174761, 0.77574)
 collision_layer = 2
 collision_mask = 2
 boue_data = ExtResource("31_p6n0u")
@@ -1397,8 +1387,12 @@ mesh = SubResource("BoxMesh_wmrfd")
 skeleton = NodePath("")
 
 [connection signal="timeout" from="Go_subscene_progress/GoSubscene_timer/Timer" to="Go_subscene_progress/GoSubscene_timer" method="_on_timer_timeout"]
-[connection signal="area_entered" from="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA" to="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA" method="_on_area_entered"]
-[connection signal="area_exited" from="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA" to="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA" method="_on_area_exited"]
+[connection signal="area_entered" from="--DECOR--/Player_Boat/Enter_dialogue_zone" to="--DECOR--/Player_Boat/Check_zone" method="_on_enter_dialogue_zone_area_entered"]
+[connection signal="area_exited" from="--DECOR--/Player_Boat/Enter_dialogue_zone" to="--DECOR--/Player_Boat/Check_zone" method="_on_enter_dialogue_zone_area_exited"]
+[connection signal="area_entered" from="--DECOR--/NPC_TRIGGER_ZONE/Maurice_NPC_Area" to="--DECOR--/NPC_TRIGGER_ZONE/Maurice_NPC_Area" method="_on_area_entered"]
+[connection signal="area_exited" from="--DECOR--/NPC_TRIGGER_ZONE/Maurice_NPC_Area" to="--DECOR--/NPC_TRIGGER_ZONE/Maurice_NPC_Area" method="_on_area_exited"]
+[connection signal="area_entered" from="--DECOR--/NPC_TRIGGER_ZONE/GardeCote_NPC_Area" to="--DECOR--/NPC_TRIGGER_ZONE/GardeCote_NPC_Area" method="_on_area_entered"]
+[connection signal="area_exited" from="--DECOR--/NPC_TRIGGER_ZONE/GardeCote_NPC_Area" to="--DECOR--/NPC_TRIGGER_ZONE/GardeCote_NPC_Area" method="_on_area_exited"]
 [connection signal="area_entered" from="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA2" to="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA2" method="_on_area_entered"]
 [connection signal="area_exited" from="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA2" to="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA2" method="_on_area_exited"]
 [connection signal="area_entered" from="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA3" to="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA3" method="_on_area_entered"]

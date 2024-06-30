@@ -1,6 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://clc3sbquuu1us"]
+[gd_scene load_steps=6 format=3 uid="uid://clc3sbquuu1us"]
 
 [ext_resource type="PackedScene" uid="uid://b04qmdjf73spd" path="res://13_TOOLS_UI/Clock_montre/clock_3d_ui_prefab.tscn" id="1_71jwj"]
+[ext_resource type="Resource" uid="uid://c6jw6ja2xggvh" path="res://11_SPEAKER/00_NPC/Npc_data/Otis_Coast_guard_data.tres" id="1_tlm5h"]
+[ext_resource type="Script" path="res://13_TOOLS_UI/Clock_montre/Wait_for_otis.gd" id="1_wf3tb"]
 
 [sub_resource type="GDScript" id="GDScript_uwuod"]
 script/source = "extends Node
@@ -8,25 +10,45 @@ script/source = "extends Node
 @onready var render = $\"../Render\"
 @onready var clock_root = $\"../SubViewport/clock_3d_prefab/clock_3d/root_equille\"
 
-
 var t 
+signal end_of_time
+var previous_call
 
 func _ready():
-	_global_datas.send_bird_responce.connect(_start_clock)
-	_global_datas._open_dialogue.connect(_done)	
+	_global_datas.wait_in_time.connect(_start_clock)
+	_global_datas.connect_wait_of_time.connect(connect_end_of_time)
+	
+func connect_end_of_time(function):
 
-
+	if previous_call:
+		_global_datas.end_of_time.disconnect(previous_call)
+	_global_datas.end_of_time.connect(function)
+	previous_call = function
+	
+	
 func _start_clock():
 	
+	#_global_datas.go_darker_color.emit()
+	_global_datas.out_dialogue_zone.emit()
+	_global_datas.hide_open_dialogue.emit()
+	
+	_global_datas.Waiting_bird = true
+	
 	render.visible = true
+	
 	
 	if t:
 		t.kill()
 		
 	t = create_tween()
-	t.tween_method(_value,0.0,1440,10.0)
-	
+	t.tween_method(_value,0.0,360,5.0)
+	t.connect(\"finished\",done)
 
+func done():
+	_global_datas.Waiting_bird = false
+	_global_datas.end_of_time.emit()
+	_done()
+	
 func _done():
 	
 	render.visible = false
@@ -49,6 +71,10 @@ offset_bottom = 40.0
 
 [node name="Time" type="Node" parent="."]
 script = SubResource("GDScript_uwuod")
+
+[node name="Wait_for_otis" type="Node" parent="."]
+script = ExtResource("1_wf3tb")
+Otis_data = ExtResource("1_tlm5h")
 
 [node name="Render" type="TextureRect" parent="."]
 visible = false

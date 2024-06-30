@@ -37,6 +37,8 @@ func add_choice(choice_text : String):
 func show_all_responce():
 	
 	var choice = v_box_container.get_children()
+	if !choice:
+		return
 	for c in choice:
 		c.visible = true
 		

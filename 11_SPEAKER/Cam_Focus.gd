@@ -16,7 +16,7 @@ func _update_cam_focus(index):
 		
 	var cam_list = _global_datas.Npc_Dialogue.camera_state
 	var position_from_index = cam_list[index]
-	#camera_3d.position = position_from_index	
+
 	
 	_smooth_movement(position_from_index)
 func _smooth_movement(new_position):

@@ -6,12 +6,12 @@ var actual_isSubscene_value : float
 func _ready():
 	_NormalColor_mainScene()
 	_global_datas._go_Subscene.connect(_Darker_mainScene)
-	_global_datas._open_dialogue.connect(_Darker_mainScene)
-	_global_datas._close_dialogue.connect(_NormalColor_mainScene)
 	_global_datas._backFrom_subscene.connect(_NormalColor_mainScene)
-	#_global_datas._open_menu.connect(_open)
 	_global_datas._active_progress_subscene.connect(_open)
-	_global_datas.send_bird_responce.connect(_Darker_mainScene)
+	
+	_global_datas.go_normal_color.connect(_NormalColor_mainScene)
+	_global_datas.go_darker_color.connect(_Darker_mainScene)
+	
 	#ACTIVE DITHER
 	RenderingServer.global_shader_parameter_set("Subscene_mirror_alpha", 0.0)
 	RenderingServer.global_shader_parameter_set("active_Dither", true)

@@ -1,27 +1,23 @@
-[gd_scene load_steps=27 format=3 uid="uid://dti7l20thp2rk"]
+[gd_scene load_steps=28 format=3 uid="uid://dti7l20thp2rk"]
 
 [ext_resource type="Shader" uid="uid://jjqliete2f27" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Subscene_elements/Subscene_element_sh.tres" id="1_4eijp"]
 [ext_resource type="PackedScene" uid="uid://bxyofd07elshh" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Boue/boue_msh_01_prefab.tscn" id="1_68viu"]
+[ext_resource type="Script" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Subscene_elements/Dive_zone.gd" id="1_mmyx7"]
 
 [sub_resource type="GDScript" id="GDScript_kppkw"]
 script/source = "extends Area3D
 
 @export var boue_data : BoueData
 @onready var on_over = $Boue_msh_01/On_Over
-
 @onready var root = $\".\"
 
-
 signal see_int(condition : bool)
-
 
 @onready var boue = $Boue_msh_01
 var was_detected : bool = false
 
 func _ready():
-	
 	boue_data.world_position = root.global_position
-
 
 
 func _on_area_entered(_area):
@@ -45,7 +41,7 @@ func _on_area_entered(_area):
 		was_detected = true
 		_global_datas.Active_boue_position = global_position
 		_global_datas._boat_inside_zone.emit(true)
-		
+			
 func _on_area_exited(_area):
 	
 	if _area.name == \"Enter_dialogue_zone\":
@@ -401,6 +397,9 @@ shader_parameter/Distance = 0.0
 input_ray_pickable = false
 script = SubResource("GDScript_kppkw")
 
+[node name="Dive_zone" type="Node" parent="."]
+script = ExtResource("1_mmyx7")
+
 [node name="Boue_msh_01" parent="." instance=ExtResource("1_68viu")]
 transform = Transform3D(0.0575288, 0, -0.0887662, 0, 0.105778, 0, 0.0887662, 0, 0.0575288, 0, -0.027, 0)
 
@@ -418,7 +417,7 @@ mesh = SubResource("TorusMesh_e6koh")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("ShaderMaterial_ahafp")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="Col" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_7qqy6")
 
 [node name="Epave_visuals" type="Node3D" parent="."]
@@ -432,7 +431,5 @@ mesh = SubResource("ArrayMesh_qimfy")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("ShaderMaterial_yfs1e")
 
-[connection signal="area_entered" from="." to="." method="_on_area_entered"]
-[connection signal="area_exited" from="." to="." method="_on_area_exited"]
 [connection signal="see_int" from="." to="Boue_msh_01" method="_on_epave_zone_see_int"]
 [connection signal="tree_exiting" from="." to="Epave_visuals/Fade_out" method="_on_epave_zone_tree_exiting"]

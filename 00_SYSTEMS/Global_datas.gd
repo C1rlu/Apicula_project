@@ -58,9 +58,15 @@ signal _active_world_grid(condition : bool)
 signal _teleport_boat_at_pos(position : Vector3)
 signal _boat_inside_zone(condition : bool)
 
+#color signal 
+signal go_normal_color
+signal go_darker_color
+
 # dialogue signals
 signal in_dialogue_zone
 signal out_dialogue_zone
+
+signal hide_open_dialogue
 signal  _open_dialogue
 signal  _close_dialogue
 signal _type_text(count : int)
@@ -150,8 +156,14 @@ signal show_element_on_board(value : int)
 
 signal ui_noted_taked
 signal map_fade(condition : bool) # true is in : false is out
-signal send_bird_responce
 
+signal connect_wait_of_time(function)
+signal wait_in_time
+signal end_of_time
+
+#all
+signal send_bird_responce
+signal wait_for_otis
 
 signal responce_link_mode(condition : bool, text : String)
 var link_mode : bool = false
