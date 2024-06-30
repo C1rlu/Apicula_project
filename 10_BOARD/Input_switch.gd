@@ -3,14 +3,18 @@ extends Node
 
 
 var using_pad : bool = false
+
 func _ready():
 	_global_datas.using_pad.connect(_switch_inputs)
 	_global_datas.open_inventory.connect(close_pad_target)
+
+
 
 func _switch_inputs(condition : bool):
 	
 	if !_global_datas.Player_In_Inventory:
 		return
+	
 	
 	pad_target.visible = condition
 	using_pad = condition

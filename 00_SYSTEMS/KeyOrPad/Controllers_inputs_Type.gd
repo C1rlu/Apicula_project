@@ -12,15 +12,11 @@ func _ready():
 func _input(event):
 	
 	if event is InputEventJoypadButton or event is InputEventJoypadMotion:
-		
-		if !using_pad:
-			_global_datas.using_pad.emit(true)
-			using_pad = true
+	
+		_global_datas.using_pad.emit(true)
 	else:
-		
-		if using_pad:
-			_global_datas.using_pad.emit(false)
-			using_pad = false
+		_global_datas.using_pad.emit(false)
+
 			
 			
 			

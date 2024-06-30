@@ -350,18 +350,20 @@ script/source = "extends Node
 @onready var material_key : Material = key_img.get_material()
 
 var t
-
+var actual_condition = false
 func _ready():
 	_global_datas.using_pad.connect(show_whats_used)
 	
 	
 func show_whats_used(condition : bool):
 	
+	if actual_condition == condition:
+		return 
+	actual_condition = condition
+		
 	pad_img.visible = condition
 	key_img.visible = !condition
 	
-	
-			
 	if t:
 		t.kill()
 	t = create_tween()

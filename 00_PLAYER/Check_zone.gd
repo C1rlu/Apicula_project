@@ -1,6 +1,7 @@
 extends Node
 
 @onready var area_root = $"../Enter_dialogue_zone"
+@onready var col = $"../Enter_dialogue_zone/Col"
 
 
 func _ready():
@@ -25,13 +26,16 @@ func close():
 		
 func check_condition(condition: bool):
 	 
+	
 	if !condition:
-		check_zone()	
+		check_zone()
 	else:
 		_global_datas.out_dialogue_zone.emit()	
 		_global_datas._show_object_legend.emit(false,"")
 		
-		
+	col.disabled = condition
+	
+
 func check_zone():
 	
 	if _global_datas.Waiting_bird:
@@ -62,6 +66,9 @@ func check_zone():
 		
 func _on_enter_dialogue_zone_area_entered(area):
 	
+	if _global_datas.Waiting_bird:
+		return
+		
 	if area:
 		var npc_zone = area.get_node_or_null("Npc_zone")
 		if npc_zone:	
@@ -79,6 +86,8 @@ func _on_enter_dialogue_zone_area_entered(area):
 			
 func _on_enter_dialogue_zone_area_exited(area):
 	
+	if _global_datas.Waiting_bird:
+		return
 	if area:
 		var npc_zone = area.get_node_or_null("Npc_zone")
 		if npc_zone:
