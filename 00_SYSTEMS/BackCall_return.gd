@@ -10,6 +10,11 @@ func _ready():
 
 func _input(event):
 	
+	if _global_datas.Player_InDialogue:
+		return
+	if _global_datas.Waiting_bird:
+		return
+	
 	var top_call = _global_datas._back_call_list.size()
 	if top_call == 0:
 		return

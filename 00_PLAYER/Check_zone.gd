@@ -21,13 +21,10 @@ func _ready():
 func close():
 	_global_datas.out_dialogue_zone.emit()	
 	_global_datas._show_object_legend.emit(false,"")	
-	
+	_global_datas.go_darker_color.emit()
 		
 func check_condition(condition: bool):
 	 
-	if _global_datas.Waiting_bird:
-		return
-		
 	if !condition:
 		check_zone()	
 	else:
@@ -37,6 +34,16 @@ func check_condition(condition: bool):
 		
 func check_zone():
 	
+	if _global_datas.Waiting_bird:
+		close()
+		return
+		
+	_global_datas.go_normal_color.emit()
+	
+	if _global_datas.Npc_Dialogue:
+		if _global_datas.Npc_Dialogue.name == "MrBird":
+			_global_datas.Npc_Dialogue = null
+		
 	var all_area = area_root.get_overlapping_areas()
 	for a in all_area:
 		var npc_zone = a.get_node_or_null("Npc_zone")

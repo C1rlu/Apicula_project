@@ -43,19 +43,9 @@ func _open_dialogue():
 				
 func _close_dialogue():
 	
-	#_global_datas.in_dialogue_zone.emit()
-		
 	dialogue.visible =  false
 	_global_datas.Player_InDialogue = false
-	#_global_datas.go_normal_color.emit()
-	
-	if _global_datas.Npc_Dialogue.name == "MrBird":
-		_global_datas.Npc_Dialogue = null
-		#_global_datas.out_dialogue_zone.emit()
-	#if !_global_datas.Waiting_bird:
-		#_global_datas.go_normal_color.emit()
-	#else:
-		#_global_datas.out_dialogue_zone.emit()	
+
 	$Random_FaceChanger/Timer.stop()
 
 
