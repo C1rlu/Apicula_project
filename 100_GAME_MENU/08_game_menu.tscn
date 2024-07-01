@@ -1,8 +1,9 @@
-[gd_scene load_steps=34 format=3 uid="uid://bemddl0bqqfwo"]
+[gd_scene load_steps=35 format=3 uid="uid://bemddl0bqqfwo"]
 
 [ext_resource type="Script" path="res://100_GAME_MENU/Open_Menu.gd" id="1_2jpo2"]
 [ext_resource type="Script" path="res://100_GAME_MENU/Option_panel.gd" id="2_gelwi"]
 [ext_resource type="Script" path="res://100_GAME_MENU/Restart.gd" id="4_0detv"]
+[ext_resource type="Script" path="res://100_GAME_MENU/Language_state_Menu.gd" id="4_34xg6"]
 [ext_resource type="Script" path="res://06_UI/Fps_counter.gd" id="4_86v10"]
 [ext_resource type="Script" path="res://100_GAME_MENU/HSlider.gd" id="5_7b61k"]
 
@@ -342,6 +343,9 @@ script = ExtResource("4_0detv")
 process_mode = 3
 script = SubResource("GDScript_8vnul")
 
+[node name="Language_state_Menu" type="Node" parent="."]
+script = ExtResource("4_34xg6")
+
 [node name="FPS_COUNTER" type="Label" parent="."]
 process_mode = 3
 z_index = 1
@@ -391,16 +395,17 @@ metadata/_edit_use_anchors_ = true
 layout_mode = 1
 anchors_preset = 0
 offset_left = -42.0
-offset_top = 40.0
+offset_top = 72.0
 offset_right = -42.0
-offset_bottom = 40.0
+offset_bottom = 72.0
 
 [node name="Title" type="Label" parent="Game_Menu_Root/MainMenu_Box"]
 clip_contents = true
 layout_direction = 1
 layout_mode = 1
+offset_top = -8.0
 offset_right = 638.0
-offset_bottom = 69.0
+offset_bottom = 61.0
 theme_override_colors/font_color = Color(0.317647, 0.615686, 0.529412, 1)
 theme_override_font_sizes/font_size = 35
 text = "APICULA (PROTOTYPE)"
@@ -412,9 +417,9 @@ autowrap_mode = 3
 process_mode = 3
 layout_mode = 1
 offset_left = 120.0
-offset_top = 78.0
+offset_top = 63.0
 offset_right = 560.0
-offset_bottom = 128.0
+offset_bottom = 113.0
 theme_override_constants/separation = 50
 
 [node name="Resum_Button2" type="Button" parent="Game_Menu_Root/MainMenu_Box/HBoxContainer"]
@@ -458,9 +463,9 @@ script = SubResource("GDScript_e1pe5")
 layout_mode = 1
 anchors_preset = 0
 offset_left = 124.0
-offset_top = 141.0
+offset_top = 159.0
 offset_right = 624.0
-offset_bottom = 258.0
+offset_bottom = 276.0
 mouse_filter = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Game_Menu_Root/MainMenu_Box/Options"]
@@ -658,6 +663,14 @@ step = 0.05
 value = 0.4
 script = ExtResource("5_7b61k")
 
+[node name="Language_choice" type="OptionButton" parent="Game_Menu_Root/MainMenu_Box"]
+process_mode = 2
+layout_mode = 0
+offset_left = 131.0
+offset_top = 327.0
+offset_right = 402.0
+offset_bottom = 401.0
+
 [connection signal="pressed" from="Game_Menu_Root/MainMenu_Box/HBoxContainer/Resum_Button2" to="Game_Menu_Root/MainMenu_Box/HBoxContainer/Resum_Button2" method="_on_pressed"]
 [connection signal="pressed" from="Game_Menu_Root/MainMenu_Box/HBoxContainer/Restart_Button" to="Restart" method="_on_restart_button_pressed"]
 [connection signal="pressed" from="Game_Menu_Root/MainMenu_Box/HBoxContainer/Exit_Button" to="Game_Menu_Root/MainMenu_Box/HBoxContainer/Exit_Button" method="_on_pressed"]
@@ -665,3 +678,4 @@ script = ExtResource("5_7b61k")
 [connection signal="toggled" from="Game_Menu_Root/MainMenu_Box/Options/VBoxContainer/Vsync_button" to="Option_Panel" method="_on_vsync_button_toggled"]
 [connection signal="toggled" from="Game_Menu_Root/MainMenu_Box/Options/VBoxContainer/ActiveDither_button" to="Option_Panel" method="_on_active_dither_button_toggled"]
 [connection signal="value_changed" from="Game_Menu_Root/MainMenu_Box/Options/VBoxContainer/Label/HSlider_dither" to="Game_Menu_Root/MainMenu_Box/Options/VBoxContainer/Label/HSlider_dither" method="_on_value_changed"]
+[connection signal="item_selected" from="Game_Menu_Root/MainMenu_Box/Language_choice" to="Language_state_Menu" method="_on_language_choice_item_selected"]

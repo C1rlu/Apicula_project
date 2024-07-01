@@ -78,6 +78,7 @@ var active_queste : Note_Data
 var boue_archives : Array[BoueData]
 var tools_list : Array[tool_data]
 
+signal _change_language_state(l_state : int)
 signal _start_dialogue_box
 signal _hide_dialogue_box
 signal _show_dialogue_box

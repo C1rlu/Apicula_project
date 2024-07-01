@@ -6,6 +6,7 @@ signal up_dialogue_index
 
 @onready var state = {
 	
+	"LS" : 0, # lANGUAGE STATE 0 > ENGLISH 1 > FRENCH
 	"give_letter" : _global_datas._give_letter,	
 	"up_dialogue_index" : up_dialogue_index,
 	"cam_focus" : _global_datas._update_cam_focus,
@@ -17,7 +18,12 @@ signal up_dialogue_index
 
 func _ready():
 	_global_datas._start_dialogue_box.connect(_open_dialogue)
+	_global_datas._change_language_state.connect(change_language_state)
 	
+func change_language_state(state_value : int):	
+	state["LS"] = state_value	
+	
+		
 func _open_dialogue():
 	
 	dialogue_box.is_dialogue_done = false
