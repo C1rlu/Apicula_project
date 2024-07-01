@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=3 uid="uid://cein0q2eirkay"]
+[gd_scene load_steps=51 format=3 uid="uid://cein0q2eirkay"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_g3pi7"]
 [ext_resource type="Script" path="res://10_BOARD/Board_CamTarget.gd" id="1_janbq"]
@@ -15,6 +15,7 @@
 [ext_resource type="Material" uid="uid://5qv6cc3a63nt" path="res://05_SHADER_TEST/Full_screen/04_board_simple_disolved.tres" id="7_fiqjo"]
 [ext_resource type="Script" path="res://10_BOARD/Player_onMap.gd" id="7_vhvc2"]
 [ext_resource type="Material" uid="uid://t4qtyso7w6ee" path="res://05_SHADER_TEST/Board/board_boat.tres" id="8_et36p"]
+[ext_resource type="Script" path="res://10_BOARD/Color_board.gd" id="8_rqh7c"]
 [ext_resource type="Script" path="res://10_BOARD/Link_Opacity.gd" id="12_vtjlf"]
 [ext_resource type="Script" path="res://10_BOARD/type_responce_hand.gd" id="13_qhohh"]
 [ext_resource type="Script" path="res://10_BOARD/Switch_Cursor_icon.gd" id="19_t6o6e"]
@@ -40,7 +41,6 @@ func open_inventory(condition : bool):
 	camera_xray.current = condition
 	
 	if !condition:
-		#_global_datas._show_object_legend.emit(false,\"\")
 		_global_datas.show_on_scanner.emit(false)
 		_global_datas.show_ui_scanner_dots.emit(false)	
 
@@ -550,6 +550,9 @@ viewports = [NodePath("../3D_SCENE/SubViewport")]
 
 [node name="Fade" type="Node" parent="."]
 script = SubResource("GDScript_52477")
+
+[node name="Color_board" type="Node" parent="."]
+script = ExtResource("8_rqh7c")
 
 [node name="set_Resolution" type="Node" parent="." node_paths=PackedStringArray("viewports")]
 script = ExtResource("1_g3pi7")

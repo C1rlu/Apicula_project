@@ -164,6 +164,7 @@ signal end_of_time
 #all
 signal send_bird_responce
 signal wait_for_otis
+signal active_diving
 
 signal responce_link_mode(condition : bool, text : String)
 var link_mode : bool = false

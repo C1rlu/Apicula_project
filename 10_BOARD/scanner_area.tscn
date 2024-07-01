@@ -1,67 +1,45 @@
-[gd_scene load_steps=23 format=3 uid="uid://dxjn0mjuqebwy"]
+[gd_scene load_steps=33 format=3 uid="uid://dxjn0mjuqebwy"]
 
-[ext_resource type="Resource" uid="uid://bcid58kxecbk2" path="res://12_INVENTORY/Photo/Maurice_photoData.tres" id="1_vlt1h"]
-[ext_resource type="Script" path="res://10_BOARD/Take_Object.tres.gd" id="2_gdyj0"]
+[ext_resource type="Script" path="res://10_BOARD/Photo_element.gd" id="1_tpp7t"]
+[ext_resource type="Resource" uid="uid://dyh1qg1u652pl" path="res://12_INVENTORY/Photo/Epave_ch_photoData.tres" id="2_offdg"]
 [ext_resource type="Shader" uid="uid://upo0fuo5sqgd" path="res://05_SHADER_TEST/Board/Board_sh.tres" id="3_aco5g"]
 [ext_resource type="Material" uid="uid://bs4xcdhvj0k0p" path="res://05_SHADER_TEST/Board/board_scanner_texture.tres" id="4_5hroj"]
+[ext_resource type="Texture2D" uid="uid://dtyhegc0wsj1h" path="res://10_BOARD/00_BOOK/01_UI/cursor_scan.png" id="5_cq0xw"]
+[ext_resource type="Script" path="res://10_BOARD/Show_scanner.gd" id="6_ovic5"]
+[ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="7_tjbgo"]
+[ext_resource type="Script" path="res://10_BOARD/00_BOOK/Legend/Legend_behaviour.gd" id="9_pcvth"]
+[ext_resource type="Script" path="res://10_BOARD/00_BOOK/Show_this_page.gd" id="10_xyvhp"]
+[ext_resource type="Script" path="res://10_BOARD/Link_this_info.gd" id="11_a2mev"]
 
-[sub_resource type="GDScript" id="GDScript_2oe2p"]
-script/source = "extends Area3D
+[sub_resource type="GDScript" id="GDScript_r1yy1"]
+script/source = "@tool
+extends Node
 
-@export var photo_data : PhotoData
-
-@onready var collision_shape_3d = $CollisionShape3D
-@onready var mesh_instance_3d_7 = $MeshInstance3D7
-@onready var photo = $photo
-
-
-
-func _ready():
-	_disable_object()
-		
-func _active():
-	collision_shape_3d.disabled = false	
-	mesh_instance_3d_7.visible = true
-	photo.visible = true
-
-
-func _disable_object():
-	
-	collision_shape_3d.disabled = true
-	mesh_instance_3d_7.visible = false
-	photo.visible = false
-
-
-	
-"
-
-[sub_resource type="GDScript" id="GDScript_32kbr"]
-script/source = "extends Node
-
-@onready var select_this = $\"../Select_this\"
-
+@onready var photo_area = $\"../..\"
 @onready var photo = $\"../photo\"
 
-@onready var material : Material = photo.get_surface_override_material(0)
 
 func _ready():
 	
-	var texture_data = select_this.photo_data.image
-	material.set_shader_parameter(\"Texture\",texture_data)
+	var texture_data = photo_area.Photo_data.image
+	var mat = photo.get_surface_override_material(0)
+	mat.set_shader_parameter(\"Texture\", texture_data)
+	
+	
+	
+func _run():
+	var texture_data = photo_area.Photo_data.image
+	var mat  : Material = photo.get_surface_override_material(0)
+	mat.set_shader_parameter(\"Texture\", texture_data)
 "
 
-[sub_resource type="QuadMesh" id="QuadMesh_540lh"]
+[sub_resource type="PlaneMesh" id="PlaneMesh_l1221"]
+resource_local_to_scene = true
 
-[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_53wbb"]
-function = 31
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_025qg"]
-constant = 0.4
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_5qx1q"]
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_shisn"]
 constant = 1.0
 
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_ijvmg"]
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_y3hi8"]
 size = Vector2(724.789, 654.559)
 expression = "const float DITHER_THRESHOLDS[16] ={
 		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
@@ -74,50 +52,35 @@ vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
 
-[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_7m0jy"]
-constant = Color(0.84, 0.5376, 0.168, 1)
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_fdada"]
+parameter_name = "Dither_size"
+qualifier = 1
 
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_13c7n"]
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_qmaqj"]
+default_input_values = [0, 0.83, 1, 0.0]
 
-[sub_resource type="Gradient" id="Gradient_754lt"]
-offsets = PackedFloat32Array(0, 0.738614, 0.90495, 0.956436, 1)
-colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 1, 0.212305, 0.212305, 0.212305, 1, 0, 0, 0, 1, 0.0303292, 0.0303292, 0.0303292, 1)
+[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_w2suj"]
+constant = Color(0.73, 0.47377, 0.1606, 1)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_npgut"]
-gradient = SubResource("Gradient_754lt")
-fill = 2
-fill_from = Vector2(0.5, 0.5)
-
-[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_vcijt"]
-texture = SubResource("GradientTexture2D_npgut")
-
-[sub_resource type="VisualShader" id="VisualShader_jlr7g"]
+[sub_resource type="VisualShader" id="VisualShader_tl2py"]
 code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded, shadows_disabled;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
 
-uniform sampler2D tex_frg_9;
+global uniform float Dither_size;
 
 
 
 void fragment() {
-// ColorConstant:5
-	vec4 n_out5p0 = vec4(0.840000, 0.537600, 0.168000, 1.000000);
-
-
-// Texture2D:9
-	vec4 n_out9p0 = texture(tex_frg_9, UV);
-
-
-// FloatFunc:10
-	float n_out10p0 = 1.0 - n_out9p0.x;
+// ColorConstant:7
+	vec4 n_out7p0 = vec4(0.730000, 0.473770, 0.160600, 1.000000);
 
 
 // FloatConstant:3
 	float n_out3p0 = 1.000000;
 
 
-// FloatConstant:2
-	float n_out2p0 = 0.400000;
+// FloatParameter:5
+	float n_out5p0 = Dither_size;
 
 
 	float n_out4p0;
@@ -131,33 +94,31 @@ void fragment() {
 				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
 			};
 			
-		vec2 uv = FRAGCOORD.xy * n_out2p0;
+		vec2 uv = FRAGCOORD.xy * n_out5p0;
 		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 		n_out4p0 = n_out3p0 - DITHER_THRESHOLDS[index];
 	}
 
 
-// Step:8
-	float n_out8p0 = step(n_out10p0, n_out4p0);
+// Step:6
+	float n_in6p0 = 0.83000;
+	float n_out6p0 = step(n_in6p0, n_out4p0);
 
 
 // Output:0
-	ALBEDO = vec3(n_out5p0.xyz);
-	ALPHA = n_out8p0;
+	ALBEDO = vec3(n_out7p0.xyz);
+	ALPHA = n_out6p0;
 
 
 }
 "
-graph_offset = Vector2(-683.156, -435.322)
+graph_offset = Vector2(-573.321, -129.617)
 flags/unshaded = true
-flags/shadows_disabled = true
-nodes/fragment/0/position = Vector2(680, 20)
-nodes/fragment/2/node = SubResource("VisualShaderNodeFloatConstant_025qg")
-nodes/fragment/2/position = Vector2(-708.999, 749.102)
-nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_5qx1q")
-nodes/fragment/3/position = Vector2(-708.999, 609.102)
-nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_ijvmg")
-nodes/fragment/4/position = Vector2(-408.999, 729.102)
+nodes/fragment/0/position = Vector2(580, 220)
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_shisn")
+nodes/fragment/3/position = Vector2(-1180, 460)
+nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_y3hi8")
+nodes/fragment/4/position = Vector2(-900, 460)
 nodes/fragment/4/size = Vector2(724.789, 654.559)
 nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
 nodes/fragment/4/output_ports = "0,0,Dither_Node;"
@@ -171,69 +132,277 @@ nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
 vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/5/node = SubResource("VisualShaderNodeColorConstant_7m0jy")
-nodes/fragment/5/position = Vector2(331.001, -290.898)
-nodes/fragment/8/node = SubResource("VisualShaderNodeStep_13c7n")
-nodes/fragment/8/position = Vector2(353.087, -105.897)
-nodes/fragment/9/node = SubResource("VisualShaderNodeTexture_vcijt")
-nodes/fragment/9/position = Vector2(-360, -260)
-nodes/fragment/10/node = SubResource("VisualShaderNodeFloatFunc_53wbb")
-nodes/fragment/10/position = Vector2(60, -120)
-nodes/fragment/connections = PackedInt32Array(2, 0, 4, 1, 3, 0, 4, 0, 4, 0, 8, 1, 8, 0, 0, 1, 5, 0, 0, 0, 9, 0, 10, 0, 10, 0, 8, 0)
+nodes/fragment/5/node = SubResource("VisualShaderNodeFloatParameter_fdada")
+nodes/fragment/5/position = Vector2(-1540, 620)
+nodes/fragment/6/node = SubResource("VisualShaderNodeStep_qmaqj")
+nodes/fragment/6/position = Vector2(130.23, 516.22)
+nodes/fragment/7/node = SubResource("VisualShaderNodeColorConstant_w2suj")
+nodes/fragment/7/position = Vector2(226.136, 51.1274)
+nodes/fragment/connections = PackedInt32Array(3, 0, 4, 0, 5, 0, 4, 1, 4, 0, 6, 1, 6, 0, 0, 1, 7, 0, 0, 0)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_v4xfe"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gfhbg"]
 render_priority = 0
-shader = SubResource("VisualShader_jlr7g")
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_nufnr"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4jhqi"]
-render_priority = 0
-shader = ExtResource("3_aco5g")
-shader_parameter/Dark_color = Color(0, 0, 0, 1)
-shader_parameter/ColorParameter = Color(0.231373, 0.2, 0.101961, 1)
-shader_parameter/light_color = Color(0.431373, 0.364706, 0.141176, 1)
+shader = SubResource("VisualShader_tl2py")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mdprb"]
-size = Vector3(0.0690674, 0.017453, 0.0662781)
+size = Vector3(0.0690674, 0.0105576, 0.0662781)
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_8mitn"]
+[sub_resource type="CylinderMesh" id="CylinderMesh_csoeo"]
 
-[node name="Scanner_area" type="Area3D"]
-transform = Transform3D(5.39092, 0, 0, 0, 5.39092, 0, 0, 0, 5.39092, 0, 0.00272226, 0)
-script = SubResource("GDScript_2oe2p")
-photo_data = ExtResource("1_vlt1h")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_58dwd"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("3_aco5g")
+shader_parameter/Dark_color = Color(0.945098, 0.807843, 0.517647, 1)
+shader_parameter/ColorParameter = Color(0.0235294, 0.0588235, 0.0627451, 1)
+shader_parameter/light_color = Color(0.494118, 0.388235, 0.141176, 1)
 
-[node name="Select_this" type="Node" parent="."]
-script = ExtResource("2_gdyj0")
+[sub_resource type="CylinderMesh" id="CylinderMesh_rxyrc"]
 
-[node name="texture" type="Node" parent="."]
-script = SubResource("GDScript_32kbr")
+[sub_resource type="BoxShape3D" id="BoxShape3D_hwpu2"]
+size = Vector3(0.0735859, 0.00637502, 0.019679)
 
-[node name="IS_SELECT" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.0922867, 0, 0, 0, -4.03398e-09, 0.0922867, 0, -0.0922867, -4.03398e-09, 0, 0.00213066, 0)
+[sub_resource type="ViewportTexture" id="ViewportTexture_5w0qn"]
+viewport_path = NodePath("legend/legend_render")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_seomj"]
+resource_local_to_scene = true
+size = Vector2(1.8, 1.8)
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_o4cud"]
+parameter_name = "link_opacity"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_4dsm5"]
+size = Vector2(620, 200)
+expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
+grey_value = luminance;"
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_y3xem"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
+op_type = 3
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_rax8w"]
+input_name = "color"
+
+[sub_resource type="VisualShader" id="VisualShader_sxcgk"]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+global uniform float link_opacity;
+
+
+
+void fragment() {
+// Input:5
+	vec4 n_out5p0 = COLOR;
+
+
+	float n_out3p0;
+// Expression:3
+	n_out3p0 = 0.0;
+	{
+		float luminance = 0.299 * vec3(n_out5p0.xyz).x + 0.587 * vec3(n_out5p0.xyz).y + 0.114 * vec3(n_out5p0.xyz).z;
+		n_out3p0 = luminance;
+	}
+
+
+// FloatParameter:2
+	float n_out2p0 = link_opacity;
+
+
+// Mix:4
+	vec3 n_out4p0 = mix(vec3(n_out5p0.xyz), vec3(n_out3p0), vec3(n_out2p0));
+
+
+// Output:0
+	COLOR.rgb = n_out4p0;
+
+
+}
+"
+graph_offset = Vector2(-50.8594, -157.287)
+mode = 1
+flags/light_only = false
+nodes/fragment/0/position = Vector2(720, 200)
+nodes/fragment/2/node = SubResource("VisualShaderNodeFloatParameter_o4cud")
+nodes/fragment/2/position = Vector2(-80, 80)
+nodes/fragment/3/node = SubResource("VisualShaderNodeExpression_4dsm5")
+nodes/fragment/3/position = Vector2(-220, -260)
+nodes/fragment/3/size = Vector2(620, 200)
+nodes/fragment/3/input_ports = "0,4,color;"
+nodes/fragment/3/output_ports = "0,0,grey_value;"
+nodes/fragment/3/expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
+grey_value = luminance;"
+nodes/fragment/4/node = SubResource("VisualShaderNodeMix_y3xem")
+nodes/fragment/4/position = Vector2(540, 60)
+nodes/fragment/5/node = SubResource("VisualShaderNodeInput_rax8w")
+nodes/fragment/5/position = Vector2(-580, -20)
+nodes/fragment/connections = PackedInt32Array(2, 0, 4, 2, 3, 0, 4, 1, 5, 0, 3, 0, 5, 0, 4, 0, 4, 0, 0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jbhxr"]
+shader = SubResource("VisualShader_sxcgk")
+
+[node name="Photo_element_root" type="Node3D"]
+script = ExtResource("1_tpp7t")
+Photo_data = ExtResource("2_offdg")
+book_position_offset = Vector3(0.025, 0.008, 0.125)
+
+[node name="Photo" type="Node3D" parent="."]
+
+[node name="texture" type="Node" parent="Photo"]
+script = SubResource("GDScript_r1yy1")
+
+[node name="On_Over" type="MeshInstance3D" parent="Photo"]
+transform = Transform3D(0.0396476, 0, 0.000431277, 0, 0.034558, 0, -0.000429739, 0, 0.0397897, 0.00034634, 0.00123594, 0)
 visible = false
 layers = 2
-mesh = SubResource("QuadMesh_540lh")
-surface_material_override/0 = SubResource("ShaderMaterial_v4xfe")
+mesh = SubResource("PlaneMesh_l1221")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("ShaderMaterial_gfhbg")
 
-[node name="MeshInstance3D7" type="MeshInstance3D" parent="."]
+[node name="Render_ui_scan" type="Sprite3D" parent="Photo"]
+transform = Transform3D(0.0163116, 0.000434548, -7.60632e-05, 7.58006e-05, 1.08666e-05, 0.0163174, 0.000434588, -0.0163117, 8.84402e-06, 0.0250836, 0.0059832, -0.0266915)
+visible = false
+layers = 2
+sorting_offset = 3.0
+modulate = Color(0.796078, 0.768627, 0.639216, 1)
+texture = ExtResource("5_cq0xw")
+
+[node name="Render_ui_scan" type="Sprite3D" parent="Photo/Render_ui_scan"]
+transform = Transform3D(1, 2.04891e-08, -2.13367e-09, -2.38419e-07, 1, 5.23869e-10, 5.81167e-10, 3.49246e-10, 1, -0.00988793, -0.135393, -0.00247461)
+layers = 2
+sorting_offset = 2.0
+modulate = Color(0.0392157, 0.172549, 0.184314, 1)
+texture = ExtResource("5_cq0xw")
+
+[node name="Photo_area" type="Area3D" parent="Photo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.00272226, 0)
+
+[node name="On_click" type="Node" parent="Photo/Photo_area"]
+script = ExtResource("6_ovic5")
+
+[node name="On_Over" type="Node" parent="Photo/Photo_area" node_paths=PackedStringArray("_on_over", "_on_over_second")]
+script = ExtResource("7_tjbgo")
+_on_over = NodePath("../../Render_ui_scan")
+_on_over_second = NodePath("../../On_Over")
+icon_type = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Photo/Photo_area"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000622556, 0.00481491, -0.000192255)
+shape = SubResource("BoxShape3D_mdprb")
+
+[node name="Base" type="MeshInstance3D" parent="Photo"]
 transform = Transform3D(0.0682586, 0, 0, 0, 0.00230959, 0, 0, 0, 0.0682586, 0, 0, 0)
 layers = 2
-mesh = SubResource("CylinderMesh_nufnr")
-skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("ShaderMaterial_4jhqi")
+mesh = SubResource("CylinderMesh_csoeo")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("ShaderMaterial_58dwd")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000622556, 0.00826263, -0.000192255)
-shape = SubResource("BoxShape3D_mdprb")
-disabled = true
-
-[node name="photo" type="MeshInstance3D" parent="."]
+[node name="photo" type="MeshInstance3D" parent="Photo"]
 transform = Transform3D(0.0575424, 0, 0, 0, -0.00215731, -5.03052e-09, 0, 1.88598e-10, -0.0575425, 0.000475392, 0.00130028, 0)
 layers = 2
-mesh = SubResource("CylinderMesh_8mitn")
+mesh = SubResource("CylinderMesh_rxyrc")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("4_5hroj")
 
-[connection signal="on_click" from="Select_this" to="Select_this" method="_on_on_click"]
+[node name="legend" type="Node3D" parent="."]
+transform = Transform3D(0.99286, 0, -0.119288, 0, 1, 0, 0.119288, 0, 0.99286, 0.005, 0, 0.047)
+
+[node name="legend_behaviour" type="Node" parent="legend"]
+script = ExtResource("9_pcvth")
+
+[node name="Timer" type="Timer" parent="legend/legend_behaviour"]
+wait_time = 0.1
+one_shot = true
+
+[node name="Legend_area" type="Area3D" parent="legend"]
+
+[node name="On_Over" type="Node" parent="legend/Legend_area" node_paths=PackedStringArray("_on_over_second")]
+script = ExtResource("7_tjbgo")
+_on_over_second = NodePath("../../On_Over")
+icon_type = 1
+
+[node name="On_click" type="Node" parent="legend/Legend_area"]
+script = ExtResource("10_xyvhp")
+
+[node name="Link_info" type="Node" parent="legend/Legend_area"]
+script = ExtResource("11_a2mev")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="legend/Legend_area"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000850344, 0.00429791, -0.00163807)
+shape = SubResource("BoxShape3D_hwpu2")
+disabled = true
+
+[node name="Render_text" type="Sprite3D" parent="legend"]
+transform = Transform3D(0.0165207, 4.65661e-10, 0, 0, -7.22143e-10, 0.0165207, 4.65661e-10, -0.0165207, -7.22143e-10, 0, 0, 0)
+layers = 2
+sorting_offset = 1.0
+texture = SubResource("ViewportTexture_5w0qn")
+
+[node name="On_Over" type="MeshInstance3D" parent="legend"]
+transform = Transform3D(0.0417257, 0, 0.000179212, 0, 0.0357813, 0, -0.000452262, 0, 0.016534, 0, -1.41226e-05, 0)
+visible = false
+layers = 2
+mesh = SubResource("PlaneMesh_seomj")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("ShaderMaterial_gfhbg")
+
+[node name="legend_render" type="SubViewport" parent="legend"]
+transparent_bg = true
+size = Vector2i(600, 400)
+
+[node name="text_for_size" type="Label" parent="legend/legend_render"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -198.0
+offset_top = -55.0
+offset_right = 198.0
+offset_bottom = 55.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.360784, 0.341176, 0.294118, 1)
+theme_override_font_sizes/font_size = 80
+text = "?"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ColorRect" type="ColorRect" parent="legend/legend_render/text_for_size"]
+material = SubResource("ShaderMaterial_jbhxr")
+layout_direction = 1
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -68.77
+offset_bottom = 56.2299
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.831373, 0.796078, 0.639216, 1)
+
+[node name="text" type="Label" parent="legend/legend_render"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -198.0
+offset_top = -48.775
+offset_right = 198.0
+offset_bottom = 34.225
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.360784, 0.341176, 0.294118, 1)
+theme_override_font_sizes/font_size = 60
+text = "?"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="update_legend" from="." to="legend/legend_behaviour" method="_on_photo_element_root_update_legend"]
+[connection signal="On_click" from="Photo/Photo_area/On_click" to="." method="_on_show_scanner"]
+[connection signal="timeout" from="legend/legend_behaviour/Timer" to="legend/legend_behaviour" method="_on_timer_timeout"]
+[connection signal="On_click" from="legend/Legend_area/On_click" to="." method="_on_show_this_page"]

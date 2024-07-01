@@ -8,53 +8,32 @@
 script/source = "extends Area3D
 
 @export var boue_data : BoueData
-@onready var on_over = $Boue_msh_01/On_Over
 @onready var root = $\".\"
 
-signal see_int(condition : bool)
+@export var activable : Array[Node3D]
 
-@onready var boue = $Boue_msh_01
-var was_detected : bool = false
+
+signal see_int(condition : bool)
 
 func _ready():
 	boue_data.world_position = root.global_position
 
 
-func _on_area_entered(_area):
-
-	if _global_datas.Player_InSubScene:
-		return
-		
-	if _area.name == \"Enter_dialogue_zone\":
-			
-		_global_datas.selected_subscene = boue_data.zone_packed_scene
-		see_int.emit(true)
-		on_over.visible = true
-		_global_datas._show_object_legend.emit(true,boue_data.legend)
-		
-		if !was_detected:
-			_global_datas._active_sonar.emit(global_position)
-			_global_datas.ui_noted_taked.emit()
-			if boue_data:
-				_global_datas.boue_archives.append(boue_data)
-		boue.visible = true
-		was_detected = true
-		_global_datas.Active_boue_position = global_position
-		_global_datas._boat_inside_zone.emit(true)
-			
-func _on_area_exited(_area):
+func active():
 	
-	if _area.name == \"Enter_dialogue_zone\":
+	for e in activable:
+		e.visible = true
 		
-		_global_datas.selected_subscene = null
-		#_global_datas._load_subscene.emit(false)
-		see_int.emit(false)
-		on_over.visible = false
+	
+	$\".\".monitorable = true
+	
+func disable():
 
-		_global_datas._active_progress_subscene.emit(false)
-		_global_datas._show_object_legend.emit(false,\"\")
+	$\".\".monitorable = false
+	
+	for e in activable:
+		e.visible = false
 
-		_global_datas._boat_inside_zone.emit(false)
 "
 
 [sub_resource type="TorusMesh" id="TorusMesh_8ej3g"]
@@ -391,11 +370,12 @@ shadow_mesh = SubResource("ArrayMesh_yh6yu")
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("1_4eijp")
-shader_parameter/Distance = 0.0
+shader_parameter/Distance = 0.455
 
-[node name="EPAVE_ZONE" type="Area3D"]
+[node name="EPAVE_ZONE" type="Area3D" node_paths=PackedStringArray("activable")]
 input_ray_pickable = false
 script = SubResource("GDScript_kppkw")
+activable = [NodePath("Boue_msh_01"), NodePath("Epave_visuals")]
 
 [node name="Dive_zone" type="Node" parent="."]
 script = ExtResource("1_mmyx7")
@@ -417,7 +397,7 @@ mesh = SubResource("TorusMesh_e6koh")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("ShaderMaterial_ahafp")
 
-[node name="Col" type="CollisionShape3D" parent="."]
+[node name="collider" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_7qqy6")
 
 [node name="Epave_visuals" type="Node3D" parent="."]

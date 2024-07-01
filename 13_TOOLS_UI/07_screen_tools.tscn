@@ -67,12 +67,6 @@ var _is_typing : bool = false
 func _ready():
 
 	_global_datas._show_object_legend.connect(_update_text)
-	#_global_datas._go_Subscene.connect(disable_text)
-	#_global_datas._backFrom_subscene.connect(back_from_subscene)
-	#_global_datas.in_dialogue_zone.connect(back_from_dialogue)
-	#_global_datas.out_dialogue_zone.connect(disable_text)
-	#_global_datas._open_dialogue.connect(disable_text)
-
 
 func _update_text(condition : bool, _text : String):
 	print(\"UPDATE DIALOGUE\")
@@ -106,27 +100,6 @@ func change_ration(value : float):
 	description_text.visible_ratio = value
 	
 
-func disable_text():
-	description_text.visible = false
-
-func back_from_subscene():
-	if _global_datas.Waiting_bird:
-		return
-	description_text.visible = true
-	var text_count = description_text.text.length()
-	type_text(text_count)
-	
-func back_from_dialogue():
-	
-	if _global_datas.Waiting_bird:
-		return
-	#if _global_datas.Npc_Dialogue == null:
-		#return
-		
-	description_text.text = _global_datas.Npc_Dialogue.zone_name
-	description_text.visible = true
-	var text_count = description_text.text.length()
-	type_text(text_count)
 "
 
 [sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_uy744"]

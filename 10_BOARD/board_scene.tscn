@@ -1,4 +1,4 @@
-[gd_scene load_steps=219 format=3 uid="uid://dr73p5vs0sixe"]
+[gd_scene load_steps=220 format=3 uid="uid://dr73p5vs0sixe"]
 
 [ext_resource type="PackedScene" uid="uid://cyb6my1srlcpw" path="res://10_BOARD/Candle/Candle_set.blend" id="1_3ummb"]
 [ext_resource type="Script" path="res://10_BOARD/photos_check.gd" id="1_bcxwj"]
@@ -20,6 +20,7 @@
 [ext_resource type="PackedScene" uid="uid://b3i04ha2iqr4l" path="res://10_BOARD/Loupe/loupe_rg.tscn" id="12_alpcj"]
 [ext_resource type="Resource" uid="uid://dm0uus2gow50q" path="res://12_INVENTORY/Photo/Otis_photoData.tres" id="14_4ak8e"]
 [ext_resource type="Script" path="res://10_BOARD/Letters_checks.gd" id="14_vbqye"]
+[ext_resource type="PackedScene" uid="uid://dxjn0mjuqebwy" path="res://10_BOARD/scanner_area.tscn" id="15_7dbnv"]
 [ext_resource type="Resource" uid="uid://nb378vtwr23i" path="res://12_INVENTORY/Words_note/Find_The_Apicula_note.tres" id="17_3gp1t"]
 [ext_resource type="Resource" uid="uid://bvadwmoawvfs0" path="res://12_INVENTORY/Words_note/Meet_Ela_note.tres" id="18_e0vtf"]
 [ext_resource type="Resource" uid="uid://duqn0ehtc8aao" path="res://12_INVENTORY/Words_note/Ring_the_bell.tres" id="18_rgvka"]
@@ -2028,11 +2029,10 @@ transform = Transform3D(0.027966, 0, -0.00898967, 0, 0.0293754, 0, 0.00898967, 0
 [node name="clock_3d_prefab" parent="Deco" instance=ExtResource("8_x5b6k")]
 transform = Transform3D(0.0286346, -1.44512e-05, -0.00768743, 1.43001e-05, 0.0296485, -2.46867e-06, 0.00768743, -1.32337e-06, 0.0286346, -0.00647841, -0.00191151, 0.476101)
 
-[node name="clock_all" parent="Deco/clock_3d_prefab/clock_3d" index="0"]
-transform = Transform3D(0.0662028, -4.54747e-13, 1.86265e-09, -3.9222e-12, 0.0662028, 1.13687e-12, 0, 4.54747e-13, 0.0662028, 0, 0, 0)
+[node name="clock_all" parent="Deco/clock_3d_prefab/clock_3d2" index="0"]
 layers = 2
 
-[node name="root_equille" parent="Deco/clock_3d_prefab/clock_3d" index="1"]
+[node name="root_equille" parent="Deco/clock_3d_prefab/clock_3d2" index="1"]
 layers = 2
 
 [node name="LINKS" type="Node3D" parent="."]
@@ -2060,34 +2060,32 @@ transform = Transform3D(0.882135, 0, -0.470996, 0, 1, 0, 0.470996, 0, 0.882135, 
 script = ExtResource("1_bcxwj")
 
 [node name="MrBird_Photo_area" parent="PHOTO" node_paths=PackedStringArray("links_list", "next_photo_data") instance=ExtResource("1_mtaom")]
-transform = Transform3D(0.838361, 0, 0.545123, 0, 1, 0, -0.545123, 0, 0.838361, -0.0951144, -2.98023e-08, -0.0603341)
+transform = Transform3D(0.838361, 0, 0.545123, 0, 1, 0, -0.545123, 0, 0.838361, -0.0951144, 0.00081823, -0.0603341)
 Photo_data = ExtResource("4_t8cpb")
 links_list = [NodePath("../../LINKS/link_03")]
 next_photo_data = [NodePath("../Maurice_Photo_area5")]
 book_rotation_angle = -100.0
 
 [node name="Maurice_Photo_area5" parent="PHOTO" node_paths=PackedStringArray("links_list", "next_photo_data") instance=ExtResource("1_mtaom")]
-transform = Transform3D(0.940239, 0.00134326, 0.340524, -0.00136849, 0.999999, -0.000166074, -0.340524, -0.000309871, 0.940241, 0.039204, 0, -0.0969784)
+transform = Transform3D(0.940239, 0.00134326, 0.340524, -0.00136849, 0.999999, -0.000166074, -0.340524, -0.000309871, 0.940241, 0.039204, 0.000537969, -0.0969784)
 Photo_data = ExtResource("10_f1pwj")
 links_list = [NodePath("../../LINKS/link_02")]
-next_photo_data = [NodePath("../MrBird_Photo_area"), NodePath("../01")]
+next_photo_data = [NodePath("../MrBird_Photo_area"), NodePath("../04")]
 book_rotation_angle = -100.0
 
 [node name="Otis_Photo" parent="PHOTO" instance=ExtResource("1_mtaom")]
-transform = Transform3D(0.972666, 0, 0.23224, 0, 1, 0, -0.23224, 0, 0.972666, 0.099547, -0.00197421, -0.161791)
+transform = Transform3D(0.972666, 0, 0.23224, 0, 1, 0, -0.23224, 0, 0.972666, 0.099547, 0.00109485, -0.161791)
 Photo_data = ExtResource("14_4ak8e")
 book_rotation_angle = -100.0
 
-[node name="01" parent="PHOTO" node_paths=PackedStringArray("links_list", "next_photo_data") instance=ExtResource("1_mtaom")]
-transform = Transform3D(0.931501, 0, 0.363756, 0, 1, 0, -0.363756, 0, 0.931501, 0.048138, -0.00197421, 0.0414641)
-Photo_data = ExtResource("11_ub6ec")
+[node name="04" parent="PHOTO" node_paths=PackedStringArray("links_list", "next_photo_data") instance=ExtResource("15_7dbnv")]
+transform = Transform3D(0.943368, 0, 0.33175, 0, 1, 0, -0.33175, 0, 0.943368, 0.0500738, 0.00379935, 0.0440464)
 links_list = [NodePath("../../LINKS/link_01")]
-next_photo_data = [NodePath("../06")]
-book_rotation_angle = -100.0
+next_photo_data = [NodePath("../05")]
 
-[node name="06" parent="PHOTO" instance=ExtResource("1_mtaom")]
-transform = Transform3D(0.953555, 0, 0.301239, 0, 1, 0, -0.301239, 0, 0.953555, 0.264629, -2.98023e-08, 0.0531271)
-book_rotation_angle = -100.0
+[node name="05" parent="PHOTO" instance=ExtResource("15_7dbnv")]
+transform = Transform3D(0.958408, 0, 0.285404, 0, 1, 0, -0.285404, 0, 0.958408, 0.265933, 0.00361408, 0.0515239)
+Photo_data = ExtResource("11_ub6ec")
 
 [node name="Letters" type="Node3D" parent="." node_paths=PackedStringArray("all_note")]
 script = ExtResource("14_vbqye")
@@ -2342,7 +2340,7 @@ skeleton = NodePath("")
 [editable path="Deco/Candle_set3"]
 [editable path="Deco/Candle_set2"]
 [editable path="Deco/clock_3d_prefab"]
-[editable path="Deco/clock_3d_prefab/clock_3d"]
+[editable path="Deco/clock_3d_prefab/clock_3d2"]
 [editable path="Chavet_part"]
 [editable path="Chavet_part2"]
 [editable path="Chavet_part3"]

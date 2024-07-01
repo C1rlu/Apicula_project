@@ -14,4 +14,4 @@ func _wait_for_otis():
 func done():
 	_global_datas.Npc_Dialogue = Otis_data
 	_global_datas._open_dialogue.emit()
-	
+	_global_datas.active_diving.emit()

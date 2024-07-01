@@ -1,11 +1,10 @@
-[gd_scene load_steps=57 format=3 uid="uid://uwg2qc3svu11"]
+[gd_scene load_steps=72 format=3 uid="uid://uwg2qc3svu11"]
 
 [ext_resource type="Script" path="res://10_BOARD/Photo_element.gd" id="1_0a8jl"]
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Legend/Legend_behaviour.gd" id="1_f7rkq"]
 [ext_resource type="Resource" uid="uid://dyh1qg1u652pl" path="res://12_INVENTORY/Photo/Epave_ch_photoData.tres" id="2_8x1kk"]
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Show_this_page.gd" id="2_653je"]
 [ext_resource type="Script" path="res://10_BOARD/Show_scanner.gd" id="3_btmm2"]
-[ext_resource type="Shader" uid="uid://upo0fuo5sqgd" path="res://05_SHADER_TEST/Board/Board_sh.tres" id="3_ysgwd"]
 [ext_resource type="Texture2D" uid="uid://38btbw60olcn" path="res://12_INVENTORY/Photo/IMG/Boat.png" id="4_wljme"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="7_vd1wc"]
 [ext_resource type="Texture2D" uid="uid://dtyhegc0wsj1h" path="res://10_BOARD/00_BOOK/01_UI/cursor_scan.png" id="10_fkyuy"]
@@ -18,6 +17,7 @@ extends Node
 
 @onready var photo_area = $\"../..\"
 @onready var img = $\"../IMG\"
+
 
 func _ready():
 	
@@ -287,15 +287,230 @@ shader_parameter/Main_color = Color(0.792157, 0.65098, 0.482353, 1)
 shader_parameter/t_render = ExtResource("4_wljme")
 shader_parameter/Gradiant = SubResource("GradientTexture2D_hghgh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_aof41"]
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_hmdwg"]
+default_input_values = [0, Quaternion(0, 0, 0, 0), 1, Quaternion(0.125, 0.125, 0.125, 0.125), 2, Quaternion(0.5, 0.5, 0.5, 0.5)]
+op_type = 5
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_nkxwk"]
+parameter_name = "ColorParameter"
+default_value_enabled = true
+default_value = Color(0.027451, 0.14902, 0.156863, 1)
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_i727x"]
+parameter_name = "Dither_size"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_n3xmo"]
+size = Vector2(620, 200)
+expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
+grey_value = luminance;"
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_j86lc"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
+op_type = 3
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_csf7j"]
+parameter_name = "link_opacity"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_rb2ba"]
+size = Vector2(620, 200)
+expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
+grey_value = luminance;"
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_snpqm"]
+constant = 1.0
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_3y63r"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
+op_type = 3
+
+[sub_resource type="Gradient" id="Gradient_3rj5j"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_6a54q"]
+gradient = SubResource("Gradient_3rj5j")
+fill_from = Vector2(0, 1)
+fill_to = Vector2(0, 0)
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_xe0um"]
+texture = SubResource("GradientTexture2D_6a54q")
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_eq5xp"]
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_8tisx"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_h702a"]
+parameter_name = "light_color"
+default_value = Color(0.401313, 0.399257, 0, 1)
+
+[sub_resource type="VisualShader" id="VisualShader_drhdi"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+
+uniform vec4 ColorParameter : source_color = vec4(0.027451, 0.149020, 0.156863, 1.000000);
+global uniform float link_opacity;
+uniform vec4 light_color : source_color;
+global uniform float Dither_size;
+uniform sampler2D tex_frg_21;
+
+
+
+void fragment() {
+// ColorParameter:14
+	vec4 n_out14p0 = ColorParameter;
+
+
+	float n_out16p0;
+// Expression:16
+	n_out16p0 = 0.0;
+	{
+		float luminance = 0.299 * vec3(n_out14p0.xyz).x + 0.587 * vec3(n_out14p0.xyz).y + 0.114 * vec3(n_out14p0.xyz).z;
+		n_out16p0 = luminance;
+	}
+
+
+// FloatParameter:18
+	float n_out18p0 = link_opacity;
+
+
+// Mix:17
+	vec3 n_out17p0 = mix(vec3(n_out14p0.xyz), vec3(n_out16p0), vec3(n_out18p0));
+
+
+// ColorParameter:9
+	vec4 n_out9p0 = light_color;
+
+
+	float n_out19p0;
+// Expression:19
+	n_out19p0 = 0.0;
+	{
+		float luminance = 0.299 * vec3(n_out9p0.xyz).x + 0.587 * vec3(n_out9p0.xyz).y + 0.114 * vec3(n_out9p0.xyz).z;
+		n_out19p0 = luminance;
+	}
+
+
+// Mix:20
+	vec3 n_out20p0 = mix(vec3(n_out9p0.xyz), vec3(n_out19p0), vec3(n_out18p0));
+
+
+// FloatConstant:2
+	float n_out2p0 = 1.000000;
+
+
+// FloatParameter:15
+	float n_out15p0 = Dither_size;
+
+
+	float n_out3p0;
+// Expression:3
+	n_out3p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out15p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out3p0 = n_out2p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Texture2D:21
+	vec4 n_out21p0 = texture(tex_frg_21, UV);
+
+
+// Step:22
+	float n_out22p0 = step(n_out3p0, n_out21p0.x);
+
+
+// Mix:13
+	vec4 n_out13p0 = mix(vec4(n_out17p0, 0.0), vec4(n_out20p0, 0.0), vec4(n_out22p0));
+
+
+// Output:0
+	ALBEDO = vec3(n_out13p0.xyz);
+
+
+}
+"
+flags/unshaded = true
+nodes/vertex/0/position = Vector2(400, 160)
+nodes/fragment/2/node = SubResource("VisualShaderNodeFloatConstant_snpqm")
+nodes/fragment/2/position = Vector2(-1160, 580)
+nodes/fragment/3/node = SubResource("VisualShaderNodeExpression_8tisx")
+nodes/fragment/3/position = Vector2(-880, 580)
+nodes/fragment/3/size = Vector2(724.789, 654.559)
+nodes/fragment/3/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/3/output_ports = "0,0,Dither_Node;"
+nodes/fragment/3/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/9/node = SubResource("VisualShaderNodeColorParameter_h702a")
+nodes/fragment/9/position = Vector2(-1197.08, -441.685)
+nodes/fragment/13/node = SubResource("VisualShaderNodeMix_hmdwg")
+nodes/fragment/13/position = Vector2(-77.0765, -61.6854)
+nodes/fragment/14/node = SubResource("VisualShaderNodeColorParameter_nkxwk")
+nodes/fragment/14/position = Vector2(-1197.08, -661.685)
+nodes/fragment/15/node = SubResource("VisualShaderNodeFloatParameter_i727x")
+nodes/fragment/15/position = Vector2(-1520, 740)
+nodes/fragment/16/node = SubResource("VisualShaderNodeExpression_n3xmo")
+nodes/fragment/16/position = Vector2(-737.077, -1021.69)
+nodes/fragment/16/size = Vector2(620, 200)
+nodes/fragment/16/input_ports = "0,4,color;"
+nodes/fragment/16/output_ports = "0,0,grey_value;"
+nodes/fragment/16/expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
+grey_value = luminance;"
+nodes/fragment/17/node = SubResource("VisualShaderNodeMix_j86lc")
+nodes/fragment/17/position = Vector2(22.9235, -801.685)
+nodes/fragment/18/node = SubResource("VisualShaderNodeFloatParameter_csf7j")
+nodes/fragment/18/position = Vector2(-717.077, -741.685)
+nodes/fragment/19/node = SubResource("VisualShaderNodeExpression_rb2ba")
+nodes/fragment/19/position = Vector2(-757.077, -481.685)
+nodes/fragment/19/size = Vector2(620, 200)
+nodes/fragment/19/input_ports = "0,4,color;"
+nodes/fragment/19/output_ports = "0,0,grey_value;"
+nodes/fragment/19/expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
+grey_value = luminance;"
+nodes/fragment/20/node = SubResource("VisualShaderNodeMix_3y63r")
+nodes/fragment/20/position = Vector2(-317.077, -661.685)
+nodes/fragment/21/node = SubResource("VisualShaderNodeTexture_xe0um")
+nodes/fragment/21/position = Vector2(-820, 180)
+nodes/fragment/22/node = SubResource("VisualShaderNodeStep_eq5xp")
+nodes/fragment/22/position = Vector2(-220, 220)
+nodes/fragment/connections = PackedInt32Array(2, 0, 3, 0, 15, 0, 3, 1, 14, 0, 16, 0, 18, 0, 17, 2, 14, 0, 17, 0, 16, 0, 17, 1, 9, 0, 19, 0, 18, 0, 20, 2, 19, 0, 20, 1, 9, 0, 20, 0, 20, 0, 13, 1, 17, 0, 13, 0, 13, 0, 0, 0, 21, 0, 22, 1, 3, 0, 22, 0, 22, 0, 13, 2)
+nodes/light/0/position = Vector2(2440, 1640)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hy8dn"]
 render_priority = 0
-shader = ExtResource("3_ysgwd")
-shader_parameter/Dark_color = Color(0.294118, 0.262745, 0, 1)
-shader_parameter/ColorParameter = Color(0.431373, 0.4, 0.309804, 1)
-shader_parameter/light_color = Color(0.580392, 0.545098, 0.439216, 1)
+shader = SubResource("VisualShader_drhdi")
+shader_parameter/ColorParameter = Color(0.6, 0.564706, 0.454902, 1)
+shader_parameter/light_color = Color(0.67451, 0.639216, 0.529412, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_8e2mh"]
-material = SubResource("ShaderMaterial_aof41")
+material = SubResource("ShaderMaterial_hy8dn")
+size = Vector3(1, 1, 1.185)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_l1221"]
 resource_local_to_scene = true
@@ -412,7 +627,7 @@ shader = SubResource("VisualShader_tl2py")
 size = Vector3(0.0690674, 0.0105576, 0.0662781)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_nnxyu"]
-size = Vector3(0.0735859, 0.00637502, 0.0321484)
+size = Vector3(0.0735859, 0.0129531, 0.0840869)
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_lyxt3"]
 viewport_path = NodePath("legend/legend_render")
@@ -506,15 +721,15 @@ book_position_offset = Vector3(0.025, 0.008, 0.125)
 script = SubResource("GDScript_32kbr")
 
 [node name="IMG" type="MeshInstance3D" parent="Photo"]
-transform = Transform3D(0.0595463, 0, 0, 0, -2.60285e-09, 0.0595463, 0, -0.0595463, -2.60285e-09, 0, 0.00427736, 0)
+transform = Transform3D(0.0595463, 0, 0, 0, -2.60285e-09, 0.0595463, 0, -0.0595463, -2.60285e-09, 0, 0.00265636, 0.00115996)
 layers = 2
 mesh = SubResource("QuadMesh_1i4du")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("ShaderMaterial_trilb")
 
 [node name="render_base" type="MeshInstance3D" parent="Photo"]
-transform = Transform3D(0.0682586, 0, 0, 0, 0.00230959, 0, 0, 0, 0.0682586, 0, 0.00272226, 0)
-layers = 16386
+transform = Transform3D(0.0682586, 0, 0, 0, 0.000958014, 0, 0, 0, 0.0682586, 0, 0.00166521, 0.00773918)
+layers = 2
 mesh = SubResource("BoxMesh_8e2mh")
 skeleton = NodePath("../..")
 
@@ -543,11 +758,13 @@ texture = ExtResource("10_fkyuy")
 
 [node name="Photo_area" type="Area3D" parent="Photo"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.00272226, 0)
+monitoring = false
+monitorable = false
 
-[node name="On_click" type="Node" parent="Photo/Photo_area"]
+[node name="On_click_off" type="Node" parent="Photo/Photo_area"]
 script = ExtResource("3_btmm2")
 
-[node name="On_Over" type="Node" parent="Photo/Photo_area" node_paths=PackedStringArray("_on_over", "_on_over_second")]
+[node name="On_Over_off" type="Node" parent="Photo/Photo_area" node_paths=PackedStringArray("_on_over", "_on_over_second")]
 script = ExtResource("7_vd1wc")
 _on_over = NodePath("../../Render_ui_scan")
 _on_over_second = NodePath("../../On_Over")
@@ -559,7 +776,7 @@ shape = SubResource("BoxShape3D_mdprb")
 disabled = true
 
 [node name="legend" type="Node3D" parent="."]
-transform = Transform3D(0.981737, 0, 0.190244, 0, 1, 0, -0.190244, 0, 0.981737, 0.0102955, 0.00516227, 0.0389719)
+transform = Transform3D(0.999989, 0, 0.00467785, 0, 1, 0, -0.00467785, 0, 0.999989, -0.000246863, 0.00516227, 0.0402894)
 
 [node name="legend_behaviour" type="Node" parent="legend"]
 script = ExtResource("1_f7rkq")
@@ -582,18 +799,18 @@ script = ExtResource("2_653je")
 script = ExtResource("10_m8k0p")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="legend/Legend_area"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000850344, 0.00429791, 0.00136547)
+transform = Transform3D(0.99999, 0, -1.86265e-09, 0, 1, 0, 1.86265e-09, 0, 0.99999, 0.000850344, 0.00687685, -0.0322746)
 shape = SubResource("BoxShape3D_nnxyu")
 disabled = true
 
 [node name="Render_text" type="Sprite3D" parent="legend"]
-transform = Transform3D(0.0165207, 4.65661e-10, 0, 0, -7.22143e-10, 0.0165207, 4.65661e-10, -0.0165207, -7.22143e-10, 0, 0, 0)
+transform = Transform3D(0.0165207, 2.61934e-10, -1.30104e-17, 0, -7.22143e-10, 0.0165207, 2.61934e-10, -0.0165207, -7.22143e-10, 0, -0.00164617, 0)
 layers = 2
 sorting_offset = 1.0
 texture = SubResource("ViewportTexture_lyxt3")
 
 [node name="On_Over" type="MeshInstance3D" parent="legend"]
-transform = Transform3D(0.0417257, 0, 0.000179212, 0, 0.0357813, 0, -0.000452262, 0, 0.016534, 0, -1.41226e-05, 0)
+transform = Transform3D(0.0414044, 0, -1.74623e-10, 0, 0.0357813, 0, 7.27596e-11, 0, 0.0511735, 0.000152637, -0.00164047, -0.0326294)
 visible = false
 layers = 2
 mesh = SubResource("PlaneMesh_seomj")
@@ -605,6 +822,7 @@ transparent_bg = true
 size = Vector2i(600, 400)
 
 [node name="text_for_size" type="Label" parent="legend/legend_render"]
+visible = false
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -623,6 +841,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="ColorRect" type="ColorRect" parent="legend/legend_render/text_for_size"]
+visible = false
 material = SubResource("ShaderMaterial_jbhxr")
 layout_direction = 1
 layout_mode = 1
@@ -649,12 +868,12 @@ offset_bottom = 34.225
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.360784, 0.341176, 0.294118, 1)
-theme_override_font_sizes/font_size = 60
+theme_override_font_sizes/font_size = 50
 text = "?"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [connection signal="update_legend" from="." to="legend/legend_behaviour" method="_on_photo_element_root_update_legend"]
-[connection signal="On_click" from="Photo/Photo_area/On_click" to="." method="_on_show_scanner"]
+[connection signal="On_click" from="Photo/Photo_area/On_click_off" to="." method="_on_show_scanner"]
 [connection signal="timeout" from="legend/legend_behaviour/Timer" to="legend/legend_behaviour" method="_on_timer_timeout"]
 [connection signal="On_click" from="legend/Legend_area/On_click" to="." method="_on_show_this_page"]
