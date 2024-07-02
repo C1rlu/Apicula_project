@@ -13,8 +13,6 @@ script/source = "extends Area3D
 @export var activable : Array[Node3D]
 
 
-signal see_int(condition : bool)
-
 func _ready():
 	boue_data.world_position = root.global_position
 
@@ -167,7 +165,7 @@ var t
 var d
 var stop_after : bool = false
 var actual_value : float
-
+var is_active : bool = false
 func _show():
 	
 	if get_tree() == null:
@@ -201,6 +199,10 @@ func change_value(value : float):
 	actual_value = value
 	
 func _on_epave_zone_see_int(condition):
+	
+	if is_active:
+		return
+	is_active = condition
 	stop_after = condition
 	_show()
 
@@ -370,7 +372,7 @@ shadow_mesh = SubResource("ArrayMesh_yh6yu")
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("1_4eijp")
-shader_parameter/Distance = 0.455
+shader_parameter/Distance = 0.0
 
 [node name="EPAVE_ZONE" type="Area3D" node_paths=PackedStringArray("activable")]
 input_ray_pickable = false
@@ -411,5 +413,5 @@ mesh = SubResource("ArrayMesh_qimfy")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("ShaderMaterial_yfs1e")
 
-[connection signal="see_int" from="." to="Boue_msh_01" method="_on_epave_zone_see_int"]
-[connection signal="tree_exiting" from="." to="Epave_visuals/Fade_out" method="_on_epave_zone_tree_exiting"]
+[connection signal="_contact" from="Dive_zone" to="Boue_msh_01" method="_contact"]
+[connection signal="_contact" from="Dive_zone" to="Epave_visuals/Fade_out" method="_on_epave_zone_see_int"]

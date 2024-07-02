@@ -1,24 +1,20 @@
 extends Node3D
 
+@onready var epave_zone = $".."
+
 @onready var flag = $Flag
 @onready var flag_off = $Flag_OFF
 
+@export var on_map = false
 
 signal show_on_map
-@export var on_map = false
-func _ready():
-	pass
-	#flag.visible = false
-	#flag_off.visible = true
-	
 
+func _contact(condition):
 
-func _on_epave_zone_see_int(condition):
-
-	if on_map:
-		return
 		
 	if condition:
 		flag.visible = true
 		flag_off.visible = false
 		on_map = true
+
+		_global_datas._active_sonar.emit(epave_zone.global_position)

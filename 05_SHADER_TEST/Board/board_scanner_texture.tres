@@ -1,4 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=19 format=3 uid="uid://bs4xcdhvj0k0p"]
+[gd_resource type="ShaderMaterial" load_steps=21 format=3 uid="uid://bs4xcdhvj0k0p"]
 
 [ext_resource type="Texture2D" uid="uid://38btbw60olcn" path="res://12_INVENTORY/Photo/IMG/Boat.png" id="1_lkjio"]
 
@@ -28,7 +28,7 @@ Dither_Node = In - DITHER_THRESHOLDS[index];"
 parameter_name = "Texture"
 
 [sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_ctxdp"]
-constant = Color(0.582931, 0.437395, 0.123467, 1)
+constant = Color(0.61, 0.443877, 0.0854, 1)
 
 [sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_h161d"]
 parameter_name = "Dither_size"
@@ -60,6 +60,14 @@ size = Vector2(580, 220)
 expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
 grey_value = luminance;"
 
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_o8s5p"]
+size = Vector2(580, 220)
+expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
+grey_value = luminance;"
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_6nr63"]
+default_input_values = [0, 0.0, 1, 1.0, 2, -0.125]
+
 [sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_p30pv"]
 default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
 op_type = 3
@@ -78,7 +86,7 @@ global uniform float link_opacity;
 
 void fragment() {
 // ColorConstant:20
-	vec4 n_out20p0 = vec4(0.582931, 0.437395, 0.123467, 1.000000);
+	vec4 n_out20p0 = vec4(0.610000, 0.443877, 0.085400, 1.000000);
 
 
 // ColorConstant:9
@@ -105,8 +113,23 @@ void fragment() {
 	n_out11p0 = texture(Texture, n_out22p0);
 
 
+	float n_out29p0;
+// Expression:29
+	n_out29p0 = 0.0;
+	{
+		float luminance = 0.299 * vec3(n_out11p0.xyz).x + 0.587 * vec3(n_out11p0.xyz).y + 0.114 * vec3(n_out11p0.xyz).z;
+		n_out29p0 = luminance;
+	}
+
+
+// Mix:30
+	float n_in30p1 = 1.00000;
+	float n_in30p2 = -0.12500;
+	float n_out30p0 = mix(n_out29p0, n_in30p1, n_in30p2);
+
+
 // FloatFunc:25
-	float n_out25p0 = 1.0 - n_out11p0.x;
+	float n_out25p0 = 1.0 - n_out30p0;
 
 
 // Mix:8
@@ -136,7 +159,6 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-903.932, 63.0655)
 flags/unshaded = true
 flags/shadows_disabled = true
 nodes/fragment/0/position = Vector2(1260, 180)
@@ -178,7 +200,7 @@ nodes/fragment/23/position = Vector2(-1780, 280)
 nodes/fragment/24/node = SubResource("VisualShaderNodeFloatConstant_m8o0b")
 nodes/fragment/24/position = Vector2(-1940, 360)
 nodes/fragment/25/node = SubResource("VisualShaderNodeFloatFunc_rk2ie")
-nodes/fragment/25/position = Vector2(-760, 360)
+nodes/fragment/25/position = Vector2(-340, -80)
 nodes/fragment/26/node = SubResource("VisualShaderNodeFloatParameter_jvucy")
 nodes/fragment/26/position = Vector2(580, 160)
 nodes/fragment/27/node = SubResource("VisualShaderNodeMix_v5yhm")
@@ -190,7 +212,16 @@ nodes/fragment/28/input_ports = "0,4,color;"
 nodes/fragment/28/output_ports = "0,0,grey_value;"
 nodes/fragment/28/expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
 grey_value = luminance;"
-nodes/fragment/connections = PackedInt32Array(13, 0, 18, 0, 21, 0, 18, 1, 2, 0, 11, 2, 23, 0, 22, 0, 24, 0, 23, 1, 20, 0, 8, 0, 9, 0, 8, 1, 18, 0, 19, 1, 22, 0, 11, 0, 11, 0, 25, 0, 25, 0, 8, 2, 26, 0, 27, 2, 28, 0, 27, 1, 8, 0, 28, 0, 8, 0, 27, 0, 27, 0, 0, 0)
+nodes/fragment/29/node = SubResource("VisualShaderNodeExpression_o8s5p")
+nodes/fragment/29/position = Vector2(-994.534, -279.633)
+nodes/fragment/29/size = Vector2(580, 220)
+nodes/fragment/29/input_ports = "0,4,color;"
+nodes/fragment/29/output_ports = "0,0,grey_value;"
+nodes/fragment/29/expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
+grey_value = luminance;"
+nodes/fragment/30/node = SubResource("VisualShaderNodeMix_6nr63")
+nodes/fragment/30/position = Vector2(-171.553, -221.166)
+nodes/fragment/connections = PackedInt32Array(13, 0, 18, 0, 21, 0, 18, 1, 2, 0, 11, 2, 23, 0, 22, 0, 24, 0, 23, 1, 18, 0, 19, 1, 22, 0, 11, 0, 26, 0, 27, 2, 28, 0, 27, 1, 8, 0, 28, 0, 8, 0, 27, 0, 27, 0, 0, 0, 20, 0, 8, 0, 9, 0, 8, 1, 11, 0, 29, 0, 25, 0, 8, 2, 29, 0, 30, 0, 30, 0, 25, 0)
 
 [resource]
 resource_local_to_scene = true

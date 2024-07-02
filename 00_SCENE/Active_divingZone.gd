@@ -1,6 +1,6 @@
 extends Node
 @onready var root = $"../--DECOR--/DIVING_ZONE"
-
+@export var active_at_start : bool = true
 var all_zone
 
 func _ready():
@@ -9,6 +9,8 @@ func _ready():
 	
 	_global_datas.active_diving.connect(active_all)
 	
+	if active_at_start:
+		active_all()	
 	
 func active_all():
 	
