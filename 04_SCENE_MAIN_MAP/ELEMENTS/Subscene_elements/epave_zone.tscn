@@ -191,20 +191,18 @@ func _hide():
 	d .tween_method(change_value,0.5,0.0,3.0)
 	await create_tween().tween_interval(3.0).finished
 	
-	if stop_after:
-		_show()
-	
+
 func change_value(value : float):
 	material.set_shader_parameter(\"Distance\",value)
 	actual_value = value
 	
 func _on_epave_zone_see_int(condition):
 	
-	#if is_active:
-		#return
-	#is_active = condition
-	stop_after = condition
-	_show()
+	if condition:	
+		_show()	
+	
+
+
 
 
 

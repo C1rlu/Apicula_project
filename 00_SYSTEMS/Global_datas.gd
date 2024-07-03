@@ -88,7 +88,7 @@ signal _take_Npc_photo(condition : bool)
 signal _show_object_legend(condtion : bool, text : String)
 
 signal _instance_photo(photoData : PhotoData)
-#signal _take_photo
+
 
 #subsceneSignal
 

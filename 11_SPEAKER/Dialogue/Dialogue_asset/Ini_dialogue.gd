@@ -22,7 +22,7 @@ func _ready():
 	
 func change_language_state(state_value : int):	
 	state["LS"] = state_value	
-	
+
 		
 func _open_dialogue():
 	
@@ -31,8 +31,8 @@ func _open_dialogue():
 	var index = _global_datas.Npc_Dialogue.Dialogue_start_index
 	var _dialogue_start = _global_datas.Npc_Dialogue.Dialogue_starts[index]
 	($EzDialogue as EzDialogue).start_dialogue(dialogue, state, _dialogue_start)
-	
-				
+
+					
 func _on_ez_dialogue_dialogue_generated(response):
 
 	dialogue_box.clear_dialogue_box()

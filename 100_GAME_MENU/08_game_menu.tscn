@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://bemddl0bqqfwo"]
+[gd_scene load_steps=36 format=3 uid="uid://bemddl0bqqfwo"]
 
 [ext_resource type="Script" path="res://100_GAME_MENU/Open_Menu.gd" id="1_2jpo2"]
 [ext_resource type="Script" path="res://100_GAME_MENU/Option_panel.gd" id="2_gelwi"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://100_GAME_MENU/Language_state_Menu.gd" id="4_34xg6"]
 [ext_resource type="Script" path="res://06_UI/Fps_counter.gd" id="4_86v10"]
 [ext_resource type="Script" path="res://100_GAME_MENU/HSlider.gd" id="5_7b61k"]
+[ext_resource type="Script" path="res://100_GAME_MENU/Label_with_state.gd" id="6_sios4"]
 
 [sub_resource type="GDScript" id="GDScript_8vnul"]
 script/source = "extends Node
@@ -287,11 +288,13 @@ shader_parameter/Opacity = 0.0
 [sub_resource type="GDScript" id="GDScript_rl0qu"]
 script/source = "extends Button
 
-#func _ready():
-	#var number : int = 0
-#	set_focus_mode(number)
+@export var language_state : Array[String]
+@onready var button = $\".\"
 
 
+
+func _ready():
+	_global_datas._change_language_state.connect(change_ls_state)
 
 func _on_pressed():
 
@@ -300,23 +303,45 @@ func _on_pressed():
 	_global_datas.Open_ui_dark_backdrop.emit(_global_datas.Player_InMenu)
 	get_tree().paused = false
 
+
+func change_ls_state(state : int):
+	button.text = language_state[state]		
+	
 "
 
 [sub_resource type="GDScript" id="GDScript_r74c2"]
 script/source = "extends Button
 
-#func _ready():
-#	var number : int = 0
-#	set_focus_mode(number)
 
+@export var language_state : Array[String]
+
+@onready var button = $\".\"
+
+
+
+func _ready():
+	_global_datas._change_language_state.connect(change_ls_state)
+
+func change_ls_state(state : int):
+	button.text = language_state[state]		
+	
 "
 
 [sub_resource type="GDScript" id="GDScript_e1pe5"]
 script/source = "extends Button
 
-#func _ready():
-#	var number : int = 0
-#	set_focus_mode(number)
+@export var language_state : Array[String]
+
+@onready var button = $\".\"
+
+
+
+func _ready():
+	_global_datas._change_language_state.connect(change_ls_state)
+
+func change_ls_state(state : int):
+	button.text = language_state[state]		
+	
 
 
 func _on_pressed():
@@ -433,6 +458,7 @@ theme_override_colors/font_color = Color(0.721569, 0.580392, 0.407843, 1)
 theme_override_font_sizes/font_size = 25
 text = "RESUME"
 script = SubResource("GDScript_rl0qu")
+language_state = Array[String](["RESUME", "RETOUR"])
 
 [node name="Restart_Button" type="Button" parent="Game_Menu_Root/MainMenu_Box/HBoxContainer"]
 process_mode = 2
@@ -446,6 +472,7 @@ theme_override_colors/font_color = Color(0.721569, 0.580392, 0.407843, 1)
 theme_override_font_sizes/font_size = 25
 text = "RESTART"
 script = SubResource("GDScript_r74c2")
+language_state = Array[String](["RESTART", "RECOMMENCER"])
 
 [node name="Exit_Button" type="Button" parent="Game_Menu_Root/MainMenu_Box/HBoxContainer"]
 process_mode = 2
@@ -458,6 +485,7 @@ theme_override_colors/font_color = Color(0.721569, 0.580392, 0.407843, 1)
 theme_override_font_sizes/font_size = 25
 text = "EXIT "
 script = SubResource("GDScript_e1pe5")
+language_state = Array[String](["EXIT ", "QUITTER"])
 
 [node name="Options" type="Control" parent="Game_Menu_Root/MainMenu_Box"]
 layout_mode = 1
@@ -532,6 +560,8 @@ grow_vertical = 2
 theme_override_colors/font_color = Color(0.317647, 0.615686, 0.529412, 1)
 theme_override_font_sizes/font_size = 25
 text = "Fullscreen ............................"
+script = ExtResource("6_sios4")
+language_state = Array[String](["Fullscreen ............................", "Plein ecran .........................."])
 
 [node name="Vsync_button" type="CheckBox" parent="Game_Menu_Root/MainMenu_Box/Options/VBoxContainer"]
 process_mode = 2
@@ -584,6 +614,8 @@ grow_vertical = 2
 theme_override_colors/font_color = Color(0.317647, 0.615686, 0.529412, 1)
 theme_override_font_sizes/font_size = 25
 text = "Vsync ...................................."
+script = ExtResource("6_sios4")
+language_state = Array[String](["Vsync ....................................", "Vsync ...................................."])
 
 [node name="ActiveDither_button" type="CheckBox" parent="Game_Menu_Root/MainMenu_Box/Options/VBoxContainer"]
 process_mode = 2
@@ -636,6 +668,8 @@ grow_vertical = 2
 theme_override_colors/font_color = Color(0.317647, 0.615686, 0.529412, 1)
 theme_override_font_sizes/font_size = 25
 text = "Active Dither........................"
+script = ExtResource("6_sios4")
+language_state = Array[String](["Active Dither........................", "Activer Dither......................"])
 
 [node name="Label" type="Label" parent="Game_Menu_Root/MainMenu_Box/Options/VBoxContainer"]
 layout_mode = 2

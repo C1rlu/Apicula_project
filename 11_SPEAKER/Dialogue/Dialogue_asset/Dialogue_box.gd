@@ -9,8 +9,12 @@ var choice_buttons : Array[Button] = []
 
 
 var is_dialogue_done = false
-
+var actual_index : int
+#func _ready():
 	
+	#_global_datas._change_language_state.connect(reload_state)
+
+
 func clear_dialogue_box():
 	text_node.text = ""
 
@@ -48,6 +52,7 @@ func _on_choice_selected(choice_index : int):
 	
 	if !is_dialogue_done:
 		($"../../../Dialogue/EzDialogue" as EzDialogue).next(choice_index)	
+		actual_index = choice_index
 	else:
 		clear_dialogue_box()	
 

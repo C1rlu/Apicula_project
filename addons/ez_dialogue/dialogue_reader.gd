@@ -27,6 +27,7 @@ var _executing_command_stack: Array[DialogueCommand]
 var _pending_choice_actions: Array
 var _stateReference: Dictionary
 
+	
 func _process(delta):
 	if is_running:
 		var response = DialogueResponse.new()
@@ -54,7 +55,7 @@ func start_dialogue(
 	dialogue: JSON, state: Dictionary, starting_node = "start"):
 	
 	_load_dialogue(dialogue)
-	
+
 	_executing_command_stack = _processing_dialogue.get_node_by_name(
 		starting_node).get_parse()
 	_pending_choice_actions = []

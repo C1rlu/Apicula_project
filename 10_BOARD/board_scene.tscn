@@ -1,4 +1,4 @@
-[gd_scene load_steps=220 format=3 uid="uid://dr73p5vs0sixe"]
+[gd_scene load_steps=241 format=3 uid="uid://dr73p5vs0sixe"]
 
 [ext_resource type="PackedScene" uid="uid://cyb6my1srlcpw" path="res://10_BOARD/Candle/Candle_set.blend" id="1_3ummb"]
 [ext_resource type="Script" path="res://10_BOARD/photos_check.gd" id="1_bcxwj"]
@@ -43,6 +43,9 @@
 [ext_resource type="Material" uid="uid://b5u3d7wosa00d" path="res://05_SHADER_TEST/Board/Flat_with_gradient.tres" id="35_xg8pc"]
 [ext_resource type="Shader" uid="uid://cctu1rugloxjc" path="res://05_SHADER_TEST/Board/Tube_liquide_sh.tres" id="36_p5f84"]
 [ext_resource type="Material" uid="uid://cwdathot7k12h" path="res://05_SHADER_TEST/Board/Maquette_sh.tres" id="37_2kevv"]
+[ext_resource type="PackedScene" uid="uid://dh8xiu7ntj52y" path="res://10_BOARD/TourneDisque/Disque_prefab.blend" id="44_0qqs5"]
+[ext_resource type="Material" uid="uid://c0oms0qis0dcm" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_mat_02.tres" id="46_tmbd7"]
+[ext_resource type="Material" uid="uid://cfi5jyq3utqd4" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_mat_04.tres" id="47_r4p1c"]
 
 [sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_af38u"]
 default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
@@ -1821,6 +1824,188 @@ shader_parameter/ColorParameter = Color(0.0431373, 0.192157, 0.203922, 1)
 material = ExtResource("6_kkuc8")
 radial_segments = 8
 
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_klsyc"]
+constant = 0.826
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_7a3hs"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_3njer"]
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_mvuaw"]
+input_name = "uv"
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_entip"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
+op_type = 3
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_m3ha3"]
+constant = 0.1
+
+[sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_6mur2"]
+parameter_name = "Gradiant"
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_8xt3r"]
+parameter_name = "Main_color"
+
+[sub_resource type="Gradient" id="Gradient_wrnuf"]
+offsets = PackedFloat32Array(0, 0.528875, 0.547112, 0.984802)
+colors = PackedColorArray(1, 1, 1, 1, 0.0102558, 0.0102558, 0.0102558, 1, 0.0243161, 0.0243161, 0.0243161, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_pl3s7"]
+gradient = SubResource("Gradient_wrnuf")
+fill_from = Vector2(0, 1)
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_yw4jk"]
+source = 5
+texture = SubResource("GradientTexture2D_pl3s7")
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_6c3ot"]
+constant = 0.4
+
+[sub_resource type="VisualShader" id="VisualShader_wr27h"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+
+uniform vec4 Main_color : source_color;
+uniform sampler2D Gradiant;
+
+
+
+void fragment() {
+// ColorParameter:17
+	vec4 n_out17p0 = Main_color;
+
+
+// Input:13
+	vec2 n_out13p0 = UV;
+
+
+	vec4 n_out8p0;
+// Texture2D:8
+	n_out8p0 = texture(Gradiant, n_out13p0);
+
+
+// FloatConstant:10
+	float n_out10p0 = 0.826000;
+
+
+// FloatConstant:9
+	float n_out9p0 = 0.400000;
+
+
+	float n_out11p0;
+// Expression:11
+	n_out11p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out9p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out11p0 = n_out10p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Step:12
+	float n_out12p0 = step(n_out8p0.x, n_out11p0);
+
+
+// FloatConstant:15
+	float n_out15p0 = 0.100000;
+
+
+// Mix:14
+	vec3 n_out14p0 = mix(vec3(n_out17p0.xyz), vec3(n_out12p0), vec3(n_out15p0));
+
+
+// Output:0
+	ALBEDO = n_out14p0;
+
+
+}
+"
+graph_offset = Vector2(-1890.92, -650.484)
+flags/unshaded = true
+nodes/fragment/8/node = SubResource("VisualShaderNodeTexture_yw4jk")
+nodes/fragment/8/position = Vector2(-1500, -380)
+nodes/fragment/9/node = SubResource("VisualShaderNodeFloatConstant_6c3ot")
+nodes/fragment/9/position = Vector2(-3000, -20)
+nodes/fragment/10/node = SubResource("VisualShaderNodeFloatConstant_klsyc")
+nodes/fragment/10/position = Vector2(-3000, -160)
+nodes/fragment/11/node = SubResource("VisualShaderNodeExpression_7a3hs")
+nodes/fragment/11/position = Vector2(-2680, 60)
+nodes/fragment/11/size = Vector2(724.789, 654.559)
+nodes/fragment/11/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/11/output_ports = "0,0,Dither_Node;"
+nodes/fragment/11/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/12/node = SubResource("VisualShaderNodeStep_3njer")
+nodes/fragment/12/position = Vector2(-1240, 400)
+nodes/fragment/13/node = SubResource("VisualShaderNodeInput_mvuaw")
+nodes/fragment/13/position = Vector2(-2080, -620)
+nodes/fragment/14/node = SubResource("VisualShaderNodeMix_entip")
+nodes/fragment/14/position = Vector2(-220, 220)
+nodes/fragment/15/node = SubResource("VisualShaderNodeFloatConstant_m3ha3")
+nodes/fragment/15/position = Vector2(-760, 560)
+nodes/fragment/16/node = SubResource("VisualShaderNodeTexture2DParameter_6mur2")
+nodes/fragment/16/position = Vector2(-2040, -420)
+nodes/fragment/17/node = SubResource("VisualShaderNodeColorParameter_8xt3r")
+nodes/fragment/17/position = Vector2(-660, -20)
+nodes/fragment/connections = PackedInt32Array(9, 0, 11, 1, 10, 0, 11, 0, 11, 0, 12, 1, 15, 0, 14, 2, 16, 0, 8, 2, 12, 0, 14, 1, 17, 0, 14, 0, 14, 0, 0, 0, 13, 0, 8, 0, 8, 0, 12, 0)
+
+[sub_resource type="Gradient" id="Gradient_nrla2"]
+offsets = PackedFloat32Array(0, 0.519856, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_7l1xj"]
+gradient = SubResource("Gradient_nrla2")
+fill = 1
+fill_from = Vector2(0.478632, 0.478632)
+fill_to = Vector2(0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c4ore"]
+render_priority = 0
+shader = SubResource("VisualShader_wr27h")
+shader_parameter/Main_color = Color(0.427451, 0.376471, 0.282353, 1)
+shader_parameter/Gradiant = SubResource("GradientTexture2D_7l1xj")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l3nap"]
+render_priority = 0
+shader = ExtResource("1_k1enu")
+shader_parameter/Dark_color = Color(0, 0, 0, 1)
+shader_parameter/ColorParameter = Color(0.0196078, 0.121569, 0.129412, 1)
+shader_parameter/light_color = Color(0.419608, 0.352941, 0.219608, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5kny1"]
+render_priority = 0
+shader = ExtResource("1_k1enu")
+shader_parameter/Dark_color = Color(0, 0, 0, 1)
+shader_parameter/ColorParameter = Color(0.0196078, 0.121569, 0.129412, 1)
+shader_parameter/light_color = Color(0.419608, 0.352941, 0.219608, 1)
+
 [node name="Board_scene" type="Node3D"]
 
 [node name="LIGHT_scene" type="OmniLight3D" parent="."]
@@ -1843,10 +2028,10 @@ object_list = [NodePath("../Deco/MAP")]
 [node name="Deco" type="Node3D" parent="."]
 
 [node name="Lanterne2" parent="Deco" instance=ExtResource("1_l5l52")]
-transform = Transform3D(0.09052, 0, 0, 0, 0.09052, 0, 0, 0, 0.09052, 0.215537, 0, -0.224478)
+transform = Transform3D(0.09052, 0, 0, 0, 0.09052, 0, 0, 0, 0.09052, 0.366506, 0, -0.347905)
 
 [node name="Lanterne" parent="Deco/Lanterne2" index="0"]
-transform = Transform3D(0.691992, 0, -0.721905, 0, 1, 0, 0.721905, 0, 0.691992, 5.83327, 6.58469e-07, 0.332052)
+transform = Transform3D(0.691992, 0, -0.721905, 0, 1, 0, 0.721905, 0, 0.691992, 0.114583, 1.31694e-06, -0.454325)
 layers = 2
 surface_material_override/0 = SubResource("ShaderMaterial_1satu")
 surface_material_override/1 = ExtResource("6_kkuc8")
@@ -1886,7 +2071,7 @@ layers = 2
 surface_material_override/0 = ExtResource("5_8m368")
 
 [node name="Candle_set2" parent="Deco" instance=ExtResource("1_3ummb")]
-transform = Transform3D(0.0541678, 0, 0.0275713, 0, 0.0607809, 0, -0.0275713, 0, 0.0541678, 0.777826, 0.00327758, 0.314386)
+transform = Transform3D(0.0541678, 0, 0.0275713, 0, 0.0607809, 0, -0.0275713, 0, 0.0541678, 0.932211, 0.123212, 0.280052)
 
 [node name="candle_msh_01" parent="Deco/Candle_set2" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.791507, 0, 0.817728)
@@ -2005,19 +2190,19 @@ mesh = SubResource("BoxMesh_v3rv8")
 skeleton = NodePath("../..")
 
 [node name="MeshInstance3D10" type="MeshInstance3D" parent="Deco"]
-transform = Transform3D(0.179429, 0, -0.123983, 0, 0.0376968, 0, 0.194323, 0, 0.11448, 0.85376, 0.0259947, 0.162209)
+transform = Transform3D(0.179429, 0, -0.123983, 0, 0.0376968, 0, 0.194323, 0, 0.11448, 0.875856, 0.0259947, 0.371542)
 layers = 2
 mesh = SubResource("BoxMesh_v3rv8")
 skeleton = NodePath("../..")
 
 [node name="MeshInstance3D11" type="MeshInstance3D" parent="Deco"]
-transform = Transform3D(0.0502634, 0, -0.165678, 0, 0.0376968, 0, 0.259672, 0, 0.0320695, 0.892266, 0.0645286, 0.145691)
+transform = Transform3D(0.0502634, 0, -0.165678, 0, 0.0376968, 0, 0.259672, 0, 0.0320695, 0.914362, 0.0645286, 0.355024)
 layers = 2
 mesh = SubResource("BoxMesh_v3rv8")
 skeleton = NodePath("../..")
 
 [node name="MeshInstance3D12" type="MeshInstance3D" parent="Deco"]
-transform = Transform3D(0.165872, 0, -0.131444, 0, 0.0376968, 0, 0.206016, 0, 0.105831, 0.896916, 0.103295, 0.136718)
+transform = Transform3D(0.165872, 0, -0.131444, 0, 0.0376968, 0, 0.206016, 0, 0.105831, 0.919012, 0.103295, 0.346051)
 layers = 2
 mesh = SubResource("BoxMesh_v3rv8")
 skeleton = NodePath("../..")
@@ -2028,12 +2213,6 @@ transform = Transform3D(0.027966, 0, -0.00898967, 0, 0.0293754, 0, 0.00898967, 0
 
 [node name="clock_3d_prefab" parent="Deco" instance=ExtResource("8_x5b6k")]
 transform = Transform3D(0.0286346, -1.44512e-05, -0.00768743, 1.43001e-05, 0.0296485, -2.46867e-06, 0.00768743, -1.32337e-06, 0.0286346, -0.00647841, -0.00191151, 0.476101)
-
-[node name="clock_all" parent="Deco/clock_3d_prefab/clock_3d2" index="0"]
-layers = 2
-
-[node name="root_equille" parent="Deco/clock_3d_prefab/clock_3d2" index="1"]
-layers = 2
 
 [node name="LINKS" type="Node3D" parent="."]
 
@@ -2282,7 +2461,7 @@ skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("ShaderMaterial_u4lgv")
 
 [node name="TUBE_oddity" type="Node3D" parent="."]
-transform = Transform3D(-0.00525478, 0, 0.39937, 0, 0.00522373, 0, -0.260425, 0, -0.00805836, 0.509559, 0.00372949, -0.401705)
+transform = Transform3D(-0.00525478, 0, 0.39937, 0, 0.00522373, 0, -0.260425, 0, -0.00805836, 0.890351, 0.00372961, 0.0322637)
 
 [node name="Area3D" type="Area3D" parent="TUBE_oddity"]
 transform = Transform3D(-1.15935, 0, -3.65986, 0, 191.434, 0, 2.38655, 0, -0.756002, -0.0537217, 25.6755, 0.0456088)
@@ -2332,6 +2511,34 @@ layers = 2
 mesh = SubResource("CylinderMesh_xsjxl")
 skeleton = NodePath("")
 
+[node name="Disque_prefab" parent="." instance=ExtResource("44_0qqs5")]
+transform = Transform3D(-0.0747814, 0, -0.117582, 0, 0.139348, 0, 0.117582, 0, -0.0747814, 0.609777, -1.19209e-07, -0.243209)
+
+[node name="Cylinder" parent="Disque_prefab" index="0"]
+layers = 2
+surface_material_override/0 = SubResource("ShaderMaterial_c4ore")
+
+[node name="01" parent="Disque_prefab" index="1"]
+layers = 2
+surface_material_override/0 = SubResource("ShaderMaterial_l3nap")
+
+[node name="Cylinder_001" parent="Disque_prefab" index="2"]
+layers = 2
+surface_material_override/0 = ExtResource("47_r4p1c")
+
+[node name="Cube_001" parent="Disque_prefab" index="3"]
+layers = 2
+surface_material_override/0 = ExtResource("47_r4p1c")
+
+[node name="Cube_002" parent="Disque_prefab" index="4"]
+layers = 2
+surface_material_override/0 = SubResource("ShaderMaterial_5kny1")
+
+[node name="Cylinder_002" parent="Disque_prefab" index="5"]
+layers = 2
+surface_material_override/0 = ExtResource("47_r4p1c")
+surface_material_override/1 = ExtResource("46_tmbd7")
+
 [connection signal="On_click" from="Bell/Area3D/On_click" to="Bell/Area3D/On_click" method="_on_on_click"]
 [connection signal="On_click" from="Book_Close_root/Area3D/On_click" to="Book_Close_root/Area3D/On_click" method="_on_on_click"]
 
@@ -2340,7 +2547,7 @@ skeleton = NodePath("")
 [editable path="Deco/Candle_set3"]
 [editable path="Deco/Candle_set2"]
 [editable path="Deco/clock_3d_prefab"]
-[editable path="Deco/clock_3d_prefab/clock_3d2"]
+[editable path="Deco/clock_3d_prefab/clock_3d"]
 [editable path="Chavet_part"]
 [editable path="Chavet_part2"]
 [editable path="Chavet_part3"]
@@ -2351,3 +2558,4 @@ skeleton = NodePath("")
 [editable path="TUBE_oddity/Peon_oddity_v01"]
 [editable path="TUBE_oddity/Tube_oddity"]
 [editable path="Apicula_maquette_v01blend"]
+[editable path="Disque_prefab"]
