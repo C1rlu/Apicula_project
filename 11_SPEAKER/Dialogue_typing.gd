@@ -13,12 +13,8 @@ func _ready():
 	_global_datas._type_text.connect(type_text)
 	_global_datas._hide_dialogue_box.connect(stop_typing)
 	_global_datas._show_dialogue_box.connect(go_typing)
-	#_global_datas._change_language_state.connect(update_language_state)
-	
-	
-func update_language_state(state : int):
-	go_typing()	
-	
+
+
 func stop_typing():
 	active = false
 
@@ -26,6 +22,7 @@ func go_typing():
 	
 	active = true
 	var words = dialogue_text.text.length()
+	
 	type_text(words)
 	
 	
@@ -62,3 +59,4 @@ func _input(event):
 				t.kill()	
 			dialogue_text.visible_ratio = 1.0
 			text_type_done.emit()
+

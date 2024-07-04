@@ -52,7 +52,7 @@ func check_zone():
 	_global_datas.go_normal_color.emit()
 	
 	if _global_datas.Npc_Dialogue:
-		if _global_datas.Npc_Dialogue.name == "MrBird":
+		if _global_datas.Npc_Dialogue.name[0] == "MrBird":
 			_global_datas.Npc_Dialogue = null
 		
 	var all_area = area_root.get_overlapping_areas()

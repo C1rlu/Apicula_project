@@ -10,11 +10,40 @@ var choice_buttons : Array[Button] = []
 
 var is_dialogue_done = false
 var actual_index : int
-#func _ready():
+
+var Localisation_state_index : int = 0 
+var actual_text_all : String
+
+
+func _ready():
 	
-	#_global_datas._change_language_state.connect(reload_state)
+	_global_datas._change_language_state.connect(_change_localisation_state)
 
-
+func _change_localisation_state(ls):
+	
+	
+	Localisation_state_index = ls
+	
+	if !_global_datas.Player_InDialogue:
+		return
+		
+		
+	var select_language_here = actual_text_all.split("/")
+	
+	if Localisation_state_index > select_language_here.size()-1:
+		
+		if Localisation_state_index == 1:
+			text_node.text  = "NO FRENCH LOCALISATION HERE"
+		else : 
+			text_node.text  = "NO LOCALISATION HERE"
+			
+	else:
+		var selected_words = select_language_here[Localisation_state_index]
+		text_node.text  = selected_words
+		
+	#var text_count = text_node.text.length()
+	#_global_datas._type_text.emit(text_count)
+	
 func clear_dialogue_box():
 	text_node.text = ""
 
@@ -23,8 +52,20 @@ func clear_dialogue_box():
 	choice_buttons = []	
 	
 func add_text(text : String):
-	text_node.text  = text
-	var text_count = text.length()
+	
+	actual_text_all = text
+	var select_language_here = text.split("/")
+	
+	if Localisation_state_index > select_language_here.size()-1:
+		if Localisation_state_index == 1:
+			text_node.text  = "NO FRENCH LOCALISATION HERE"
+		else : 
+			text_node.text  = "NO LOCALISATION HERE"
+	else:
+		var selected_words = select_language_here[Localisation_state_index]
+		text_node.text  = selected_words
+		
+	var text_count = text_node.text.length()
 	_global_datas._type_text.emit(text_count)
 	
 func add_choice(choice_text : String):
@@ -37,7 +78,10 @@ func add_choice(choice_text : String):
 	button_obj.move_to_front()
 	v_box_container.add_child(button_obj)
 	button_obj.visible = false
-
+	
+	if choice_text != "...":
+		button_obj.change_ls(Localisation_state_index)
+	
 func show_all_responce():
 	
 	var choice = v_box_container.get_children()

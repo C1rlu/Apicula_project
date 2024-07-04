@@ -4,7 +4,6 @@ extends Node
 func _ready():
 	_global_datas.type_text_mod.connect(type_text_mod)
 	
-	
 func type_text_mod(condition : bool, note_data : Note_Data):
 	#type_texte.visible = condition
 	#list_of_choice.visible = condition

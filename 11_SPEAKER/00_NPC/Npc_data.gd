@@ -1,7 +1,7 @@
 extends Resource
 class_name Npc_datas
 
-@export var name : String
+@export var name : Array[String]
 @export var photo_data : PhotoData
 @export var prefabs : PackedScene
 @export var zone_name : String

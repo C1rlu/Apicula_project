@@ -6,7 +6,6 @@ signal up_dialogue_index
 
 @onready var state = {
 	
-	"LS" : 0, # lANGUAGE STATE 0 > ENGLISH 1 > FRENCH
 	"give_letter" : _global_datas._give_letter,	
 	"up_dialogue_index" : up_dialogue_index,
 	"cam_focus" : _global_datas._update_cam_focus,
@@ -18,10 +17,6 @@ signal up_dialogue_index
 
 func _ready():
 	_global_datas._start_dialogue_box.connect(_open_dialogue)
-	_global_datas._change_language_state.connect(change_language_state)
-	
-func change_language_state(state_value : int):	
-	state["LS"] = state_value	
 
 		
 func _open_dialogue():
@@ -106,6 +101,7 @@ func up_info_state(index : int):
 	_global_datas.Npc_Dialogue.photo_data.page_information_state = index	
 	print("up page info to   ", _global_datas.Npc_Dialogue.photo_data.page_information_state)	
 	_global_datas.ui_noted_taked.emit()
+	
 func _on_up_dialogue_index():
 	
 	_global_datas.Npc_Dialogue.Dialogue_start_index =+ 1
