@@ -89,7 +89,9 @@ func show_all_responce():
 		return
 	for c in choice:
 		c.visible = true
-		
+	
+	for c in choice:
+		c.start()
 	choice[0].grab_focus()
 
 func _on_choice_selected(choice_index : int):

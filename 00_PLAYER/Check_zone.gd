@@ -3,7 +3,6 @@ extends Node
 @onready var area_root = $"../Enter_dialogue_zone"
 @onready var col = $"../Enter_dialogue_zone/Col"
 
-
 func _ready():
 	
 	# for dialogue zone
@@ -17,18 +16,21 @@ func _ready():
 	# for diving zone
 	_global_datas._backFrom_subscene.connect(check_zone)
 	_global_datas._go_Subscene.connect(close)
+
 	
-	
+
 func close():
 	_global_datas.out_dialogue_zone.emit()	
-	_global_datas._show_object_legend.emit(false,"")	
+	var nullArray: Array[String] = ["",""]
+	_global_datas._show_object_legend.emit(false,nullArray)	
 	_global_datas.go_darker_color.emit()
 	
 func close_for_menu(condition):
 	
 	if condition:
-		_global_datas.out_dialogue_zone.emit()	
-		_global_datas._show_object_legend.emit(false,"")		
+		_global_datas.out_dialogue_zone.emit()
+		var nullArray: Array[String] = ["",""]
+		_global_datas._show_object_legend.emit(false,nullArray)		
 	else:
 		
 		if _global_datas.Player_In_Inventory:
@@ -62,15 +64,17 @@ func check_zone():
 			_global_datas.Npc_Dialogue = npc_zone.get_npc()
 			_global_datas.in_dialogue_zone.emit()
 			
-			_global_datas._show_object_legend.emit(true,_global_datas.Npc_Dialogue.name)
+			var actual_zone_name = _global_datas.Npc_Dialogue.zone_name
+			_global_datas._show_object_legend.emit(true,actual_zone_name)
 
 		var dive_zone = a.get_node_or_null("Dive_zone")
 		if dive_zone:
-			#dive_zone.On_Over(true)
+
 			dive_zone._contact.emit(true)
 			var dive_data = dive_zone.get_dive_data()
 			_global_datas.selected_subscene = dive_data.zone_packed_scene
-			_global_datas._show_object_legend.emit(true,dive_data.legend)	
+			var zone_name = dive_data.zone_name
+			_global_datas._show_object_legend.emit(true,zone_name)		
 		
 func _on_enter_dialogue_zone_area_entered(area):
 	
@@ -84,15 +88,17 @@ func _on_enter_dialogue_zone_area_entered(area):
 		if npc_zone:	
 			_global_datas.Npc_Dialogue = npc_zone.get_npc()
 			_global_datas.in_dialogue_zone.emit()
-			_global_datas._show_object_legend.emit(true,_global_datas.Npc_Dialogue.zone_name)
+			var actual_zone_name = _global_datas.Npc_Dialogue.zone_name
+			_global_datas._show_object_legend.emit(true,actual_zone_name)
 	
 		var dive_zone = area.get_node_or_null("Dive_zone")
 		if dive_zone:
-			#dive_zone.On_Over(true)
+	
 			dive_zone._contact.emit(true)
 			var dive_data = dive_zone.get_dive_data()
 			_global_datas.selected_subscene = dive_data.zone_packed_scene
-			_global_datas._show_object_legend.emit(true,dive_data.legend)		
+			var zone_name = dive_data.zone_name
+			_global_datas._show_object_legend.emit(true,zone_name)		
 			
 			
 func _on_enter_dialogue_zone_area_exited(area):
@@ -104,12 +110,14 @@ func _on_enter_dialogue_zone_area_exited(area):
 		if npc_zone:
 			_global_datas.Npc_Dialogue = null
 			_global_datas.out_dialogue_zone.emit()
-			_global_datas._show_object_legend.emit(false,"")
+			var nullArray: Array[String] = ["",""]
+			_global_datas._show_object_legend.emit(false,nullArray)
 			
 		var dive_zone = area.get_node_or_null("Dive_zone")
 		if dive_zone:
-			#dive_zone.On_Over(false)
+		
 			dive_zone._contact.emit(false)
 			_global_datas.selected_subscene = null
-			_global_datas._show_object_legend.emit(false,"")	
+			var nullArray: Array[String] = ["",""]
+			_global_datas._show_object_legend.emit(false,nullArray)	
 			_global_datas._active_progress_subscene.emit(false)

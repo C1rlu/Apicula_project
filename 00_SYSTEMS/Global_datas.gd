@@ -85,7 +85,7 @@ signal _show_dialogue_box
 signal _give_letter( index : int)
 signal _take_note(note_name : String)
 signal _take_Npc_photo(condition : bool)
-signal _show_object_legend(condtion : bool, text : String)
+signal _show_object_legend(condtion : bool, _text : Array[String]) #array of string here for multilple localisation text
 
 signal _instance_photo(photoData : PhotoData)
 

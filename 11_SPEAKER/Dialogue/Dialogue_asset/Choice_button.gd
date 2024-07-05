@@ -6,6 +6,7 @@ var choice_index : int
 signal choice_selected(choice_index)
 
 var actual_text_all
+@onready var timer = $Timer
 
 
 func _ready():
@@ -25,7 +26,12 @@ func change_ls(ls):
 		var selected_words = select_language_here[ls]
 		text  = selected_words
 		
-		
+func start():
+	timer.start()			
 func _on_pressed():
 	choice_selected.emit(choice_index)
 	
+
+
+func _on_timer_timeout():
+	disabled = false

@@ -63,16 +63,31 @@ script/source = "extends Node
 var t 
 var _is_typing : bool = false
 
-
+var current_ls_text : Array[String]
+var ls_index : int = 0 
 func _ready():
 
 	_global_datas._show_object_legend.connect(_update_text)
-	
-func _update_text(condition : bool, _text : String):
+	_global_datas._change_language_state.connect(change_ls)
 
+
+func change_ls(ls):
+	
+	if current_ls_text == null:
+		return
+	ls_index = ls
+	description_text.text = current_ls_text[ls_index]
+	
+func _update_text(condition : bool, _text : Array[String]):
+
+	if !condition:
+		description_text.visible = false
+		return
+		
+	current_ls_text = _text
 	description_text.visible = condition
-	description_text.text = _text
-	var text_count = _text.length()
+	description_text.text = current_ls_text[ls_index]
+	var text_count = current_ls_text[ls_index].length()
 	type_text(text_count)
 
 func type_text(count : int):
