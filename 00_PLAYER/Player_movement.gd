@@ -37,26 +37,11 @@ func _input(event):
 		
 func _physics_process(_delta):
 	
-	if _global_datas.Player_In_Inventory:
-		return	
-	if _global_datas.Player_InSubScene:
-		return
-	if _global_datas.Player_InMenu:
-		return	
-	if _global_datas.Player_InDialogue:
-		return	
-	if _global_datas.Waiting_bird:
-		return	
-	var translation = get_global_transform().origin
-	_global_datas.player_position = translation
-	_global_datas.player_boat_rotation = rotation
-	
-	
 	move_c()
 	
 func move_c():
 	
-	
+
 	if _global_datas.Player_In_Inventory:
 		return
 	
@@ -67,10 +52,11 @@ func move_c():
 		
 	if _global_datas.Player_InDialogue:
 		return	
+
 		
 	var translation = get_global_transform().origin
 	_global_datas.player_position = translation
-	
+	_global_datas.player_boat_rotation = rotation
 
 
 	var velocity = Input.get_vector("move_right", "move_left","move_backward" , "move_forward")

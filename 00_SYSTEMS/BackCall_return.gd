@@ -4,14 +4,12 @@ extends Node
 
 
 func _ready():
-	
+
 	_global_datas._add_back_call.connect(add_back_call_and_check)
 
 func _input(event):
 	
 	if _global_datas.Player_InDialogue:
-		return
-	if _global_datas.Waiting_bird:
 		return
 
 	

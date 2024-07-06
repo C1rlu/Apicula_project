@@ -1,7 +1,6 @@
 extends Node
 
 
-@export var bird_data : Npc_datas
 @onready var area_root = $"../Enter_dialogue_zone"
 @onready var col = $"../Enter_dialogue_zone/Col"
 
@@ -45,30 +44,13 @@ func close_for_menu(condition):
 
 func check_zone():
 	
-	
-	if _global_datas.Waiting_bird:
-		close()
-		return
-	
-	_global_datas.go_normal_color.emit()
-	
-	if _global_datas.Npc_Dialogue == bird_data:
-		_global_datas.Npc_Dialogue = null
-				
 	var all_area = area_root.get_overlapping_areas()
 	for a in all_area:
 		var npc_zone = a.get_node_or_null("Npc_zone")
 		if npc_zone:
-			if _global_datas.Npc_Dialogue:
-				if _global_datas.Npc_Dialogue == bird_data:
-					npc_zone.remove()
-					_global_datas.Npc_Dialogue = null
-					_global_datas.out_dialogue_zone.emit()
-					return
-				
+			
 			_global_datas.Npc_Dialogue = npc_zone.get_npc()
 			_global_datas.in_dialogue_zone.emit()
-			
 			var actual_zone_name = _global_datas.Npc_Dialogue.zone_name
 			_global_datas._show_object_legend.emit(true,actual_zone_name)
 
@@ -83,22 +65,11 @@ func check_zone():
 		
 func _on_enter_dialogue_zone_area_entered(area):
 	
-
 	
-	if _global_datas.Waiting_bird:
-		return
-		
 	if area:
 		var npc_zone = area.get_node_or_null("Npc_zone")
 		if npc_zone:	
 			_global_datas.Npc_Dialogue = npc_zone.get_npc()
-			if _global_datas.Npc_Dialogue == bird_data:
-				npc_zone.disable_this()
-				_global_datas._open_dialogue.emit()
-				return
-				
-				
-				
 			_global_datas.in_dialogue_zone.emit()
 			var actual_zone_name = _global_datas.Npc_Dialogue.zone_name
 			_global_datas._show_object_legend.emit(true,actual_zone_name)
@@ -115,8 +86,7 @@ func _on_enter_dialogue_zone_area_entered(area):
 			
 func _on_enter_dialogue_zone_area_exited(area):
 	
-	if _global_datas.Waiting_bird:
-		return
+
 	if area:
 		var npc_zone = area.get_node_or_null("Npc_zone")
 		if npc_zone:

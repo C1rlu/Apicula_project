@@ -9,12 +9,12 @@ var target : Vector3
 
 var t
 
-func _ready():
-	_global_datas.send_bird_responce.connect(send_bird)
+
 	
 func send_bird():
 
 	_global_datas.Waiting_bird = true
+	_global_datas.Player_In_Inventory = false
 	_global_datas.open_inventory.emit(false)
 	
 

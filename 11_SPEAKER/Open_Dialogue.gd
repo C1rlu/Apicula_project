@@ -59,7 +59,7 @@ func _close_dialogue():
 	
 	dialogue.visible =  false
 	_global_datas.Player_InDialogue = false
-
+	_global_datas.go_normal_color.emit()
 	$Random_FaceChanger/Timer.stop()
 
 

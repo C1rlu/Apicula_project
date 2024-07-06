@@ -13,7 +13,6 @@ var Player_InMirrorScene : bool = false
 var Player_InMenu : bool
 var Player_InDialogue : bool
 var Player_InDialogue_zone : bool
-var Waiting_bird : bool = false
 
 # menu signals
 signal _start_ini_subscene
@@ -163,7 +162,6 @@ signal wait_in_time
 signal end_of_time
 
 #all
-signal send_bird_responce
 signal wait_for_otis
 signal active_diving
 

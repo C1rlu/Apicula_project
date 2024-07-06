@@ -81,8 +81,6 @@ func _input(event: InputEvent) -> void:
 	if _global_datas.Player_InDialogue:
 		return
 	
-	if _global_datas.Waiting_bird:
-		return
 	if !_global_datas.selected_subscene:
 		return
 		
@@ -166,8 +164,6 @@ script/source = "extends Node
 
 func _input(event):
 
-	if _global_datas.Waiting_bird:
-		return
 	if _global_datas.Player_In_Inventory:
 		return
 	
@@ -291,9 +287,7 @@ func disable_buton():
 
 	
 func active_buton():
-	
-	if _global_datas.Waiting_bird:
-		return
+
 
 	button.visible = true
 	_global_datas.Player_InDialogue_zone = true
@@ -879,7 +873,6 @@ rotation_speed = 4.0
 
 [node name="Check_zone_ui" type="Node" parent="--DECOR--/Player_Boat"]
 script = ExtResource("17_unqeu")
-bird_data = ExtResource("1_trgwt")
 
 [node name="Node3D" type="Node3D" parent="--DECOR--/Player_Boat"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 4, 0, 4)
@@ -1190,19 +1183,19 @@ mesh = SubResource("BoxMesh_ujnfl")
 skeleton = NodePath("../..")
 surface_material_override/0 = ExtResource("6_vcmny")
 
-[node name="NPC_AREA2" type="Area3D" parent="--DECOR--/NPC_TRIGGER_ZONE"]
+[node name="MrBird_NPC_AREA" type="Area3D" parent="--DECOR--/NPC_TRIGGER_ZONE"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.98105, 1.07288e-06, 2.31768)
 input_ray_pickable = false
 script = SubResource("GDScript_w8xnd")
 Npc_data = ExtResource("1_trgwt")
 
-[node name="Npc_zone" type="Node" parent="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA2"]
+[node name="Npc_zone" type="Node" parent="--DECOR--/NPC_TRIGGER_ZONE/MrBird_NPC_AREA"]
 script = ExtResource("30_ki3ay")
 
-[node name="Birds" parent="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA2" instance=ExtResource("21_py3bv")]
+[node name="Birds" parent="--DECOR--/NPC_TRIGGER_ZONE/MrBird_NPC_AREA" instance=ExtResource("21_py3bv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.643425, 0, 0.626134)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA2"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="--DECOR--/NPC_TRIGGER_ZONE/MrBird_NPC_AREA"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.484242, 0, 0.113853)
 shape = SubResource("SphereShape3D_jvty4")
 
@@ -1272,7 +1265,7 @@ skeleton = NodePath("")
 [connection signal="area_exited" from="--DECOR--/NPC_TRIGGER_ZONE/Maurice_NPC_Area" to="--DECOR--/NPC_TRIGGER_ZONE/Maurice_NPC_Area" method="_on_area_exited"]
 [connection signal="area_entered" from="--DECOR--/NPC_TRIGGER_ZONE/GardeCote_NPC_Area" to="--DECOR--/NPC_TRIGGER_ZONE/GardeCote_NPC_Area" method="_on_area_entered"]
 [connection signal="area_exited" from="--DECOR--/NPC_TRIGGER_ZONE/GardeCote_NPC_Area" to="--DECOR--/NPC_TRIGGER_ZONE/GardeCote_NPC_Area" method="_on_area_exited"]
-[connection signal="area_entered" from="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA2" to="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA2" method="_on_area_entered"]
-[connection signal="area_exited" from="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA2" to="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA2" method="_on_area_exited"]
+[connection signal="area_entered" from="--DECOR--/NPC_TRIGGER_ZONE/MrBird_NPC_AREA" to="--DECOR--/NPC_TRIGGER_ZONE/MrBird_NPC_AREA" method="_on_area_entered"]
+[connection signal="area_exited" from="--DECOR--/NPC_TRIGGER_ZONE/MrBird_NPC_AREA" to="--DECOR--/NPC_TRIGGER_ZONE/MrBird_NPC_AREA" method="_on_area_exited"]
 [connection signal="area_entered" from="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA3" to="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA3" method="_on_area_entered"]
 [connection signal="area_exited" from="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA3" to="--DECOR--/NPC_TRIGGER_ZONE/NPC_AREA3" method="_on_area_exited"]
