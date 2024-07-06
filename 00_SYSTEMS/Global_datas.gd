@@ -73,7 +73,6 @@ signal _update_cam_focus(position : Vector3)
 
 # for save game
 var photo_archives : Array[PhotoData] 
-var active_queste : Note_Data
 var boue_archives : Array[BoueData]
 var tools_list : Array[tool_data]
 var objects_data_list : Array[Board_OBJ]

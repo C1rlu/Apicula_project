@@ -57,10 +57,6 @@ func _on_ez_dialogue_custom_signal_received(value):
 			var variable_value = params[2]
 			var camera_state = variable_value.to_int()	
 			state[variable_name].emit(camera_state)
-			
-		if variable_name == "active_queste_done":
-				_global_datas.active_queste.done = true
-	
 				
 		if variable_name == "give_letter":
 				var index = params[2]

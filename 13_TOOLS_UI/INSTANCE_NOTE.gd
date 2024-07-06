@@ -8,7 +8,7 @@ extends Node
 
 func _ready():
 	_global_datas._give_letter.connect(_intance_letter)
-	_global_datas.active_queste = all_N_note[0]
+
 	
 func _input(event):
 	
@@ -28,4 +28,4 @@ func _intance_letter(index : int):
 	load_data.is_onBoard = true
 	text._update_words(load_data.note_text,load_data.from)
 
-	_global_datas.active_queste = load_data
+
