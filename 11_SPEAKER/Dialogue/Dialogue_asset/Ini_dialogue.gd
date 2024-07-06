@@ -7,12 +7,12 @@ signal up_dialogue_index
 @onready var state = {
 	
 	"give_letter" : _global_datas._give_letter,	
-	"up_dialogue_index" : up_dialogue_index,
+	"npc_ls_node" : null,
 	"cam_focus" : _global_datas._update_cam_focus,
 	"up_page_info_state" : null,
 	"give_board_item" : _global_datas.show_element_on_board,
 	"active_queste_done" : null,
-	"wait_otis" : null
+	"wait_otis" : null,
 }
 
 func _ready():
@@ -23,8 +23,7 @@ func _open_dialogue():
 	
 	dialogue_box.is_dialogue_done = false
 	var dialogue = _global_datas.Npc_Dialogue.Dialogue_data
-	var index = _global_datas.Npc_Dialogue.Dialogue_start_index
-	var _dialogue_start = _global_datas.Npc_Dialogue.Dialogue_starts[index]
+	var _dialogue_start = _global_datas.Npc_Dialogue.Dialogue_active_node
 	($EzDialogue as EzDialogue).start_dialogue(dialogue, state, _dialogue_start)
 
 					
@@ -47,12 +46,13 @@ func _on_ez_dialogue_custom_signal_received(value):
 	
 	# for extern signal call example affichage la main
 	if params[0] == "emit":
+		
 		#set variable command
 		var variable_name = params[1]
-		if variable_name == "up_page_info_state":
-			var variable_value = params[2]
-			var info_state = variable_value.to_int()	
-			up_info_state(info_state)
+		if variable_name == "npc_ls_node":
+			var node_name = params[2]
+			update_npc_active_node(node_name)
+		
 			
 		if variable_name == "cam_focus":
 			var variable_value = params[2]
@@ -78,9 +78,8 @@ func _on_ez_dialogue_custom_signal_received(value):
 			state[variable_name].emit(_index_int)
 	
 		
-		if variable_name == "wait_otis":
-			_global_datas.Waiting_bird = true
-			_global_datas.wait_for_otis.emit()
+		if variable_name == "can_dive":
+			_global_datas.active_diving.emit()
 		
 		if variable_name == "open_inventory":
 			var bool_str = params[2]
@@ -93,18 +92,13 @@ func _on_ez_dialogue_end_of_dialogue_reached():
 	dialogue_box.is_dialogue_done = true	
 	_global_datas._close_dialogue.emit()
 	
-func up_info_state(index : int):
-	var actual = _global_datas.Npc_Dialogue.photo_data.page_information_state
-	if index <= actual:
-		return
-		
-	_global_datas.Npc_Dialogue.photo_data.page_information_state = index	
-	print("up page info to   ", _global_datas.Npc_Dialogue.photo_data.page_information_state)	
-	_global_datas.ui_noted_taked.emit()
-	
+func update_npc_active_node(ls_node_name : String):
+
+	_global_datas.Npc_Dialogue.Dialogue_active_node = ls_node_name 
+	print("next dialogue of this NPC will be ", _global_datas.Npc_Dialogue.Dialogue_active_node)	
+
 func _on_up_dialogue_index():
 	
-	_global_datas.Npc_Dialogue.Dialogue_start_index =+ 1
 	if _global_datas.Npc_Dialogue.photo_data.board_information_state == 3:
 		_global_datas.ui_noted_taked.emit()
 		return
