@@ -7,6 +7,7 @@ var t
 signal text_type_done
 var _is_typing : bool = false
 var active
+@onready var end_typing_button = $"../../00_NPC_CREATOR/Npc_convas/End_typing_button"
 
 
 func _ready():
@@ -20,6 +21,8 @@ func stop_typing():
 
 func go_typing():
 	
+
+	
 	active = true
 	var words = dialogue_text.text.length()
 	
@@ -28,10 +31,13 @@ func go_typing():
 	
 func type_text(count : int):
 	
+	end_typing_button.visible = true
+	end_typing_button.grab_focus()
+	end_typing_button.disabled = false
+	
 	dialogue_text.visible_ratio = 0.0
 	var speed = 0.05 * count
-	#var clamp_speed = clamp(1.0,2.0,speed)
-	#print( speed," for ", count ," letter")
+
 	_is_typing = true
 	if t:
 		t.kill()
@@ -49,14 +55,10 @@ func change_ration(value : float):
 	dialogue_text.visible_ratio = value
 	
 
-func _input(event):
+func _on_end_typing_button_end_typing():
 	
-	if !active:
-		return
 	if _is_typing:
-		if event.is_action_pressed("Click"):
-			if t:
-				t.kill()	
-			dialogue_text.visible_ratio = 1.0
-			text_type_done.emit()
-
+		if t:
+			t.kill()	
+		dialogue_text.visible_ratio = 1.0
+		text_type_done.emit()

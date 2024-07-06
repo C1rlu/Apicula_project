@@ -6,8 +6,6 @@ var choice_buttons : Array[Button] = []
 
 @onready var v_box_container = $Dialogue_text/VBoxContainer
 
-
-
 var is_dialogue_done = false
 var actual_index : int
 
@@ -15,12 +13,29 @@ var Localisation_state_index : int = 0
 var actual_text_all : String
 
 
+
 func _ready():
 	
 	_global_datas._change_language_state.connect(_change_localisation_state)
+	_global_datas._open_dialogue.connect(clear_dialogue_box)
+	_global_datas._open_menu.connect(close_menu_check)
 
-func _change_localisation_state(ls):
+
+func close_menu_check(condition):
 	
+	if condition:
+		return
+	if _global_datas.Player_InDialogue:
+		var choice = v_box_container.get_children()
+		if !choice:
+			return
+		for c in choice:
+			c.visible = true
+		
+		choice[0].grab_focus()		
+		
+func _change_localisation_state(ls):
+		
 	
 	Localisation_state_index = ls
 	
@@ -41,8 +56,7 @@ func _change_localisation_state(ls):
 		var selected_words = select_language_here[Localisation_state_index]
 		text_node.text  = selected_words
 		
-	#var text_count = text_node.text.length()
-	#_global_datas._type_text.emit(text_count)
+
 	
 func clear_dialogue_box():
 	text_node.text = ""
@@ -85,15 +99,17 @@ func add_choice(choice_text : String):
 func show_all_responce():
 	
 	var choice = v_box_container.get_children()
+	
 	if !choice:
 		return
+		
 	for c in choice:
 		c.visible = true
-	
-	for c in choice:
-		c.start()
+		
 	choice[0].grab_focus()
-
+	
+	
+		
 func _on_choice_selected(choice_index : int):
 	
 	if !is_dialogue_done:

@@ -22,9 +22,7 @@ script/source = "extends Node
 @onready var front_element = $\"../Front_element\"
 
 
-func _ready():
-	pass
-	#_global_datas._take_photo.connect(_check_npc_photo)
+
 
 func _check_npc_photo():
 	
@@ -72,10 +70,10 @@ func _ready():
 
 
 func change_ls(ls):
-	
-	if current_ls_text == null:
-		return
 	ls_index = ls
+	
+	if current_ls_text.size() == 0:
+		return
 	description_text.text = current_ls_text[ls_index]
 	
 func _update_text(condition : bool, _text : Array[String]):
@@ -94,8 +92,6 @@ func type_text(count : int):
 	
 	description_text.visible_ratio = 0.0
 	var speed = 0.025 * count
-	#var clamp_speed = clamp(1.0,2.0,speed)
-	#print( speed,\" for \", count ,\" letter\")
 	_is_typing = true
 	
 	

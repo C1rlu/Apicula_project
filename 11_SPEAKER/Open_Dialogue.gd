@@ -63,7 +63,3 @@ func _close_dialogue():
 	$Random_FaceChanger/Timer.stop()
 
 
-func _on_leave_button_pressed():
-	_global_datas._close_dialogue.emit()
-	
-

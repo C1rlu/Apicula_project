@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://bemddl0bqqfwo"]
+[gd_scene load_steps=16 format=3 uid="uid://bemddl0bqqfwo"]
 
 [ext_resource type="Script" path="res://100_GAME_MENU/Open_Menu.gd" id="1_2jpo2"]
 [ext_resource type="Script" path="res://100_GAME_MENU/Option_panel.gd" id="2_gelwi"]
@@ -10,9 +10,9 @@
 
 [sub_resource type="GDScript" id="GDScript_8vnul"]
 script/source = "extends Node
-@onready var menu_backdrop = $\"../Game_Menu_Root/Menu_Backdrop\"
-@onready var menu_backdrop_mat : Material = menu_backdrop.get_material()
-@onready var menu_backdrop_normal = $\"../Game_Menu_Root/Menu_Backdrop_normal\"
+
+
+@onready var menu_backdrop_normal = $\"../Game_Menu_Root/Menu_Backdrop_Dither\"
 @onready var material_normal : Material = menu_backdrop_normal.get_material()
 var actual_value : float
 var t
@@ -36,7 +36,7 @@ func _fade_in():
 		t.kill()
 	t = create_tween()
 	
-	t .tween_method(set_shader_value,actual_value,0.8,0.5)
+	t .tween_method(set_shader_value,actual_value,0.9,0.5)
 
 func _fade_out():
 	
@@ -49,237 +49,42 @@ func _fade_out():
 
 func set_shader_value(value):
 
-	var clamp_y = clamp(value,0.0,0.8)
-	material_normal.set_shader_parameter(\"Opacity\",clamp_y)
+	material_normal.set_shader_parameter(\"Opacity\",value)
 	actual_value = value
 
-	#menu_backdrop_mat.set_shader_parameter(\"Opacity\",value)
 "
 
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_e0bhj"]
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_jtw7b"]
 parameter_name = "Opacity"
 hint = 1
 default_value_enabled = true
 default_value = 0.5
 
-[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_06gwt"]
-source = 5
-
-[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_uqj6v"]
-default_input_values = [1, Vector2(1, 0.5), 2, Vector2(0, 0)]
-function = 1
-
-[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_eakmn"]
-default_input_values = [0, 0.0, 1, 0.001]
-operator = 2
-
-[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_2p1qd"]
-default_input_values = [0, 0.0, 1, 0.1]
-operator = 2
-
-[sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_g232x"]
-parameter_name = "BlueNoise"
-qualifier = 1
-texture_repeat = 1
-
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_4gb3t"]
-
-[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_rjr07"]
-function = 1
-
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_t6b26"]
-parameter_name = "Dither_blue_noise_size"
-qualifier = 1
-
-[sub_resource type="VisualShader" id="VisualShader_x0sux"]
+[sub_resource type="VisualShader" id="VisualShader_h4jri"]
 code = "shader_type canvas_item;
 render_mode blend_mix;
 
-global uniform float Dither_blue_noise_size;
-global uniform sampler2D BlueNoise : repeat_enable;
 uniform float Opacity : hint_range(0, 1) = 0.5;
 
 
 
 void fragment() {
-// UVFunc:19
-	vec2 n_in19p1 = vec2(1.00000, 0.50000);
-	vec2 n_in19p2 = vec2(0.00000, 0.00000);
-	vec2 n_out19p0 = (UV - n_in19p2) * n_in19p1 + n_in19p2;
-
-
-// FloatParameter:26
-	float n_out26p0 = Dither_blue_noise_size;
-
-
-// FloatOp:20
-	float n_in20p0 = 0.00000;
-	float n_in20p1 = 0.00100;
-	float n_out20p0 = n_in20p0 * n_in20p1;
-
-
-// FloatOp:21
-	float n_in21p1 = 0.10000;
-	float n_out21p0 = n_out20p0 * n_in21p1;
-
-
-// UVFunc:25
-	vec2 n_out25p0 = (n_out19p0 - vec2(n_out21p0)) * vec2(n_out26p0) + vec2(n_out21p0);
-
-
-	vec4 n_out18p0;
-// Texture2D:18
-	n_out18p0 = texture(BlueNoise, n_out25p0);
-
-
-// FloatParameter:17
-	float n_out17p0 = Opacity;
-
-
-// Step:23
-	float n_out23p0 = step(n_out18p0.x, n_out17p0);
+// FloatParameter:3
+	float n_out3p0 = Opacity;
 
 
 // Output:0
-	COLOR.a = n_out23p0;
+	COLOR.a = n_out3p0;
 
 
 }
 "
-graph_offset = Vector2(-2545.63, -628.617)
+graph_offset = Vector2(-682.377, -35.7413)
 mode = 1
 flags/light_only = false
-nodes/fragment/17/node = SubResource("VisualShaderNodeFloatParameter_e0bhj")
-nodes/fragment/17/position = Vector2(-2040, -100)
-nodes/fragment/18/node = SubResource("VisualShaderNodeTexture_06gwt")
-nodes/fragment/18/position = Vector2(-1440, -760)
-nodes/fragment/19/node = SubResource("VisualShaderNodeUVFunc_uqj6v")
-nodes/fragment/19/position = Vector2(-2360, -760)
-nodes/fragment/20/node = SubResource("VisualShaderNodeFloatOp_eakmn")
-nodes/fragment/20/position = Vector2(-2320, -400)
-nodes/fragment/21/node = SubResource("VisualShaderNodeFloatOp_2p1qd")
-nodes/fragment/21/position = Vector2(-2260, -200)
-nodes/fragment/22/node = SubResource("VisualShaderNodeTexture2DParameter_g232x")
-nodes/fragment/22/position = Vector2(-1800, -480)
-nodes/fragment/23/node = SubResource("VisualShaderNodeStep_4gb3t")
-nodes/fragment/23/position = Vector2(-560, 40)
-nodes/fragment/25/node = SubResource("VisualShaderNodeUVFunc_rjr07")
-nodes/fragment/25/position = Vector2(-2040, -640)
-nodes/fragment/26/node = SubResource("VisualShaderNodeFloatParameter_t6b26")
-nodes/fragment/26/position = Vector2(-2840, -520)
-nodes/fragment/connections = PackedInt32Array(20, 0, 21, 0, 19, 0, 25, 0, 21, 0, 25, 2, 25, 0, 18, 0, 22, 0, 18, 2, 17, 0, 23, 1, 18, 0, 23, 0, 23, 0, 0, 1, 26, 0, 25, 1)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_6jute"]
-shader = SubResource("VisualShader_x0sux")
-shader_parameter/Opacity = 0.0
-
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_hwv0w"]
-input_name = "uv"
-
-[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_iqqqj"]
-default_input_values = [1, Vector2(1.8, 1), 2, Vector2(0.5, 0)]
-function = 1
-
-[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_fo06p"]
-default_input_values = [1, Vector2(0, 1), 2, Vector2(0, 0)]
-
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_6pk0q"]
-size = Vector2(513.781, 284.487)
-expression = "vec2 n_uv = UV -0.5;
-float d = length(n_uv);
-float c = smoothstep(r,r + feather,d);
-color = vec4(vec3(c),1.0);"
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_csyom"]
-constant = 1.372
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_rwcw2"]
-constant = 0.406
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_ny6mo"]
-constant = 0.4
-
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_4akre"]
-size = Vector2(724.789, 654.559)
-expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_p1x1a"]
-
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_bi4br"]
-parameter_name = "Opacity"
-default_value_enabled = true
-
-[sub_resource type="VisualShader" id="VisualShader_h4jri"]
-code = "shader_type canvas_item;
-render_mode blend_mix;
-
-uniform float Opacity = 0;
-
-
-
-void fragment() {
-// FloatParameter:9
-	float n_out9p0 = Opacity;
-
-
-// Output:0
-	COLOR.a = n_out9p0;
-
-
-}
-"
-mode = 1
-flags/light_only = false
-nodes/fragment/2/node = SubResource("VisualShaderNodeFloatConstant_ny6mo")
-nodes/fragment/2/position = Vector2(-1600, 600)
-nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_4akre")
-nodes/fragment/4/position = Vector2(-1300, 500)
-nodes/fragment/4/size = Vector2(724.789, 654.559)
-nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
-nodes/fragment/4/output_ports = "0,0,Dither_Node;"
-nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/5/node = SubResource("VisualShaderNodeStep_p1x1a")
-nodes/fragment/5/position = Vector2(-180, 240)
-nodes/fragment/9/node = SubResource("VisualShaderNodeFloatParameter_bi4br")
-nodes/fragment/9/position = Vector2(-1980, 380)
-nodes/fragment/10/node = SubResource("VisualShaderNodeInput_hwv0w")
-nodes/fragment/10/position = Vector2(-2820, -140)
-nodes/fragment/11/node = SubResource("VisualShaderNodeUVFunc_iqqqj")
-nodes/fragment/11/position = Vector2(-2480, -200)
-nodes/fragment/12/node = SubResource("VisualShaderNodeUVFunc_fo06p")
-nodes/fragment/12/position = Vector2(-2240, -200)
-nodes/fragment/13/node = SubResource("VisualShaderNodeExpression_6pk0q")
-nodes/fragment/13/position = Vector2(-1580, -200)
-nodes/fragment/13/size = Vector2(513.781, 284.487)
-nodes/fragment/13/input_ports = "0,3,UV;1,0,r;2,0,feather;"
-nodes/fragment/13/output_ports = "0,5,color;"
-nodes/fragment/13/expression = "vec2 n_uv = UV -0.5;
-float d = length(n_uv);
-float c = smoothstep(r,r + feather,d);
-color = vec4(vec3(c),1.0);"
-nodes/fragment/14/node = SubResource("VisualShaderNodeFloatConstant_csyom")
-nodes/fragment/14/position = Vector2(-2520, 260)
-nodes/fragment/15/node = SubResource("VisualShaderNodeFloatConstant_rwcw2")
-nodes/fragment/15/position = Vector2(-2460, 40)
-nodes/fragment/connections = PackedInt32Array(2, 0, 4, 1, 4, 0, 5, 1, 9, 0, 4, 0, 10, 0, 11, 0, 11, 0, 12, 0, 14, 0, 13, 2, 12, 0, 13, 0, 15, 0, 13, 1, 9, 0, 0, 1)
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatParameter_jtw7b")
+nodes/fragment/3/position = Vector2(-109.419, 673.378)
+nodes/fragment/connections = PackedInt32Array(3, 0, 0, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bglt3"]
 shader = SubResource("VisualShader_h4jri")
@@ -383,6 +188,8 @@ text = "FPS COUNTER"
 script = ExtResource("4_86v10")
 
 [node name="Game_Menu_Root" type="Control" parent="."]
+custom_minimum_size = Vector2(600, 720)
+layout_direction = 1
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -391,19 +198,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Menu_Backdrop" type="ColorRect" parent="Game_Menu_Root"]
-process_mode = 3
-material = SubResource("ShaderMaterial_6jute")
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.0156863, 0.0705882, 0.0823529, 1)
-metadata/_edit_use_anchors_ = true
-
-[node name="Menu_Backdrop_normal" type="ColorRect" parent="Game_Menu_Root"]
+[node name="Menu_Backdrop_Dither" type="ColorRect" parent="Game_Menu_Root"]
 process_mode = 3
 material = SubResource("ShaderMaterial_bglt3")
 layout_mode = 1
@@ -413,24 +208,25 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.0156863, 0.0705882, 0.0823529, 1)
+color = Color(0.0588235, 0.141176, 0.145098, 1)
 metadata/_edit_use_anchors_ = true
 
 [node name="MainMenu_Box" type="Control" parent="Game_Menu_Root"]
 layout_mode = 1
 anchors_preset = 0
-offset_left = -42.0
-offset_top = 72.0
-offset_right = -42.0
-offset_bottom = 72.0
+offset_left = -64.0
+offset_top = 83.0
+offset_right = -64.0
+offset_bottom = 83.0
 
 [node name="Title" type="Label" parent="Game_Menu_Root/MainMenu_Box"]
 clip_contents = true
 layout_direction = 1
 layout_mode = 1
-offset_top = -8.0
-offset_right = 638.0
-offset_bottom = 61.0
+offset_left = -14.0
+offset_top = -23.0
+offset_right = 624.0
+offset_bottom = 46.0
 theme_override_colors/font_color = Color(0.317647, 0.615686, 0.529412, 1)
 theme_override_font_sizes/font_size = 35
 text = "APICULA (PROTOTYPE)"
@@ -567,7 +363,7 @@ language_state = Array[String](["Fullscreen ............................", "Plei
 process_mode = 2
 layout_mode = 2
 focus_neighbor_top = NodePath("../Fullscreen_button")
-focus_neighbor_bottom = NodePath("../Label/HSlider_dither")
+focus_neighbor_bottom = NodePath("../ActiveDither_button")
 button_pressed = true
 alignment = 2
 
@@ -620,7 +416,7 @@ language_state = Array[String](["Vsync ....................................", "V
 [node name="ActiveDither_button" type="CheckBox" parent="Game_Menu_Root/MainMenu_Box/Options/VBoxContainer"]
 process_mode = 2
 layout_mode = 2
-focus_neighbor_top = NodePath("../Fullscreen_button")
+focus_neighbor_top = NodePath("../Vsync_button")
 focus_neighbor_bottom = NodePath("../Label/HSlider_dither")
 button_pressed = true
 alignment = 2
@@ -689,7 +485,8 @@ offset_right = -27.2
 offset_bottom = 7.0
 grow_horizontal = 2
 grow_vertical = 2
-focus_neighbor_bottom = NodePath("../../Fullscreen_button")
+focus_neighbor_top = NodePath("../../ActiveDither_button")
+focus_neighbor_bottom = NodePath("../../../../Language_choice")
 theme_override_styles/slider = SubResource("StyleBoxLine_hcfes")
 min_value = 0.1
 max_value = 1.0
@@ -700,10 +497,11 @@ script = ExtResource("5_7b61k")
 [node name="Language_choice" type="OptionButton" parent="Game_Menu_Root/MainMenu_Box"]
 process_mode = 2
 layout_mode = 0
-offset_left = 131.0
+offset_left = 116.0
 offset_top = 327.0
-offset_right = 402.0
+offset_right = 387.0
 offset_bottom = 401.0
+focus_neighbor_top = NodePath("../Options/VBoxContainer/Label/HSlider_dither")
 
 [connection signal="pressed" from="Game_Menu_Root/MainMenu_Box/HBoxContainer/Resum_Button2" to="Game_Menu_Root/MainMenu_Box/HBoxContainer/Resum_Button2" method="_on_pressed"]
 [connection signal="pressed" from="Game_Menu_Root/MainMenu_Box/HBoxContainer/Restart_Button" to="Restart" method="_on_restart_button_pressed"]

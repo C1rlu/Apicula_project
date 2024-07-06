@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=3 uid="uid://bbp1ccoa6te1g"]
+[gd_scene load_steps=54 format=3 uid="uid://bbp1ccoa6te1g"]
 
 [ext_resource type="Script" path="res://11_SPEAKER/Open_Dialogue.gd" id="1_6gph5"]
 [ext_resource type="Script" path="res://11_SPEAKER/00_NPC/NPC_DIVE_SELECTOR/Npc_loader.gd" id="2_gecf5"]
@@ -9,8 +9,8 @@
 [ext_resource type="Script" path="res://11_SPEAKER/Cam_Focus.gd" id="7_yfrxb"]
 [ext_resource type="Shader" uid="uid://i5hkaugkylpm" path="res://05_SHADER_TEST/Full_screen/Speaker_dither_convas.tres" id="9_8gj0l"]
 [ext_resource type="Script" path="res://11_SPEAKER/Dialogue/Dialogue_asset/Dialogue_box.gd" id="9_n4i7c"]
+[ext_resource type="Script" path="res://11_SPEAKER/End_Typing_Button.tres.gd" id="10_o8x3k"]
 [ext_resource type="PackedScene" uid="uid://kfeia6x8pslm" path="res://11_SPEAKER/00_NPC/guy_02_prefab.tscn" id="11_60j22"]
-[ext_resource type="PackedScene" uid="uid://l88yn3sqao5k" path="res://11_SPEAKER/Dialogue/Dialogue_asset/Photo_button.tscn" id="12_8wltn"]
 [ext_resource type="PackedScene" uid="uid://d2b7ysl6sho71" path="res://11_SPEAKER/00_NPC/Model/Mr_birds_prefab.tscn" id="13_f7b57"]
 [ext_resource type="PackedScene" uid="uid://bhp5srocc6bwr" path="res://11_SPEAKER/00_NPC/Otis_Npc_prefabs.tscn" id="13_une54"]
 
@@ -258,7 +258,6 @@ script/source = "extends Node
 @onready var timer = $Timer
 
 @export var active_npc_entrance : bool = false
-@onready var photo_button = $\"../Npc_convas/PhotoButton\"
 
 
 func _ready():
@@ -304,12 +303,10 @@ func _on_timer_timeout():
 	if _global_datas.Npc_Dialogue != null:
 		var photo_Data = _global_datas.Npc_Dialogue.photo_data
 		if check_photo_exist(photo_Data):
-			#photo_button.visible = false
 			_global_datas._start_dialogue_box.emit()
 			_global_datas._show_dialogue_box.emit()	
 		else:
-			#photo_button.visible = true	
-			#photo_button.grab_focus()
+
 			_global_datas.photo_archives.append(photo_Data)
 			_global_datas._start_dialogue_box.emit()
 			_global_datas._show_dialogue_box.emit()	
@@ -545,26 +542,6 @@ shader_parameter/Opacity = 1.0
 [sub_resource type="ViewportTexture" id="ViewportTexture_ah4ff"]
 viewport_path = NodePath("00_NPC_CREATOR/Npc_convas/SubViewport")
 
-[sub_resource type="Theme" id="Theme_g7433"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_08hgk"]
-bg_color = Color(0.235294, 0.286275, 0.25098, 0)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h0dus"]
-bg_color = Color(0.792157, 0.690196, 0.494118, 0.521569)
-border_color = Color(0.0625, 0.140625, 0.140625, 1)
-
-[sub_resource type="GDScript" id="GDScript_pev46"]
-script/source = "extends Button
-
-
-func _ready():
-	var number : int = 0
-	set_focus_mode(number)
-
-
-"
-
 [node name="05_SPEAKER" type="Node"]
 script = ExtResource("1_6gph5")
 
@@ -704,19 +681,20 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("ViewportTexture_ah4ff")
 
-[node name="PhotoButton" parent="00_NPC_CREATOR/Npc_convas" instance=ExtResource("12_8wltn")]
+[node name="End_typing_button" type="TextureButton" parent="00_NPC_CREATOR/Npc_convas"]
 visible = false
+layout_direction = 1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 0.0
-offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_default_cursor_shape = 2
+disabled = true
 action_mode = 0
-texture_normal = null
+ignore_texture_size = true
+stretch_mode = 0
+script = ExtResource("10_o8x3k")
 
 [node name="Dialogue_box" type="Control" parent="00_NPC_CREATOR/Npc_convas"]
 layout_mode = 1
@@ -729,30 +707,6 @@ offset_right = -124.0
 offset_bottom = 296.0
 grow_horizontal = 0
 script = ExtResource("9_n4i7c")
-
-[node name="Leave_button" type="Button" parent="00_NPC_CREATOR/Npc_convas/Dialogue_box"]
-visible = false
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = 175.0
-offset_top = 338.0
-offset_right = 248.0
-offset_bottom = 369.0
-grow_horizontal = 2
-grow_vertical = 0
-mouse_default_cursor_shape = 2
-theme = SubResource("Theme_g7433")
-theme_override_colors/font_color = Color(0.8, 0.698039, 0.494118, 1)
-theme_override_font_sizes/font_size = 22
-theme_override_styles/normal = SubResource("StyleBoxFlat_08hgk")
-theme_override_styles/hover = SubResource("StyleBoxFlat_h0dus")
-text = "Leave"
-alignment = 0
-script = SubResource("GDScript_pev46")
 
 [node name="Dialogue_name" type="Label" parent="00_NPC_CREATOR/Npc_convas/Dialogue_box"]
 layout_direction = 1
@@ -866,4 +820,5 @@ visible = false
 [connection signal="timeout" from="Random_FaceChanger/Timer" to="Random_FaceChanger" method="_on_timer_timeout"]
 [connection signal="timeout" from="00_NPC_CREATOR/Fade_in/Timer" to="00_NPC_CREATOR/Fade_in" method="_on_timer_timeout"]
 [connection signal="timeout" from="00_NPC_CREATOR/Entrance_animation/Timer" to="00_NPC_CREATOR/Entrance_animation" method="_on_timer_timeout"]
-[connection signal="pressed" from="00_NPC_CREATOR/Npc_convas/Dialogue_box/Leave_button" to="." method="_on_leave_button_pressed"]
+[connection signal="end_typing" from="00_NPC_CREATOR/Npc_convas/End_typing_button" to="Dialogue/Dialogue_typing" method="_on_end_typing_button_end_typing"]
+[connection signal="pressed" from="00_NPC_CREATOR/Npc_convas/End_typing_button" to="00_NPC_CREATOR/Npc_convas/End_typing_button" method="_on_pressed"]

@@ -14,8 +14,7 @@ func _switch_inputs(condition : bool):
 	
 	if !_global_datas.Player_In_Inventory:
 		return
-	
-	
+
 	pad_target.visible = condition
 	using_pad = condition
 	if condition:
@@ -27,4 +26,6 @@ func _switch_inputs(condition : bool):
 func close_pad_target(condition):
 	
 	if using_pad:
-		pad_target.visible = condition
+			pad_target.visible = condition
+	
+
