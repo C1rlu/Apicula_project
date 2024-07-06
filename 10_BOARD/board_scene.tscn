@@ -1,4 +1,4 @@
-[gd_scene load_steps=240 format=3 uid="uid://dr73p5vs0sixe"]
+[gd_scene load_steps=241 format=3 uid="uid://dr73p5vs0sixe"]
 
 [ext_resource type="PackedScene" uid="uid://cyb6my1srlcpw" path="res://10_BOARD/Candle/Candle_set.blend" id="1_3ummb"]
 [ext_resource type="Script" path="res://10_BOARD/photos_check.gd" id="1_bcxwj"]
@@ -9,8 +9,9 @@
 [ext_resource type="Resource" uid="uid://cooqi0giysm3w" path="res://12_INVENTORY/Photo/MrBirs_photoData.tres" id="4_t8cpb"]
 [ext_resource type="Material" uid="uid://dvbomu5aenq4x" path="res://05_SHADER_TEST/Board/board_candle.tres" id="5_8m368"]
 [ext_resource type="PackedScene" uid="uid://bru8c4c70eohg" path="res://10_BOARD/Decor/PLume_pot.blend" id="5_m8vsb"]
-[ext_resource type="Script" path="res://10_BOARD/Active_scene_object.gd" id="6_20hrj"]
+[ext_resource type="Script" path="res://10_BOARD/OBJ_active.gd" id="6_dbdwd"]
 [ext_resource type="Material" uid="uid://5cye33kgwfo5" path="res://10_BOARD/Shading/Board_shading_base.tres" id="6_kkuc8"]
+[ext_resource type="Resource" uid="uid://blxuee4l6ey2g" path="res://10_BOARD/Board_OBJ_data/Map_data.tres" id="7_ajhp1"]
 [ext_resource type="Resource" uid="uid://ctxrmh1elpnm1" path="res://12_INVENTORY/Photo/Oddity_photoData/Follower_photoData.tres" id="8_mk0a6"]
 [ext_resource type="PackedScene" uid="uid://6pkqjlcwbqu1" path="res://13_TOOLS_UI/Clock_montre/clock_3d_prefab.tscn" id="8_x5b6k"]
 [ext_resource type="PackedScene" uid="uid://qgyjfq88teq8" path="res://10_BOARD/letters_area.tscn" id="9_ajmma"]
@@ -2020,10 +2021,6 @@ omni_range = 1.6
 omni_attenuation = 1.14868
 omni_shadow_mode = 0
 
-[node name="Active_scene_object" type="Node" parent="." node_paths=PackedStringArray("object_list")]
-script = ExtResource("6_20hrj")
-object_list = [NodePath("../Deco/MAP")]
-
 [node name="Deco" type="Node3D" parent="."]
 
 [node name="Lanterne2" parent="Deco" instance=ExtResource("1_l5l52")]
@@ -2105,6 +2102,10 @@ mesh = SubResource("PlaneMesh_x8wfj")
 skeleton = NodePath("../../..")
 surface_material_override/0 = SubResource("ShaderMaterial_ok24o")
 
+[node name="OBJ_active" type="Node" parent="Deco/MAP"]
+script = ExtResource("6_dbdwd")
+Obj_data = ExtResource("7_ajhp1")
+
 [node name="On_Over" type="MeshInstance3D" parent="Deco/MAP"]
 transform = Transform3D(0.44437, 0, -0.000342503, 0, 0.387303, 0, 0.000341229, 0, 0.445962, 0, 0.00562999, 0)
 visible = false
@@ -2121,7 +2122,7 @@ skeleton = NodePath("../../../..")
 
 [node name="Area3D" type="Area3D" parent="Deco/MAP"]
 
-[node name="On_Over" type="Node" parent="Deco/MAP/Area3D"]
+[node name="On_Over_off" type="Node" parent="Deco/MAP/Area3D"]
 script = ExtResource("23_4ws66")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Deco/MAP/Area3D"]

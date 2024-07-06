@@ -12,10 +12,9 @@ script/source = "extends Area3D
 
 @export var activable : Array[Node3D]
 
-
 func _ready():
 	boue_data.world_position = root.global_position
-
+	
 
 func active():
 	
@@ -32,6 +31,15 @@ func disable():
 	for e in activable:
 		e.visible = false
 
+
+
+func _on_dive_zone__contact(condition):
+	
+	if condition:
+		if !boue_data.is_discover:
+			_global_datas.boue_archives.append(boue_data)
+			boue_data.is_discover = true
+			_global_datas.ui_noted_taked.emit()
 "
 
 [sub_resource type="TorusMesh" id="TorusMesh_8ej3g"]
@@ -166,6 +174,8 @@ var d
 var stop_after : bool = false
 var actual_value : float
 var is_active : bool = false
+
+
 func _show():
 	
 	if get_tree() == null:
@@ -411,5 +421,6 @@ mesh = SubResource("ArrayMesh_qimfy")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("ShaderMaterial_yfs1e")
 
+[connection signal="_contact" from="Dive_zone" to="." method="_on_dive_zone__contact"]
 [connection signal="_contact" from="Dive_zone" to="Boue_msh_01" method="_contact"]
 [connection signal="_contact" from="Dive_zone" to="Epave_visuals/Fade_out" method="_on_epave_zone_see_int"]

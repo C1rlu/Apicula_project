@@ -11,8 +11,7 @@ func _ready():
 	_global_datas._open_dialogue.connect(close)
 	
 	_global_datas.open_inventory.connect(close_for_menu)
-	_global_datas.wait_in_time.connect(close)
-	
+
 	# for diving zone
 	_global_datas._backFrom_subscene.connect(check_zone)
 	_global_datas._go_Subscene.connect(close)

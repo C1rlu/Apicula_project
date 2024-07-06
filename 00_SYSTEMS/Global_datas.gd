@@ -76,6 +76,8 @@ var photo_archives : Array[PhotoData]
 var active_queste : Note_Data
 var boue_archives : Array[BoueData]
 var tools_list : Array[tool_data]
+var objects_data_list : Array[Board_OBJ]
+
 
 signal _change_language_state(l_state : int)
 signal _start_dialogue_box
@@ -152,17 +154,14 @@ var board_camera : Camera3D
 var zoom_value : float
 var Cursor_mode : Node
 signal close_all_over_ui
-signal show_element_on_board(value : int)
+signal add_OBJ(obj_name : String)
 
 signal ui_noted_taked
 signal map_fade(condition : bool) # true is in : false is out
 
-signal connect_wait_of_time(function)
-signal wait_in_time
-signal end_of_time
 
-#all
-signal wait_for_otis
+
+# quest_state signal in order
 signal active_diving
 
 signal responce_link_mode(condition : bool, text : String)

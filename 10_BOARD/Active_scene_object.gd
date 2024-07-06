@@ -5,6 +5,8 @@ extends Node
 
 var active : bool = false
 
+
+
 func _ready():
 	
 	if !active:

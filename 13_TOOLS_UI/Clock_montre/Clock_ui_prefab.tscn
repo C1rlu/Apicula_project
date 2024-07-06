@@ -1,8 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://clc3sbquuu1us"]
+[gd_scene load_steps=4 format=3 uid="uid://clc3sbquuu1us"]
 
 [ext_resource type="PackedScene" uid="uid://b04qmdjf73spd" path="res://13_TOOLS_UI/Clock_montre/clock_3d_ui_prefab.tscn" id="1_71jwj"]
-[ext_resource type="Resource" uid="uid://c6jw6ja2xggvh" path="res://11_SPEAKER/00_NPC/Npc_data/Otis_Coast_guard_data.tres" id="1_tlm5h"]
-[ext_resource type="Script" path="res://13_TOOLS_UI/Clock_montre/Wait_for_otis.gd" id="1_wf3tb"]
 
 [sub_resource type="GDScript" id="GDScript_uwuod"]
 script/source = "extends Node
@@ -12,27 +10,13 @@ script/source = "extends Node
 
 var t 
 signal end_of_time
-var previous_call
+
 
 func _ready():
-	_global_datas.wait_in_time.connect(_start_clock)
-	_global_datas.connect_wait_of_time.connect(connect_end_of_time)
-	
-func connect_end_of_time(function):
-
-	if previous_call:
-		_global_datas.end_of_time.disconnect(previous_call)
-	_global_datas.end_of_time.connect(function)
-	previous_call = function
-	
+	_global_datas._go_Subscene.connect(_start_clock)
+	_global_datas._backFrom_subscene.connect(_done)
 	
 func _start_clock():
-	
-	
-	_global_datas.out_dialogue_zone.emit()
-	_global_datas.hide_open_dialogue.emit()
-	
-	_global_datas.Waiting_bird = true
 	
 	render.visible = true
 	
@@ -41,12 +25,12 @@ func _start_clock():
 		t.kill()
 		
 	t = create_tween()
-	t.tween_method(_value,0.0,360,5.0)
+	t.tween_method(_value,0.0,360,60.0)
 	t.connect(\"finished\",done)
 
 func done():
-	_global_datas.Waiting_bird = false
-	_global_datas.end_of_time.emit()
+	_global_datas._backFrom_subscene.emit()
+	_global_datas._go_Mainscene.emit()
 	_done()
 	
 func _done():
@@ -72,10 +56,6 @@ offset_bottom = 40.0
 [node name="Time" type="Node" parent="."]
 script = SubResource("GDScript_uwuod")
 
-[node name="Wait_for_otis" type="Node" parent="."]
-script = ExtResource("1_wf3tb")
-Otis_data = ExtResource("1_tlm5h")
-
 [node name="Render" type="TextureRect" parent="."]
 visible = false
 layout_mode = 1
@@ -84,13 +64,13 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -122.0
-offset_top = -128.0
-offset_right = 134.0
-offset_bottom = 128.0
+offset_left = -84.0
+offset_top = -91.0
+offset_right = 172.0
+offset_bottom = 165.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(0.8, 0.8)
+scale = Vector2(0.5, 0.5)
 texture = SubResource("ViewportTexture_t3k0a")
 
 [node name="SubViewport" type="SubViewport" parent="."]

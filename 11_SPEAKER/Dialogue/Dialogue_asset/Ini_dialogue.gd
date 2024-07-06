@@ -10,7 +10,6 @@ signal up_dialogue_index
 	"npc_ls_node" : null,
 	"cam_focus" : _global_datas._update_cam_focus,
 	"up_page_info_state" : null,
-	"give_board_item" : _global_datas.show_element_on_board,
 	"active_queste_done" : null,
 	"wait_otis" : null,
 }
@@ -72,11 +71,9 @@ func _on_ez_dialogue_custom_signal_received(value):
 	
 			up_dialogue_index.emit()	
 		
-		if variable_name == "give_board_item":
-			var _index = params[2]
-			var _index_int : int = int(_index)
-			state[variable_name].emit(_index_int)
-	
+		if variable_name == "add_OBJ":
+			var obj_name = params[2]
+			_global_datas.add_OBJ.emit(obj_name)
 		
 		if variable_name == "can_dive":
 			_global_datas.active_diving.emit()
