@@ -1,0 +1,80 @@
+[gd_resource type="ShaderMaterial" load_steps=7 format=3 uid="uid://dnm3xbumsinu2"]
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_dbxfx"]
+parameter_name = "Lit_color"
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_435qj"]
+constant = 1.0
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_cqesa"]
+parameter_name = "Dither_size"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_q6y3y"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_ye3uw"]
+default_input_values = [0, 0.87, 1, 0.0]
+
+[sub_resource type="VisualShader" id="VisualShader_gx03j"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded, shadows_disabled;
+
+uniform vec4 Lit_color : source_color;
+
+
+
+void fragment() {
+// ColorParameter:2
+	vec4 n_out2p0 = Lit_color;
+
+
+// Output:0
+	ALBEDO = vec3(n_out2p0.xyz);
+
+
+}
+"
+flags/unshaded = true
+flags/shadows_disabled = true
+nodes/vertex/0/position = Vector2(400, 160)
+nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_dbxfx")
+nodes/fragment/2/position = Vector2(-440, 100)
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_435qj")
+nodes/fragment/3/position = Vector2(-1160, 360)
+nodes/fragment/4/node = SubResource("VisualShaderNodeFloatParameter_cqesa")
+nodes/fragment/4/position = Vector2(-1240, 580)
+nodes/fragment/5/node = SubResource("VisualShaderNodeExpression_q6y3y")
+nodes/fragment/5/position = Vector2(-860, 480)
+nodes/fragment/5/size = Vector2(724.789, 654.559)
+nodes/fragment/5/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/5/output_ports = "0,0,Dither_Node;"
+nodes/fragment/5/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/6/node = SubResource("VisualShaderNodeStep_ye3uw")
+nodes/fragment/6/position = Vector2(-40, 340)
+nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0, 3, 0, 5, 0, 4, 0, 5, 1, 5, 0, 6, 1)
+nodes/light/0/position = Vector2(2620, 1260)
+
+[resource]
+render_priority = 2
+shader = SubResource("VisualShader_gx03j")
+shader_parameter/Lit_color = Color(0.721569, 0.580392, 0.407843, 1)

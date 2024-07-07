@@ -1,4 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=6 format=3 uid="uid://cfd7rt53ee7jp"]
+[gd_resource type="ShaderMaterial" load_steps=9 format=3 uid="uid://cfd7rt53ee7jp"]
 
 [sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_fjoeh"]
 input_name = "texture"
@@ -13,10 +13,24 @@ texture = SubResource("CameraTexture_hytm8")
 [sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_wx8qy"]
 constant = Color(0.258824, 0.517647, 0.447059, 1)
 
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_4i5sq"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
+op_type = 3
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_5i20b"]
+size = Vector2(580, 220)
+expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
+grey_value = luminance;"
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_whrbr"]
+parameter_name = "link_opacity"
+qualifier = 1
+
 [sub_resource type="VisualShader" id="VisualShader_aoud6"]
 code = "shader_type canvas_item;
 render_mode blend_mix;
 
+global uniform float link_opacity;
 
 
 
@@ -25,13 +39,30 @@ void fragment() {
 	vec4 n_out5p0 = vec4(0.258824, 0.517647, 0.447059, 1.000000);
 
 
+	float n_out7p0;
+// Expression:7
+	n_out7p0 = 0.0;
+	{
+		float luminance = 0.299 * vec3(n_out5p0.xyz).x + 0.587 * vec3(n_out5p0.xyz).y + 0.114 * vec3(n_out5p0.xyz).z;
+		n_out7p0 = luminance;
+	}
+
+
+// FloatParameter:8
+	float n_out8p0 = link_opacity;
+
+
+// Mix:6
+	vec3 n_out6p0 = mix(vec3(n_out5p0.xyz), vec3(n_out7p0), vec3(n_out8p0));
+
+
 	vec4 n_out3p0;
 // Texture2D:3
 	n_out3p0 = texture(TEXTURE, UV);
 
 
 // Output:0
-	COLOR.rgb = vec3(n_out5p0.xyz);
+	COLOR.rgb = n_out6p0;
 	COLOR.a = n_out3p0.x;
 
 
@@ -39,13 +70,25 @@ void fragment() {
 "
 mode = 1
 flags/light_only = false
+nodes/fragment/0/position = Vector2(660, 160)
 nodes/fragment/2/node = SubResource("VisualShaderNodeInput_fjoeh")
 nodes/fragment/2/position = Vector2(-300, 340)
 nodes/fragment/3/node = SubResource("VisualShaderNodeTexture_mfhxu")
 nodes/fragment/3/position = Vector2(0, 320)
 nodes/fragment/5/node = SubResource("VisualShaderNodeColorConstant_wx8qy")
-nodes/fragment/5/position = Vector2(80, 60)
-nodes/fragment/connections = PackedInt32Array(2, 0, 3, 2, 3, 0, 0, 1, 5, 0, 0, 0)
+nodes/fragment/5/position = Vector2(-400, -60)
+nodes/fragment/6/node = SubResource("VisualShaderNodeMix_4i5sq")
+nodes/fragment/6/position = Vector2(680, -400)
+nodes/fragment/7/node = SubResource("VisualShaderNodeExpression_5i20b")
+nodes/fragment/7/position = Vector2(-180, -540)
+nodes/fragment/7/size = Vector2(580, 220)
+nodes/fragment/7/input_ports = "0,4,color;"
+nodes/fragment/7/output_ports = "0,0,grey_value;"
+nodes/fragment/7/expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
+grey_value = luminance;"
+nodes/fragment/8/node = SubResource("VisualShaderNodeFloatParameter_whrbr")
+nodes/fragment/8/position = Vector2(100, -260)
+nodes/fragment/connections = PackedInt32Array(2, 0, 3, 2, 3, 0, 0, 1, 8, 0, 6, 2, 7, 0, 6, 1, 5, 0, 7, 0, 5, 0, 6, 0, 6, 0, 0, 0)
 
 [resource]
 shader = SubResource("VisualShader_aoud6")

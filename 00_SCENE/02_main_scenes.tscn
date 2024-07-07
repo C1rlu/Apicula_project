@@ -1,4 +1,4 @@
-[gd_scene load_steps=92 format=3 uid="uid://cnmptm7i0xxmj"]
+[gd_scene load_steps=90 format=3 uid="uid://cnmptm7i0xxmj"]
 
 [ext_resource type="Script" path="res://00_SCENE/Active_Decor_Scene.gd" id="1_ounvv"]
 [ext_resource type="PackedScene" uid="uid://vpdvl0v7dubd" path="res://00_PLAYER/Player_boat.tscn" id="1_qltht"]
@@ -34,9 +34,7 @@
 [ext_resource type="PackedScene" uid="uid://bw5vovfbghh6f" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Mountain/Moutain_set/mountain_set_02_prefab.tscn" id="23_e4he1"]
 [ext_resource type="Material" uid="uid://dkpo8pe6k46g6" path="res://05_SHADER_TEST/All_Materials/Light_mat.tres" id="23_o3pq1"]
 [ext_resource type="PackedScene" uid="uid://dti7l20thp2rk" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Subscene_elements/epave_zone.tscn" id="23_txlwt"]
-[ext_resource type="PackedScene" uid="uid://bqqneopisva6t" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Buildings/Industry/Industry_elements_01.blend" id="27_8ox6v"]
-[ext_resource type="Shader" uid="uid://bdhvl7org3f04" path="res://05_SHADER_TEST/DitherMain_scene.tres" id="28_peoou"]
-[ext_resource type="PackedScene" uid="uid://dv1iknicborl3" path="res://00_PLAYER/Boat/Boat_smoke/Factory_smoke.tscn" id="29_0sj0o"]
+[ext_resource type="PackedScene" uid="uid://dcpwskqdnluhn" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Buildings/Industry/industry_prefab_scene_01.tscn" id="27_wwb1n"]
 [ext_resource type="Resource" uid="uid://xuxu60afj84h" path="res://11_SPEAKER/00_NPC/Npc_data/Maurice_dialogue_data.tres" id="30_ivc7k"]
 [ext_resource type="Script" path="res://00_SCENE/Npc_zone.gd" id="30_ki3ay"]
 [ext_resource type="Resource" uid="uid://bqtier24l2d58" path="res://10_BOARD/00_Boue_Zones/Boue_appicula.tres" id="31_p6n0u"]
@@ -510,18 +508,6 @@ material = SubResource("ShaderMaterial_kcje2")
 script/source = "extends Node
 "
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_woxkm"]
-render_priority = 2
-shader = ExtResource("28_peoou")
-shader_parameter/stayGlobal = true
-shader_parameter/Color = Color(0, 0, 0, 1)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_bjtvj"]
-render_priority = 1
-shader = ExtResource("28_peoou")
-shader_parameter/stayGlobal = true
-shader_parameter/Color = Color(0.294118, 0.25098, 0.203922, 1)
-
 [sub_resource type="GDScript" id="GDScript_w8xnd"]
 script/source = "extends Area3D
 
@@ -552,19 +538,32 @@ material = SubResource("ShaderMaterial_8p064")
 render_priority = 0
 shader = ExtResource("5_83wu6")
 
+[sub_resource type="PlaneMesh" id="PlaneMesh_7ftl5"]
+size = Vector2(30, 30)
+
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_kdi3x"]
 parameter_name = "Dark_color"
 qualifier = 1
 
-[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_71s6s"]
-default_input_values = [0, 0.0, 1, 0.435]
-operator = 2
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_4uaxg"]
+parameter_name = "link_opacity"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_luc30"]
+size = Vector2(580, 220)
+expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
+grey_value = luminance;"
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_shekr"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
+op_type = 3
 
 [sub_resource type="VisualShader" id="VisualShader_lshfh"]
 code = "shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx;
 
 global uniform vec4 Dark_color : source_color;
+global uniform float link_opacity;
 
 
 
@@ -573,26 +572,49 @@ void fragment() {
 	vec4 n_out2p0 = Dark_color;
 
 
+	float n_out4p0;
+// Expression:4
+	n_out4p0 = 0.0;
+	{
+		float luminance = 0.299 * vec3(n_out2p0.xyz).x + 0.587 * vec3(n_out2p0.xyz).y + 0.114 * vec3(n_out2p0.xyz).z;
+		n_out4p0 = luminance;
+	}
+
+
+// FloatParameter:3
+	float n_out3p0 = link_opacity;
+
+
+// Mix:5
+	vec3 n_out5p0 = mix(vec3(n_out2p0.xyz), vec3(n_out4p0), vec3(n_out3p0));
+
+
 // Output:0
-	ALBEDO = vec3(n_out2p0.xyz);
+	ALBEDO = n_out5p0;
 
 
 }
 "
-graph_offset = Vector2(-478.212, -54.435)
+graph_offset = Vector2(-364.29, -222.704)
+nodes/fragment/0/position = Vector2(600, 220)
 nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_kdi3x")
-nodes/fragment/2/position = Vector2(-272.177, 153.732)
-nodes/fragment/3/node = SubResource("VisualShaderNodeFloatOp_71s6s")
-nodes/fragment/3/position = Vector2(156.284, 335.958)
-nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0)
+nodes/fragment/2/position = Vector2(-600, 300)
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatParameter_4uaxg")
+nodes/fragment/3/position = Vector2(40, 300)
+nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_luc30")
+nodes/fragment/4/position = Vector2(-340, -160)
+nodes/fragment/4/size = Vector2(580, 220)
+nodes/fragment/4/input_ports = "0,4,color;"
+nodes/fragment/4/output_ports = "0,0,grey_value;"
+nodes/fragment/4/expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
+grey_value = luminance;"
+nodes/fragment/5/node = SubResource("VisualShaderNodeMix_shekr")
+nodes/fragment/5/position = Vector2(403.058, 22.7459)
+nodes/fragment/connections = PackedInt32Array(2, 0, 4, 0, 3, 0, 5, 2, 5, 0, 0, 0, 4, 0, 5, 1, 2, 0, 5, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qtam4"]
 render_priority = 0
 shader = SubResource("VisualShader_lshfh")
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_7ftl5"]
-material = SubResource("ShaderMaterial_qtam4")
-size = Vector2(30, 30)
 
 [sub_resource type="BoxMesh" id="BoxMesh_hogrq"]
 material = ExtResource("6_vcmny")
@@ -1040,15 +1062,6 @@ transform = Transform3D(-0.137043, 0, -0.51145, 0, 0.529492, 0, 0.51145, 0, -0.1
 [node name="IceBerg_12" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("15_bqwbg")]
 transform = Transform3D(-0.300319, 0, -1.1208, 0, 1.16034, 0, 1.1208, 0, -0.300319, -9.47565, -0.207551, -0.339665)
 
-[node name="Banquise_02" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("17_4pwgg")]
-transform = Transform3D(-0.624077, 0, -0.734248, 0, 0.963635, 0, 0.734248, 0, -0.624077, -3.98623, -0.21875, -1.53876)
-
-[node name="Banquise_07" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("17_4pwgg")]
-transform = Transform3D(-2.07321, 0, 0.021965, 0, 2.07333, 0, -0.021965, 0, -2.07321, -7.3006, -0.21875, 7.09551)
-
-[node name="Banquise_03" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("17_4pwgg")]
-transform = Transform3D(-3.44011, 0, -1.42649, 0, 3.72414, 0, 1.42649, 0, -3.44011, -15.8757, -0.21875, 0.720535)
-
 [node name="Mountain_set_02_Prefab" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("23_e4he1")]
 transform = Transform3D(0.647372, 0, 0, 0, 0.647372, 0, 0, 0, 0.647372, -6.97561, -0.209662, 2.41715)
 
@@ -1102,12 +1115,6 @@ transform = Transform3D(0.0448409, 0, -0.0339498, 0, 0.0562434, 0, 0.0339498, 0,
 
 [node name="Pine_prefabs34" parent="--DECOR--/WORLD_ELEMENTS/Mountain_set_02_Prefab3" instance=ExtResource("10_c6r5x")]
 transform = Transform3D(0.023463, 0, -0.0511154, 0, 0.0562434, 0, 0.0511154, 0, 0.023463, 1.14791, 0.49971, -0.706503)
-
-[node name="Banquise_06" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("17_4pwgg")]
-transform = Transform3D(3.347, 0, -1.63302, 0, 3.72414, 0, 1.63302, 0, 3.347, -9.5005, -0.21875, 10.6072)
-
-[node name="Banquise_04" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("17_4pwgg")]
-transform = Transform3D(0.999525, 0, 0.0308178, 0, 1, 0, -0.0308178, 0, 0.999525, -4.61812, -0.215396, -0.382779)
 
 [node name="Banquise_05" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("17_4pwgg")]
 transform = Transform3D(-0.522002, 0, 0.559075, 0, 0.764886, 0, -0.559075, 0, -0.522002, -2.36794, -0.216037, -5.03695)
@@ -1163,65 +1170,17 @@ transform = Transform3D(0.0448409, 0, -0.0339498, 0, 0.0562434, 0, 0.0339498, 0,
 [node name="Pine_prefabs34" parent="--DECOR--/WORLD_ELEMENTS/Mountain_set_02_Prefab4" instance=ExtResource("10_c6r5x")]
 transform = Transform3D(0.023463, 0, -0.0511154, 0, 0.0562434, 0, 0.0511154, 0, 0.023463, 1.62557, 0.381355, -0.940355)
 
-[node name="Industry_elements_01" parent="--DECOR--/WORLD_ELEMENTS/Mountain_set_02_Prefab4" instance=ExtResource("27_8ox6v")]
-transform = Transform3D(-5.58794e-08, 0, 0.501892, 0, 0.501892, 0, -0.501892, 0, -5.58794e-08, 0.71719, 0.5069, 0.396892)
+[node name="Industry_Prefab_scene_01" parent="--DECOR--/WORLD_ELEMENTS/Mountain_set_02_Prefab4" instance=ExtResource("27_wwb1n")]
+transform = Transform3D(1.86265e-08, 0, 0.387096, 0, 0.387096, 0, -0.387096, 0, 1.86265e-08, 2.30405, 0.256598, 0.764289)
 
-[node name="Usine_01_prefab" parent="--DECOR--/WORLD_ELEMENTS/Mountain_set_02_Prefab4/Industry_elements_01" index="0"]
-transform = Transform3D(1, 0, 7.45058e-09, 0, 0.999999, 0, -7.45058e-09, 0, 1, 0, 0, 0)
-surface_material_override/0 = SubResource("ShaderMaterial_woxkm")
-surface_material_override/1 = SubResource("ShaderMaterial_bjtvj")
+[node name="Industry_Prefab_scene_02" parent="--DECOR--/WORLD_ELEMENTS/Mountain_set_02_Prefab4" instance=ExtResource("27_wwb1n")]
+transform = Transform3D(1.45286e-07, 0, 0.461897, 0, 0.461895, 0, -0.461897, 0, 1.45286e-07, 1.22727, 0.510952, 0.363849)
 
-[node name="Usine_01_prefab_mask" parent="--DECOR--/WORLD_ELEMENTS/Mountain_set_02_Prefab4/Industry_elements_01" index="1"]
-layers = 1032
-surface_material_override/0 = ExtResource("6_vcmny")
+[node name="Industry_Prefab_scene_03" parent="--DECOR--/WORLD_ELEMENTS/Mountain_set_02_Prefab4" instance=ExtResource("27_wwb1n")]
+transform = Transform3D(0.414619, 0, -7.07805e-08, 0, 0.414618, 0, 7.07805e-08, 0, 0.414619, 0.0143843, 0.630875, 0.700044)
 
-[node name="Particule" parent="--DECOR--/WORLD_ELEMENTS/Mountain_set_02_Prefab4/Industry_elements_01" instance=ExtResource("29_0sj0o")]
-transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, -1.65331, 4.90848, -0.253201)
-
-[node name="Industry_elements_02" parent="--DECOR--/WORLD_ELEMENTS/Mountain_set_02_Prefab4" instance=ExtResource("27_8ox6v")]
-transform = Transform3D(-0.377492, 0, -1.49012e-07, 0, 0.377492, 0, 1.49012e-07, 0, -0.377492, -0.483553, 0.482494, -0.0984361)
-
-[node name="Usine_01_prefab" parent="--DECOR--/WORLD_ELEMENTS/Mountain_set_02_Prefab4/Industry_elements_02" index="0"]
-transform = Transform3D(1, 0, 7.45058e-09, 0, 0.999999, 0, -7.45058e-09, 0, 1, 0, 0, 0)
-surface_material_override/0 = SubResource("ShaderMaterial_woxkm")
-surface_material_override/1 = SubResource("ShaderMaterial_bjtvj")
-
-[node name="Usine_01_prefab_mask" parent="--DECOR--/WORLD_ELEMENTS/Mountain_set_02_Prefab4/Industry_elements_02" index="1"]
-layers = 1032
-surface_material_override/0 = ExtResource("6_vcmny")
-
-[node name="Particule" parent="--DECOR--/WORLD_ELEMENTS/Mountain_set_02_Prefab4/Industry_elements_02" instance=ExtResource("29_0sj0o")]
-transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, -1.65331, 4.90848, -0.253201)
-
-[node name="Industry_elements_04" parent="--DECOR--/WORLD_ELEMENTS/Mountain_set_02_Prefab4" instance=ExtResource("27_8ox6v")]
-transform = Transform3D(0.24002, 0, 1.15484e-07, 0, 0.24002, 0, -1.15484e-07, 0, 0.24002, 1.9725, 0.208826, -0.53053)
-
-[node name="Usine_01_prefab" parent="--DECOR--/WORLD_ELEMENTS/Mountain_set_02_Prefab4/Industry_elements_04" index="0"]
-transform = Transform3D(1, 0, 7.45058e-09, 0, 0.999999, 0, -7.45058e-09, 0, 1, 0, 0, 0)
-surface_material_override/0 = SubResource("ShaderMaterial_woxkm")
-surface_material_override/1 = SubResource("ShaderMaterial_bjtvj")
-
-[node name="Usine_01_prefab_mask" parent="--DECOR--/WORLD_ELEMENTS/Mountain_set_02_Prefab4/Industry_elements_04" index="1"]
-layers = 1032
-surface_material_override/0 = ExtResource("6_vcmny")
-
-[node name="Particule" parent="--DECOR--/WORLD_ELEMENTS/Mountain_set_02_Prefab4/Industry_elements_04" instance=ExtResource("29_0sj0o")]
-transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, -1.65331, 4.90848, -0.253201)
-
-[node name="Industry_elements_03" parent="--DECOR--/WORLD_ELEMENTS/Mountain_set_02_Prefab4" instance=ExtResource("27_8ox6v")]
-transform = Transform3D(-1.47149e-07, 0, 0.310798, 0, 0.310798, 0, -0.310798, 0, -1.47149e-07, 2.23155, 0.3383, 0.28792)
-
-[node name="Usine_01_prefab" parent="--DECOR--/WORLD_ELEMENTS/Mountain_set_02_Prefab4/Industry_elements_03" index="0"]
-transform = Transform3D(1, 0, 7.45058e-09, 0, 0.999999, 0, -7.45058e-09, 0, 1, 0, 0, 0)
-surface_material_override/0 = SubResource("ShaderMaterial_woxkm")
-surface_material_override/1 = SubResource("ShaderMaterial_bjtvj")
-
-[node name="Usine_01_prefab_mask" parent="--DECOR--/WORLD_ELEMENTS/Mountain_set_02_Prefab4/Industry_elements_03" index="1"]
-layers = 1032
-surface_material_override/0 = ExtResource("6_vcmny")
-
-[node name="Particule" parent="--DECOR--/WORLD_ELEMENTS/Mountain_set_02_Prefab4/Industry_elements_03" instance=ExtResource("29_0sj0o")]
-transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, -1.65331, 4.90848, -0.253201)
+[node name="Industry_Prefab_scene_04" parent="--DECOR--/WORLD_ELEMENTS/Mountain_set_02_Prefab4" instance=ExtResource("27_wwb1n")]
+transform = Transform3D(-0.403227, 0, 2.75671e-07, 0, 0.403226, 0, -2.75671e-07, 0, -0.403227, 0.411705, 0.139193, -0.622757)
 
 [node name="NPC_TRIGGER_ZONE" type="Node3D" parent="--DECOR--"]
 
@@ -1342,6 +1301,7 @@ surface_material_override/0 = SubResource("ShaderMaterial_2pkhh")
 transform = Transform3D(4.4285, 0, 0, 0, 0.44285, 0, 0, 0, 4.4285, 0.739399, -15.5369, 1.21398)
 mesh = SubResource("PlaneMesh_7ftl5")
 skeleton = NodePath("")
+surface_material_override/0 = SubResource("ShaderMaterial_qtam4")
 
 [node name="Sea_collider" type="MeshInstance3D" parent="--DECOR--/SEA"]
 transform = Transform3D(4.4285, 0, 0, 0, 0.44285, 0, 0, 0, 4.4285, 0.739399, -0.40696, 1.21398)
@@ -1364,8 +1324,3 @@ skeleton = NodePath("")
 [connection signal="area_exited" from="--DECOR--/NPC_TRIGGER_ZONE/GardeCote_NPC_Area" to="--DECOR--/NPC_TRIGGER_ZONE/GardeCote_NPC_Area" method="_on_area_exited"]
 [connection signal="area_entered" from="--DECOR--/NPC_TRIGGER_ZONE/MrBird_NPC_AREA" to="--DECOR--/NPC_TRIGGER_ZONE/MrBird_NPC_AREA" method="_on_area_entered"]
 [connection signal="area_exited" from="--DECOR--/NPC_TRIGGER_ZONE/MrBird_NPC_AREA" to="--DECOR--/NPC_TRIGGER_ZONE/MrBird_NPC_AREA" method="_on_area_exited"]
-
-[editable path="--DECOR--/WORLD_ELEMENTS/Mountain_set_02_Prefab4/Industry_elements_01"]
-[editable path="--DECOR--/WORLD_ELEMENTS/Mountain_set_02_Prefab4/Industry_elements_02"]
-[editable path="--DECOR--/WORLD_ELEMENTS/Mountain_set_02_Prefab4/Industry_elements_04"]
-[editable path="--DECOR--/WORLD_ELEMENTS/Mountain_set_02_Prefab4/Industry_elements_03"]
