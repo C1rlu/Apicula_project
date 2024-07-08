@@ -49,7 +49,6 @@ func show_all_info():
 		
 	#active next ? of the intrigue
 	for p in next_photo_data:    
-		if p.Photo_data.board_information_state == 0:
 			p.Photo_data.board_information_state = 1
 			p.Photo_data.page_information_state = 1
 	for l in links_list:
@@ -75,9 +74,9 @@ func show_this_on_book():
 	_global_datas.book_data.book_node._show_from_index(Photo_data.page_index)
 	
 	var book = _global_datas.book_data.book_node
-	#book.position = photo_element_root.global_position  + book_position_offset
-	#var rotation_offset = book_rotation_angle - book.position.x * 25
-	#book.rotation_degrees = Vector3(0,rotation_offset,0)
+	book.position = photo_element_root.global_position  + book_position_offset
+	var rotation_offset = book_rotation_angle - book.position.x * 25
+	book.rotation_degrees = Vector3(0,rotation_offset,0)
 	var offset = Vector3(-0.02,0.0,-0.07)
 	
 	var book_position = book.position + offset

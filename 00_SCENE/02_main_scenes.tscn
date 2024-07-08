@@ -1268,6 +1268,22 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.643425, 0, 0.626134)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.484242, 0, 0.113853)
 shape = SubResource("SphereShape3D_jvty4")
 
+[node name="MrBird_NPC_AREA2" type="Area3D" parent="--DECOR--/NPC_TRIGGER_ZONE"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.81402, 1.54972e-06, -7.13756)
+input_ray_pickable = false
+script = SubResource("GDScript_w8xnd")
+Npc_data = ExtResource("1_trgwt")
+
+[node name="Npc_zone" type="Node" parent="--DECOR--/NPC_TRIGGER_ZONE/MrBird_NPC_AREA2"]
+script = ExtResource("30_ki3ay")
+
+[node name="Birds" parent="--DECOR--/NPC_TRIGGER_ZONE/MrBird_NPC_AREA2" instance=ExtResource("21_py3bv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.643425, 0, 0.626134)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="--DECOR--/NPC_TRIGGER_ZONE/MrBird_NPC_AREA2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.484242, 0, 0.113853)
+shape = SubResource("SphereShape3D_jvty4")
+
 [node name="DIVING_ZONE" type="Node3D" parent="--DECOR--"]
 
 [node name="EPAVE_ZONE" parent="--DECOR--/DIVING_ZONE" instance=ExtResource("23_txlwt")]
@@ -1324,3 +1340,5 @@ skeleton = NodePath("")
 [connection signal="area_exited" from="--DECOR--/NPC_TRIGGER_ZONE/GardeCote_NPC_Area" to="--DECOR--/NPC_TRIGGER_ZONE/GardeCote_NPC_Area" method="_on_area_exited"]
 [connection signal="area_entered" from="--DECOR--/NPC_TRIGGER_ZONE/MrBird_NPC_AREA" to="--DECOR--/NPC_TRIGGER_ZONE/MrBird_NPC_AREA" method="_on_area_entered"]
 [connection signal="area_exited" from="--DECOR--/NPC_TRIGGER_ZONE/MrBird_NPC_AREA" to="--DECOR--/NPC_TRIGGER_ZONE/MrBird_NPC_AREA" method="_on_area_exited"]
+[connection signal="area_entered" from="--DECOR--/NPC_TRIGGER_ZONE/MrBird_NPC_AREA2" to="--DECOR--/NPC_TRIGGER_ZONE/MrBird_NPC_AREA2" method="_on_area_entered"]
+[connection signal="area_exited" from="--DECOR--/NPC_TRIGGER_ZONE/MrBird_NPC_AREA2" to="--DECOR--/NPC_TRIGGER_ZONE/MrBird_NPC_AREA2" method="_on_area_exited"]
