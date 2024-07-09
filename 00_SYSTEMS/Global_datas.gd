@@ -103,7 +103,7 @@ signal _photo_flash
 var flash_subscene_position : Vector3
 var _selected_tool : tool_data 
 signal switching_tool(tool : tool_data)
-var active_rapatrier_node : bool 
+signal out_mirror_element(position : Vector3)
 
 #to lock input back to light if on zone
 var player_is_Interactive_Zone : bool 
@@ -198,7 +198,7 @@ var in_scanner_mode : bool
 var clock_timer : Timer
 signal active_photo_button(condition : bool)
 signal active_scanner_button(condition : bool)
-signal _mirror_switch(condition : bool)
+
 
 #-----------------------------
 # dialogue datas

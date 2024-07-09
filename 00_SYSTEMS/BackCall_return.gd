@@ -9,8 +9,8 @@ func _ready():
 
 func _input(event):
 	
-	if _global_datas.Player_InDialogue:
-		return
+	#if _global_datas.Player_InDialogue:
+		#return
 
 	
 	var top_call = _global_datas._back_call_list.size()

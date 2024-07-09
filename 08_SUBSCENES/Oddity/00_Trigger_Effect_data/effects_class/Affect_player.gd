@@ -3,7 +3,7 @@ class_name affect_player
 
 @export var speed_amount : float 
 
-func trigger_effect() -> void:
+func trigger_effect(element) -> void:
 	
 	
 	var player_rg : RigidBody3D = _global_datas.player_rg

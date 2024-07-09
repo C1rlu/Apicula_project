@@ -1,4 +1,4 @@
-[gd_scene load_steps=67 format=3 uid="uid://nigmie4bbn6"]
+[gd_scene load_steps=66 format=3 uid="uid://nigmie4bbn6"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/00_Scripts/Subscene_loader.gd" id="1_7uoo0"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="2_3srhu"]
@@ -12,8 +12,7 @@
 [ext_resource type="Script" path="res://08_SUBSCENES/Tools/Play_Orber_tool.gd" id="6_51m8x"]
 [ext_resource type="Resource" uid="uid://vv3dws7dmhtd" path="res://08_SUBSCENES/Tools/Scanner.tres" id="6_b80v7"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Tools/PhotoData_list_update.gd" id="10_w7dre"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Stroke_Filter/Orbe_Result_Instancer.gd" id="12_lg0wa"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Stroke_Filter/Stroke_Filter.tres.gd" id="14_0roc3"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Mirror_out_element_VFX.gd" id="14_bj7yb"]
 [ext_resource type="Resource" uid="uid://dqpl0ihtab1su" path="res://08_SUBSCENES/Tools/Fusion_tool.tres" id="14_glnqv"]
 [ext_resource type="Script" path="res://03_CAMERA/Active_scene_viewports.gd" id="21_jai7k"]
 
@@ -707,14 +706,6 @@ script = ExtResource("6_51m8x")
 light_tool = ExtResource("4_h1r1k")
 Scanner_tool = ExtResource("6_b80v7")
 
-[node name="Patern_recognizer" type="Node" parent="."]
-
-[node name="Stroke_Filter" type="Node" parent="Patern_recognizer"]
-script = ExtResource("14_0roc3")
-
-[node name="Result_Instancer" type="Node" parent="Patern_recognizer"]
-script = ExtResource("12_lg0wa")
-
 [node name="SEE_MIRROR_FLASH" type="Node" parent="."]
 script = SubResource("GDScript_nvaxv")
 
@@ -771,6 +762,9 @@ grow_vertical = 2
 texture = SubResource("ViewportTexture_dqppn")
 expand_mode = 3
 
+[node name="Mirror_out_element_VFX" type="Node" parent="."]
+script = ExtResource("14_bj7yb")
+
 [node name="Player_Sub" parent="." instance=ExtResource("2_ri8q1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.334, 0)
 collision_layer = 6
@@ -812,8 +806,6 @@ offset_right = 60.0
 offset_bottom = 58.0
 scale = Vector2(0.602919, 0.602919)
 theme_override_font_sizes/font_size = 20
-
-[node name="Timer" type="Timer" parent="."]
 
 [connection signal="timeout" from="FADE_IN/Timer" to="FADE_IN" method="_on_timer_timeout"]
 [connection signal="timeout" from="FADE_OUT/Timer" to="FADE_OUT" method="_on_timer_timeout"]
