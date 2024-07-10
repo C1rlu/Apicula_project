@@ -5,7 +5,7 @@ var t
 
 func _ready():
 	scale()	
-
+	#_global_datas._photo_flash.connect(scale)
 
 func scale():
 
@@ -13,7 +13,7 @@ func scale():
 		t.kill()
 	
 	t = create_tween()
-	t.tween_method(value,0.5,5.0,0.5).set_trans(Tween.TRANS_SINE)
+	t.tween_method(value,0.25,15.0,1.25).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
 	t.connect("finished",done)
 	
 func done():

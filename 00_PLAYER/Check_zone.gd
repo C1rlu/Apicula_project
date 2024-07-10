@@ -19,7 +19,7 @@ func _ready():
 	
 
 func close():
-	_global_datas.out_dialogue_zone.emit()	
+	_global_datas.in_dialogue_zone.emit(false)	
 	var nullArray: Array[String] = ["",""]
 	_global_datas._show_object_legend.emit(false,nullArray)	
 	_global_datas.go_darker_color.emit()
@@ -27,7 +27,7 @@ func close():
 func close_for_menu(condition):
 	
 	if condition:
-		_global_datas.out_dialogue_zone.emit()
+		_global_datas.in_dialogue_zone.emit(false)
 		var nullArray: Array[String] = ["",""]
 		_global_datas._show_object_legend.emit(false,nullArray)		
 	else:
@@ -49,7 +49,7 @@ func check_zone():
 		if npc_zone:
 			
 			_global_datas.Npc_Dialogue = npc_zone.get_npc()
-			_global_datas.in_dialogue_zone.emit()
+			_global_datas.in_dialogue_zone.emit(true)
 			var actual_zone_name = _global_datas.Npc_Dialogue.zone_name
 			_global_datas._show_object_legend.emit(true,actual_zone_name)
 
@@ -69,7 +69,8 @@ func _on_enter_dialogue_zone_area_entered(area):
 		var npc_zone = area.get_node_or_null("Npc_zone")
 		if npc_zone:	
 			_global_datas.Npc_Dialogue = npc_zone.get_npc()
-			_global_datas.in_dialogue_zone.emit()
+			_global_datas.in_dialogue_zone.emit(true)
+
 			var actual_zone_name = _global_datas.Npc_Dialogue.zone_name
 			_global_datas._show_object_legend.emit(true,actual_zone_name)
 	
@@ -89,8 +90,7 @@ func _on_enter_dialogue_zone_area_exited(area):
 	if area:
 		var npc_zone = area.get_node_or_null("Npc_zone")
 		if npc_zone:
-			_global_datas.Npc_Dialogue = null
-			_global_datas.out_dialogue_zone.emit()
+			_global_datas.in_dialogue_zone.emit(false)
 			var nullArray: Array[String] = ["",""]
 			_global_datas._show_object_legend.emit(false,nullArray)
 			

@@ -87,10 +87,6 @@ func check_cast(targetPos : Vector2):
 		_On_click.On_click.emit()
 
 
-	if _global_datas.link_mode:	
-		if result.collider.get_node_or_null("On_click_link"): 
-			var _On_click = result.collider.get_node_or_null("On_click_link")
-			_On_click.On_click.emit()
 
 	if result.collider.get_node_or_null("Teleport_PlayerBoat"):
 		var Teleport_PlayerBoat	= result.collider.get_node_or_null("Teleport_PlayerBoat")
@@ -124,11 +120,6 @@ func check_on_over(targetPos : Vector2):
 		previous_on_over.on_over(false)
 		previous_on_over = null	
 		
-	if _global_datas.link_mode:	
-		if result.collider.get_node_or_null("On_click_link"): 
-			var button = result.collider.get_node_or_null("On_click_link")
-			previous_on_over = button
-			button.on_over(true)	
 
 	if On_Over:
 		On_Over.on_over(false)	

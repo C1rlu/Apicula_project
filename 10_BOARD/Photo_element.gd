@@ -2,6 +2,7 @@ extends Node3D
 
 @onready var photo_element_root = $"."
 
+
 @export var Photo_data : PhotoData
 
 @export var links_list : Array[Node3D]
@@ -25,17 +26,12 @@ func check_state():
 		
 	_disable()	
 	
-	if Photo_data.board_information_state == 0:
-		return
-		
-	if Photo_data.board_information_state == 1:
-		show_interogation()		
-		return	
-				
-	if Photo_data.board_information_state == 2:
+	if Photo_data.intrige_state == 1: 
 		show_interogation()
-		show_all_info()	
-		return			
+	
+	if Photo_data.intrige_state == 2:
+		show_all_info()	 
+		show_interogation()
 	
 func show_interogation():
 	legend.visible = true
@@ -47,10 +43,6 @@ func show_all_info():
 	photo.visible = true	
 	collision_shape_3d_p.disabled = false
 		
-	#active next ? of the intrigue
-	for p in next_photo_data:    
-			p.Photo_data.board_information_state = 1
-			p.Photo_data.page_information_state = 1
 	for l in links_list:
 		l.visible = true		
 		
@@ -86,8 +78,7 @@ func show_this_on_book():
 	
 	
 func _on_show_this_page():
-	if _global_datas.link_mode:
-		return	
+
 	show_this_on_book()	
 	_global_datas._add_back_call.emit(back_call)
 	
@@ -95,7 +86,6 @@ func back_call():
 		_global_datas.book_back_idle_position.emit(false)	
 		
 func _on_show_scanner():
-	if _global_datas.link_mode:
-		return
+
 	_global_datas.selected_photoData = Photo_data
 	_global_datas.show_on_scanner.emit(true)

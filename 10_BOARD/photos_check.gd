@@ -11,12 +11,5 @@ func _check_found(condition : bool):
 		return
 		
 	for e in all_photos:
-		if check_photo_exist(e.Photo_data):
-	
 			e.check_state()
 		
-func check_photo_exist(photo_Data):	
-
-	for photo in _global_datas.photo_archives:
-		if photo.name == photo_Data.name:
-			return true 	

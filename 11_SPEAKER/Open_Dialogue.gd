@@ -11,6 +11,7 @@ extends Node
 
 
 var Localisation_state_index : int = 0
+var in_zone : bool = false
 
 func _ready():
 	_global_datas._open_dialogue.connect(_open_dialogue)
@@ -20,6 +21,7 @@ func _ready():
 	_global_datas._change_language_state.connect(change_ls)
 	
 	npc_convas.visible = false
+
 
 func change_ls(ls):
 	Localisation_state_index = ls
@@ -32,9 +34,8 @@ func _show_dialogue_box():
 
 func _open_dialogue():
 		
-	if _global_datas.Npc_Dialogue == null:
-		return
-		
+
+	
 	_global_datas.Player_InDialogue = true
 
 	_global_datas.go_darker_color.emit()

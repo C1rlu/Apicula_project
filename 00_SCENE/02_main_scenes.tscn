@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://00_SCENE/Active_Decor_Scene.gd" id="1_ounvv"]
 [ext_resource type="PackedScene" uid="uid://vpdvl0v7dubd" path="res://00_PLAYER/Player_boat.tscn" id="1_qltht"]
-[ext_resource type="Resource" uid="uid://ppxk5i543dfn" path="res://11_SPEAKER/00_NPC/Npc_data/Mr_Birds_data.tres" id="1_trgwt"]
+[ext_resource type="Resource" uid="uid://ppxk5i543dfn" path="res://15_GAME_RESSOURCE/00_Npc_data/Mr_Birds_data.tres" id="1_trgwt"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_xd8sb"]
 [ext_resource type="Script" path="res://03_CAMERA/CameraFollow.gd" id="2_7lb1x"]
 [ext_resource type="Script" path="res://00_PLAYER/Sonar/Button_active_sonar.gd" id="3_0rdsq"]
@@ -35,10 +35,10 @@
 [ext_resource type="Material" uid="uid://dkpo8pe6k46g6" path="res://05_SHADER_TEST/All_Materials/Light_mat.tres" id="23_o3pq1"]
 [ext_resource type="PackedScene" uid="uid://dti7l20thp2rk" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Subscene_elements/epave_zone.tscn" id="23_txlwt"]
 [ext_resource type="PackedScene" uid="uid://dcpwskqdnluhn" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Buildings/Industry/industry_prefab_scene_01.tscn" id="27_wwb1n"]
-[ext_resource type="Resource" uid="uid://xuxu60afj84h" path="res://11_SPEAKER/00_NPC/Npc_data/Maurice_dialogue_data.tres" id="30_ivc7k"]
+[ext_resource type="Resource" uid="uid://xuxu60afj84h" path="res://15_GAME_RESSOURCE/00_Npc_data/Maurice_dialogue_data.tres" id="30_ivc7k"]
 [ext_resource type="Script" path="res://00_SCENE/Npc_zone.gd" id="30_ki3ay"]
 [ext_resource type="Resource" uid="uid://bqtier24l2d58" path="res://10_BOARD/00_Boue_Zones/Boue_appicula.tres" id="31_p6n0u"]
-[ext_resource type="Resource" uid="uid://c6jw6ja2xggvh" path="res://11_SPEAKER/00_NPC/Npc_data/Otis_Coast_guard_data.tres" id="32_pt30g"]
+[ext_resource type="Resource" uid="uid://c6jw6ja2xggvh" path="res://15_GAME_RESSOURCE/00_Npc_data/Otis_Coast_guard_data.tres" id="32_pt30g"]
 [ext_resource type="Resource" uid="uid://bgbdnk7mpw4vb" path="res://10_BOARD/00_Boue_Zones/TheOddity_zone.tres" id="32_tmg04"]
 [ext_resource type="Resource" uid="uid://dyrjwnrw6plmp" path="res://10_BOARD/00_Boue_Zones/Boue_DarkHole.tres" id="32_uxxuf"]
 
@@ -169,7 +169,8 @@ func _input(event):
 	if _global_datas.Player_InDialogue:
 		return
 	if event.is_action_pressed(\"Push_to_subscene\"):
-		if _global_datas.Npc_Dialogue == null:
+		
+		if !_global_datas.Player_InDialogue_zone:
 			return
 		
 		_global_datas._open_dialogue.emit()	
@@ -276,20 +277,21 @@ script/source = "extends Node
 
 func _ready():
 	_global_datas.in_dialogue_zone.connect(active_buton)
-	_global_datas.out_dialogue_zone.connect(disable_buton)
-	_global_datas._open_dialogue.connect(disable_buton)
-	_global_datas.hide_open_dialogue.connect(disable_buton)
-
-func disable_buton():
-	button.visible = false
-	_global_datas.Player_InDialogue_zone = false
+	_global_datas._open_dialogue.connect(active)
+	_global_datas.hide_open_dialogue.connect(disable)
+	
+	
+func active():
+	active_buton(true)		
+	
+func disable():
+	active_buton(false)	
+			
+func active_buton(condition):
 
 	
-func active_buton():
-
-
-	button.visible = true
-	_global_datas.Player_InDialogue_zone = true
+	button.visible = condition
+	_global_datas.Player_InDialogue_zone = condition
 
 
 	

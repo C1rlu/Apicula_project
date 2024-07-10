@@ -1,0 +1,422 @@
+[gd_scene load_steps=16 format=3 uid="uid://dmqvkk6j7g1ri"]
+
+[ext_resource type="Script" path="res://10_BOARD/00_BOOK/02_Book_information/Page/Page_information_state.gd" id="1_eln5u"]
+[ext_resource type="Resource" uid="uid://cooqi0giysm3w" path="res://15_GAME_RESSOURCE/MrBirs_photoData.tres" id="2_h54jo"]
+[ext_resource type="Texture2D" uid="uid://ga5yb54aj2kv" path="res://10_BOARD/00_BOOK/00_img/question_back_alpha.png" id="3_oblrs"]
+[ext_resource type="PackedScene" uid="uid://cx7k4grvoqu2b" path="res://10_BOARD/00_BOOK/Photo_2d_book/Photo_2D.tscn" id="4_6nm7u"]
+[ext_resource type="Texture2D" uid="uid://dvlnqtm1lcg0r" path="res://12_INVENTORY/Photo/IMG/Birds_photo.png" id="5_y4g8d"]
+
+[sub_resource type="GDScript" id="GDScript_bodfx"]
+script/source = "extends Node
+
+@onready var color_rect = $\"../ColorRect\"
+@onready var color_rect_2 = $\"../ColorRect2\"
+
+func _ready():
+	
+	color_rect.queue_free()	
+	color_rect_2.queue_free()
+"
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_v1e1i"]
+input_name = "color"
+
+[sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_rwuqm"]
+parameter_name = "Texture2DParameter"
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_r0yo0"]
+source = 5
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_1oqxe"]
+constant = 0.948
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_jr3ge"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_m2q45"]
+parameter_name = "Dither_size"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_8inx8"]
+default_input_values = [0, -0.32, 1, 1.49]
+
+[sub_resource type="VisualShader" id="VisualShader_rgfm4"]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+global uniform float Dither_size;
+uniform sampler2D Texture2DParameter;
+
+
+
+void fragment() {
+// Input:10
+	vec4 n_out10p0 = COLOR;
+
+
+// FloatConstant:2
+	float n_out2p0 = 0.948000;
+
+
+// FloatParameter:4
+	float n_out4p0 = Dither_size;
+
+
+	float n_out3p0;
+// Expression:3
+	n_out3p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out4p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out3p0 = n_out2p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+	vec4 n_out12p0;
+// Texture2D:12
+	n_out12p0 = texture(Texture2DParameter, UV);
+
+
+// Step:5
+	float n_out5p0 = step(n_out3p0, n_out12p0.x);
+
+
+// Output:0
+	COLOR.rgb = vec3(n_out10p0.xyz);
+	COLOR.a = n_out5p0;
+
+
+}
+"
+mode = 1
+flags/light_only = false
+nodes/fragment/2/node = SubResource("VisualShaderNodeFloatConstant_1oqxe")
+nodes/fragment/2/position = Vector2(-1320, 360)
+nodes/fragment/3/node = SubResource("VisualShaderNodeExpression_jr3ge")
+nodes/fragment/3/position = Vector2(-1000, 700)
+nodes/fragment/3/size = Vector2(724.789, 654.559)
+nodes/fragment/3/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/3/output_ports = "0,0,Dither_Node;"
+nodes/fragment/3/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/4/node = SubResource("VisualShaderNodeFloatParameter_m2q45")
+nodes/fragment/4/position = Vector2(-1680, 520)
+nodes/fragment/5/node = SubResource("VisualShaderNodeStep_8inx8")
+nodes/fragment/5/position = Vector2(-80, 460)
+nodes/fragment/10/node = SubResource("VisualShaderNodeInput_v1e1i")
+nodes/fragment/10/position = Vector2(-320, 100)
+nodes/fragment/11/node = SubResource("VisualShaderNodeTexture2DParameter_rwuqm")
+nodes/fragment/11/position = Vector2(-880, 20)
+nodes/fragment/12/node = SubResource("VisualShaderNodeTexture_r0yo0")
+nodes/fragment/12/position = Vector2(-380, 420)
+nodes/fragment/connections = PackedInt32Array(2, 0, 3, 0, 4, 0, 3, 1, 3, 0, 5, 0, 5, 0, 0, 1, 10, 0, 0, 0, 11, 0, 12, 2, 12, 0, 5, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4wpuw"]
+shader = SubResource("VisualShader_rgfm4")
+shader_parameter/Texture2DParameter = ExtResource("3_oblrs")
+
+[node name="Page_01" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 2000.0
+offset_bottom = 1200.0
+
+[node name="Page_information_state" type="Node" parent="." node_paths=PackedStringArray("state_page_info")]
+script = ExtResource("1_eln5u")
+page_photo_data = ExtResource("2_h54jo")
+state_page_info = [NodePath("../State_00"), NodePath("../State_01")]
+
+[node name="Hide_repaire" type="Node" parent="."]
+script = SubResource("GDScript_bodfx")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_right = 3.04004
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 3.0
+grow_horizontal = 0
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="State_00" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 423.0
+offset_top = 153.0
+offset_right = 463.0
+offset_bottom = 193.0
+
+[node name="Info2" type="Control" parent="State_00"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -221.0
+offset_top = -91.0
+offset_right = 322.0
+offset_bottom = 201.0
+rotation = 0.00252468
+
+[node name="back" type="ColorRect" parent="State_00/Info2"]
+material = SubResource("ShaderMaterial_4wpuw")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.662745, 0.623529, 0.545098, 1)
+
+[node name="Text" type="Label" parent="State_00/Info2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 22.0
+offset_right = -26.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 35
+text = "the first letter from my sponsor tell me to find a Seagull"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="State_01" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 127.0
+offset_top = 851.0
+offset_right = 574.0
+offset_bottom = 1069.0
+rotation = -0.0120299
+
+[node name="Info" type="Control" parent="State_01"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -52.0878
+offset_top = -408.656
+offset_right = 490.912
+offset_bottom = -116.656
+rotation = 0.00252468
+
+[node name="back" type="ColorRect" parent="State_01/Info"]
+material = SubResource("ShaderMaterial_4wpuw")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.662745, 0.623529, 0.545098, 1)
+
+[node name="Text" type="Label" parent="State_01/Info"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 22.0
+offset_right = -26.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.25098, 0.211765, 0.117647, 1)
+theme_override_font_sizes/font_size = 35
+text = "A seagull give me a letter"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Photo2d" parent="State_01" instance=ExtResource("4_6nm7u")]
+offset_left = 456.769
+offset_top = -310.528
+offset_right = 856.769
+offset_bottom = 89.4722
+rotation = 0.130874
+
+[node name="TextureRect" parent="State_01/Photo2d" index="1"]
+texture = ExtResource("5_y4g8d")
+
+[node name="Info4" type="Control" parent="State_01"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 938.532
+offset_top = -786.767
+offset_right = 1480.53
+offset_bottom = -520.767
+rotation = -0.0958952
+
+[node name="back" type="ColorRect" parent="State_01/Info4"]
+material = SubResource("ShaderMaterial_4wpuw")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.662745, 0.623529, 0.545098, 1)
+
+[node name="Text" type="Label" parent="State_01/Info4"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 25.0
+offset_right = -23.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.25098, 0.211765, 0.117647, 1)
+theme_override_font_sizes/font_size = 35
+text = "Seagull are not domestic from what i know"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Info2" type="Control" parent="State_01"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 1269.22
+offset_top = -592.775
+offset_right = 1863.22
+offset_bottom = -312.775
+rotation = 0.0632375
+
+[node name="back" type="ColorRect" parent="State_01/Info2"]
+material = SubResource("ShaderMaterial_4wpuw")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.662745, 0.623529, 0.545098, 1)
+
+[node name="Text" type="Label" parent="State_01/Info2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 21.0
+offset_right = -33.0
+offset_bottom = 6.10352e-05
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.25098, 0.211765, 0.117647, 1)
+theme_override_font_sizes/font_size = 35
+text = "Parrots coulb be, but i guess we don't found them in the cold north"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Info5" type="Control" parent="State_01"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 1288.4
+offset_top = 57.5031
+offset_right = 1823.4
+offset_bottom = 337.503
+rotation = -0.0217575
+
+[node name="back" type="ColorRect" parent="State_01/Info5"]
+material = SubResource("ShaderMaterial_4wpuw")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.662745, 0.623529, 0.545098, 1)
+
+[node name="Text" type="Label" parent="State_01/Info5"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.25098, 0.211765, 0.117647, 1)
+theme_override_font_sizes/font_size = 35
+text = "The letter is signed just by 
+\" A\""
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="back" type="ColorRect" parent="State_01"]
+material = SubResource("ShaderMaterial_4wpuw")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.662745, 0.623529, 0.545098, 1)
+
+[node name="Text" type="Label" parent="State_01"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 18.0
+offset_right = -31.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.25098, 0.211765, 0.117647, 1)
+theme_override_font_sizes/font_size = 35
+text = "it's a strange bird,
+i don't like him"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[connection signal="visibility_changed" from="." to="Page_information_state" method="_on_page_visibility_changed"]
+[connection signal="tree_exited" from="State_00/Info2" to="State_00/Info2" method="_on_tree_exited"]
+[connection signal="tree_exited" from="State_01" to="State_01" method="_on_tree_exited"]
+[connection signal="tree_exited" from="State_01/Info" to="State_01/Info" method="_on_tree_exited"]
+[connection signal="tree_exited" from="State_01/Info4" to="State_01/Info4" method="_on_tree_exited"]
+[connection signal="tree_exited" from="State_01/Info2" to="State_01/Info2" method="_on_tree_exited"]
+[connection signal="tree_exited" from="State_01/Info5" to="State_01/Info5" method="_on_tree_exited"]
+
+[editable path="State_01/Photo2d"]

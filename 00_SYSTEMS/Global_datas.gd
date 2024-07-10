@@ -18,7 +18,7 @@ var Player_InDialogue_zone : bool
 signal _start_ini_subscene
 signal _end_ini_subscene
 signal _open_menu(condition : bool)
-signal set_resolution(resolution : Vector2i)
+
 
 #visual visibility call // FOR PERFORMANCE HIDE AND SHOW 3D ELEMENT SCENE WHEN NEED
 signal show_3D_MainScene(condition : bool)
@@ -34,11 +34,7 @@ func _ready():
 	_back_call_list.clear()
 	_selected_tool = null
 	_photo_data_scene_list.clear()
-	_orbe_stroke_scene.clear()
-	_orbe_tool_origin_position = Vector3.ZERO
-	_orbe_stroke.clear()
-	_strokeID = 0
-	_orbe_visual_scene.clear()
+
 
 # input type
 signal using_pad(condition : bool)
@@ -62,35 +58,31 @@ signal go_normal_color
 signal go_darker_color
 
 # dialogue signals
-signal in_dialogue_zone
-signal out_dialogue_zone
-
+signal in_dialogue_zone(condition : bool)
 signal hide_open_dialogue
 signal  _open_dialogue
 signal  _close_dialogue
 signal _type_text(count : int)
 signal _update_cam_focus(position : Vector3)
-
-# for save game
-var photo_archives : Array[PhotoData] 
-var boue_archives : Array[BoueData]
-var tools_list : Array[tool_data]
-var objects_data_list : Array[Board_OBJ]
-
-
 signal _change_language_state(l_state : int)
 signal _start_dialogue_box
 signal _hide_dialogue_box
 signal _show_dialogue_box
 signal _give_letter( index : int)
-signal _take_note(note_name : String)
-signal _take_Npc_photo(condition : bool)
+
+
+# for save game
+#var photo_archives : Array[PhotoData] 
+var boue_archives : Array[BoueData]
+var tools_list : Array[tool_data]
+var objects_data_list : Array[Board_OBJ]
+
+#UI VAR 
+signal set_resolution(resolution : Vector2i)
 signal _show_object_legend(condtion : bool, _text : Array[String]) #array of string here for multilple localisation text
 
-signal _instance_photo(photoData : PhotoData)
 
-
-#subsceneSignal
+# SUBSCENE VAR 
 
 var player_rg : RigidBody3D
 
@@ -105,15 +97,11 @@ var _selected_tool : tool_data
 signal switching_tool(tool : tool_data)
 signal out_mirror_element(position : Vector3)
 
-#to lock input back to light if on zone
-var player_is_Interactive_Zone : bool 
 
-#Fusion element 
-var active_fusion_node_list : Array
-
+# Fusion element 
 # Main Oddity & elements related ------------------------------------
+
 var Main_oddity_node : Node3D
-var Main_oddity_positions_data : Array[position_spot]
 var scanner_element_list : Array #for scanner light list on oddity
 signal flash_x_ray_oddity # to call the scanner if exist in list
 var scanner_flash_isActive : bool 
@@ -127,22 +115,6 @@ signal _explosed_traceur_zone
 # SUBSCENE ORBE previously teleporter
 var _photo_data_scene_list : Array[Node]
 
-# Orbe Points.Point.New
-signal _instance_start_visual_orbe
-signal _instance_end_visual_orbe
-signal _instance_stroke
-
-
-var _orbe_stroke : Array
-var _strokeID : int
-
-# orbe stroke in scene
-var _orbe_stroke_scene : Array[Node3D]
-var _orbe_tool_origin_position : Vector3
-var _orbe_visual_scene : Array[Node3D]
-
-# Oddity # FOR ODDITY IN SCENE
-signal instance_scene_oddity(oddity_scene : PackedScene, amount : int ,position : Vector3)
 
 #board scene
 
@@ -155,6 +127,7 @@ var Cursor_mode : Node
 signal close_all_over_ui
 signal add_OBJ(obj_name : String)
 
+signal information_added(information : info_data)
 signal ui_noted_taked
 signal map_fade(condition : bool) # true is in : false is out
 

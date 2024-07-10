@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=3 uid="uid://bbp1ccoa6te1g"]
+[gd_scene load_steps=56 format=3 uid="uid://bbp1ccoa6te1g"]
 
 [ext_resource type="Script" path="res://11_SPEAKER/Open_Dialogue.gd" id="1_6gph5"]
 [ext_resource type="Script" path="res://11_SPEAKER/00_NPC/NPC_DIVE_SELECTOR/Npc_loader.gd" id="2_gecf5"]
@@ -276,9 +276,7 @@ func _start():
 	_material.set_shader_parameter(\"Opacity\",2.0)
 	_global_datas._hide_dialogue_box.emit()
 	
-	var photo_Data = _global_datas.Npc_Dialogue.photo_data
-	if !check_photo_exist(photo_Data):
-		_material.set_shader_parameter(\"Is_in_archive\",false)	
+	_material.set_shader_parameter(\"Is_in_archive\",false)	
 	
 	
 func _process(delta):
@@ -291,54 +289,14 @@ func _process(delta):
 	var lerp_time_circle = lerp(1.0,0.0,(timer.time_left / timer.wait_time ))
 	_material_circle.set_shader_parameter(\"Opacity\",lerp_time_circle)
 	
-func check_photo_exist(photo_Data):
-	
-	for photo in _global_datas.photo_archives:
-		if photo == photo_Data:
-			return true 		
-			
+
 			
 func _on_timer_timeout():
 	
 	if _global_datas.Npc_Dialogue != null:
 		var photo_Data = _global_datas.Npc_Dialogue.photo_data
-		if check_photo_exist(photo_Data):
-			_global_datas._start_dialogue_box.emit()
-			_global_datas._show_dialogue_box.emit()	
-		else:
-
-			_global_datas.photo_archives.append(photo_Data)
-			_global_datas._start_dialogue_box.emit()
-			_global_datas._show_dialogue_box.emit()	
-"
-
-[sub_resource type="GDScript" id="GDScript_hx3ow"]
-script/source = "extends Node
-
-
-@onready var timer = $Timer
-@onready var loader = $\"../Models/Loader\"
-
-@export var active_npc_entrance : bool = false
-
-func _ready():
-	
-	if !active_npc_entrance:
-		return
-	_global_datas._open_dialogue.connect(_start)
-
-func _start():
-	
-	timer.start()
-	_global_datas._hide_dialogue_box.emit()
-	
-func _process(delta):
-	
-	if timer.is_stopped():
-		return	
-	
-	loader.rotation_degrees.z = lerp(0.0,-60.0,(timer.time_left / timer.wait_time ))
-
+		_global_datas._start_dialogue_box.emit()
+		_global_datas._show_dialogue_box.emit()	
 "
 
 [sub_resource type="VisualShader" id="VisualShader_6uu1l"]
@@ -637,13 +595,6 @@ active_npc_entrance = true
 wait_time = 0.5
 one_shot = true
 
-[node name="Entrance_animation" type="Node" parent="00_NPC_CREATOR"]
-script = SubResource("GDScript_hx3ow")
-
-[node name="Timer" type="Timer" parent="00_NPC_CREATOR/Entrance_animation"]
-wait_time = 0.6
-one_shot = true
-
 [node name="Npc_convas" type="Control" parent="00_NPC_CREATOR"]
 texture_filter = 1
 texture_repeat = 2
@@ -861,6 +812,5 @@ visible = false
 [connection signal="text_type_done" from="Dialogue/Dialogue_typing" to="00_NPC_CREATOR/Npc_convas/Dialogue_box" method="_on_dialogue_typing_text_type_done"]
 [connection signal="timeout" from="Random_FaceChanger/Timer" to="Random_FaceChanger" method="_on_timer_timeout"]
 [connection signal="timeout" from="00_NPC_CREATOR/Fade_in/Timer" to="00_NPC_CREATOR/Fade_in" method="_on_timer_timeout"]
-[connection signal="timeout" from="00_NPC_CREATOR/Entrance_animation/Timer" to="00_NPC_CREATOR/Entrance_animation" method="_on_timer_timeout"]
 [connection signal="end_typing" from="00_NPC_CREATOR/Npc_convas/End_typing_button" to="Dialogue/Dialogue_typing" method="_on_end_typing_button_end_typing"]
 [connection signal="pressed" from="00_NPC_CREATOR/Npc_convas/End_typing_button" to="00_NPC_CREATOR/Npc_convas/End_typing_button" method="_on_pressed"]

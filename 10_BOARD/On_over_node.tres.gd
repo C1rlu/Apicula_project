@@ -10,9 +10,6 @@ func _ready():
 	
 func on_over(condition):
 	
-	if _global_datas.link_mode:
-		return
-		
 	if _on_over:
 		_on_over.visible = condition	
 	if _on_over_second:

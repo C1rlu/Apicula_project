@@ -1,5 +1,6 @@
 extends Node
 
+@export var information : info_data
 
 @export var min_distance_to_see : float  = 2.5
 @export var speed : float
@@ -27,8 +28,10 @@ func _check_if_player_is_close():
 		real_speed = speed * (distance_to_player / 8.0)
 	follow_target = true	
 	target = _global_datas.subbscene_playerPosition
-
-
+	
+	_global_datas.information_added.emit(information)
+		
+	
 func _process(delta):
 	
 	if !_global_datas.Player_InSubScene:

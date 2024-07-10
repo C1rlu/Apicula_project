@@ -72,13 +72,13 @@ func _on_ez_dialogue_custom_signal_received(value):
 		#below for INTRIGUE intrigue state to page info state
 
 		if variable_name == "intrigue_index": #here for intrigue so photo on board
-			var page_state_index = params[2] # 0 = intrigue off # 1 = introgue start ? 2 = intrigue found 
-			_global_datas.Npc_Dialogue.photo_data.board_information_state = page_state_index		
+			#var page_state_index = params[2] # 0 = intrigue off # 1 = introgue start ? 2 = intrigue found 
+			#_global_datas.Npc_Dialogue.photo_data.board_information_state = page_state_index		
 			_global_datas.ui_noted_taked.emit()	
 		
 		if variable_name == "up_page_info_state": # here for page what to show index
-			var info_state = params[2]
-			_global_datas.Npc_Dialogue.photo_data.page_information_state = info_state
+			#var info_state = params[2]
+			#_global_datas.Npc_Dialogue.photo_data.page_information_state = info_state
 			_global_datas.ui_noted_taked.emit()
 			
 			

@@ -1,10 +1,14 @@
 extends Node
 
+@export var information : info_data
 
 @onready var root = $"../.."
 @onready var engine = $"../../Main_Oddity/Render_root/Main_render_msh_01/Engine"
 
 var t 
+
+
+
 @onready var actual_scale = engine.scale.x 
 
 @onready var timer = $Timer
@@ -16,16 +20,20 @@ signal active_rotation
 func _ready():
 	_global_datas._photo_flash.connect(check_distance)
 
-
+	
 func check_distance():
 
 	var distance_to_player = root.global_position.distance_to(_global_datas.subbscene_playerPosition) 	
 	if distance_to_player < 2.0:
 		Bounce_engine()	
+		
 		active_flash_mirror.emit()
 		active_rotation.emit()
-			
-	
+
+		_global_datas.information_added.emit(information)
+
+		
+		
 func Bounce_engine():
 	
 	gpu_eat_vfx.emitting = true

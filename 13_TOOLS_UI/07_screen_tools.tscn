@@ -63,6 +63,8 @@ var _is_typing : bool = false
 
 var current_ls_text : Array[String]
 var ls_index : int = 0 
+@onready var timer = $Timer
+
 func _ready():
 
 	_global_datas._show_object_legend.connect(_update_text)
@@ -77,7 +79,7 @@ func change_ls(ls):
 	description_text.text = current_ls_text[ls_index]
 	
 func _update_text(condition : bool, _text : Array[String]):
-
+	
 	if !condition:
 		description_text.visible = false
 		return
@@ -89,6 +91,8 @@ func _update_text(condition : bool, _text : Array[String]):
 	type_text(text_count)
 
 func type_text(count : int):
+	
+	timer.start()
 	
 	description_text.visible_ratio = 0.0
 	var speed = 0.025 * count
@@ -111,6 +115,11 @@ func change_ration(value : float):
 	description_text.visible_ratio = value
 	
 
+
+
+func _on_timer_timeout():
+	var stop_array : Array[String] = [\"\",\"\"]
+	_global_datas._show_object_legend.emit(false,stop_array)
 "
 
 [sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_uy744"]
@@ -522,6 +531,10 @@ position = Vector2(989, 752)
 [node name="Update_description" type="Node" parent="Description"]
 script = SubResource("GDScript_cnn2b")
 
+[node name="Timer" type="Timer" parent="Description/Update_description"]
+wait_time = 2.5
+one_shot = true
+
 [node name="Front_element" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 15
@@ -646,3 +659,5 @@ offset_left = 620.0
 offset_top = 105.0
 offset_right = 660.0
 offset_bottom = 145.0
+
+[connection signal="timeout" from="Description/Update_description/Timer" to="Description/Update_description" method="_on_timer_timeout"]

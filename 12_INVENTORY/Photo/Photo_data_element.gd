@@ -1,6 +1,8 @@
 extends Node
 
 @export var photoData : PhotoData
+@export var information : info_data
+
 @export var root : Node3D
 @export var _in_mirror : bool = false
 signal scanner_effect_condition(condition : bool)
@@ -14,12 +16,6 @@ var is_scanning : bool = false
 func _ready():
 	_global_datas._photo_data_scene_list.append(self)	
 	
-func check_photo_exist(photo_Data):
-	
-	for photo in _global_datas.photo_archives:
-		if photo == photo_Data:
-			return true 
-				
 func get_PhotoData():
 	return photoData 
 	
@@ -37,7 +33,7 @@ func scanning():
 		
 	scanner_effect_condition.emit(true)
 
-	
+
 
 func stop_scanning():
 	
@@ -54,12 +50,12 @@ func scanning_done():
 	
 	_global_datas.selected_photoData = photoData
 	_global_datas.show_on_scanner.emit(true)
-	#_global_datas._show_object_legend.emit(true,photoData.legend)
-	photoData.board_information_state = 2
-	_global_datas.ui_noted_taked.emit()
-	if !check_photo_exist(photoData):
-		_global_datas.photo_archives.append(photoData)
 	
+	photoData.intrige_state = photoData.intrigue_s.started
+	
+
+	_global_datas.information_added.emit(information)
+
 func get_node_position():
 	return 	root.global_position
 
