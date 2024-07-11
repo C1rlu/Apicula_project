@@ -81,14 +81,15 @@ func _on_ez_dialogue_custom_signal_received(value):
 			#_global_datas.Npc_Dialogue.photo_data.page_information_state = info_state
 			_global_datas.ui_noted_taked.emit()
 			
-			
+func update_npc_active_node(ls_node_name : String):
+
+	_global_datas.Npc_Dialogue.Dialogue_active_node = ls_node_name 
+	print("next dialogue of this NPC will be ", _global_datas.Npc_Dialogue.Dialogue_active_node)	
+				
 func _on_ez_dialogue_end_of_dialogue_reached():
 	dialogue_box.is_dialogue_done = true	
 	_global_datas._close_dialogue.emit()
 	_global_datas._update_cam_focus.emit(0)
 
-func update_npc_active_node(ls_node_name : String):
 
-	_global_datas.Npc_Dialogue.Dialogue_active_node = ls_node_name 
-	print("next dialogue of this NPC will be ", _global_datas.Npc_Dialogue.Dialogue_active_node)	
 
