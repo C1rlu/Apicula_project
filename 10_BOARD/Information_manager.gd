@@ -13,4 +13,4 @@ func active_information(information : info_data):
 	if !information.is_discovered:
 		information.is_discovered = true
 		_global_datas.ui_noted_taked.emit()
-		_global_datas._show_object_legend.emit(true,information)
+		#_global_datas._show_object_legend.emit(true,information)
