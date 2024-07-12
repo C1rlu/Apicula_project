@@ -63,8 +63,8 @@ func _disable():
 func show_this_on_book():
 	
 	_global_datas.selected_photoData = Photo_data
-	_global_datas.book_data.book_node._show_from_index(Photo_data.page_index)
-	
+	_global_datas.show_page.emit(Photo_data.page_prefab)
+
 	var book = _global_datas.book_data.book_node
 	book.position = photo_element_root.global_position  + book_position_offset
 	var rotation_offset = book_rotation_angle - book.position.x * 25

@@ -119,6 +119,7 @@ var _photo_data_scene_list : Array[Node]
 #board scene
 
 var book_data : book_page_data
+signal show_page(content : PackedScene)
 signal open_inventory(condition : bool)
 signal mouse_raycast
 var board_camera : Camera3D
