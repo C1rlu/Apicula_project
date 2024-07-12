@@ -61,7 +61,6 @@ script/source = "extends Node
 var t 
 var _is_typing : bool = false
 
-var current_ls_text : Array[String]
 var ls_index : int = 0 
 @onready var timer = $Timer
 
@@ -72,24 +71,30 @@ func _ready():
 	_global_datas._show_object_legend.connect(_update_text)
 	_global_datas._change_language_state.connect(change_ls)
 
-
+	
 func change_ls(ls):
 	ls_index = ls
 	
-	if current_ls_text.size() == 0:
+	if info == null:
 		return
-	description_text.text = current_ls_text[ls_index]
+	var info_reader = board_info_reader.new()
+	var text_info = info_reader.node_by_name(info,ls_index)
+	description_text.text = text_info
 	
-func _update_text(condition : bool, _text : Array[String]):
+func _update_text(condition : bool, _info : info_data):
 	
 	if !condition:
 		description_text.visible = false
 		return
-		
-	current_ls_text = _text
+	
+	info = _info
+	var info_reader = board_info_reader.new()
+	var text_info = info_reader.node_by_name(info,ls_index)
+
 	description_text.visible = condition
-	description_text.text = current_ls_text[ls_index]
-	var text_count = current_ls_text[ls_index].length()
+	description_text.text = text_info
+	var text_count = text_info.length()
+	
 	type_text(text_count)
 
 func type_text(count : int):
@@ -120,8 +125,7 @@ func change_ration(value : float):
 
 
 func _on_timer_timeout():
-	var stop_array : Array[String] = [\"\",\"\"]
-	_global_datas._show_object_legend.emit(false,stop_array)
+	_global_datas._show_object_legend.emit(false,null)
 "
 
 [sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_uy744"]

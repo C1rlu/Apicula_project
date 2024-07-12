@@ -1,7 +1,7 @@
 extends Resource
 class_name BoueData
 
-@export var zone_name : Array[String]
+@export var info : info_data
 @export var zone_packed_scene : PackedScene
 @export var world_position : Vector3
 

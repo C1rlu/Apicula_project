@@ -79,7 +79,7 @@ var objects_data_list : Array[Board_OBJ]
 
 #UI VAR 
 signal set_resolution(resolution : Vector2i)
-signal _show_object_legend(condtion : bool, _text : Array[String]) #array of string here for multilple localisation text
+signal _show_object_legend(condtion : bool, info : info_data)
 
 
 # SUBSCENE VAR 

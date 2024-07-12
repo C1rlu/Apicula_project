@@ -46,8 +46,8 @@ func stop_scanner():
 func _back_call():
 	
 	_global_datas.show_on_scanner.emit(false)
-	var nullArray: Array[String] = ["",""]
-	_global_datas._show_object_legend.emit(false,nullArray)
+
+	_global_datas._show_object_legend.emit(false,null)
 	_global_datas.show_ui_scanner_dots.emit(false)
 	
 	#_global_datas._start_dialogue_box.emit()
