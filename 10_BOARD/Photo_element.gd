@@ -1,13 +1,10 @@
 extends Node3D
 
 @onready var photo_element_root = $"."
-
-
 @export var Photo_data : PhotoData
+@export var next_photo_data_question : Array[Node3D]
 
-@export var links_list : Array[Node3D]
-@export var next_photo_data : Array[Node3D]
-
+@export var _question_link : Array[MeshInstance3D]
 
 @export var book_position_offset : Vector3
 @export var book_rotation_angle : float = -90.0
@@ -18,8 +15,7 @@ extends Node3D
 
 signal update_legend( legend : String)
 
-func _ready():
-	check_state()	
+
 
 		
 func check_state():
@@ -36,6 +32,10 @@ func check_state():
 func show_interogation():
 	legend.visible = true
 	collision_shape_3d_l.disabled = false		
+	
+	for node in _question_link:
+		node.visible = true
+	
 
 func show_all_info():
 	
@@ -43,22 +43,27 @@ func show_all_info():
 	photo.visible = true	
 	collision_shape_3d_p.disabled = false
 		
-	for l in links_list:
-		l.visible = true		
-		
+
 	# update legend:
 	update_legend.emit(Photo_data.legend)
 	
+	for p in next_photo_data_question:
+		if p.Photo_data.intrige_state == 0:
+			p.Photo_data.intrige_state = 1
+	
+		
+		
 func _disable():
+	
+	for node in _question_link:
+		node.visible = false
+	
 	
 	legend.visible = false	
 	photo.visible = false
 	collision_shape_3d_p.disabled = true	
 	collision_shape_3d_l.disabled = true	
-	
-	for l in links_list:
-			l.visible = false	
-	
+
 
 func show_this_on_book():
 	
