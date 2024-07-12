@@ -11,40 +11,51 @@ script/source = "extends Node
 var t 
 signal end_of_time
 
-
+var in_inventory : bool = false
 func _ready():
-	pass
-	#_global_datas._go_Subscene.connect(_start_clock)
-	#_global_datas._backFrom_subscene.connect(_done)
+
+	_start_clock()
 	
-	#_start_clock()
+	_global_datas.open_inventory.connect(show_hide)
+
+func show_hide(condition):
 	
+	render.visible = !condition
+	in_inventory = condition	
 func _start_clock():
 	
-	render.visible = true
-	
-	
+	if !in_inventory:
+		render.visible = true
+	else :
+		render.visible = false
+		
 	if t:
 		t.kill()
 		
 	t = create_tween()
-	t.tween_method(_value,0.0,360,60.0)
+	t.tween_method(_value,0.0,360,15.0)
 	t.connect(\"finished\",done)
 
-func done():
-	_global_datas._backFrom_subscene.emit()
-	_global_datas._go_Mainscene.emit()
-	_done()
-	
-func _done():
+func done():	
+	var boat_position = _global_datas.player_position
+	_global_datas._active_sonar.emit(boat_position)
+	_start_clock()
+		
+func _stop():
 	
 	render.visible = false
 	if t:
 		t.kill()	
-				
+		
+func _pause():
+	
+	render.visible = false
+	if t:
+		t.kill()
+							
 func _value(value : float):
 	clock_root.rotation_degrees.y = -value
-
+	_global_datas.clock_timer = value
 "
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_t3k0a"]

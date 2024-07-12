@@ -14,6 +14,8 @@ var Player_InMenu : bool
 var Player_InDialogue : bool
 var Player_InDialogue_zone : bool
 
+
+
 # menu signals
 signal _start_ini_subscene
 signal _end_ini_subscene
@@ -169,7 +171,7 @@ var selected_photoData : PhotoData
 var in_scanner_mode : bool 
 
 #tools_ui
-var clock_timer : Timer
+var clock_timer : float
 signal active_photo_button(condition : bool)
 signal active_scanner_button(condition : bool)
 
