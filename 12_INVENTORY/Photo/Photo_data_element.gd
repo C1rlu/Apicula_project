@@ -10,19 +10,32 @@ signal scanner_effect_condition(condition : bool)
 
 @onready var timer = $Timer
 
-
 var is_scanning : bool = false
+var can_scann : bool = true
+
+signal on_scanning_done
 
 func _ready():
 	_global_datas._photo_data_scene_list.append(self)	
+	_global_datas._mirror_can_be_scan.connect(can_be_scan_in_mirror)
 	
+		
+	if _in_mirror:
+		can_scann = false
+	
+		
+func can_be_scan_in_mirror(condition : bool):
+	
+	if _in_mirror:
+		can_scann = condition	
+
 func get_PhotoData():
 	return photoData 
 	
 func scanning():
 	
-	if _in_mirror:
-		return
+	if !can_scann:
+		return	
 		
 	if is_scanning:
 		return
@@ -55,7 +68,9 @@ func scanning_done():
 	
 
 	_global_datas.information_added.emit(information)
-
+	_in_mirror = false
+	on_scanning_done.emit()
+	
 func get_node_position():
 	return 	root.global_position
 

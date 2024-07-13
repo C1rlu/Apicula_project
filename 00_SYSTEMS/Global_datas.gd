@@ -41,9 +41,8 @@ signal _backFrom_subscene
 signal _active_sonar(position : Vector3)
 signal _active_progress_subscene(condition : bool)
 signal _active_go_subscene_button(condition : bool)
-signal _active_world_grid(condition : bool)
-signal _teleport_boat_at_pos(position : Vector3)
-signal _boat_inside_zone(condition : bool)
+
+signal _teleport_boat_at_pos(position : Vector3) # you don"t have teleporter at start
 
 #color signal 
 signal go_normal_color
@@ -83,6 +82,7 @@ signal _load_subscene(condition : bool)
 signal _go_Subscene
 var subbscene_playerPosition : Vector3
 signal _scan_mirror_xray
+signal _mirror_can_be_scan(condition : bool)
 signal _photo_flash
 var flash_subscene_position : Vector3
 var _selected_tool : tool_data 
@@ -94,17 +94,9 @@ signal subscene_sonar_effect
 # Main Oddity & elements related ------------------------------------
 
 var Main_oddity_node : Node3D
-var scanner_element_list : Array #for scanner light list on oddity
 signal flash_x_ray_oddity # to call the scanner if exist in list
-var scanner_flash_isActive : bool 
 
-signal rapatrier_vfx(position : Vector3)
-
-signal _traceur_pause(condition : bool)
-signal _explosed_traceur_zone
-
-
-# SUBSCENE ORBE previously teleporter
+# for scanner very important
 var _photo_data_scene_list : Array[Node]
 
 
@@ -122,28 +114,13 @@ signal add_OBJ(obj_name : String)
 
 signal information_added(information : info_data)
 signal ui_noted_taked
-signal map_fade(condition : bool) # true is in : false is out
-
-
 
 # quest_state signal in order
 signal active_diving
 
-signal responce_link_mode(condition : bool, text : String)
-var link_mode : bool = false
-var question_node : Node3D = null
-signal responce_chose(text : String)
-
 #type text responce
-signal type_text_mod(condition : bool,note_data : Note_Data)
-var selected_question : Node = null
-var in_text_type_mod : bool = false
-
-var photo_are_active : bool 
-
 signal book_back_idle_position(condition : bool)
 var book_idle_pos : bool = true
-
 
 signal switch_icon_cursor(icon_type : icon_class.icon_list)
 
@@ -153,27 +130,22 @@ signal Open_ui_dark_backdrop(condition : bool)
 signal show_on_scanner(condition : bool)
 signal show_ui_scanner_dots(condition : bool)
 
-var selected_book : book_page_data
-var legend_page_index : int
-
 
 var selected_photoData : PhotoData
 var in_scanner_mode : bool 
 
 #tools_ui
 var clock_timer : float
-signal active_photo_button(condition : bool)
-signal active_scanner_button(condition : bool)
-
 
 #-----------------------------
 # dialogue datas
 var Npc_Dialogue : Npc_datas
 
-#-------------------- GAME STATE ------------------
+#-------------------- DEBUG SIGNAL STATE ------------
 
 signal active_prologue_demo
 
+# READY
 func _ready():
 	_back_call_list.clear()
 	_selected_tool = null

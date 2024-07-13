@@ -6,21 +6,18 @@ extends Node
 @onready var all_render_x_ray = $"../All_render_X_ray"
 @onready var photo_data = $"../Photo_data"
 
-var exit_index : int = 0
-
 
 func start_exit():
 	
 	if all_render.visible:
 		return
-	exit_index += 1	
-	
-	if exit_index == 3:
-		all_render.visible = true
-		col.disabled = false
-		all_render_x_ray.visible = false
-		photo_data._in_mirror = false
 		
+	all_render.visible = true
+	col.disabled = false
+	all_render_x_ray.visible = false
+	photo_data._in_mirror = false
 		
-func _on_timer_timeout():
-	exit_index = 0
+
+
+func _on_photo_data_on_scanning_done():
+	start_exit()

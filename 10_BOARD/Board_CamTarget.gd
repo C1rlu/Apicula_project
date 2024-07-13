@@ -20,9 +20,6 @@ func _process(delta):
 	if on_auto_move:
 		return
 		
-	if _global_datas.in_text_type_mod:
-		return
-		
 	if _global_datas.Player_InMenu:
 		return
 	

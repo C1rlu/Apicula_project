@@ -19,9 +19,7 @@ func _active_raycast(condition : bool):
 
 func _input(event):
 	
-	if _global_datas.in_text_type_mod:
-		return
-		
+
 	if _global_datas.in_scanner_mode:
 		return
 	

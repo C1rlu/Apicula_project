@@ -51,7 +51,7 @@ func _start_flash():
 	if is_paused:
 		return
 	light_sphere.visible = true
-	check_mirror_element.check_mirror()
+	#check_mirror_element.check_mirror()
 	if t:
 		t.kill()
 		
@@ -75,6 +75,10 @@ func _on_bounce_engine_active_flash_mirror():
 func _on_flash_wait_timeout():
 	_start_flash()
 	_global_datas._scan_mirror_xray.emit()	
+
+
+func _on_check_mirror_element_check_mirror_flash():
+	active_flash()
 "
 
 [sub_resource type="GDScript" id="GDScript_u7ou3"]
@@ -722,5 +726,6 @@ draw_pass_1 = SubResource("SphereMesh_t73r3")
 [connection signal="scanner_effect_condition" from="Main_Oddity/Photo_data" to="Main_Oddity/Photo_data/Scanning_effect" method="_on_photo_data_scanner_effect_condition"]
 [connection signal="tree_exited" from="Main_Oddity/Photo_data" to="Main_Oddity/Photo_data" method="_on_tree_exited"]
 [connection signal="timeout" from="Main_Oddity/Photo_data/Timer" to="Main_Oddity/Photo_data" method="_on_timer_timeout"]
+[connection signal="check_mirror_flash" from="Main_Oddity/Check_Mirror_element" to="Movable_Main_oddity/Fade_flash_Mirror" method="_on_check_mirror_element_check_mirror_flash"]
 
 [editable path="Main_Oddity/Render_root/Main_render_msh_01"]
