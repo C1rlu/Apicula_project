@@ -16,37 +16,6 @@
 [ext_resource type="PackedScene" uid="uid://bbp1ccoa6te1g" path="res://11_SPEAKER/05_speaker_02.tscn" id="18_l1ne5"]
 [ext_resource type="PackedScene" uid="uid://nigmie4bbn6" path="res://08_SUBSCENES/03_subscenes.tscn" id="19_cnotd"]
 
-[sub_resource type="GDScript" id="GDScript_7v3dw"]
-script/source = "extends Node
-
-@export var active_prologue_demo : bool = false
-
-
-func _ready():
-	
-	$Timer.start()	
-
-func _on_timer_timeout():
-	if active_prologue_demo:
-		_global_datas.active_prologue_demo.emit()
-		_global_datas.player_active_tools.emit(false)
-	else:
-		_global_datas.player_active_tools.emit(true)	
-		
-"
-
-[sub_resource type="GDScript" id="GDScript_gl82p"]
-script/source = "extends Node
-
-@export var lock_fps = false
-@export var fps_target : int = 60
-
-func _ready():
-	if lock_fps:
-		Engine.set_max_fps(fps_target)
-	
-"
-
 [sub_resource type="GDScript" id="GDScript_c11gh"]
 script/source = "extends Node
 
@@ -62,11 +31,45 @@ func _input(event):
 
 	if event.is_action_pressed(\"Demo\"):
 		_global_datas.active_prologue_demo.emit()
-		_global_datas.player_active_tools.emit(false)
+
+	if event.is_action_pressed(\"debug_3\"):
+		_global_datas.subscene_sonar_effect.emit()
+"
+
+[sub_resource type="GDScript" id="GDScript_7v3dw"]
+script/source = "extends Node
+
+@export var active_prologue_demo : bool = false
+
+
+func _ready():
+	
+	$Timer.start()	
+
+func _on_timer_timeout():
+	if active_prologue_demo:
+		_global_datas.active_prologue_demo.emit()
+	
+"
+
+[sub_resource type="GDScript" id="GDScript_gl82p"]
+script/source = "extends Node
+
+@export var lock_fps = false
+@export var fps_target : int = 60
+
+func _ready():
+	if lock_fps:
+		Engine.set_max_fps(fps_target)
+	
 "
 
 [node name="Main" type="Node"]
 metadata/_edit_horizontal_guides_ = [-31.0]
+
+[node name="DEBUG_Dev_shortcut" type="Node" parent="."]
+script = SubResource("GDScript_c11gh")
+scene_test = ExtResource("9_r3n1r")
 
 [node name="01_GAME_MANAGERS" type="Node" parent="."]
 script = ExtResource("1_64l51")
@@ -101,10 +104,6 @@ script = ExtResource("8_slpjd")
 
 [node name="Fps_locker" type="Node" parent="01_GAME_MANAGERS/Options"]
 script = SubResource("GDScript_gl82p")
-
-[node name="Dev_shortcut" type="Node" parent="01_GAME_MANAGERS/Options"]
-script = SubResource("GDScript_c11gh")
-scene_test = ExtResource("9_r3n1r")
 
 [node name="02_MAIN_SCENES" parent="." instance=ExtResource("18_gvi4q")]
 

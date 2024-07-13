@@ -37,8 +37,12 @@ func _start_clock():
 	t.connect(\"finished\",done)
 
 func done():	
-	var boat_position = _global_datas.player_position
-	_global_datas._active_sonar.emit(boat_position)
+	
+	if !_global_datas.Player_InSubScene:
+		var boat_position = _global_datas.player_position
+		_global_datas._active_sonar.emit(boat_position)
+	else:
+		_global_datas.subscene_sonar_effect.emit()
 	_start_clock()
 		
 func _stop():

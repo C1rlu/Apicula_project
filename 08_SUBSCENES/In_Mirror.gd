@@ -20,7 +20,7 @@ func start_exit():
 		col.disabled = false
 		all_render_x_ray.visible = false
 		photo_data._in_mirror = false
-		_global_datas.out_mirror_element.emit(root.global_position)
+		
 		
 func _on_timer_timeout():
 	exit_index = 0

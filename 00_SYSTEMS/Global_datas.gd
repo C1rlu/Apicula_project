@@ -4,17 +4,11 @@ var Main_Camera : Camera3D
 var Subscene_Camera : Camera3D
 var player_position : Vector3
 var player_boat_rotation : Vector3
-
-var Active_boue_position : Vector3
-
 var Player_In_Inventory : bool
 var Player_InSubScene : bool
-var Player_InMirrorScene : bool = false
 var Player_InMenu : bool
 var Player_InDialogue : bool
 var Player_InDialogue_zone : bool
-
-
 
 # menu signals
 signal _start_ini_subscene
@@ -27,16 +21,12 @@ signal show_3D_MainScene(condition : bool)
 signal show_3D_BoardScene(condition : bool)
 signal show_3D_SubScene(condition : bool)
 signal show_3D_SpeackerScene(condition : bool)
+
+
 #backcalls
 signal _back_call
 signal _add_back_call(back_call)
 var _back_call_list : Array 
-
-func _ready():
-	_back_call_list.clear()
-	_selected_tool = null
-	_photo_data_scene_list.clear()
-
 
 # input type
 signal using_pad(condition : bool)
@@ -97,7 +87,7 @@ signal _photo_flash
 var flash_subscene_position : Vector3
 var _selected_tool : tool_data 
 signal switching_tool(tool : tool_data)
-signal out_mirror_element(position : Vector3)
+signal subscene_sonar_effect
 
 
 # Fusion element 
@@ -183,5 +173,8 @@ var Npc_Dialogue : Npc_datas
 #-------------------- GAME STATE ------------------
 
 signal active_prologue_demo
-signal player_active_tools(condition : bool)# to active sonar, dive and clock ect, after the lighthouse
 
+func _ready():
+	_back_call_list.clear()
+	_selected_tool = null
+	_photo_data_scene_list.clear()

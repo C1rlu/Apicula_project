@@ -9,11 +9,7 @@ extends Node
 func _ready():
 	_global_datas._give_letter.connect(_intance_letter)
 
-	
-func _input(event):
-	
-	if Input.is_action_just_pressed("debug_3"):
-		_intance_letter(0)	
+
 
 func _intance_letter(index : int):
 	
