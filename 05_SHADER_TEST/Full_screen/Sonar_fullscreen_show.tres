@@ -1,8 +1,5 @@
 [gd_resource type="VisualShader" load_steps=5 format=3 uid="uid://bqd3h43rhgah0"]
 
-[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_03c27"]
-parameter_name = "ColorParameter"
-
 [sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_h4pp0"]
 input_name = "texture"
 
@@ -13,18 +10,20 @@ expanded_output_ports = [0]
 source = 5
 texture = SubResource("CameraTexture_feaj1")
 
+[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_hc8bt"]
+constant = Color(0.667877, 0.529428, 0.363048, 1)
+
 [resource]
 resource_local_to_scene = true
 code = "shader_type canvas_item;
 render_mode blend_mix;
 
-uniform vec4 ColorParameter : source_color;
 
 
 
 void fragment() {
-// ColorParameter:10
-	vec4 n_out10p0 = ColorParameter;
+// ColorConstant:9
+	vec4 n_out9p0 = vec4(0.667877, 0.529428, 0.363048, 1.000000);
 
 
 	vec4 n_out3p0;
@@ -33,13 +32,12 @@ void fragment() {
 
 
 // Output:0
-	COLOR.rgb = vec3(n_out10p0.xyz);
+	COLOR.rgb = vec3(n_out9p0.xyz);
 	COLOR.a = n_out3p0.x;
 
 
 }
 "
-graph_offset = Vector2(178.258, -88.2392)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(960, 180)
@@ -47,6 +45,6 @@ nodes/fragment/2/node = SubResource("VisualShaderNodeInput_h4pp0")
 nodes/fragment/2/position = Vector2(-80, 140)
 nodes/fragment/3/node = SubResource("VisualShaderNodeTexture_blk37")
 nodes/fragment/3/position = Vector2(300, 300)
-nodes/fragment/10/node = SubResource("VisualShaderNodeColorParameter_03c27")
-nodes/fragment/10/position = Vector2(658.849, 15.5587)
-nodes/fragment/connections = PackedInt32Array(2, 0, 3, 2, 3, 0, 0, 1, 10, 0, 0, 0)
+nodes/fragment/9/node = SubResource("VisualShaderNodeColorConstant_hc8bt")
+nodes/fragment/9/position = Vector2(480, 80)
+nodes/fragment/connections = PackedInt32Array(2, 0, 3, 2, 9, 0, 0, 0, 3, 0, 0, 1)

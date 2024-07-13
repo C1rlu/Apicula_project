@@ -24,8 +24,8 @@ func _ready():
 	_global_datas._end_ini_subscene.connect(can_Move)
 	_global_datas._backFrom_subscene.connect(cant_Move)
 	orbe_tool.tool_active_signal.connect(_change_speed)	
-
-
+	_global_datas._explosed_traceur_zone.connect(push)
+	
 	_global_datas.player_rg = self
 	
 func ini_Pos():

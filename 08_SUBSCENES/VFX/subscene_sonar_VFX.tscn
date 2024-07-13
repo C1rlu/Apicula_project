@@ -1,24 +1,16 @@
-[gd_scene load_steps=8 format=3 uid="uid://cakei8rfaiuqm"]
+[gd_scene load_steps=5 format=3 uid="uid://cakei8rfaiuqm"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/VFX/Scale_on_ready.gd" id="1_mevm0"]
 [ext_resource type="Material" uid="uid://goq7y1lqdpxa" path="res://05_SHADER_TEST/Subscene_materials/element_subscene_x_ray_VFX_LIGHT.tres" id="2_jhh1y"]
-[ext_resource type="Script" path="res://08_SUBSCENES/VFX/Check_sonar_contact.gd" id="2_s8wsq"]
 [ext_resource type="Material" uid="uid://d2t0ju6dynwgf" path="res://05_SHADER_TEST/Subscene_materials/oddity_mirror.tres" id="3_e2wvt"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_m2dhk"]
 radial_segments = 32
 
-[sub_resource type="BoxMesh" id="BoxMesh_tkdat"]
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_av2au"]
-
 [node name="Mirror_exit_VFX" type="Node3D"]
 
 [node name="Scale_on_ready" type="Node" parent="."]
 script = ExtResource("1_mevm0")
-
-[node name="Check_sonar_contact" type="Node" parent="."]
-script = ExtResource("2_s8wsq")
 
 [node name="Msh" type="MeshInstance3D" parent="."]
 layers = 4
@@ -30,17 +22,3 @@ transform = Transform3D(1.17894, 0, 0, 0, 1.17894, 0, 0, 0, 1.17894, 0, 0, 0)
 layers = 4
 mesh = SubResource("SphereMesh_m2dhk")
 surface_material_override/0 = ExtResource("3_e2wvt")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.524896, 0, 0, 0, 0.524896, 0, 0, 0, 0.524896, 0, -0.468327, 0)
-visible = false
-mesh = SubResource("BoxMesh_tkdat")
-
-[node name="Area3D" type="Area3D" parent="."]
-collision_layer = 4
-collision_mask = 4
-
-[node name="Col" type="CollisionShape3D" parent="Area3D"]
-shape = SubResource("SphereShape3D_av2au")
-
-[connection signal="area_shape_entered" from="Area3D" to="Check_sonar_contact" method="_on_area_3d_area_shape_entered"]

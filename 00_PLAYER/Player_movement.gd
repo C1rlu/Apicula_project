@@ -12,12 +12,19 @@ var _lock_speed : bool = false
 func _ready():
 	
 	_global_datas.using_pad.connect(_using_pad)
+	_global_datas._boat_inside_zone.connect(lock_speed)
 	speed = move_speed
 
 func _using_pad(condition : bool):
 	
 	using_pad = condition	
-
+func lock_speed(condition : bool):
+	
+	_lock_speed = condition
+	
+	if condition:
+		speed = move_speed
+				
 func _input(event):
 	
 	
