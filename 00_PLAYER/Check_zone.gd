@@ -60,7 +60,7 @@ func check_zone():
 			_global_datas.selected_subscene = dive_data.zone_packed_scene
 			var zone_info = dive_data.info
 			_global_datas._show_object_legend.emit(true,zone_info)		
-			_global_datas._boat_inside_zone.emit(true)
+		
 func _on_enter_dialogue_zone_area_entered(area):
 	
 	
@@ -78,7 +78,6 @@ func _on_enter_dialogue_zone_area_entered(area):
 	
 			dive_zone._contact.emit(true)
 			var dive_data = dive_zone.get_dive_data()
-			_global_datas._boat_inside_zone.emit(true)
 			_global_datas.selected_subscene = dive_data.zone_packed_scene
 			var zone_info = dive_data.info
 			_global_datas._show_object_legend.emit(true,zone_info)		
