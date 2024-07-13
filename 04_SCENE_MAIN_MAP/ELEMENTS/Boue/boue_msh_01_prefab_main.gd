@@ -16,4 +16,4 @@ func _contact(condition):
 		flag_off.visible = false
 		on_map = true
 
-		#_global_datas._active_sonar.emit(epave_zone.global_position)
+		_global_datas._active_sonar.emit(epave_zone.global_position)

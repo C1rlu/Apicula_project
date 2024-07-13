@@ -9,41 +9,29 @@ script/source = "extends Node
 @onready var clock_root = $\"../SubViewport/clock_3d_prefab/clock_3d2/root_equille\"
 
 var t 
-signal end_of_time
 
-var in_inventory : bool = false
 func _ready():
 
-	_start_clock()
-	
-	_global_datas.open_inventory.connect(show_hide)
+	_global_datas._go_Subscene.connect(_start_clock)
+	_global_datas._backFrom_subscene.connect(_stop)
 
-func show_hide(condition):
-	
-	render.visible = !condition
-	in_inventory = condition	
 func _start_clock():
 	
-	if !in_inventory:
-		render.visible = true
-	else :
-		render.visible = false
-		
+	render.visible = true
+	
 	if t:
 		t.kill()
 		
 	t = create_tween()
-	t.tween_method(_value,0.0,360,15.0)
+	t.tween_method(_value,0.0,360,60.0)
 	t.connect(\"finished\",done)
 
 func done():	
-	
-	if !_global_datas.Player_InSubScene:
-		var boat_position = _global_datas.player_position
-		_global_datas._active_sonar.emit(boat_position)
-	else:
-		_global_datas.subscene_sonar_effect.emit()
-	_start_clock()
+	_stop()	
+
+	_global_datas._backFrom_subscene.emit()
+	_global_datas._go_Mainscene.emit()
+	_global_datas.show_on_scanner.emit(false)
 		
 func _stop():
 	

@@ -8,9 +8,13 @@ extends Node
 
 var exit_index : int = 0
 
+var out_of_mirror : bool = false
 
 func start_exit():
 	
+	if out_of_mirror:
+		return
+		
 	if all_render.visible:
 		return
 	exit_index += 1	
@@ -20,7 +24,7 @@ func start_exit():
 		col.disabled = false
 		all_render_x_ray.visible = false
 		photo_data._in_mirror = false
-		
+		out_of_mirror = true
 		
 func _on_timer_timeout():
 	exit_index = 0

@@ -87,7 +87,7 @@ signal _photo_flash
 var flash_subscene_position : Vector3
 var _selected_tool : tool_data 
 signal switching_tool(tool : tool_data)
-signal subscene_sonar_effect
+signal subscene_sonar_effect(position : Vector3)
 
 
 # Fusion element 
@@ -98,7 +98,6 @@ var scanner_element_list : Array #for scanner light list on oddity
 signal flash_x_ray_oddity # to call the scanner if exist in list
 var scanner_flash_isActive : bool 
 
-signal rapatrier_vfx(position : Vector3)
 
 signal _traceur_pause(condition : bool)
 signal _explosed_traceur_zone
