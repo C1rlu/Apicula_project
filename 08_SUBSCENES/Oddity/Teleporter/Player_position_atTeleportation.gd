@@ -2,6 +2,7 @@ extends Node
 
 @onready var teleporter_prefab = $".."
 @onready var timer = $Timer
+@onready var explose_part = $"../Explose_part"
 
 func _ready():
 	if _global_datas.teleportation_active:	
@@ -10,7 +11,8 @@ func _ready():
 		
 		player_rg.linear_velocity = Vector3.ZERO
 		timer.start()
-		_global_datas.subscene_sonar_effect.emit(teleporter_prefab.global_position)
+		explose_part.emitting = true
+		#_global_datas.subscene_sonar_effect.emit(teleporter_prefab.global_position)
 
 		
 func _on_timer_timeout():

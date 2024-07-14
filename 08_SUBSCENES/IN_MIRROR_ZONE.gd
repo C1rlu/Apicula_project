@@ -8,6 +8,6 @@ func _ready():
 	
 
 func mirror_zone(condition : bool):
-	RenderingServer.global_shader_parameter_set("active_Dither", !condition)	
+	#RenderingServer.global_shader_parameter_set("active_Dither", !condition)	
 	
-	#mirror_view.visible = condition	
+	mirror_view.visible = condition	
