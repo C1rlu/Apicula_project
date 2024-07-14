@@ -89,8 +89,11 @@ var _selected_tool : tool_data
 signal switching_tool(tool : tool_data)
 signal subscene_sonar_effect(position : Vector3)
 
-signal vortex_teleport
+#teleporter vertex variable
+signal in_mirror_zone(condition : bool)
+var teleportation_active : bool 
 var active_subscene_zone : PackedScene
+
 
 # Fusion element 
 # Main Oddity & elements related ------------------------------------
