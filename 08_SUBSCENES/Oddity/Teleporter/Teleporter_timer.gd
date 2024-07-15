@@ -33,4 +33,9 @@ func check_teleporter_area():
 	
 					
 func _on_timer_timeout():
+
+	teleport_effect.emit()
+
+
+func _on_vortex_effect_check_teleporter():
 	check_teleporter_area()
