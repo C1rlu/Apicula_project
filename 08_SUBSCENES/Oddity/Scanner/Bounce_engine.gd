@@ -3,7 +3,7 @@ extends Node
 @export var information : info_data
 
 @onready var root = $"../.."
-@onready var engine = $"../../Main_Oddity/Render_root/Main_render_msh_01/Engine"
+@onready var engine = $"../../Main_Oddity/Render_root/Main_render_msh/Engine"
 
 var t 
 
@@ -22,7 +22,8 @@ func _ready():
 
 	
 func check_distance():
-
+	if !_global_datas.is_in_mirror_zone:
+		return
 	var distance_to_player = root.global_position.distance_to(_global_datas.subbscene_playerPosition) 	
 	if distance_to_player < 2.0:
 		Bounce_engine()	

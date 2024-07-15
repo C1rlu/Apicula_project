@@ -3,10 +3,14 @@ extends Node
 
 
 @onready var area = $".."
+@onready var mirror_element_oddity = $"../../Mirror_element_oddity"
 
 
 func check_mirror():
 	
+	#if _global_datas.is_in_mirror_zone | mirror_element_oddity.in_mirror:
+		#return
+
 	var all_areas = area.get_overlapping_areas()
 	
 	for a in all_areas:

@@ -16,6 +16,9 @@ func _ready():
 	
 func _check_if_player_is_close():
 	
+	if !_global_datas.is_in_mirror_zone:
+		return
+		
 	var distance_to_player = rapatrier_rg.global_position.distance_to(_global_datas.subbscene_playerPosition) 
 	
 	if distance_to_player > min_distance_to_see :
@@ -37,8 +40,10 @@ func _process(delta):
 	if !_global_datas.Player_InSubScene:
 		return
 	if _global_datas.Player_In_Inventory:
-		return	
-
+		return
+	if !_global_datas.is_in_mirror_zone:
+		return
+		
 	_folow_player(delta)
 	
 

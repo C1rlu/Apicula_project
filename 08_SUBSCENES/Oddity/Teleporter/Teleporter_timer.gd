@@ -25,6 +25,11 @@ func check_teleporter_area():
 			if player :
 				_teleport()
 				_global_datas.subscene_sonar_effect.emit(root.global_position)
+				
+				
+			var element = areas.get_node_or_null("Switch_mirror")
+			if element:
+				element.switch()	
 					
 func _on_timer_timeout():
 
