@@ -26,7 +26,7 @@ func _start_light(condition):
 	
 	_global_datas._scan_mirror_xray.emit()
 	_global_datas._photo_flash.emit()
-	check_flash_zone()
+	#check_flash_zone()
 		
 	
 func check_flash_zone():
