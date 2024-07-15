@@ -10,6 +10,17 @@ var exit_index : int = 0
 
 var out_of_mirror : bool = false
 
+
+
+func _ready():
+	
+	_global_datas.in_mirror_zone.connect(in_mirror)
+	
+func in_mirror(condition : bool):
+	
+	all_render.visible = condition
+	col.disabled = !condition			
+		
 func start_exit():
 	
 	if out_of_mirror:

@@ -91,9 +91,7 @@ signal subscene_sonar_effect(position : Vector3)
 
 #teleporter vertex variable
 signal in_mirror_zone(condition : bool)
-var teleportation_active : bool 
-var active_subscene_zone : PackedScene
-
+var is_in_mirror_zone : bool = false
 
 # Fusion element 
 # Main Oddity & elements related ------------------------------------

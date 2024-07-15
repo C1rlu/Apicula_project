@@ -20,7 +20,6 @@ func _ready():
 
 	_global_datas.Subscene_Camera = _all_cam_array[0]
 	
-	_global_datas.in_mirror_zone.connect(direct_to_player)
 	
 	
 func _physics_process(_delta):
@@ -30,11 +29,6 @@ func _physics_process(_delta):
 		
 	var playerPosition = _global_datas.subbscene_playerPosition	
 	
-	if _global_datas.teleportation_active:
-		for cam in _all_cam_array:
-			cam.transform.origin = playerPosition +  active_target	
-		return
-
 	for cam in _all_cam_array:
 		cam.transform.origin = lerp(cam.transform.origin, playerPosition +  active_target, smooth_speed * _delta)	
 
@@ -44,13 +38,7 @@ func  reset_position():
 	for cam in _all_cam_array:
 		cam.transform.origin = subscene_reset_position
 		
-		
-func direct_to_player(condition): #for teleportation no smooth
-	
-	var playerPosition = _global_datas.subbscene_playerPosition	
-	for cam in _all_cam_array:
-		cam.transform.origin = playerPosition +  active_target	
-			
+
 func can_move():
 	canMove = true
 	reset_position()

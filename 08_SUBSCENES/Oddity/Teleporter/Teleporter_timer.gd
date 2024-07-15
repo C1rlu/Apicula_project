@@ -6,19 +6,13 @@ extends Node
 
 signal teleport_effect
 
-
 func _ready():
 	timer.start()
 	
-
 func _teleport():
 	
-	_global_datas.selected_subscene = root.teleport_zone
-	_global_datas.in_mirror_zone.emit(true)
-	_global_datas.teleportation_active = true
-	_global_datas._load_subscene.emit(true)
-	
-	print("TELEPORT TO ")
+	_global_datas.is_in_mirror_zone =! _global_datas.is_in_mirror_zone
+	_global_datas.in_mirror_zone.emit(_global_datas.is_in_mirror_zone)
 
 func check_teleporter_area():
 	
@@ -30,7 +24,7 @@ func check_teleporter_area():
 			var player = areas.get_node_or_null("Player")
 			if player :
 				_teleport()
-	
+				_global_datas.subscene_sonar_effect.emit(root.global_position)
 					
 func _on_timer_timeout():
 
