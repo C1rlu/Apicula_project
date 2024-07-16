@@ -13,6 +13,7 @@ var t
 
 @onready var timer = $Timer
 @onready var gpu_eat_vfx = $"../../GPU_eat_vfx"
+@onready var mirror_element_oddity = $"../../Mirror_element_oddity"
 
 signal active_flash_mirror
 signal active_rotation
@@ -22,8 +23,10 @@ func _ready():
 
 	
 func check_distance():
-	if !_global_datas.is_in_mirror_zone:
+	
+	if mirror_element_oddity.State_selected != _global_datas.player_state:
 		return
+	
 	var distance_to_player = root.global_position.distance_to(_global_datas.subbscene_playerPosition) 	
 	if distance_to_player < 2.0:
 		Bounce_engine()	

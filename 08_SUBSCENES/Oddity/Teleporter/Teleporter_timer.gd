@@ -10,9 +10,16 @@ func _ready():
 	timer.start()
 	
 func _teleport():
-	
-	_global_datas.is_in_mirror_zone =! _global_datas.is_in_mirror_zone
-	_global_datas.in_mirror_zone.emit(_global_datas.is_in_mirror_zone)
+		
+	if _global_datas.player_state == game_state.visible_state.normal:
+		_global_datas.player_state = game_state.visible_state.mirror
+		_global_datas.in_mirror_zone.emit()
+		return
+		
+	if _global_datas.player_state == game_state.visible_state.mirror:
+		_global_datas.player_state = game_state.visible_state.normal
+		_global_datas.in_mirror_zone.emit()	
+		return
 
 func check_teleporter_area():
 	
@@ -29,6 +36,7 @@ func check_teleporter_area():
 				
 			var element = areas.get_node_or_null("Switch_mirror")
 			if element:
+				_global_datas.subscene_sonar_effect.emit(root.global_position)
 				element.switch()	
 					
 func _on_timer_timeout():

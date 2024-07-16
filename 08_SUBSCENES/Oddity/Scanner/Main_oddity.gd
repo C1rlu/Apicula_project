@@ -9,6 +9,7 @@ extends Node
 var target : Vector3
 var follow_target : bool  = false
 var real_speed : float
+@onready var mirror_element_oddity = $"../Mirror_element_oddity"
 
 func _ready():
 
@@ -16,7 +17,7 @@ func _ready():
 	
 func _check_if_player_is_close():
 	
-	if !_global_datas.is_in_mirror_zone:
+	if mirror_element_oddity.State_selected != _global_datas.player_state:
 		return
 		
 	var distance_to_player = rapatrier_rg.global_position.distance_to(_global_datas.subbscene_playerPosition) 
@@ -41,7 +42,8 @@ func _process(delta):
 		return
 	if _global_datas.Player_In_Inventory:
 		return
-	if !_global_datas.is_in_mirror_zone:
+	
+	if mirror_element_oddity.State_selected != _global_datas.player_state:
 		return
 		
 	_folow_player(delta)

@@ -8,8 +8,6 @@ extends Node
 
 func check_mirror():
 	
-	#if _global_datas.is_in_mirror_zone | mirror_element_oddity.in_mirror:
-		#return
 
 	var all_areas = area.get_overlapping_areas()
 	

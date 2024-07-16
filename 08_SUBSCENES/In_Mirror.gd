@@ -10,17 +10,26 @@ var exit_index : int = 0
 
 var out_of_mirror : bool = false
 
-
+@export var element_state : game_state.visible_state
 
 func _ready():
 	
-	_global_datas.in_mirror_zone.connect(in_mirror)
+	_global_datas.in_mirror_zone.connect(check_in_mirror)
+	check_in_mirror()
+func check_in_mirror():
 	
-func in_mirror(condition : bool):
-	
+	if _global_datas.player_state == element_state:
+		show(true)
+	else:
+		show(false)			
+				
+						
+func show(condition):
 	all_render.visible = condition
-	col.disabled = !condition			
-		
+	all_render_x_ray.visible = !condition
+	col.disabled = !condition
+
+	
 func start_exit():
 	
 	if out_of_mirror:
@@ -31,10 +40,7 @@ func start_exit():
 	exit_index += 1	
 	
 	if exit_index == 3:
-		all_render.visible = true
-		col.disabled = false
-		all_render_x_ray.visible = false
-		photo_data._in_mirror = false
+		show(true)
 		out_of_mirror = true
 		
 func _on_timer_timeout():

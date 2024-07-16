@@ -90,13 +90,8 @@ signal switching_tool(tool : tool_data)
 signal subscene_sonar_effect(position : Vector3)
 
 #teleporter vertex variable
-signal in_mirror_zone(condition : bool)
-var is_in_mirror_zone : bool = false
-
-enum scene_visible_state {
-	normal,
-	mirror
-}
+signal in_mirror_zone
+var player_state : game_state.visible_state
 
 # Fusion element 
 # Main Oddity & elements related ------------------------------------

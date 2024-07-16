@@ -7,10 +7,21 @@ func _ready():
 	
 	
 
-func mirror_zone(condition : bool):
-
-	if condition:	
-		RenderingServer.global_shader_parameter_set("mirror_wave_speed", 0.02)
-	else:
+func mirror_zone():
+	
+	var player_state = _global_datas.player_state
+	 
+	if player_state == game_state.visible_state.normal:
+		mirror_view.visible = false
 		RenderingServer.global_shader_parameter_set("mirror_wave_speed", 0.0)
-	mirror_view.visible = condition	
+		
+	if player_state == game_state.visible_state.mirror:
+		mirror_view.visible = true
+		RenderingServer.global_shader_parameter_set("mirror_wave_speed", 0.02)
+		
+
+		
+	
+	
+	
+	

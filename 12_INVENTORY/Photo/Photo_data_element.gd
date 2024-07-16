@@ -4,8 +4,9 @@ extends Node
 @export var information : info_data
 
 @export var root : Node3D
-@export var _in_mirror : bool = false
+
 signal scanner_effect_condition(condition : bool)
+@export var in_mirror : Node
 
 
 @onready var timer = $Timer
@@ -21,8 +22,9 @@ func get_PhotoData():
 	
 func scanning():
 	
-	if _in_mirror:
-		return
+	if in_mirror:
+		if in_mirror.element_state != _global_datas.player_state:
+			return
 		
 	if is_scanning:
 		return

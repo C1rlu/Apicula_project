@@ -1,4 +1,4 @@
-[gd_scene load_steps=86 format=3 uid="uid://g7u8o55jrnyy"]
+[gd_scene load_steps=88 format=3 uid="uid://g7u8o55jrnyy"]
 
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="1_n1vw4"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Player_sub_behaviour.gd" id="1_o2v73"]
@@ -15,7 +15,9 @@
 [ext_resource type="PackedScene" uid="uid://bktiy5sdjc87f" path="res://08_SUBSCENES/Player_subscene/Cosmo_Mod_01.blend" id="14_tdqlw"]
 [ext_resource type="Material" uid="uid://cdnmf431kgh7" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat_far.tres" id="15_evn0r"]
 [ext_resource type="Resource" uid="uid://vv3dws7dmhtd" path="res://08_SUBSCENES/Tools/Scanner.tres" id="15_vswql"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Oddity/Scanner/Attract.gd" id="16_k51d3"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/look_at_camera.gd" id="17_mnoui"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Push.gd" id="17_qkxfn"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_c70j3"]
 bounce = 0.8
@@ -1024,6 +1026,14 @@ draw_pass_1 = SubResource("SphereMesh_6ufqt")
 collision_layer = 4
 collision_mask = 4
 input_ray_pickable = false
+
+[node name="Attract_me" type="Node" parent="ZoneCollide" node_paths=PackedStringArray("rg")]
+script = ExtResource("16_k51d3")
+rg = NodePath("../..")
+
+[node name="Push" type="Node" parent="ZoneCollide" node_paths=PackedStringArray("rg")]
+script = ExtResource("17_qkxfn")
+rg = NodePath("../..")
 
 [node name="Player" type="Node" parent="ZoneCollide"]
 
