@@ -93,6 +93,11 @@ signal subscene_sonar_effect(position : Vector3)
 signal in_mirror_zone(condition : bool)
 var is_in_mirror_zone : bool = false
 
+enum scene_visible_state {
+	normal,
+	mirror
+}
+
 # Fusion element 
 # Main Oddity & elements related ------------------------------------
 
