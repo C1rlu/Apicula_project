@@ -37,6 +37,7 @@ func check_teleporter_area():
 			var element = areas.get_node_or_null("Switch_mirror")
 			if element:
 				_global_datas.subscene_sonar_effect.emit(root.global_position)
+				print("SWITCH IS FOUND HERE")
 				element.switch()	
 					
 func _on_timer_timeout():

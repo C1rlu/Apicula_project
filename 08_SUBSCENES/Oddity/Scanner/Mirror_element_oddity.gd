@@ -25,7 +25,7 @@ func show(condition):
 	main_render_msh.visible = condition
 	main_render_msh_mirror.visible = !condition
 
-	col.disabled = !condition
+	#col.disabled = !condition
 	col_rg.disabled = !condition
 	
 
@@ -34,10 +34,10 @@ func _on_switch_mirror_switch_mirror():
 	
 	if State_selected == game_state.visible_state.mirror:
 		State_selected = game_state.visible_state.normal
-		show(false)	
+		check_player_in_mirror()
 		return
 		
 	if State_selected == game_state.visible_state.normal:
 		State_selected = game_state.visible_state.mirror
-		show(false)		
+		check_player_in_mirror()
 		return
