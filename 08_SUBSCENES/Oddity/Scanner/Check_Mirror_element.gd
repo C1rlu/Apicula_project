@@ -3,7 +3,6 @@ extends Node
 
 
 @onready var area = $".."
-@onready var mirror_element_oddity = $"../../Mirror_element_oddity"
 
 
 func check_mirror():

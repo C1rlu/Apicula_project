@@ -10,7 +10,7 @@ var exit_index : int = 0
 
 var out_of_mirror : bool = false
 
-@export var element_state : game_state.visible_state
+@export var State_selected : game_state.visible_state
 
 func _ready():
 	
@@ -18,7 +18,7 @@ func _ready():
 	check_in_mirror()
 func check_in_mirror():
 	
-	if _global_datas.player_state == element_state:
+	if _global_datas.player_state == State_selected:
 		show(true)
 	else:
 		show(false)			

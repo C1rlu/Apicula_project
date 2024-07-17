@@ -99,8 +99,6 @@ var player_state : game_state.visible_state
 var Main_oddity_node : Node3D
 var scanner_element_list : Array #for scanner light list on oddity
 signal flash_x_ray_oddity # to call the scanner if exist in list
-var scanner_flash_isActive : bool 
-
 
 signal _traceur_pause(condition : bool)
 signal _explosed_traceur_zone

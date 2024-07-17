@@ -15,10 +15,6 @@ func _start_light(condition):
 	
 	if !condition:
 		return
-	
-
-	if _global_datas.scanner_flash_isActive:
-		return
 			
 	if !timer.is_stopped():
 		return	

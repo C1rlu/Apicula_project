@@ -23,7 +23,7 @@ func get_PhotoData():
 func scanning():
 	
 	if in_mirror:
-		if in_mirror.element_state != _global_datas.player_state:
+		if in_mirror.State_selected != _global_datas.player_state:
 			return
 		
 	if is_scanning:
