@@ -11,6 +11,8 @@ var border_ratio : float = 42
 var target_position : Vector3
 var f
 var on_auto_move = false
+
+
 func _ready():
 	_global_datas.focus_this_on_board.connect(_focus_this)
 
@@ -18,9 +20,6 @@ func _ready():
 func _process(delta):
 	
 	if on_auto_move:
-		return
-		
-	if _global_datas.in_text_type_mod:
 		return
 		
 	if _global_datas.Player_InMenu:
@@ -71,8 +70,14 @@ func _process(delta):
 	
 	target_position.x = clamp(target_position.x, oneminus * min_x, oneminus * max_x)
 	target_position.z = clamp(target_position.z, oneminus * min_z, oneminus * max_z)
+	
+	
+	
 		
 	position = target_position
+	
+	
+	
 	
 func _focus_this(_position):
 	

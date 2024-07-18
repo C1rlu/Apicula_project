@@ -21,10 +21,6 @@ func _on_area_3d_area_shape_exited(area_rid, area, area_shape_index, local_shape
 		if attractive:
 			attractive.attract_me(false,root.global_position,change_value)	
 		
-									
-					
-
-
 
 func _on_vortex_effect_atractor_strenght(strenght):
 	pass
