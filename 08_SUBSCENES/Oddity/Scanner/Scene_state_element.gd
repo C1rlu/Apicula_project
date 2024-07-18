@@ -1,12 +1,12 @@
 extends Node
 
-@onready var col = $"../Main_Oddity/col"
-@onready var col_rg = $"../Col_rg"
-@onready var main_render_msh = $"../Main_Oddity/Render_root/Main_render_msh"
-@onready var main_render_msh_mirror = $"../Main_Oddity/Render_root/Main_render_msh_mirror"
+
+@export var main_render_msh : Node3D
+@export var main_render_msh_mirror : Node3D
 @export var State_selected : game_state.visible_state
 
-@onready var gpu_normal = $"../GPU_normal"
+@export var Vfx : GPUParticles3D
+
 
 
 func _ready():
@@ -22,11 +22,14 @@ func check_player_in_mirror():
 	
 
 func show(condition):
-	main_render_msh.visible = condition
-	main_render_msh_mirror.visible = !condition
+	
+	if main_render_msh:
+		main_render_msh.visible = condition
+	if main_render_msh_mirror:	
+		main_render_msh_mirror.visible = !condition
 
-	col_rg.disabled = !condition
-	gpu_normal.emitting = condition
+	if Vfx:
+		Vfx.emitting = condition
 
 			
 func _on_switch_mirror_switch_mirror():

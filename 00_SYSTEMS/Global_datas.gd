@@ -91,7 +91,7 @@ signal subscene_sonar_effect(position : Vector3)
 
 #teleporter vertex variable
 signal in_mirror_zone
-var player_state : game_state.visible_state
+var player_state : game_state.visible_state = game_state.visible_state.normal
 
 # Fusion element 
 # Main Oddity & elements related ------------------------------------
