@@ -68,6 +68,7 @@ script/source = "extends Node
 @onready var material : Material = subscenes_cam_scene.get_material()
 
 @onready var subscenes_cam_scanner_x = $\"../Viewport/Scanner_x\"
+@onready var mirror_view = $\"../Viewport/Mirror_view\"
 
 @onready var active_scene_viewports = $\"../Viewport/Active_scene_viewports\"
 
@@ -77,7 +78,7 @@ func _ready():
 func _fade_out():
 	timer.start()
 	subscenes_cam_scanner_x.visible = false
-
+	mirror_view.visible = false
 	
 	_global_datas.show_3D_MainScene.emit(true)
 	active_scene_viewports._active_viewports(false)
