@@ -15,18 +15,35 @@ func _ready():
 
 	_global_datas._go_Subscene.connect(_start_clock)
 	_global_datas._backFrom_subscene.connect(_stop)
-
+	_global_datas.in_mirror_zone.connect(pause)
+	
+	
+	
+	
 func _start_clock():
 	
 	render.visible = true
-	
+	var time_need = 60.0 - (_global_datas.clock_timer / 6)
 	if t:
 		t.kill()
 		
 	t = create_tween()
-	t.tween_method(_value,0.0,360,60.0)
+	t.tween_method(_value,_global_datas.clock_timer,360.0,time_need)
 	t.connect(\"finished\",done)
 
+
+func pause():
+	
+	var player_state = _global_datas.player_state
+	 
+	if player_state == game_state.visible_state.normal:
+		_start_clock()
+
+	if player_state == game_state.visible_state.mirror:
+		if t:
+			t.kill()
+
+	
 func done():	
 	_stop()	
 
@@ -35,6 +52,7 @@ func done():
 	_global_datas.show_on_scanner.emit(false)
 		
 func _stop():
+	_global_datas.clock_timer = 0.0
 	
 	render.visible = false
 	if t:
@@ -64,7 +82,6 @@ offset_bottom = 40.0
 script = SubResource("GDScript_uwuod")
 
 [node name="Render" type="TextureRect" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
