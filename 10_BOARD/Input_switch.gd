@@ -2,10 +2,10 @@ extends Node
 @onready var pad_target = $"../3D_SCENE/Pad_target"
 
 
-var using_pad : bool = false
+var using_pad : bool = true
 
 func _ready():
-	_global_datas.using_pad.connect(_switch_inputs)
+	#_global_datas.using_pad.connect(_switch_inputs)
 	_global_datas.open_inventory.connect(close_pad_target)
 
 
