@@ -1,6 +1,6 @@
 extends Node
 
-var _pad : bool = true
+var _pad : bool = false
 
 @onready var  Camera = $"../3D_SCENE/Camp_root_XRay/Camera_xray"
 @onready var pad_target = $"../3D_SCENE/Pad_target"
@@ -11,8 +11,8 @@ var boue_click
 signal active_scanner(condition : bool)
 
 func _ready():
-	pass
-	#_global_datas.using_pad.connect(_active_raycast)
+
+	_global_datas.using_pad.connect(_active_raycast)
 
 	
 func _active_raycast(condition : bool):
