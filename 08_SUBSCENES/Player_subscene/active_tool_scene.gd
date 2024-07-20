@@ -8,5 +8,6 @@ func _ready():
 	
 func active(condition : bool):
 	
+	#print("active ",_tool_data, condition)
 	for e in list_of_object:
 		e.visible = condition

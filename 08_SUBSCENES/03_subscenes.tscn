@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=3 uid="uid://nigmie4bbn6"]
+[gd_scene load_steps=48 format=3 uid="uid://nigmie4bbn6"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/00_Scripts/Subscene_loader.gd" id="1_7uoo0"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="2_3srhu"]
@@ -8,12 +8,11 @@
 [ext_resource type="Material" uid="uid://dbu2q4lhlk8w5" path="res://05_SHADER_TEST/Full_screen/Subscene_screen/Main_subscene_dither.tres" id="3_w42nb"]
 [ext_resource type="Material" uid="uid://b7ffjkgpmtkc6" path="res://05_SHADER_TEST/Full_screen/Subscene_screen/Scanner_x_subscene_dither.tres" id="4_bkck3"]
 [ext_resource type="Resource" uid="uid://d11cl4f25dgwg" path="res://08_SUBSCENES/Tools/Flash_light.tres" id="4_h1r1k"]
-[ext_resource type="Resource" uid="uid://380xcgsxw62f" path="res://08_SUBSCENES/Tools/Orbe_spawner.tres" id="5_5xftw"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Tools/Play_Orber_tool.gd" id="6_51m8x"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Tools/Tool_selector.gd" id="5_xafm0"]
 [ext_resource type="Resource" uid="uid://vv3dws7dmhtd" path="res://08_SUBSCENES/Tools/Scanner.tres" id="6_b80v7"]
+[ext_resource type="Resource" uid="uid://380xcgsxw62f" path="res://08_SUBSCENES/Tools/magnet_tool.tres" id="7_28d8b"]
 [ext_resource type="Script" path="res://08_SUBSCENES/IN_MIRROR_ZONE.gd" id="10_qqphy"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Tools/PhotoData_list_update.gd" id="10_w7dre"]
-[ext_resource type="Resource" uid="uid://dqpl0ihtab1su" path="res://08_SUBSCENES/Tools/Fusion_tool.tres" id="14_glnqv"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Clock_sonar_VFX.gd" id="14_xtaeu"]
 [ext_resource type="Material" uid="uid://b1iqs8p4it3ni" path="res://05_SHADER_TEST/Full_screen/Subscene_screen/Scanner_subscene_dither.tres" id="15_6os4y"]
 [ext_resource type="Script" path="res://03_CAMERA/Active_scene_viewports.gd" id="21_jai7k"]
@@ -26,7 +25,8 @@ script/source = "extends Node
 
 @onready var material : Material = subscenes_cam_scene.get_material()
 @onready var subscenes_cam_scanner_x = $\"../Viewport/Scanner_x\"
-
+@onready var mirror_view = $\"../Viewport/Mirror_view\"
+@onready var material_m : Material = mirror_view.get_material()
 
 @onready var active_scene_viewports = $\"../Viewport/Active_scene_viewports\"
 
@@ -35,6 +35,12 @@ func _ready():
 	_global_datas._go_Subscene.connect(_fade_in)
 	
 func _fade_in():
+	
+	var player_state = _global_datas.player_state
+	 
+	if player_state == game_state.visible_state.mirror:
+		mirror_view.visible = true			
+
 	subscenes_cam_scene.visible = true
 	subscenes_cam_scanner_x.visible = true
 
@@ -51,7 +57,7 @@ func _process(delta):
 		
 	var lerp_time = lerp(0.0,1.0, timer.time_left / timer.wait_time)	
 	material.set_shader_parameter(\"Opacity\",lerp_time)	
-	
+	material_m.set_shader_parameter(\"Opacity\",lerp_time)	
 
 func _on_timer_timeout():
 	timer.stop()
@@ -490,14 +496,14 @@ script = SubResource("GDScript_71vlv")
 
 [node name="TOOLS" type="Node" parent="."]
 
-[node name="Switch_tools_input" type="Node" parent="TOOLS"]
-script = ExtResource("3_2mtx3")
-tool_list = Array[Resource("res://08_SUBSCENES/Tools/Tools_Data.gd")]([ExtResource("4_h1r1k"), ExtResource("14_glnqv"), ExtResource("6_b80v7"), ExtResource("5_5xftw")])
-
 [node name="Action_inputs_call" type="Node" parent="TOOLS"]
-script = ExtResource("6_51m8x")
+script = ExtResource("5_xafm0")
 light_tool = ExtResource("4_h1r1k")
 Scanner_tool = ExtResource("6_b80v7")
+
+[node name="Switch_tools_input" type="Node" parent="TOOLS"]
+script = ExtResource("3_2mtx3")
+all_tool = Array[Resource("res://08_SUBSCENES/Tools/Tools_Data.gd")]([ExtResource("4_h1r1k"), ExtResource("6_b80v7"), ExtResource("7_28d8b")])
 
 [node name="SEE_MIRROR_FLASH" type="Node" parent="."]
 script = SubResource("GDScript_nvaxv")

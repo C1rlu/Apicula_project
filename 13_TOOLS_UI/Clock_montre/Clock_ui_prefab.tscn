@@ -13,7 +13,7 @@ var t
 func _ready():
 
 
-	_global_datas._go_Subscene.connect(_start_clock)
+	_global_datas._go_Subscene.connect(pause)
 	_global_datas._backFrom_subscene.connect(_stop)
 	_global_datas.in_mirror_zone.connect(pause)
 	
@@ -44,7 +44,8 @@ func pause():
 			t.kill()
 
 	
-func done():	
+func done():
+		
 	_stop()	
 
 	_global_datas._backFrom_subscene.emit()
@@ -52,18 +53,20 @@ func done():
 	_global_datas.show_on_scanner.emit(false)
 		
 func _stop():
-	_global_datas.clock_timer = 0.0
 	
-	render.visible = false
-	if t:
-		t.kill()	
+	var player_state = _global_datas.player_state
+	 
+	if player_state == game_state.visible_state.normal:
+		render.visible = false
+		if t:
+			t.kill()	
+		_global_datas.clock_timer = 0.0
 		
-func _pause():
+	if player_state == game_state.visible_state.mirror:
+		if t:
+			t.kill()
 	
-	render.visible = false
-	if t:
-		t.kill()
-							
+								
 func _value(value : float):
 	clock_root.rotation_degrees.y = -value
 	_global_datas.clock_timer = value
