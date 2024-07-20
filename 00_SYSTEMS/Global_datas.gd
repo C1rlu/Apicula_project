@@ -126,21 +126,10 @@ signal ui_noted_taked
 signal map_fade(condition : bool) # true is in : false is out
 
 
-
 # quest_state signal in order
 signal active_diving
 
-signal responce_link_mode(condition : bool, text : String)
-var link_mode : bool = false
-var question_node : Node3D = null
-signal responce_chose(text : String)
 
-#type text responce
-signal type_text_mod(condition : bool,note_data : Note_Data)
-var selected_question : Node = null
-var in_text_type_mod : bool = false
-
-var photo_are_active : bool 
 
 signal book_back_idle_position(condition : bool)
 var book_idle_pos : bool = true

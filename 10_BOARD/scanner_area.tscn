@@ -170,10 +170,6 @@ viewport_path = NodePath("legend/legend_render")
 resource_local_to_scene = true
 size = Vector2(1.8, 1.8)
 
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_o4cud"]
-parameter_name = "link_opacity"
-qualifier = 1
-
 [sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_4dsm5"]
 size = Vector2(620, 200)
 expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
@@ -186,11 +182,15 @@ op_type = 3
 [sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_rax8w"]
 input_name = "color"
 
+[sub_resource type="VisualShaderNodeBooleanParameter" id="VisualShaderNodeBooleanParameter_4daqk"]
+parameter_name = "isGray"
+qualifier = 1
+
 [sub_resource type="VisualShader" id="VisualShader_sxcgk"]
 code = "shader_type canvas_item;
 render_mode blend_mix;
 
-global uniform float link_opacity;
+global uniform bool isGray;
 
 
 
@@ -208,12 +208,12 @@ void fragment() {
 	}
 
 
-// FloatParameter:2
-	float n_out2p0 = link_opacity;
+// BooleanParameter:6
+	bool n_out6p0 = isGray;
 
 
 // Mix:4
-	vec3 n_out4p0 = mix(vec3(n_out5p0.xyz), vec3(n_out3p0), vec3(n_out2p0));
+	vec3 n_out4p0 = mix(vec3(n_out5p0.xyz), vec3(n_out3p0), vec3(n_out6p0 ? 1.0 : 0.0));
 
 
 // Output:0
@@ -222,12 +222,10 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-50.8594, -157.287)
+graph_offset = Vector2(-303.501, -174.498)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(720, 200)
-nodes/fragment/2/node = SubResource("VisualShaderNodeFloatParameter_o4cud")
-nodes/fragment/2/position = Vector2(-80, 80)
 nodes/fragment/3/node = SubResource("VisualShaderNodeExpression_4dsm5")
 nodes/fragment/3/position = Vector2(-220, -260)
 nodes/fragment/3/size = Vector2(620, 200)
@@ -239,9 +237,11 @@ nodes/fragment/4/node = SubResource("VisualShaderNodeMix_y3xem")
 nodes/fragment/4/position = Vector2(540, 60)
 nodes/fragment/5/node = SubResource("VisualShaderNodeInput_rax8w")
 nodes/fragment/5/position = Vector2(-580, -20)
-nodes/fragment/connections = PackedInt32Array(2, 0, 4, 2, 3, 0, 4, 1, 5, 0, 3, 0, 5, 0, 4, 0, 4, 0, 0, 0)
+nodes/fragment/6/node = SubResource("VisualShaderNodeBooleanParameter_4daqk")
+nodes/fragment/6/position = Vector2(-646.713, 403.75)
+nodes/fragment/connections = PackedInt32Array(3, 0, 4, 1, 5, 0, 3, 0, 5, 0, 4, 0, 4, 0, 0, 0, 6, 0, 4, 2)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_jbhxr"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7djay"]
 shader = SubResource("VisualShader_sxcgk")
 
 [node name="Photo_element_root" type="Node3D"]
@@ -369,7 +369,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="ColorRect" type="ColorRect" parent="legend/legend_render/text_for_size"]
-material = SubResource("ShaderMaterial_jbhxr")
+material = SubResource("ShaderMaterial_7djay")
 layout_direction = 1
 layout_mode = 1
 anchors_preset = 14

@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=3 uid="uid://bbp1ccoa6te1g"]
+[gd_scene load_steps=52 format=3 uid="uid://bbp1ccoa6te1g"]
 
 [ext_resource type="Script" path="res://11_SPEAKER/Open_Dialogue.gd" id="1_6gph5"]
 [ext_resource type="Script" path="res://11_SPEAKER/00_NPC/NPC_DIVE_SELECTOR/Npc_loader.gd" id="2_gecf5"]
@@ -354,25 +354,9 @@ grey_value = luminance;"
 default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
 op_type = 3
 
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_2uwgk"]
-input_name = "uv"
-
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_2bs7j"]
-parameter_name = "link_opacity"
+[sub_resource type="VisualShaderNodeBooleanParameter" id="VisualShaderNodeBooleanParameter_7xq23"]
+parameter_name = "isGray"
 qualifier = 1
-
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_sn1mh"]
-size = Vector2(513.781, 284.487)
-expression = "vec2 n_uv = UV -0.5;
-float d = length(n_uv);
-float c = smoothstep(r,r + feather,d);
-color = vec4(vec3(c),1.0);"
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_0xt40"]
-constant = 0.5
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_f10hi"]
-constant = 0.25
 
 [sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_hd7wn"]
 size = Vector2(724.789, 654.559)
@@ -392,7 +376,7 @@ code = "shader_type canvas_item;
 render_mode blend_mix;
 
 uniform vec4 Backdrop_color : source_color;
-global uniform float link_opacity;
+global uniform bool isGray;
 uniform sampler2D tex_frg_13;
 uniform float Opacity : hint_range(0, 1) = 1;
 global uniform float Dither_size;
@@ -413,12 +397,12 @@ void fragment() {
 	}
 
 
-// FloatParameter:20
-	float n_out20p0 = link_opacity;
+// BooleanParameter:21
+	bool n_out21p0 = isGray;
 
 
 // Mix:19
-	vec3 n_out19p0 = mix(vec3(n_out12p0.xyz), vec3(n_out18p0), vec3(n_out20p0));
+	vec3 n_out19p0 = mix(vec3(n_out12p0.xyz), vec3(n_out18p0), vec3(n_out21p0 ? 1.0 : 0.0));
 
 
 // Texture2D:13
@@ -461,25 +445,10 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(410.418, -358.719)
+graph_offset = Vector2(702.711, -234.06)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(1720, 160)
-nodes/fragment/2/node = SubResource("VisualShaderNodeInput_2uwgk")
-nodes/fragment/2/position = Vector2(-1440, 20)
-nodes/fragment/5/node = SubResource("VisualShaderNodeExpression_sn1mh")
-nodes/fragment/5/position = Vector2(-960, 100)
-nodes/fragment/5/size = Vector2(513.781, 284.487)
-nodes/fragment/5/input_ports = "0,3,UV;1,0,r;2,0,feather;"
-nodes/fragment/5/output_ports = "0,5,color;"
-nodes/fragment/5/expression = "vec2 n_uv = UV -0.5;
-float d = length(n_uv);
-float c = smoothstep(r,r + feather,d);
-color = vec4(vec3(c),1.0);"
-nodes/fragment/6/node = SubResource("VisualShaderNodeFloatConstant_0xt40")
-nodes/fragment/6/position = Vector2(-1500, 340)
-nodes/fragment/7/node = SubResource("VisualShaderNodeFloatConstant_f10hi")
-nodes/fragment/7/position = Vector2(-1440, 100)
 nodes/fragment/9/node = SubResource("VisualShaderNodeExpression_hd7wn")
 nodes/fragment/9/position = Vector2(420, 720)
 nodes/fragment/9/size = Vector2(724.789, 654.559)
@@ -520,9 +489,9 @@ nodes/fragment/18/expression = "float luminance = 0.299 * color.x + 0.587 * colo
 grey_value = luminance;"
 nodes/fragment/19/node = SubResource("VisualShaderNodeMix_p4a8h")
 nodes/fragment/19/position = Vector2(1940, -340)
-nodes/fragment/20/node = SubResource("VisualShaderNodeFloatParameter_2bs7j")
-nodes/fragment/20/position = Vector2(1480, -180)
-nodes/fragment/connections = PackedInt32Array(6, 0, 5, 2, 7, 0, 5, 1, 10, 0, 9, 0, 9, 0, 11, 1, 2, 0, 5, 0, 14, 0, 15, 1, 16, 0, 9, 1, 13, 0, 17, 0, 9, 0, 17, 1, 17, 0, 15, 2, 17, 0, 0, 1, 20, 0, 19, 2, 18, 0, 19, 1, 12, 0, 18, 0, 12, 0, 19, 0, 19, 0, 0, 0)
+nodes/fragment/21/node = SubResource("VisualShaderNodeBooleanParameter_7xq23")
+nodes/fragment/21/position = Vector2(1440, -100)
+nodes/fragment/connections = PackedInt32Array(10, 0, 9, 0, 9, 0, 11, 1, 14, 0, 15, 1, 16, 0, 9, 1, 13, 0, 17, 0, 9, 0, 17, 1, 17, 0, 15, 2, 17, 0, 0, 1, 18, 0, 19, 1, 12, 0, 18, 0, 12, 0, 19, 0, 19, 0, 0, 0, 21, 0, 19, 2)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1ca5o"]
 shader = SubResource("VisualShader_jx62j")
@@ -798,12 +767,12 @@ theme_override_constants/separation = 10
 [node name="Loader" type="Node3D" parent="00_NPC_CREATOR/Models"]
 
 [node name="Guy_02" parent="00_NPC_CREATOR/Models/Loader" instance=ExtResource("11_60j22")]
-visible = false
 
 [node name="Mr_Birds" parent="00_NPC_CREATOR/Models/Loader" instance=ExtResource("13_f7b57")]
 visible = false
 
 [node name="Otis_Npc_prefabs" parent="00_NPC_CREATOR/Models/Loader" instance=ExtResource("13_une54")]
+visible = false
 
 [connection signal="custom_signal_received" from="Dialogue/EzDialogue" to="Dialogue" method="_on_ez_dialogue_custom_signal_received"]
 [connection signal="dialogue_generated" from="Dialogue/EzDialogue" to="Dialogue" method="_on_ez_dialogue_dialogue_generated"]

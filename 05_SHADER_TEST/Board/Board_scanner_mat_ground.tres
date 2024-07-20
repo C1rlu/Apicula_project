@@ -1,4 +1,9 @@
-[gd_resource type="ShaderMaterial" load_steps=35 format=3 uid="uid://c4fuaxiqyxou"]
+[gd_resource type="ShaderMaterial" load_steps=31 format=3 uid="uid://c4fuaxiqyxou"]
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_cc6o2"]
+parameter_name = "ColorParameter2"
+default_value_enabled = true
+default_value = Color(0.027451, 0.14902, 0.156863, 1)
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_7uttg"]
 parameter_name = "light_color"
@@ -29,22 +34,6 @@ qualifier = 1
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_65cce"]
 constant = 1.0
-
-[sub_resource type="Gradient" id="Gradient_nlmwc"]
-offsets = PackedFloat32Array(0, 0.956778)
-colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_rcwtw"]
-gradient = SubResource("Gradient_nlmwc")
-fill_from = Vector2(1, 1)
-
-[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_k1bb5"]
-texture = SubResource("GradientTexture2D_rcwtw")
-
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_sb6i5"]
-
-[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_7a4i0"]
-function = 31
 
 [sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_45wud"]
 size = Vector2(724.789, 654.559)
@@ -125,6 +114,7 @@ render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_s
 
 uniform float Speed : hint_range(0, 1) = 0.5;
 uniform sampler2D tex_vtx_8;
+uniform vec4 ColorParameter2 : source_color = vec4(0.027451, 0.149020, 0.156863, 1.000000);
 uniform vec4 ColorParameter : source_color = vec4(0.027451, 0.149020, 0.156863, 1.000000);
 uniform vec4 light_color : source_color;
 global uniform float Dither_size;
@@ -183,6 +173,17 @@ void vertex() {
 
 // Output:0
 	VERTEX = n_out3p0;
+
+
+}
+
+void fragment() {
+// ColorParameter:2
+	vec4 n_out2p0 = ColorParameter2;
+
+
+// Output:0
+	ALBEDO = vec3(n_out2p0.xyz);
 
 
 }
@@ -261,12 +262,12 @@ void light() {
 
 
 // Output:0
-	DIFFUSE_LIGHT = vec3(n_out19p0.xyz);
+	SPECULAR_LIGHT = vec3(n_out19p0.xyz);
 
 
 }
 "
-graph_offset = Vector2(808.716, 888.721)
+graph_offset = Vector2(-303.676, -85.2647)
 nodes/vertex/0/position = Vector2(400, 160)
 nodes/vertex/2/node = SubResource("VisualShaderNodeInput_kb5dy")
 nodes/vertex/2/position = Vector2(-260, 600)
@@ -293,6 +294,9 @@ nodes/vertex/12/position = Vector2(-240, 260)
 nodes/vertex/13/node = SubResource("VisualShaderNodeFloatOp_gcg7d")
 nodes/vertex/13/position = Vector2(-1180, 560)
 nodes/vertex/connections = PackedInt32Array(2, 0, 3, 1, 4, 0, 7, 0, 7, 0, 6, 2, 9, 0, 3, 0, 11, 0, 12, 0, 10, 0, 12, 1, 12, 0, 9, 1, 5, 0, 13, 0, 10, 0, 13, 1, 13, 0, 7, 1, 6, 0, 8, 0, 8, 0, 9, 0, 3, 0, 0, 0)
+nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_cc6o2")
+nodes/fragment/2/position = Vector2(-33.808, 109.242)
+nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0)
 nodes/light/0/position = Vector2(2700, 1620)
 nodes/light/3/node = SubResource("VisualShaderNodeFloatConstant_65cce")
 nodes/light/3/position = Vector2(-1700, 2260)
@@ -335,17 +339,12 @@ nodes/light/23/node = SubResource("VisualShaderNodeColorParameter_qpac3")
 nodes/light/23/position = Vector2(1140, 1180)
 nodes/light/24/node = SubResource("VisualShaderNodeFloatParameter_uc4lj")
 nodes/light/24/position = Vector2(-2060, 2420)
-nodes/light/30/node = SubResource("VisualShaderNodeTexture_k1bb5")
-nodes/light/30/position = Vector2(1320, 2240)
-nodes/light/31/node = SubResource("VisualShaderNodeStep_sb6i5")
-nodes/light/31/position = Vector2(1800, 2060)
-nodes/light/32/node = SubResource("VisualShaderNodeFloatFunc_7a4i0")
-nodes/light/32/position = Vector2(2244.3, 1780.21)
-nodes/light/connections = PackedInt32Array(5, 0, 19, 2, 15, 0, 16, 0, 16, 0, 17, 1, 9, 0, 7, 1, 3, 0, 4, 0, 4, 0, 5, 0, 17, 0, 5, 1, 24, 0, 4, 1, 13, 0, 19, 1, 23, 0, 19, 0, 6, 0, 7, 0, 8, 0, 17, 0, 7, 0, 8, 0, 30, 0, 31, 1, 31, 0, 32, 0, 4, 0, 31, 0, 19, 0, 0, 0)
+nodes/light/connections = PackedInt32Array(5, 0, 19, 2, 15, 0, 16, 0, 16, 0, 17, 1, 9, 0, 7, 1, 3, 0, 4, 0, 4, 0, 5, 0, 17, 0, 5, 1, 24, 0, 4, 1, 13, 0, 19, 1, 23, 0, 19, 0, 6, 0, 7, 0, 8, 0, 17, 0, 7, 0, 8, 0, 19, 0, 0, 1)
 
 [resource]
 render_priority = 0
 shader = SubResource("VisualShader_uagv5")
 shader_parameter/Speed = 0.0
+shader_parameter/ColorParameter2 = Color(0, 0, 0, 1)
 shader_parameter/ColorParameter = Color(0.458824, 0.352941, 0.223529, 1)
 shader_parameter/light_color = Color(1, 0.992157, 0.729412, 1)

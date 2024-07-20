@@ -39,10 +39,6 @@ grey_value = luminance;"
 default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
 op_type = 3
 
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_1d7om"]
-parameter_name = "link_opacity"
-qualifier = 1
-
 [sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_y3xdc"]
 size = Vector2(620, 200)
 expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
@@ -54,6 +50,10 @@ op_type = 3
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_spwqn"]
 constant = 1.156
+
+[sub_resource type="VisualShaderNodeBooleanParameter" id="VisualShaderNodeBooleanParameter_ro0lc"]
+parameter_name = "isGray"
+qualifier = 1
 
 [sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_5yhv0"]
 size = Vector2(724.789, 654.559)
@@ -87,7 +87,7 @@ render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_s
 
 uniform vec4 Dark_color : source_color;
 uniform vec4 ColorParameter : source_color = vec4(0.027451, 0.149020, 0.156863, 1.000000);
-global uniform float link_opacity;
+global uniform bool isGray;
 uniform vec4 light_color : source_color;
 global uniform float Dither_size;
 
@@ -118,12 +118,12 @@ void light() {
 	}
 
 
-// FloatParameter:27
-	float n_out27p0 = link_opacity;
+// BooleanParameter:30
+	bool n_out30p0 = isGray;
 
 
 // Mix:26
-	vec3 n_out26p0 = mix(vec3(n_out23p0.xyz), vec3(n_out25p0), vec3(n_out27p0));
+	vec3 n_out26p0 = mix(vec3(n_out23p0.xyz), vec3(n_out25p0), vec3(n_out30p0 ? 1.0 : 0.0));
 
 
 // ColorParameter:13
@@ -140,7 +140,7 @@ void light() {
 
 
 // Mix:29
-	vec3 n_out29p0 = mix(vec3(n_out13p0.xyz), vec3(n_out28p0), vec3(n_out27p0));
+	vec3 n_out29p0 = mix(vec3(n_out13p0.xyz), vec3(n_out28p0), vec3(n_out30p0 ? 1.0 : 0.0));
 
 
 // FloatConstant:3
@@ -213,6 +213,7 @@ void light() {
 
 }
 "
+graph_offset = Vector2(11.0657, 9.80243)
 nodes/vertex/0/position = Vector2(400, 160)
 nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_c5muk")
 nodes/fragment/2/position = Vector2(-480, 20)
@@ -268,8 +269,6 @@ nodes/light/25/expression = "float luminance = 0.299 * color.x + 0.587 * color.y
 grey_value = luminance;"
 nodes/light/26/node = SubResource("VisualShaderNodeMix_6jd32")
 nodes/light/26/position = Vector2(1660, 620)
-nodes/light/27/node = SubResource("VisualShaderNodeFloatParameter_1d7om")
-nodes/light/27/position = Vector2(920, 680)
 nodes/light/28/node = SubResource("VisualShaderNodeExpression_y3xdc")
 nodes/light/28/position = Vector2(880, 940)
 nodes/light/28/size = Vector2(620, 200)
@@ -279,4 +278,6 @@ nodes/light/28/expression = "float luminance = 0.299 * color.x + 0.587 * color.y
 grey_value = luminance;"
 nodes/light/29/node = SubResource("VisualShaderNodeMix_of7et")
 nodes/light/29/position = Vector2(1320, 760)
-nodes/light/connections = PackedInt32Array(5, 0, 19, 2, 15, 0, 16, 0, 16, 0, 17, 1, 6, 0, 7, 0, 9, 0, 7, 1, 3, 0, 4, 0, 4, 0, 5, 0, 17, 0, 5, 1, 7, 0, 8, 0, 8, 0, 17, 0, 24, 0, 4, 1, 23, 0, 25, 0, 27, 0, 26, 2, 23, 0, 26, 0, 25, 0, 26, 1, 13, 0, 28, 0, 27, 0, 29, 2, 28, 0, 29, 1, 13, 0, 29, 0, 19, 0, 0, 1, 29, 0, 19, 1, 26, 0, 19, 0)
+nodes/light/30/node = SubResource("VisualShaderNodeBooleanParameter_ro0lc")
+nodes/light/30/position = Vector2(1054.08, 634.802)
+nodes/light/connections = PackedInt32Array(5, 0, 19, 2, 15, 0, 16, 0, 16, 0, 17, 1, 6, 0, 7, 0, 9, 0, 7, 1, 3, 0, 4, 0, 4, 0, 5, 0, 17, 0, 5, 1, 7, 0, 8, 0, 8, 0, 17, 0, 24, 0, 4, 1, 23, 0, 25, 0, 23, 0, 26, 0, 25, 0, 26, 1, 13, 0, 28, 0, 28, 0, 29, 1, 13, 0, 29, 0, 19, 0, 0, 1, 29, 0, 19, 1, 26, 0, 19, 0, 30, 0, 29, 2, 30, 0, 26, 2)

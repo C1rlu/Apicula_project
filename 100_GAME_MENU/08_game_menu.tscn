@@ -417,7 +417,7 @@ language_state = Array[String](["Vsync ....................................", "V
 process_mode = 2
 layout_mode = 2
 focus_neighbor_top = NodePath("../Vsync_button")
-focus_neighbor_bottom = NodePath("../ActiveBW_button")
+focus_neighbor_bottom = NodePath("../Label/HSlider_dither")
 button_pressed = true
 alignment = 2
 
@@ -467,60 +467,6 @@ text = "Active Dither........................"
 script = ExtResource("6_sios4")
 language_state = Array[String](["Active Dither........................", "Activer Dither......................"])
 
-[node name="ActiveBW_button" type="CheckBox" parent="Game_Menu_Root/MainMenu_Box/Options/VBoxContainer"]
-process_mode = 2
-layout_mode = 2
-focus_neighbor_top = NodePath("../ActiveDither_button")
-focus_neighbor_bottom = NodePath("../../../Language_choice")
-button_pressed = true
-alignment = 2
-
-[node name="Checker_off" type="ColorRect" parent="Game_Menu_Root/MainMenu_Box/Options/VBoxContainer/ActiveBW_button"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-color = Color(0.180392, 0.388235, 0.329412, 1)
-
-[node name="Checker_on" type="ColorRect" parent="Game_Menu_Root/MainMenu_Box/Options/VBoxContainer/ActiveBW_button/Checker_off"]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -7.5
-offset_top = -7.5
-offset_right = 7.5
-offset_bottom = 7.5
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-color = Color(0.745098, 0.6, 0.431373, 1)
-
-[node name="Label" type="Label" parent="Game_Menu_Root/MainMenu_Box/Options/VBoxContainer/ActiveBW_button"]
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -364.0
-offset_top = -20.0
-offset_right = -36.0
-offset_bottom = 15.0
-grow_horizontal = 0
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.317647, 0.615686, 0.529412, 1)
-theme_override_font_sizes/font_size = 25
-text = "Black & White .................."
-script = ExtResource("6_sios4")
-language_state = Array[String](["Black & White ..................", "Noir & Blanc ....................."])
-
 [node name="Label" type="Label" parent="Game_Menu_Root/MainMenu_Box/Options/VBoxContainer"]
 layout_mode = 2
 text = "0.3"
@@ -563,6 +509,5 @@ focus_neighbor_top = NodePath("../Options/VBoxContainer/Label/HSlider_dither")
 [connection signal="toggled" from="Game_Menu_Root/MainMenu_Box/Options/VBoxContainer/Fullscreen_button" to="Option_Panel" method="_on_fullscreen_button_toggled"]
 [connection signal="toggled" from="Game_Menu_Root/MainMenu_Box/Options/VBoxContainer/Vsync_button" to="Option_Panel" method="_on_vsync_button_toggled"]
 [connection signal="toggled" from="Game_Menu_Root/MainMenu_Box/Options/VBoxContainer/ActiveDither_button" to="Option_Panel" method="_on_active_dither_button_toggled"]
-[connection signal="toggled" from="Game_Menu_Root/MainMenu_Box/Options/VBoxContainer/ActiveBW_button" to="Option_Panel" method="_on_active_bw_button_toggled"]
 [connection signal="value_changed" from="Game_Menu_Root/MainMenu_Box/Options/VBoxContainer/Label/HSlider_dither" to="Game_Menu_Root/MainMenu_Box/Options/VBoxContainer/Label/HSlider_dither" method="_on_value_changed"]
 [connection signal="item_selected" from="Game_Menu_Root/MainMenu_Box/Language_choice" to="Language_state_Menu" method="_on_language_choice_item_selected"]

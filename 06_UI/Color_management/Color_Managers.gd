@@ -15,7 +15,6 @@ func _ready():
 	_global_datas.go_darker_color.connect(_Darker_mainScene)
 	
 	#ACTIVE DITHER
-	RenderingServer.global_shader_parameter_set("Subscene_mirror_alpha", 0.0)
 	RenderingServer.global_shader_parameter_set("active_Dither", true)
 	
 func _open(condition : bool):

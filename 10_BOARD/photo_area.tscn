@@ -87,6 +87,10 @@ input_name = "uv"
 
 [sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_3rkhe"]
 
+[sub_resource type="VisualShaderNodeBooleanParameter" id="VisualShaderNodeBooleanParameter_usl74"]
+parameter_name = "isGray"
+qualifier = 1
+
 [sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_h3fqg"]
 parameter_name = "t_render"
 texture_type = 1
@@ -99,10 +103,6 @@ grey_value = luminance;"
 [sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_jd3py"]
 default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
 op_type = 3
-
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_cia5x"]
-parameter_name = "link_opacity"
-qualifier = 1
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_hlg78"]
 constant = 1.0
@@ -122,7 +122,7 @@ uniform vec4 Main_color : source_color;
 uniform sampler2D t_render : source_color;
 uniform sampler2D Gradiant : repeat_enable;
 global uniform float Dither_size;
-global uniform float link_opacity;
+global uniform bool isGray;
 
 
 
@@ -196,12 +196,12 @@ void fragment() {
 	}
 
 
-// FloatParameter:6
-	float n_out6p0 = link_opacity;
+// BooleanParameter:22
+	bool n_out22p0 = isGray;
 
 
 // Mix:5
-	vec3 n_out5p0 = mix(n_out14p0, vec3(n_out4p0), vec3(n_out6p0));
+	vec3 n_out5p0 = mix(n_out14p0, vec3(n_out4p0), vec3(n_out22p0 ? 1.0 : 0.0));
 
 
 // Output:0
@@ -210,6 +210,7 @@ void fragment() {
 
 }
 "
+graph_offset = Vector2(121, -73)
 flags/unshaded = true
 nodes/fragment/0/position = Vector2(1000, 180)
 nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_ray7x")
@@ -225,8 +226,6 @@ nodes/fragment/4/expression = "float luminance = 0.299 * color.x + 0.587 * color
 grey_value = luminance;"
 nodes/fragment/5/node = SubResource("VisualShaderNodeMix_jd3py")
 nodes/fragment/5/position = Vector2(840, -100)
-nodes/fragment/6/node = SubResource("VisualShaderNodeFloatParameter_cia5x")
-nodes/fragment/6/position = Vector2(520, 80)
 nodes/fragment/7/node = SubResource("VisualShaderNodeFloatConstant_hlg78")
 nodes/fragment/7/position = Vector2(-2860, 340)
 nodes/fragment/8/node = SubResource("VisualShaderNodeTexture2DParameter_5pj88")
@@ -266,7 +265,9 @@ nodes/fragment/20/node = SubResource("VisualShaderNodeInput_g4g7h")
 nodes/fragment/20/position = Vector2(-2140, -200)
 nodes/fragment/21/node = SubResource("VisualShaderNodeUVFunc_3rkhe")
 nodes/fragment/21/position = Vector2(-1699.56, -134.443)
-nodes/fragment/connections = PackedInt32Array(3, 0, 2, 2, 6, 0, 5, 2, 4, 0, 5, 1, 5, 0, 0, 0, 7, 0, 16, 0, 16, 0, 11, 1, 8, 0, 10, 2, 9, 0, 14, 0, 10, 0, 11, 0, 15, 0, 16, 1, 14, 0, 4, 0, 14, 0, 5, 0, 2, 0, 14, 1, 19, 0, 17, 2, 17, 0, 14, 2, 11, 0, 17, 0, 20, 0, 21, 0, 12, 0, 21, 2, 20, 0, 10, 0)
+nodes/fragment/22/node = SubResource("VisualShaderNodeBooleanParameter_usl74")
+nodes/fragment/22/position = Vector2(428, 213)
+nodes/fragment/connections = PackedInt32Array(3, 0, 2, 2, 4, 0, 5, 1, 5, 0, 0, 0, 7, 0, 16, 0, 16, 0, 11, 1, 8, 0, 10, 2, 9, 0, 14, 0, 10, 0, 11, 0, 15, 0, 16, 1, 14, 0, 4, 0, 14, 0, 5, 0, 2, 0, 14, 1, 19, 0, 17, 2, 17, 0, 14, 2, 11, 0, 17, 0, 20, 0, 21, 0, 12, 0, 21, 2, 20, 0, 10, 0, 22, 0, 5, 2)
 
 [sub_resource type="Gradient" id="Gradient_ycer5"]
 offsets = PackedFloat32Array(0, 0.484444, 1)
@@ -307,10 +308,6 @@ grey_value = luminance;"
 default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
 op_type = 3
 
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_csf7j"]
-parameter_name = "link_opacity"
-qualifier = 1
-
 [sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_rb2ba"]
 size = Vector2(620, 200)
 expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
@@ -335,6 +332,10 @@ texture = SubResource("GradientTexture2D_6a54q")
 
 [sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_eq5xp"]
 
+[sub_resource type="VisualShaderNodeBooleanParameter" id="VisualShaderNodeBooleanParameter_et7t7"]
+parameter_name = "isGray"
+qualifier = 1
+
 [sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_8tisx"]
 size = Vector2(724.789, 654.559)
 expression = "const float DITHER_THRESHOLDS[16] ={
@@ -357,7 +358,7 @@ code = "shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
 
 uniform vec4 ColorParameter : source_color = vec4(0.027451, 0.149020, 0.156863, 1.000000);
-global uniform float link_opacity;
+global uniform bool isGray;
 uniform vec4 light_color : source_color;
 global uniform float Dither_size;
 uniform sampler2D tex_frg_21;
@@ -378,12 +379,12 @@ void fragment() {
 	}
 
 
-// FloatParameter:18
-	float n_out18p0 = link_opacity;
+// BooleanParameter:23
+	bool n_out23p0 = isGray;
 
 
 // Mix:17
-	vec3 n_out17p0 = mix(vec3(n_out14p0.xyz), vec3(n_out16p0), vec3(n_out18p0));
+	vec3 n_out17p0 = mix(vec3(n_out14p0.xyz), vec3(n_out16p0), vec3(n_out23p0 ? 1.0 : 0.0));
 
 
 // ColorParameter:9
@@ -400,7 +401,7 @@ void fragment() {
 
 
 // Mix:20
-	vec3 n_out20p0 = mix(vec3(n_out9p0.xyz), vec3(n_out19p0), vec3(n_out18p0));
+	vec3 n_out20p0 = mix(vec3(n_out9p0.xyz), vec3(n_out19p0), vec3(n_out23p0 ? 1.0 : 0.0));
 
 
 // FloatConstant:2
@@ -446,6 +447,7 @@ void fragment() {
 
 }
 "
+graph_offset = Vector2(-676.505, -535.065)
 flags/unshaded = true
 nodes/vertex/0/position = Vector2(400, 160)
 nodes/fragment/2/node = SubResource("VisualShaderNodeFloatConstant_snpqm")
@@ -482,8 +484,6 @@ nodes/fragment/16/expression = "float luminance = 0.299 * color.x + 0.587 * colo
 grey_value = luminance;"
 nodes/fragment/17/node = SubResource("VisualShaderNodeMix_j86lc")
 nodes/fragment/17/position = Vector2(22.9235, -801.685)
-nodes/fragment/18/node = SubResource("VisualShaderNodeFloatParameter_csf7j")
-nodes/fragment/18/position = Vector2(-717.077, -741.685)
 nodes/fragment/19/node = SubResource("VisualShaderNodeExpression_rb2ba")
 nodes/fragment/19/position = Vector2(-757.077, -481.685)
 nodes/fragment/19/size = Vector2(620, 200)
@@ -497,7 +497,9 @@ nodes/fragment/21/node = SubResource("VisualShaderNodeTexture_xe0um")
 nodes/fragment/21/position = Vector2(-820, 180)
 nodes/fragment/22/node = SubResource("VisualShaderNodeStep_eq5xp")
 nodes/fragment/22/position = Vector2(-220, 220)
-nodes/fragment/connections = PackedInt32Array(2, 0, 3, 0, 15, 0, 3, 1, 14, 0, 16, 0, 18, 0, 17, 2, 14, 0, 17, 0, 16, 0, 17, 1, 9, 0, 19, 0, 18, 0, 20, 2, 19, 0, 20, 1, 9, 0, 20, 0, 20, 0, 13, 1, 17, 0, 13, 0, 13, 0, 0, 0, 21, 0, 22, 1, 3, 0, 22, 0, 22, 0, 13, 2)
+nodes/fragment/23/node = SubResource("VisualShaderNodeBooleanParameter_et7t7")
+nodes/fragment/23/position = Vector2(-780, -700)
+nodes/fragment/connections = PackedInt32Array(2, 0, 3, 0, 15, 0, 3, 1, 14, 0, 16, 0, 14, 0, 17, 0, 16, 0, 17, 1, 9, 0, 19, 0, 19, 0, 20, 1, 9, 0, 20, 0, 20, 0, 13, 1, 17, 0, 13, 0, 13, 0, 0, 0, 21, 0, 22, 1, 3, 0, 22, 0, 22, 0, 13, 2, 23, 0, 17, 2, 23, 0, 20, 2)
 nodes/light/0/position = Vector2(2440, 1640)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hy8dn"]
@@ -634,10 +636,6 @@ viewport_path = NodePath("legend/legend_render")
 resource_local_to_scene = true
 size = Vector2(1.8, 1.615)
 
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_o4cud"]
-parameter_name = "link_opacity"
-qualifier = 1
-
 [sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_4dsm5"]
 size = Vector2(620, 200)
 expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
@@ -650,11 +648,15 @@ op_type = 3
 [sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_rax8w"]
 input_name = "color"
 
+[sub_resource type="VisualShaderNodeBooleanParameter" id="VisualShaderNodeBooleanParameter_4daqk"]
+parameter_name = "isGray"
+qualifier = 1
+
 [sub_resource type="VisualShader" id="VisualShader_sxcgk"]
 code = "shader_type canvas_item;
 render_mode blend_mix;
 
-global uniform float link_opacity;
+global uniform bool isGray;
 
 
 
@@ -672,12 +674,12 @@ void fragment() {
 	}
 
 
-// FloatParameter:2
-	float n_out2p0 = link_opacity;
+// BooleanParameter:6
+	bool n_out6p0 = isGray;
 
 
 // Mix:4
-	vec3 n_out4p0 = mix(vec3(n_out5p0.xyz), vec3(n_out3p0), vec3(n_out2p0));
+	vec3 n_out4p0 = mix(vec3(n_out5p0.xyz), vec3(n_out3p0), vec3(n_out6p0 ? 1.0 : 0.0));
 
 
 // Output:0
@@ -686,12 +688,10 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-50.8594, -157.287)
+graph_offset = Vector2(-584.26, -98.1041)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(720, 200)
-nodes/fragment/2/node = SubResource("VisualShaderNodeFloatParameter_o4cud")
-nodes/fragment/2/position = Vector2(-80, 80)
 nodes/fragment/3/node = SubResource("VisualShaderNodeExpression_4dsm5")
 nodes/fragment/3/position = Vector2(-220, -260)
 nodes/fragment/3/size = Vector2(620, 200)
@@ -703,7 +703,9 @@ nodes/fragment/4/node = SubResource("VisualShaderNodeMix_y3xem")
 nodes/fragment/4/position = Vector2(540, 60)
 nodes/fragment/5/node = SubResource("VisualShaderNodeInput_rax8w")
 nodes/fragment/5/position = Vector2(-580, -20)
-nodes/fragment/connections = PackedInt32Array(2, 0, 4, 2, 3, 0, 4, 1, 5, 0, 3, 0, 5, 0, 4, 0, 4, 0, 0, 0)
+nodes/fragment/6/node = SubResource("VisualShaderNodeBooleanParameter_4daqk")
+nodes/fragment/6/position = Vector2(-646.713, 403.75)
+nodes/fragment/connections = PackedInt32Array(3, 0, 4, 1, 5, 0, 3, 0, 5, 0, 4, 0, 4, 0, 0, 0, 6, 0, 4, 2)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jbhxr"]
 shader = SubResource("VisualShader_sxcgk")

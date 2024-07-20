@@ -42,5 +42,4 @@ func _on_active_dither_button_toggled(toggled_on):
 	active_dither(toggled_on)
 
 
-func _on_active_bw_button_toggled(toggled_on):
-	RenderingServer.global_shader_parameter_set("link_opacity",toggled_on)
+

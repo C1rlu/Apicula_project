@@ -122,8 +122,8 @@ grey_value = luminance;"
 default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
 op_type = 3
 
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_6swom"]
-parameter_name = "link_opacity"
+[sub_resource type="VisualShaderNodeBooleanParameter" id="VisualShaderNodeBooleanParameter_1vipu"]
+parameter_name = "isGray"
 qualifier = 1
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_b75wv"]
@@ -164,7 +164,7 @@ uniform vec4 Grid_color : source_color = vec4(0.470642, 0.389814, 0.097199, 1.00
 uniform vec2 Offset = vec2(0.000000, 0.000000);
 uniform vec2 Size = vec2(1000.000000, 1000.000000);
 uniform float Ligne_widht = 0.02500000037253;
-global uniform float link_opacity;
+global uniform bool isGray;
 
 
 
@@ -306,12 +306,12 @@ void fragment() {
 	}
 
 
-// FloatParameter:40
-	float n_out40p0 = link_opacity;
+// BooleanParameter:41
+	bool n_out41p0 = isGray;
 
 
 // Mix:39
-	vec3 n_out39p0 = mix(n_out24p0, vec3(n_out38p0), vec3(n_out40p0));
+	vec3 n_out39p0 = mix(n_out24p0, vec3(n_out38p0), vec3(n_out41p0 ? 1.0 : 0.0));
 
 
 // Output:0
@@ -320,6 +320,7 @@ void fragment() {
 
 }
 "
+graph_offset = Vector2(-439.683, -434.537)
 flags/unshaded = true
 nodes/fragment/5/node = SubResource("VisualShaderNodeColorParameter_b75wv")
 nodes/fragment/5/position = Vector2(-3140, -240)
@@ -422,7 +423,7 @@ nodes/fragment/38/expression = "float luminance = 0.299 * color.x + 0.587 * colo
 grey_value = luminance;"
 nodes/fragment/39/node = SubResource("VisualShaderNodeMix_v50np")
 nodes/fragment/39/position = Vector2(219.509, -367.303)
-nodes/fragment/40/node = SubResource("VisualShaderNodeFloatParameter_6swom")
-nodes/fragment/40/position = Vector2(-460.491, -367.303)
-nodes/fragment/connections = PackedInt32Array(12, 0, 11, 1, 15, 0, 11, 3, 13, 0, 11, 0, 14, 0, 11, 2, 16, 0, 11, 4, 18, 0, 19, 0, 11, 0, 20, 1, 19, 0, 20, 0, 20, 0, 24, 2, 27, 0, 8, 1, 27, 0, 19, 1, 5, 0, 25, 0, 9, 0, 25, 1, 28, 0, 8, 0, 10, 0, 25, 2, 8, 0, 10, 0, 23, 0, 10, 1, 25, 0, 32, 0, 32, 0, 24, 0, 31, 0, 32, 1, 33, 0, 30, 1, 29, 0, 33, 1, 34, 0, 35, 2, 35, 0, 30, 0, 36, 0, 35, 0, 37, 0, 36, 1, 33, 0, 32, 2, 21, 0, 24, 1, 40, 0, 39, 2, 38, 0, 39, 1, 24, 0, 38, 0, 39, 0, 0, 0, 24, 0, 39, 0)
+nodes/fragment/41/node = SubResource("VisualShaderNodeBooleanParameter_1vipu")
+nodes/fragment/41/position = Vector2(-340, -240)
+nodes/fragment/connections = PackedInt32Array(12, 0, 11, 1, 15, 0, 11, 3, 13, 0, 11, 0, 14, 0, 11, 2, 16, 0, 11, 4, 18, 0, 19, 0, 11, 0, 20, 1, 19, 0, 20, 0, 20, 0, 24, 2, 27, 0, 8, 1, 27, 0, 19, 1, 5, 0, 25, 0, 9, 0, 25, 1, 28, 0, 8, 0, 10, 0, 25, 2, 8, 0, 10, 0, 23, 0, 10, 1, 25, 0, 32, 0, 32, 0, 24, 0, 31, 0, 32, 1, 33, 0, 30, 1, 29, 0, 33, 1, 34, 0, 35, 2, 35, 0, 30, 0, 36, 0, 35, 0, 37, 0, 36, 1, 33, 0, 32, 2, 21, 0, 24, 1, 38, 0, 39, 1, 24, 0, 38, 0, 39, 0, 0, 0, 24, 0, 39, 0, 41, 0, 39, 2)
 nodes/light/0/position = Vector2(2920, 40)

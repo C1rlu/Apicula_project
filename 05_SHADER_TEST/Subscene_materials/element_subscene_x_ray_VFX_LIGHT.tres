@@ -1,4 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=26 format=3 uid="uid://goq7y1lqdpxa"]
+[gd_resource type="ShaderMaterial" load_steps=29 format=3 uid="uid://goq7y1lqdpxa"]
 
 [sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_mtuen"]
 
@@ -9,6 +9,19 @@ default_input_values = [0, 0.0, 1, 1.0, 2, 0.63]
 parameter_name = "FloatParameter"
 default_value_enabled = true
 default_value = 0.15
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_qn7xa"]
+size = Vector2(620, 200)
+expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
+grey_value = luminance;"
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_pqoem"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
+op_type = 3
+
+[sub_resource type="VisualShaderNodeBooleanParameter" id="VisualShaderNodeBooleanParameter_kjfes"]
+parameter_name = "isGray"
+qualifier = 1
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_4dc38"]
 parameter_name = "ColorParameter"
@@ -95,6 +108,7 @@ render_mode blend_mix, depth_draw_opaque, cull_front, diffuse_lambert, specular_
 uniform float Speed : hint_range(0, 1) = 0.5;
 uniform sampler2D tex_vtx_8;
 uniform vec4 ColorParameter : source_color;
+global uniform bool isGray;
 uniform float FloatParameter = 0.15000000596046;
 global uniform float Dither_size;
 uniform sampler2D depth_tex_frg_9 : hint_depth_texture;
@@ -162,6 +176,23 @@ void fragment() {
 	vec4 n_out3p0 = ColorParameter;
 
 
+	float n_out14p0;
+// Expression:14
+	n_out14p0 = 0.0;
+	{
+		float luminance = 0.299 * vec3(n_out3p0.xyz).x + 0.587 * vec3(n_out3p0.xyz).y + 0.114 * vec3(n_out3p0.xyz).z;
+		n_out14p0 = luminance;
+	}
+
+
+// BooleanParameter:16
+	bool n_out16p0 = isGray;
+
+
+// Mix:15
+	vec3 n_out15p0 = mix(vec3(n_out3p0.xyz), vec3(n_out14p0), vec3(n_out16p0 ? 1.0 : 0.0));
+
+
 // FloatParameter:13
 	float n_out13p0 = FloatParameter;
 
@@ -220,12 +251,13 @@ void fragment() {
 
 
 // Output:0
-	ALBEDO = vec3(n_out3p0.xyz);
+	ALBEDO = n_out15p0;
 	ALPHA = n_out12p0;
 
 
 }
 "
+graph_offset = Vector2(-154.22, -314.139)
 modes/cull = 1
 flags/unshaded = true
 flags/shadows_disabled = true
@@ -254,6 +286,7 @@ nodes/vertex/12/position = Vector2(-468.178, 389.452)
 nodes/vertex/13/node = SubResource("VisualShaderNodeFloatOp_eiiqw")
 nodes/vertex/13/position = Vector2(-1420, 680)
 nodes/vertex/connections = PackedInt32Array(2, 0, 3, 1, 6, 0, 8, 0, 4, 0, 7, 0, 7, 0, 6, 2, 9, 0, 3, 0, 3, 0, 0, 0, 8, 0, 9, 0, 11, 0, 12, 0, 10, 0, 12, 1, 12, 0, 9, 1, 5, 0, 13, 0, 10, 0, 13, 1, 13, 0, 7, 1)
+nodes/fragment/0/position = Vector2(800, 260)
 nodes/fragment/3/node = SubResource("VisualShaderNodeColorParameter_4dc38")
 nodes/fragment/3/position = Vector2(-120, 80)
 nodes/fragment/4/node = SubResource("VisualShaderNodeFresnel_ll8n4")
@@ -287,7 +320,18 @@ nodes/fragment/12/node = SubResource("VisualShaderNodeMix_tnddl")
 nodes/fragment/12/position = Vector2(180, 420)
 nodes/fragment/13/node = SubResource("VisualShaderNodeFloatParameter_m0gfl")
 nodes/fragment/13/position = Vector2(-920, 460)
-nodes/fragment/connections = PackedInt32Array(3, 0, 0, 0, 6, 0, 5, 1, 5, 0, 8, 1, 4, 0, 11, 0, 5, 0, 11, 1, 11, 0, 12, 0, 8, 0, 12, 2, 13, 0, 4, 3, 12, 0, 0, 1, 9, 0, 8, 0, 7, 0, 5, 0)
+nodes/fragment/14/node = SubResource("VisualShaderNodeExpression_qn7xa")
+nodes/fragment/14/position = Vector2(301.094, -325.188)
+nodes/fragment/14/size = Vector2(620, 200)
+nodes/fragment/14/input_ports = "0,4,color;"
+nodes/fragment/14/output_ports = "0,0,grey_value;"
+nodes/fragment/14/expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
+grey_value = luminance;"
+nodes/fragment/15/node = SubResource("VisualShaderNodeMix_pqoem")
+nodes/fragment/15/position = Vector2(1001.09, -45.1884)
+nodes/fragment/16/node = SubResource("VisualShaderNodeBooleanParameter_kjfes")
+nodes/fragment/16/position = Vector2(314.584, -52.8016)
+nodes/fragment/connections = PackedInt32Array(6, 0, 5, 1, 5, 0, 8, 1, 4, 0, 11, 0, 5, 0, 11, 1, 11, 0, 12, 0, 8, 0, 12, 2, 13, 0, 4, 3, 12, 0, 0, 1, 9, 0, 8, 0, 7, 0, 5, 0, 14, 0, 15, 1, 16, 0, 15, 2, 3, 0, 14, 0, 3, 0, 15, 0, 15, 0, 0, 0)
 nodes/light/0/position = Vector2(1060, 580)
 
 [resource]

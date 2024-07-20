@@ -1,8 +1,24 @@
-[gd_resource type="VisualShader" load_steps=33 format=3 uid="uid://cx243vj1gf8pv"]
+[gd_resource type="VisualShader" load_steps=40 format=3 uid="uid://cx243vj1gf8pv"]
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_vsiqd"]
 parameter_name = "Subscene_Darker_color"
 qualifier = 1
+
+[sub_resource type="VisualShaderNodeBooleanParameter" id="VisualShaderNodeBooleanParameter_1tx3l"]
+parameter_name = "isGray"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_bq4re"]
+size = Vector2(620, 200)
+expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
+grey_value = luminance;"
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_08pu3"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
+op_type = 3
+
+[sub_resource type="VisualShaderNodeVaryingSetter" id="VisualShaderNodeVaryingSetter_4ndun"]
+varying_name = "isgray"
 
 [sub_resource type="VisualShaderNodeClamp" id="VisualShaderNodeClamp_byx46"]
 
@@ -59,6 +75,18 @@ parameter_name = "active_Dither"
 qualifier = 1
 
 [sub_resource type="VisualShaderNodeSwitch" id="VisualShaderNodeSwitch_kcixi"]
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_hmtla"]
+size = Vector2(620, 200)
+expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
+grey_value = luminance;"
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_n5gij"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
+op_type = 3
+
+[sub_resource type="VisualShaderNodeVaryingGetter" id="VisualShaderNodeVaryingGetter_8eq70"]
+varying_name = "isgray"
 
 [sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_asbju"]
 
@@ -117,9 +145,14 @@ constant = 10.0
 code = "shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, shadows_disabled, debug_shadow_splits;
 
+
+// Varyings
+varying float isgray;
+
 global uniform float mirror_wave_speed;
 uniform sampler2D tex_vtx_7;
 global uniform vec4 Subscene_Darker_color : source_color;
+global uniform bool isGray;
 uniform float Distance_power = 0.25;
 global uniform bool active_Dither;
 global uniform float Dither_size;
@@ -187,8 +220,29 @@ void fragment() {
 	vec4 n_out2p0 = Subscene_Darker_color;
 
 
+	float n_out4p0;
+// Expression:4
+	n_out4p0 = 0.0;
+	{
+		float luminance = 0.299 * vec3(n_out2p0.xyz).x + 0.587 * vec3(n_out2p0.xyz).y + 0.114 * vec3(n_out2p0.xyz).z;
+		n_out4p0 = luminance;
+	}
+
+
+// BooleanParameter:3
+	bool n_out3p0 = isGray;
+
+
+// Mix:5
+	vec3 n_out5p0 = mix(vec3(n_out2p0.xyz), vec3(n_out4p0), vec3(n_out3p0 ? 1.0 : 0.0));
+
+
 // Output:0
-	ALBEDO = vec3(n_out2p0.xyz);
+	ALBEDO = n_out5p0;
+
+
+// VaryingSetter:6
+	isgray = (n_out3p0 ? 1.0 : 0.0);
 
 
 }
@@ -281,14 +335,33 @@ void light() {
 	vec3 n_out16p0 = mix(n_in16p0, n_out31p0, vec3(n_out32p0));
 
 
+	float n_out50p0;
+// Expression:50
+	n_out50p0 = 0.0;
+	{
+		float luminance = 0.299 * n_out16p0.x + 0.587 * n_out16p0.y + 0.114 * n_out16p0.z;
+		n_out50p0 = luminance;
+	}
+
+
+// VaryingGetter:52
+	float n_out52p0 = isgray;
+
+
+// Mix:51
+	vec3 n_out51p0 = mix(n_out16p0, vec3(n_out50p0), vec3(n_out52p0));
+
+
 // Output:0
-	SPECULAR_LIGHT = n_out16p0;
+	SPECULAR_LIGHT = n_out51p0;
 
 
 }
 "
+graph_offset = Vector2(-336.663, -275.652)
 flags/shadows_disabled = true
 flags/debug_shadow_splits = true
+varyings/isgray = "1,0"
 nodes/vertex/2/node = SubResource("VisualShaderNodeInput_65iyk")
 nodes/vertex/2/position = Vector2(-200, 500)
 nodes/vertex/3/node = SubResource("VisualShaderNodeInput_1s3sb")
@@ -314,10 +387,24 @@ nodes/vertex/12/position = Vector2(-180, 160)
 nodes/vertex/13/node = SubResource("VisualShaderNodeFloatParameter_a8smw")
 nodes/vertex/13/position = Vector2(-1440, 740)
 nodes/vertex/connections = PackedInt32Array(2, 0, 10, 1, 3, 0, 6, 0, 6, 0, 5, 2, 8, 0, 10, 0, 9, 0, 12, 0, 12, 0, 8, 1, 4, 0, 11, 0, 11, 0, 6, 1, 5, 0, 7, 0, 7, 0, 8, 0, 13, 0, 11, 1, 13, 0, 12, 1, 10, 0, 0, 0)
+nodes/fragment/0/position = Vector2(720, 160)
 nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_vsiqd")
-nodes/fragment/2/position = Vector2(-340, -100)
-nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0)
-nodes/light/0/position = Vector2(1060, 580)
+nodes/fragment/2/position = Vector2(-680, 60)
+nodes/fragment/3/node = SubResource("VisualShaderNodeBooleanParameter_1tx3l")
+nodes/fragment/3/position = Vector2(-320, -120)
+nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_bq4re")
+nodes/fragment/4/position = Vector2(-333.49, -392.387)
+nodes/fragment/4/size = Vector2(620, 200)
+nodes/fragment/4/input_ports = "0,4,color;"
+nodes/fragment/4/output_ports = "0,0,grey_value;"
+nodes/fragment/4/expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
+grey_value = luminance;"
+nodes/fragment/5/node = SubResource("VisualShaderNodeMix_08pu3")
+nodes/fragment/5/position = Vector2(366.51, -112.387)
+nodes/fragment/6/node = SubResource("VisualShaderNodeVaryingSetter_4ndun")
+nodes/fragment/6/position = Vector2(60.4525, 44.4744)
+nodes/fragment/connections = PackedInt32Array(4, 0, 5, 1, 3, 0, 5, 2, 3, 0, 6, 0, 2, 0, 4, 0, 2, 0, 5, 0, 5, 0, 0, 0)
+nodes/light/0/position = Vector2(1660, 560)
 nodes/light/3/node = SubResource("VisualShaderNodeFloatConstant_jokje")
 nodes/light/3/position = Vector2(-2940, 1080)
 nodes/light/4/node = SubResource("VisualShaderNodeExpression_d805k")
@@ -346,7 +433,7 @@ nodes/light/10/position = Vector2(-2280, 140)
 nodes/light/11/node = SubResource("VisualShaderNodeInput_yv3uh")
 nodes/light/11/position = Vector2(-2900, 440)
 nodes/light/16/node = SubResource("VisualShaderNodeMix_lmf6q")
-nodes/light/16/position = Vector2(-40, -20)
+nodes/light/16/position = Vector2(80, 20)
 nodes/light/27/node = SubResource("VisualShaderNodeInput_cls45")
 nodes/light/27/position = Vector2(-2027.75, 245.994)
 nodes/light/28/node = SubResource("VisualShaderNodeFloatOp_jvnaj")
@@ -365,4 +452,15 @@ nodes/light/48/node = SubResource("VisualShaderNodeBooleanParameter_cnt8j")
 nodes/light/48/position = Vector2(-840, 720)
 nodes/light/49/node = SubResource("VisualShaderNodeSwitch_kcixi")
 nodes/light/49/position = Vector2(-300, 600)
-nodes/light/connections = PackedInt32Array(3, 0, 4, 0, 10, 0, 29, 0, 32, 0, 16, 2, 33, 0, 32, 1, 27, 0, 28, 0, 28, 0, 29, 1, 8, 0, 10, 0, 7, 0, 8, 0, 29, 0, 6, 1, 31, 0, 16, 1, 11, 0, 8, 1, 4, 0, 6, 0, 47, 0, 4, 1, 16, 0, 0, 1, 48, 0, 49, 0, 6, 0, 49, 1, 49, 0, 32, 2, 29, 0, 49, 2)
+nodes/light/50/node = SubResource("VisualShaderNodeExpression_hmtla")
+nodes/light/50/position = Vector2(637.3, -146.778)
+nodes/light/50/size = Vector2(620, 200)
+nodes/light/50/input_ports = "0,4,color;"
+nodes/light/50/output_ports = "0,0,grey_value;"
+nodes/light/50/expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
+grey_value = luminance;"
+nodes/light/51/node = SubResource("VisualShaderNodeMix_n5gij")
+nodes/light/51/position = Vector2(1337.3, 133.222)
+nodes/light/52/node = SubResource("VisualShaderNodeVaryingGetter_8eq70")
+nodes/light/52/position = Vector2(589.069, 145.339)
+nodes/light/connections = PackedInt32Array(3, 0, 4, 0, 10, 0, 29, 0, 32, 0, 16, 2, 33, 0, 32, 1, 27, 0, 28, 0, 28, 0, 29, 1, 8, 0, 10, 0, 7, 0, 8, 0, 29, 0, 6, 1, 31, 0, 16, 1, 11, 0, 8, 1, 4, 0, 6, 0, 47, 0, 4, 1, 48, 0, 49, 0, 6, 0, 49, 1, 49, 0, 32, 2, 29, 0, 49, 2, 50, 0, 51, 1, 16, 0, 50, 0, 16, 0, 51, 0, 51, 0, 0, 1, 52, 0, 51, 2)
