@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://cein0q2eirkay"]
+[gd_scene load_steps=39 format=3 uid="uid://cein0q2eirkay"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_g3pi7"]
 [ext_resource type="Script" path="res://10_BOARD/Board_CamTarget.gd" id="1_janbq"]
@@ -10,7 +10,11 @@
 [ext_resource type="Script" path="res://10_BOARD/Information_manager.gd" id="7_v3hdy"]
 [ext_resource type="Script" path="res://10_BOARD/Player_onMap.gd" id="7_vhvc2"]
 [ext_resource type="Material" uid="uid://t4qtyso7w6ee" path="res://05_SHADER_TEST/Board/board_boat.tres" id="8_et36p"]
+[ext_resource type="Script" path="res://10_BOARD/Cam_state_position.gd" id="9_jxrsg"]
+[ext_resource type="Script" path="res://10_BOARD/Select_CamState.gd" id="9_pj3rb"]
 [ext_resource type="Script" path="res://10_BOARD/Json_reader_test.gd" id="9_tfybn"]
+[ext_resource type="Resource" uid="uid://dv1j6fti14i8t" path="res://15_GAME_RESSOURCE/03_Board_Cam_State/PhotoCamstate_Data.tres" id="10_oc5qc"]
+[ext_resource type="Resource" uid="uid://dx4j6ggpv55yg" path="res://15_GAME_RESSOURCE/03_Board_Cam_State/MainView_Camstate_Data.tres" id="11_25tbm"]
 [ext_resource type="Script" path="res://10_BOARD/Board_OBJ_Manager.gd" id="14_johxk"]
 [ext_resource type="Resource" uid="uid://blxuee4l6ey2g" path="res://10_BOARD/Board_OBJ_data/Map_data.tres" id="15_6vhht"]
 [ext_resource type="Script" path="res://10_BOARD/Switch_Cursor_icon.gd" id="19_t6o6e"]
@@ -29,7 +33,11 @@ script/source = "extends Node
 func _ready():
 	_global_datas.Player_In_Inventory = debug_board
 	_global_datas.open_inventory.connect(open_inventory)
-	
+
+
+	if debug_board:
+		_global_datas.open_inventory.emit(true)
+			
 func open_inventory(condition : bool):
 
 
@@ -139,40 +147,46 @@ var lock_action : bool = false
 
 func _ready():
 
-	_global_datas.zoom_value = 1
-	origin_global_pos = Cam.global_position
-	_set_zoom_pos()	
-	rotation_target = Vector3(-43.9,-5.8,0)
+	#_global_datas.zoom_value = 1
+	#origin_global_pos = Cam.global_position
+	#_set_zoom_pos()	
+	#rotation_target = Vector3(-43.9,-5.8,0)
+	_global_datas.camera_board_state.connect(focus_this)
 
-	_global_datas.focus_this_on_board.connect(zoom_on_focus)
-
+func focus_this(_target : Vector3, _rotation_target : Vector3):
+	
+	target = _target	
+	rotation_target = _rotation_target	
+	
+	process_zoom_auto()	
+	
 	
 func zoom_on_focus(value):
 	zoom_index = 3
 	_Zoom(0)	
 	
-func _input(event):
-	
-	if _global_datas.in_scanner_mode:
-		return
-		
-	if _global_datas.Player_InMenu:
-		return
-		
-	if !_global_datas.Player_In_Inventory:
-		return
-	
+#func _input(event):
+	#
+	#if _global_datas.in_scanner_mode:
+		#return
 		#
-	#if lock_action:
-		#return	
-		
-		
-	if event.is_action_pressed(\"Board_zoom_in\"):
-		_Zoom(1)
-			
-	if event.is_action_pressed(\"Board_zoom_out\"):
-		_Zoom(-1)
-
+	#if _global_datas.Player_InMenu:
+		#return
+		#
+	#if !_global_datas.Player_In_Inventory:
+		#return
+	#
+		##
+	##if lock_action:
+		##return	
+		#
+		#
+	#if event.is_action_pressed(\"Board_zoom_in\"):
+		#_Zoom(1)
+			#
+	#if event.is_action_pressed(\"Board_zoom_out\"):
+		#_Zoom(-1)
+#
 
 func _open_inventory(value):
 	zoom_index = 1
@@ -204,7 +218,19 @@ func _Zoom(value : int):
 	process_zoom()
 		
 
+func process_zoom_auto():
 	
+	if t:
+		t.kill()
+	t = create_tween()
+	t.tween_property(Cam,\"position\",target,0.8) #.set_trans(Tween.TRANS_SINE)
+	t.connect(\"finished\",done)
+	
+	if r:
+		r.kill()
+	r = create_tween()
+	r.tween_property(Cam,\"rotation_degrees\",rotation_target,0.8)#.set_trans(Tween.TRANS_SINE)
+		
 	
 func process_zoom():
 	
@@ -258,7 +284,7 @@ var cam_focus : Vector3
 func _ready():
 
 	offset = camp_root_render.global_position - cam_target.global_position
-	
+		
 	
 func _physics_process(_delta):
 	
@@ -388,6 +414,8 @@ nodes/fragment/connections = PackedInt32Array(3, 0, 2, 0, 4, 0, 2, 1, 5, 0, 2, 2
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_blt4p"]
 shader = SubResource("VisualShader_elssd")
 
+[sub_resource type="SphereMesh" id="SphereMesh_22wkq"]
+
 [sub_resource type="ArrayMesh" id="ArrayMesh_i7f22"]
 resource_name = "Player_Boat_01-c9377ed3c1eb09ef00335a9606626fca_Cube_001"
 _surfaces = [{
@@ -407,7 +435,6 @@ blend_shape_mode = 0
 
 [node name="04_BOARD" type="Node"]
 script = SubResource("GDScript_w13ry")
-debug_board = false
 metadata/_edit_horizontal_guides_ = [-58.0]
 
 [node name="Information_manager" type="Node" parent="."]
@@ -446,7 +473,23 @@ script = ExtResource("3_rqf42")
 script = ExtResource("14_johxk")
 all_object_list = Array[Resource("res://10_BOARD/Board_OBJ_data/object_data.gd")]([ExtResource("15_6vhht")])
 
+[node name="Select_CamState" type="Node" parent="."]
+script = ExtResource("9_pj3rb")
+main_focus = ExtResource("11_25tbm")
+
 [node name="3D_SCENE" type="Node3D" parent="."]
+
+[node name="Camera_state_position" type="Node3D" parent="3D_SCENE"]
+
+[node name="Main_state" type="Node3D" parent="3D_SCENE/Camera_state_position"]
+transform = Transform3D(4.9744, 0.350362, -0.36408, 0, 3.60276, 3.46701, 0.50528, -3.44926, 3.58431, -0.08, 0.945, 1.035)
+script = ExtResource("9_jxrsg")
+position_camera_state = ExtResource("11_25tbm")
+
+[node name="photo_state" type="Node3D" parent="3D_SCENE/Camera_state_position"]
+transform = Transform3D(4.85148, -1.15426, 0.361723, 0, 1.4952, 4.7712, -1.20961, -4.62948, 1.45079, -0.196546, 0.433021, 0.17108)
+script = ExtResource("9_jxrsg")
+position_camera_state = ExtResource("10_oc5qc")
 
 [node name="Camp_root_XRay" type="Node3D" parent="3D_SCENE"]
 
@@ -512,9 +555,13 @@ max_x = 1.0
 min_z = -0.5
 max_z = 0.5
 
+[node name="MeshInstance3D" type="MeshInstance3D" parent="3D_SCENE/CamTarget"]
+transform = Transform3D(0.0241091, 0, 0, 0, 0.0241091, 0, 0, 0, 0.0241091, 0, 0, 0)
+layers = 2
+mesh = SubResource("SphereMesh_22wkq")
+
 [node name="Player_on_map" type="Node3D" parent="3D_SCENE"]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.000402212, 0.00895628, -0.00213873)
-visible = false
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.226148, 0.012804, 0.372664)
 script = ExtResource("7_vhvc2")
 offset = Vector3(-0.124, 0, 0.26)
 division_scale = 50.0

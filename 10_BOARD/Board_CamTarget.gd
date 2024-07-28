@@ -12,13 +12,17 @@ var target_position : Vector3
 var f
 var on_auto_move = false
 
-
+var disable = true
 func _ready():
-	_global_datas.focus_this_on_board.connect(_focus_this)
+	pass
+	#_global_datas.focus_this_on_board.connect(_focus_this)
 
 
 func _process(delta):
 	
+	if disable:
+		return	
+		
 	if on_auto_move:
 		return
 		

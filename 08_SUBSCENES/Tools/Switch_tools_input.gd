@@ -5,6 +5,8 @@ var tool_index : int = 0
 func _ready():	
 	_global_datas._start_ini_subscene.connect(ini_sub)
 	ini_sub()	
+	
+	
 func ini_sub():
 	switch_active_tool(all_tool[tool_index])		
 		
@@ -35,7 +37,7 @@ func select_next_tool():
 		tool_index +=1
 	var selected_tool = all_tool[tool_index] 
 	switch_active_tool(selected_tool)
-			
+	disable_all_tool()		
 func select_previous_tool():
 	print("previous")	
 	if tool_index == -1 :
@@ -45,9 +47,13 @@ func select_previous_tool():
 		
 	var selected_tool = all_tool[tool_index] 
 	switch_active_tool(selected_tool)
-	
+	disable_all_tool()
 
-			
+func disable_all_tool():
+	for t in all_tool:
+		t.tool_active_signal.emit(false)	
+	
+				
 func switch_active_tool(tool : tool_data):
 
 	#SELECT VISUAL TOOLS IN SCENE

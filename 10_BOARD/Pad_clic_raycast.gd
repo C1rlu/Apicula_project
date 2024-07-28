@@ -28,8 +28,8 @@ func _input(event):
 			
 	if !_global_datas.Player_In_Inventory:
 		return	
-	if _global_datas.zoom_value == 1:
-		return
+	#if _global_datas.zoom_value == 1:
+		#return
 	
 			
 	if _pad: 
@@ -85,9 +85,7 @@ func check_cast(targetPos : Vector2):
 	if result.collider.get_node_or_null("On_click"): 
 		var _On_click = result.collider.get_node_or_null("On_click")
 		_On_click.On_click.emit()
-
-
-
+		
 	if result.collider.get_node_or_null("Teleport_PlayerBoat"):
 		var Teleport_PlayerBoat	= result.collider.get_node_or_null("Teleport_PlayerBoat")
 		Teleport_PlayerBoat.lunch_teleport(true)
