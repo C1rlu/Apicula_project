@@ -1,4 +1,4 @@
-[gd_scene load_steps=71 format=3 uid="uid://uwg2qc3svu11"]
+[gd_scene load_steps=73 format=3 uid="uid://uwg2qc3svu11"]
 
 [ext_resource type="Script" path="res://10_BOARD/Photo_element.gd" id="1_0a8jl"]
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Legend/Legend_behaviour.gd" id="1_f7rkq"]
@@ -6,7 +6,9 @@
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Show_this_page.gd" id="2_653je"]
 [ext_resource type="Script" path="res://10_BOARD/Show_scanner.gd" id="3_btmm2"]
 [ext_resource type="Texture2D" uid="uid://38btbw60olcn" path="res://12_INVENTORY/Photo/IMG/Boat.png" id="4_wljme"]
+[ext_resource type="Script" path="res://10_BOARD/Boad_focus_state.gd" id="7_u7daw"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="7_vd1wc"]
+[ext_resource type="Resource" uid="uid://c4ukh4c2t2w5k" path="res://15_GAME_RESSOURCE/03_Board_Cam_State/Photo_all/Maurice_PhotoCamState_Data.tres" id="8_7re7b"]
 [ext_resource type="Texture2D" uid="uid://dtyhegc0wsj1h" path="res://10_BOARD/00_BOOK/01_UI/cursor_scan.png" id="10_fkyuy"]
 
 [sub_resource type="GDScript" id="GDScript_32kbr"]
@@ -778,6 +780,10 @@ disabled = true
 [node name="legend" type="Node3D" parent="."]
 transform = Transform3D(0.999989, 0, 0.00467785, 0, 1, 0, -0.00467785, 0, 0.999989, -0.000246863, 0.00516227, 0.0402894)
 
+[node name="Boad_focus_state" type="Node" parent="legend"]
+script = ExtResource("7_u7daw")
+focusState = ExtResource("8_7re7b")
+
 [node name="legend_behaviour" type="Node" parent="legend"]
 script = ExtResource("1_f7rkq")
 
@@ -872,3 +878,4 @@ vertical_alignment = 1
 [connection signal="On_click" from="Photo/Photo_area/On_click_off" to="." method="_on_show_scanner"]
 [connection signal="timeout" from="legend/legend_behaviour/Timer" to="legend/legend_behaviour" method="_on_timer_timeout"]
 [connection signal="On_click" from="legend/Legend_area/On_click" to="." method="_on_show_this_page"]
+[connection signal="On_click" from="legend/Legend_area/On_click" to="legend/Boad_focus_state" method="_on_on_click_on_click"]
