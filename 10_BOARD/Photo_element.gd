@@ -68,7 +68,7 @@ func _disable():
 func show_this_on_book():
 	
 	_global_datas.selected_photoData = Photo_data
-	_global_datas.show_page.emit(Photo_data.page_prefab)
+	
 
 	var book = _global_datas.book_data.book_node
 	book.position = photo_element_root.global_position  + book_position_offset
@@ -82,11 +82,12 @@ func show_this_on_book():
 	_global_datas.book_idle_pos = false		
 	_global_datas.book_back_idle_position.emit(true)
 	
+	_global_datas.show_page.emit(Photo_data.page_prefab)
 	
 func _on_show_this_page():
 
 	show_this_on_book()	
-	_global_datas._add_back_call.emit(back_call)
+	#_global_datas._add_back_call.emit(back_call)
 	
 func back_call():
 		_global_datas.book_back_idle_position.emit(false)	

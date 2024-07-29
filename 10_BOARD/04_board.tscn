@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://cein0q2eirkay"]
+[gd_scene load_steps=44 format=3 uid="uid://cein0q2eirkay"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_g3pi7"]
 [ext_resource type="Script" path="res://10_BOARD/Board_CamTarget.gd" id="1_janbq"]
@@ -16,7 +16,7 @@
 [ext_resource type="Resource" uid="uid://dv1j6fti14i8t" path="res://15_GAME_RESSOURCE/03_Board_Cam_State/PhotoCamstate_Data.tres" id="10_oc5qc"]
 [ext_resource type="Resource" uid="uid://dx4j6ggpv55yg" path="res://15_GAME_RESSOURCE/03_Board_Cam_State/MainView_Camstate_Data.tres" id="11_25tbm"]
 [ext_resource type="Resource" uid="uid://bcpgxwncrojqi" path="res://15_GAME_RESSOURCE/03_Board_Cam_State/ClockCamstate_Data.tres" id="13_dae5a"]
-[ext_resource type="Resource" uid="uid://c4ukh4c2t2w5k" path="res://15_GAME_RESSOURCE/03_Board_Cam_State/Photo_all/Maurice_PhotoCamState_Data.tres" id="13_txhvk"]
+[ext_resource type="Resource" uid="uid://c4ukh4c2t2w5k" path="res://15_GAME_RESSOURCE/03_Board_Cam_State/Photo_all/PhotoOnBook_PhotoCamState_Data.tres" id="13_txhvk"]
 [ext_resource type="Resource" uid="uid://c4uyosfnm210j" path="res://15_GAME_RESSOURCE/03_Board_Cam_State/MapCamstate_Data.tres" id="14_6shk3"]
 [ext_resource type="Script" path="res://10_BOARD/Board_OBJ_Manager.gd" id="14_johxk"]
 [ext_resource type="Resource" uid="uid://blxuee4l6ey2g" path="res://10_BOARD/Board_OBJ_data/Map_data.tres" id="15_6vhht"]
@@ -25,6 +25,7 @@
 [ext_resource type="Texture2D" uid="uid://bb53vqhy3jx8j" path="res://10_BOARD/00_BOOK/01_UI/cursor_eyes.png" id="20_cuebq"]
 [ext_resource type="Script" path="res://10_BOARD/Follow_cursor.gd" id="20_vjjnn"]
 [ext_resource type="Texture2D" uid="uid://d1kttlfg1wwvk" path="res://10_BOARD/00_BOOK/01_UI/cursor_Circle.png" id="21_qhnbf"]
+[ext_resource type="PackedScene" uid="uid://bh5a7fhvftxmm" path="res://10_BOARD/00_BOOK/02_Book_information/00_Book_journal.tscn" id="22_ahvxh"]
 
 [sub_resource type="GDScript" id="GDScript_w13ry"]
 script/source = "extends Node
@@ -380,14 +381,13 @@ all_object_list = Array[Resource("res://10_BOARD/Board_OBJ_data/object_data.gd")
 
 [node name="Select_CamState" type="Node" parent="."]
 script = ExtResource("9_pj3rb")
-main_focus = ExtResource("11_25tbm")
 
 [node name="3D_SCENE" type="Node3D" parent="."]
 
 [node name="Camera_state_position" type="Node3D" parent="3D_SCENE"]
 
 [node name="00_Camera_taker" type="Camera3D" parent="3D_SCENE/Camera_state_position"]
-transform = Transform3D(0.988228, -0.144121, 0.0513193, 0, 0.335451, 0.942057, -0.152986, -0.930968, 0.331503, -0.224, 0.258, 0.114)
+transform = Transform3D(0.986819, -0.157432, 0.0374573, 0.0128708, 0.307087, 0.951594, -0.161314, -0.93857, 0.305066, -0.164, 0.269, 0.487)
 cull_mask = 2
 fov = 40.0
 
@@ -401,7 +401,7 @@ position_camera_state = ExtResource("11_25tbm")
 _00_camera_taker = NodePath("../00_Camera_taker")
 
 [node name="photo_state" type="Node3D" parent="3D_SCENE/Camera_state_position" node_paths=PackedStringArray("_00_camera_taker")]
-transform = Transform3D(4.85148, -1.15426, 0.361723, 0, 1.4952, 4.7712, -1.20961, -4.62948, 1.45079, -0.196546, 0.433021, 0.17108)
+transform = Transform3D(4.85148, -1.15426, 0.361721, 0, 1.4952, 4.7712, -1.20961, -4.62948, 1.45079, -0.151, 0.593, 0.239)
 script = ExtResource("9_jxrsg")
 position_camera_state = ExtResource("10_oc5qc")
 _00_camera_taker = NodePath("../00_Camera_taker")
@@ -413,7 +413,7 @@ position_camera_state = ExtResource("13_dae5a")
 _00_camera_taker = NodePath("../00_Camera_taker")
 
 [node name="Map_state" type="Node3D" parent="3D_SCENE/Camera_state_position" node_paths=PackedStringArray("_00_camera_taker")]
-transform = Transform3D(4.9922, 0.251919, -0.120159, 0, 2.15256, 4.51292, 0.279108, -4.50589, 2.1492, 0.327, 0.547, 0.475)
+transform = Transform3D(4.90477, 0.857494, -0.455937, 0, 2.34736, 4.41473, 0.971171, -4.33066, 2.30265, 0.278, 0.571, 0.498)
 script = ExtResource("9_jxrsg")
 position_camera_state = ExtResource("14_6shk3")
 _00_camera_taker = NodePath("../00_Camera_taker")
@@ -425,12 +425,6 @@ position_camera_state = ExtResource("15_82dih")
 _00_camera_taker = NodePath("../00_Camera_taker")
 
 [node name="-------------PHOTO----------------" type="Node" parent="3D_SCENE/Camera_state_position"]
-
-[node name="Photo_01" type="Node3D" parent="3D_SCENE/Camera_state_position" node_paths=PackedStringArray("_00_camera_taker")]
-transform = Transform3D(0.988228, -0.144122, 0.0513193, 0, 0.335452, 0.942058, -0.152986, -0.930969, 0.331503, -0.224, 0.258, 0.114)
-script = ExtResource("9_jxrsg")
-position_camera_state = ExtResource("13_txhvk")
-_00_camera_taker = NodePath("../00_Camera_taker")
 
 [node name="Camp_root_XRay" type="Node3D" parent="3D_SCENE"]
 
@@ -513,6 +507,15 @@ transform = Transform3D(0.00720477, 0, 0, 0, 0.00720477, 0, 0, 0, 0.00720477, -1
 layers = 2
 mesh = SubResource("ArrayMesh_i7f22")
 skeleton = NodePath("")
+
+[node name="BOOK" parent="3D_SCENE" instance=ExtResource("22_ahvxh")]
+transform = Transform3D(0.0117898, 0.00107781, -0.0611994, -0.00193464, 0.0622999, 0.000724488, 0.0611784, 0.00176239, 0.0118168, -0.176986, 0.00750353, 0.404187)
+
+[node name="Photo_01" type="Node3D" parent="3D_SCENE/BOOK" node_paths=PackedStringArray("_00_camera_taker")]
+transform = Transform3D(158.312, -25.2562, 6.00912, 2.06481, 49.2647, 152.66, -25.879, -150.571, 48.9404, 1.01997, 4.22759, 0.126093)
+script = ExtResource("9_jxrsg")
+position_camera_state = ExtResource("13_txhvk")
+_00_camera_taker = NodePath("../../Camera_state_position/00_Camera_taker")
 
 [node name="Cursor_icon" type="Control" parent="."]
 visible = false

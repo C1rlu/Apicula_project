@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://dxjn0mjuqebwy"]
+[gd_scene load_steps=34 format=3 uid="uid://dxjn0mjuqebwy"]
 
 [ext_resource type="Script" path="res://10_BOARD/Photo_element.gd" id="1_tpp7t"]
 [ext_resource type="Resource" uid="uid://dyh1qg1u652pl" path="res://15_GAME_RESSOURCE/Epave_ch_photoData.tres" id="2_m0i7o"]
@@ -7,7 +7,9 @@
 [ext_resource type="Texture2D" uid="uid://dtyhegc0wsj1h" path="res://10_BOARD/00_BOOK/01_UI/cursor_scan.png" id="5_cq0xw"]
 [ext_resource type="Script" path="res://10_BOARD/Show_scanner.gd" id="6_ovic5"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="7_tjbgo"]
+[ext_resource type="Script" path="res://10_BOARD/Boad_focus_state.gd" id="9_2wsca"]
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Legend/Legend_behaviour.gd" id="9_pcvth"]
+[ext_resource type="Resource" uid="uid://c4ukh4c2t2w5k" path="res://15_GAME_RESSOURCE/03_Board_Cam_State/Photo_all/PhotoOnBook_PhotoCamState_Data.tres" id="10_pgf6m"]
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Show_this_page.gd" id="10_xyvhp"]
 
 [sub_resource type="GDScript" id="GDScript_r1yy1"]
@@ -319,6 +321,10 @@ one_shot = true
 
 [node name="Legend_area" type="Area3D" parent="legend"]
 
+[node name="Boad_focus_state" type="Node" parent="legend/Legend_area"]
+script = ExtResource("9_2wsca")
+focusState = ExtResource("10_pgf6m")
+
 [node name="On_Over" type="Node" parent="legend/Legend_area" node_paths=PackedStringArray("_on_over_second")]
 script = ExtResource("7_tjbgo")
 _on_over_second = NodePath("../../On_Over")
@@ -404,3 +410,4 @@ vertical_alignment = 1
 [connection signal="On_click" from="Photo/Photo_area/On_click" to="." method="_on_show_scanner"]
 [connection signal="timeout" from="legend/legend_behaviour/Timer" to="legend/legend_behaviour" method="_on_timer_timeout"]
 [connection signal="On_click" from="legend/Legend_area/On_click" to="." method="_on_show_this_page"]
+[connection signal="On_click" from="legend/Legend_area/On_click" to="legend/Legend_area/Boad_focus_state" method="_on_on_click_on_click"]
