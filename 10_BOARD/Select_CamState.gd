@@ -7,7 +7,7 @@ func _ready():
 	
 func select_focus(focus_data : boardCamState_data):
 
-	var position_target = focus_data.p_position
-	var rotation_target = focus_data.r_position	
+	var position_target = focus_data.camera_state.global_position
+	var rotation_target = focus_data.camera_state.rotation_degrees
 	_global_datas.camera_board_state.emit(position_target,rotation_target)
 

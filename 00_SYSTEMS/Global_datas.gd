@@ -133,7 +133,7 @@ signal active_diving
 
 
 
-signal book_back_idle_position(condition : bool)
+signal open_info_book(condition : bool)
 var book_idle_pos : bool = true
 
 

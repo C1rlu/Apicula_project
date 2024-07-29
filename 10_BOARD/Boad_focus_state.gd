@@ -17,4 +17,5 @@ func back_call():
 	var previous_state = focusState.back_state
 	if previous_state:
 		_global_datas.select_boardFocus.emit(previous_state)	
-		_global_datas.book_back_idle_position.emit(false)	
+		_global_datas.open_info_book.emit(false)
+		_global_datas.show_on_scanner.emit(false)

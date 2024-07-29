@@ -5,7 +5,7 @@ extends Node
 
 func _ready():
 	
-	_global_datas.book_back_idle_position.connect(_show)
+	_global_datas.open_info_book.connect(_show)
 	
 	
 func _show(condition):

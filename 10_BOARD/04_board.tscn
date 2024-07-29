@@ -1,7 +1,6 @@
-[gd_scene load_steps=44 format=3 uid="uid://cein0q2eirkay"]
+[gd_scene load_steps=51 format=3 uid="uid://cein0q2eirkay"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_g3pi7"]
-[ext_resource type="Script" path="res://10_BOARD/Board_CamTarget.gd" id="1_janbq"]
 [ext_resource type="Script" path="res://10_BOARD/Active_3D_BoardScene.gd" id="1_n6a4y"]
 [ext_resource type="Script" path="res://10_BOARD/Input_switch.gd" id="2_00g5f"]
 [ext_resource type="PackedScene" uid="uid://dr73p5vs0sixe" path="res://10_BOARD/board_scene.tscn" id="2_6c571"]
@@ -10,17 +9,18 @@
 [ext_resource type="Script" path="res://10_BOARD/Information_manager.gd" id="7_v3hdy"]
 [ext_resource type="Script" path="res://10_BOARD/Player_onMap.gd" id="7_vhvc2"]
 [ext_resource type="Material" uid="uid://t4qtyso7w6ee" path="res://05_SHADER_TEST/Board/board_boat.tres" id="8_et36p"]
+[ext_resource type="Script" path="res://10_BOARD/Switch_focus.gd" id="9_5llfi"]
 [ext_resource type="Script" path="res://10_BOARD/Cam_state_position.gd" id="9_jxrsg"]
 [ext_resource type="Script" path="res://10_BOARD/Select_CamState.gd" id="9_pj3rb"]
 [ext_resource type="Script" path="res://10_BOARD/Json_reader_test.gd" id="9_tfybn"]
 [ext_resource type="Resource" uid="uid://dv1j6fti14i8t" path="res://15_GAME_RESSOURCE/03_Board_Cam_State/PhotoCamstate_Data.tres" id="10_oc5qc"]
 [ext_resource type="Resource" uid="uid://dx4j6ggpv55yg" path="res://15_GAME_RESSOURCE/03_Board_Cam_State/MainView_Camstate_Data.tres" id="11_25tbm"]
 [ext_resource type="Resource" uid="uid://bcpgxwncrojqi" path="res://15_GAME_RESSOURCE/03_Board_Cam_State/ClockCamstate_Data.tres" id="13_dae5a"]
-[ext_resource type="Resource" uid="uid://c4ukh4c2t2w5k" path="res://15_GAME_RESSOURCE/03_Board_Cam_State/Photo_all/PhotoOnBook_PhotoCamState_Data.tres" id="13_txhvk"]
 [ext_resource type="Resource" uid="uid://c4uyosfnm210j" path="res://15_GAME_RESSOURCE/03_Board_Cam_State/MapCamstate_Data.tres" id="14_6shk3"]
 [ext_resource type="Script" path="res://10_BOARD/Board_OBJ_Manager.gd" id="14_johxk"]
 [ext_resource type="Resource" uid="uid://blxuee4l6ey2g" path="res://10_BOARD/Board_OBJ_data/Map_data.tres" id="15_6vhht"]
 [ext_resource type="Resource" uid="uid://06456lm78us1" path="res://15_GAME_RESSOURCE/03_Board_Cam_State/NoteCamstate_Data.tres" id="15_82dih"]
+[ext_resource type="Resource" uid="uid://tbsnjvt64rq3" path="res://15_GAME_RESSOURCE/03_Board_Cam_State/ScannerCamstate_Data.tres" id="17_m6gu3"]
 [ext_resource type="Script" path="res://10_BOARD/Switch_Cursor_icon.gd" id="19_t6o6e"]
 [ext_resource type="Texture2D" uid="uid://bb53vqhy3jx8j" path="res://10_BOARD/00_BOOK/01_UI/cursor_eyes.png" id="20_cuebq"]
 [ext_resource type="Script" path="res://10_BOARD/Follow_cursor.gd" id="20_vjjnn"]
@@ -130,16 +130,16 @@ func set_shader_value(value):
 script/source = "extends Node
 
 @onready var Cam : Camera3D = $\"../3D_SCENE/SubViewport/Camp_root_Render/Camera3D\"
+@onready var camera_xray = $\"../3D_SCENE/Camp_root_XRay/Camera_xray\"
+@onready var selectable_cam = $\"../3D_SCENE/SubViewport_SELECTABLE/Camp_root_Render/Camera3D\"
 
 var target : Vector3
 var rotation_target : Vector3
 
-var t 
-var r
 
-var lock_action : bool = false
+var lock_action : bool = true
 
-
+signal _lock_action(condition : bool)
 
 func _ready():
 
@@ -147,76 +147,36 @@ func _ready():
 
 func focus_this(_target : Vector3, _rotation_target : Vector3):
 	
+	if !lock_action:
+		return
+		
 	target = _target	
 	rotation_target = _rotation_target	
-	
+	lock_action = false
+	_lock_action.emit(true)
 	process_zoom_auto()	
 	
 
 func process_zoom_auto():
 	
-	if t:
-		t.kill()
-	t = create_tween()
-	t.tween_property(Cam,\"global_position\",target,0.8).set_trans(Tween.TRANS_SINE)
-	t.connect(\"finished\",done)
+	create_movement(Cam)
+	create_movement(camera_xray)
+	create_movement(selectable_cam)
 	
-	if r:
-		r.kill()
-	r = create_tween()
-	r.tween_property(Cam,\"rotation_degrees\",rotation_target,0.8).set_trans(Tween.TRANS_SINE)
-		
+func create_movement(element):
 	
-
+	var new_t
+	new_t = create_tween()
+	new_t.tween_property(element,\"position\",target,0.8).set_trans(Tween.TRANS_SINE)	
+	new_t.connect(\"finished\",done)
+	
+	var new_r
+	new_r = create_tween()
+	new_r.tween_property(element,\"rotation_degrees\",rotation_target,0.8).set_trans(Tween.TRANS_SINE)	
+	
 func done():
-	lock_action = false	
-			
-"
-
-[sub_resource type="GDScript" id="GDScript_q7x8f"]
-script/source = "extends Node
-
-var smooth_speed = 3.0
-var offset: Vector3
-
-@onready var cam_target = $\"../3D_SCENE/CamTarget\"
-@onready var camp_root_render = $\"../3D_SCENE/SubViewport/Camp_root_Render\"
-
-@onready var camera_xray = $\"../3D_SCENE/Camp_root_XRay/Camera_xray\"
-@onready var camera_3d = $\"../3D_SCENE/SubViewport/Camp_root_Render/Camera3D\"
-
-var cam_focus : Vector3
-
-func _ready():
-
-	offset = camp_root_render.global_position - cam_target.global_position
-		
-	
-func _physics_process(_delta):
-	
-	
-	
-	if !_global_datas.Player_In_Inventory:
-		return
-		
-	cam_focus = cam_target.global_position	
-	camp_root_render.global_position = lerp(camp_root_render.global_position, cam_focus + offset, smooth_speed * _delta)		
-		
-	rotation_angle(_delta)	
-	
-	camera_xray.global_position = camera_3d.global_position
-	camera_xray.global_rotation  = camera_3d.global_rotation 	
-
-
-func rotation_angle(_delta):
-
-	var angle_target = cam_target.global_position.x
-	
-	var angle_target_clamp = clampf(angle_target,-0.5,0.5)
-	var t = (angle_target_clamp - -0.5) / ( 0.5 -- 0.5)
-	var target_angle = lerp(-0.3, 0.3, t)
-	camp_root_render.global_rotation = Vector3(0,-target_angle,0)
-
+	lock_action = true
+	_lock_action.emit(false)		
 "
 
 [sub_resource type="GDScript" id="GDScript_l5hmx"]
@@ -230,97 +190,170 @@ func _ready():
 [sub_resource type="ViewportTexture" id="ViewportTexture_gpfe8"]
 viewport_path = NodePath("3D_SCENE/SubViewport")
 
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_yrkdd"]
-size = Vector2(513.781, 284.487)
-expression = "vec2 n_uv = UV -0.5;
-float d = length(n_uv);
-float c = smoothstep(r,r + feather,d);
-color = vec4(vec3(c),1.0);"
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_1bmtq"]
+input_name = "texture"
 
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_fxvjj"]
-input_name = "uv"
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_cfy76"]
+expanded_output_ports = [0]
+source = 5
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_xdogs"]
-constant = 0.5
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_cvbc7"]
+parameter_name = "Opacity"
+hint = 1
+default_value_enabled = true
+default_value = 0.5
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_wb6mp"]
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_ox0aq"]
+source = 5
 
-[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_evu1d"]
-function = 31
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_lc8sk"]
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_5pf1n"]
-constant = 0.1
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_47j3k"]
+default_input_values = [0, 2.1, 1, 1.2, 2, 0.145]
 
-[sub_resource type="VisualShader" id="VisualShader_elssd"]
+[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_efkim"]
+constant = Color(0.992188, 0.847656, 0.621094, 1)
+
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_ju04x"]
+function = 1
+
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_6qro8"]
+default_input_values = [1, Vector2(1, 0.5), 2, Vector2(0, 0)]
+function = 1
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_oap7g"]
+input_name = "time"
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_si4e8"]
+default_input_values = [0, 0.0, 1, 0.001]
+operator = 2
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_p0cva"]
+default_input_values = [0, 0.0, 1, 0.05]
+operator = 2
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_ja3k8"]
+parameter_name = "Dither_blue_noise_size"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_xnjpb"]
+parameter_name = "BlueNoise"
+qualifier = 1
+texture_repeat = 1
+
+[sub_resource type="VisualShader" id="VisualShader_drqso"]
 code = "shader_type canvas_item;
 render_mode blend_mix;
 
+global uniform float Dither_blue_noise_size;
+global uniform sampler2D BlueNoise : repeat_enable;
+uniform float Opacity : hint_range(0, 1) = 0.5;
 
 
 
 void fragment() {
-// Input:3
-	vec2 n_out3p0 = UV;
+// ColorConstant:56
+	vec4 n_out56p0 = vec4(0.992188, 0.847656, 0.621094, 1.000000);
 
 
-// FloatConstant:4
-	float n_out4p0 = 0.500000;
+// UVFunc:59
+	vec2 n_in59p1 = vec2(1.00000, 0.50000);
+	vec2 n_in59p2 = vec2(0.00000, 0.00000);
+	vec2 n_out59p0 = (UV - n_in59p2) * n_in59p1 + n_in59p2;
 
 
-// FloatConstant:5
-	float n_out5p0 = 0.000000;
+// FloatParameter:67
+	float n_out67p0 = Dither_blue_noise_size;
 
 
-	vec4 n_out2p0;
-// Expression:2
-	n_out2p0 = vec4(0.0, 0.0, 0.0, 0.0);
-	{
-		vec2 n_uv = n_out3p0 -0.5;
-		float d = length(n_uv);
-		float c = smoothstep(n_out4p0,n_out4p0 + n_out5p0,d);
-		n_out2p0 = vec4(vec3(c),1.0);
-	}
+// Input:60
+	float n_out60p0 = TIME;
 
 
-// FloatFunc:6
-	float n_out6p0 = 1.0 - n_out2p0.x;
+// FloatOp:61
+	float n_in61p1 = 0.00100;
+	float n_out61p0 = n_out60p0 * n_in61p1;
+
+
+// FloatOp:62
+	float n_in62p1 = 0.05000;
+	float n_out62p0 = n_out61p0 * n_in62p1;
+
+
+// UVFunc:58
+	vec2 n_out58p0 = (n_out59p0 - vec2(n_out62p0)) * vec2(n_out67p0) + vec2(n_out62p0);
+
+
+	vec4 n_out42p0;
+// Texture2D:42
+	n_out42p0 = texture(BlueNoise, n_out58p0);
+
+
+// FloatParameter:39
+	float n_out39p0 = Opacity;
+
+
+// Mix:48
+	float n_in48p0 = 2.10000;
+	float n_out48p0 = mix(n_in48p0, n_out42p0.x, n_out39p0);
+
+
+	vec4 n_out25p0;
+// Texture2D:25
+	n_out25p0 = texture(TEXTURE, UV);
+	float n_out25p4 = n_out25p0.a;
+
+
+// Step:43
+	float n_out43p0 = step(n_out48p0, n_out25p4);
 
 
 // Output:0
-	COLOR.a = n_out6p0;
+	COLOR.rgb = vec3(n_out56p0.xyz);
+	COLOR.a = n_out43p0;
 
 
 }
 "
-graph_offset = Vector2(-507.845, 108.253)
 mode = 1
 flags/light_only = false
-nodes/fragment/0/position = Vector2(820, 140)
-nodes/fragment/2/node = SubResource("VisualShaderNodeExpression_yrkdd")
-nodes/fragment/2/position = Vector2(-82.4779, 287.841)
-nodes/fragment/2/size = Vector2(513.781, 284.487)
-nodes/fragment/2/input_ports = "0,3,UV;1,0,r;2,0,feather;"
-nodes/fragment/2/output_ports = "0,5,color;"
-nodes/fragment/2/expression = "vec2 n_uv = UV -0.5;
-float d = length(n_uv);
-float c = smoothstep(r,r + feather,d);
-color = vec4(vec3(c),1.0);"
-nodes/fragment/3/node = SubResource("VisualShaderNodeInput_fxvjj")
-nodes/fragment/3/position = Vector2(-482.478, 227.841)
-nodes/fragment/4/node = SubResource("VisualShaderNodeFloatConstant_xdogs")
-nodes/fragment/4/position = Vector2(-362.478, 387.841)
-nodes/fragment/5/node = SubResource("VisualShaderNodeFloatConstant_wb6mp")
-nodes/fragment/5/position = Vector2(-282.478, 487.841)
-nodes/fragment/6/node = SubResource("VisualShaderNodeFloatFunc_evu1d")
-nodes/fragment/6/position = Vector2(654.179, 36.3039)
-nodes/fragment/7/node = SubResource("VisualShaderNodeFloatConstant_5pf1n")
-nodes/fragment/7/position = Vector2(57.5221, -12.1591)
-nodes/fragment/connections = PackedInt32Array(3, 0, 2, 0, 4, 0, 2, 1, 5, 0, 2, 2, 2, 0, 6, 0, 6, 0, 0, 1)
+nodes/fragment/0/position = Vector2(1320, 40)
+nodes/fragment/24/node = SubResource("VisualShaderNodeInput_1bmtq")
+nodes/fragment/24/position = Vector2(-460, -1260)
+nodes/fragment/25/node = SubResource("VisualShaderNodeTexture_cfy76")
+nodes/fragment/25/position = Vector2(-160, -1200)
+nodes/fragment/39/node = SubResource("VisualShaderNodeFloatParameter_cvbc7")
+nodes/fragment/39/position = Vector2(-1620, 200)
+nodes/fragment/42/node = SubResource("VisualShaderNodeTexture_ox0aq")
+nodes/fragment/42/position = Vector2(-520, -640)
+nodes/fragment/43/node = SubResource("VisualShaderNodeStep_lc8sk")
+nodes/fragment/43/position = Vector2(480, -360)
+nodes/fragment/48/node = SubResource("VisualShaderNodeMix_47j3k")
+nodes/fragment/48/position = Vector2(-200, -280)
+nodes/fragment/56/node = SubResource("VisualShaderNodeColorConstant_efkim")
+nodes/fragment/56/position = Vector2(800, -420)
+nodes/fragment/58/node = SubResource("VisualShaderNodeUVFunc_ju04x")
+nodes/fragment/58/position = Vector2(-1440, -840)
+nodes/fragment/59/node = SubResource("VisualShaderNodeUVFunc_6qro8")
+nodes/fragment/59/position = Vector2(-1760, -960)
+nodes/fragment/60/node = SubResource("VisualShaderNodeInput_oap7g")
+nodes/fragment/60/position = Vector2(-2040, -580)
+nodes/fragment/61/node = SubResource("VisualShaderNodeFloatOp_si4e8")
+nodes/fragment/61/position = Vector2(-1720, -600)
+nodes/fragment/62/node = SubResource("VisualShaderNodeFloatOp_p0cva")
+nodes/fragment/62/position = Vector2(-1660, -400)
+nodes/fragment/67/node = SubResource("VisualShaderNodeFloatParameter_ja3k8")
+nodes/fragment/67/position = Vector2(-2440, -940)
+nodes/fragment/68/node = SubResource("VisualShaderNodeTexture2DParameter_xnjpb")
+nodes/fragment/68/position = Vector2(-1100, -520)
+nodes/fragment/connections = PackedInt32Array(24, 0, 25, 2, 60, 0, 61, 0, 61, 0, 62, 0, 62, 0, 58, 2, 68, 0, 42, 2, 56, 0, 0, 0, 59, 0, 58, 0, 25, 4, 43, 1, 43, 0, 0, 1, 48, 0, 43, 0, 42, 0, 48, 1, 39, 0, 48, 2, 67, 0, 58, 1, 58, 0, 42, 0)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_blt4p"]
-shader = SubResource("VisualShader_elssd")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8haio"]
+shader = SubResource("VisualShader_drqso")
+shader_parameter/Opacity = 0.55
 
-[sub_resource type="SphereMesh" id="SphereMesh_22wkq"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_1niwu"]
+viewport_path = NodePath("3D_SCENE/SubViewport_SELECTABLE")
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_i7f22"]
 resource_name = "Player_Boat_01-c9377ed3c1eb09ef00335a9606626fca_Cube_001"
@@ -354,20 +387,14 @@ script = SubResource("GDScript_1a2yk")
 
 [node name="Active_3D_scene" type="Node" parent="." node_paths=PackedStringArray("viewports")]
 script = ExtResource("1_n6a4y")
-viewports = [NodePath("../3D_SCENE/SubViewport")]
+viewports = [NodePath("../3D_SCENE/SubViewport"), NodePath("../3D_SCENE/SubViewport_SELECTABLE")]
 
 [node name="Fade" type="Node" parent="."]
 script = SubResource("GDScript_52477")
 
 [node name="set_Resolution" type="Node" parent="." node_paths=PackedStringArray("viewports")]
 script = ExtResource("1_g3pi7")
-viewports = [NodePath("../3D_SCENE/SubViewport")]
-
-[node name="ZOOM_Behaviour" type="Node" parent="."]
-script = SubResource("GDScript_00hwt")
-
-[node name="Cam_follow" type="Node" parent="."]
-script = SubResource("GDScript_q7x8f")
+viewports = [NodePath("../3D_SCENE/SubViewport"), NodePath("../3D_SCENE/SubViewport_SELECTABLE")]
 
 [node name="Input_switch" type="Node" parent="."]
 script = ExtResource("2_00g5f")
@@ -379,6 +406,13 @@ script = ExtResource("3_rqf42")
 script = ExtResource("14_johxk")
 all_object_list = Array[Resource("res://10_BOARD/Board_OBJ_data/object_data.gd")]([ExtResource("15_6vhht")])
 
+[node name="CAMERA_FOCUS" type="Node" parent="."]
+script = SubResource("GDScript_00hwt")
+
+[node name="Switch_focus" type="Node" parent="CAMERA_FOCUS"]
+script = ExtResource("9_5llfi")
+all_focus = Array[Resource("res://15_GAME_RESSOURCE/03_Board_Cam_State/BoardCamState_Data.gd")]([ExtResource("11_25tbm"), ExtResource("10_oc5qc"), ExtResource("14_6shk3"), ExtResource("13_dae5a"), ExtResource("15_82dih")])
+
 [node name="Select_CamState" type="Node" parent="."]
 script = ExtResource("9_pj3rb")
 
@@ -386,45 +420,49 @@ script = ExtResource("9_pj3rb")
 
 [node name="Camera_state_position" type="Node3D" parent="3D_SCENE"]
 
-[node name="00_Camera_taker" type="Camera3D" parent="3D_SCENE/Camera_state_position"]
-transform = Transform3D(0.986819, -0.157432, 0.0374573, 0.0128708, 0.307087, 0.951594, -0.161314, -0.93857, 0.305066, -0.164, 0.269, 0.487)
-cull_mask = 2
-fov = 40.0
-
 [node name="-------------MAIN ZONE----------------" type="Node" parent="3D_SCENE/Camera_state_position"]
 
-[node name="Main_state" type="Node3D" parent="3D_SCENE/Camera_state_position" node_paths=PackedStringArray("_00_camera_taker")]
-transform = Transform3D(4.9744, 0.350362, -0.36408, 0, 3.60276, 3.46701, 0.50528, -3.44926, 3.58431, -0.08, 0.945, 1.035)
-visible = false
+[node name="CamState_Main" type="Camera3D" parent="3D_SCENE/Camera_state_position"]
+transform = Transform3D(0.994881, 0.0700724, -0.0728161, 0, 0.720552, 0.693401, 0.101056, -0.689852, 0.716863, -0.08, 0.945, 1.035)
+cull_mask = 2
+fov = 40.0
 script = ExtResource("9_jxrsg")
 position_camera_state = ExtResource("11_25tbm")
-_00_camera_taker = NodePath("../00_Camera_taker")
 
-[node name="photo_state" type="Node3D" parent="3D_SCENE/Camera_state_position" node_paths=PackedStringArray("_00_camera_taker")]
-transform = Transform3D(4.85148, -1.15426, 0.361721, 0, 1.4952, 4.7712, -1.20961, -4.62948, 1.45079, -0.151, 0.593, 0.239)
+[node name="CamState_photo" type="Camera3D" parent="3D_SCENE/Camera_state_position"]
+transform = Transform3D(0.954373, -0.286268, 0.0849859, -0.00897381, 0.256976, 0.966376, -0.298482, -0.923046, 0.242682, -0.148, 0.529, 0.162)
+cull_mask = 2
+fov = 40.0
 script = ExtResource("9_jxrsg")
 position_camera_state = ExtResource("10_oc5qc")
-_00_camera_taker = NodePath("../00_Camera_taker")
 
-[node name="clock_state" type="Node3D" parent="3D_SCENE/Camera_state_position" node_paths=PackedStringArray("_00_camera_taker")]
-transform = Transform3D(4.96981, -0.458056, 0.302032, 0, 2.75241, 4.17424, -0.54867, -4.14903, 2.73578, 0.062, 0.235, 0.605)
+[node name="CamState_Clock" type="Camera3D" parent="3D_SCENE/Camera_state_position"]
+transform = Transform3D(0.993961, -0.091611, 0.0604065, 0, 0.550482, 0.834847, -0.109734, -0.829806, 0.547157, 0.062, 0.235, 0.605)
+cull_mask = 2
+fov = 40.0
 script = ExtResource("9_jxrsg")
 position_camera_state = ExtResource("13_dae5a")
-_00_camera_taker = NodePath("../00_Camera_taker")
 
-[node name="Map_state" type="Node3D" parent="3D_SCENE/Camera_state_position" node_paths=PackedStringArray("_00_camera_taker")]
-transform = Transform3D(4.90477, 0.857494, -0.455937, 0, 2.34736, 4.41473, 0.971171, -4.33066, 2.30265, 0.278, 0.571, 0.498)
+[node name="CamState_Map" type="Camera3D" parent="3D_SCENE/Camera_state_position"]
+transform = Transform3D(0.980955, 0.171499, -0.0911876, 0, 0.469472, 0.882947, 0.194234, -0.866132, 0.460531, 0.278, 0.571, 0.498)
+cull_mask = 2
+fov = 40.0
 script = ExtResource("9_jxrsg")
 position_camera_state = ExtResource("14_6shk3")
-_00_camera_taker = NodePath("../00_Camera_taker")
 
-[node name="Note_state" type="Node3D" parent="3D_SCENE/Camera_state_position" node_paths=PackedStringArray("_00_camera_taker")]
-transform = Transform3D(4.9922, 0.251919, -0.120159, 0, 2.15256, 4.51292, 0.279108, -4.50589, 2.1492, -0.058, 0.222, 0.465)
+[node name="CamState_Note" type="Camera3D" parent="3D_SCENE/Camera_state_position"]
+transform = Transform3D(0.998441, 0.0503838, -0.0240319, 0, 0.430512, 0.902585, 0.0558216, -0.901178, 0.429841, -0.058, 0.222, 0.465)
+cull_mask = 2
+fov = 40.0
 script = ExtResource("9_jxrsg")
 position_camera_state = ExtResource("15_82dih")
-_00_camera_taker = NodePath("../00_Camera_taker")
 
-[node name="-------------PHOTO----------------" type="Node" parent="3D_SCENE/Camera_state_position"]
+[node name="CamState_Scanner" type="Camera3D" parent="3D_SCENE/Camera_state_position"]
+transform = Transform3D(0.999926, 0.00599737, -0.0106436, 0, 0.871214, 0.490904, 0.012217, -0.490867, 0.871149, 0.012, 0.219, 0.143)
+cull_mask = 2
+fov = 40.0
+script = ExtResource("9_jxrsg")
+position_camera_state = ExtResource("17_m6gu3")
 
 [node name="Camp_root_XRay" type="Node3D" parent="3D_SCENE"]
 
@@ -451,6 +489,26 @@ fov = 40.0
 far = 4.25
 script = SubResource("GDScript_l5hmx")
 
+[node name="BOOK" parent="3D_SCENE/SubViewport/Camp_root_Render/Camera3D" instance=ExtResource("22_ahvxh")]
+transform = Transform3D(1.22284e-16, -2.79753e-09, -0.064, -0.064, -2.79753e-09, 0, -2.79753e-09, 0.064, -2.79753e-09, 0.001, -0.013, -0.263)
+
+[node name="SubViewport_SELECTABLE" type="SubViewport" parent="3D_SCENE"]
+transparent_bg = true
+handle_input_locally = false
+scaling_3d_scale = 0.9
+size = Vector2i(1920, 1080)
+
+[node name="Camp_root_Render" type="Node3D" parent="3D_SCENE/SubViewport_SELECTABLE"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.38419e-07)
+
+[node name="Camera3D" type="Camera3D" parent="3D_SCENE/SubViewport_SELECTABLE/Camp_root_Render"]
+transform = Transform3D(0.994881, 0.0700724, -0.072816, 0, 0.720551, 0.693402, 0.101056, -0.689852, 0.716862, -0.08, 0.945, 1.035)
+cull_mask = 512
+current = true
+fov = 40.0
+far = 4.25
+script = SubResource("GDScript_l5hmx")
+
 [node name="RENDER" type="TextureRect" parent="3D_SCENE"]
 material = ExtResource("7_fiqjo")
 anchors_preset = 15
@@ -461,40 +519,18 @@ grow_vertical = 2
 texture = SubResource("ViewportTexture_gpfe8")
 expand_mode = 3
 
-[node name="Pad_target" type="ColorRect" parent="3D_SCENE"]
+[node name="RENDER_selectable" type="TextureRect" parent="3D_SCENE"]
 visible = false
-material = SubResource("ShaderMaterial_blt4p")
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -10.0
-offset_top = -10.0
-offset_right = 5.0
-offset_bottom = 5.0
+material = SubResource("ShaderMaterial_8haio")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(0.89, 0.89)
-mouse_filter = 2
-color = Color(0.721569, 0.635294, 0.439216, 1)
+texture = SubResource("ViewportTexture_1niwu")
+expand_mode = 3
 
 [node name="Board_scene" parent="3D_SCENE" instance=ExtResource("2_6c571")]
-
-[node name="CamTarget" type="Node3D" parent="3D_SCENE"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.002, 0)
-visible = false
-script = ExtResource("1_janbq")
-move_speed = 1.0
-min_x = -1.0
-max_x = 1.0
-min_z = -0.5
-max_z = 0.5
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="3D_SCENE/CamTarget"]
-transform = Transform3D(0.0241091, 0, 0, 0, 0.0241091, 0, 0, 0, 0.0241091, 0, 0, 0)
-layers = 2
-mesh = SubResource("SphereMesh_22wkq")
 
 [node name="Player_on_map" type="Node3D" parent="3D_SCENE"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.226148, 0.012804, 0.372664)
@@ -507,15 +543,6 @@ transform = Transform3D(0.00720477, 0, 0, 0, 0.00720477, 0, 0, 0, 0.00720477, -1
 layers = 2
 mesh = SubResource("ArrayMesh_i7f22")
 skeleton = NodePath("")
-
-[node name="BOOK" parent="3D_SCENE" instance=ExtResource("22_ahvxh")]
-transform = Transform3D(0.0117898, 0.00107781, -0.0611994, -0.00193464, 0.0622999, 0.000724488, 0.0611784, 0.00176239, 0.0118168, -0.176986, 0.00750353, 0.404187)
-
-[node name="Photo_01" type="Node3D" parent="3D_SCENE/BOOK" node_paths=PackedStringArray("_00_camera_taker")]
-transform = Transform3D(158.312, -25.2562, 6.00912, 2.06481, 49.2647, 152.66, -25.879, -150.571, 48.9404, 1.01997, 4.22759, 0.126093)
-script = ExtResource("9_jxrsg")
-position_camera_state = ExtResource("13_txhvk")
-_00_camera_taker = NodePath("../../Camera_state_position/00_Camera_taker")
 
 [node name="Cursor_icon" type="Control" parent="."]
 visible = false
@@ -549,4 +576,5 @@ position = Vector2(23.6249, -16.3751)
 scale = Vector2(0.12207, 0.12207)
 texture = ExtResource("20_cuebq")
 
-[connection signal="active_scanner" from="Pad_clic_raycast" to="ZOOM_Behaviour" method="_on_pad_clic_raycast_active_scanner"]
+[connection signal="active_scanner" from="Pad_clic_raycast" to="CAMERA_FOCUS" method="_on_pad_clic_raycast_active_scanner"]
+[connection signal="_lock_action" from="CAMERA_FOCUS" to="CAMERA_FOCUS/Switch_focus" method="_on_camera_focus__lock_action"]

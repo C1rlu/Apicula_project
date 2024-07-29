@@ -3,7 +3,7 @@ extends Node
 var _pad : bool = false
 
 @onready var  Camera = $"../3D_SCENE/Camp_root_XRay/Camera_xray"
-@onready var pad_target = $"../3D_SCENE/Pad_target"
+
 
 var previous_on_over
 var On_Over
@@ -20,35 +20,22 @@ func _active_raycast(condition : bool):
 
 func _input(event):
 	
-
-	
 	if _global_datas.in_scanner_mode:
 		return
 	
 			
 	if !_global_datas.Player_In_Inventory:
 		return	
-	#if _global_datas.zoom_value == 1:
-		#return
-	
-			
-	if _pad: 
-		var center_screen = Vector2i(640,360)
-		check_on_over(center_screen)		
-	else:
+
+	if !_pad: 
 		var target = get_viewport().get_mouse_position()
 		check_on_over(target)	
 		
 
-			
+
 	if event.is_action_pressed("Click_on_board"):	
 
-		if _pad: 
-	
-			var center_screen = Vector2i(640,360)
-
-			check_cast(center_screen)		
-		else:
+		if !_pad: 
 			var target = get_viewport().get_mouse_position()
 			check_cast(target)
 	
@@ -85,7 +72,7 @@ func check_cast(targetPos : Vector2):
 	if result.collider.get_node_or_null("On_click"): 
 		var _On_click = result.collider.get_node_or_null("On_click")
 		_On_click.On_click.emit()
-		
+		_global_datas.close_all_over_ui.emit()
 	if result.collider.get_node_or_null("Teleport_PlayerBoat"):
 		var Teleport_PlayerBoat	= result.collider.get_node_or_null("Teleport_PlayerBoat")
 		Teleport_PlayerBoat.lunch_teleport(true)
