@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://cein0q2eirkay"]
+[gd_scene load_steps=55 format=3 uid="uid://cein0q2eirkay"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_g3pi7"]
 [ext_resource type="Script" path="res://10_BOARD/Active_3D_BoardScene.gd" id="1_n6a4y"]
@@ -131,7 +131,7 @@ script/source = "extends Node
 
 @onready var Cam : Camera3D = $\"../3D_SCENE/SubViewport/Camp_root_Render/Camera3D\"
 @onready var camera_xray = $\"../3D_SCENE/Camp_root_XRay/Camera_xray\"
-@onready var selectable_cam = $\"../3D_SCENE/SubViewport_SELECTABLE/Camp_root_Render/Camera3D\"
+@onready var selectable = $\"../3D_SCENE/SubViewport_selectable/Camp_root_Render/Camera3D\"
 
 var target : Vector3
 var rotation_target : Vector3
@@ -161,7 +161,7 @@ func process_zoom_auto():
 	
 	create_movement(Cam)
 	create_movement(camera_xray)
-	create_movement(selectable_cam)
+	create_movement(selectable)
 	
 func create_movement(element):
 	
@@ -190,63 +190,85 @@ func _ready():
 [sub_resource type="ViewportTexture" id="ViewportTexture_gpfe8"]
 viewport_path = NodePath("3D_SCENE/SubViewport")
 
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_1bmtq"]
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_cqne7"]
 input_name = "texture"
 
-[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_cfy76"]
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_coe2e"]
 expanded_output_ports = [0]
 source = 5
 
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_cvbc7"]
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_qcp7g"]
 parameter_name = "Opacity"
 hint = 1
 default_value_enabled = true
 default_value = 0.5
 
-[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_ox0aq"]
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_akdp2"]
 source = 5
 
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_lc8sk"]
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_drier"]
 
-[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_47j3k"]
-default_input_values = [0, 2.1, 1, 1.2, 2, 0.145]
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_m3au6"]
+default_input_values = [0, 2.0, 1, 1.2, 2, 0.145]
 
-[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_efkim"]
+[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_lecqq"]
 constant = Color(0.992188, 0.847656, 0.621094, 1)
 
-[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_ju04x"]
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_mef7u"]
 function = 1
 
-[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_6qro8"]
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_r2kae"]
 default_input_values = [1, Vector2(1, 0.5), 2, Vector2(0, 0)]
 function = 1
 
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_oap7g"]
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_mbjxw"]
 input_name = "time"
 
-[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_si4e8"]
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_owjti"]
 default_input_values = [0, 0.0, 1, 0.001]
 operator = 2
 
-[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_p0cva"]
-default_input_values = [0, 0.0, 1, 0.05]
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_ed2p3"]
+default_input_values = [0, 0.0, 1, 0.1]
 operator = 2
 
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_ja3k8"]
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_hvbho"]
 parameter_name = "Dither_blue_noise_size"
 qualifier = 1
 
-[sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_xnjpb"]
+[sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_yfyr4"]
 parameter_name = "BlueNoise"
 qualifier = 1
 texture_repeat = 1
 
-[sub_resource type="VisualShader" id="VisualShader_drqso"]
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_7uki5"]
+constant = 4.0
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_1b3kq"]
+constant = 1.0
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_sjrt8"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_3n7qf"]
+parameter_name = "Dither_size"
+qualifier = 1
+
+[sub_resource type="VisualShader" id="VisualShader_v0osk"]
 code = "shader_type canvas_item;
 render_mode blend_mix;
 
-global uniform float Dither_blue_noise_size;
-global uniform sampler2D BlueNoise : repeat_enable;
+global uniform float Dither_size;
 uniform float Opacity : hint_range(0, 1) = 0.5;
 
 
@@ -256,37 +278,29 @@ void fragment() {
 	vec4 n_out56p0 = vec4(0.992188, 0.847656, 0.621094, 1.000000);
 
 
-// UVFunc:59
-	vec2 n_in59p1 = vec2(1.00000, 0.50000);
-	vec2 n_in59p2 = vec2(0.00000, 0.00000);
-	vec2 n_out59p0 = (UV - n_in59p2) * n_in59p1 + n_in59p2;
+// FloatConstant:70
+	float n_out70p0 = 1.000000;
 
 
-// FloatParameter:67
-	float n_out67p0 = Dither_blue_noise_size;
+// FloatParameter:72
+	float n_out72p0 = Dither_size;
 
 
-// Input:60
-	float n_out60p0 = TIME;
-
-
-// FloatOp:61
-	float n_in61p1 = 0.00100;
-	float n_out61p0 = n_out60p0 * n_in61p1;
-
-
-// FloatOp:62
-	float n_in62p1 = 0.05000;
-	float n_out62p0 = n_out61p0 * n_in62p1;
-
-
-// UVFunc:58
-	vec2 n_out58p0 = (n_out59p0 - vec2(n_out62p0)) * vec2(n_out67p0) + vec2(n_out62p0);
-
-
-	vec4 n_out42p0;
-// Texture2D:42
-	n_out42p0 = texture(BlueNoise, n_out58p0);
+	float n_out71p0;
+// Expression:71
+	n_out71p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out72p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out71p0 = n_out70p0 - DITHER_THRESHOLDS[index];
+	}
 
 
 // FloatParameter:39
@@ -294,8 +308,8 @@ void fragment() {
 
 
 // Mix:48
-	float n_in48p0 = 2.10000;
-	float n_out48p0 = mix(n_in48p0, n_out42p0.x, n_out39p0);
+	float n_in48p0 = 2.00000;
+	float n_out48p0 = mix(n_in48p0, n_out71p0, n_out39p0);
 
 
 	vec4 n_out25p0;
@@ -315,45 +329,67 @@ void fragment() {
 
 }
 "
+graph_offset = Vector2(-121.92, -581.531)
 mode = 1
 flags/light_only = false
-nodes/fragment/0/position = Vector2(1320, 40)
-nodes/fragment/24/node = SubResource("VisualShaderNodeInput_1bmtq")
-nodes/fragment/24/position = Vector2(-460, -1260)
-nodes/fragment/25/node = SubResource("VisualShaderNodeTexture_cfy76")
-nodes/fragment/25/position = Vector2(-160, -1200)
-nodes/fragment/39/node = SubResource("VisualShaderNodeFloatParameter_cvbc7")
-nodes/fragment/39/position = Vector2(-1620, 200)
-nodes/fragment/42/node = SubResource("VisualShaderNodeTexture_ox0aq")
+nodes/fragment/0/position = Vector2(980, -520)
+nodes/fragment/24/node = SubResource("VisualShaderNodeInput_cqne7")
+nodes/fragment/24/position = Vector2(-20, -700)
+nodes/fragment/25/node = SubResource("VisualShaderNodeTexture_coe2e")
+nodes/fragment/25/position = Vector2(280, -640)
+nodes/fragment/39/node = SubResource("VisualShaderNodeFloatParameter_qcp7g")
+nodes/fragment/39/position = Vector2(-720, -180)
+nodes/fragment/42/node = SubResource("VisualShaderNodeTexture_akdp2")
 nodes/fragment/42/position = Vector2(-520, -640)
-nodes/fragment/43/node = SubResource("VisualShaderNodeStep_lc8sk")
+nodes/fragment/43/node = SubResource("VisualShaderNodeStep_drier")
 nodes/fragment/43/position = Vector2(480, -360)
-nodes/fragment/48/node = SubResource("VisualShaderNodeMix_47j3k")
+nodes/fragment/48/node = SubResource("VisualShaderNodeMix_m3au6")
 nodes/fragment/48/position = Vector2(-200, -280)
-nodes/fragment/56/node = SubResource("VisualShaderNodeColorConstant_efkim")
-nodes/fragment/56/position = Vector2(800, -420)
-nodes/fragment/58/node = SubResource("VisualShaderNodeUVFunc_ju04x")
+nodes/fragment/56/node = SubResource("VisualShaderNodeColorConstant_lecqq")
+nodes/fragment/56/position = Vector2(700, -620)
+nodes/fragment/58/node = SubResource("VisualShaderNodeUVFunc_mef7u")
 nodes/fragment/58/position = Vector2(-1440, -840)
-nodes/fragment/59/node = SubResource("VisualShaderNodeUVFunc_6qro8")
+nodes/fragment/59/node = SubResource("VisualShaderNodeUVFunc_r2kae")
 nodes/fragment/59/position = Vector2(-1760, -960)
-nodes/fragment/60/node = SubResource("VisualShaderNodeInput_oap7g")
+nodes/fragment/60/node = SubResource("VisualShaderNodeInput_mbjxw")
 nodes/fragment/60/position = Vector2(-2040, -580)
-nodes/fragment/61/node = SubResource("VisualShaderNodeFloatOp_si4e8")
+nodes/fragment/61/node = SubResource("VisualShaderNodeFloatOp_owjti")
 nodes/fragment/61/position = Vector2(-1720, -600)
-nodes/fragment/62/node = SubResource("VisualShaderNodeFloatOp_p0cva")
+nodes/fragment/62/node = SubResource("VisualShaderNodeFloatOp_ed2p3")
 nodes/fragment/62/position = Vector2(-1660, -400)
-nodes/fragment/67/node = SubResource("VisualShaderNodeFloatParameter_ja3k8")
+nodes/fragment/67/node = SubResource("VisualShaderNodeFloatParameter_hvbho")
 nodes/fragment/67/position = Vector2(-2440, -940)
-nodes/fragment/68/node = SubResource("VisualShaderNodeTexture2DParameter_xnjpb")
+nodes/fragment/68/node = SubResource("VisualShaderNodeTexture2DParameter_yfyr4")
 nodes/fragment/68/position = Vector2(-1100, -520)
-nodes/fragment/connections = PackedInt32Array(24, 0, 25, 2, 60, 0, 61, 0, 61, 0, 62, 0, 62, 0, 58, 2, 68, 0, 42, 2, 56, 0, 0, 0, 59, 0, 58, 0, 25, 4, 43, 1, 43, 0, 0, 1, 48, 0, 43, 0, 42, 0, 48, 1, 39, 0, 48, 2, 67, 0, 58, 1, 58, 0, 42, 0)
+nodes/fragment/69/node = SubResource("VisualShaderNodeFloatConstant_7uki5")
+nodes/fragment/69/position = Vector2(-1651.68, -718.096)
+nodes/fragment/70/node = SubResource("VisualShaderNodeFloatConstant_1b3kq")
+nodes/fragment/70/position = Vector2(-1180, 200)
+nodes/fragment/71/node = SubResource("VisualShaderNodeExpression_sjrt8")
+nodes/fragment/71/position = Vector2(-900, 200)
+nodes/fragment/71/size = Vector2(724.789, 654.559)
+nodes/fragment/71/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/71/output_ports = "0,0,Dither_Node;"
+nodes/fragment/71/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/72/node = SubResource("VisualShaderNodeFloatParameter_3n7qf")
+nodes/fragment/72/position = Vector2(-1540, 360)
+nodes/fragment/connections = PackedInt32Array(24, 0, 25, 2, 60, 0, 61, 0, 61, 0, 62, 0, 58, 0, 42, 0, 68, 0, 42, 2, 59, 0, 58, 0, 39, 0, 48, 2, 69, 0, 58, 1, 62, 0, 58, 2, 70, 0, 71, 0, 72, 0, 71, 1, 25, 4, 43, 1, 71, 0, 48, 1, 48, 0, 43, 0, 43, 0, 0, 1, 56, 0, 0, 0)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8haio"]
-shader = SubResource("VisualShader_drqso")
-shader_parameter/Opacity = 0.55
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hdi7w"]
+shader = SubResource("VisualShader_v0osk")
+shader_parameter/Opacity = 0.631
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_1niwu"]
-viewport_path = NodePath("3D_SCENE/SubViewport_SELECTABLE")
+[sub_resource type="ViewportTexture" id="ViewportTexture_x5m4v"]
+viewport_path = NodePath("3D_SCENE/SubViewport_selectable")
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_i7f22"]
 resource_name = "Player_Boat_01-c9377ed3c1eb09ef00335a9606626fca_Cube_001"
@@ -387,14 +423,14 @@ script = SubResource("GDScript_1a2yk")
 
 [node name="Active_3D_scene" type="Node" parent="." node_paths=PackedStringArray("viewports")]
 script = ExtResource("1_n6a4y")
-viewports = [NodePath("../3D_SCENE/SubViewport"), NodePath("../3D_SCENE/SubViewport_SELECTABLE")]
+viewports = [NodePath("../3D_SCENE/SubViewport"), NodePath("../3D_SCENE/SubViewport_selectable")]
 
 [node name="Fade" type="Node" parent="."]
 script = SubResource("GDScript_52477")
 
 [node name="set_Resolution" type="Node" parent="." node_paths=PackedStringArray("viewports")]
 script = ExtResource("1_g3pi7")
-viewports = [NodePath("../3D_SCENE/SubViewport"), NodePath("../3D_SCENE/SubViewport_SELECTABLE")]
+viewports = [NodePath("../3D_SCENE/SubViewport"), NodePath("../3D_SCENE/SubViewport_selectable")]
 
 [node name="Input_switch" type="Node" parent="."]
 script = ExtResource("2_00g5f")
@@ -490,18 +526,19 @@ far = 4.25
 script = SubResource("GDScript_l5hmx")
 
 [node name="BOOK" parent="3D_SCENE/SubViewport/Camp_root_Render/Camera3D" instance=ExtResource("22_ahvxh")]
-transform = Transform3D(1.22284e-16, -2.79753e-09, -0.064, -0.064, -2.79753e-09, 0, -2.79753e-09, 0.064, -2.79753e-09, 0.001, -0.013, -0.263)
+transform = Transform3D(1.22284e-16, -2.79753e-09, -0.064, -0.064, -2.79753e-09, -3.97047e-23, -2.79753e-09, 0.064, -2.79753e-09, 0.001, -0.013, -0.263)
+visible = false
 
-[node name="SubViewport_SELECTABLE" type="SubViewport" parent="3D_SCENE"]
+[node name="SubViewport_selectable" type="SubViewport" parent="3D_SCENE"]
 transparent_bg = true
 handle_input_locally = false
 scaling_3d_scale = 0.9
 size = Vector2i(1920, 1080)
 
-[node name="Camp_root_Render" type="Node3D" parent="3D_SCENE/SubViewport_SELECTABLE"]
+[node name="Camp_root_Render" type="Node3D" parent="3D_SCENE/SubViewport_selectable"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.38419e-07)
 
-[node name="Camera3D" type="Camera3D" parent="3D_SCENE/SubViewport_SELECTABLE/Camp_root_Render"]
+[node name="Camera3D" type="Camera3D" parent="3D_SCENE/SubViewport_selectable/Camp_root_Render"]
 transform = Transform3D(0.994881, 0.0700724, -0.072816, 0, 0.720551, 0.693402, 0.101056, -0.689852, 0.716862, -0.08, 0.945, 1.035)
 cull_mask = 512
 current = true
@@ -519,15 +556,15 @@ grow_vertical = 2
 texture = SubResource("ViewportTexture_gpfe8")
 expand_mode = 3
 
-[node name="RENDER_selectable" type="TextureRect" parent="3D_SCENE"]
+[node name="RENDER_noise" type="TextureRect" parent="3D_SCENE"]
 visible = false
-material = SubResource("ShaderMaterial_8haio")
+material = SubResource("ShaderMaterial_hdi7w")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = SubResource("ViewportTexture_1niwu")
+texture = SubResource("ViewportTexture_x5m4v")
 expand_mode = 3
 
 [node name="Board_scene" parent="3D_SCENE" instance=ExtResource("2_6c571")]
