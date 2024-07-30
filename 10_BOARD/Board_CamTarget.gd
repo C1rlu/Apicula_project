@@ -12,13 +12,27 @@ var target_position : Vector3
 var f
 var on_auto_move = false
 
+var is_disable : bool = false
+var reset_position : Vector3
+
 
 func _ready():
 	_global_datas.focus_this_on_board.connect(_focus_this)
 
-
+	_global_datas.camera_focus_On.connect(active)
+	reset_position = global_position
+	
+func active(condition : bool, value):
+	is_disable = condition
+	
+	if condition:
+		position = reset_position
+	
 func _process(delta):
 	
+	
+	if is_disable:
+		return
 	if on_auto_move:
 		return
 		
@@ -70,10 +84,8 @@ func _process(delta):
 	
 	target_position.x = clamp(target_position.x, oneminus * min_x, oneminus * max_x)
 	target_position.z = clamp(target_position.z, oneminus * min_z, oneminus * max_z)
+
 	
-	
-	
-		
 	position = target_position
 	
 	

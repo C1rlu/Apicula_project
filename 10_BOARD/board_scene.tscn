@@ -1,4 +1,4 @@
-[gd_scene load_steps=252 format=3 uid="uid://dr73p5vs0sixe"]
+[gd_scene load_steps=256 format=3 uid="uid://dr73p5vs0sixe"]
 
 [ext_resource type="PackedScene" uid="uid://cyb6my1srlcpw" path="res://10_BOARD/Candle/Candle_set.blend" id="1_3ummb"]
 [ext_resource type="Script" path="res://10_BOARD/photos_check.gd" id="1_bcxwj"]
@@ -32,6 +32,7 @@
 [ext_resource type="Script" path="res://10_BOARD/Close_book.gd" id="24_4lsou"]
 [ext_resource type="Resource" uid="uid://dyrjwnrw6plmp" path="res://15_GAME_RESSOURCE/00_Boue_Zones/Boue_DarkHole.tres" id="27_l5lxj"]
 [ext_resource type="Script" path="res://10_BOARD/Open_book.gd" id="27_xury7"]
+[ext_resource type="PackedScene" uid="uid://c4hlsbi48s1t4" path="res://12_INVENTORY/Scanner/scanner_reader_msh.blend" id="29_46dqu"]
 [ext_resource type="PackedScene" uid="uid://bh5a7fhvftxmm" path="res://10_BOARD/00_BOOK/02_Book_information/00_Book_journal.tscn" id="31_x0ass"]
 [ext_resource type="PackedScene" uid="uid://8lvyeqde6f4" path="res://10_BOARD/Apicula_maquette/Apicula_maquette_v01.blend" id="31_xntsl"]
 [ext_resource type="PackedScene" uid="uid://b3e0cgra0jrsb" path="res://08_SUBSCENES/Oddity/Peon_oddity_v01.blend" id="34_4t7ek"]
@@ -44,6 +45,8 @@
 [ext_resource type="Material" uid="uid://cwdathot7k12h" path="res://05_SHADER_TEST/Board/Maquette_sh.tres" id="37_2kevv"]
 [ext_resource type="Resource" uid="uid://ctxrmh1elpnm1" path="res://15_GAME_RESSOURCE/Follower_photoData.tres" id="37_jc8ce"]
 [ext_resource type="PackedScene" uid="uid://dh8xiu7ntj52y" path="res://10_BOARD/TourneDisque/Disque_prefab.blend" id="44_0qqs5"]
+[ext_resource type="Script" path="res://10_BOARD/Focus_state.gd" id="45_37758"]
+[ext_resource type="Resource" uid="uid://d15m8513w4wv2" path="res://15_GAME_RESSOURCE/03_BoardCam_state/AppiculaM_focus_data.tres" id="46_av22g"]
 [ext_resource type="Material" uid="uid://c0oms0qis0dcm" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_mat_02.tres" id="46_tmbd7"]
 [ext_resource type="Material" uid="uid://cfi5jyq3utqd4" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_mat_04.tres" id="47_r4p1c"]
 
@@ -1327,6 +1330,13 @@ shader_parameter/light_color = Color(0.0470588, 0.207843, 0.227451, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_a213g"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l3nap"]
+render_priority = 0
+shader = ExtResource("1_k1enu")
+shader_parameter/Dark_color = Color(0, 0, 0, 1)
+shader_parameter/ColorParameter = Color(0.0196078, 0.121569, 0.129412, 1)
+shader_parameter/light_color = Color(0.419608, 0.352941, 0.219608, 1)
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_isdhd"]
 render_priority = 0
 shader = ExtResource("1_k1enu")
@@ -1929,6 +1939,9 @@ shader_parameter/ColorParameter = Color(0.0431373, 0.192157, 0.203922, 1)
 material = ExtResource("6_kkuc8")
 radial_segments = 8
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_yuede"]
+size = Vector3(1.08643, 1, 1)
+
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_klsyc"]
 constant = 0.826
 
@@ -2139,13 +2152,6 @@ shader = SubResource("VisualShader_wr27h")
 shader_parameter/Main_color = Color(0.427451, 0.376471, 0.282353, 1)
 shader_parameter/Gradiant = SubResource("GradientTexture2D_7l1xj")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_l3nap"]
-render_priority = 0
-shader = ExtResource("1_k1enu")
-shader_parameter/Dark_color = Color(0, 0, 0, 1)
-shader_parameter/ColorParameter = Color(0.0196078, 0.121569, 0.129412, 1)
-shader_parameter/light_color = Color(0.419608, 0.352941, 0.219608, 1)
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5kny1"]
 render_priority = 0
 shader = ExtResource("1_k1enu")
@@ -2171,7 +2177,7 @@ omni_shadow_mode = 0
 [node name="Deco" type="Node3D" parent="."]
 
 [node name="Lanterne2" parent="Deco" instance=ExtResource("1_l5l52")]
-transform = Transform3D(0.09052, 0, 0, 0, 0.09052, 0, 0, 0, 0.09052, 0.184348, 2.98023e-08, -0.156687)
+transform = Transform3D(0.09052, 0, 0, 0, 0.09052, 0, 0, 0, 0.09052, 0.200756, 2.98023e-08, -0.245534)
 
 [node name="Lanterne" parent="Deco/Lanterne2" index="0"]
 transform = Transform3D(0.691992, 0, -0.721905, 0, 1, 0, 0.721905, 0, 0.691992, 0.114583, 1.31694e-06, -0.454325)
@@ -2486,20 +2492,31 @@ transform = Transform3D(-2.95986e-10, 0, -0.00677136, 0, 0.00677136, 0, 0.006771
 Boue_Data = ExtResource("27_l5lxj")
 
 [node name="Bell" parent="." instance=ExtResource("22_4fabq")]
-transform = Transform3D(0.178537, 0, 0, 0, 0.178537, 0, 0, 0, 0.178537, -0.0167627, 5.96046e-08, 0.112303)
+transform = Transform3D(0.178537, 0, 0, 0, 0.178537, 0, 0, 0, 0.178537, 0.674994, 5.96046e-08, 0.205361)
 
 [node name="bell" parent="Bell" index="0"]
-transform = Transform3D(0.765345, 0, 0.146205, 0, 0.779185, 0, -0.146205, 0, 0.765345, 0.913235, 0.0411411, 2.00107)
+transform = Transform3D(0.765345, 0, 0.146205, 0, 0.779185, 0, -0.146205, 0, 0.765345, 0, 0, 0)
 layers = 2
 surface_material_override/0 = SubResource("ShaderMaterial_kqq05")
 surface_material_override/1 = SubResource("ShaderMaterial_jka2s")
 
 [node name="Area3D" type="Area3D" parent="Bell"]
-transform = Transform3D(0.982238, 0, 0.187638, 0, 1, 0, -0.187638, 0, 0.982238, 4.16058, 0.0411409, 0.536188)
+transform = Transform3D(0.982238, 0, 0.187638, 0, 1, 0, -0.187638, 0, 0.982238, 0, 0, 0)
 
 [node name="Col" type="CollisionShape3D" parent="Bell/Area3D"]
 transform = Transform3D(0.367208, 0, 0, 0, 0.367208, 0, 0, 0, 0.367208, 0, 0.0858023, 0)
 shape = SubResource("BoxShape3D_a213g")
+
+[node name="Scanner_reader" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0221759, 0, -0.122532)
+
+[node name="scanner_reader_msh" parent="Scanner_reader" instance=ExtResource("29_46dqu")]
+transform = Transform3D(0.167932, 0, 0, 0, 0.167932, 0, 0, 0, 0.167932, 0, 0, 0)
+
+[node name="msh_scanner" parent="Scanner_reader/scanner_reader_msh" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000728503, 0.00602073, -0.00493574)
+layers = 2
+surface_material_override/0 = SubResource("ShaderMaterial_l3nap")
 
 [node name="Loupe_RG" parent="." instance=ExtResource("12_alpcj")]
 transform = Transform3D(0.135433, 0.00848562, -0.485434, -0.00763931, 0.503941, 0.0066779, 0.485448, 0.00556293, 0.135533, -0.274407, -0.00497461, 0.403081)
@@ -2510,8 +2527,7 @@ transform = Transform3D(0.0117898, 0.00107781, -0.0611994, -0.00193464, 0.062299
 visible = false
 
 [node name="PLume_pot" parent="." instance=ExtResource("5_m8vsb")]
-transform = Transform3D(-0.0622137, -0.00123118, 0.00360307, -0.00132096, 0.0622976, -0.0015214, -0.00357103, -0.00159492, -0.0622073, -0.0995528, 0.00675815, 0.434898)
-visible = false
+transform = Transform3D(-0.0622137, -0.00123118, 0.00360307, -0.00132096, 0.0622976, -0.0015214, -0.00357103, -0.00159492, -0.0622073, -0.239276, 0.00675815, 0.416855)
 
 [node name="Plume" parent="PLume_pot" index="0"]
 transform = Transform3D(-0.061306, -0.00794099, 0.029306, -0.00993596, 0.0676429, -0.00245616, -0.0286912, -0.00645732, -0.0617693, -1.19358, -0.0291275, -0.0194216)
@@ -2525,7 +2541,7 @@ layers = 2
 surface_material_override/0 = ExtResource("6_kkuc8")
 
 [node name="Book_Close_root" type="Node3D" parent="."]
-transform = Transform3D(0.881072, 0.0236816, 0.472389, -0.0229906, 0.99971, -0.00723632, -0.472423, -0.00448479, 0.88136, -0.198895, 0.000346512, 0.362615)
+transform = Transform3D(0.772841, 0.0223639, 0.634205, -0.0229906, 0.99971, -0.00723632, -0.634183, -0.00898823, 0.77313, -0.507116, 0.000346512, 0.272563)
 
 [node name="Close_book" type="Node" parent="Book_Close_root"]
 script = ExtResource("24_4lsou")
@@ -2647,6 +2663,24 @@ layers = 2
 mesh = SubResource("CylinderMesh_xsjxl")
 skeleton = NodePath("")
 
+[node name="Area3D" type="Area3D" parent="Apicula_maquette_v01blend"]
+
+[node name="Focus_state" type="Node" parent="Apicula_maquette_v01blend/Area3D"]
+script = ExtResource("45_37758")
+focus_data = ExtResource("46_av22g")
+
+[node name="On_click" type="Node" parent="Apicula_maquette_v01blend/Area3D"]
+script = ExtResource("17_gpvpy")
+
+[node name="On_Over" type="Node" parent="Apicula_maquette_v01blend/Area3D" node_paths=PackedStringArray("move_node")]
+script = ExtResource("23_4ws66")
+icon_type = 1
+move_node = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Apicula_maquette_v01blend/Area3D"]
+transform = Transform3D(7.02404, 0, -0.20838, 0, 6.10468, 0, 0.420137, 0, 3.4838, 0.374424, 0.636473, 0.087966)
+shape = SubResource("BoxShape3D_yuede")
+
 [node name="Disque_prefab" parent="." instance=ExtResource("44_0qqs5")]
 transform = Transform3D(-0.120931, 0, -0.0692351, 0, 0.139348, 0, 0.0692351, 0, -0.120931, 0.495269, -1.19209e-07, -0.172643)
 
@@ -2676,6 +2710,7 @@ surface_material_override/0 = ExtResource("47_r4p1c")
 surface_material_override/1 = ExtResource("46_tmbd7")
 
 [connection signal="On_click" from="Book_Close_root/Area3D/On_click_off" to="Book_Close_root/Area3D/On_click_off" method="_on_on_click"]
+[connection signal="On_click" from="Apicula_maquette_v01blend/Area3D/On_click" to="Apicula_maquette_v01blend/Area3D/Focus_state" method="_on_on_click_on_click"]
 
 [editable path="Deco/Lanterne2"]
 [editable path="Deco/Candle_set"]
@@ -2688,6 +2723,7 @@ surface_material_override/1 = ExtResource("46_tmbd7")
 [editable path="Chavet_part3"]
 [editable path="Chavet_part4"]
 [editable path="Bell"]
+[editable path="Scanner_reader/scanner_reader_msh"]
 [editable path="PLume_pot"]
 [editable path="TUBE_oddity/Peon_oddity_v01"]
 [editable path="TUBE_oddity/Tube_oddity"]
