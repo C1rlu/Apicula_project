@@ -26,8 +26,8 @@ func _input(event):
 	if !_global_datas.Player_In_Inventory:
 		return	
 		
-	#if _global_datas.zoom_value == 1:
-		#return
+	if _global_datas.zoom_value == 1:
+		return
 	
 			
 	if _pad: 

@@ -133,8 +133,6 @@ var no_zoom_pos : Vector3
 var normal_zoom_pos : Vector3
 var max_zoom_pos : Vector3
 
-var scanner_zoom_pos : Vector3
-
 var target : Vector3
 var rotation_target : Vector3
 var zoom_index : int = 1
@@ -181,14 +179,9 @@ func _input(event):
 	if lock_action:
 		return	
 		
-		
-	if event.is_action_pressed(\"Board_zoom_in\"):
+	if event.is_action_pressed(\"Click_on_board\"):
 		_Zoom(1)
 			
-	if event.is_action_pressed(\"Board_zoom_out\"):
-		_Zoom(-1)
-
-
 func _reset():
 	zoom_index = 1
 	_global_datas.zoom_value = 1
@@ -251,7 +244,7 @@ func _set_zoom_pos():
 	normal_zoom_pos = no_zoom_pos + forward * 0.7 + Vector3(0.0,0.0,-0.08)
 	max_zoom_pos = no_zoom_pos + forward * 1.05 + Vector3(0.0,0.0,-0.12)
 
-	scanner_zoom_pos = no_zoom_pos + forward * 1.15 + Vector3(0.0,0.0,-0.18)
+
 
 func _on_pad_clic_raycast_active_scanner(condition):
 	if condition:
@@ -294,6 +287,8 @@ func _physics_process(_delta):
 	if !_global_datas.camera_current_state == _global_datas.camera_state.Main:
 		
 		camp_root_render.global_position = cam_target.global_position + offset	
+		
+		
 		return
 		
 		
@@ -442,7 +437,6 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-515.723, 113.347)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(680, 140)
@@ -603,7 +597,7 @@ nodes/fragment/connections = PackedInt32Array(39, 0, 37, 0, 37, 0, 35, 1, 69, 0,
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_noh2t"]
 shader = SubResource("VisualShader_evyyy")
-shader_parameter/Opacity = 0.0
+shader_parameter/Opacity = 1.0
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_qrcca"]
 viewport_path = NodePath("3D_SCENE/SubViewport_scanner")
@@ -771,8 +765,13 @@ scanner_first_data = ExtResource("11_ldr1y")
 [node name="Fade" type="Node" parent="Show_OnScanner"]
 script = ExtResource("11_2x7ah")
 
-[node name="TurnScanner" type="Node" parent="Show_OnScanner"]
+[node name="Zoom_inScan" type="Node" parent="Show_OnScanner"]
+
+[node name="TurnScanner_and_zoom" type="Node" parent="Show_OnScanner" node_paths=PackedStringArray("Cam_ref", "Cam_to_move", "Cam_to_move_scanner")]
 script = ExtResource("12_2daja")
+Cam_ref = NodePath("../../3D_SCENE/Camera_state/Camera_OnScanner")
+Cam_to_move = NodePath("../../3D_SCENE/SubViewport/Camera3D_state")
+Cam_to_move_scanner = NodePath("../../3D_SCENE/SubViewport_scanner/Camera3D_state_Scanner")
 
 [node name="3D_SCENE" type="Node3D" parent="."]
 
@@ -793,7 +792,7 @@ script = ExtResource("9_2ajy3")
 focus_data = ExtResource("12_ceb6p")
 
 [node name="Camera_OnScanner" type="Camera3D" parent="3D_SCENE/Camera_state"]
-transform = Transform3D(0.990024, 0.0738303, -0.120009, 0, 0.851727, 0.523986, 0.140901, -0.518759, 0.84323, 0, 0.207, 0.095)
+transform = Transform3D(0.990024, 0.0738303, -0.120009, 0, 0.851727, 0.523986, 0.140901, -0.518759, 0.84323, 0, 0.24, 0.151)
 cull_mask = 2
 fov = 40.0
 script = ExtResource("9_2ajy3")
