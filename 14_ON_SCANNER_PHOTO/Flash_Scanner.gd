@@ -4,14 +4,13 @@ extends Node
 @onready var render_scanner = $"../RENDER_Scanner"
 @onready var render_scanner_material : Material = render_scanner.get_material()
 
+@onready var light = $"../InsidePhoto_scanner_scene/OmniLight3D"
 
 func _ready():
 	_global_datas.flash_scanner.connect(flash_scanner)
-
+	done()
 
 func flash_scanner():
-	
-
 	
 	if !_global_datas.selected_photoData:
 			return
@@ -20,6 +19,7 @@ func flash_scanner():
 		var instance = _global_datas.selected_photoData.scanner_prefab.instantiate()
 		loader.add_child(instance)
 	
+	light.visible = true
 	
 	var fade_in = create_tween()
 	fade_in.tween_method(set_shader_value,1.0,0.0,2.0).set_trans(Tween.TRANS_SINE)
@@ -31,6 +31,7 @@ func done():
 	for e in previous:
 		e.queue_free()
 	
+	light.visible = false
 func set_shader_value(value):
 	
 	render_scanner_material.set_shader_parameter("Opacity",value)

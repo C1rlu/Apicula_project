@@ -1,25 +1,24 @@
 extends Node
 
-@onready var render_scanner = $"../RENDER_Scanner"
-@onready var loader = $"../InsidePhoto_scanner_scene/loader"
-@onready var backdrop_focus = $"../BACKDROP_FOCUS"
-@onready var active_scene_viewports = $"../Active_scene_viewports"
+@onready var render_scanner = $"../3D_SCENE/RENDER_Scanner"
+@onready var loader = $"../3D_SCENE/Loader"
 
+@onready var scanner_light = $"../3D_SCENE/Scanner_light"
 
+@export var scanner_first_data : PhotoData
 func _ready():
 	_global_datas.show_on_scanner.connect(_show_scanner)
 
 	render_scanner.visible = true
-	backdrop_focus.visible = true
 
 	stop_scanner()
-	
+	_global_datas.selected_photoData = scanner_first_data
+
+
 func _show_scanner(condition : bool):
 	
-	_global_datas.in_scanner_mode = condition
 	
-	active_scene_viewports._active_viewports(condition)
-
+	
 	if condition:
 		
 		#loader.rotation = Vector3.ZERO
@@ -29,12 +28,8 @@ func _show_scanner(condition : bool):
 		if _global_datas.selected_photoData.scanner_prefab:	
 			var instance = _global_datas.selected_photoData.scanner_prefab.instantiate()
 			loader.add_child(instance)
-		_global_datas.show_ui_scanner_dots.emit(true)
-		_global_datas._add_back_call.emit(_back_call)
-		
-		if _global_datas.Npc_Dialogue != null:
-			_global_datas._start_dialogue_box.emit()
-		
+	
+	#scanner_light.visible = condition
 			
 func stop_scanner():
 
@@ -43,14 +38,3 @@ func stop_scanner():
 		e.queue_free()
 
 
-func _back_call():
-	
-	_global_datas.show_on_scanner.emit(false)
-
-	_global_datas._show_object_legend.emit(false,null)
-	_global_datas.show_ui_scanner_dots.emit(false)
-	
-	#_global_datas._start_dialogue_box.emit()
-	if _global_datas.Npc_Dialogue != null:
-		_global_datas._show_dialogue_box.emit()
-	
