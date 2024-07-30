@@ -5,7 +5,7 @@ extends Node
 @onready var text = $"../legend_render/text"
 @onready var text_for_size = $"../legend_render/text_for_size"
 
-@onready var on_over = $"../On_Over"
+@onready var on_over = $"../All_over/On_Over"
 @onready var timer = $Timer
 
 

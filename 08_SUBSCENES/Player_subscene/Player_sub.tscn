@@ -1,4 +1,4 @@
-[gd_scene load_steps=85 format=3 uid="uid://g7u8o55jrnyy"]
+[gd_scene load_steps=86 format=3 uid="uid://g7u8o55jrnyy"]
 
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="1_n1vw4"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Player_sub_behaviour.gd" id="1_o2v73"]
@@ -9,6 +9,7 @@
 [ext_resource type="Resource" uid="uid://d11cl4f25dgwg" path="res://08_SUBSCENES/Tools/Flash_light.tres" id="6_axu5t"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/active_tool_scene.gd" id="8_8bfcd"]
 [ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_elements_mat.tres" id="8_wvhjt"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Magnet_effect.gd" id="9_wphos"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Active_scanner_visual_pulse.gd" id="10_ir8y2"]
 [ext_resource type="Shader" uid="uid://drchaj5fcdan0" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_sh.tres" id="12_cij64"]
 [ext_resource type="Resource" uid="uid://380xcgsxw62f" path="res://08_SUBSCENES/Tools/magnet_tool.tres" id="12_nmehd"]
@@ -488,6 +489,9 @@ shader_parameter/R = 0.11
 shader_parameter/Size = 0.7
 shader_parameter/flash_opacity = 0.5
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_g1ic5"]
+radius = 0.303955
+
 [sub_resource type="Curve" id="Curve_mwumu"]
 _data = [Vector2(0, 0.56015), 0.0, 0.0, 0, 0, Vector2(1, 0.181391), 0.0, 0.0, 0, 0]
 point_count = 2
@@ -516,9 +520,6 @@ radius = 0.25
 height = 0.5
 radial_segments = 8
 rings = 8
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_g1ic5"]
-radius = 0.303955
 
 [sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_gp5bj"]
 
@@ -794,6 +795,11 @@ wait_time = 0.1
 [node name="Photo_Flash" type="Node" parent="."]
 script = SubResource("GDScript_8qwgp")
 
+[node name="Magnet_effect" type="Node" parent="." node_paths=PackedStringArray("magnet_fx")]
+script = ExtResource("9_wphos")
+manget_tool = ExtResource("12_nmehd")
+magnet_fx = NodePath("../VFX_MAGNET")
+
 [node name="Render_mesh" type="Node3D" parent="."]
 
 [node name="Active_visual_tools" type="Node" parent="Render_mesh"]
@@ -986,16 +992,6 @@ surface_material_override/0 = SubResource("ShaderMaterial_4j2xv")
 [node name="Orbe_spawner_position" type="Node3D" parent="Render_mesh"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0341371, 0.137754, 0.194054)
 
-[node name="VFX_SPHERE_MIRROR" type="GPUParticles3D" parent="Render_mesh/Orbe_spawner_position"]
-transform = Transform3D(1.429, 0, 0, 0, 1.429, 0, 0, 0, 1.429, 0.00496598, -0.008692, -0.0181673)
-layers = 4
-cast_shadow = 0
-emitting = false
-amount = 50
-speed_scale = 2.0
-process_material = SubResource("ParticleProcessMaterial_icvuv")
-draw_pass_1 = SubResource("SphereMesh_6ufqt")
-
 [node name="ZoneCollide" type="Area3D" parent="."]
 collision_layer = 4
 collision_mask = 4
@@ -1021,6 +1017,16 @@ shape = SubResource("SphereShape3D_g1ic5")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.348655, 0.114098)
 layers = 4100
 omni_range = 2.0
+
+[node name="VFX_MAGNET" type="GPUParticles3D" parent="."]
+transform = Transform3D(1.429, 0, 0, 0, 1.429, 0, 0, 0, 1.429, 0.0391031, 0.129062, 0.175887)
+layers = 4
+cast_shadow = 0
+emitting = false
+amount = 50
+speed_scale = 2.0
+process_material = SubResource("ParticleProcessMaterial_icvuv")
+draw_pass_1 = SubResource("SphereMesh_6ufqt")
 
 [node name="Fx_water" type="GPUParticles3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.0390157, 0.999239, 0, -0.999239, 0.0390157, 0.00288114, 0.135205, -0.0997294)

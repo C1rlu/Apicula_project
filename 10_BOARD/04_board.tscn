@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://cein0q2eirkay"]
+[gd_scene load_steps=35 format=3 uid="uid://cein0q2eirkay"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_g3pi7"]
 [ext_resource type="Script" path="res://10_BOARD/Board_CamTarget.gd" id="1_janbq"]
@@ -135,7 +135,7 @@ var all
 var origin_global_pos : Vector3
 var lock_action : bool = false
 
-
+signal lock_movement(condition : bool)
 
 func _ready():
 
@@ -162,9 +162,9 @@ func _input(event):
 	if !_global_datas.Player_In_Inventory:
 		return
 	
-		#
-	#if lock_action:
-		#return	
+
+	if lock_action:
+		return	
 		
 		
 	if event.is_action_pressed(\"Board_zoom_in\"):
@@ -208,18 +208,20 @@ func _Zoom(value : int):
 	
 func process_zoom():
 	
+	
+	lock_movement.emit(true)
 	lock_action = true
 	
 	if t:
 		t.kill()
 	t = create_tween()
-	t.tween_property(Cam,\"position\",target,0.8) #.set_trans(Tween.TRANS_SINE)
+	t.tween_property(Cam,\"position\",target,0.8).set_trans(Tween.TRANS_SINE)
 	t.connect(\"finished\",done)
 	
 	if r:
 		r.kill()
 	r = create_tween()
-	r.tween_property(Cam,\"rotation_degrees\",rotation_target,0.8)#.set_trans(Tween.TRANS_SINE)
+	r.tween_property(Cam,\"rotation_degrees\",rotation_target,0.8).set_trans(Tween.TRANS_SINE)
 	
 
 func done():
@@ -388,6 +390,8 @@ nodes/fragment/connections = PackedInt32Array(3, 0, 2, 0, 4, 0, 2, 1, 5, 0, 2, 2
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_blt4p"]
 shader = SubResource("VisualShader_elssd")
 
+[sub_resource type="SphereMesh" id="SphereMesh_ycnm1"]
+
 [sub_resource type="ArrayMesh" id="ArrayMesh_i7f22"]
 resource_name = "Player_Boat_01-c9377ed3c1eb09ef00335a9606626fca_Cube_001"
 _surfaces = [{
@@ -511,6 +515,11 @@ min_x = -1.0
 max_x = 1.0
 min_z = -0.5
 max_z = 0.5
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="3D_SCENE/CamTarget"]
+transform = Transform3D(0.0354637, 0, 0, 0, 0.0354637, 0, 0, 0, 0.0354637, 0, 0, 0.150396)
+layers = 2
+mesh = SubResource("SphereMesh_ycnm1")
 
 [node name="Player_on_map" type="Node3D" parent="3D_SCENE"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.000402212, 0.00895628, -0.00213873)

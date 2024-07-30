@@ -10,11 +10,12 @@ extends Node3D
 @export var book_rotation_angle : float = -90.0
 @onready var legend = $legend
 @onready var photo = $Photo
-@onready var collision_shape_3d_p = $Photo/Photo_area/CollisionShape3D
+
 @onready var collision_shape_3d_l = $legend/Legend_area/CollisionShape3D
 
 signal update_legend( legend : String)
 
+@onready var on_over_full = $legend/All_over/On_Over_full
 
 
 		
@@ -41,8 +42,8 @@ func show_all_info():
 	
 	#active photo on board
 	photo.visible = true	
-	collision_shape_3d_p.disabled = false
-		
+
+	on_over_full.visible = true	
 
 	# update legend:
 	update_legend.emit(Photo_data.legend)
@@ -61,7 +62,9 @@ func _disable():
 	
 	legend.visible = false	
 	photo.visible = false
-	collision_shape_3d_p.disabled = true	
+	
+	on_over_full.visible = false
+	
 	collision_shape_3d_l.disabled = true	
 
 

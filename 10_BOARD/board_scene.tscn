@@ -1,4 +1,4 @@
-[gd_scene load_steps=251 format=3 uid="uid://dr73p5vs0sixe"]
+[gd_scene load_steps=252 format=3 uid="uid://dr73p5vs0sixe"]
 
 [ext_resource type="PackedScene" uid="uid://cyb6my1srlcpw" path="res://10_BOARD/Candle/Candle_set.blend" id="1_3ummb"]
 [ext_resource type="Script" path="res://10_BOARD/photos_check.gd" id="1_bcxwj"]
@@ -17,10 +17,10 @@
 [ext_resource type="PackedScene" uid="uid://b3i04ha2iqr4l" path="res://10_BOARD/Loupe/loupe_rg.tscn" id="12_alpcj"]
 [ext_resource type="Script" path="res://10_BOARD/Letters_checks.gd" id="14_vbqye"]
 [ext_resource type="Resource" uid="uid://cooqi0giysm3w" path="res://15_GAME_RESSOURCE/MrBirs_photoData.tres" id="14_ycmhi"]
-[ext_resource type="PackedScene" uid="uid://dxjn0mjuqebwy" path="res://10_BOARD/scanner_area.tscn" id="15_7dbnv"]
 [ext_resource type="Resource" uid="uid://dm0uus2gow50q" path="res://15_GAME_RESSOURCE/Otis_photoData.tres" id="15_m1itl"]
 [ext_resource type="Resource" uid="uid://bcid58kxecbk2" path="res://15_GAME_RESSOURCE/Maurice_photoData.tres" id="16_14mtd"]
 [ext_resource type="Resource" uid="uid://nb378vtwr23i" path="res://12_INVENTORY/Words_note/Find_The_Apicula_note.tres" id="17_3gp1t"]
+[ext_resource type="Script" path="res://10_BOARD/On_Click_clock.gd" id="17_gpvpy"]
 [ext_resource type="Resource" uid="uid://bvadwmoawvfs0" path="res://12_INVENTORY/Words_note/Meet_Ela_note.tres" id="18_e0vtf"]
 [ext_resource type="Resource" uid="uid://dlm0knnql1e6h" path="res://15_GAME_RESSOURCE/Ghost_Scanner_photoData.tres" id="18_gjhpl"]
 [ext_resource type="Script" path="res://10_BOARD/Boue/Boue_check.gd" id="18_tu2nn"]
@@ -786,6 +786,9 @@ size = Vector2(1, 1.56)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_5heux"]
 size = Vector2(1, 1.22)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xtbcp"]
+size = Vector3(1.32465, 0.264404, 0.875488)
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_6pb33"]
 parameter_name = "Dark_color"
@@ -2352,9 +2355,6 @@ mesh = SubResource("BoxMesh_v3rv8")
 skeleton = NodePath("../..")
 surface_material_override/0 = ExtResource("6_kkuc8")
 
-[node name="clock_3d_prefab" parent="Deco" instance=ExtResource("8_x5b6k")]
-transform = Transform3D(0.04829, -2.43708e-05, -0.0129643, 2.4116e-05, 0.05, -4.16356e-06, 0.0129643, -2.23175e-06, 0.04829, 0.0335523, -0.00191151, 0.443388)
-
 [node name="LINKS" type="Node3D" parent="."]
 
 [node name="link_01" type="MeshInstance3D" parent="LINKS"]
@@ -2379,33 +2379,49 @@ surface_material_override/0 = SubResource("ShaderMaterial_ev73a")
 transform = Transform3D(0.882135, 0, -0.470996, 0, 1, 0, 0.470996, 0, 0.882135, 0.16492, 0.00272226, 0.0156601)
 script = ExtResource("1_bcxwj")
 
-[node name="MrBird_Photo_area" parent="PHOTO" instance=ExtResource("1_mtaom")]
+[node name="MrBird_Photo" parent="PHOTO" node_paths=PackedStringArray("next_photo_data_question", "_question_link") instance=ExtResource("1_mtaom")]
 transform = Transform3D(0.605645, 0, 0.79574, 0, 1, 0, -0.79574, 0, 0.605645, -0.562169, 0.00081823, 0.247527)
 Photo_data = ExtResource("14_ycmhi")
+next_photo_data_question = [NodePath("../Maurice_Photo")]
+_question_link = [NodePath("../../LINKS/link_03")]
 
 [node name="Otis_Photo" parent="PHOTO" instance=ExtResource("1_mtaom")]
 transform = Transform3D(0.837527, 0, 0.546412, 0, 1, 0, -0.546412, 0, 0.837527, -0.399603, 0.00109485, 0.0835533)
 Photo_data = ExtResource("15_m1itl")
 
-[node name="Maurice_Photo_area5" parent="PHOTO" node_paths=PackedStringArray("next_photo_data_question", "_question_link") instance=ExtResource("1_mtaom")]
+[node name="Maurice_Photo" parent="PHOTO" node_paths=PackedStringArray("next_photo_data_question", "_question_link") instance=ExtResource("1_mtaom")]
 transform = Transform3D(0.770508, 0.00116029, 0.637437, -0.00136849, 0.999999, -0.000166074, -0.637436, -0.000744379, 0.770509, -0.448402, 0.000537969, 0.169163)
 Photo_data = ExtResource("16_14mtd")
-next_photo_data_question = [NodePath("../05")]
+next_photo_data_question = [NodePath("../GhostFollower_Photo")]
 _question_link = [NodePath("../../LINKS/link_03")]
 
-[node name="05" parent="PHOTO" node_paths=PackedStringArray("next_photo_data_question", "_question_link") instance=ExtResource("15_7dbnv")]
-transform = Transform3D(0.751577, 0, 0.659649, 0, 1, 0, -0.659649, 0, 0.751577, -0.385546, 0.00361411, 0.289721)
+[node name="GhostFollower_Photo" parent="PHOTO" node_paths=PackedStringArray("next_photo_data_question", "_question_link") instance=ExtResource("1_mtaom")]
+transform = Transform3D(0.829902, 0.00122836, 0.557918, -0.00136849, 0.999999, -0.000166074, -0.557917, -0.000625695, 0.829903, -0.377001, 0.000537954, 0.295134)
 Photo_data = ExtResource("18_gjhpl")
-next_photo_data_question = [NodePath("../06")]
+next_photo_data_question = [NodePath("../Epave_Photo")]
 _question_link = [NodePath("../../LINKS/link_02")]
 
-[node name="06" parent="PHOTO" node_paths=PackedStringArray("_question_link") instance=ExtResource("15_7dbnv")]
-transform = Transform3D(0.678881, 0, 0.734253, 0, 1, 0, -0.734253, 0, 0.678881, -0.307911, 0.0037994, 0.24902)
+[node name="Epave_Photo" parent="PHOTO" node_paths=PackedStringArray("_question_link") instance=ExtResource("1_mtaom")]
+transform = Transform3D(0.792254, 0.00118553, 0.6102, -0.00136849, 0.999999, -0.000166074, -0.610199, -0.000703494, 0.792255, -0.298916, 0.000537999, 0.251722)
 _question_link = [NodePath("../../LINKS/link_01")]
 
 [node name="Letters" type="Node3D" parent="." node_paths=PackedStringArray("all_note")]
 script = ExtResource("14_vbqye")
 all_note = [NodePath("note_01"), NodePath("note_02"), NodePath("note_03"), NodePath("note_04")]
+
+[node name="Area3D" type="Area3D" parent="Letters"]
+
+[node name="On_click" type="Node" parent="Letters/Area3D"]
+script = ExtResource("17_gpvpy")
+
+[node name="On_Over" type="Node" parent="Letters/Area3D" node_paths=PackedStringArray("move_node")]
+script = ExtResource("23_4ws66")
+icon_type = 1
+move_node = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Letters/Area3D"]
+transform = Transform3D(0.0818709, 0, -0.00792366, 0, 0.0822535, 0, 0.00792366, 0, 0.0818709, -0.0540348, 0.0082818, 0.354089)
+shape = SubResource("BoxShape3D_xtbcp")
 
 [node name="note_01" parent="Letters" instance=ExtResource("9_ajmma")]
 transform = Transform3D(0.983171, 0, -0.182682, 0, 1, 0, 0.182682, 0, 0.983173, -0.0549712, 0.00367881, 0.353129)
@@ -2422,6 +2438,9 @@ Note_data = ExtResource("18_e0vtf")
 [node name="note_04" parent="Letters" instance=ExtResource("9_ajmma")]
 transform = Transform3D(0.99714, 0, -0.0755702, 0, 1, 0, 0.0755703, 0, 0.997141, -0.0534332, 0.00658163, 0.357349)
 Note_data = ExtResource("17_3gp1t")
+
+[node name="clock_3d_prefab" parent="." instance=ExtResource("8_x5b6k")]
+transform = Transform3D(0.04829, -2.43708e-05, -0.0129643, 2.4116e-05, 0.05, -4.16356e-06, 0.0129643, -2.23175e-06, 0.04829, 0.0335523, -0.00191151, 0.443388)
 
 [node name="Chavet_part" parent="." instance=ExtResource("20_d7w3e")]
 transform = Transform3D(0.0117306, 0, 0, 0, 0.0117306, 0, 0, 0, 0.0117306, 0.284679, 0.00290929, 0.330804)
@@ -2662,8 +2681,8 @@ surface_material_override/1 = ExtResource("46_tmbd7")
 [editable path="Deco/Candle_set"]
 [editable path="Deco/Candle_set3"]
 [editable path="Deco/Candle_set2"]
-[editable path="Deco/clock_3d_prefab"]
-[editable path="Deco/clock_3d_prefab/clock_3d"]
+[editable path="clock_3d_prefab"]
+[editable path="clock_3d_prefab/clock_3d"]
 [editable path="Chavet_part"]
 [editable path="Chavet_part2"]
 [editable path="Chavet_part3"]
