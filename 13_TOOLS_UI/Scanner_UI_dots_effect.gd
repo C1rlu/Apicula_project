@@ -10,7 +10,12 @@ var actual_value : float
 
 func _ready():
 	_global_datas.show_ui_scanner_dots.connect(_Ui_dots_effect)
-
+	_global_datas.flash_scanner.connect(flash)
+	
+	
+func flash():
+	actual_value = 1	
+	_Ui_dots_effect(false)	
 func _Ui_dots_effect(condition : bool):
 	
 	if t:

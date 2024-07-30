@@ -51,8 +51,8 @@ func scanning_done():
 	stop_scanning()
 	
 	_global_datas.selected_photoData = photoData
-	_global_datas.show_on_scanner.emit(true)
-	
+	#_global_datas.show_on_scanner.emit(true)
+	_global_datas.flash_scanner.emit()
 	photoData.intrige_state = photoData.intrigue_s.started
 	
 

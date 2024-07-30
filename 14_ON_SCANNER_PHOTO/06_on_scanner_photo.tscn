@@ -1,8 +1,9 @@
-[gd_scene load_steps=68 format=3 uid="uid://dpl12cginnwpp"]
+[gd_scene load_steps=69 format=3 uid="uid://dpl12cginnwpp"]
 
 [ext_resource type="Script" path="res://14_ON_SCANNER_PHOTO/Show_OnScanner.gd" id="1_0c44t"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_ifne7"]
 [ext_resource type="Script" path="res://14_ON_SCANNER_PHOTO/Rotation_scanner.gd" id="2_6aofa"]
+[ext_resource type="Script" path="res://14_ON_SCANNER_PHOTO/Flash_Scanner.gd" id="2_gnkwf"]
 [ext_resource type="Script" path="res://14_ON_SCANNER_PHOTO/Fade_scanner.gd" id="3_iqou0"]
 [ext_resource type="Script" path="res://14_ON_SCANNER_PHOTO/Zoom_scanner.gd" id="4_06k31"]
 [ext_resource type="PackedScene" uid="uid://b4hspc8dsyv14" path="res://08_SUBSCENES/Elements/Tiny_boat/scene_boat_ch_test.tscn" id="5_fy62g"]
@@ -272,7 +273,7 @@ nodes/fragment/connections = PackedInt32Array(39, 0, 37, 0, 37, 0, 35, 1, 69, 0,
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qojhl"]
 shader = SubResource("VisualShader_evyyy")
-shader_parameter/Opacity = 0.0
+shader_parameter/Opacity = 1.0
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_ev3qb"]
 viewport_path = NodePath("SubViewport_scanner")
@@ -438,7 +439,7 @@ nodes/fragment/connections = PackedInt32Array(24, 0, 25, 2, 60, 0, 61, 0, 61, 0,
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1p8ix"]
 shader = SubResource("VisualShader_drqso")
-shader_parameter/Opacity = 0.0
+shader_parameter/Opacity = 0.535
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_ucabj"]
 viewport_path = NodePath("SubViewport_scanner_Noise")
@@ -674,6 +675,9 @@ shader_parameter/Ligne_widht = 0.05
 script = ExtResource("1_ifne7")
 viewports = [NodePath("../SubViewport_scanner"), NodePath("../SubViewport_scanner_Noise")]
 
+[node name="Flash_Scanner" type="Node" parent="."]
+script = ExtResource("2_gnkwf")
+
 [node name="Show_OnScanner" type="Node" parent="."]
 script = ExtResource("1_0c44t")
 
@@ -775,6 +779,7 @@ transform = Transform3D(0.0133498, 0, 0, 0, 0.0133497, 0, 0, 0, 0.0133498, 0, 0,
 
 [node name="Grid" type="MeshInstance3D" parent="InsidePhoto_scanner_scene"]
 transform = Transform3D(0.312734, 0, 0, 0, 0, 0.312734, 0, -0.312734, 0, 0, 0.0362411, -0.0370907)
+visible = false
 layers = 128
 mesh = SubResource("QuadMesh_0l2rs")
 surface_material_override/0 = SubResource("ShaderMaterial_wi17y")

@@ -35,7 +35,7 @@ func _show_scanner(condition : bool):
 		if _global_datas.Npc_Dialogue != null:
 			_global_datas._start_dialogue_box.emit()
 		
-		
+			
 func stop_scanner():
 
 	var previous = loader.get_children()

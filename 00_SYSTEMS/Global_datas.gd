@@ -154,6 +154,7 @@ signal switch_icon_cursor(icon_type : icon_class.icon_list)
 signal focus_this_on_board(target : Vector3)
 signal Open_ui_dark_backdrop(condition : bool)
 signal show_on_scanner(condition : bool)
+signal flash_scanner
 signal show_ui_scanner_dots(condition : bool)
 
 var selected_book : book_page_data

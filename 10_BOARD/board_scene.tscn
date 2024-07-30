@@ -1,4 +1,4 @@
-[gd_scene load_steps=258 format=3 uid="uid://dr73p5vs0sixe"]
+[gd_scene load_steps=262 format=3 uid="uid://dr73p5vs0sixe"]
 
 [ext_resource type="PackedScene" uid="uid://cyb6my1srlcpw" path="res://10_BOARD/Candle/Candle_set.blend" id="1_3ummb"]
 [ext_resource type="Script" path="res://10_BOARD/photos_check.gd" id="1_bcxwj"]
@@ -33,6 +33,9 @@
 [ext_resource type="Resource" uid="uid://dyrjwnrw6plmp" path="res://15_GAME_RESSOURCE/00_Boue_Zones/Boue_DarkHole.tres" id="27_l5lxj"]
 [ext_resource type="Script" path="res://10_BOARD/Open_book.gd" id="27_xury7"]
 [ext_resource type="PackedScene" uid="uid://c4hlsbi48s1t4" path="res://12_INVENTORY/Scanner/scanner_reader_msh.blend" id="29_46dqu"]
+[ext_resource type="Script" path="res://10_BOARD/Open_Scanner.gd" id="29_le7qy"]
+[ext_resource type="Resource" uid="uid://3pilop3f4m6r" path="res://15_GAME_RESSOURCE/03_BoardCam_state/ScannerM_focus_data.tres" id="30_1ohc7"]
+[ext_resource type="Resource" uid="uid://dyh1qg1u652pl" path="res://15_GAME_RESSOURCE/Epave_ch_photoData.tres" id="30_h64ui"]
 [ext_resource type="PackedScene" uid="uid://bh5a7fhvftxmm" path="res://10_BOARD/00_BOOK/02_Book_information/00_Book_journal.tscn" id="31_x0ass"]
 [ext_resource type="PackedScene" uid="uid://8lvyeqde6f4" path="res://10_BOARD/Apicula_maquette/Apicula_maquette_v01.blend" id="31_xntsl"]
 [ext_resource type="PackedScene" uid="uid://b3e0cgra0jrsb" path="res://08_SUBSCENES/Oddity/Peon_oddity_v01.blend" id="34_4t7ek"]
@@ -1331,6 +1334,9 @@ shader_parameter/light_color = Color(0.0470588, 0.207843, 0.227451, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_a213g"]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_c0r5v"]
+size = Vector3(0.169104, 0.063208, 0.162207)
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_l3nap"]
 render_priority = 0
 shader = ExtResource("1_k1enu")
@@ -2514,6 +2520,28 @@ shape = SubResource("BoxShape3D_a213g")
 [node name="Scanner_reader" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0221759, 0, -0.122532)
 
+[node name="Area3D" type="Area3D" parent="Scanner_reader"]
+
+[node name="Open_Scanner" type="Node" parent="Scanner_reader/Area3D"]
+script = ExtResource("29_le7qy")
+scanner_data = ExtResource("30_h64ui")
+
+[node name="Focus_state" type="Node" parent="Scanner_reader/Area3D"]
+script = ExtResource("45_37758")
+focus_data = ExtResource("30_1ohc7")
+
+[node name="On_click" type="Node" parent="Scanner_reader/Area3D"]
+script = ExtResource("17_gpvpy")
+
+[node name="On_Over" type="Node" parent="Scanner_reader/Area3D" node_paths=PackedStringArray("move_node")]
+script = ExtResource("23_4ws66")
+icon_type = 1
+move_node = NodePath("../../scanner_reader_msh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Scanner_reader/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00346069, 0.0374634, -4.88311e-05)
+shape = SubResource("BoxShape3D_c0r5v")
+
 [node name="scanner_reader_msh" parent="Scanner_reader" instance=ExtResource("29_46dqu")]
 transform = Transform3D(0.167932, 0, 0, 0, 0.167932, 0, 0, 0, 0.167932, 0, 0, 0)
 
@@ -2734,6 +2762,8 @@ move_node = NodePath("../../Disque_prefab")
 transform = Transform3D(0.871195, 0, 0.490913, 0, 1, 0, -0.490913, 0, 0.871195, 0.015209, 0.134239, -0.0155258)
 shape = SubResource("BoxShape3D_64lbo")
 
+[connection signal="On_click" from="Scanner_reader/Area3D/On_click" to="Scanner_reader/Area3D/Open_Scanner" method="_on_on_click_on_click"]
+[connection signal="On_click" from="Scanner_reader/Area3D/On_click" to="Scanner_reader/Area3D/Focus_state" method="_on_on_click_on_click"]
 [connection signal="On_click" from="Book_Close_root/Area3D/On_click_off" to="Book_Close_root/Area3D/On_click_off" method="_on_on_click"]
 [connection signal="On_click" from="Apicula_maquette_v01blend/Area3D/On_click" to="Apicula_maquette_v01blend/Area3D/Focus_state" method="_on_on_click_on_click"]
 [connection signal="On_click" from="TOURNE_DISQUE/Area3D/On_click" to="TOURNE_DISQUE/Area3D/Focus_state" method="_on_on_click_on_click"]

@@ -4,6 +4,7 @@ extends Node
 @export var Cam_state : Camera3D
 @export var Cam_main : Camera3D
 
+var is_active : bool = false
 
 func _ready():
 	_global_datas.camera_focus_On.connect(focus)
@@ -11,11 +12,9 @@ func _ready():
 	
 func focus(condition : bool, focus_data : boardCamState_data):
 	
-
 	if !condition:
 		
-		
-		
+
 		var tt
 		tt = create_tween()
 		tt.tween_property(Cam_state,"global_position",Cam_main.global_position,0.8).set_trans(Tween.TRANS_SINE)
@@ -38,14 +37,16 @@ func focus(condition : bool, focus_data : boardCamState_data):
 		var t
 		t = create_tween()
 		t.tween_property(Cam_state,"global_position",focus_data.camera_position_node.global_position,0.8).set_trans(Tween.TRANS_SINE)
-		#t.connect("finished",done)	
+		t.connect("finished",done)	
 
 		var r
 		r = create_tween()
 		r.tween_property(Cam_state,"rotation_degrees",focus_data.camera_position_node.global_rotation_degrees,0.8).set_trans(Tween.TRANS_SINE)
 
 
-
+func done():
+	pass
+	
 
 func done_state_to_main():
 	Cam_main.current = true
@@ -53,3 +54,4 @@ func done_state_to_main():
 	
 	_global_datas.camera_current_state = _global_datas.camera_state.Main
 	print("BACK TO POSITION")
+	is_active = false
