@@ -15,6 +15,6 @@ func add_back_call():
 		_global_datas.show_on_scanner_backdrop.emit(false)
 		
 	_global_datas.camera_focus_On.emit(false,null)
-	
+	_global_datas.book_back_idle_position.emit(false)
 	
 	

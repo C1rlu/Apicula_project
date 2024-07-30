@@ -3,5 +3,6 @@ class_name boardCamState_data
 
 
 @export var cam_state : _global_datas.camera_state
+@export var zoom_value : float = 0.5
 var camera_position_node : Node3D
 

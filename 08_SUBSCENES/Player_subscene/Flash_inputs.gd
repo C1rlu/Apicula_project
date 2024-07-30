@@ -8,17 +8,22 @@ extends Node
 
 
 func _ready():
-	flash_tool_data.tool_active_signal.connect(start_loop)	
+	#flash_tool_data.tool_active_signal.connect(start_loop)	
+	_global_datas._end_ini_subscene.connect(start_loop)
+	_global_datas._backFrom_subscene.connect(stop_loop)
+	
+func start_loop():
+	loop_lighter.start()	
+	_global_datas._scan_mirror_xray.emit()
+	_global_datas._photo_flash.emit()	
+	
+	
+func stop_loop():
+	loop_lighter.stop()
 
-func start_loop(condition):
+
 	
-	if condition:
-		if loop_lighter.is_stopped():
-			loop_lighter.start()	
-		else:
-			loop_lighter.stop()	
-	
-		
+			
 func _start_light(condition):
 	
 	if _global_datas.in_scanner_mode:

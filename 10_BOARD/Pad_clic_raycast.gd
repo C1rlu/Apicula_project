@@ -22,7 +22,10 @@ func _input(event):
 	
 
 	
-			
+	if _global_datas.camera_current_state != _global_datas.camera_state.Main:
+		return
+		
+				
 	if !_global_datas.Player_In_Inventory:
 		return	
 		

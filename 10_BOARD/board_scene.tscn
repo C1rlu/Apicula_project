@@ -1,4 +1,4 @@
-[gd_scene load_steps=262 format=3 uid="uid://dr73p5vs0sixe"]
+[gd_scene load_steps=264 format=3 uid="uid://dr73p5vs0sixe"]
 
 [ext_resource type="PackedScene" uid="uid://cyb6my1srlcpw" path="res://10_BOARD/Candle/Candle_set.blend" id="1_3ummb"]
 [ext_resource type="Script" path="res://10_BOARD/photos_check.gd" id="1_bcxwj"]
@@ -44,7 +44,9 @@
 [ext_resource type="Material" uid="uid://mqx4i5esml54" path="res://10_BOARD/Tube/Transparency_tube.tres" id="35_jujjk"]
 [ext_resource type="Shader" uid="uid://cd5obrgn7uute" path="res://05_SHADER_TEST/Board/Oddity_in_tube.tres" id="35_wnb4t"]
 [ext_resource type="Material" uid="uid://b5u3d7wosa00d" path="res://05_SHADER_TEST/Board/Flat_with_gradient.tres" id="35_xg8pc"]
+[ext_resource type="Script" path="res://10_BOARD/Set_focus_data.gd" id="36_310g8"]
 [ext_resource type="Shader" uid="uid://cctu1rugloxjc" path="res://05_SHADER_TEST/Board/Tube_liquide_sh.tres" id="36_p5f84"]
+[ext_resource type="Resource" uid="uid://cvrp1lkxdf4md" path="res://15_GAME_RESSOURCE/03_BoardCam_state/Book_focus_data.tres" id="37_1me4o"]
 [ext_resource type="Material" uid="uid://cwdathot7k12h" path="res://05_SHADER_TEST/Board/Maquette_sh.tres" id="37_2kevv"]
 [ext_resource type="Resource" uid="uid://ctxrmh1elpnm1" path="res://15_GAME_RESSOURCE/Follower_photoData.tres" id="37_jc8ce"]
 [ext_resource type="PackedScene" uid="uid://dh8xiu7ntj52y" path="res://10_BOARD/TourneDisque/Disque_prefab.blend" id="44_0qqs5"]
@@ -2556,7 +2558,13 @@ visible = false
 
 [node name="BOOK" parent="." instance=ExtResource("31_x0ass")]
 transform = Transform3D(0.0117898, 0.00107781, -0.0611994, -0.00193464, 0.0622999, 0.000724488, 0.0611784, 0.00176239, 0.0118168, -0.172865, 0.00750353, 0.415659)
-visible = false
+
+[node name="Camera_OnBook" type="Camera3D" parent="BOOK"]
+transform = Transform3D(-7.01245e-07, -15.3085, 4.79739, 0, 4.79738, 15.3085, -16.0426, 6.69154e-07, -2.097e-07, 1.231, 4.26, -0.109)
+cull_mask = 2
+fov = 40.0
+script = ExtResource("36_310g8")
+focus_data = ExtResource("37_1me4o")
 
 [node name="PLume_pot" parent="." instance=ExtResource("5_m8vsb")]
 transform = Transform3D(-0.0622137, -0.00123118, 0.00360307, -0.00132096, 0.0622976, -0.0015214, -0.00357103, -0.00159492, -0.0622073, -0.239276, 0.00675815, 0.416855)

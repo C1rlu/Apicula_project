@@ -72,9 +72,8 @@ func _physics_process(_delta):
 		return	
 	if _global_datas.Player_In_Inventory:
 		return 
-	if _global_datas.in_scanner_mode:
-		return 	
-	
+
+
 	if _global_datas.Player_InSubScene:
 		_global_datas.subbscene_playerPosition = transform.origin	
 		_global_datas.flash_subscene_position = light_position.global_position

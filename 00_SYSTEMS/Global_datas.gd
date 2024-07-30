@@ -133,7 +133,9 @@ enum camera_state {
 	
 	Main,
 	Apicula,
-	Scanner
+	Scanner,
+	Disque,
+	Book
 	
 }
 
