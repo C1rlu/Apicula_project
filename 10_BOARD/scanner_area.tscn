@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://dxjn0mjuqebwy"]
+[gd_scene load_steps=32 format=3 uid="uid://dxjn0mjuqebwy"]
 
 [ext_resource type="Script" path="res://10_BOARD/Photo_element.gd" id="1_tpp7t"]
 [ext_resource type="Resource" uid="uid://dyh1qg1u652pl" path="res://15_GAME_RESSOURCE/Epave_ch_photoData.tres" id="2_m0i7o"]
@@ -7,9 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://dtyhegc0wsj1h" path="res://10_BOARD/00_BOOK/01_UI/cursor_scan.png" id="5_cq0xw"]
 [ext_resource type="Script" path="res://10_BOARD/Show_scanner.gd" id="6_ovic5"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="7_tjbgo"]
-[ext_resource type="Script" path="res://10_BOARD/Boad_focus_state.gd" id="9_2wsca"]
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Legend/Legend_behaviour.gd" id="9_pcvth"]
-[ext_resource type="Resource" uid="uid://c4ukh4c2t2w5k" path="res://15_GAME_RESSOURCE/03_Board_Cam_State/Photo_all/PhotoOnBook_PhotoCamState_Data.tres" id="10_pgf6m"]
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Show_this_page.gd" id="10_xyvhp"]
 
 [sub_resource type="GDScript" id="GDScript_r1yy1"]
@@ -37,10 +35,10 @@ func _run():
 [sub_resource type="PlaneMesh" id="PlaneMesh_l1221"]
 resource_local_to_scene = true
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_mx4ls"]
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_shisn"]
 constant = 1.0
 
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_dkxxd"]
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_y3hi8"]
 size = Vector2(724.789, 654.559)
 expression = "const float DITHER_THRESHOLDS[16] ={
 		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
@@ -53,17 +51,17 @@ vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
 
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_71mw4"]
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_fdada"]
 parameter_name = "Dither_size"
 qualifier = 1
 
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_ylohr"]
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_qmaqj"]
 default_input_values = [0, 0.83, 1, 0.0]
 
-[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_15x36"]
+[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_w2suj"]
 constant = Color(0.73, 0.47377, 0.1606, 1)
 
-[sub_resource type="VisualShader" id="VisualShader_r81gj"]
+[sub_resource type="VisualShader" id="VisualShader_tl2py"]
 code = "shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
 
@@ -116,9 +114,9 @@ void fragment() {
 graph_offset = Vector2(-573.321, -129.617)
 flags/unshaded = true
 nodes/fragment/0/position = Vector2(580, 220)
-nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_mx4ls")
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_shisn")
 nodes/fragment/3/position = Vector2(-1180, 460)
-nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_dkxxd")
+nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_y3hi8")
 nodes/fragment/4/position = Vector2(-900, 460)
 nodes/fragment/4/size = Vector2(724.789, 654.559)
 nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
@@ -133,20 +131,20 @@ nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
 vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/5/node = SubResource("VisualShaderNodeFloatParameter_71mw4")
+nodes/fragment/5/node = SubResource("VisualShaderNodeFloatParameter_fdada")
 nodes/fragment/5/position = Vector2(-1540, 620)
-nodes/fragment/6/node = SubResource("VisualShaderNodeStep_ylohr")
+nodes/fragment/6/node = SubResource("VisualShaderNodeStep_qmaqj")
 nodes/fragment/6/position = Vector2(130.23, 516.22)
-nodes/fragment/7/node = SubResource("VisualShaderNodeColorConstant_15x36")
+nodes/fragment/7/node = SubResource("VisualShaderNodeColorConstant_w2suj")
 nodes/fragment/7/position = Vector2(226.136, 51.1274)
 nodes/fragment/connections = PackedInt32Array(3, 0, 4, 0, 5, 0, 4, 1, 4, 0, 6, 1, 6, 0, 0, 1, 7, 0, 0, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gfhbg"]
 render_priority = 0
-shader = SubResource("VisualShader_r81gj")
+shader = SubResource("VisualShader_tl2py")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mdprb"]
-size = Vector3(0.0690674, 0.00479052, 0.0662781)
+size = Vector3(0.0690674, 0.0105576, 0.0662781)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_csoeo"]
 radial_segments = 8
@@ -163,7 +161,7 @@ shader_parameter/light_color = Color(0.494118, 0.388235, 0.141176, 1)
 radial_segments = 8
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_hwpu2"]
-size = Vector3(0.0735859, 0.0157608, 0.0914676)
+size = Vector3(0.0735859, 0.00637502, 0.019679)
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_5w0qn"]
 viewport_path = NodePath("legend/legend_render")
@@ -282,19 +280,18 @@ texture = ExtResource("5_cq0xw")
 [node name="Photo_area" type="Area3D" parent="Photo"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.00272226, 0)
 
-[node name="On_click_off" type="Node" parent="Photo/Photo_area"]
+[node name="On_click" type="Node" parent="Photo/Photo_area"]
 script = ExtResource("6_ovic5")
 
-[node name="On_Over_off" type="Node" parent="Photo/Photo_area" node_paths=PackedStringArray("_on_over", "_on_over_second")]
+[node name="On_Over" type="Node" parent="Photo/Photo_area" node_paths=PackedStringArray("_on_over", "_on_over_second")]
 script = ExtResource("7_tjbgo")
 _on_over = NodePath("../../Render_ui_scan")
 _on_over_second = NodePath("../../On_Over")
 icon_type = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Photo/Photo_area"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000622556, 0.00193137, -0.000192255)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000622556, 0.00481491, -0.000192255)
 shape = SubResource("BoxShape3D_mdprb")
-disabled = true
 
 [node name="Base" type="MeshInstance3D" parent="Photo"]
 transform = Transform3D(0.0682586, 0, 0, 0, 0.00230959, 0, 0, 0, 0.0682586, 0, 0, 0)
@@ -322,10 +319,6 @@ one_shot = true
 
 [node name="Legend_area" type="Area3D" parent="legend"]
 
-[node name="Boad_focus_state" type="Node" parent="legend/Legend_area"]
-script = ExtResource("9_2wsca")
-focusState = ExtResource("10_pgf6m")
-
 [node name="On_Over" type="Node" parent="legend/Legend_area" node_paths=PackedStringArray("_on_over_second")]
 script = ExtResource("7_tjbgo")
 _on_over_second = NodePath("../../On_Over")
@@ -335,7 +328,7 @@ icon_type = 1
 script = ExtResource("10_xyvhp")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="legend/Legend_area"]
-transform = Transform3D(0.985247, 0, 0.171138, 0, 1, 0, -0.171138, 0, 0.985247, -0.00460947, 0.00899078, -0.0330703)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000850344, 0.00429791, -0.00163807)
 shape = SubResource("BoxShape3D_hwpu2")
 disabled = true
 
@@ -408,6 +401,6 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [connection signal="update_legend" from="." to="legend/legend_behaviour" method="_on_photo_element_root_update_legend"]
-[connection signal="On_click" from="Photo/Photo_area/On_click_off" to="." method="_on_show_scanner"]
+[connection signal="On_click" from="Photo/Photo_area/On_click" to="." method="_on_show_scanner"]
 [connection signal="timeout" from="legend/legend_behaviour/Timer" to="legend/legend_behaviour" method="_on_timer_timeout"]
 [connection signal="On_click" from="legend/Legend_area/On_click" to="." method="_on_show_this_page"]

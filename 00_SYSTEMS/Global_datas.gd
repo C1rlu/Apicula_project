@@ -116,7 +116,6 @@ signal show_page(content : PackedScene)
 signal open_inventory(condition : bool)
 signal mouse_raycast
 var board_camera : Camera3D
-signal select_boardFocus(focusState : boardCamState_data)
 var zoom_value : float
 var Cursor_mode : Node
 signal close_all_over_ui
@@ -127,20 +126,18 @@ signal ui_noted_taked
 signal map_fade(condition : bool) # true is in : false is out
 
 
-
 # quest_state signal in order
 signal active_diving
 
 
 
-signal open_info_book(condition : bool)
+signal book_back_idle_position(condition : bool)
 var book_idle_pos : bool = true
 
 
 signal switch_icon_cursor(icon_type : icon_class.icon_list)
 
 #update description on board
-signal camera_board_state(target : Vector3, _rotation_target : Vector3)
 signal focus_this_on_board(target : Vector3)
 signal Open_ui_dark_backdrop(condition : bool)
 signal show_on_scanner(condition : bool)

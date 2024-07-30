@@ -36,12 +36,12 @@ func _move_cam(_delta):
 	if Input.is_action_pressed(_global_datas.move_left):
 		var _magnitude = Input.get_action_strength(_global_datas.move_left)
 		cam_target.x -= _magnitude * _speed * _delta	
-	#if Input.is_action_pressed(_global_datas.move_forward):
-		#var _magnitude = Input.get_action_strength(_global_datas.move_forward)
-		#cam_target.z -= _magnitude * _speed * _delta	
-	#if Input.is_action_pressed(_global_datas.move_backward):
-		#var _magnitude = Input.get_action_strength(_global_datas.move_backward)
-		#cam_target.z += _magnitude * _speed * _delta
+	if Input.is_action_pressed(_global_datas.move_forward):
+		var _magnitude = Input.get_action_strength(_global_datas.move_forward)
+		cam_target.z -= _magnitude * _speed * _delta	
+	if Input.is_action_pressed(_global_datas.move_backward):
+		var _magnitude = Input.get_action_strength(_global_datas.move_backward)
+		cam_target.z += _magnitude * _speed * _delta
 	
 	cam_target.x = clamp(cam_target.x, clamp_cam_x.x, clamp_cam_x.y)
 	cam_target.z = clamp(cam_target.z, clamp_cam_z.x, clamp_cam_z.y)
@@ -49,7 +49,7 @@ func _move_cam(_delta):
 	for cam in _all_cam_array:
 			cam.global_position = lerp(cam.global_position, cam_target + offset, smooth_speed * _delta)	
 		
-	rotation_angle(_delta)
+	#rotation_angle(_delta)
 	
 func rotation_angle(_delta):
 
