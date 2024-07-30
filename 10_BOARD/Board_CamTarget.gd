@@ -12,27 +12,17 @@ var target_position : Vector3
 var f
 var on_auto_move = false
 
-var is_disable : bool = false
-var reset_position : Vector3
-
 
 func _ready():
 	_global_datas.focus_this_on_board.connect(_focus_this)
 
-	_global_datas.camera_focus_On.connect(active)
-	reset_position = global_position
-	
-func active(condition : bool, value):
-	is_disable = condition
-	
-	if condition:
-		position = reset_position
-	
+
 func _process(delta):
 	
-	
-	if is_disable:
+	if !_global_datas.camera_current_state == _global_datas.camera_state.Main:
 		return
+
+
 	if on_auto_move:
 		return
 		

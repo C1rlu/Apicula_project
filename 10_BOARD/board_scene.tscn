@@ -1,4 +1,4 @@
-[gd_scene load_steps=256 format=3 uid="uid://dr73p5vs0sixe"]
+[gd_scene load_steps=258 format=3 uid="uid://dr73p5vs0sixe"]
 
 [ext_resource type="PackedScene" uid="uid://cyb6my1srlcpw" path="res://10_BOARD/Candle/Candle_set.blend" id="1_3ummb"]
 [ext_resource type="Script" path="res://10_BOARD/photos_check.gd" id="1_bcxwj"]
@@ -49,6 +49,7 @@
 [ext_resource type="Resource" uid="uid://d15m8513w4wv2" path="res://15_GAME_RESSOURCE/03_BoardCam_state/AppiculaM_focus_data.tres" id="46_av22g"]
 [ext_resource type="Material" uid="uid://c0oms0qis0dcm" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_mat_02.tres" id="46_tmbd7"]
 [ext_resource type="Material" uid="uid://cfi5jyq3utqd4" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_mat_04.tres" id="47_r4p1c"]
+[ext_resource type="Resource" uid="uid://cd1asdnwwphju" path="res://15_GAME_RESSOURCE/03_BoardCam_state/TourneDisque_focus_data.tres" id="50_v3523"]
 
 [sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_af38u"]
 default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
@@ -2159,6 +2160,9 @@ shader_parameter/Dark_color = Color(0, 0, 0, 1)
 shader_parameter/ColorParameter = Color(0.0196078, 0.121569, 0.129412, 1)
 shader_parameter/light_color = Color(0.419608, 0.352941, 0.219608, 1)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_64lbo"]
+size = Vector3(0.348923, 0.252609, 0.317188)
+
 [node name="Board_scene" type="Node3D"]
 
 [node name="LIGHT_scene" type="OmniLight3D" parent="."]
@@ -2592,19 +2596,19 @@ _on_over = NodePath("../../IS_SELECT")
 transform = Transform3D(0.958621, 0, -0.284685, 0, 1, 0, 0.284685, 0, 0.958621, -0.0162398, 0.0219561, 0.0325306)
 shape = SubResource("BoxShape3D_gphou")
 
-[node name="MeshInstance3D16" type="MeshInstance3D" parent="."]
+[node name="PhotoZone" type="MeshInstance3D" parent="."]
 transform = Transform3D(-0.13068, 0, 0.738866, 0, 0.00252979, 0, -0.608021, 0, -0.158803, -0.162295, 0.00267054, 0.0875484)
 layers = 2
 mesh = SubResource("BoxMesh_p7wk2")
 skeleton = NodePath("../..")
 
-[node name="MeshInstance3D5" type="MeshInstance3D" parent="MeshInstance3D16"]
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="PhotoZone"]
 transform = Transform3D(-0.00523905, 0, -1.16649, 0, 67.9976, 0, 0.785872, 0, -0.0085845, -0.00500987, 0.53237, -0.0019574)
 layers = 2
 mesh = SubResource("PlaneMesh_i55er")
 skeleton = NodePath("../../..")
 
-[node name="On_Over" type="MeshInstance3D" parent="MeshInstance3D16"]
+[node name="On_Over" type="MeshInstance3D" parent="PhotoZone"]
 transform = Transform3D(0.44437, 0, -0.000342503, 0, 0.387303, 0, 0.000341229, 0, 0.445962, -0.0122902, 0.613576, -0.00293779)
 visible = false
 layers = 2
@@ -2681,36 +2685,58 @@ move_node = NodePath("../..")
 transform = Transform3D(7.02404, 0, -0.20838, 0, 6.10468, 0, 0.420137, 0, 3.4838, 0.374424, 0.636473, 0.087966)
 shape = SubResource("BoxShape3D_yuede")
 
-[node name="Disque_prefab" parent="." instance=ExtResource("44_0qqs5")]
-transform = Transform3D(-0.120931, 0, -0.0692351, 0, 0.139348, 0, 0.0692351, 0, -0.120931, 0.495269, -1.19209e-07, -0.172643)
+[node name="TOURNE_DISQUE" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.495269, -1.19209e-07, -0.172643)
 
-[node name="Cylinder" parent="Disque_prefab" index="0"]
+[node name="Disque_prefab" parent="TOURNE_DISQUE" instance=ExtResource("44_0qqs5")]
+transform = Transform3D(-0.120931, 0, -0.0692351, 0, 0.139348, 0, 0.0692351, 0, -0.120931, 0, 0, 0)
+
+[node name="Cylinder" parent="TOURNE_DISQUE/Disque_prefab" index="0"]
 layers = 2
 surface_material_override/0 = SubResource("ShaderMaterial_c4ore")
 
-[node name="01" parent="Disque_prefab" index="1"]
+[node name="01" parent="TOURNE_DISQUE/Disque_prefab" index="1"]
 layers = 2
 surface_material_override/0 = SubResource("ShaderMaterial_l3nap")
 
-[node name="Cylinder_001" parent="Disque_prefab" index="2"]
+[node name="Cylinder_001" parent="TOURNE_DISQUE/Disque_prefab" index="2"]
 layers = 2
 surface_material_override/0 = ExtResource("47_r4p1c")
 
-[node name="Cube_001" parent="Disque_prefab" index="3"]
+[node name="Cube_001" parent="TOURNE_DISQUE/Disque_prefab" index="3"]
 layers = 2
 surface_material_override/0 = ExtResource("47_r4p1c")
 
-[node name="Cube_002" parent="Disque_prefab" index="4"]
+[node name="Cube_002" parent="TOURNE_DISQUE/Disque_prefab" index="4"]
 layers = 2
 surface_material_override/0 = SubResource("ShaderMaterial_5kny1")
 
-[node name="Cylinder_002" parent="Disque_prefab" index="5"]
+[node name="Cylinder_002" parent="TOURNE_DISQUE/Disque_prefab" index="5"]
 layers = 2
 surface_material_override/0 = ExtResource("47_r4p1c")
 surface_material_override/1 = ExtResource("46_tmbd7")
 
+[node name="Area3D" type="Area3D" parent="TOURNE_DISQUE"]
+
+[node name="Focus_state" type="Node" parent="TOURNE_DISQUE/Area3D"]
+script = ExtResource("45_37758")
+focus_data = ExtResource("50_v3523")
+
+[node name="On_click" type="Node" parent="TOURNE_DISQUE/Area3D"]
+script = ExtResource("17_gpvpy")
+
+[node name="On_Over" type="Node" parent="TOURNE_DISQUE/Area3D" node_paths=PackedStringArray("move_node")]
+script = ExtResource("23_4ws66")
+icon_type = 1
+move_node = NodePath("../../Disque_prefab")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TOURNE_DISQUE/Area3D"]
+transform = Transform3D(0.871195, 0, 0.490913, 0, 1, 0, -0.490913, 0, 0.871195, 0.015209, 0.134239, -0.0155258)
+shape = SubResource("BoxShape3D_64lbo")
+
 [connection signal="On_click" from="Book_Close_root/Area3D/On_click_off" to="Book_Close_root/Area3D/On_click_off" method="_on_on_click"]
 [connection signal="On_click" from="Apicula_maquette_v01blend/Area3D/On_click" to="Apicula_maquette_v01blend/Area3D/Focus_state" method="_on_on_click_on_click"]
+[connection signal="On_click" from="TOURNE_DISQUE/Area3D/On_click" to="TOURNE_DISQUE/Area3D/Focus_state" method="_on_on_click_on_click"]
 
 [editable path="Deco/Lanterne2"]
 [editable path="Deco/Candle_set"]
@@ -2728,4 +2754,4 @@ surface_material_override/1 = ExtResource("46_tmbd7")
 [editable path="TUBE_oddity/Peon_oddity_v01"]
 [editable path="TUBE_oddity/Tube_oddity"]
 [editable path="Apicula_maquette_v01blend"]
-[editable path="Disque_prefab"]
+[editable path="TOURNE_DISQUE/Disque_prefab"]
