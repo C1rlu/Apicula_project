@@ -1,4 +1,4 @@
-[gd_scene load_steps=70 format=3 uid="uid://cein0q2eirkay"]
+[gd_scene load_steps=76 format=3 uid="uid://cein0q2eirkay"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_g3pi7"]
 [ext_resource type="Script" path="res://10_BOARD/Board_CamTarget.gd" id="1_janbq"]
@@ -23,10 +23,16 @@
 [ext_resource type="Script" path="res://10_BOARD/Board_OBJ_Manager.gd" id="14_johxk"]
 [ext_resource type="Resource" uid="uid://blxuee4l6ey2g" path="res://10_BOARD/Board_OBJ_data/Map_data.tres" id="15_6vhht"]
 [ext_resource type="Resource" uid="uid://cvrp1lkxdf4md" path="res://15_GAME_RESSOURCE/03_BoardCam_state/Book_focus_data.tres" id="15_a7u4q"]
+[ext_resource type="Script" path="res://10_BOARD/Next_scanner_input.gd" id="16_l7ebl"]
+[ext_resource type="Resource" uid="uid://ctxrmh1elpnm1" path="res://15_GAME_RESSOURCE/Follower_photoData.tres" id="17_mbuj8"]
+[ext_resource type="Resource" uid="uid://dlm0knnql1e6h" path="res://15_GAME_RESSOURCE/Ghost_Scanner_photoData.tres" id="18_aukda"]
+[ext_resource type="Resource" uid="uid://bcid58kxecbk2" path="res://15_GAME_RESSOURCE/Maurice_photoData.tres" id="19_8dlfp"]
 [ext_resource type="Script" path="res://10_BOARD/Switch_Cursor_icon.gd" id="19_t6o6e"]
+[ext_resource type="Resource" uid="uid://cooqi0giysm3w" path="res://15_GAME_RESSOURCE/MrBirs_photoData.tres" id="20_0rbh6"]
 [ext_resource type="PackedScene" uid="uid://b4hspc8dsyv14" path="res://08_SUBSCENES/Elements/Tiny_boat/scene_boat_ch_test.tscn" id="20_60dek"]
 [ext_resource type="Texture2D" uid="uid://bb53vqhy3jx8j" path="res://10_BOARD/00_BOOK/01_UI/cursor_eyes.png" id="20_cuebq"]
 [ext_resource type="Script" path="res://10_BOARD/Follow_cursor.gd" id="20_vjjnn"]
+[ext_resource type="Resource" uid="uid://dm0uus2gow50q" path="res://15_GAME_RESSOURCE/Otis_photoData.tres" id="21_ko3r3"]
 [ext_resource type="Texture2D" uid="uid://d1kttlfg1wwvk" path="res://10_BOARD/00_BOOK/01_UI/cursor_Circle.png" id="21_qhnbf"]
 
 [sub_resource type="GDScript" id="GDScript_w13ry"]
@@ -196,6 +202,9 @@ func _normal_zoom():
 	_Zoom()
 
 	_global_datas._add_back_call.emit(back_call)
+	
+	
+	
 	
 func back_call():
 	_reset()	
@@ -568,10 +577,9 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-118.905, -351.314)
 mode = 1
 flags/light_only = false
-nodes/fragment/0/position = Vector2(1800, -60)
+nodes/fragment/0/position = Vector2(2060, -260)
 nodes/fragment/35/node = SubResource("VisualShaderNodeStep_3q8mc")
 nodes/fragment/35/position = Vector2(1080, 560)
 nodes/fragment/37/node = SubResource("VisualShaderNodeExpression_q6ooe")
@@ -594,11 +602,11 @@ nodes/fragment/39/position = Vector2(-320, 220)
 nodes/fragment/69/node = SubResource("VisualShaderNodeFloatParameter_6ng33")
 nodes/fragment/69/position = Vector2(-420, 660)
 nodes/fragment/76/node = SubResource("VisualShaderNodeInput_wh4is")
-nodes/fragment/76/position = Vector2(600, -480)
+nodes/fragment/76/position = Vector2(440, -660)
 nodes/fragment/77/node = SubResource("VisualShaderNodeTexture_qr5as")
-nodes/fragment/77/position = Vector2(1220, -360)
+nodes/fragment/77/position = Vector2(1060, -540)
 nodes/fragment/80/node = SubResource("VisualShaderNodeMix_gtw5f")
-nodes/fragment/80/position = Vector2(1520, 40)
+nodes/fragment/80/position = Vector2(1480, 40)
 nodes/fragment/connections = PackedInt32Array(39, 0, 37, 0, 37, 0, 35, 1, 69, 0, 37, 1, 76, 0, 77, 2, 35, 0, 80, 2, 80, 0, 0, 1, 77, 0, 0, 0, 77, 4, 80, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_noh2t"]
@@ -751,9 +759,10 @@ script = SubResource("GDScript_00hwt")
 [node name="Cam_follow" type="Node" parent="."]
 script = SubResource("GDScript_q7x8f")
 
-[node name="Cam_focus" type="Node" parent="." node_paths=PackedStringArray("Cam_main", "Cam_state", "Cam_scanner_state")]
+[node name="Cam_focus" type="Node" parent="." node_paths=PackedStringArray("Cam_main", "Cam_scanner_main", "Cam_state", "Cam_scanner_state")]
 script = ExtResource("6_7tgl6")
 Cam_main = NodePath("../3D_SCENE/SubViewport/Camp_root_Render/Camera3D")
+Cam_scanner_main = NodePath("../3D_SCENE/SubViewport_scanner/Camp_root_Render/Camera3D")
 Cam_state = NodePath("../3D_SCENE/SubViewport/Camera3D_state")
 Cam_scanner_state = NodePath("../3D_SCENE/SubViewport_scanner/Camera3D_state_Scanner")
 
@@ -777,6 +786,10 @@ Cam_ref_scanner = ExtResource("13_87a1q")
 Cam_ref_Book = ExtResource("15_a7u4q")
 Cam_to_move = NodePath("../../3D_SCENE/SubViewport/Camera3D_state")
 Cam_to_move_scanner = NodePath("../../3D_SCENE/SubViewport_scanner/Camera3D_state_Scanner")
+
+[node name="Next_scanner_input" type="Node" parent="Show_OnScanner"]
+script = ExtResource("16_l7ebl")
+all_scanner = Array[Resource("res://12_INVENTORY/Photo/Photo_data.gd")]([ExtResource("11_ldr1y"), ExtResource("17_mbuj8"), ExtResource("18_aukda"), ExtResource("19_8dlfp"), ExtResource("20_0rbh6"), ExtResource("21_ko3r3")])
 
 [node name="3D_SCENE" type="Node3D" parent="."]
 

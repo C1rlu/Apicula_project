@@ -6,6 +6,10 @@ extends Node
 @onready var scanner_light = $"../3D_SCENE/Scanner_light"
 
 @export var scanner_first_data : PhotoData
+
+
+
+
 func _ready():
 	_global_datas.show_on_scanner.connect(_show_scanner)
 

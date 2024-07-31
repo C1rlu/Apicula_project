@@ -21,12 +21,15 @@ func _ready():
 func _set_camZoom(value,Cam_ref : boardCamState_data):
 	
 	_set_zoom_pos(Cam_ref)
+	
+	
 func _process(delta):
 	
-
+	
 	if !_global_datas.camera_current_state == _global_datas.camera_state.Scanner:
 		return	
 		
+
 	if Input.is_action_pressed((_global_datas.move_right)):
 	
 		loader.rotation_degrees.y -=  100 * delta
@@ -34,24 +37,24 @@ func _process(delta):
 	if Input.is_action_pressed((_global_datas.move_left)):
 	
 		loader.rotation_degrees.y +=  100 * delta
-		
+			
 
 func _input(event):
 	
 	if _global_datas.camera_current_state == _global_datas.camera_state.Main:
 		return	
 	
+	
+	if lock_action:
+		return
+		
 	if event.is_action_pressed((_global_datas.move_forward)):
 		process_zoom_in()
 			
-	if event.is_action_released((_global_datas.move_forward)):
-		process_zoom_out()
-
 
 		
 func process_zoom_in():
-	
-	
+
 	lock_action = true
 	
 	var t
@@ -62,11 +65,15 @@ func process_zoom_in():
 	var s
 	s = create_tween()
 	s.tween_property(Cam_to_move_scanner,"position",zoom_position,0.8).set_trans(Tween.TRANS_SINE)
-	s.connect("finished",done)
+
+	
+	_global_datas._add_back_call.emit(process_zoom_out)
+	
+	
 	
 func process_zoom_out():
 	
-	
+
 	lock_action = true
 	
 	var t
@@ -77,7 +84,7 @@ func process_zoom_out():
 	var s
 	s = create_tween()
 	s.tween_property(Cam_to_move_scanner,"position",no_zoom_pos,0.8).set_trans(Tween.TRANS_SINE)
-	s.connect("finished",done)
+
 	
 	
 func done():
@@ -92,7 +99,7 @@ func _set_zoom_pos(Cam_ref):
 	var forward = -dir.normalized()
 
 	no_zoom_pos = Cam_ref.camera_position_node.global_position
-	zoom_position = no_zoom_pos + forward * Cam_ref.zoom_value #+ Vector3(0.0,0.0,-0.08)		
+	zoom_position = no_zoom_pos + forward * Cam_ref.zoom_value	
 	
 	
 	

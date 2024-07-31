@@ -1,7 +1,7 @@
 extends Node
 
 @export var Cam_main : Camera3D
-@onready var Cam_scanner_main = $"../3D_SCENE/SubViewport_scanner/Camp_root_Render/Camera3D"
+@export var Cam_scanner_main : Camera3D 
 
 
 
@@ -18,9 +18,11 @@ func _focus(condition : bool, focus_data : boardCamState_data):
 	
 	if !condition:
 		
-		Cam_scanner_main.global_position = Cam_main.global_position
-		Cam_scanner_main.rotation_degrees = Cam_main.global_rotation_degrees	
 		
+		Cam_scanner_main.global_position = Cam_main.global_position
+		Cam_scanner_main.rotation_degrees = Cam_main.global_rotation_degrees
+			
+	
 		state_to_cam(Cam_state)
 		state_to_cam(Cam_scanner_state)
 		
