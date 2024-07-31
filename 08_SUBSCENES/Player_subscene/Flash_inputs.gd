@@ -1,10 +1,12 @@
 extends Node
 
-@onready var timer = $Timer
-@export var flash_tool_data : tool_data
-@onready var area = $"../ZoneCollide"
+@onready var delay_light_timer = $Delay_light_timer
 
-@onready var loop_lighter = $Loop_lighter
+
+@export var flash_tool_data : tool_data
+@onready var Mirror_scanner_area = $"../ZoneCollide"
+
+@onready var timer_mirror_check = $Delay_light_timer
 
 
 func _ready():
@@ -13,51 +15,34 @@ func _ready():
 	_global_datas._backFrom_subscene.connect(stop_loop)
 	
 func start_loop():
-	loop_lighter.start()	
-	_global_datas._scan_mirror_xray.emit()
-	_global_datas._photo_flash.emit()	
-	
-	
+	timer_mirror_check.start()	
+
 func stop_loop():
-	loop_lighter.stop()
+	timer_mirror_check.stop()
 
+			
+func _start_light():
 
-	
-			
-func _start_light(condition):
-	
-	if _global_datas.in_scanner_mode:
+	if !delay_light_timer.is_stopped():
 		return
-	
-	if !condition:
-		return
-			
-	if !timer.is_stopped():
-		return	
-	timer.start()
+	delay_light_timer.start()
 	
 	_global_datas._scan_mirror_xray.emit()
 	_global_datas._photo_flash.emit()
-	#check_flash_zone()
-		
 	
+
 func check_flash_zone():
 	
-	var all_area = area.get_overlapping_areas()
+	var all_Mirror_scanner_area = Mirror_scanner_area.get_overlapping_Mirror_scanner_areas()
 	
-	if all_area:
-		for areas in all_area:
-			
-			
-			var vortex = areas.get_node_or_null("Teleport_zone")
-			if vortex:
-				vortex._teleport()
-			
-			var vortex_back = areas.get_node_or_null("Teleport_zone_back")
-			if vortex_back:
-				vortex_back._teleport()	
-			
-			
+	if all_Mirror_scanner_area:
+		for _areas in all_Mirror_scanner_area:
+
+			var mirror_element = _areas.get_node_or_null("Mirror_element")
+			if mirror_element:
+				_start_light()			
+				print("mirror element is near")
+
 func _on_loop_lighter_timeout():
-	_global_datas._scan_mirror_xray.emit()
-	_global_datas._photo_flash.emit()
+	check_flash_zone()
+	
