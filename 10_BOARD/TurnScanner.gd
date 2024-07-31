@@ -54,7 +54,7 @@ func _input(event):
 	if lock_action:
 		return
 		
-	if event.is_action_pressed((_global_datas.move_forward)):
+	if event.is_action_pressed("Click_on_board"):
 		process_zoom_in()
 			
 
