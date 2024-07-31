@@ -14,6 +14,5 @@ enum camera_state {
 	Scanner,
 	Disque,
 	Book,
-	Board
-	
+	Board,
 }

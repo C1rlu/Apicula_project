@@ -2,7 +2,7 @@ extends Node
 
 var _pad : bool = false
 
-@onready var  Camera = $"../3D_SCENE/Camp_root_XRay/Camera_xray"
+@onready var  Camera = $"../3D_SCENE/Camera_xray"
 @onready var pad_target = $"../3D_SCENE/Pad_target"
 
 var previous_on_over
@@ -22,15 +22,15 @@ func _input(event):
 	
 
 	
-	if _global_datas.camera_current_state != game_state.camera_state.Main:
-		return
+	#if _global_datas.camera_current_state != game_state.camera_state.Main:
+		#return
 		
 				
 	if !_global_datas.Player_In_Inventory:
 		return	
 		
-	if _global_datas.zoom_value == 1:
-		return
+	#if _global_datas.zoom_value == 1:
+		#return
 	
 			
 	if _pad: 

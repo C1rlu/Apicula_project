@@ -1,15 +1,9 @@
 extends Node
 
-@export var Cam_main : Camera3D
-@export var Cam_scanner_main : Camera3D 
-
-
-
-@export var Cam_state : Camera3D
-@export var Cam_scanner_state : Camera3D
+@export var all_Cam : Array[Camera3D]
 
 var is_active : bool = false
-
+@export var previous_focus : boardCamState_data
 func _ready():
 	_global_datas.camera_focus_On.connect(_focus)
 	_global_datas.camera_focus_update.connect(update_focus)
@@ -17,40 +11,29 @@ func _ready():
 # for book update position for example
 func update_focus(focus_data : boardCamState_data):
 	
-	cam_to_state(Cam_state,focus_data)
-	cam_to_state(Cam_scanner_state,focus_data)
+	for c in all_Cam:
+		cam_to_state(c,focus_data)	
 
-func _focus(condition : bool, focus_data : boardCamState_data):
+func _focus(focus_data : boardCamState_data):
 	
-	if !condition:
-		
-		
-		Cam_scanner_main.global_position = Cam_main.global_position
-		Cam_scanner_main.rotation_degrees = Cam_main.global_rotation_degrees
-			
-	
-		state_to_cam(Cam_state)
-		state_to_cam(Cam_scanner_state)
-		
-	else:
-		
-		_global_datas.camera_current_state = focus_data.cam_state
-		
-		align_cam()
-		
-		cam_to_state(Cam_state,focus_data)
-		cam_to_state(Cam_scanner_state,focus_data)
+	for c in all_Cam:
+		cam_to_state(c,focus_data)	
 
-func align_cam():
+	_global_datas.camera_current_state = focus_data.cam_state
+		
+	_global_datas._add_back_call.emit(back_call)
+
+func back_call():
 	
-	Cam_state.global_position = Cam_main.global_position
-	Cam_state.rotation_degrees = Cam_main.global_rotation_degrees
+	if _global_datas.camera_current_state == game_state.camera_state.Scanner:
+		_global_datas.show_on_scanner_backdrop.emit(false)
 		
-	Cam_scanner_state.global_position = Cam_main.global_position
-	Cam_scanner_state.rotation_degrees = Cam_main.global_rotation_degrees
-		
-	Cam_scanner_main.global_position = Cam_main.global_position
-	Cam_scanner_main.rotation_degrees = Cam_main.global_rotation_degrees	
+	_global_datas.book_back_idle_position.emit(false)
+	
+	for c in all_Cam:
+		cam_to_state(c,previous_focus)	
+	
+	_global_datas.camera_current_state = previous_focus.cam_state
 		
 func cam_to_state(cam,focus):
 		cam.current = true 
@@ -58,27 +41,14 @@ func cam_to_state(cam,focus):
 		var t
 		t = create_tween()
 		t.tween_property(cam,"global_position",focus.camera_position_node.global_position,0.8).set_trans(Tween.TRANS_SINE)
-		
+		#t.connect("finished",done_state_to_main)	
 		var r
 		r = create_tween()
 		r.tween_property(cam,"rotation_degrees",focus.camera_position_node.global_rotation_degrees,0.8).set_trans(Tween.TRANS_SINE)	
 
-func state_to_cam(cam):
-		
-		var tt
-		tt = create_tween()
-		tt.tween_property(cam,"global_position",Cam_main.global_position,0.8).set_trans(Tween.TRANS_SINE)
-		tt.connect("finished",done_state_to_main)	
-		var rr
-		rr = create_tween()
-		rr.tween_property(cam,"rotation_degrees",Cam_main.global_rotation_degrees,0.8).set_trans(Tween.TRANS_SINE)	
 
 func done_state_to_main():
-	
-	Cam_main.current = true
-	Cam_scanner_main.current = true
 
-	
 	_global_datas.camera_current_state = game_state.camera_state.Main
-	#print("BACK TO POSITION")
-	is_active = false
+
+

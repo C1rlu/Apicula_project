@@ -1,4 +1,4 @@
-[gd_scene load_steps=263 format=3 uid="uid://dr73p5vs0sixe"]
+[gd_scene load_steps=265 format=3 uid="uid://dr73p5vs0sixe"]
 
 [ext_resource type="PackedScene" uid="uid://cyb6my1srlcpw" path="res://10_BOARD/Candle/Candle_set.blend" id="1_3ummb"]
 [ext_resource type="Script" path="res://10_BOARD/photos_check.gd" id="1_bcxwj"]
@@ -48,12 +48,16 @@
 [ext_resource type="Resource" uid="uid://cvrp1lkxdf4md" path="res://15_GAME_RESSOURCE/03_BoardCam_state/Book_focus_data.tres" id="37_1me4o"]
 [ext_resource type="Material" uid="uid://cwdathot7k12h" path="res://05_SHADER_TEST/Board/Maquette_sh.tres" id="37_2kevv"]
 [ext_resource type="Resource" uid="uid://ctxrmh1elpnm1" path="res://15_GAME_RESSOURCE/Follower_photoData.tres" id="37_jc8ce"]
+[ext_resource type="Resource" uid="uid://cyu7mo6v7aaij" path="res://15_GAME_RESSOURCE/03_BoardCam_state/Board_focus_data.tres" id="41_geg11"]
 [ext_resource type="PackedScene" uid="uid://dh8xiu7ntj52y" path="res://10_BOARD/TourneDisque/Disque_prefab.blend" id="44_0qqs5"]
 [ext_resource type="Script" path="res://10_BOARD/Focus_state.gd" id="45_37758"]
 [ext_resource type="Resource" uid="uid://d15m8513w4wv2" path="res://15_GAME_RESSOURCE/03_BoardCam_state/AppiculaM_focus_data.tres" id="46_av22g"]
 [ext_resource type="Material" uid="uid://c0oms0qis0dcm" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_mat_02.tres" id="46_tmbd7"]
 [ext_resource type="Material" uid="uid://cfi5jyq3utqd4" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_mat_04.tres" id="47_r4p1c"]
 [ext_resource type="Resource" uid="uid://cd1asdnwwphju" path="res://15_GAME_RESSOURCE/03_BoardCam_state/TourneDisque_focus_data.tres" id="50_v3523"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8qfni"]
+size = Vector3(1.69008, 0.00946939, 1.07778)
 
 [sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_af38u"]
 default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
@@ -2185,6 +2189,24 @@ omni_range = 1.6
 omni_attenuation = 1.14868
 omni_shadow_mode = 0
 
+[node name="Area3D" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.162295, 0.00267054, 0.0875484)
+
+[node name="Focus_state" type="Node" parent="Area3D"]
+script = ExtResource("45_37758")
+focus_data = ExtResource("41_geg11")
+
+[node name="On_click" type="Node" parent="Area3D"]
+script = ExtResource("17_gpvpy")
+
+[node name="On_Over" type="Node" parent="Area3D"]
+script = ExtResource("23_4ws66")
+icon_type = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.340201, -0.00158234, -0.0680908)
+shape = SubResource("BoxShape3D_8qfni")
+
 [node name="Deco" type="Node3D" parent="."]
 
 [node name="Lanterne2" parent="Deco" instance=ExtResource("1_l5l52")]
@@ -2769,6 +2791,7 @@ move_node = NodePath("../../Disque_prefab")
 transform = Transform3D(0.871195, 0, 0.490913, 0, 1, 0, -0.490913, 0, 0.871195, 0.015209, 0.134239, -0.0155258)
 shape = SubResource("BoxShape3D_64lbo")
 
+[connection signal="On_click" from="Area3D/On_click" to="Area3D/Focus_state" method="_on_on_click_on_click"]
 [connection signal="On_click" from="Scanner_reader/Area3D/On_click" to="Scanner_reader/Area3D/Open_Scanner" method="_on_on_click_on_click"]
 [connection signal="On_click" from="Scanner_reader/Area3D/On_click" to="Scanner_reader/Area3D/Focus_state" method="_on_on_click_on_click"]
 [connection signal="On_click" from="Book_Close_root/Area3D/On_click_off" to="Book_Close_root/Area3D/On_click_off" method="_on_on_click"]

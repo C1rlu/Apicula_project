@@ -24,7 +24,7 @@ func update_focus(focus_data : boardCamState_data):
 	_set_zoom_pos(focus_data)	
 
 	
-func _set_camZoom(value,Cam_ref : boardCamState_data):
+func _set_camZoom(Cam_ref : boardCamState_data):
 	
 	_set_zoom_pos(Cam_ref)
 	

@@ -116,7 +116,6 @@ signal show_page(content : PackedScene)
 signal open_inventory(condition : bool)
 signal mouse_raycast
 var board_camera : Camera3D
-var zoom_value : float
 var Cursor_mode : Node
 signal close_all_over_ui
 signal add_OBJ(obj_name : String)
@@ -126,9 +125,9 @@ signal ui_noted_taked
 signal map_fade(condition : bool) # true is in : false is out
 
 
-signal camera_focus_On(condition : bool , focus_data : boardCamState_data)
+signal camera_focus_On(focus_data : boardCamState_data)
 signal camera_focus_update(focus_data : boardCamState_data)
-var camera_current_state : game_state.camera_state = 0
+var camera_current_state : game_state.camera_state 
 
 
 # quest_state signal in order
