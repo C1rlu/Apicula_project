@@ -12,8 +12,14 @@ var is_active : bool = false
 
 func _ready():
 	_global_datas.camera_focus_On.connect(_focus)
+	_global_datas.camera_focus_update.connect(update_focus)
+
+# for book update position for example
+func update_focus(focus_data : boardCamState_data):
 	
-	
+	cam_to_state(Cam_state,focus_data)
+	cam_to_state(Cam_scanner_state,focus_data)
+
 func _focus(condition : bool, focus_data : boardCamState_data):
 	
 	if !condition:

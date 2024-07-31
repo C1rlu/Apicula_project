@@ -12,6 +12,8 @@ class_name PhotoData
 
 @export var info_list : Array[info_data] #just to have the list of the info page here
 
+var photo_element
+
 enum intrigue_s {
 	
 	none,

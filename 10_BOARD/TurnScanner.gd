@@ -16,7 +16,13 @@ var zoom_position : Vector3
 func _ready():
 
 	_global_datas.camera_focus_On.connect(_set_camZoom)
-	
+	_global_datas.camera_focus_update.connect(update_focus)
+
+# for book update position for example
+func update_focus(focus_data : boardCamState_data):
+
+	_set_zoom_pos(focus_data)	
+
 	
 func _set_camZoom(value,Cam_ref : boardCamState_data):
 	

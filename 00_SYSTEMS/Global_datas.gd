@@ -127,6 +127,7 @@ signal map_fade(condition : bool) # true is in : false is out
 
 
 signal camera_focus_On(condition : bool , focus_data : boardCamState_data)
+signal camera_focus_update(focus_data : boardCamState_data)
 var camera_current_state : camera_state = camera_state.Main
 
 enum camera_state {

@@ -17,7 +17,9 @@ signal update_legend( legend : String)
 
 @onready var on_over_full = $legend/All_over/On_Over_full
 
-
+func _ready():
+	
+	Photo_data.photo_element = self
 		
 func check_state():
 		
@@ -70,7 +72,7 @@ func _disable():
 
 func show_this_on_book():
 	
-	_global_datas.selected_photoData = Photo_data
+
 	_global_datas.show_page.emit(Photo_data.page_prefab)
 
 	var book = _global_datas.book_data.book_node
@@ -90,7 +92,4 @@ func _on_show_this_page():
 	show_this_on_book()	
 
 		
-func _on_show_scanner():
 
-	_global_datas.selected_photoData = Photo_data
-	_global_datas.show_on_scanner.emit(true)
