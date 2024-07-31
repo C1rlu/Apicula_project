@@ -32,7 +32,7 @@ func _set_camZoom(value,Cam_ref : boardCamState_data):
 func _process(delta):
 	
 	
-	if !_global_datas.camera_current_state == _global_datas.camera_state.Scanner:
+	if !_global_datas.camera_current_state == game_state.camera_state.Scanner:
 		return	
 		
 
@@ -47,7 +47,7 @@ func _process(delta):
 
 func _input(event):
 	
-	if _global_datas.camera_current_state == _global_datas.camera_state.Main:
+	if _global_datas.camera_current_state == game_state.camera_state.Main:
 		return	
 	
 	

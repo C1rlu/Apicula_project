@@ -11,7 +11,7 @@ func _on_on_click_on_click():
 	
 func add_back_call():
 	
-	if _global_datas.camera_current_state == _global_datas.camera_state.Scanner:
+	if _global_datas.camera_current_state == game_state.camera_state.Scanner:
 		_global_datas.show_on_scanner_backdrop.emit(false)
 		
 	_global_datas.camera_focus_On.emit(false,null)

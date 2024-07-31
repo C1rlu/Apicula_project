@@ -19,7 +19,7 @@ func _ready():
 
 func _process(delta):
 	
-	if !_global_datas.camera_current_state == _global_datas.camera_state.Main:
+	if !_global_datas.camera_current_state == game_state.camera_state.Main:
 		return
 
 

@@ -7,3 +7,13 @@ enum visible_state {
 	mirror
 }
 
+enum camera_state {
+	
+	Main,
+	Apicula,
+	Scanner,
+	Disque,
+	Book,
+	Board
+	
+}

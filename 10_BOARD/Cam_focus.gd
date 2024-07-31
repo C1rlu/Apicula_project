@@ -79,6 +79,6 @@ func done_state_to_main():
 	Cam_scanner_main.current = true
 
 	
-	_global_datas.camera_current_state = _global_datas.camera_state.Main
+	_global_datas.camera_current_state = game_state.camera_state.Main
 	#print("BACK TO POSITION")
 	is_active = false

@@ -128,17 +128,8 @@ signal map_fade(condition : bool) # true is in : false is out
 
 signal camera_focus_On(condition : bool , focus_data : boardCamState_data)
 signal camera_focus_update(focus_data : boardCamState_data)
-var camera_current_state : camera_state = camera_state.Main
+var camera_current_state : game_state.camera_state = 0
 
-enum camera_state {
-	
-	Main,
-	Apicula,
-	Scanner,
-	Disque,
-	Book
-	
-}
 
 # quest_state signal in order
 signal active_diving
