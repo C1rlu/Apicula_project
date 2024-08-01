@@ -1,9 +1,8 @@
 extends Node
 
 @export var all_Cam : Array[Camera3D]
-
 var is_active : bool = false
-@export var previous_focus : boardCamState_data
+var active_focus : boardCamState_data
 func _ready():
 	_global_datas.camera_focus_On.connect(_focus)
 	_global_datas.camera_focus_update.connect(update_focus)
@@ -15,6 +14,9 @@ func update_focus(focus_data : boardCamState_data):
 		cam_to_state(c,focus_data)	
 
 func _focus(focus_data : boardCamState_data):
+	
+	if active_focus != focus_data:
+		active_focus = focus_data
 	
 	for c in all_Cam:
 		cam_to_state(c,focus_data)	
@@ -29,11 +31,13 @@ func back_call():
 		_global_datas.show_on_scanner_backdrop.emit(false)
 		
 	_global_datas.book_back_idle_position.emit(false)
+	_global_datas.camera_current_state = active_focus.back_focus.cam_state
+	
 	
 	for c in all_Cam:
-		cam_to_state(c,previous_focus)	
+		cam_to_state(c,active_focus.back_focus)	
 	
-	_global_datas.camera_current_state = previous_focus.cam_state
+	
 		
 func cam_to_state(cam,focus):
 		cam.current = true 

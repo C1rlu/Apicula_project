@@ -16,6 +16,9 @@ func _ready():
 	
 func _process(delta):
 	
+	var disable  = true
+	if disable:
+		return
 	if _global_datas.camera_current_state != game_state.camera_state.Board:
 		return
 		

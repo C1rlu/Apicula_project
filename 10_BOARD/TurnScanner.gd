@@ -50,7 +50,10 @@ func _input(event):
 	if _global_datas.camera_current_state == game_state.camera_state.Main:
 		return	
 	
-	
+	var disable = true
+	if disable:
+		return
+		
 	if lock_action:
 		return
 		

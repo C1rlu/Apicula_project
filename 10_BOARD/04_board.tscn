@@ -1,4 +1,4 @@
-[gd_scene load_steps=78 format=3 uid="uid://cein0q2eirkay"]
+[gd_scene load_steps=77 format=3 uid="uid://cein0q2eirkay"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_g3pi7"]
 [ext_resource type="Script" path="res://10_BOARD/Board_CamTarget.gd" id="1_janbq"]
@@ -133,14 +133,6 @@ func end_fadeIn():
 func set_shader_value(value):
 	material.set_shader_parameter(\"Opacity\",value)
 	fade_value = value
-"
-
-[sub_resource type="GDScript" id="GDScript_l5hmx"]
-script/source = "extends Camera3D
-
-func _ready():
-	_global_datas.board_camera = self
-
 "
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_gpfe8"]
@@ -563,7 +555,6 @@ script = SubResource("GDScript_52477")
 [node name="Cam_focus" type="Node" parent="." node_paths=PackedStringArray("all_Cam")]
 script = ExtResource("6_7tgl6")
 all_Cam = [NodePath("../3D_SCENE/Camera_xray"), NodePath("../3D_SCENE/SubViewport/Camera3D_Main"), NodePath("../3D_SCENE/SubViewport_scanner/Camera3D_Scanner")]
-previous_focus = ExtResource("24_pisk2")
 
 [node name="Board_CamFly" type="Node" parent="Cam_focus" node_paths=PackedStringArray("all_cam", "focus_target")]
 script = ExtResource("8_cia84")
@@ -582,6 +573,10 @@ script = ExtResource("22_huhhn")
 focus_data = ExtResource("15_a7u4q")
 all_photoData = Array[Resource("res://12_INVENTORY/Photo/Photo_data.gd")]([ExtResource("20_0rbh6"), ExtResource("19_8dlfp"), ExtResource("21_ko3r3"), ExtResource("18_aukda"), ExtResource("11_ldr1y")])
 
+[node name="Next_scanner_input" type="Node" parent="Cam_focus"]
+script = ExtResource("16_l7ebl")
+all_scanner = Array[Resource("res://12_INVENTORY/Photo/Photo_data.gd")]([ExtResource("11_ldr1y"), ExtResource("17_mbuj8"), ExtResource("18_aukda"), ExtResource("19_8dlfp"), ExtResource("20_0rbh6"), ExtResource("21_ko3r3")])
+
 [node name="Pad_clic_raycast" type="Node" parent="."]
 script = ExtResource("3_rqf42")
 
@@ -595,10 +590,6 @@ scanner_first_data = ExtResource("11_ldr1y")
 
 [node name="Fade" type="Node" parent="Show_OnScanner"]
 script = ExtResource("11_2x7ah")
-
-[node name="Next_scanner_input" type="Node" parent="Show_OnScanner"]
-script = ExtResource("16_l7ebl")
-all_scanner = Array[Resource("res://12_INVENTORY/Photo/Photo_data.gd")]([ExtResource("11_ldr1y"), ExtResource("17_mbuj8"), ExtResource("18_aukda"), ExtResource("19_8dlfp"), ExtResource("20_0rbh6"), ExtResource("21_ko3r3")])
 
 [node name="3D_SCENE" type="Node3D" parent="."]
 
@@ -660,35 +651,12 @@ current = true
 fov = 40.0
 far = 10.0
 
-[node name="Camp_root_Render" type="Node3D" parent="3D_SCENE/SubViewport"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.38419e-07)
-visible = false
-
-[node name="Camera3D" type="Camera3D" parent="3D_SCENE/SubViewport/Camp_root_Render"]
-transform = Transform3D(0.994881, 0.0700724, -0.072816, 0, 0.720551, 0.693402, 0.101056, -0.689852, 0.716862, -0.08, 0.945, 1.035)
-cull_mask = 2
-current = true
-fov = 40.0
-far = 10.0
-script = SubResource("GDScript_l5hmx")
-
 [node name="SubViewport_scanner" type="SubViewport" parent="3D_SCENE"]
 transparent_bg = true
 handle_input_locally = false
 size = Vector2i(1920, 1080)
 
 [node name="Camera3D_Scanner" type="Camera3D" parent="3D_SCENE/SubViewport_scanner"]
-transform = Transform3D(0.994881, 0.0700724, -0.072816, 0, 0.720551, 0.693402, 0.101056, -0.689852, 0.716862, -0.08, 0.945, 1.035)
-cull_mask = 128
-current = true
-fov = 40.0
-far = 5.0
-
-[node name="Camp_root_Render" type="Node3D" parent="3D_SCENE/SubViewport_scanner"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.38419e-07)
-visible = false
-
-[node name="Camera3D" type="Camera3D" parent="3D_SCENE/SubViewport_scanner/Camp_root_Render"]
 transform = Transform3D(0.994881, 0.0700724, -0.072816, 0, 0.720551, 0.693402, 0.101056, -0.689852, 0.716862, -0.08, 0.945, 1.035)
 cull_mask = 128
 current = true
