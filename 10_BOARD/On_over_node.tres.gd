@@ -10,6 +10,9 @@ extends Node
 
 var move_node_position : Vector3
 var node_rotation_degrees : Vector3
+
+signal on_over_signal(condition : bool)
+
 func _ready():
 	
 	_global_datas.close_all_over_ui.connect(close)
@@ -48,3 +51,4 @@ func close():
 		_on_over_second.visible = false
 	if move_node:
 		move(false)
+

@@ -11,5 +11,5 @@ func _on_on_click_on_click():
 		if _global_datas.camera_current_state == focus_data.cam_state:
 			return
 		_global_datas.camera_focus_On.emit(focus_data)
-
+		
 	

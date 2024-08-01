@@ -20,7 +20,7 @@ func update_focus(focus_data : boardCamState_data):
 func _focus(focus_data : boardCamState_data):
 	
 	_global_datas.camera_current_state = focus_data.cam_state
-	
+	_global_datas.close_all_over_ui.emit()
 
 	for c in all_Cam:
 		cam_to_state(c,focus_data)	
