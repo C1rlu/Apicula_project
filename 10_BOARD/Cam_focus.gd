@@ -2,7 +2,8 @@ extends Node
 
 @export var all_Cam : Array[Camera3D]
 var is_active : bool = false
-var active_focus : boardCamState_data
+@export var previous_focus : boardCamState_data
+@export var previous_focus_main : boardCamState_data
 func _ready():
 	_global_datas.camera_focus_On.connect(_focus)
 	_global_datas.camera_focus_update.connect(update_focus)
@@ -15,29 +16,52 @@ func update_focus(focus_data : boardCamState_data):
 
 func _focus(focus_data : boardCamState_data):
 	
-	if active_focus != focus_data:
-		active_focus = focus_data
 	
 	for c in all_Cam:
 		cam_to_state(c,focus_data)	
 
 	_global_datas.camera_current_state = focus_data.cam_state
 		
-	_global_datas._add_back_call.emit(back_call)
+		
+		
+	# FILTER BACK CALL NEED TO BE HERE	
+	_global_datas._add_back_call.emit(back_call_main)
+	#if _global_datas.camera_current_state == game_state.camera_state.Board:
+		#_global_datas._add_back_call.emit(back_call_main)
+		##print("MAIN	 FOCUS SETED")	
+	#else:
+		##_global_datas._add_back_call.emit(back_call_main)
+		#_global_datas._add_back_call.emit(back_call_board)
+		##print("BOARD FOCUS SETED")	
+	
+	
 
-func back_call():
+func back_call_main():
 	
 	if _global_datas.camera_current_state == game_state.camera_state.Scanner:
 		_global_datas.show_on_scanner_backdrop.emit(false)
 		
 	_global_datas.book_back_idle_position.emit(false)
-	_global_datas.camera_current_state = active_focus.back_focus.cam_state
+	
+	_global_datas.camera_current_state = previous_focus_main.cam_state
 	
 	
 	for c in all_Cam:
-		cam_to_state(c,active_focus.back_focus)	
+		cam_to_state(c,previous_focus_main)	
 	
+func back_call_board():
 	
+	if _global_datas.camera_current_state == game_state.camera_state.Scanner:
+		_global_datas.show_on_scanner_backdrop.emit(false)
+		
+	_global_datas.book_back_idle_position.emit(false)
+
+	_global_datas.camera_current_state = previous_focus.cam_state
+
+	
+	for c in all_Cam:
+		cam_to_state(c,previous_focus)	
+		
 		
 func cam_to_state(cam,focus):
 		cam.current = true 
