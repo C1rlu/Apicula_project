@@ -29,7 +29,8 @@ func on_over(condition):
 		
 	_global_datas.switch_icon_cursor.emit(icon_type)
 
-
+	on_over_signal.emit(condition)
+	
 	if move_node:
 		move(condition)
 		
@@ -51,4 +52,5 @@ func close():
 		_on_over_second.visible = false
 	if move_node:
 		move(false)
-
+		
+	on_over_signal.emit(false)

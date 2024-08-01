@@ -8,8 +8,7 @@ extends Node
 @onready var backdrop_focus = $"../../3D_SCENE/BACKDROP_FOCUS"
 @onready var backdrop_focus_material : Material = backdrop_focus.get_material()
 
-
-
+var actual_value_b : float
 var fade_in
 
 func _ready():
@@ -18,6 +17,7 @@ func _ready():
 
 func show_scanner(condition : bool):
 	
+
 	if condition:
 		if fade_in:
 			fade_in.kill()
@@ -25,7 +25,9 @@ func show_scanner(condition : bool):
 		fade_in = create_tween()
 		fade_in.tween_method(set_scanner_shader_value,0.0,1.0,1.0).set_trans(Tween.TRANS_SINE)
 		
-	else:		
+	else:
+		
+					
 		if fade_in:
 			fade_in.kill()
 	
@@ -39,21 +41,22 @@ func show_backdrop(condition : bool):
 			fade_in.kill()
 	
 		fade_in = create_tween()
-		fade_in.tween_method(set_backdrop_shader_value,0.0,1.0,1.0).set_trans(Tween.TRANS_SINE)
+		fade_in.tween_method(set_backdrop_shader_value,actual_value_b,1.0,1.0).set_trans(Tween.TRANS_SINE)
 		
 	else:		
 		if fade_in:
 			fade_in.kill()
 	
 		fade_in = create_tween()
-		fade_in.tween_method(set_backdrop_shader_value,1.0,0.0,0.5).set_trans(Tween.TRANS_SINE)
+		fade_in.tween_method(set_backdrop_shader_value,actual_value_b,0.0,0.5).set_trans(Tween.TRANS_SINE)
 	
 
 func set_backdrop_shader_value(value):
 	
 
 	backdrop_focus_material.set_shader_parameter("Opacity",value)
-
+	actual_value_b = value
+	
 func set_scanner_shader_value(value):
 	
 	render_scanner_material.set_shader_parameter("Opacity",value)
