@@ -22,17 +22,13 @@ func _input(event):
 	
 
 	
-	#if _global_datas.camera_current_state != game_state.camera_state.Main:
-		#return
+	if _global_datas.camera_current_state == game_state.camera_state.Book:
+		return
 		
 				
 	if !_global_datas.Player_In_Inventory:
 		return	
-		
-	#if _global_datas.zoom_value == 1:
-		#return
 	
-			
 	if _pad: 
 		var center_screen = Vector2i(640,360)
 		check_on_over(center_screen)		
