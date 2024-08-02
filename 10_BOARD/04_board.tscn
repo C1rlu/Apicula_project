@@ -1,4 +1,4 @@
-[gd_scene load_steps=77 format=3 uid="uid://cein0q2eirkay"]
+[gd_scene load_steps=80 format=3 uid="uid://cein0q2eirkay"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_g3pi7"]
 [ext_resource type="Script" path="res://10_BOARD/Board_CamTarget.gd" id="1_janbq"]
@@ -8,12 +8,14 @@
 [ext_resource type="Script" path="res://10_BOARD/Pad_clic_raycast.gd" id="3_rqf42"]
 [ext_resource type="Script" path="res://10_BOARD/Cam_focus.gd" id="6_7tgl6"]
 [ext_resource type="Material" uid="uid://5qv6cc3a63nt" path="res://05_SHADER_TEST/Full_screen/04_board_simple_disolved.tres" id="7_fiqjo"]
+[ext_resource type="Script" path="res://10_BOARD/Set_state_call.gd" id="7_m8teq"]
 [ext_resource type="Script" path="res://10_BOARD/Information_manager.gd" id="7_v3hdy"]
 [ext_resource type="Script" path="res://10_BOARD/Player_onMap.gd" id="7_vhvc2"]
-[ext_resource type="Script" path="res://10_BOARD/Board_CamFly.gd" id="8_cia84"]
 [ext_resource type="Material" uid="uid://t4qtyso7w6ee" path="res://05_SHADER_TEST/Board/board_boat.tres" id="8_et36p"]
 [ext_resource type="Script" path="res://10_BOARD/Set_focus_data.gd" id="9_2ajy3"]
+[ext_resource type="Script" path="res://10_BOARD/Zoom_state.gd" id="9_8at4f"]
 [ext_resource type="Script" path="res://10_BOARD/Json_reader_test.gd" id="9_tfybn"]
+[ext_resource type="Script" path="res://10_BOARD/Set_back_Call.gd" id="9_xskqn"]
 [ext_resource type="Script" path="res://14_ON_SCANNER_PHOTO/Show_OnScanner.gd" id="10_354m8"]
 [ext_resource type="Script" path="res://14_ON_SCANNER_PHOTO/Fade_scanner.gd" id="11_2x7ah"]
 [ext_resource type="Resource" uid="uid://d15m8513w4wv2" path="res://15_GAME_RESSOURCE/03_BoardCam_state/AppiculaM_focus_data.tres" id="11_clmas"]
@@ -35,16 +37,16 @@
 [ext_resource type="Script" path="res://10_BOARD/Follow_cursor.gd" id="20_vjjnn"]
 [ext_resource type="Resource" uid="uid://dm0uus2gow50q" path="res://15_GAME_RESSOURCE/Otis_photoData.tres" id="21_ko3r3"]
 [ext_resource type="Texture2D" uid="uid://d1kttlfg1wwvk" path="res://10_BOARD/00_BOOK/01_UI/cursor_Circle.png" id="21_qhnbf"]
-[ext_resource type="Script" path="res://10_BOARD/Book_page_element.gd" id="22_huhhn"]
 [ext_resource type="Resource" uid="uid://cd5pseveq582t" path="res://15_GAME_RESSOURCE/03_BoardCam_state/Main_focus_data.tres" id="24_pisk2"]
 [ext_resource type="Resource" uid="uid://cyu7mo6v7aaij" path="res://15_GAME_RESSOURCE/03_BoardCam_state/Board_focus_data.tres" id="27_vvxtf"]
+[ext_resource type="Resource" uid="uid://cjwmwf4frvq3c" path="res://15_GAME_RESSOURCE/03_BoardCam_state/BoardZoom_focus_data.tres" id="28_njdgu"]
 
 [sub_resource type="GDScript" id="GDScript_w13ry"]
 script/source = "extends Node
 
 
 @export var debug_board = true
-@onready var camera_xray = $\"3D_SCENE/Camera_xray\"
+
 
 
 func _ready():
@@ -52,10 +54,6 @@ func _ready():
 	_global_datas.open_inventory.connect(open_inventory)
 	
 func open_inventory(condition : bool):
-
-
-	camera_xray.current = condition
-	
 	if !condition:
 		_global_datas.show_on_scanner.emit(false)
 		_global_datas.show_ui_scanner_dots.emit(false)	
@@ -507,6 +505,8 @@ shader = SubResource("VisualShader_elssd")
 
 [sub_resource type="SphereMesh" id="SphereMesh_ycnm1"]
 
+[sub_resource type="PrismMesh" id="PrismMesh_2j3nk"]
+
 [sub_resource type="ArrayMesh" id="ArrayMesh_i7f22"]
 resource_name = "Player_Boat_01-c9377ed3c1eb09ef00335a9606626fca_Cube_001"
 _surfaces = [{
@@ -552,17 +552,24 @@ viewports = [NodePath("../3D_SCENE/SubViewport"), NodePath("../3D_SCENE/SubViewp
 [node name="Fade" type="Node" parent="."]
 script = SubResource("GDScript_52477")
 
-[node name="Cam_focus" type="Node" parent="." node_paths=PackedStringArray("all_Cam")]
+[node name="Cam_focus" type="Node" parent="." node_paths=PackedStringArray("all_Cam", "focus_target")]
 script = ExtResource("6_7tgl6")
 all_Cam = [NodePath("../3D_SCENE/Camera_xray"), NodePath("../3D_SCENE/SubViewport/Camera3D_Main"), NodePath("../3D_SCENE/SubViewport_scanner/Camera3D_Scanner")]
-previous_focus = ExtResource("27_vvxtf")
-previous_focus_main = ExtResource("24_pisk2")
+focus_target = NodePath("../3D_SCENE/CamTarget")
 
-[node name="Board_CamFly" type="Node" parent="Cam_focus" node_paths=PackedStringArray("all_cam", "focus_target")]
-script = ExtResource("8_cia84")
-all_cam = [NodePath("../../3D_SCENE/SubViewport/Camera3D_Main"), NodePath("../../3D_SCENE/Camera_xray"), NodePath("../../3D_SCENE/SubViewport_scanner/Camera3D_Scanner")]
-focus_target = NodePath("../../3D_SCENE/CamTarget")
-cam_state_board = ExtResource("27_vvxtf")
+[node name="Set_state_call" type="Node" parent="Cam_focus"]
+script = ExtResource("7_m8teq")
+
+[node name="Set_back_Call" type="Node" parent="Cam_focus"]
+script = ExtResource("9_xskqn")
+Main_camera_data = ExtResource("24_pisk2")
+Board_camera_data = ExtResource("27_vvxtf")
+
+[node name="Zoom_state" type="Node" parent="Cam_focus"]
+script = ExtResource("9_8at4f")
+main_state = ExtResource("24_pisk2")
+board_state = ExtResource("27_vvxtf")
+board_zoom_state = ExtResource("28_njdgu")
 
 [node name="TurnScanner_and_zoom" type="Node" parent="Cam_focus" node_paths=PackedStringArray("Cam_to_move", "Cam_to_move_scanner")]
 script = ExtResource("12_2daja")
@@ -570,11 +577,6 @@ Cam_ref_scanner = ExtResource("13_87a1q")
 Cam_ref_Book = ExtResource("15_a7u4q")
 Cam_to_move = NodePath("../../3D_SCENE/SubViewport/Camera3D_Main")
 Cam_to_move_scanner = NodePath("../../3D_SCENE/SubViewport_scanner/Camera3D_Scanner")
-
-[node name="Book_page_element" type="Node" parent="Cam_focus"]
-script = ExtResource("22_huhhn")
-focus_data = ExtResource("15_a7u4q")
-all_photoData = Array[Resource("res://12_INVENTORY/Photo/Photo_data.gd")]([ExtResource("20_0rbh6"), ExtResource("19_8dlfp"), ExtResource("21_ko3r3"), ExtResource("18_aukda"), ExtResource("11_ldr1y")])
 
 [node name="Next_scanner_input" type="Node" parent="Cam_focus"]
 script = ExtResource("16_l7ebl")
@@ -598,19 +600,26 @@ script = ExtResource("11_2x7ah")
 
 [node name="Camera_state" type="Node3D" parent="3D_SCENE"]
 
+[node name="Camera_OnBoard" type="Camera3D" parent="3D_SCENE/Camera_state"]
+transform = Transform3D(1, 0, 0, 0, 0.642788, 0.766044, 0, -0.766044, 0.642788, 0, 0.48, 0.49)
+cull_mask = 2
+fov = 40.0
+script = ExtResource("9_2ajy3")
+focus_data = ExtResource("27_vvxtf")
+
+[node name="Camera_OnBoard_zoom" type="Camera3D" parent="3D_SCENE/Camera_state"]
+transform = Transform3D(1, 0, 0, 0, 0.34202, 0.939693, 0, -0.939693, 0.34202, 0, 0.232, 0.214)
+cull_mask = 2
+fov = 40.0
+script = ExtResource("9_2ajy3")
+focus_data = ExtResource("28_njdgu")
+
 [node name="Camera_OnMain" type="Camera3D" parent="3D_SCENE/Camera_state"]
 transform = Transform3D(0.994881, 0.0700724, -0.072816, 0, 0.720551, 0.693402, 0.101056, -0.689852, 0.716862, -0.08, 0.945, 1.035)
 cull_mask = 2
 fov = 40.0
 script = ExtResource("9_2ajy3")
 focus_data = ExtResource("24_pisk2")
-
-[node name="Camera_OnBoard" type="Camera3D" parent="3D_SCENE/Camera_state"]
-transform = Transform3D(0.995884, -0.0694286, 0.0582575, 0, 0.642788, 0.766044, -0.0906326, -0.762892, 0.640142, -0.205, 0.385, 0.385)
-cull_mask = 2
-fov = 40.0
-script = ExtResource("9_2ajy3")
-focus_data = ExtResource("27_vvxtf")
 
 [node name="Camera_OnScanner" type="Camera3D" parent="3D_SCENE/Camera_state"]
 transform = Transform3D(0.990024, 0.0738302, -0.120009, 0, 0.851727, 0.523986, 0.140901, -0.518759, 0.84323, 0, 0.24, 0.151)
@@ -632,8 +641,6 @@ cull_mask = 2
 fov = 40.0
 script = ExtResource("9_2ajy3")
 focus_data = ExtResource("12_ceb6p")
-
-[node name="Camp_root_XRay" type="Node3D" parent="3D_SCENE"]
 
 [node name="Camera_xray" type="Camera3D" parent="3D_SCENE"]
 transform = Transform3D(0.994881, 0.0700724, -0.072816, 0, 0.720551, 0.693402, 0.101056, -0.689852, 0.716862, -0.08, 0.945, 1.035)
@@ -718,6 +725,7 @@ color = Color(0.721569, 0.635294, 0.439216, 1)
 [node name="Board_scene" parent="3D_SCENE" instance=ExtResource("2_6c571")]
 
 [node name="CamTarget" type="Node3D" parent="3D_SCENE"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.125)
 script = ExtResource("1_janbq")
 min_x = -1.0
 max_x = 1.0
@@ -726,8 +734,15 @@ max_z = 0.5
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="3D_SCENE/CamTarget"]
 transform = Transform3D(0.0354637, 0, 0, 0, 0.0354637, 0, 0, 0, 0.0354637, 0, 0, 0)
+visible = false
 layers = 2
 mesh = SubResource("SphereMesh_ycnm1")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="3D_SCENE/CamTarget"]
+transform = Transform3D(0.0176783, 0, 0, 0, -7.72744e-10, 0.0176783, 0, -0.0176783, -7.72744e-10, 0, 0.017216, 0)
+visible = false
+layers = 2
+mesh = SubResource("PrismMesh_2j3nk")
 
 [node name="Player_on_map" type="Node3D" parent="3D_SCENE"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.000402212, 0.00895628, -0.00213873)
@@ -784,3 +799,6 @@ texture = ExtResource("20_cuebq")
 position = Vector2(23.6249, -16.3751)
 scale = Vector2(0.12207, 0.12207)
 texture = ExtResource("20_cuebq")
+
+[connection signal="set_back_call" from="Cam_focus" to="Cam_focus/Set_back_Call" method="_set_back_call"]
+[connection signal="set_state_call" from="Cam_focus" to="Cam_focus/Set_state_call" method="_set_state_call"]

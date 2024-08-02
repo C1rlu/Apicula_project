@@ -16,7 +16,7 @@ extends Node3D
 signal update_legend( legend : String)
 
 @onready var on_over_full = $legend/All_over/On_Over_full
-
+@export var camera_state : boardCamState_data
 func _ready():
 	
 	Photo_data.photo_element = self
@@ -80,7 +80,12 @@ func show_this_on_book():
 	var rotation_offset = book_rotation_angle - book.position.x * 25
 	book.rotation_degrees = Vector3(0,rotation_offset,0)
 	
+	var target = book.global_position
 
+	_global_datas.focus_this_on_board.emit(target)
+	_global_datas.camera_focus_On.emit(camera_state)
+	
+	
 	_global_datas.book_idle_pos = false		
 	_global_datas.book_back_idle_position.emit(true)
 	

@@ -15,4 +15,5 @@ enum camera_state {
 	Disque,
 	Book,
 	Board,
+	BoardZoom
 }

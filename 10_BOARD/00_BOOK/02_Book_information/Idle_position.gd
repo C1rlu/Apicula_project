@@ -17,3 +17,11 @@ func back_idle(condition: bool):
 		book.rotation_degrees = Vector3(0.0,book_idle_rotation,0.0)
 	
 	book.visible = condition
+
+
+	_global_datas._add_back_call.emit(back_call)
+
+func back_call():
+	_global_datas.book_back_idle_position.emit(false)		
+	
+	

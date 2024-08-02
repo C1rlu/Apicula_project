@@ -1,12 +1,11 @@
-[gd_scene load_steps=70 format=3 uid="uid://uwg2qc3svu11"]
+[gd_scene load_steps=69 format=3 uid="uid://uwg2qc3svu11"]
 
 [ext_resource type="Script" path="res://10_BOARD/Photo_element.gd" id="1_0a8jl"]
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Legend/Legend_behaviour.gd" id="1_f7rkq"]
 [ext_resource type="Resource" uid="uid://dyh1qg1u652pl" path="res://15_GAME_RESSOURCE/Epave_ch_photoData.tres" id="2_8x1kk"]
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Show_this_page.gd" id="2_653je"]
+[ext_resource type="Resource" uid="uid://cjwmwf4frvq3c" path="res://15_GAME_RESSOURCE/03_BoardCam_state/BoardZoom_focus_data.tres" id="3_tu215"]
 [ext_resource type="Texture2D" uid="uid://38btbw60olcn" path="res://12_INVENTORY/Photo/IMG/Boat.png" id="4_wljme"]
-[ext_resource type="Script" path="res://10_BOARD/Focus_state.gd" id="5_bcvfb"]
-[ext_resource type="Resource" uid="uid://cvrp1lkxdf4md" path="res://15_GAME_RESSOURCE/03_BoardCam_state/Book_focus_data.tres" id="6_0chaq"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="7_vd1wc"]
 
 [sub_resource type="GDScript" id="GDScript_32kbr"]
@@ -711,6 +710,8 @@ shader = SubResource("VisualShader_sxcgk")
 script = ExtResource("1_0a8jl")
 Photo_data = ExtResource("2_8x1kk")
 book_position_offset = Vector3(0.025, 0.008, 0.08)
+book_rotation_angle = -80.0
+camera_state = ExtResource("3_tu215")
 
 [node name="Photo" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0468789)
@@ -743,16 +744,12 @@ one_shot = true
 
 [node name="Legend_area" type="Area3D" parent="legend"]
 
-[node name="Focus_state" type="Node" parent="legend/Legend_area"]
-script = ExtResource("5_bcvfb")
-focus_data = ExtResource("6_0chaq")
-
 [node name="On_Over" type="Node" parent="legend/Legend_area" node_paths=PackedStringArray("move_node")]
 script = ExtResource("7_vd1wc")
 icon_type = 1
 move_node = NodePath("../../..")
 position_over = Vector3(0, 0.005, 0)
-rotation_over = Vector3(28, 0, 0)
+rotation_over = Vector3(10, 0, 0)
 
 [node name="On_click" type="Node" parent="legend/Legend_area"]
 script = ExtResource("2_653je")
@@ -844,4 +841,3 @@ vertical_alignment = 1
 [connection signal="update_legend" from="." to="legend/legend_behaviour" method="_on_photo_element_root_update_legend"]
 [connection signal="timeout" from="legend/legend_behaviour/Timer" to="legend/legend_behaviour" method="_on_timer_timeout"]
 [connection signal="On_click" from="legend/Legend_area/On_click" to="." method="_on_show_this_page"]
-[connection signal="On_click" from="legend/Legend_area/On_click" to="legend/Legend_area/Focus_state" method="_on_on_click_on_click"]
