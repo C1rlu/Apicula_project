@@ -6,8 +6,9 @@ extends Node
 
 var fade_in
 func _ready():
-	_global_datas.set_tool_ui.connect(fade)
-	render_.visible = false	
+	pass
+	#_global_datas.set_tool_ui.connect(fade)
+	#render_.visible = false	
 func fade(data):
 	render_.visible = true
 	

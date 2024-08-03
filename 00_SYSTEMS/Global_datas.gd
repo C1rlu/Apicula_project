@@ -86,7 +86,9 @@ signal _scan_mirror_xray
 signal _photo_flash
 var flash_subscene_position : Vector3
 var _selected_tool : tool_data 
+var player_in_selector : bool = false
 signal set_tool_ui(tool : tool_data)
+signal open_tool_selector(condition : bool)
 signal subscene_sonar_effect(position : Vector3)
 
 #teleporter vertex variable

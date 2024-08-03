@@ -72,13 +72,15 @@ func _physics_process(_delta):
 		return	
 	if _global_datas.Player_In_Inventory:
 		return 
-
+	
+	
 
 	if _global_datas.Player_InSubScene:
 		_global_datas.subbscene_playerPosition = transform.origin	
 		_global_datas.flash_subscene_position = light_position.global_position
 
-		
+	if _global_datas.player_in_selector:
+		return	
 	if Input.is_action_pressed((_global_datas.move_forward)):
 		var goingUp = transform.basis.y
 		apply_central_force(goingUp * actual_speed)
