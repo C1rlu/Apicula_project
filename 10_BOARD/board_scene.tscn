@@ -1,4 +1,4 @@
-[gd_scene load_steps=264 format=3 uid="uid://dr73p5vs0sixe"]
+[gd_scene load_steps=263 format=3 uid="uid://dr73p5vs0sixe"]
 
 [ext_resource type="PackedScene" uid="uid://cyb6my1srlcpw" path="res://10_BOARD/Candle/Candle_set.blend" id="1_3ummb"]
 [ext_resource type="Script" path="res://10_BOARD/photos_check.gd" id="1_bcxwj"]
@@ -47,16 +47,13 @@
 [ext_resource type="Resource" uid="uid://cvrp1lkxdf4md" path="res://15_GAME_RESSOURCE/03_BoardCam_state/Book_focus_data.tres" id="37_1me4o"]
 [ext_resource type="Material" uid="uid://cwdathot7k12h" path="res://05_SHADER_TEST/Board/Maquette_sh.tres" id="37_2kevv"]
 [ext_resource type="Resource" uid="uid://ctxrmh1elpnm1" path="res://15_GAME_RESSOURCE/Follower_photoData.tres" id="37_jc8ce"]
-[ext_resource type="Resource" uid="uid://cyu7mo6v7aaij" path="res://15_GAME_RESSOURCE/03_BoardCam_state/Board_focus_data.tres" id="41_geg11"]
 [ext_resource type="PackedScene" uid="uid://dh8xiu7ntj52y" path="res://10_BOARD/TourneDisque/Disque_prefab.blend" id="44_0qqs5"]
 [ext_resource type="Script" path="res://10_BOARD/Focus_state.gd" id="45_37758"]
 [ext_resource type="Resource" uid="uid://d15m8513w4wv2" path="res://15_GAME_RESSOURCE/03_BoardCam_state/AppiculaM_focus_data.tres" id="46_av22g"]
 [ext_resource type="Material" uid="uid://c0oms0qis0dcm" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_mat_02.tres" id="46_tmbd7"]
 [ext_resource type="Material" uid="uid://cfi5jyq3utqd4" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_mat_04.tres" id="47_r4p1c"]
 [ext_resource type="Resource" uid="uid://cd1asdnwwphju" path="res://15_GAME_RESSOURCE/03_BoardCam_state/TourneDisque_focus_data.tres" id="50_v3523"]
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_8qfni"]
-size = Vector3(1.69008, 0.00946939, 1.07778)
+[ext_resource type="PackedScene" uid="uid://c5fv4g2cle0l1" path="res://10_BOARD/legend_only.tscn" id="51_gvukx"]
 
 [sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_af38u"]
 default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
@@ -2188,26 +2185,6 @@ omni_range = 1.6
 omni_attenuation = 1.14868
 omni_shadow_mode = 0
 
-[node name="Area3D" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.162295, 0.00267054, 0.0875484)
-visible = false
-
-[node name="Focus_state" type="Node" parent="Area3D"]
-script = ExtResource("45_37758")
-focus_data = ExtResource("41_geg11")
-
-[node name="On_click_off" type="Node" parent="Area3D"]
-script = ExtResource("17_gpvpy")
-
-[node name="On_Over_off" type="Node" parent="Area3D"]
-script = ExtResource("23_4ws66")
-icon_type = 1
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.340201, -0.00158234, -0.0680908)
-shape = SubResource("BoxShape3D_8qfni")
-disabled = true
-
 [node name="Deco" type="Node3D" parent="."]
 
 [node name="Lanterne2" parent="Deco" instance=ExtResource("1_l5l52")]
@@ -2394,6 +2371,26 @@ layers = 2
 mesh = SubResource("BoxMesh_v3rv8")
 skeleton = NodePath("../..")
 surface_material_override/0 = ExtResource("6_kkuc8")
+
+[node name="Legend_only_ap" parent="." instance=ExtResource("51_gvukx")]
+transform = Transform3D(1.46935, 0, 0.301668, 0, 1.5, 0, -0.301668, 0, 1.46935, -0.232287, 0, -0.239616)
+legend_name = "Apicula ?"
+
+[node name="Legend_only_scanner" parent="." instance=ExtResource("51_gvukx")]
+transform = Transform3D(1.49764, 0, 0.0840982, 0, 1.5, 0, -0.0840982, 0, 1.49764, 0.0105427, -2.98023e-08, 0.000631027)
+legend_name = "Scanner reader"
+
+[node name="Legend_only_scanner2" parent="." instance=ExtResource("51_gvukx")]
+transform = Transform3D(1.24688, 0, -0.833834, 0, 1.5, 0, 0.833834, 0, 1.24688, 0.290748, -2.98023e-08, -0.127963)
+legend_name = "Disque"
+
+[node name="Legend_only_dive_zone" parent="." instance=ExtResource("51_gvukx")]
+transform = Transform3D(0.977842, 0, -0.209345, 0, 1, 0, 0.209345, 0, 0.977842, 0.169973, 0.00379267, 0.34497)
+legend_name = "First Oddities"
+
+[node name="Legend_only_dive_zone2" parent="." instance=ExtResource("51_gvukx")]
+transform = Transform3D(0.976631, 0, -0.214923, 0, 1, 0, 0.214923, 0, 0.976631, 0.302058, 0.00379267, 0.405704)
+legend_name = "Old Boat"
 
 [node name="LINKS" type="Node3D" parent="."]
 
@@ -2789,7 +2786,6 @@ move_node = NodePath("../../Disque_prefab")
 transform = Transform3D(0.871195, 0, 0.490913, 0, 1, 0, -0.490913, 0, 0.871195, 0.015209, 0.134239, -0.0155258)
 shape = SubResource("BoxShape3D_64lbo")
 
-[connection signal="On_click" from="Area3D/On_click_off" to="Area3D/Focus_state" method="_on_on_click_on_click"]
 [connection signal="On_click" from="Scanner_reader/Area3D/On_click" to="Scanner_reader/Area3D/Focus_state" method="_on_on_click_on_click"]
 [connection signal="On_click" from="Book_Close_root/Area3D/On_click_off" to="Book_Close_root/Area3D/On_click_off" method="_on_on_click"]
 [connection signal="On_click" from="Apicula_maquette_v01blend/Area3D/On_click" to="Apicula_maquette_v01blend/Area3D/Focus_state" method="_on_on_click_on_click"]

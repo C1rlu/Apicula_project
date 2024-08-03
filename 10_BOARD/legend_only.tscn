@@ -1,0 +1,307 @@
+[gd_scene load_steps=23 format=3 uid="uid://c5fv4g2cle0l1"]
+
+[ext_resource type="Script" path="res://10_BOARD/legend_only.gd" id="1_pl300"]
+[ext_resource type="PackedScene" uid="uid://dxqy27a6g6wju" path="res://10_BOARD/00_BOOK/02_Book_information/Page/Page_2d/Legend_element_page/MaquetteApicula_page.tscn" id="2_i84wo"]
+[ext_resource type="Resource" uid="uid://cjwmwf4frvq3c" path="res://15_GAME_RESSOURCE/03_BoardCam_state/BoardZoom_focus_data.tres" id="3_4lkki"]
+[ext_resource type="Script" path="res://10_BOARD/00_BOOK/Legend/Legend_behaviour.gd" id="5_vs6hc"]
+[ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="6_0awpw"]
+[ext_resource type="Script" path="res://10_BOARD/00_BOOK/Show_this_page.gd" id="7_aj2kh"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qdemk"]
+size = Vector3(0.0953867, 0.0129531, 0.0317599)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_sflup"]
+viewport_path = NodePath("legend/legend_render")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_seomj"]
+resource_local_to_scene = true
+size = Vector2(1.8, 1.615)
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_shisn"]
+constant = 1.0
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_y3hi8"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_fdada"]
+parameter_name = "Dither_size"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_qmaqj"]
+default_input_values = [0, 0.83, 1, 0.0]
+
+[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_w2suj"]
+constant = Color(0.73, 0.47377, 0.1606, 1)
+
+[sub_resource type="VisualShader" id="VisualShader_tl2py"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+
+global uniform float Dither_size;
+
+
+
+void fragment() {
+// ColorConstant:7
+	vec4 n_out7p0 = vec4(0.730000, 0.473770, 0.160600, 1.000000);
+
+
+// FloatConstant:3
+	float n_out3p0 = 1.000000;
+
+
+// FloatParameter:5
+	float n_out5p0 = Dither_size;
+
+
+	float n_out4p0;
+// Expression:4
+	n_out4p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out5p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out4p0 = n_out3p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Step:6
+	float n_in6p0 = 0.83000;
+	float n_out6p0 = step(n_in6p0, n_out4p0);
+
+
+// Output:0
+	ALBEDO = vec3(n_out7p0.xyz);
+	ALPHA = n_out6p0;
+
+
+}
+"
+graph_offset = Vector2(-573.321, -129.617)
+flags/unshaded = true
+nodes/fragment/0/position = Vector2(580, 220)
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_shisn")
+nodes/fragment/3/position = Vector2(-1180, 460)
+nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_y3hi8")
+nodes/fragment/4/position = Vector2(-900, 460)
+nodes/fragment/4/size = Vector2(724.789, 654.559)
+nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/4/output_ports = "0,0,Dither_Node;"
+nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/5/node = SubResource("VisualShaderNodeFloatParameter_fdada")
+nodes/fragment/5/position = Vector2(-1540, 620)
+nodes/fragment/6/node = SubResource("VisualShaderNodeStep_qmaqj")
+nodes/fragment/6/position = Vector2(130.23, 516.22)
+nodes/fragment/7/node = SubResource("VisualShaderNodeColorConstant_w2suj")
+nodes/fragment/7/position = Vector2(226.136, 51.1274)
+nodes/fragment/connections = PackedInt32Array(3, 0, 4, 0, 5, 0, 4, 1, 4, 0, 6, 1, 6, 0, 0, 1, 7, 0, 0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gfhbg"]
+render_priority = 0
+shader = SubResource("VisualShader_tl2py")
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_4dsm5"]
+size = Vector2(620, 200)
+expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
+grey_value = luminance;"
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_y3xem"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
+op_type = 3
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_rax8w"]
+input_name = "color"
+
+[sub_resource type="VisualShaderNodeBooleanParameter" id="VisualShaderNodeBooleanParameter_4daqk"]
+parameter_name = "isGray"
+qualifier = 1
+
+[sub_resource type="VisualShader" id="VisualShader_sxcgk"]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+global uniform bool isGray;
+
+
+
+void fragment() {
+// Input:5
+	vec4 n_out5p0 = COLOR;
+
+
+	float n_out3p0;
+// Expression:3
+	n_out3p0 = 0.0;
+	{
+		float luminance = 0.299 * vec3(n_out5p0.xyz).x + 0.587 * vec3(n_out5p0.xyz).y + 0.114 * vec3(n_out5p0.xyz).z;
+		n_out3p0 = luminance;
+	}
+
+
+// BooleanParameter:6
+	bool n_out6p0 = isGray;
+
+
+// Mix:4
+	vec3 n_out4p0 = mix(vec3(n_out5p0.xyz), vec3(n_out3p0), vec3(n_out6p0 ? 1.0 : 0.0));
+
+
+// Output:0
+	COLOR.rgb = n_out4p0;
+
+
+}
+"
+graph_offset = Vector2(-584.26, -98.1041)
+mode = 1
+flags/light_only = false
+nodes/fragment/0/position = Vector2(720, 200)
+nodes/fragment/3/node = SubResource("VisualShaderNodeExpression_4dsm5")
+nodes/fragment/3/position = Vector2(-220, -260)
+nodes/fragment/3/size = Vector2(620, 200)
+nodes/fragment/3/input_ports = "0,4,color;"
+nodes/fragment/3/output_ports = "0,0,grey_value;"
+nodes/fragment/3/expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
+grey_value = luminance;"
+nodes/fragment/4/node = SubResource("VisualShaderNodeMix_y3xem")
+nodes/fragment/4/position = Vector2(540, 60)
+nodes/fragment/5/node = SubResource("VisualShaderNodeInput_rax8w")
+nodes/fragment/5/position = Vector2(-580, -20)
+nodes/fragment/6/node = SubResource("VisualShaderNodeBooleanParameter_4daqk")
+nodes/fragment/6/position = Vector2(-646.713, 403.75)
+nodes/fragment/connections = PackedInt32Array(3, 0, 4, 1, 5, 0, 3, 0, 5, 0, 4, 0, 4, 0, 0, 0, 6, 0, 4, 2)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jbhxr"]
+shader = SubResource("VisualShader_sxcgk")
+
+[node name="Legend_only" type="Node3D"]
+script = ExtResource("1_pl300")
+legend_page = ExtResource("2_i84wo")
+camera_state = ExtResource("3_4lkki")
+book_position_offset = Vector3(0, 0, 0.1)
+
+[node name="legend" type="Node3D" parent="."]
+transform = Transform3D(0.999989, 0, 0.00467785, 0, 1, 0, -0.00467785, 0, 0.999989, -0.000246863, 0.00516227, -0.00658954)
+
+[node name="legend_behaviour" type="Node" parent="legend"]
+script = ExtResource("5_vs6hc")
+
+[node name="Timer" type="Timer" parent="legend/legend_behaviour"]
+wait_time = 0.1
+one_shot = true
+
+[node name="Legend_area" type="Area3D" parent="legend"]
+
+[node name="On_Over" type="Node" parent="legend/Legend_area" node_paths=PackedStringArray("_on_over", "move_node")]
+script = ExtResource("6_0awpw")
+_on_over = NodePath("../../All_over")
+icon_type = 1
+move_node = NodePath("../../..")
+position_over = Vector3(0, 0.005, 0)
+rotation_over = Vector3(10, 0, 0)
+
+[node name="On_click" type="Node" parent="legend/Legend_area"]
+script = ExtResource("7_aj2kh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="legend/Legend_area"]
+transform = Transform3D(0.999999, -0.000167906, 3.06638e-06, 0.000167906, 0.999356, -0.0358932, 2.96254e-06, 0.0358934, 0.999354, 0.0117507, 0.0068159, -0.00326939)
+shape = SubResource("BoxShape3D_qdemk")
+
+[node name="Render_text" type="Sprite3D" parent="legend"]
+transform = Transform3D(0.0164991, -0.0008441, -1.17144e-05, 1.16724e-05, -1.12108e-06, 0.0165207, -0.000844101, -0.0164991, -5.23245e-07, 0.00900734, -0.00159823, -0.00282747)
+layers = 2
+sorting_offset = 1.0
+texture = SubResource("ViewportTexture_sflup")
+
+[node name="All_over" type="Node3D" parent="legend"]
+transform = Transform3D(1, 0, 4.65661e-10, 0, 1, 0, -4.65661e-10, 0, 1, 0, 0, 0)
+visible = false
+
+[node name="On_Over" type="MeshInstance3D" parent="legend/All_over"]
+transform = Transform3D(0.0420304, -1.28734e-06, 0.000787211, 1.51669e-06, 0.0357813, -1.30085e-08, -0.00190124, 8.49778e-08, 0.0174028, 0.00832754, -0.00164047, -0.00361389)
+layers = 2
+mesh = SubResource("PlaneMesh_seomj")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("ShaderMaterial_gfhbg")
+
+[node name="legend_render" type="SubViewport" parent="legend"]
+transparent_bg = true
+size = Vector2i(600, 400)
+
+[node name="text_for_size" type="Label" parent="legend/legend_render"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -198.0
+offset_top = -55.0
+offset_right = 198.0
+offset_bottom = 55.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.360784, 0.341176, 0.294118, 1)
+theme_override_font_sizes/font_size = 80
+text = "?"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ColorRect" type="ColorRect" parent="legend/legend_render/text_for_size"]
+material = SubResource("ShaderMaterial_jbhxr")
+layout_direction = 1
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -68.77
+offset_bottom = 56.2299
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.831373, 0.796078, 0.639216, 1)
+
+[node name="text" type="Label" parent="legend/legend_render"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -198.0
+offset_top = -48.775
+offset_right = 198.0
+offset_bottom = 34.225
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.360784, 0.341176, 0.294118, 1)
+theme_override_font_sizes/font_size = 50
+text = "?"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="set_legend" from="." to="legend/legend_behaviour" method="_on_photo_element_root_update_legend"]
+[connection signal="On_click" from="legend/Legend_area/On_click" to="." method="_on_on_click_on_click"]

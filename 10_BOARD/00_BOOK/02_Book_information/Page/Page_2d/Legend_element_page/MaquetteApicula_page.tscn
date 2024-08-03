@@ -1,0 +1,639 @@
+[gd_scene load_steps=22 format=3 uid="uid://dxqy27a6g6wju"]
+
+[ext_resource type="Texture2D" uid="uid://ga5yb54aj2kv" path="res://10_BOARD/00_BOOK/00_img/question_back_alpha.png" id="1_xiyhh"]
+
+[sub_resource type="GDScript" id="GDScript_v4jor"]
+script/source = "extends Node
+
+@onready var color_rect = $\"../ColorRect\"
+@onready var color_rect_2 = $\"../ColorRect2\"
+
+func _ready():
+	
+	color_rect.queue_free()	
+	color_rect_2.queue_free()
+"
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_ac7f6"]
+input_name = "color"
+
+[sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_vmbrj"]
+parameter_name = "Texture2DParameter"
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_y63q1"]
+source = 5
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_jq4ir"]
+constant = 0.948
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_syv5b"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_e65cs"]
+parameter_name = "Dither_size"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_m2r8n"]
+default_input_values = [0, -0.32, 1, 1.49]
+
+[sub_resource type="VisualShader" id="VisualShader_hgvm3"]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+global uniform float Dither_size;
+uniform sampler2D Texture2DParameter;
+
+
+
+void fragment() {
+// Input:10
+	vec4 n_out10p0 = COLOR;
+
+
+// FloatConstant:2
+	float n_out2p0 = 0.948000;
+
+
+// FloatParameter:4
+	float n_out4p0 = Dither_size;
+
+
+	float n_out3p0;
+// Expression:3
+	n_out3p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out4p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out3p0 = n_out2p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+	vec4 n_out12p0;
+// Texture2D:12
+	n_out12p0 = texture(Texture2DParameter, UV);
+
+
+// Step:5
+	float n_out5p0 = step(n_out3p0, n_out12p0.x);
+
+
+// Output:0
+	COLOR.rgb = vec3(n_out10p0.xyz);
+	COLOR.a = n_out5p0;
+
+
+}
+"
+mode = 1
+flags/light_only = false
+nodes/fragment/2/node = SubResource("VisualShaderNodeFloatConstant_jq4ir")
+nodes/fragment/2/position = Vector2(-1320, 360)
+nodes/fragment/3/node = SubResource("VisualShaderNodeExpression_syv5b")
+nodes/fragment/3/position = Vector2(-1000, 700)
+nodes/fragment/3/size = Vector2(724.789, 654.559)
+nodes/fragment/3/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/3/output_ports = "0,0,Dither_Node;"
+nodes/fragment/3/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/4/node = SubResource("VisualShaderNodeFloatParameter_e65cs")
+nodes/fragment/4/position = Vector2(-1680, 520)
+nodes/fragment/5/node = SubResource("VisualShaderNodeStep_m2r8n")
+nodes/fragment/5/position = Vector2(-80, 460)
+nodes/fragment/10/node = SubResource("VisualShaderNodeInput_ac7f6")
+nodes/fragment/10/position = Vector2(-320, 100)
+nodes/fragment/11/node = SubResource("VisualShaderNodeTexture2DParameter_vmbrj")
+nodes/fragment/11/position = Vector2(-880, 20)
+nodes/fragment/12/node = SubResource("VisualShaderNodeTexture_y63q1")
+nodes/fragment/12/position = Vector2(-380, 420)
+nodes/fragment/connections = PackedInt32Array(2, 0, 3, 0, 4, 0, 3, 1, 3, 0, 5, 0, 5, 0, 0, 1, 10, 0, 0, 0, 11, 0, 12, 2, 12, 0, 5, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4d7dv"]
+shader = SubResource("VisualShader_hgvm3")
+shader_parameter/Texture2DParameter = ExtResource("1_xiyhh")
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_yungi"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_glbgq"]
+constant = 1.0
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_rckjg"]
+parameter_name = "Dither_size"
+qualifier = 1
+
+[sub_resource type="Gradient" id="Gradient_7vib2"]
+offsets = PackedFloat32Array(0.822034, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_3ko2c"]
+gradient = SubResource("Gradient_7vib2")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_cdnfw"]
+texture = SubResource("GradientTexture2D_3ko2c")
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_tuypb"]
+
+[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_oyb7m"]
+function = 31
+
+[sub_resource type="VisualShader" id="VisualShader_72w2g"]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+uniform sampler2D tex_frg_5;
+global uniform float Dither_size;
+
+
+
+void fragment() {
+// Texture2D:5
+	vec4 n_out5p0 = texture(tex_frg_5, UV);
+
+
+// FloatFunc:7
+	float n_out7p0 = 1.0 - n_out5p0.x;
+
+
+// FloatConstant:3
+	float n_out3p0 = 1.000000;
+
+
+// FloatParameter:4
+	float n_out4p0 = Dither_size;
+
+
+	float n_out2p0;
+// Expression:2
+	n_out2p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out4p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out2p0 = n_out3p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Step:6
+	float n_out6p0 = step(n_out7p0, n_out2p0);
+
+
+// Output:0
+	COLOR.a = n_out6p0;
+
+
+}
+"
+graph_offset = Vector2(-362.653, 10.229)
+mode = 1
+flags/light_only = false
+nodes/fragment/0/position = Vector2(660, 220)
+nodes/fragment/2/node = SubResource("VisualShaderNodeExpression_yungi")
+nodes/fragment/2/position = Vector2(-560, 340)
+nodes/fragment/2/size = Vector2(724.789, 654.559)
+nodes/fragment/2/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/2/output_ports = "0,0,Dither_Node;"
+nodes/fragment/2/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_glbgq")
+nodes/fragment/3/position = Vector2(-1080, 340)
+nodes/fragment/4/node = SubResource("VisualShaderNodeFloatParameter_rckjg")
+nodes/fragment/4/position = Vector2(-960, 520)
+nodes/fragment/5/node = SubResource("VisualShaderNodeTexture_cdnfw")
+nodes/fragment/5/position = Vector2(-180, 80)
+nodes/fragment/6/node = SubResource("VisualShaderNodeStep_tuypb")
+nodes/fragment/6/position = Vector2(230.298, 224.7)
+nodes/fragment/7/node = SubResource("VisualShaderNodeFloatFunc_oyb7m")
+nodes/fragment/7/position = Vector2(242.704, 132.074)
+nodes/fragment/connections = PackedInt32Array(3, 0, 2, 0, 4, 0, 2, 1, 6, 0, 0, 1, 2, 0, 6, 1, 5, 0, 7, 0, 7, 0, 6, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_64ryc"]
+shader = SubResource("VisualShader_72w2g")
+
+[node name="Page_02" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 2000.0
+offset_bottom = 1200.0
+
+[node name="Hide_repaire" type="Node" parent="."]
+script = SubResource("GDScript_v4jor")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_right = 3.04004
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 3.0
+grow_horizontal = 0
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="State_00" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 423.0
+offset_top = 153.0
+offset_right = 463.0
+offset_bottom = 193.0
+
+[node name="Info2" type="Control" parent="State_00"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -335.0
+offset_top = -91.0
+offset_right = 208.0
+offset_bottom = 201.0
+rotation = 0.00252468
+
+[node name="back" type="ColorRect" parent="State_00/Info2"]
+material = SubResource("ShaderMaterial_4d7dv")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.662745, 0.623529, 0.545098, 1)
+
+[node name="On_Over" type="ColorRect" parent="State_00/Info2"]
+visible = false
+material = SubResource("ShaderMaterial_64ryc")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -24.0277
+offset_top = -10.9394
+offset_right = -24.0277
+offset_bottom = -10.9394
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.08758, 1.08758)
+mouse_filter = 2
+color = Color(0.929412, 0.85098, 0.568627, 1)
+
+[node name="Text" type="Label" parent="State_00/Info2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 22.0
+offset_right = -26.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.25098, 0.211765, 0.117647, 1)
+theme_override_font_sizes/font_size = 35
+text = "It's a maquette of a boat"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="State_01" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 127.0
+offset_top = 851.0
+offset_right = 574.0
+offset_bottom = 1069.0
+rotation = -0.0120299
+
+[node name="Info" type="Control" parent="State_01"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 278.933
+offset_top = -574.686
+offset_right = 821.933
+offset_bottom = -282.686
+rotation = 0.00252468
+
+[node name="back" type="ColorRect" parent="State_01/Info"]
+material = SubResource("ShaderMaterial_4d7dv")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.662745, 0.623529, 0.545098, 1)
+
+[node name="Text" type="Label" parent="State_01/Info"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 22.0
+offset_right = -26.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.25098, 0.211765, 0.117647, 1)
+theme_override_font_sizes/font_size = 35
+text = "from year 1823"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="On_Over" type="ColorRect" parent="State_01/Info"]
+visible = false
+material = SubResource("ShaderMaterial_64ryc")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -24.0277
+offset_top = -10.9394
+offset_right = -24.0277
+offset_bottom = -10.9394
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.08758, 1.08758)
+mouse_filter = 2
+color = Color(0.929412, 0.85098, 0.568627, 1)
+
+[node name="Info2" type="Control" parent="State_01"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -1.09002
+offset_top = -325.037
+offset_right = 541.91
+offset_bottom = -33.0363
+rotation = 0.00252468
+
+[node name="back" type="ColorRect" parent="State_01/Info2"]
+material = SubResource("ShaderMaterial_4d7dv")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.662745, 0.623529, 0.545098, 1)
+
+[node name="Text" type="Label" parent="State_01/Info2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 22.0
+offset_right = -26.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.25098, 0.211765, 0.117647, 1)
+theme_override_font_sizes/font_size = 35
+text = "it's seems  to be what i'm looking for, the Apicula"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="On_Over" type="ColorRect" parent="State_01/Info2"]
+visible = false
+material = SubResource("ShaderMaterial_64ryc")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -24.0059
+offset_top = -13.2288
+offset_right = -24.0059
+offset_bottom = -13.2288
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.08758, 1.08758)
+mouse_filter = 2
+color = Color(0.929412, 0.85098, 0.568627, 1)
+
+[node name="State_02" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 1503.0
+offset_top = 510.0
+offset_right = 1543.0
+offset_bottom = 550.0
+
+[node name="Info4" type="Control" parent="State_02"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -395.0
+offset_top = -372.0
+offset_right = 147.0
+offset_bottom = -106.0
+rotation = -0.0958952
+
+[node name="back" type="ColorRect" parent="State_02/Info4"]
+material = SubResource("ShaderMaterial_4d7dv")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.662745, 0.623529, 0.545098, 1)
+
+[node name="Text" type="Label" parent="State_02/Info4"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 25.0
+offset_right = -23.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.25098, 0.211765, 0.117647, 1)
+theme_override_font_sizes/font_size = 35
+text = "an old boat"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="On_Over" type="ColorRect" parent="State_02/Info4"]
+visible = false
+material = SubResource("ShaderMaterial_64ryc")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -24.0059
+offset_top = -13.2288
+offset_right = -24.0059
+offset_bottom = -13.2288
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.08758, 1.08758)
+mouse_filter = 2
+color = Color(0.929412, 0.85098, 0.568627, 1)
+
+[node name="Info2" type="Control" parent="State_02"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -188.0
+offset_top = -176.104
+offset_right = 406.0
+offset_bottom = 103.896
+rotation = -0.061173
+
+[node name="back" type="ColorRect" parent="State_02/Info2"]
+material = SubResource("ShaderMaterial_4d7dv")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.662745, 0.623529, 0.545098, 1)
+
+[node name="Text" type="Label" parent="State_02/Info2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 21.0
+offset_right = -33.0
+offset_bottom = 6.10352e-05
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.25098, 0.211765, 0.117647, 1)
+theme_override_font_sizes/font_size = 35
+text = "what can i do"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="On_Over" type="ColorRect" parent="State_02/Info2"]
+visible = false
+material = SubResource("ShaderMaterial_64ryc")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -24.0059
+offset_top = -13.2288
+offset_right = -24.0059
+offset_bottom = -13.2288
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.08758, 1.08758)
+mouse_filter = 2
+color = Color(0.929412, 0.85098, 0.568627, 1)
+
+[node name="Info5" type="Control" parent="State_02"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -219.0
+offset_top = 200.896
+offset_right = 316.0
+offset_bottom = 480.896
+rotation = -0.0217575
+
+[node name="back" type="ColorRect" parent="State_02/Info5"]
+material = SubResource("ShaderMaterial_4d7dv")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.662745, 0.623529, 0.545098, 1)
+
+[node name="Text" type="Label" parent="State_02/Info5"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.25098, 0.211765, 0.117647, 1)
+theme_override_font_sizes/font_size = 35
+text = "let's see"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="On_Over" type="ColorRect" parent="State_02/Info5"]
+visible = false
+material = SubResource("ShaderMaterial_64ryc")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -24.0059
+offset_top = -13.2288
+offset_right = -24.0059
+offset_bottom = -13.2288
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.08758, 1.08758)
+mouse_filter = 2
+color = Color(0.929412, 0.85098, 0.568627, 1)
+
+[connection signal="tree_exited" from="State_00/Info2" to="State_00/Info2" method="_on_tree_exited"]
+[connection signal="tree_exited" from="State_01" to="State_01" method="_on_tree_exited"]
+[connection signal="tree_exited" from="State_01/Info" to="State_01/Info" method="_on_tree_exited"]
+[connection signal="tree_exited" from="State_01/Info2" to="State_01/Info2" method="_on_tree_exited"]
+[connection signal="tree_exited" from="State_02/Info4" to="State_02/Info4" method="_on_tree_exited"]
+[connection signal="tree_exited" from="State_02/Info2" to="State_02/Info2" method="_on_tree_exited"]
+[connection signal="tree_exited" from="State_02/Info5" to="State_02/Info5" method="_on_tree_exited"]

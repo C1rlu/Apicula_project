@@ -21,7 +21,8 @@ func _active_raycast(condition : bool):
 func _input(event):
 	
 
-	
+	if _global_datas.camera_current_state == game_state.camera_state.Scanner:
+		return
 	if _global_datas.camera_current_state == game_state.camera_state.Book:
 		return
 		

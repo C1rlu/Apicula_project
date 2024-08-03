@@ -45,7 +45,13 @@ func show_scanner(condition : bool):
 	
 func show_backdrop(condition : bool):
 
+
+	
+
 	if condition:
+		
+		backdrop_focus.visible = true
+		
 		if fade_in:
 			fade_in.kill()
 	
@@ -58,8 +64,11 @@ func show_backdrop(condition : bool):
 	
 		fade_in = create_tween()
 		fade_in.tween_method(set_backdrop_shader_value,actual_value_b,0.0,0.5).set_trans(Tween.TRANS_SINE)
+		fade_in.connect("finished",done)
+		
+func done():
+	backdrop_focus.visible = false
 	
-
 func set_backdrop_shader_value(value):
 	
 
