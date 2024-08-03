@@ -2,6 +2,8 @@ extends Resource
 class_name tool_data
 
 @export var Tool_Name = "Tool_Name_Here"
+@export var ui_prefabs : PackedScene
 signal tool_active_signal(condition : bool)
 signal cancel_action_signal
 signal select_this_tool_scene_prefabs(condition : bool)
+

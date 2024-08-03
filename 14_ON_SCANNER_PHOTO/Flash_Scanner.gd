@@ -1,8 +1,13 @@
 extends Node
 
 @onready var loader = $"../InsidePhoto_scanner_scene/loader"
+
+
 @onready var render_scanner = $"../RENDER_Scanner"
 @onready var render_scanner_material : Material = render_scanner.get_material()
+
+@onready var backdrop_focus = $"../BACKDROP_FOCUS"
+@onready var backdrop_focus_material : Material = backdrop_focus.get_material()
 
 @onready var light = $"../InsidePhoto_scanner_scene/OmniLight3D"
 
@@ -35,4 +40,5 @@ func done():
 func set_shader_value(value):
 	
 	render_scanner_material.set_shader_parameter("Opacity",value)
-
+	#var clamp_value = clamp(value,0.0,0.5)
+	#backdrop_focus_material.set_shader_parameter("Opacity",clamp_value)

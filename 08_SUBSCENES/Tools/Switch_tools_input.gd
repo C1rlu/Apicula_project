@@ -58,3 +58,4 @@ func switch_active_tool(tool : tool_data):
 	_global_datas._selected_tool = tool	
 	
 	_global_datas._selected_tool.select_this_tool_scene_prefabs.emit(true)
+	_global_datas.set_tool_ui.emit(tool)
