@@ -44,9 +44,13 @@ func _focus(focus_data : boardCamState_data):
 	target_position = focus_data.camera_position_node.global_position
 	target_rotation = focus_data.camera_position_node.rotation_degrees
 
-
+	# back call will be set here in a back_call class for more flexibility
+	if focus_data.back_call:
+		focus_data.back_call.back_call()
+	
+	# could set a emit call class here as well for more flexibility
 	set_state_call.emit()
-	set_back_call.emit()
+	#set_back_call.emit()
 
 	if _global_datas.camera_current_state == game_state.camera_state.Main:
 		cam_state = 0

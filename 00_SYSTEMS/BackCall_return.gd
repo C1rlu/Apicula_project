@@ -23,7 +23,8 @@ func _input(event):
 func connect_back_call():
 	
 	var top_call = _global_datas._back_call_list.size()
-	_global_datas._back_call.connect(_global_datas._back_call_list[top_call-1])
+	if !_global_datas._back_call.is_connected(_global_datas._back_call_list[top_call-1]): 
+		_global_datas._back_call.connect(_global_datas._back_call_list[top_call-1])
 	
 
 func remove_emited_call():

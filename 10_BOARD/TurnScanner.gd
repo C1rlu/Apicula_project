@@ -104,11 +104,11 @@ func _set_zoom_pos(Cam_ref):
 	if Cam_ref == null:
 		return
 		
-	var dir = Cam_ref.camera_position_node.get_camera_transform().basis.z
-	var forward = -dir.normalized()
-
-	no_zoom_pos = Cam_ref.camera_position_node.global_position
-	zoom_position = no_zoom_pos + forward * Cam_ref.zoom_value	
+	#var dir = Cam_ref.camera_position_node.get_camera_transform().basis.z
+	#var forward = -dir.normalized()
+#
+	#no_zoom_pos = Cam_ref.camera_position_node.global_position
+	#zoom_position = no_zoom_pos + forward * Cam_ref.zoom_value	
 	
 	
 	
