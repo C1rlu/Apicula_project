@@ -11,7 +11,7 @@ func _ready():
 	_global_datas.open_inventory.connect(condition)
 	_global_datas.using_pad.connect(_disable_show)
 	_global_datas._open_menu.connect(condition)	
-	_global_datas.open_tool_selector.connect(condition)
+
 	
 func _disable_show(_condition : bool):
 	disable_show = _condition	

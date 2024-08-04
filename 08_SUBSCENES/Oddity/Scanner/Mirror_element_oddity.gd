@@ -24,7 +24,7 @@ func check_player_in_mirror():
 func show(condition):
 	main_render_msh.visible = condition
 	main_render_msh_mirror.visible = !condition
-
+	
 	col_rg.disabled = !condition
 	gpu_normal.emitting = condition
 
