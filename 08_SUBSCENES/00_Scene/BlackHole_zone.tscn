@@ -1,10 +1,34 @@
-[gd_scene load_steps=6 format=3 uid="uid://bo33th5yn61n1"]
+[gd_scene load_steps=17 format=3 uid="uid://bo33th5yn61n1"]
 
 [ext_resource type="PackedScene" uid="uid://ciuyel1b0of8e" path="res://08_SUBSCENES/Oddity/Teleporter/Teleporter_prefab.tscn" id="1_vqx1j"]
 [ext_resource type="PackedScene" uid="uid://bqksk5rvc6q2h" path="res://08_SUBSCENES/Elements/Tiny_boat/boat_man_subscene_asset_01.tscn" id="2_s2d0c"]
 [ext_resource type="PackedScene" uid="uid://bneebc6fpaysa" path="res://08_SUBSCENES/Elements/Ice/ice_msh_01.tscn" id="4_e540o"]
+[ext_resource type="Resource" uid="uid://c6jw6ja2xggvh" path="res://15_GAME_RESSOURCE/00_Npc_data/Otis_Coast_guard_data.tres" id="4_fda7n"]
+[ext_resource type="Script" path="res://00_SCENE/Npc_zone.gd" id="4_yaajt"]
 [ext_resource type="PackedScene" uid="uid://chipng023vh22" path="res://08_SUBSCENES/Elements/Ice/ice_msh_01_far.tscn" id="5_ipvrn"]
 [ext_resource type="PackedScene" uid="uid://50ubp7klhsex" path="res://08_SUBSCENES/Oddity/Scanner/Main_oddity.tscn" id="5_qf6u0"]
+[ext_resource type="Material" uid="uid://dkpo8pe6k46g6" path="res://05_SHADER_TEST/All_Materials/Light_mat.tres" id="5_u5afq"]
+[ext_resource type="Material" uid="uid://dgl2um0yp8e3c" path="res://05_SHADER_TEST/All_Materials/Building_mat.tres" id="6_soy6p"]
+[ext_resource type="Material" uid="uid://ctnqf5d3uj1g7" path="res://05_SHADER_TEST/All_Materials/dark_mask.tres" id="7_sbu5t"]
+
+[sub_resource type="GDScript" id="GDScript_xxb7y"]
+script/source = "extends Area3D
+
+@export var Npc_data : Npc_datas
+
+
+"
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_2kspa"]
+radius = 0.352078
+
+[sub_resource type="PrismMesh" id="PrismMesh_r3syi"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_026ew"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_p70rs"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_jjq23"]
 
 [node name="BalckHole_zone" type="Node3D"]
 
@@ -20,6 +44,44 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.276407, -6.22672, 0)
 
 [node name="BoatMan_subscene_asset_01" parent="Static/Element" instance=ExtResource("2_s2d0c")]
 transform = Transform3D(-0.184431, 0.0347539, -0.0125068, 0.0258751, 0.167019, 0.0825473, 0.0263578, 0.0792196, -0.168548, -1.03479, -9.60056, 0)
+
+[node name="NPC_Area" type="Area3D" parent="Static/Element"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.53338, -2.79811, 0)
+collision_layer = 4
+collision_mask = 4
+input_ray_pickable = false
+script = SubResource("GDScript_xxb7y")
+Npc_data = ExtResource("4_fda7n")
+
+[node name="Npc_zone" type="Node" parent="Static/Element/NPC_Area"]
+script = ExtResource("4_yaajt")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Static/Element/NPC_Area"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.422843, 0, 0.0136065)
+shape = SubResource("SphereShape3D_2kspa")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Static/Element/NPC_Area/CollisionShape3D"]
+transform = Transform3D(-5.76091e-10, 0.127663, 1.29577e-09, 0, 1.52236e-09, -0.108661, -0.0131794, -5.58032e-09, -5.66399e-17, -0.163318, 0.169142, 0.0421472)
+layers = 4
+mesh = SubResource("PrismMesh_r3syi")
+surface_material_override/0 = ExtResource("5_u5afq")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Static/Element/NPC_Area/CollisionShape3D"]
+transform = Transform3D(-5.76091e-10, 0.0143792, 4.42475e-09, 0, 1.7147e-10, -0.371052, -0.0131794, -6.28535e-10, -1.93412e-16, -0.219283, 0.0534687, 0.0421472)
+layers = 4
+mesh = SubResource("BoxMesh_026ew")
+surface_material_override/0 = ExtResource("5_u5afq")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Static/Element/NPC_Area"]
+transform = Transform3D(0.803273, 0, 0.156978, 0, 0.068, 0, -0.803273, 0, 0.156978, -0.178382, -0.155468, -0.2644)
+mesh = SubResource("BoxMesh_p70rs")
+surface_material_override/0 = ExtResource("6_soy6p")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Static/Element/NPC_Area/MeshInstance3D"]
+layers = 4
+mesh = SubResource("BoxMesh_jjq23")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("7_sbu5t")
 
 [node name="Ice_msh_01" parent="Static" instance=ExtResource("4_e540o")]
 transform = Transform3D(2.07535, -0.0582957, 0, 0.273225, 0.4428, 0, 0, 0, 1.57743, -0.756213, -11.2646, 0)
@@ -104,3 +166,6 @@ transform = Transform3D(-0.430526, 0.434579, 0.0171076, -0.415705, -0.404114, -0
 
 [node name="Ice_msh_14" parent="Static" instance=ExtResource("5_ipvrn")]
 transform = Transform3D(0.816386, 0.279855, -0.0404084, -0.23767, 0.746054, 0.365176, 0.153181, -0.33395, 0.781953, 0.732828, -7.44956, -3.58519)
+
+[connection signal="area_entered" from="Static/Element/NPC_Area" to="Static/Element/NPC_Area" method="_on_area_entered"]
+[connection signal="area_exited" from="Static/Element/NPC_Area" to="Static/Element/NPC_Area" method="_on_area_exited"]

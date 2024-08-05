@@ -1,6 +1,6 @@
 extends Node
 
-@onready var h_box_container = $"../Center/HBoxContainer"
+@onready var h_box_container = $"../Center"
 
 var fade_in
 var current_value : float 
