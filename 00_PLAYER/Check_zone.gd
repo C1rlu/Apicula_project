@@ -42,6 +42,10 @@ func close_for_menu(condition):
 
 func check_zone():
 	
+	
+	if _global_datas.Player_InSubScene:
+		return
+	
 	var all_area = area_root.get_overlapping_areas()
 	for a in all_area:
 		var npc_zone = a.get_node_or_null("Npc_zone")

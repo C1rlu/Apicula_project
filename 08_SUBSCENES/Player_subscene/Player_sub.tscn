@@ -1,4 +1,4 @@
-[gd_scene load_steps=86 format=3 uid="uid://g7u8o55jrnyy"]
+[gd_scene load_steps=87 format=3 uid="uid://g7u8o55jrnyy"]
 
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="1_n1vw4"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Player_sub_behaviour.gd" id="1_o2v73"]
@@ -18,6 +18,7 @@
 [ext_resource type="Resource" uid="uid://vv3dws7dmhtd" path="res://08_SUBSCENES/Tools/Scanner.tres" id="15_vswql"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Oddity/Scanner/Attract.gd" id="16_k51d3"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/look_at_camera.gd" id="17_mnoui"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Check_Dialogue_Zone.gd" id="17_o0rcv"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Push.gd" id="17_qkxfn"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_c70j3"]
@@ -501,7 +502,7 @@ curve = SubResource("Curve_mwumu")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_icvuv"]
 emission_shape = 2
-emission_sphere_radius = 0.15
+emission_sphere_radius = 0.3
 direction = Vector3(0, 0, 0)
 spread = 180.0
 gravity = Vector3(0, 0, 0)
@@ -992,6 +993,9 @@ surface_material_override/0 = SubResource("ShaderMaterial_4j2xv")
 [node name="Orbe_spawner_position" type="Node3D" parent="Render_mesh"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0341371, 0.137754, 0.194054)
 
+[node name="Check_Dialogue_Zone" type="Node" parent="."]
+script = ExtResource("17_o0rcv")
+
 [node name="ZoneCollide" type="Area3D" parent="."]
 collision_layer = 4
 collision_mask = 4
@@ -1050,5 +1054,7 @@ draw_pass_1 = ExtResource("4_6vpi7")
 [connection signal="timeout" from="Flash_inputs/Loop_lighter" to="Flash_inputs" method="_on_loop_lighter_timeout"]
 [connection signal="timeout" from="Scanne_element/time_checker" to="Scanne_element" method="_on_time_checker_timeout"]
 [connection signal="timeout" from="Scanne_element/Active_scanner_visual_pulse/Timer" to="Scanne_element/Active_scanner_visual_pulse" method="_on_timer_timeout"]
+[connection signal="area_shape_entered" from="ZoneCollide" to="Check_Dialogue_Zone" method="_area_entered"]
+[connection signal="area_shape_exited" from="ZoneCollide" to="Check_Dialogue_Zone" method="_area_exited"]
 
 [editable path="Render_mesh/Cosmo_Mod_02"]

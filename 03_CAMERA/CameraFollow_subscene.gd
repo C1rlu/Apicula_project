@@ -9,7 +9,11 @@ var active_target : Vector3
 var canMove = false
 
 @export var basePos: Vector3
+@export var dialogue_Pos: Vector3 = Vector3(-1.0,1.0,0.0)
 var subscene_reset_position : Vector3
+
+
+
 func _ready():
 	var playerPosition = _global_datas.subbscene_playerPosition
 	offset = _all_cam_array[0].transform.origin - playerPosition
@@ -20,7 +24,13 @@ func _ready():
 
 	_global_datas.Subscene_Camera = _all_cam_array[0]
 	
-	
+	_global_datas._open_dialogue.connect(open_dialogue)
+	_global_datas._close_dialogue.connect(close_dialogue)
+		
+func open_dialogue():
+	active_target = offset + basePos + dialogue_Pos			
+func close_dialogue():	
+	active_target = offset + basePos 
 	
 func _physics_process(_delta):
 	

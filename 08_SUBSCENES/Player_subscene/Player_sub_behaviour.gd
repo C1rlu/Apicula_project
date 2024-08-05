@@ -73,7 +73,8 @@ func _physics_process(_delta):
 	if _global_datas.Player_In_Inventory:
 		return 
 	
-	
+	if _global_datas.Player_InDialogue:
+		return 
 
 	if _global_datas.Player_InSubScene:
 		_global_datas.subbscene_playerPosition = transform.origin	

@@ -12,8 +12,8 @@ var real_speed : float
 @onready var mirror_element_oddity = $"../Mirror_element_oddity"
 
 func _ready():
-
-	_global_datas._photo_flash.connect(_check_if_player_is_close)
+	pass
+	#_global_datas._photo_flash.connect(_check_if_player_is_close)
 	
 func _check_if_player_is_close():
 	

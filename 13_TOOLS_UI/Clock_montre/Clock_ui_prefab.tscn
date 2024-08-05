@@ -19,6 +19,12 @@ func _ready():
 	
 	_global_datas._active_progress_subscene.connect(load_clock)
 	
+	
+	_global_datas._open_dialogue.connect(dialogue_pause)
+	_global_datas._close_dialogue.connect(dialogue_stop_pause)
+	
+	
+	
 func load_clock(condition : bool):
 	
 	render.visible = condition
@@ -48,7 +54,15 @@ func _start_clock():
 	t.tween_method(_value,_global_datas.clock_timer,360.0,time_need)
 	t.connect(\"finished\",done)
 
+func dialogue_pause():
 
+		if t:
+			t.kill()	
+		render.visible = false
+		
+func dialogue_stop_pause():
+	pause()		
+		
 func pause():
 	
 	var player_state = _global_datas.player_state
@@ -59,7 +73,8 @@ func pause():
 	if player_state == game_state.visible_state.mirror:
 		if t:
 			t.kill()
-
+	
+	render.visible = true	
 	
 func done():
 		

@@ -20,7 +20,9 @@ func _input(event):
 	if  !_global_datas.Player_InSubScene:
 		return
 	
-	
+	if _global_datas.Player_InDialogue:
+		return
+		
 	if event.is_action_pressed("Select_next_orbre"):	
 		select_next_index()
 		

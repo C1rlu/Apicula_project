@@ -6,11 +6,11 @@ extends Node
 @onready var Mirror_scanner_area = $"../ZoneCollide"
 
 
-
 func _ready():
 
 	_global_datas._end_ini_subscene.connect(start_loop)
 	_global_datas._backFrom_subscene.connect(stop_loop)
+
 	
 func start_loop():
 	timer_mirror_check.start()	
@@ -44,3 +44,4 @@ func check_flash_zone():
 func _on_loop_lighter_timeout():
 	check_flash_zone()
 	
+
