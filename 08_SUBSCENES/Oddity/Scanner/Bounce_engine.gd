@@ -19,7 +19,8 @@ signal active_flash_mirror
 signal active_rotation
 
 func _ready():
-	_global_datas._photo_flash.connect(check_distance)
+	pass
+	#_global_datas._photo_flash.connect(check_distance)
 
 	
 func check_distance():

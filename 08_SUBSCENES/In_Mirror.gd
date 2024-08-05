@@ -29,7 +29,7 @@ func show(condition):
 	all_render_x_ray.visible = !condition
 	col.disabled = !condition
 
-	
+			
 func start_exit():
 	
 	if out_of_mirror:

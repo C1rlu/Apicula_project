@@ -5,7 +5,7 @@ extends Node
 @onready var main_render_msh = $"../Main_Oddity/Render_root/Main_render_msh"
 @onready var main_render_msh_mirror = $"../Main_Oddity/Render_root/Main_render_msh_mirror"
 @export var State_selected : game_state.visible_state
-
+@export var mirror_element_checker : Node
 @onready var gpu_normal = $"../GPU_normal"
 
 
@@ -33,6 +33,7 @@ func _on_switch_mirror_switch_mirror():
 	
 	if State_selected == game_state.visible_state.mirror:
 		State_selected = game_state.visible_state.normal
+		
 		check_player_in_mirror()
 		return
 		
@@ -40,3 +41,6 @@ func _on_switch_mirror_switch_mirror():
 		State_selected = game_state.visible_state.mirror
 		check_player_in_mirror()
 		return
+		
+	if mirror_element_checker:
+			mirror_element_checker.State_selected = State_selected	

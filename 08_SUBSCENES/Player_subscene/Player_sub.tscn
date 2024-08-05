@@ -1,4 +1,4 @@
-[gd_scene load_steps=87 format=3 uid="uid://g7u8o55jrnyy"]
+[gd_scene load_steps=88 format=3 uid="uid://g7u8o55jrnyy"]
 
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="1_n1vw4"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Player_sub_behaviour.gd" id="1_o2v73"]
@@ -492,6 +492,9 @@ shader_parameter/flash_opacity = 0.5
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_g1ic5"]
 radius = 0.303955
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_47iq4"]
+radius = 0.501064
 
 [sub_resource type="Curve" id="Curve_mwumu"]
 _data = [Vector2(0, 0.56015), 0.0, 0.0, 0, 0, Vector2(1, 0.181391), 0.0, 0.0, 0, 0]
@@ -1017,6 +1020,14 @@ rg = NodePath("../..")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.138627, 0)
 shape = SubResource("SphereShape3D_g1ic5")
 
+[node name="Magnet_zone" type="Area3D" parent="."]
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Magnet_zone"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.135905, 0)
+shape = SubResource("SphereShape3D_47iq4")
+
 [node name="Light" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.348655, 0.114098)
 layers = 4
@@ -1056,5 +1067,7 @@ draw_pass_1 = ExtResource("4_6vpi7")
 [connection signal="timeout" from="Scanne_element/Active_scanner_visual_pulse/Timer" to="Scanne_element/Active_scanner_visual_pulse" method="_on_timer_timeout"]
 [connection signal="area_shape_entered" from="ZoneCollide" to="Check_Dialogue_Zone" method="_area_entered"]
 [connection signal="area_shape_exited" from="ZoneCollide" to="Check_Dialogue_Zone" method="_area_exited"]
+[connection signal="area_shape_entered" from="Magnet_zone" to="Magnet_effect" method="_magnet_enter"]
+[connection signal="area_shape_exited" from="Magnet_zone" to="Magnet_effect" method="_magnet_exited"]
 
 [editable path="Render_mesh/Cosmo_Mod_02"]

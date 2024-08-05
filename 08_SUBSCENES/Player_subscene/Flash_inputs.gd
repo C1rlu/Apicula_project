@@ -3,7 +3,7 @@ extends Node
 @onready var delay_light_timer = $Delay_light_timer
 @onready var timer_mirror_check = $Loop_lighter
 
-@onready var Mirror_scanner_area = $"../ZoneCollide"
+@onready var Mirror_scanner_area = $"../Magnet_zone"
 
 
 func _ready():
@@ -31,6 +31,9 @@ func _start_light():
 
 func check_flash_zone():
 	
+	
+	if _global_datas.player_state == game_state.visible_state.mirror:
+		return
 	var all_Mirror_scanner_area = Mirror_scanner_area.get_overlapping_areas()
 	
 	if all_Mirror_scanner_area:
@@ -38,7 +41,8 @@ func check_flash_zone():
 
 			var mirror_element = _areas.get_node_or_null("Mirror_element")
 			if mirror_element:
-				_start_light()			
+				_start_light()	
+							
 				
 
 func _on_loop_lighter_timeout():
