@@ -17,7 +17,6 @@
 [ext_resource type="Material" uid="uid://ctnqf5d3uj1g7" path="res://05_SHADER_TEST/All_Materials/dark_mask.tres" id="6_vcmny"]
 [ext_resource type="Material" uid="uid://b64juw612xqpu" path="res://05_SHADER_TEST/Sea_sh/Sea_mat.tres" id="7_4y8ld"]
 [ext_resource type="Script" path="res://00_SCENE/Active_divingZone.gd" id="7_f3xb7"]
-[ext_resource type="Texture2D" uid="uid://dafg2qvpi6wmk" path="res://06_UI/Loader_circle/Loader_circle.png" id="8_eaeqh"]
 [ext_resource type="Shader" uid="uid://b8pie7pbqwtks" path="res://05_SHADER_TEST/Full_screen/Main_fullscreen.tres" id="8_oftpq"]
 [ext_resource type="PackedScene" uid="uid://dla1534gcagbl" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Pine/pine_prefabs.tscn" id="10_c6r5x"]
 [ext_resource type="Texture2D" uid="uid://dcw858b7ly30k" path="res://06_UI/Controller/x_pad.png" id="10_ftn2e"]
@@ -25,6 +24,7 @@
 [ext_resource type="Shader" uid="uid://b4xbrp36syqmj" path="res://06_UI/Controller/Pad_ui_info_sh.tres" id="10_n0t7r"]
 [ext_resource type="PackedScene" uid="uid://cegdqm3et2y35" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Iceberg/ice_berg_02.tscn" id="11_086vv"]
 [ext_resource type="PackedScene" uid="uid://d3h77dy71bcme" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Iceberg/ice_berg_01.tscn" id="12_638yx"]
+[ext_resource type="Texture2D" uid="uid://d1oa7syfbxit1" path="res://13_TOOLS_UI/Clock_montre/Clock_ui_img.png" id="14_8dr3k"]
 [ext_resource type="PackedScene" uid="uid://biiofg53lwx38" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Mountain/Mountain_03.tscn" id="14_fqdgl"]
 [ext_resource type="PackedScene" uid="uid://bjfuwgxyiffs4" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Mountain/Mountain_01.tscn" id="15_bqwbg"]
 [ext_resource type="PackedScene" uid="uid://fcjcvy77lg0o" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Lighthouse/lighthouse_prefabs.tscn" id="16_u78ww"]
@@ -296,55 +296,23 @@ func active_buton(condition):
 shader = ExtResource("10_n0t7r")
 shader_parameter/Color = Color(0.721569, 0.580392, 0.407843, 1)
 
-[sub_resource type="GDScript" id="GDScript_mdv56"]
+[sub_resource type="GDScript" id="GDScript_mwlfd"]
 script/source = "extends Node
-
-@onready var timer = $Timer
-@onready var go_subscene_progress = $\"..\"
-
-
+@onready var button = $ClockUiImg
 
 func _ready():
-	#_global_datas._active_progress_subscene.connect(_active)
-	pass
-
-		
-func _active(condition : bool):
-	
-	if condition:
-		_start_clock()
-	else :
-		_stop_clock()	
-
-
-func _process(delta):
-	
-	if timer.is_stopped():
-		return		
-	_update_clock()
-	
-
-func _update_clock():
-	var timeConvert = 1 - (timer.time_left / timer.wait_time ) 
-	var lerp_result = lerp(0.0,100.0,timeConvert) 
-	go_subscene_progress.value = lerp_result 
+	_global_datas.player_in_diveZone.connect(active_buton)
 
 	
-func _start_clock():
-	go_subscene_progress.value = 0.0
-	timer.start()
-
-func _stop_clock():
-	
-	timer.stop()
-	go_subscene_progress.value = 0.0
+func active_buton(condition):
 
 	
-func _on_timer_timeout():
-	_global_datas._active_progress_subscene.emit(false)
-	go_subscene_progress.value = 0.0
-	_global_datas._go_Subscene.emit()
-	#LOADER.visible = false
+	button.visible = condition
+
+
+
+	
+
 "
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ituqr"]
@@ -855,29 +823,14 @@ position = Vector2(54.1213, 11.5974)
 scale = Vector2(0.365326, 0.365326)
 texture = ExtResource("10_ftn2e")
 
-[node name="Go_subscene_progress" type="TextureProgressBar" parent="."]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -16.0
-offset_top = -144.0
-offset_right = 16.0
-offset_bottom = -112.0
-grow_horizontal = 2
-grow_vertical = 0
-fill_mode = 4
-nine_patch_stretch = true
-texture_under = ExtResource("8_eaeqh")
-texture_progress = ExtResource("8_eaeqh")
-tint_under = Color(0.658824, 0.470588, 0.27451, 0)
-tint_progress = Color(0.658824, 0.470588, 0.27451, 1)
+[node name="Button_active_Dive" type="Node" parent="01_GAME_UI/MAIN_SCENE_UI"]
+script = SubResource("GDScript_mwlfd")
 
-[node name="GoSubscene_timer" type="Node" parent="Go_subscene_progress"]
-script = SubResource("GDScript_mdv56")
-
-[node name="Timer" type="Timer" parent="Go_subscene_progress/GoSubscene_timer"]
+[node name="ClockUiImg" type="Sprite2D" parent="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dive"]
+visible = false
+position = Vector2(659, 319)
+scale = Vector2(0.558594, 0.558594)
+texture = ExtResource("14_8dr3k")
 
 [node name="--DECOR--" type="Node3D" parent="."]
 
@@ -1387,7 +1340,6 @@ layers = 2048
 mesh = SubResource("BoxMesh_wmrfd")
 skeleton = NodePath("")
 
-[connection signal="timeout" from="Go_subscene_progress/GoSubscene_timer/Timer" to="Go_subscene_progress/GoSubscene_timer" method="_on_timer_timeout"]
 [connection signal="area_entered" from="--DECOR--/Player_Boat/Enter_dialogue_zone" to="--DECOR--/Player_Boat/Check_zone_ui" method="_on_enter_dialogue_zone_area_entered"]
 [connection signal="area_exited" from="--DECOR--/Player_Boat/Enter_dialogue_zone" to="--DECOR--/Player_Boat/Check_zone_ui" method="_on_enter_dialogue_zone_area_exited"]
 [connection signal="area_entered" from="--DECOR--/NPC_TRIGGER_ZONE/Maurice_NPC_Area" to="--DECOR--/NPC_TRIGGER_ZONE/Maurice_NPC_Area" method="_on_area_entered"]

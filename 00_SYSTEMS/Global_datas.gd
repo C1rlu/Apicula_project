@@ -79,6 +79,7 @@ signal _show_object_legend(condtion : bool, info : info_data)
 var player_rg : RigidBody3D
 
 var selected_subscene : PackedScene
+signal player_in_diveZone(condition : bool)
 signal _load_subscene(condition : bool)
 signal _go_Subscene
 var subbscene_playerPosition : Vector3

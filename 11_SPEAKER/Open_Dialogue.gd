@@ -46,6 +46,7 @@ func _open_dialogue():
 	
 	update_name_ls()
 	
+	_global_datas._add_back_call.emit(back_call)
 func update_name_ls():
 	
 	if !_global_datas.Player_InDialogue:
@@ -63,4 +64,7 @@ func _close_dialogue():
 	_global_datas.go_normal_color.emit()
 	$Random_FaceChanger/Timer.stop()
 
+	
+func back_call():
+	_global_datas._close_dialogue.emit()
 	

@@ -1,6 +1,8 @@
 extends Node
 
 
+@export var light_tool : tool_data
+
 func _input(event):
 	
 
@@ -22,4 +24,7 @@ func _input(event):
 
 		_global_datas._selected_tool.tool_active_signal.emit(false)
 		
+
+	if event.is_action_pressed("Flash_light"):
+		light_tool.tool_active_signal.emit(true)
 
