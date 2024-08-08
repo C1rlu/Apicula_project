@@ -15,7 +15,7 @@ var _canMove = false
 var stop_control = false
 @onready var PlayerMesh = $Render_mesh
 @onready var light_position = $Render_mesh/Light_Position
-@onready var orbe_spawner_position = $Render_mesh/Orbe_spawner_position
+
 
 
 func _ready():
@@ -76,11 +76,11 @@ func _physics_process(_delta):
 	if _global_datas.Player_InDialogue:
 		return 
 
-	if _global_datas.Player_InSubScene:
-		_global_datas.subbscene_playerPosition = transform.origin	
-		_global_datas.flash_subscene_position = light_position.global_position
+	if !_global_datas.Player_InSubScene:
+		return
+		
+	_global_datas.subbscene_playerPosition = transform.origin	
 
-	
 
 	if Input.is_action_pressed((_global_datas.move_right)):
 		var goingRight = transform.basis.x

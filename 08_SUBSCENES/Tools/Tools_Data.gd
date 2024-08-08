@@ -6,4 +6,4 @@ class_name tool_data
 signal tool_active_signal(condition : bool)
 signal cancel_action_signal
 signal select_this_tool_scene_prefabs(condition : bool)
-
+var selector_button : Button

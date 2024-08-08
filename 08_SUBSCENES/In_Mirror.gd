@@ -27,8 +27,8 @@ func check_in_mirror():
 func show(condition):
 	all_render.visible = condition
 	all_render_x_ray.visible = !condition
-	col.disabled = !condition
-
+	#col.disabled = !condition
+	col.call_deferred("set_disabled",!condition)
 			
 func start_exit():
 	

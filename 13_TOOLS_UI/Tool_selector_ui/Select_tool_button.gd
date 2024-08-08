@@ -1,5 +1,7 @@
 extends Node
 
+@export var jet_tool : tool_data
+
 @onready var _show_ui = $"../Center"
 @onready var h_box_container = $"../Center/HBoxContainer"
 
@@ -11,16 +13,29 @@ var select_index : int = 0
 signal _fade(condition : bool)
 var is_active : bool = false
 
+var lock_selector : bool = false
 func _ready():
 	_global_datas.open_tool_selector.connect(show_ui)
 	_global_datas._backFrom_subscene.connect(hide)
-
+	jet_tool.tool_active_signal.connect(_lock_selector)
+	_global_datas.update_selector.connect(update_button_list_after_removed)
+	
+	
+func _lock_selector(condition : bool):
+	
+	if condition:
+		lock_selector = true	
+				
 func _input(event):
 	
 	if  !_global_datas.Player_InSubScene:
 		return
 	
 	if _global_datas.Player_InDialogue:
+		return
+		
+		
+	if lock_selector:
 		return
 		
 	if event.is_action_pressed("Select_next_orbre"):	
@@ -32,7 +47,7 @@ func _input(event):
 func hide():
 	show_ui(false)	
 	is_active = false
-
+	lock_selector = false
 func show_ui(condition : bool):
 	
 	update_button_list()
@@ -86,6 +101,8 @@ func select_previous_index():
 
 func update_button_list():
 
+
+	
 	button_list.clear()
 	var all_b = h_box_container.get_children()	
 	
@@ -93,7 +110,19 @@ func update_button_list():
 		if b.visible:
 			button_list.append(b)	
 
+func update_button_list_after_removed():
 
+	button_list.clear()
+	var all_b = h_box_container.get_children()	
+	
+	for b in all_b:
+		if b.visible:
+			button_list.append(b)	
+			
+	select_index = button_list.size()-1
+	var selected_button = button_list[select_index]
+	selected_button.grab_focus()
+	selected_button.button_down.emit()
 
 func _on_timer_timeout():
 	hide()

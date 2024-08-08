@@ -12,9 +12,11 @@ func check_push_element():
 			
 			var Pusher = areas.get_node_or_null("Push")
 			if Pusher:
-				var random_target = area.global_position + Vector3(randf_range(0,5),randf_range(0,5),randf_range(0,5))
-				Pusher.Push(random_target)	
+				Pusher.Push()	
 
 
-func _on_vortex_effect_check_teleporter():
+
+
+func _on_teleporter_teleport_effect():
 	check_push_element()
+	print("CHECK PUSH")

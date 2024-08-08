@@ -8,7 +8,7 @@ func _ready():
 	_global_datas._load_subscene.connect(_loadscene)
 	_global_datas._go_Subscene.connect(active_subscene)
 	_global_datas._backFrom_subscene.connect(disable_subscene)
-
+	_global_datas.LoadScene = load_scene
 	
 func _loadscene(condition : bool):
 	

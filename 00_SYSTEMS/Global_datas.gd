@@ -84,15 +84,15 @@ signal _go_Subscene
 var subbscene_playerPosition : Vector3
 signal _scan_mirror_xray
 signal _photo_flash
-var flash_subscene_position : Vector3
 var _selected_tool : tool_data 
 signal set_tool_ui(tool : tool_data)
 signal open_tool_selector(condition : bool)
 signal subscene_sonar_effect(position : Vector3)
-
+var LoadScene : Node3D
 #teleporter vertex variable
 signal in_mirror_zone
-
+signal update_selector
+var backcall_path : Array[Node3D] 
 var player_state : game_state.visible_state = game_state.visible_state.normal
 
 # Fusion element 

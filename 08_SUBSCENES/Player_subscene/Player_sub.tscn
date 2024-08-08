@@ -1,4 +1,4 @@
-[gd_scene load_steps=91 format=3 uid="uid://g7u8o55jrnyy"]
+[gd_scene load_steps=101 format=3 uid="uid://g7u8o55jrnyy"]
 
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="1_n1vw4"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Player_sub_behaviour.gd" id="1_o2v73"]
@@ -10,15 +10,21 @@
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/active_tool_scene.gd" id="8_8bfcd"]
 [ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_elements_mat.tres" id="8_wvhjt"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Magnet_effect.gd" id="9_wphos"]
+[ext_resource type="Resource" uid="uid://bcj27libgpl5g" path="res://08_SUBSCENES/Tools/Check_clock.tres" id="10_fdj0j"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Active_scanner_visual_pulse.gd" id="10_ir8y2"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Subjet_effet.gd" id="10_jdgje"]
-[ext_resource type="Resource" uid="uid://df0swhar7lchv" path="res://08_SUBSCENES/Tools/SubJet_tool.tres" id="11_8qh5t"]
+[ext_resource type="Resource" uid="uid://df0swhar7lchv" path="res://08_SUBSCENES/Tools/Jet_tool.tres" id="11_rhn2f"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/CallLoader_effect.gd" id="12_5ga5g"]
 [ext_resource type="Shader" uid="uid://drchaj5fcdan0" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_sh.tres" id="12_cij64"]
 [ext_resource type="Resource" uid="uid://380xcgsxw62f" path="res://08_SUBSCENES/Tools/magnet_tool.tres" id="12_nmehd"]
+[ext_resource type="Resource" uid="uid://cfgfc4mex2tlo" path="res://08_SUBSCENES/Tools/Call_loader_tool.tres" id="13_p6l7e"]
 [ext_resource type="PackedScene" uid="uid://bktiy5sdjc87f" path="res://08_SUBSCENES/Player_subscene/Cosmo_Mod_01.blend" id="14_tdqlw"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Callback_spanwer.gd" id="15_035md"]
 [ext_resource type="Material" uid="uid://cdnmf431kgh7" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat_far.tres" id="15_evn0r"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Add_Vortex.gd" id="15_lot3r"]
 [ext_resource type="Resource" uid="uid://vv3dws7dmhtd" path="res://08_SUBSCENES/Tools/Scanner.tres" id="15_vswql"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Oddity/Scanner/Attract.gd" id="16_k51d3"]
+[ext_resource type="Resource" uid="uid://oyqj56gdwuxl" path="res://08_SUBSCENES/Tools/BackPath_tool.tres" id="16_o1pdp"]
+[ext_resource type="Resource" uid="uid://bkjhpngeq4pbp" path="res://08_SUBSCENES/Tools/Vortex_tool.tres" id="16_ondnv"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/look_at_camera.gd" id="17_mnoui"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Check_Dialogue_Zone.gd" id="17_o0rcv"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Push.gd" id="17_qkxfn"]
@@ -494,6 +500,14 @@ shader_parameter/R = 0.11
 shader_parameter/Size = 0.7
 shader_parameter/flash_opacity = 0.5
 
+[sub_resource type="BoxMesh" id="BoxMesh_cfhia"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_48fqw"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_3jp01"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_e86n7"]
+
 [sub_resource type="SphereShape3D" id="SphereShape3D_g1ic5"]
 radius = 0.303955
 
@@ -509,7 +523,7 @@ curve = SubResource("Curve_mwumu")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_icvuv"]
 emission_shape = 2
-emission_sphere_radius = 0.3
+emission_sphere_radius = 0.35
 direction = Vector3(0, 0, 0)
 spread = 180.0
 gravity = Vector3(0, 0, 0)
@@ -529,22 +543,22 @@ height = 0.5
 radial_segments = 8
 rings = 8
 
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_gp5bj"]
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_tn8hw"]
 
-[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_v5j0a"]
+[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_m8rke"]
 constant = Color(0.167591, 0.231187, 0.314371, 1)
 
-[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_ocuib"]
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_owhlk"]
 default_input_values = [0, 0.0, 1, 1.0, 2, -0.135]
 
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_etyct"]
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_vgmkj"]
 output_port_for_preview = 0
 expanded_output_ports = [0]
 input_name = "color"
 
-[sub_resource type="VisualShaderNodeFresnel" id="VisualShaderNodeFresnel_l8b5q"]
+[sub_resource type="VisualShaderNodeFresnel" id="VisualShaderNodeFresnel_ce83a"]
 
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_y6t3h"]
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_hbjpq"]
 size = Vector2(634.014, 470.339)
 expression = "const float DITHER_THRESHOLDS[16] ={
 		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
@@ -557,27 +571,27 @@ vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
 
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_oo3k7"]
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_ex0fh"]
 parameter_name = "Dither_size"
 qualifier = 1
 
-[sub_resource type="VisualShaderNodeBooleanParameter" id="VisualShaderNodeBooleanParameter_hc8ne"]
+[sub_resource type="VisualShaderNodeBooleanParameter" id="VisualShaderNodeBooleanParameter_3x2cn"]
 parameter_name = "isGray"
 qualifier = 1
 
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_u37kw"]
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_15ejn"]
 size = Vector2(620, 200)
 expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
 grey_value = luminance;"
 
-[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_a018s"]
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_fy8s4"]
 default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
 op_type = 3
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_f165y"]
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_x01xe"]
 constant = 0.3
 
-[sub_resource type="VisualShader" id="VisualShader_lmymd"]
+[sub_resource type="VisualShader" id="VisualShader_rbjxf"]
 code = "shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
 
@@ -661,7 +675,7 @@ void fragment() {
 graph_offset = Vector2(-96.7732, -371.046)
 flags/unshaded = true
 nodes/fragment/0/position = Vector2(780, 160)
-nodes/fragment/2/node = SubResource("VisualShaderNodeExpression_y6t3h")
+nodes/fragment/2/node = SubResource("VisualShaderNodeExpression_hbjpq")
 nodes/fragment/2/position = Vector2(-960, 820)
 nodes/fragment/2/size = Vector2(634.014, 470.339)
 nodes/fragment/2/input_ports = "0,4,noise;1,0,In;2,0,Size;"
@@ -676,48 +690,48 @@ nodes/fragment/2/expression = "const float DITHER_THRESHOLDS[16] ={
 vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/4/node = SubResource("VisualShaderNodeFloatConstant_f165y")
+nodes/fragment/4/node = SubResource("VisualShaderNodeFloatConstant_x01xe")
 nodes/fragment/4/position = Vector2(-1180, 880)
-nodes/fragment/10/node = SubResource("VisualShaderNodeStep_gp5bj")
+nodes/fragment/10/node = SubResource("VisualShaderNodeStep_tn8hw")
 nodes/fragment/10/position = Vector2(-100, 420)
-nodes/fragment/15/node = SubResource("VisualShaderNodeColorConstant_v5j0a")
+nodes/fragment/15/node = SubResource("VisualShaderNodeColorConstant_m8rke")
 nodes/fragment/15/position = Vector2(-18.1255, 46.3031)
-nodes/fragment/16/node = SubResource("VisualShaderNodeMix_ocuib")
+nodes/fragment/16/node = SubResource("VisualShaderNodeMix_owhlk")
 nodes/fragment/16/position = Vector2(-260, 140)
-nodes/fragment/17/node = SubResource("VisualShaderNodeInput_etyct")
+nodes/fragment/17/node = SubResource("VisualShaderNodeInput_vgmkj")
 nodes/fragment/17/position = Vector2(-840, 420)
-nodes/fragment/18/node = SubResource("VisualShaderNodeFresnel_l8b5q")
+nodes/fragment/18/node = SubResource("VisualShaderNodeFresnel_ce83a")
 nodes/fragment/18/position = Vector2(-520, 100)
-nodes/fragment/28/node = SubResource("VisualShaderNodeFloatParameter_oo3k7")
+nodes/fragment/28/node = SubResource("VisualShaderNodeFloatParameter_ex0fh")
 nodes/fragment/28/position = Vector2(-1500.72, 1122.86)
-nodes/fragment/29/node = SubResource("VisualShaderNodeBooleanParameter_hc8ne")
+nodes/fragment/29/node = SubResource("VisualShaderNodeBooleanParameter_3x2cn")
 nodes/fragment/29/position = Vector2(299.286, -158.783)
-nodes/fragment/30/node = SubResource("VisualShaderNodeExpression_u37kw")
+nodes/fragment/30/node = SubResource("VisualShaderNodeExpression_15ejn")
 nodes/fragment/30/position = Vector2(285.796, -431.17)
 nodes/fragment/30/size = Vector2(620, 200)
 nodes/fragment/30/input_ports = "0,4,color;"
 nodes/fragment/30/output_ports = "0,0,grey_value;"
 nodes/fragment/30/expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
 grey_value = luminance;"
-nodes/fragment/31/node = SubResource("VisualShaderNodeMix_a018s")
+nodes/fragment/31/node = SubResource("VisualShaderNodeMix_fy8s4")
 nodes/fragment/31/position = Vector2(985.796, -151.17)
 nodes/fragment/connections = PackedInt32Array(4, 0, 2, 1, 2, 0, 10, 1, 16, 0, 10, 0, 17, 0, 16, 2, 18, 0, 16, 0, 28, 0, 2, 2, 10, 0, 0, 1, 30, 0, 31, 1, 29, 0, 31, 2, 15, 0, 30, 0, 15, 0, 31, 0, 31, 0, 0, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_auo33"]
 render_priority = 3
-shader = SubResource("VisualShader_lmymd")
+shader = SubResource("VisualShader_rbjxf")
 
 [sub_resource type="Gradient" id="Gradient_1ksq0"]
 offsets = PackedFloat32Array(0.142857, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_co4bx"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_g2i3w"]
 gradient = SubResource("Gradient_1ksq0")
 
 [sub_resource type="Curve" id="Curve_sac7r"]
 _data = [Vector2(0, 0.968421), 0.0, 0.546851, 0, 0, Vector2(0.994118, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_tyy8c"]
+[sub_resource type="CurveTexture" id="CurveTexture_kteqk"]
 curve = SubResource("Curve_sac7r")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_snyp2"]
@@ -732,8 +746,8 @@ angular_velocity_max = 0.1
 gravity = Vector3(0, 0, 0)
 scale_min = 0.1
 scale_max = 0.15
-scale_curve = SubResource("CurveTexture_tyy8c")
-color_ramp = SubResource("GradientTexture1D_co4bx")
+scale_curve = SubResource("CurveTexture_kteqk")
+color_ramp = SubResource("GradientTexture1D_g2i3w")
 turbulence_noise_strength = 0.05
 turbulence_noise_scale = 0.1
 turbulence_noise_speed_random = 0.0
@@ -808,10 +822,27 @@ script = SubResource("GDScript_8qwgp")
 script = ExtResource("9_wphos")
 manget_tool = ExtResource("12_nmehd")
 magnet_fx = NodePath("../VFX_MAGNET")
+tool_clock = ExtResource("10_fdj0j")
 
-[node name="Subjet_effet" type="Node" parent="."]
+[node name="Subjet_effect" type="Node" parent="."]
 script = ExtResource("10_jdgje")
-subjet_effect = ExtResource("11_8qh5t")
+subjet_effect = ExtResource("11_rhn2f")
+
+[node name="CallLoader_effect" type="Node" parent="."]
+script = ExtResource("12_5ga5g")
+caller_tool = ExtResource("13_p6l7e")
+
+[node name="Add_Vortex" type="Node" parent="."]
+script = ExtResource("15_lot3r")
+vortex_tool = ExtResource("16_ondnv")
+
+[node name="Callback_spanwer" type="Node" parent="."]
+script = ExtResource("15_035md")
+BackPath = ExtResource("16_o1pdp")
+
+[node name="Timer" type="Timer" parent="Callback_spanwer"]
+wait_time = 0.2
+one_shot = true
 
 [node name="Render_mesh" type="Node3D" parent="."]
 
@@ -833,11 +864,17 @@ list_of_object = [NodePath("../../Magnet")]
 
 [node name="active_Subjet" type="Node" parent="Render_mesh/Active_visual_tools" node_paths=PackedStringArray("list_of_object")]
 script = ExtResource("8_8bfcd")
-_tool_data = ExtResource("11_8qh5t")
+_tool_data = ExtResource("11_rhn2f")
 list_of_object = [NodePath("../../Subjet_mesh")]
+
+[node name="active_CallerLoader" type="Node" parent="Render_mesh/Active_visual_tools" node_paths=PackedStringArray("list_of_object")]
+script = ExtResource("8_8bfcd")
+_tool_data = ExtResource("13_p6l7e")
+list_of_object = [NodePath("../../LoaderCaller")]
 
 [node name="Scanner" type="MeshInstance3D" parent="Render_mesh"]
 transform = Transform3D(-1.7049e-09, -0.038187, 0, 0.0390036, -1.66921e-09, 0, 0, 0, 0.121949, 0.0349853, 0.140869, 0.0831259)
+visible = false
 layers = 4
 mesh = SubResource("BoxMesh_8vb5i")
 skeleton = NodePath("../../Player_sub_collider")
@@ -875,6 +912,7 @@ surface_material_override/0 = ExtResource("1_n1vw4")
 
 [node name="Subjet_mesh" type="Node3D" parent="Render_mesh"]
 transform = Transform3D(0.0471908, 0, 0, 0, 0.0927655, 0, 0, 0, 0.0374641, -0.125487, 0.182732, -0.103348)
+visible = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Render_mesh/Subjet_mesh"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0459266, 0.0184072, 0)
@@ -892,6 +930,7 @@ surface_material_override/0 = ExtResource("1_n1vw4")
 
 [node name="Magnet" type="MeshInstance3D" parent="Render_mesh"]
 transform = Transform3D(-1.7049e-09, -0.038187, 0, 0.0390036, -1.66921e-09, 0, 0, 0, 0.121949, 0.0349853, 0.140869, 0.0650372)
+visible = false
 layers = 4
 mesh = SubResource("BoxMesh_8vb5i")
 skeleton = NodePath("../../Player_sub_collider")
@@ -933,7 +972,7 @@ skeleton = NodePath("../../../Player_sub_collider")
 surface_material_override/0 = ExtResource("8_wvhjt")
 
 [node name="Teleporter_msh3" type="MeshInstance3D" parent="Render_mesh/Magnet"]
-transform = Transform3D(2.25725, -9.86674e-08, -9.86684e-08, -1.00777e-07, -1.00777e-07, -2.30551, 3.15573e-08, 0.721946, -3.15573e-08, 0, 0.0100367, 0.657824)
+transform = Transform3D(2.24697, -9.82183e-08, -9.82192e-08, -1.00318e-07, -1.00318e-07, -2.29502, 3.14136e-08, 0.71866, -3.14136e-08, 0, 0.0100367, 0.657824)
 layers = 4
 mesh = SubResource("SphereMesh_yi3h4")
 skeleton = NodePath("../../../Player_sub_collider")
@@ -996,7 +1035,6 @@ surface_material_override/0 = ExtResource("1_n1vw4")
 surface_material_override/1 = ExtResource("1_n1vw4")
 
 [node name="msh_right_arm" parent="Render_mesh/Cosmo_Mod_02" index="4"]
-visible = false
 layers = 4
 surface_material_override/0 = ExtResource("1_n1vw4")
 surface_material_override/1 = ExtResource("1_n1vw4")
@@ -1022,8 +1060,32 @@ mesh = SubResource("QuadMesh_uqek7")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("ShaderMaterial_4j2xv")
 
-[node name="Orbe_spawner_position" type="Node3D" parent="Render_mesh"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0341371, 0.137754, 0.194054)
+[node name="LoaderCaller" type="Node3D" parent="Render_mesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0384353, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Render_mesh/LoaderCaller"]
+transform = Transform3D(0.0305803, -0.000150778, 0, 9.07337e-05, 0.0508172, 0, 0, 0, 0.0181113, 0.0346741, 0.141455, 0.0743087)
+layers = 4
+mesh = SubResource("BoxMesh_cfhia")
+surface_material_override/0 = ExtResource("1_n1vw4")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Render_mesh/LoaderCaller"]
+transform = Transform3D(0.075265, 0, 0, 0, 0.0289881, 0, 0, 0, 0.0360357, 0.021186, 0.116174, 0.0747349)
+layers = 4
+mesh = SubResource("BoxMesh_48fqw")
+surface_material_override/0 = ExtResource("1_n1vw4")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Render_mesh/LoaderCaller"]
+transform = Transform3D(0.0192906, 0, 0, 0, 0.0412885, 0, 0, 0, 0.0138274, 0.0346741, 0.0586663, 0.0743087)
+layers = 4
+mesh = SubResource("CylinderMesh_3jp01")
+surface_material_override/0 = ExtResource("1_n1vw4")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Render_mesh/LoaderCaller"]
+transform = Transform3D(-0.0423208, 3.28083e-09, 0, 1.3414e-09, -0.0552776, 0, 0, 0, 0.0469795, 0.0346741, 0.00476729, 0.0742247)
+layers = 4
+mesh = SubResource("PrismMesh_e86n7")
+surface_material_override/0 = ExtResource("8_wvhjt")
 
 [node name="Check_Dialogue_Zone" type="Node" parent="."]
 script = ExtResource("17_o0rcv")
@@ -1032,10 +1094,6 @@ script = ExtResource("17_o0rcv")
 collision_layer = 4
 collision_mask = 4
 input_ray_pickable = false
-
-[node name="Attract_me" type="Node" parent="ZoneCollide" node_paths=PackedStringArray("rg")]
-script = ExtResource("16_k51d3")
-rg = NodePath("../..")
 
 [node name="Push" type="Node" parent="ZoneCollide" node_paths=PackedStringArray("rg")]
 script = ExtResource("17_qkxfn")
