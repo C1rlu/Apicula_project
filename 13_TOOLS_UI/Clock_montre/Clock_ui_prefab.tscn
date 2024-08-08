@@ -1,5 +1,6 @@
-[gd_scene load_steps=14 format=3 uid="uid://clc3sbquuu1us"]
+[gd_scene load_steps=15 format=3 uid="uid://clc3sbquuu1us"]
 
+[ext_resource type="Resource" uid="uid://df0swhar7lchv" path="res://08_SUBSCENES/Tools/SubJet_tool.tres" id="1_2k37p"]
 [ext_resource type="PackedScene" uid="uid://b04qmdjf73spd" path="res://13_TOOLS_UI/Clock_montre/clock_3d_ui_prefab.tscn" id="1_71jwj"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/Clock_montre/Fade_dither.gd" id="1_v6xwk"]
 
@@ -9,7 +10,7 @@ script/source = "extends Node
 @onready var render = $\"../Render\"
 @onready var clock_root = $\"../SubViewport/clock_3d_prefab/clock_3d2/root_equille\"
 @onready var fade_dither = $\"../Fade_dither\"
-
+@export var tool_jetback : tool_data
 var t 
 
 func _ready():
@@ -65,7 +66,7 @@ func go_subscene():
 func _start_clock():
 	
 
-	var time_need = 120.0 - (_global_datas.clock_timer / 12)
+	var time_need = 60.0 - (_global_datas.clock_timer / 6)
 	if t:
 		t.kill()
 		
@@ -91,10 +92,13 @@ func done():
 		
 	_stop()	
 
-	_global_datas._backFrom_subscene.emit()
-	_global_datas._go_Mainscene.emit()
-	_global_datas.show_on_scanner.emit(false)
-		
+	#_global_datas._backFrom_subscene.emit()
+	#_global_datas._go_Mainscene.emit()
+	#_global_datas.show_on_scanner.emit(false)
+	
+	_global_datas.set_tool_ui.emit(tool_jetback)
+	tool_jetback.tool_active_signal.emit(true)
+	
 func _stop():
 	
 	if t:
@@ -251,6 +255,7 @@ mouse_filter = 2
 
 [node name="Time" type="Node" parent="."]
 script = SubResource("GDScript_uwuod")
+tool_jetback = ExtResource("1_2k37p")
 
 [node name="Fade_dither" type="Node" parent="." node_paths=PackedStringArray("texture_img")]
 script = ExtResource("1_v6xwk")
