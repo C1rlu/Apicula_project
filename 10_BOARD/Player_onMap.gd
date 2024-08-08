@@ -25,7 +25,6 @@ func _updade_playerMapPosition(condition : bool):
 	
 	var PlayerMapPosition = Vector3(x,0.009,z)
 
-	rotation = _global_datas.player_boat_rotation
 	position = PlayerMapPosition
 	
 

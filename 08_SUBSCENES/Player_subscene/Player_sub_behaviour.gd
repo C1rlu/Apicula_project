@@ -12,7 +12,7 @@ extends RigidBody3D
 @export var startPos : Vector3
 
 var _canMove = false
-
+var stop_control = false
 @onready var PlayerMesh = $Render_mesh
 @onready var light_position = $Render_mesh/Light_Position
 @onready var orbe_spawner_position = $Render_mesh/Orbe_spawner_position
@@ -80,16 +80,8 @@ func _physics_process(_delta):
 		_global_datas.subbscene_playerPosition = transform.origin	
 		_global_datas.flash_subscene_position = light_position.global_position
 
-	if _global_datas.player_in_selector:
-		return	
-	if Input.is_action_pressed((_global_datas.move_forward)):
-		var goingUp = transform.basis.y
-		apply_central_force(goingUp * actual_speed)
-		player_dir(_delta,0.0,-27.0)
-	if Input.is_action_pressed((_global_datas.move_backward)):
-		var goingDown = -transform.basis.y
-		apply_central_force(goingDown * actual_speed)
-		player_dir(_delta,0.0,27.0)
+	
+
 	if Input.is_action_pressed((_global_datas.move_right)):
 		var goingRight = transform.basis.x
 		apply_central_force(goingRight * actual_speed)
@@ -101,6 +93,24 @@ func _physics_process(_delta):
 	var current_velocity = linear_velocity
 	var current_speed = current_velocity.length()
 	
+	if stop_control:
+		
+		if Input.is_action_pressed((_global_datas.move_forward)):
+			player_dir(_delta,0.0,-27.0)
+		if Input.is_action_pressed((_global_datas.move_backward)):
+			player_dir(_delta,0.0,27.0)
+		
+		return	
+		
+	if Input.is_action_pressed((_global_datas.move_forward)):
+		var goingUp = transform.basis.y
+		apply_central_force(goingUp * actual_speed)
+		player_dir(_delta,0.0,-27.0)
+	if Input.is_action_pressed((_global_datas.move_backward)):
+		var goingDown = -transform.basis.y
+		apply_central_force(goingDown * actual_speed)
+		player_dir(_delta,0.0,27.0)
+			
 	if current_speed > maxSpeed:
 		current_velocity = current_velocity.normalized() * maxSpeed
 		linear_velocity = current_velocity

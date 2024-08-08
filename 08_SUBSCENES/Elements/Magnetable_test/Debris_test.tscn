@@ -1,0 +1,68 @@
+[gd_scene load_steps=6 format=3 uid="uid://di031pbbucu1n"]
+
+[ext_resource type="Material" uid="uid://bxf2r8qu2qvay" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_rock.tres" id="1_epchv"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Oddity/Scanner/Attract.gd" id="2_snwxr"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_pux22"]
+radius = 0.0486438
+
+[sub_resource type="SphereMesh" id="SphereMesh_d743k"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_4726r"]
+radius = 0.0881311
+
+[node name="RigidBody3D" type="RigidBody3D"]
+transform = Transform3D(1.00119, 0, 0, 0, 1.00119, 0, 0, 0, 1.00119, 0.312475, -2.73366, 0)
+collision_layer = 2
+collision_mask = 2
+input_ray_pickable = false
+axis_lock_linear_z = true
+gravity_scale = 0.1
+linear_damp = 1.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1.46692, 0, 0, 0, 1.46692, 0, 0, 0, 1.46692, 0.00124303, 0.0039556, 0.00526146)
+shape = SubResource("SphereShape3D_pux22")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.130903, 0, 0, 0, 0.130903, 0, 0, 0, 0.130903, 0.00250667, 0.00116825, 0.00824188)
+layers = 4
+mesh = SubResource("SphereMesh_d743k")
+surface_material_override/0 = ExtResource("1_epchv")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.0643325, 0, 0, 0, 0.0643325, 0, 0, 0, 0.0643325, 0.0463373, 0.0535235, 0.00824188)
+layers = 4
+mesh = SubResource("SphereMesh_d743k")
+surface_material_override/0 = ExtResource("1_epchv")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.0885947, 0, 0, 0, 0.0885947, 0, 0, 0, 0.0885947, -0.0419973, 0.0535235, 0.00824188)
+layers = 4
+mesh = SubResource("SphereMesh_d743k")
+surface_material_override/0 = ExtResource("1_epchv")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.0636671, 0, 0, 0, 0.0636671, 0, 0, 0, 0.0636671, -0.00462911, -0.0668879, 0.00824188)
+layers = 4
+mesh = SubResource("SphereMesh_d743k")
+surface_material_override/0 = ExtResource("1_epchv")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.0731933, 0, 0, 0, 0.0731933, 0, 0, 0, 0.0731933, 0.0172439, 0.0206068, 0.0494108)
+layers = 4
+mesh = SubResource("SphereMesh_d743k")
+surface_material_override/0 = ExtResource("1_epchv")
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 4
+collision_mask = 4
+
+[node name="Attract_me" type="Node" parent="Area3D" node_paths=PackedStringArray("rg")]
+script = ExtResource("2_snwxr")
+rg = NodePath("../..")
+strenght = 150.0
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(2.75354, 0, 0, 0, 2.75354, 0, 0, 0, 2.75354, 0, 0, 0)
+shape = SubResource("SphereShape3D_4726r")

@@ -25,8 +25,10 @@ func show(condition):
 	main_render_msh.visible = condition
 	main_render_msh_mirror.visible = !condition
 	
-	col_rg.disabled = !condition
+	col_rg.call_deferred("set_disabled",!condition)
+	#col_rg.disabled = !condition 
 	gpu_normal.emitting = condition
+
 
 			
 func _on_switch_mirror_switch_mirror():

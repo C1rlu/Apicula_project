@@ -37,11 +37,6 @@ func _input(event):
 		
 func _physics_process(_delta):
 	
-	move_c()
-	
-func move_c():
-	
-
 	if _global_datas.Player_In_Inventory:
 		return
 	
@@ -52,11 +47,23 @@ func move_c():
 		
 	if _global_datas.Player_InDialogue:
 		return	
-
+	
 		
 	var translation = get_global_transform().origin
 	_global_datas.player_position = translation
-	_global_datas.player_boat_rotation = rotation
+	
+	move_c()
+	
+	#if using_pad:
+		#
+	#else:
+		#move_a()
+	
+func move_c():
+	
+
+
+
 
 
 	var velocity = Input.get_vector("move_right", "move_left","move_backward" , "move_forward")
@@ -119,3 +126,28 @@ func wrap_angle(angle):
 	else:
 		return angle
 	
+func move_a():
+	
+	
+	var forward_value = 0.0
+	if Input.is_action_pressed(("move_forward")):
+		var forward_vector = -transform.basis.z
+		apply_central_force(forward_vector * speed)
+		forward_value = 1
+	if Input.is_action_pressed(("move_backward")):
+		var backward_vector = transform.basis.z
+		apply_central_force(backward_vector * speed/1.5 )
+		forward_value = -1
+	var current_velocity = linear_velocity
+	var current_speed = current_velocity.length()
+	
+	if Input.is_action_pressed(("move_right")):
+		apply_torque(Vector3(0,-rotation_speed * current_speed * forward_value,0))
+	if Input.is_action_pressed(("move_left")):
+		apply_torque(Vector3(0,rotation_speed * current_speed * forward_value,0))
+	
+	if current_speed > maxSpeed:
+		current_velocity = current_velocity.normalized() * maxSpeed
+		linear_velocity = current_velocity
+	
+	self.transform.origin.y = 0.0

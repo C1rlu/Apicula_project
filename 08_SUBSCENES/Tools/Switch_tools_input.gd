@@ -9,8 +9,8 @@ func _ready():
 	_global_datas._go_Subscene.connect(_reset)
 	
 func _reset():
-	
-	_global_datas.set_tool_ui.emit(_global_datas._selected_tool)
+	var select = all_tool[0]
+	_global_datas.set_tool_ui.emit(select)
 
 			
 func select_this(tool : tool_data):

@@ -1,4 +1,4 @@
-[gd_scene load_steps=88 format=3 uid="uid://g7u8o55jrnyy"]
+[gd_scene load_steps=91 format=3 uid="uid://g7u8o55jrnyy"]
 
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="1_n1vw4"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Player_sub_behaviour.gd" id="1_o2v73"]
@@ -11,6 +11,8 @@
 [ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_elements_mat.tres" id="8_wvhjt"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Magnet_effect.gd" id="9_wphos"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Active_scanner_visual_pulse.gd" id="10_ir8y2"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Subjet_effet.gd" id="10_jdgje"]
+[ext_resource type="Resource" uid="uid://df0swhar7lchv" path="res://08_SUBSCENES/Tools/SubJet_tool.tres" id="11_8qh5t"]
 [ext_resource type="Shader" uid="uid://drchaj5fcdan0" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_sh.tres" id="12_cij64"]
 [ext_resource type="Resource" uid="uid://380xcgsxw62f" path="res://08_SUBSCENES/Tools/magnet_tool.tres" id="12_nmehd"]
 [ext_resource type="PackedScene" uid="uid://bktiy5sdjc87f" path="res://08_SUBSCENES/Player_subscene/Cosmo_Mod_01.blend" id="14_tdqlw"]
@@ -234,6 +236,8 @@ ring_segments = 16
 outer_radius = 0.65
 rings = 16
 ring_segments = 8
+
+[sub_resource type="BoxMesh" id="BoxMesh_xo13g"]
 
 [sub_resource type="PrismMesh" id="PrismMesh_cb64w"]
 
@@ -494,7 +498,7 @@ shader_parameter/flash_opacity = 0.5
 radius = 0.303955
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_47iq4"]
-radius = 0.501064
+radius = 0.560663
 
 [sub_resource type="Curve" id="Curve_mwumu"]
 _data = [Vector2(0, 0.56015), 0.0, 0.0, 0, 0, Vector2(1, 0.181391), 0.0, 0.0, 0, 0]
@@ -749,9 +753,7 @@ gravity_scale = 0.0
 linear_damp = 1.0
 script = ExtResource("1_o2v73")
 orbe_tool = ExtResource("12_nmehd")
-actual_speed = 8.0
 hight_speed = 12.0
-normal_speed = 8.0
 maxSpeed = 12.0
 startPos = Vector3(0, 1, 0)
 
@@ -807,6 +809,10 @@ script = ExtResource("9_wphos")
 manget_tool = ExtResource("12_nmehd")
 magnet_fx = NodePath("../VFX_MAGNET")
 
+[node name="Subjet_effet" type="Node" parent="."]
+script = ExtResource("10_jdgje")
+subjet_effect = ExtResource("11_8qh5t")
+
 [node name="Render_mesh" type="Node3D" parent="."]
 
 [node name="Active_visual_tools" type="Node" parent="Render_mesh"]
@@ -824,6 +830,11 @@ list_of_object = [NodePath("../../Scanner")]
 script = ExtResource("8_8bfcd")
 _tool_data = ExtResource("12_nmehd")
 list_of_object = [NodePath("../../Magnet")]
+
+[node name="active_Subjet" type="Node" parent="Render_mesh/Active_visual_tools" node_paths=PackedStringArray("list_of_object")]
+script = ExtResource("8_8bfcd")
+_tool_data = ExtResource("11_8qh5t")
+list_of_object = [NodePath("../../Subjet_mesh")]
 
 [node name="Scanner" type="MeshInstance3D" parent="Render_mesh"]
 transform = Transform3D(-1.7049e-09, -0.038187, 0, 0.0390036, -1.66921e-09, 0, 0, 0, 0.121949, 0.0349853, 0.140869, 0.0831259)
@@ -860,6 +871,23 @@ transform = Transform3D(2.25725, -9.86674e-08, -9.86684e-08, -1.00777e-07, -1.00
 layers = 4
 mesh = SubResource("TorusMesh_k0nng")
 skeleton = NodePath("../../../Player_sub_collider")
+surface_material_override/0 = ExtResource("1_n1vw4")
+
+[node name="Subjet_mesh" type="Node3D" parent="Render_mesh"]
+transform = Transform3D(0.0471908, 0, 0, 0, 0.0927655, 0, 0, 0, 0.0374641, -0.125487, 0.182732, -0.103348)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Render_mesh/Subjet_mesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0459266, 0.0184072, 0)
+layers = 4
+mesh = SubResource("BoxMesh_xo13g")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("1_n1vw4")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Render_mesh/Subjet_mesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.32522, 0.0184072, 0)
+layers = 4
+mesh = SubResource("BoxMesh_xo13g")
+skeleton = NodePath("../..")
 surface_material_override/0 = ExtResource("1_n1vw4")
 
 [node name="Magnet" type="MeshInstance3D" parent="Render_mesh"]
