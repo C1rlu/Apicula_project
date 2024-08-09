@@ -17,18 +17,9 @@ func scale_effect():
 		t.kill()
 	t = create_tween()	
 	t.tween_method(_value,1.0,0.5,0.5).set_trans(Tween.TRANS_SINE)
-	#t.connect("finished",back_sacle)
 
-func back_sacle():
-	
-	t = create_tween()
-	if t:
-		t.kill()
-		t = create_tween()
-		t.tween_method(_value,1.0,0.5,0.5).set_trans(Tween.TRANS_SINE)
-		
 func _value(value : float):
-	#teleporter_prefab.scale = Vector3(value,value,value)
+
 	vortex_part.amount_ratio = value
 	mesh_mat.set_shader_parameter("Speed",value)
 

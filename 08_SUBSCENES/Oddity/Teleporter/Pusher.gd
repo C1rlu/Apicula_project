@@ -19,4 +19,4 @@ func check_push_element():
 
 func _on_teleporter_teleport_effect():
 	check_push_element()
-	print("CHECK PUSH")
+

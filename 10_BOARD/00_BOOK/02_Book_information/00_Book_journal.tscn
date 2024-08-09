@@ -1,4 +1,4 @@
-[gd_scene load_steps=60 format=3 uid="uid://bh5a7fhvftxmm"]
+[gd_scene load_steps=61 format=3 uid="uid://bh5a7fhvftxmm"]
 
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/02_Book_information/Book_page_behaviour.gd" id="1_ggf51"]
 [ext_resource type="Resource" uid="uid://bnr5ucr2s173m" path="res://10_BOARD/00_BOOK/02_Book_information/Main_Book.tres" id="2_0b3of"]
@@ -541,6 +541,9 @@ shader = SubResource("VisualShader_ir0xt")
 shader_parameter/Dark_color = Color(0.286275, 0.258824, 0.184314, 1)
 shader_parameter/Gradient = SubResource("GradientTexture2D_m77sg")
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_e1byd"]
+size = Vector3(2.91418, 0.314575, 4.89087)
+
 [node name="Book" type="Node3D"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
 script = ExtResource("1_ggf51")
@@ -582,6 +585,12 @@ layers = 2
 mesh = SubResource("BoxMesh_0xre3")
 skeleton = NodePath("../../..")
 surface_material_override/0 = SubResource("ShaderMaterial_t44i5")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.115173, 0.135315, -0.00720215)
+shape = SubResource("BoxShape3D_e1byd")
 
 [connection signal="timeout" from="Multiple_page_transition_right" to="." method="_on_multiple_page_transition_timeout"]
 [connection signal="timeout" from="Multiple_page_transition_left" to="." method="_on_multiple_page_transition_left_timeout"]

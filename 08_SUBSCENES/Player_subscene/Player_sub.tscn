@@ -1,4 +1,4 @@
-[gd_scene load_steps=101 format=3 uid="uid://g7u8o55jrnyy"]
+[gd_scene load_steps=97 format=3 uid="uid://g7u8o55jrnyy"]
 
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="1_n1vw4"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Player_sub_behaviour.gd" id="1_o2v73"]
@@ -500,14 +500,6 @@ shader_parameter/R = 0.11
 shader_parameter/Size = 0.7
 shader_parameter/flash_opacity = 0.5
 
-[sub_resource type="BoxMesh" id="BoxMesh_cfhia"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_48fqw"]
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_3jp01"]
-
-[sub_resource type="PrismMesh" id="PrismMesh_e86n7"]
-
 [sub_resource type="SphereShape3D" id="SphereShape3D_g1ic5"]
 radius = 0.303955
 
@@ -870,11 +862,15 @@ list_of_object = [NodePath("../../Subjet_mesh")]
 [node name="active_CallerLoader" type="Node" parent="Render_mesh/Active_visual_tools" node_paths=PackedStringArray("list_of_object")]
 script = ExtResource("8_8bfcd")
 _tool_data = ExtResource("13_p6l7e")
-list_of_object = [NodePath("../../LoaderCaller")]
+list_of_object = [NodePath("../../Scanner")]
+
+[node name="active_Vortex" type="Node" parent="Render_mesh/Active_visual_tools" node_paths=PackedStringArray("list_of_object")]
+script = ExtResource("8_8bfcd")
+_tool_data = ExtResource("16_ondnv")
+list_of_object = [NodePath("../../Scanner")]
 
 [node name="Scanner" type="MeshInstance3D" parent="Render_mesh"]
 transform = Transform3D(-1.7049e-09, -0.038187, 0, 0.0390036, -1.66921e-09, 0, 0, 0, 0.121949, 0.0349853, 0.140869, 0.0831259)
-visible = false
 layers = 4
 mesh = SubResource("BoxMesh_8vb5i")
 skeleton = NodePath("../../Player_sub_collider")
@@ -1059,33 +1055,6 @@ cast_shadow = 0
 mesh = SubResource("QuadMesh_uqek7")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("ShaderMaterial_4j2xv")
-
-[node name="LoaderCaller" type="Node3D" parent="Render_mesh"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0384353, 0, 0)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Render_mesh/LoaderCaller"]
-transform = Transform3D(0.0305803, -0.000150778, 0, 9.07337e-05, 0.0508172, 0, 0, 0, 0.0181113, 0.0346741, 0.141455, 0.0743087)
-layers = 4
-mesh = SubResource("BoxMesh_cfhia")
-surface_material_override/0 = ExtResource("1_n1vw4")
-
-[node name="MeshInstance3D5" type="MeshInstance3D" parent="Render_mesh/LoaderCaller"]
-transform = Transform3D(0.075265, 0, 0, 0, 0.0289881, 0, 0, 0, 0.0360357, 0.021186, 0.116174, 0.0747349)
-layers = 4
-mesh = SubResource("BoxMesh_48fqw")
-surface_material_override/0 = ExtResource("1_n1vw4")
-
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="Render_mesh/LoaderCaller"]
-transform = Transform3D(0.0192906, 0, 0, 0, 0.0412885, 0, 0, 0, 0.0138274, 0.0346741, 0.0586663, 0.0743087)
-layers = 4
-mesh = SubResource("CylinderMesh_3jp01")
-surface_material_override/0 = ExtResource("1_n1vw4")
-
-[node name="MeshInstance3D4" type="MeshInstance3D" parent="Render_mesh/LoaderCaller"]
-transform = Transform3D(-0.0423208, 3.28083e-09, 0, 1.3414e-09, -0.0552776, 0, 0, 0, 0.0469795, 0.0346741, 0.00476729, 0.0742247)
-layers = 4
-mesh = SubResource("PrismMesh_e86n7")
-surface_material_override/0 = ExtResource("8_wvhjt")
 
 [node name="Check_Dialogue_Zone" type="Node" parent="."]
 script = ExtResource("17_o0rcv")

@@ -8,7 +8,6 @@
 [sub_resource type="GDScript" id="GDScript_uwuod"]
 script/source = "extends Node
 
-
 @export var tool_clock : tool_data
 @export var tool_jetback : tool_data
 
@@ -16,9 +15,8 @@ script/source = "extends Node
 @onready var clock_root = $\"../SubViewport/clock_3d_prefab/clock_3d2/root_equille\"
 @onready var fade_dither = $\"../Fade_dither\"
 
-
 var t 
-var r
+
 func _ready():
 
 	_global_datas._active_progress_subscene.connect(load_clock)
@@ -32,11 +30,16 @@ func _ready():
 func reload_timer(condition):
 	
 	if condition:
-	
-		if r:
-			r.kill()
-		r = create_tween()
-		r.tween_method(_value,360,0.0,2.5)	
+		
+		var angle_reste = 360.0 + clock_root.rotation_degrees.y
+		var angle = 360.0 - angle_reste
+		
+		var time_ratio = 4.0 / 360
+		var timer_need = time_ratio * angle
+		if t:
+			t.kill()
+		t = create_tween()
+		t.tween_method(_value,angle,0.0,timer_need)	
 		
 	else:
 		_start_clock()	
@@ -78,6 +81,8 @@ func load_clock(condition : bool):
 		if t:
 			t.kill()
 		hide()
+		
+		
 func go_subscene():
 	_global_datas._active_progress_subscene.emit(false)
 	_global_datas._go_Subscene.emit()
@@ -118,8 +123,8 @@ func done():
 	#_global_datas._go_Mainscene.emit()
 	#_global_datas.show_on_scanner.emit(false)
 	
-	_global_datas.set_tool_ui.emit(tool_jetback)
-	tool_jetback.tool_active_signal.emit(true)
+	#_global_datas.set_tool_ui.emit(tool_jetback)
+	#tool_jetback.tool_active_signal.emit(true)
 	
 func _stop():
 	
@@ -130,6 +135,10 @@ func _stop():
 		
 							
 func _value(value : float):
+	
+
+	
+
 	clock_root.rotation_degrees.y = -value
 	_global_datas.clock_timer = value
 	
