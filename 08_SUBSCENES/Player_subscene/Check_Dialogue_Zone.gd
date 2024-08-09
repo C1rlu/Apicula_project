@@ -13,9 +13,8 @@ func _ready():
 	
 
 func close():
+	
 	_global_datas.in_dialogue_zone.emit(false)	
-
-	_global_datas._show_object_legend.emit(false,null)	
 	_global_datas.go_darker_color.emit()
 	
 
@@ -32,11 +31,8 @@ func check_zone():
 			
 			_global_datas.Npc_Dialogue = npc_zone.get_npc()
 			_global_datas.in_dialogue_zone.emit(true)
-			var actual_zone_name = _global_datas.Npc_Dialogue.zone_info_name
-			_global_datas._show_object_legend.emit(true,actual_zone_name)
-
 	
-			
+
 func _area_entered(area_rid, area, area_shape_index, local_shape_index):
 	
 	if area:
@@ -45,8 +41,6 @@ func _area_entered(area_rid, area, area_shape_index, local_shape_index):
 			_global_datas.Npc_Dialogue = npc_zone.get_npc()
 			_global_datas.in_dialogue_zone.emit(true)
 			
-			var actual_zone_name = _global_datas.Npc_Dialogue.zone_info_name
-			_global_datas._show_object_legend.emit(true,actual_zone_name)
 	
 func _area_exited(area_rid, area, area_shape_index, local_shape_index):
 	
@@ -55,7 +49,7 @@ func _area_exited(area_rid, area, area_shape_index, local_shape_index):
 		var npc_zone = area.get_node_or_null("Npc_zone")
 		if npc_zone:
 			_global_datas.in_dialogue_zone.emit(false)
-			_global_datas._show_object_legend.emit(false,null)
+
 			
 	
 

@@ -45,18 +45,18 @@ func reload_timer(condition):
 		_start_clock()	
 			
 		
-func _input(event):
-	
-	
-	if !_global_datas.Player_InSubScene:
-		return
-	
-	if event.is_action_pressed(\"Open_Inventory\"):	
-		show()	
-	if event.is_action_released(\"Open_Inventory\"):	
-		hide()	
-		
-		
+#func _input(event):
+	#
+	#
+	#if !_global_datas.Player_InSubScene:
+		#return
+	#
+	#if event.is_action_pressed(\"Open_Inventory\"):	
+		#show()	
+	#if event.is_action_released(\"Open_Inventory\"):	
+		#hide()	
+		#
+		#
 		
 func show():
 	#render.visible = true
@@ -86,7 +86,7 @@ func load_clock(condition : bool):
 func go_subscene():
 	_global_datas._active_progress_subscene.emit(false)
 	_global_datas._go_Subscene.emit()
-			
+	show()		
 func _start_clock():
 	
 	var tree = get_tree()
@@ -131,8 +131,8 @@ func _stop():
 	if t:
 		t.kill()	
 	_global_datas.clock_timer = 0.0
-	
-		
+
+	hide()	
 							
 func _value(value : float):
 	
@@ -272,7 +272,7 @@ nodes/fragment/connections = PackedInt32Array(37, 0, 35, 1, 72, 0, 37, 1, 39, 0,
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_08e44"]
 shader = SubResource("VisualShader_5dayk")
-shader_parameter/Opacity = 0.0
+shader_parameter/Opacity = 1.0
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_xhme6"]
 viewport_path = NodePath("SubViewport")
@@ -280,8 +280,6 @@ viewport_path = NodePath("SubViewport")
 [node name="Clock" type="Control"]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
 mouse_filter = 2
 
 [node name="Time" type="Node" parent="."]
@@ -304,18 +302,19 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -170.0
-offset_top = -186.0
-offset_right = 130.0
-offset_bottom = 114.0
+offset_left = -64.0
+offset_top = -71.0
+offset_right = 64.0
+offset_bottom = 57.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 texture = SubResource("ViewportTexture_xhme6")
+expand_mode = 1
 
 [node name="SubViewport" type="SubViewport" parent="."]
 transparent_bg = true
-size = Vector2i(300, 300)
+size = Vector2i(256, 256)
 
 [node name="clock_3d_prefab" parent="SubViewport" instance=ExtResource("1_71jwj")]
 

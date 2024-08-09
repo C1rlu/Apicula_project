@@ -1,4 +1,4 @@
-[gd_scene load_steps=92 format=3 uid="uid://cnmptm7i0xxmj"]
+[gd_scene load_steps=86 format=3 uid="uid://cnmptm7i0xxmj"]
 
 [ext_resource type="Script" path="res://00_SCENE/Active_Decor_Scene.gd" id="1_ounvv"]
 [ext_resource type="PackedScene" uid="uid://vpdvl0v7dubd" path="res://00_PLAYER/Player_boat.tscn" id="1_qltht"]
@@ -19,12 +19,9 @@
 [ext_resource type="Script" path="res://00_SCENE/Active_divingZone.gd" id="7_f3xb7"]
 [ext_resource type="Shader" uid="uid://b8pie7pbqwtks" path="res://05_SHADER_TEST/Full_screen/Main_fullscreen.tres" id="8_oftpq"]
 [ext_resource type="PackedScene" uid="uid://dla1534gcagbl" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Pine/pine_prefabs.tscn" id="10_c6r5x"]
-[ext_resource type="Texture2D" uid="uid://dcw858b7ly30k" path="res://06_UI/Controller/x_pad.png" id="10_ftn2e"]
 [ext_resource type="PackedScene" uid="uid://cjp6vd8eetmyf" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Iceberg/ice_berg_03.tscn" id="10_h0nl5"]
-[ext_resource type="Shader" uid="uid://b4xbrp36syqmj" path="res://06_UI/Controller/Pad_ui_info_sh.tres" id="10_n0t7r"]
 [ext_resource type="PackedScene" uid="uid://cegdqm3et2y35" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Iceberg/ice_berg_02.tscn" id="11_086vv"]
 [ext_resource type="PackedScene" uid="uid://d3h77dy71bcme" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Iceberg/ice_berg_01.tscn" id="12_638yx"]
-[ext_resource type="Texture2D" uid="uid://d1oa7syfbxit1" path="res://13_TOOLS_UI/Clock_montre/Clock_ui_img.png" id="14_8dr3k"]
 [ext_resource type="PackedScene" uid="uid://biiofg53lwx38" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Mountain/Mountain_03.tscn" id="14_fqdgl"]
 [ext_resource type="PackedScene" uid="uid://bjfuwgxyiffs4" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Mountain/Mountain_01.tscn" id="15_bqwbg"]
 [ext_resource type="PackedScene" uid="uid://fcjcvy77lg0o" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Lighthouse/lighthouse_prefabs.tscn" id="16_u78ww"]
@@ -263,57 +260,6 @@ func change_value(value : float):
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_dm76q"]
 viewport_path = NodePath("01_GAME_UI/MAIN_SCENE_UI/Viewports/SKY_Viewport")
-
-[sub_resource type="GDScript" id="GDScript_hpjin"]
-script/source = "extends Node
-@onready var button = $Button
-
-func _ready():
-	_global_datas.in_dialogue_zone.connect(active_buton)
-	_global_datas._open_dialogue.connect(active)
-	_global_datas.hide_open_dialogue.connect(disable)
-	
-	
-func active():
-	active_buton(true)		
-	
-func disable():
-	active_buton(false)	
-			
-func active_buton(condition):
-
-	
-	button.visible = condition
-	_global_datas.Player_InDialogue_zone = condition
-
-
-	
-
-
-"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_oj3lt"]
-shader = ExtResource("10_n0t7r")
-shader_parameter/Color = Color(0.721569, 0.580392, 0.407843, 1)
-
-[sub_resource type="GDScript" id="GDScript_mwlfd"]
-script/source = "extends Node
-@onready var button = $ClockUiImg
-
-func _ready():
-	_global_datas.player_in_diveZone.connect(active_buton)
-
-	
-func active_buton(condition):
-
-	
-	button.visible = condition
-
-
-
-	
-
-"
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ituqr"]
 bounce = 500.0
@@ -754,83 +700,6 @@ grow_vertical = 2
 mouse_filter = 2
 texture = SubResource("ViewportTexture_dm76q")
 expand_mode = 3
-
-[node name="Button_active_Dialogue" type="Node" parent="01_GAME_UI/MAIN_SCENE_UI"]
-script = SubResource("GDScript_hpjin")
-
-[node name="Button" type="Control" parent="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue"]
-visible = false
-layout_mode = 3
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 25.0001
-offset_top = -43.0
-offset_right = 25.0001
-offset_bottom = -43.0
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(0.471, 0.471)
-mouse_filter = 2
-
-[node name="ColorRect2" type="ColorRect" parent="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue/Button"]
-layout_mode = 0
-offset_left = -32.022
-offset_top = -16.0
-offset_right = 117.98
-offset_bottom = 58.505
-rotation = 1.17948
-scale = Vector2(0.577567, 0.231991)
-color = Color(0.952941, 0.815686, 0.690196, 1)
-
-[node name="ColorRect3" type="ColorRect" parent="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue/Button"]
-layout_mode = 0
-offset_left = -10.022
-offset_top = -18.0
-offset_right = 139.98
-offset_bottom = 56.505
-rotation = 1.43593
-scale = Vector2(0.577567, 0.231991)
-color = Color(0.952941, 0.815686, 0.690196, 1)
-
-[node name="ColorRect" type="ColorRect" parent="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue/Button"]
-layout_mode = 0
-offset_left = -128.0
-offset_top = -40.0
-offset_right = 22.0
-offset_bottom = 34.505
-color = Color(0.952941, 0.815686, 0.690196, 1)
-
-[node name="Label" type="Label" parent="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue/Button/ColorRect"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.129412, 0.25098, 0.254902, 1)
-theme_override_font_sizes/font_size = 40
-text = "..."
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="XPad" type="Sprite2D" parent="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dialogue/Button"]
-visible = false
-material = SubResource("ShaderMaterial_oj3lt")
-position = Vector2(54.1213, 11.5974)
-scale = Vector2(0.365326, 0.365326)
-texture = ExtResource("10_ftn2e")
-
-[node name="Button_active_Dive" type="Node" parent="01_GAME_UI/MAIN_SCENE_UI"]
-script = SubResource("GDScript_mwlfd")
-
-[node name="ClockUiImg" type="Sprite2D" parent="01_GAME_UI/MAIN_SCENE_UI/Button_active_Dive"]
-visible = false
-position = Vector2(634, 319)
-scale = Vector2(0.558594, 0.558594)
-texture = ExtResource("14_8dr3k")
 
 [node name="--DECOR--" type="Node3D" parent="."]
 
