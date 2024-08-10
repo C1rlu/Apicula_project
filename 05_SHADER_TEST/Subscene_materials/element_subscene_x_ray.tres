@@ -38,12 +38,12 @@ noise_type = 2
 frequency = 0.3
 fractal_weighted_strength = 1.0
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_xwg5r"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ukugt"]
 bump_strength = 27.2
 noise = SubResource("FastNoiseLite_75nlw")
 
 [sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_1bhus"]
-texture = SubResource("NoiseTexture2D_xwg5r")
+texture = SubResource("NoiseTexture2D_ukugt")
 
 [sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_emt3f"]
 default_input_values = [0, 0.0, 1, 0.075]
@@ -53,66 +53,8 @@ operator = 2
 code = "shader_type spatial;
 render_mode blend_mix, depth_draw_always, cull_disabled, diffuse_lambert, specular_schlick_ggx, shadows_disabled, debug_shadow_splits;
 
-uniform float Speed : hint_range(0, 1) = 0.5;
-uniform sampler2D tex_vtx_8;
 
 
-
-void vertex() {
-// Input:4
-	float n_out4p0 = TIME;
-
-
-// FloatConstant:5
-	float n_out5p0 = 0.500000;
-
-
-// FloatParameter:10
-	float n_out10p0 = Speed;
-
-
-// FloatOp:13
-	float n_out13p0 = n_out5p0 * n_out10p0;
-
-
-// FloatOp:7
-	float n_out7p0 = n_out4p0 * n_out13p0;
-
-
-// UVFunc:6
-	vec2 n_in6p1 = vec2(1.00000, 1.00000);
-	vec2 n_out6p0 = vec2(n_out7p0) * n_in6p1 + UV;
-
-
-// Texture2D:8
-	vec4 n_out8p0 = texture(tex_vtx_8, n_out6p0);
-
-
-// FloatConstant:11
-	float n_out11p0 = 10.000000;
-
-
-// FloatOp:12
-	float n_out12p0 = n_out11p0 * n_out10p0;
-
-
-// FloatOp:9
-	float n_out9p0 = n_out8p0.x * n_out12p0;
-
-
-// Input:2
-	vec3 n_out2p0 = VERTEX;
-
-
-// VectorOp:3
-	vec3 n_out3p0 = vec3(n_out9p0) + n_out2p0;
-
-
-// Output:0
-	VERTEX = n_out3p0;
-
-
-}
 
 void fragment() {
 // ColorConstant:3
@@ -125,6 +67,7 @@ void fragment() {
 
 }
 "
+graph_offset = Vector2(-418.149, -154.816)
 modes/depth_draw = 1
 modes/cull = 2
 flags/shadows_disabled = true
@@ -154,7 +97,7 @@ nodes/vertex/12/node = SubResource("VisualShaderNodeFloatOp_3ndta")
 nodes/vertex/12/position = Vector2(-60.4978, 130.82)
 nodes/vertex/13/node = SubResource("VisualShaderNodeFloatOp_5hpn1")
 nodes/vertex/13/position = Vector2(-1000.5, 430.82)
-nodes/vertex/connections = PackedInt32Array(2, 0, 3, 1, 4, 0, 7, 0, 7, 0, 6, 2, 9, 0, 3, 0, 11, 0, 12, 0, 10, 0, 12, 1, 12, 0, 9, 1, 5, 0, 13, 0, 10, 0, 13, 1, 13, 0, 7, 1, 6, 0, 8, 0, 8, 0, 9, 0, 3, 0, 0, 0)
+nodes/vertex/connections = PackedInt32Array(2, 0, 3, 1, 4, 0, 7, 0, 7, 0, 6, 2, 9, 0, 3, 0, 11, 0, 12, 0, 10, 0, 12, 1, 12, 0, 9, 1, 5, 0, 13, 0, 10, 0, 13, 1, 13, 0, 7, 1, 6, 0, 8, 0, 8, 0, 9, 0)
 nodes/fragment/3/node = SubResource("VisualShaderNodeColorConstant_tf6yy")
 nodes/fragment/3/position = Vector2(-320, -80)
 nodes/fragment/connections = PackedInt32Array(3, 0, 0, 0)
@@ -164,4 +107,3 @@ nodes/light/0/position = Vector2(1060, 580)
 resource_local_to_scene = true
 render_priority = 0
 shader = SubResource("VisualShader_g43lm")
-shader_parameter/Speed = 0.02

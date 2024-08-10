@@ -258,7 +258,7 @@ ring_segments = 8
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_j5ih5"]
 render_priority = 1
 shader = ExtResource("12_cij64")
-shader_parameter/ColorParameter2 = Color(0.721569, 0.580392, 0.407843, 1)
+shader_parameter/ColorParameter2 = Color(0.180392, 0.462745, 0.337255, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_3nn6t"]
 
@@ -495,7 +495,7 @@ nodes/light/0/position = Vector2(1060, 580)
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4j2xv"]
 render_priority = 0
 shader = SubResource("VisualShader_75hiu")
-shader_parameter/ColorParameter = Color(0.831373, 0.647059, 0.423529, 1)
+shader_parameter/ColorParameter = Color(0.180392, 0.462745, 0.337255, 1)
 shader_parameter/R = 0.11
 shader_parameter/Size = 0.7
 shader_parameter/flash_opacity = 0.5
@@ -911,10 +911,11 @@ particle_flag_disable_z = true
 emission_shape = 2
 emission_sphere_radius = 2.5
 gravity = Vector3(0, 0, 0)
-tangential_accel_min = 2.0
-tangential_accel_max = 2.0
+tangential_accel_min = 2.5
+tangential_accel_max = 2.5
 scale_min = 0.05
 scale_max = 0.2
+turbulence_noise_scale = 1.585
 
 [sub_resource type="SphereMesh" id="SphereMesh_oinhl"]
 radius = 0.1
@@ -1001,6 +1002,9 @@ caller_tool = ExtResource("13_p6l7e")
 [node name="Add_Vortex" type="Node" parent="."]
 script = ExtResource("15_lot3r")
 vortex_tool = ExtResource("16_ondnv")
+
+[node name="Timer_check" type="Timer" parent="Add_Vortex"]
+wait_time = 0.1
 
 [node name="Callback_spanwer" type="Node" parent="."]
 script = ExtResource("15_035md")
@@ -1266,7 +1270,7 @@ omni_range = 2.0
 [node name="Light_xray" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.348655, 0.114098)
 layers = 4096
-omni_range = 2.62246
+omni_range = 1.77549
 
 [node name="VFX_MAGNET" type="GPUParticles3D" parent="."]
 transform = Transform3D(1.429, 0, 0, 0, 1.429, 0, 0, 0, 1.429, 0.0391031, 0.129062, 0.175887)
@@ -1305,6 +1309,7 @@ draw_pass_1 = SubResource("SphereMesh_oinhl")
 [connection signal="timeout" from="Flash_inputs/Loop_lighter" to="Flash_inputs" method="_on_loop_lighter_timeout"]
 [connection signal="timeout" from="Scanne_element/time_checker" to="Scanne_element" method="_on_time_checker_timeout"]
 [connection signal="timeout" from="Scanne_element/Active_scanner_visual_pulse/Timer" to="Scanne_element/Active_scanner_visual_pulse" method="_on_timer_timeout"]
+[connection signal="timeout" from="Add_Vortex/Timer_check" to="Add_Vortex" method="_on_timer_check_timeout"]
 [connection signal="area_shape_entered" from="ZoneCollide" to="Check_Dialogue_Zone" method="_area_entered"]
 [connection signal="area_shape_exited" from="ZoneCollide" to="Check_Dialogue_Zone" method="_area_exited"]
 [connection signal="area_shape_entered" from="Magnet_zone" to="Magnet_effect" method="_magnet_enter"]
