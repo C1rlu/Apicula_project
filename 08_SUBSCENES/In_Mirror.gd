@@ -1,10 +1,10 @@
 extends Node
 @onready var root = $".."
 
-@onready var all_render = $"../All_render"
-@onready var col = $"../All_render/All_render/CollisionShape3D"
-@onready var all_render_x_ray = $"../All_render_X_ray"
-@onready var photo_data = $"../Photo_data"
+
+@export  var all_render : Node3D
+@export var col : CollisionShape3D
+@export var all_render_x_ray : Node3D
 @export var State_selected : game_state.visible_state
 
 func _ready():
