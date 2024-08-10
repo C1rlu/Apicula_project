@@ -1,6 +1,7 @@
 extends Node
 
 @export var caller_tool : tool_data
+@export var tool_clock: tool_data
 const LOADER_PREFABSCN = preload("res://08_SUBSCENES/Tools/Loader/Loader_prefabscn.tscn")
 
 func _ready():
@@ -22,3 +23,20 @@ func set_loader():
 func disable():
 	caller_tool.selector_button.visible = false
 	_global_datas.update_selector.emit()
+
+
+
+func _on_zone_collide_area_entered(area):
+	
+	if area:
+		var _loader = area.get_node_or_null("Loading_oxygene")
+		if _loader:
+			tool_clock.tool_active_signal.emit(true)	
+
+
+func _on_zone_collide_area_exited(area):
+	
+	if area:
+		var _loader = area.get_node_or_null("Loading_oxygene")
+		if _loader:
+			tool_clock.tool_active_signal.emit(false)	

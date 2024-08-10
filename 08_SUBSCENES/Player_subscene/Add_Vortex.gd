@@ -4,6 +4,7 @@ extends Node
 @export var vortex_tool : tool_data
 const TELEPORTER_PREFAB = preload("res://08_SUBSCENES/Oddity/Teleporter/Teleporter_prefab.tscn")
 @onready var vortex_creation_part : GPUParticles3D = $"../Vortex_creation_part"
+@onready var vortex_creation_msh = $"../Vortex_creation_msh"
 
 var t
 @onready var area = $"../ZoneCollide"
@@ -17,7 +18,7 @@ func add_vortex(condition : bool):
 	
 	if condition:
 		vortex_creation_part.emitting = true
-		
+		vortex_creation_msh.visible = true
 		
 		
 		if t:
@@ -33,7 +34,7 @@ func add_vortex(condition : bool):
 		vortex_creation_part.emitting = false
 		
 		timer_check.stop()	
-		
+		vortex_creation_msh.visible = false
 func set_vortex():
 	
 	if check_zone(): #check is a zone is overlapping return true
@@ -46,6 +47,8 @@ func set_vortex():
 	var player_position = _global_datas.subbscene_playerPosition
 	teleporter.global_position = player_position
 	timer_check.stop()	
+	vortex_creation_msh.visible = false
+	
 	disable()
 	
 func disable():
@@ -55,7 +58,7 @@ func disable():
 	
 func _value(value : float):
 	vortex_creation_part.amount_ratio = value	
-
+	vortex_creation_msh.scale = Vector3(value,value,value)
 
 func check_zone() -> bool :
 	
