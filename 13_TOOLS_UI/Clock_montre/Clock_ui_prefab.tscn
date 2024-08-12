@@ -45,26 +45,27 @@ func reload_timer(condition):
 		_start_clock()	
 			
 		
-#func _input(event):
-	#
-	#
-	#if !_global_datas.Player_InSubScene:
-		#return
-	#
-	#if event.is_action_pressed(\"Open_Inventory\"):	
-		#show()	
-	#if event.is_action_released(\"Open_Inventory\"):	
-		#hide()	
-		#
-		#
+func _input(event):
+	
+	
+	if !_global_datas.Player_InSubScene:
+		return
+	
+	if event.is_action_pressed(\"Open_Inventory\"):	
+		show()	
+	if event.is_action_released(\"Open_Inventory\"):	
+		hide()	
+		
+		
 		
 func show():
-	#render.visible = true
+
 	fade_dither.fade_in()
+	_global_datas.open_tool_selector.emit(true)
 func hide():
-	#render.visible = false		
+
 	fade_dither.fade_out()	
-	
+	_global_datas.open_tool_selector.emit(false)
 func load_clock(condition : bool):
 	
 	
@@ -86,7 +87,7 @@ func load_clock(condition : bool):
 func go_subscene():
 	_global_datas._active_progress_subscene.emit(false)
 	_global_datas._go_Subscene.emit()
-	show()		
+	hide()	
 func _start_clock():
 	
 	var tree = get_tree()
@@ -116,8 +117,8 @@ func pause():
 	
 
 func done():
-		
-	_stop()	
+	pass	
+	#_stop()	
 
 	#_global_datas._backFrom_subscene.emit()
 	#_global_datas._go_Mainscene.emit()
@@ -279,7 +280,11 @@ viewport_path = NodePath("SubViewport")
 
 [node name="Clock" type="Control"]
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 
 [node name="Time" type="Node" parent="."]
@@ -302,10 +307,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -64.0
-offset_top = -71.0
-offset_right = 64.0
-offset_bottom = 57.0
+offset_left = -128.0
+offset_top = -126.0
+offset_right = 128.0
+offset_bottom = 130.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2

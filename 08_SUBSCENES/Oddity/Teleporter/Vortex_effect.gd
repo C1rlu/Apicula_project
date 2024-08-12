@@ -17,7 +17,8 @@ func scale_effect():
 		t.kill()
 	t = create_tween()	
 	t.tween_method(_value,1.0,0.5,0.5).set_trans(Tween.TRANS_SINE)
-
+	
+	
 func _value(value : float):
 
 	vortex_part.amount_ratio = value
@@ -26,4 +27,8 @@ func _value(value : float):
 
 func _on_teleporter_teleport_effect():
 	explose_part.emitting = true
+	scale_effect()
+
+
+func _player_in():
 	scale_effect()

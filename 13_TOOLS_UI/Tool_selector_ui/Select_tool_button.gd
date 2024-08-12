@@ -1,7 +1,5 @@
 extends Node
 
-@export var jet_tool : tool_data
-
 @onready var _show_ui = $"../Center"
 @onready var h_box_container = $"../Center/HBoxContainer"
 
@@ -17,7 +15,6 @@ var lock_selector : bool = false
 func _ready():
 	_global_datas.open_tool_selector.connect(show_ui)
 	_global_datas._backFrom_subscene.connect(hide)
-	jet_tool.tool_active_signal.connect(_lock_selector)
 	_global_datas.update_selector.connect(update_button_list_after_removed)
 	
 	
@@ -48,6 +45,8 @@ func hide():
 	show_ui(false)	
 	is_active = false
 	lock_selector = false
+	
+	
 func show_ui(condition : bool):
 	
 	update_button_list()
@@ -58,8 +57,7 @@ func show_ui(condition : bool):
 	_fade.emit(condition)
 
 func select_next_index():
-
-		
+	
 	timer.start()
 	if !is_active:
 		_global_datas.open_tool_selector.emit(true)

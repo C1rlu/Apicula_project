@@ -911,15 +911,17 @@ particle_flag_disable_z = true
 emission_shape = 2
 emission_sphere_radius = 2.5
 gravity = Vector3(0, 0, 0)
-tangential_accel_min = 2.5
-tangential_accel_max = 2.5
+tangential_accel_min = 2.0
+tangential_accel_max = 2.0
 scale_min = 0.05
 scale_max = 0.2
 turbulence_noise_scale = 1.585
 
 [sub_resource type="SphereMesh" id="SphereMesh_oinhl"]
-radius = 0.1
-height = 0.2
+radius = 0.05
+height = 0.1
+radial_segments = 6
+rings = 6
 
 [sub_resource type="SphereMesh" id="SphereMesh_dmxj8"]
 radial_segments = 32
@@ -1300,6 +1302,9 @@ manget_tool = ExtResource("12_nmehd")
 magnet_fx = NodePath("../VFX_MAGNET")
 tool_clock = ExtResource("10_fdj0j")
 
+[node name="Timer" type="Timer" parent="Magnet_effect"]
+wait_time = 2.0
+
 [node name="Subjet_effect" type="Node" parent="."]
 script = ExtResource("10_jdgje")
 subjet_effect = ExtResource("11_rhn2f")
@@ -1660,6 +1665,7 @@ surface_material_override/0 = SubResource("ShaderMaterial_m0v3u")
 [connection signal="timeout" from="Flash_inputs/Loop_lighter" to="Flash_inputs" method="_on_loop_lighter_timeout"]
 [connection signal="timeout" from="Scanne_element/time_checker" to="Scanne_element" method="_on_time_checker_timeout"]
 [connection signal="timeout" from="Scanne_element/Active_scanner_visual_pulse/Timer" to="Scanne_element/Active_scanner_visual_pulse" method="_on_timer_timeout"]
+[connection signal="timeout" from="Magnet_effect/Timer" to="Magnet_effect" method="_on_timer_timeout"]
 [connection signal="timeout" from="Add_Vortex/Timer_check" to="Add_Vortex" method="_on_timer_check_timeout"]
 [connection signal="area_entered" from="ZoneCollide" to="Loader_Call_and_reload" method="_on_zone_collide_area_entered"]
 [connection signal="area_exited" from="ZoneCollide" to="Loader_Call_and_reload" method="_on_zone_collide_area_exited"]

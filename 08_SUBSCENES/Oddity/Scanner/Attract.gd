@@ -13,3 +13,7 @@ func attract_me(delta,position):
 	rg.apply_central_force(direction * strenght * delta)
 	
 
+func Push(strengh):
+		
+	var target = (rg.global_position - _global_datas.subbscene_playerPosition).normalized()
+	rg.apply_impulse(target  * strengh)
