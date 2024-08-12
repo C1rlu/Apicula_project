@@ -1,15 +1,152 @@
-[gd_scene load_steps=14 format=3 uid="uid://d0skcajnuhv37"]
+[gd_scene load_steps=28 format=3 uid="uid://d0skcajnuhv37"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/Tool_selector_ui/Select_tool_button.gd" id="1_npeg6"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/Tool_selector_ui/Fade_selector.gd" id="2_5eyta"]
-[ext_resource type="Resource" uid="uid://df0swhar7lchv" path="res://08_SUBSCENES/Tools/Jet_tool.tres" id="2_hpxlb"]
+[ext_resource type="PackedScene" uid="uid://clc3sbquuu1us" path="res://13_TOOLS_UI/Clock_montre/Clock_ui_prefab.tscn" id="3_is6m6"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/Tool_selector_ui/Button_tool_select.gd" id="3_x5nql"]
 [ext_resource type="Resource" uid="uid://vv3dws7dmhtd" path="res://08_SUBSCENES/Tools/Scanner.tres" id="4_kpv76"]
 [ext_resource type="Resource" uid="uid://380xcgsxw62f" path="res://08_SUBSCENES/Tools/magnet_tool.tres" id="5_je66b"]
+[ext_resource type="Texture2D" uid="uid://c3vxocj0g37fm" path="res://13_TOOLS_UI/Tool_selector_ui/img/magnet_tool_img.png" id="6_00bfl"]
 [ext_resource type="Resource" uid="uid://dw8noyr5roa8f" path="res://08_SUBSCENES/Tools/Disque_tool.tres" id="6_pkjtd"]
 [ext_resource type="Resource" uid="uid://cfgfc4mex2tlo" path="res://08_SUBSCENES/Tools/Call_loader_tool.tres" id="6_yvre6"]
 [ext_resource type="Resource" uid="uid://bkjhpngeq4pbp" path="res://08_SUBSCENES/Tools/Vortex_tool.tres" id="7_ruh6l"]
 [ext_resource type="Resource" uid="uid://oyqj56gdwuxl" path="res://08_SUBSCENES/Tools/BackPath_tool.tres" id="8_csu6w"]
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_ys6lu"]
+source = 5
+
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_175m0"]
+function = 1
+
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_kd30o"]
+default_input_values = [1, Vector2(1, 0.5), 2, Vector2(0, 0)]
+function = 1
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_qyedu"]
+input_name = "time"
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_j3xoq"]
+default_input_values = [0, 0.0, 1, 0.001]
+operator = 2
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_1smnx"]
+default_input_values = [0, 0.0, 1, 0.1]
+operator = 2
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_0f45h"]
+
+[sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_feygw"]
+parameter_name = "BlueNoise"
+qualifier = 1
+texture_repeat = 1
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_kgj0g"]
+parameter_name = "Dither_blue_noise_size"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_kuvd1"]
+parameter_name = "Opacity"
+hint = 1
+default_value_enabled = true
+default_value = 0.5
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_eq2ot"]
+input_name = "color"
+
+[sub_resource type="VisualShader" id="VisualShader_hgt7l"]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+global uniform float Dither_blue_noise_size;
+global uniform sampler2D BlueNoise : repeat_enable;
+uniform float Opacity : hint_range(0, 1) = 0.5;
+
+
+
+void fragment() {
+// Input:9
+	vec4 n_out9p0 = COLOR;
+
+
+// UVFunc:16
+	vec2 n_in16p1 = vec2(1.00000, 0.50000);
+	vec2 n_in16p2 = vec2(0.00000, 0.00000);
+	vec2 n_out16p0 = (UV - n_in16p2) * n_in16p1 + n_in16p2;
+
+
+// FloatParameter:30
+	float n_out30p0 = Dither_blue_noise_size;
+
+
+// Input:17
+	float n_out17p0 = TIME;
+
+
+// FloatOp:18
+	float n_in18p1 = 0.00100;
+	float n_out18p0 = n_out17p0 * n_in18p1;
+
+
+// FloatOp:19
+	float n_in19p1 = 0.10000;
+	float n_out19p0 = n_out18p0 * n_in19p1;
+
+
+// UVFunc:15
+	vec2 n_out15p0 = (n_out16p0 - vec2(n_out19p0)) * vec2(n_out30p0) + vec2(n_out19p0);
+
+
+	vec4 n_out13p0;
+// Texture2D:13
+	n_out13p0 = texture(BlueNoise, n_out15p0);
+
+
+// FloatParameter:5
+	float n_out5p0 = Opacity;
+
+
+// Step:2
+	float n_out2p0 = step(n_out13p0.x, n_out5p0);
+
+
+// Output:0
+	COLOR.rgb = vec3(n_out9p0.xyz);
+	COLOR.a = n_out2p0;
+
+
+}
+"
+graph_offset = Vector2(-652.644, -327.21)
+mode = 1
+flags/light_only = false
+nodes/fragment/0/position = Vector2(680, 140)
+nodes/fragment/2/node = SubResource("VisualShaderNodeStep_0f45h")
+nodes/fragment/2/position = Vector2(260, 200)
+nodes/fragment/5/node = SubResource("VisualShaderNodeFloatParameter_kuvd1")
+nodes/fragment/5/position = Vector2(-200, 380)
+nodes/fragment/9/node = SubResource("VisualShaderNodeInput_eq2ot")
+nodes/fragment/9/position = Vector2(740, -640)
+nodes/fragment/13/node = SubResource("VisualShaderNodeTexture_ys6lu")
+nodes/fragment/13/position = Vector2(-820, -580)
+nodes/fragment/15/node = SubResource("VisualShaderNodeUVFunc_175m0")
+nodes/fragment/15/position = Vector2(-1420, -460)
+nodes/fragment/16/node = SubResource("VisualShaderNodeUVFunc_kd30o")
+nodes/fragment/16/position = Vector2(-1740, -580)
+nodes/fragment/17/node = SubResource("VisualShaderNodeInput_qyedu")
+nodes/fragment/17/position = Vector2(-2020, -200)
+nodes/fragment/18/node = SubResource("VisualShaderNodeFloatOp_j3xoq")
+nodes/fragment/18/position = Vector2(-1700, -220)
+nodes/fragment/19/node = SubResource("VisualShaderNodeFloatOp_1smnx")
+nodes/fragment/19/position = Vector2(-1640, -20)
+nodes/fragment/21/node = SubResource("VisualShaderNodeTexture2DParameter_feygw")
+nodes/fragment/21/position = Vector2(-1180, -300)
+nodes/fragment/30/node = SubResource("VisualShaderNodeFloatParameter_kgj0g")
+nodes/fragment/30/position = Vector2(-2140, -440)
+nodes/fragment/connections = PackedInt32Array(9, 0, 0, 0, 17, 0, 18, 0, 18, 0, 19, 0, 16, 0, 15, 0, 19, 0, 15, 2, 15, 0, 13, 0, 21, 0, 13, 2, 13, 0, 2, 0, 5, 0, 2, 1, 30, 0, 15, 1, 2, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cvehy"]
+shader = SubResource("VisualShader_hgt7l")
+shader_parameter/Opacity = 0.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mghkj"]
 bg_color = Color(0.235294, 0.286275, 0.25098, 0)
@@ -20,12 +157,11 @@ bg_color = Color(0.458824, 0.443137, 0.301961, 1)
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6tshm"]
 
 [node name="Selector_tool_ui_Linear" type="Control"]
+process_mode = 3
 layout_mode = 3
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -40,6 +176,48 @@ one_shot = true
 
 [node name="Fade_selector" type="Node" parent="."]
 script = ExtResource("2_5eyta")
+
+[node name="BACKDROP_FOCUS" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_cvehy")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.0705882, 0.12549, 0.129412, 1)
+
+[node name="Clock" parent="." instance=ExtResource("3_is6m6")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_top = -7.0
+offset_bottom = -7.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+visible = false
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -201.0
+offset_top = 135.0
+offset_right = 199.0
+offset_bottom = 175.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 20
+alignment = 1
 
 [node name="Center" type="Control" parent="."]
 layout_mode = 1
@@ -56,173 +234,204 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Center"]
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -201.0
-offset_top = -28.0
-offset_right = 199.0
-offset_bottom = 12.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-theme_override_constants/separation = 20
-alignment = 1
-
-[node name="Scanner" type="Button" parent="Center/HBoxContainer"]
-custom_minimum_size = Vector2(40, 40)
+[node name="Scanner" type="Button" parent="Center"]
+process_mode = 3
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
+offset_left = -12.0
+offset_top = -172.0
+offset_right = 52.0
+offset_bottom = -108.0
 focus_mode = 1
 mouse_filter = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_mghkj")
 theme_override_styles/focus = SubResource("StyleBoxFlat_ch3xb")
-disabled = true
-button_mask = 0
 script = ExtResource("3_x5nql")
 tool = ExtResource("4_kpv76")
 
-[node name="img" type="TextureRect" parent="Center/HBoxContainer/Scanner"]
+[node name="img" type="TextureRect" parent="Center/Scanner"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+texture = ExtResource("6_00bfl")
 expand_mode = 2
 
-[node name="Magnet" type="Button" parent="Center/HBoxContainer"]
-custom_minimum_size = Vector2(40, 40)
+[node name="Magnet" type="Button" parent="Center"]
+process_mode = 3
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
+offset_left = 92.0
+offset_top = -121.0
+offset_right = 156.0
+offset_bottom = -57.0
 focus_mode = 1
 mouse_filter = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_6tshm")
 theme_override_styles/focus = SubResource("StyleBoxFlat_ch3xb")
-disabled = true
-button_mask = 0
 script = ExtResource("3_x5nql")
 tool = ExtResource("5_je66b")
 
-[node name="img" type="TextureRect" parent="Center/HBoxContainer/Magnet"]
+[node name="img" type="TextureRect" parent="Center/Magnet"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+texture = ExtResource("6_00bfl")
 expand_mode = 2
 
-[node name="CallLoader" type="Button" parent="Center/HBoxContainer"]
-visible = false
-custom_minimum_size = Vector2(40, 40)
+[node name="CallLoader" type="Button" parent="Center"]
+process_mode = 3
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
+offset_left = 136.0
+offset_top = -13.0
+offset_right = 200.0
+offset_bottom = 51.0
 focus_mode = 1
 mouse_filter = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_6tshm")
 theme_override_styles/focus = SubResource("StyleBoxFlat_ch3xb")
-disabled = true
-button_mask = 0
 script = ExtResource("3_x5nql")
 tool = ExtResource("6_yvre6")
 
-[node name="img" type="TextureRect" parent="Center/HBoxContainer/CallLoader"]
+[node name="img" type="TextureRect" parent="Center/CallLoader"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+texture = ExtResource("6_00bfl")
 expand_mode = 2
 
-[node name="Vortex" type="Button" parent="Center/HBoxContainer"]
-custom_minimum_size = Vector2(40, 40)
+[node name="Vortex" type="Button" parent="Center"]
+process_mode = 3
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
+offset_left = 103.0
+offset_top = 111.0
+offset_right = 167.0
+offset_bottom = 175.0
 focus_mode = 1
 mouse_filter = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_6tshm")
 theme_override_styles/focus = SubResource("StyleBoxFlat_ch3xb")
-disabled = true
-button_mask = 0
 script = ExtResource("3_x5nql")
 tool = ExtResource("7_ruh6l")
 
-[node name="img" type="TextureRect" parent="Center/HBoxContainer/Vortex"]
+[node name="img" type="TextureRect" parent="Center/Vortex"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+texture = ExtResource("6_00bfl")
 expand_mode = 2
 
-[node name="Button6" type="Button" parent="Center/HBoxContainer"]
-visible = false
-custom_minimum_size = Vector2(40, 40)
+[node name="Button6" type="Button" parent="Center"]
+process_mode = 3
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
+offset_left = -13.0
+offset_top = 145.0
+offset_right = 51.0
+offset_bottom = 209.0
 focus_mode = 1
 mouse_filter = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_6tshm")
 theme_override_styles/focus = SubResource("StyleBoxFlat_ch3xb")
-disabled = true
-button_mask = 0
 script = ExtResource("3_x5nql")
 tool = ExtResource("8_csu6w")
 
-[node name="img" type="TextureRect" parent="Center/HBoxContainer/Button6"]
+[node name="img" type="TextureRect" parent="Center/Button6"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+texture = ExtResource("6_00bfl")
 expand_mode = 2
 
-[node name="Button5" type="Button" parent="Center/HBoxContainer"]
-visible = false
-custom_minimum_size = Vector2(40, 40)
+[node name="Button5" type="Button" parent="Center"]
+process_mode = 3
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
+offset_left = -126.0
+offset_top = 111.0
+offset_right = -62.0
+offset_bottom = 175.0
 focus_mode = 1
 mouse_filter = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_6tshm")
 theme_override_styles/focus = SubResource("StyleBoxFlat_ch3xb")
-disabled = true
-button_mask = 0
-script = ExtResource("3_x5nql")
-tool = ExtResource("2_hpxlb")
-
-[node name="img" type="TextureRect" parent="Center/HBoxContainer/Button5"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-expand_mode = 2
-
-[node name="Button3" type="Button" parent="Center/HBoxContainer"]
-visible = false
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-focus_mode = 1
-mouse_filter = 2
-theme_override_styles/normal = SubResource("StyleBoxEmpty_6tshm")
-theme_override_styles/focus = SubResource("StyleBoxFlat_ch3xb")
-disabled = true
-button_mask = 0
 script = ExtResource("3_x5nql")
 tool = ExtResource("6_pkjtd")
 
-[node name="img" type="TextureRect" parent="Center/HBoxContainer/Button3"]
+[node name="img" type="TextureRect" parent="Center/Button5"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+texture = ExtResource("6_00bfl")
+expand_mode = 2
+
+[node name="Button3" type="Button" parent="Center"]
+process_mode = 3
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+offset_left = -172.0
+offset_top = -13.0
+offset_right = -108.0
+offset_bottom = 51.0
+focus_mode = 1
+mouse_filter = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_6tshm")
+theme_override_styles/focus = SubResource("StyleBoxFlat_ch3xb")
+script = ExtResource("3_x5nql")
+tool = ExtResource("6_pkjtd")
+
+[node name="img" type="TextureRect" parent="Center/Button3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_00bfl")
+expand_mode = 2
+
+[node name="Button4" type="Button" parent="Center"]
+process_mode = 3
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+offset_left = -128.0
+offset_top = -122.0
+offset_right = -64.0
+offset_bottom = -58.0
+focus_mode = 1
+mouse_filter = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_6tshm")
+theme_override_styles/focus = SubResource("StyleBoxFlat_ch3xb")
+script = ExtResource("3_x5nql")
+tool = ExtResource("6_pkjtd")
+
+[node name="img" type="TextureRect" parent="Center/Button4"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_00bfl")
 expand_mode = 2
 
 [connection signal="_fade" from="Select_tool_button" to="Fade_selector" method="_fade"]

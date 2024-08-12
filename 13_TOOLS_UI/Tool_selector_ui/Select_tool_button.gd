@@ -1,7 +1,7 @@
 extends Node
 
 @onready var _show_ui = $"../Center"
-@onready var h_box_container = $"../Center/HBoxContainer"
+@onready var h_box_container = $"../Center"
 
 var button_list : Array[Button]
 var select_index : int = 0
@@ -16,12 +16,11 @@ func _ready():
 	_global_datas.open_tool_selector.connect(show_ui)
 	_global_datas._backFrom_subscene.connect(hide)
 	_global_datas.update_selector.connect(update_button_list_after_removed)
-	
+	_global_datas.open_tool_selector.connect(_lock_selector)
 	
 func _lock_selector(condition : bool):
-	
-	if condition:
-		lock_selector = true	
+
+	lock_selector = condition
 				
 func _input(event):
 	
@@ -32,15 +31,17 @@ func _input(event):
 		return
 		
 		
-	if lock_selector:
+	if !lock_selector:
 		return
 		
-	if event.is_action_pressed("Select_next_orbre"):	
+	if event.is_action_pressed("move_right"):	
 		select_next_index()
 		
-	if event.is_action_pressed("Select_previous_orbre"):	
+	if event.is_action_pressed("move_left"):	
 		select_previous_index()	
 		
+
+			
 func hide():
 	show_ui(false)	
 	is_active = false
@@ -53,18 +54,19 @@ func show_ui(condition : bool):
 	
 	if condition:
 		_show_ui.visible = true
-	
+		button_list[select_index].grab_focus()
+		get_tree().paused = true
+	else:
+		get_tree().paused = false
 	_fade.emit(condition)
-
+	
 func select_next_index():
 	
-	timer.start()
-	if !is_active:
-		_global_datas.open_tool_selector.emit(true)
-		
-		button_list[select_index].grab_focus()
-		is_active = true
-		return
+	#timer.start()
+	#if !is_active:
+		#button_list[select_index].grab_focus()
+		#is_active = true
+		#return
 	
 	select_index += 1
 	
@@ -74,18 +76,18 @@ func select_next_index():
 
 	var selected_button = button_list[select_index]
 	selected_button.grab_focus()
-	selected_button.button_down.emit()
+
 	
 func select_previous_index():
 	
-	timer.start()
+	#timer.start()
 
 	
-	if !is_active:
-		_global_datas.open_tool_selector.emit(true)
-		button_list[select_index].grab_focus()
-		is_active = true
-		return
+	#if !is_active:
+		#_global_datas.open_tool_selector.emit(true)
+		#button_list[select_index].grab_focus()
+		#is_active = true
+		#return
 	
 	select_index -= 1
 	
@@ -95,7 +97,7 @@ func select_previous_index():
 		
 	var selected_button = button_list[select_index]
 	selected_button.grab_focus()
-	selected_button.button_down.emit()
+
 
 func update_button_list():
 

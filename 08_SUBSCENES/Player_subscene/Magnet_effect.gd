@@ -3,8 +3,6 @@ extends Node
 
 @export var manget_tool : tool_data
 @export var magnet_fx : GPUParticles3D
-@export var tool_clock: tool_data
-
 @onready var root = $".."
 var magneting : bool = false
 var list_of_magnetable : Array[Node]
@@ -20,10 +18,6 @@ func _active(condition : bool):
 	magnet_fx.emitting = condition
 	magneting = condition
 	
-	#if condition:
-		#timer.start()
-	#else:
-		#timer.stop()
 		
 func _process(delta):
 	

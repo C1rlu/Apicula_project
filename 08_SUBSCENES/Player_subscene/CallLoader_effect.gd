@@ -22,7 +22,7 @@ func set_loader():
 
 func disable():
 	caller_tool.selector_button.visible = false
-	_global_datas.update_selector.emit()
+	#_global_datas.update_selector.emit()
 
 
 
@@ -36,6 +36,7 @@ func _on_zone_collide_area_entered(area):
 
 func _on_zone_collide_area_exited(area):
 	
+
 	if area:
 		var _loader = area.get_node_or_null("Loading_oxygene")
 		if _loader:

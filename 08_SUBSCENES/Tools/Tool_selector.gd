@@ -26,3 +26,6 @@ func _input(event):
 	if event.is_action_pressed("open_tool_selector"):
 		_global_datas.open_tool_selector.emit(true)
 	
+	if event.is_action_released("open_tool_selector"):
+		_global_datas.open_tool_selector.emit(false)
+	
