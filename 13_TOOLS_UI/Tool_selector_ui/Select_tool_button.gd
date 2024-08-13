@@ -17,7 +17,6 @@ func _ready():
 	_global_datas.open_tool_selector.connect(_lock_selector)
 	
 func _lock_selector(condition : bool):
-
 	lock_selector = condition
 				
 #func _input(event):

@@ -71,7 +71,6 @@ uniform vec4 Main_color : source_color;
 uniform sampler2D Gradiant;
 global uniform float Dither_size;
 uniform vec4 Main_color_02 : source_color;
-global uniform bool isGray;
 
 
 
@@ -126,29 +125,13 @@ void fragment() {
 	vec3 n_out14p0 = mix(vec3(n_out17p0.xyz), vec3(n_out12p0), vec3(n_out18p0.xyz));
 
 
-	float n_out20p0;
-// Expression:20
-	n_out20p0 = 0.0;
-	{
-		float luminance = 0.299 * n_out14p0.x + 0.587 * n_out14p0.y + 0.114 * n_out14p0.z;
-		n_out20p0 = luminance;
-	}
-
-
-// BooleanParameter:22
-	bool n_out22p0 = isGray;
-
-
-// Mix:21
-	vec3 n_out21p0 = mix(n_out14p0, vec3(n_out20p0), vec3(n_out22p0 ? 1.0 : 0.0));
-
-
 // Output:0
-	ALBEDO = n_out21p0;
+	ALBEDO = n_out14p0;
 
 
 }
 "
+graph_offset = Vector2(-340.177, -156.285)
 flags/unshaded = true
 nodes/fragment/0/position = Vector2(680, 220)
 nodes/fragment/8/node = SubResource("VisualShaderNodeTexture_msk2a")
@@ -195,4 +178,4 @@ nodes/fragment/21/node = SubResource("VisualShaderNodeMix_pv8f1")
 nodes/fragment/21/position = Vector2(440, -60)
 nodes/fragment/22/node = SubResource("VisualShaderNodeBooleanParameter_44gfw")
 nodes/fragment/22/position = Vector2(-140, -40)
-nodes/fragment/connections = PackedInt32Array(10, 0, 11, 0, 11, 0, 12, 1, 16, 0, 8, 2, 12, 0, 14, 1, 17, 0, 14, 0, 13, 0, 8, 0, 8, 0, 12, 0, 18, 0, 14, 2, 19, 0, 11, 1, 20, 0, 21, 1, 22, 0, 21, 2, 21, 0, 0, 0, 14, 0, 20, 0, 14, 0, 21, 0)
+nodes/fragment/connections = PackedInt32Array(10, 0, 11, 0, 11, 0, 12, 1, 16, 0, 8, 2, 12, 0, 14, 1, 17, 0, 14, 0, 13, 0, 8, 0, 8, 0, 12, 0, 18, 0, 14, 2, 19, 0, 11, 1, 20, 0, 21, 1, 22, 0, 21, 2, 14, 0, 20, 0, 14, 0, 21, 0, 14, 0, 0, 0)

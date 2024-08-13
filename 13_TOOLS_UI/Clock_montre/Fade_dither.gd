@@ -1,9 +1,6 @@
 extends Node
 
-
 @export var tool_clock : tool_data
-
-
 @export var texture_img : TextureRect
 @export var fade_timing_in : float = 0.5
 @export var fade_timing_out : float = 0.5
@@ -16,8 +13,8 @@ var actual_value : float
 func _ready():
 	material.set_shader_parameter("Opacity",0.0)
 	_global_datas._go_Subscene.connect(fade_out)
-	#tool_clock.tool_active_signal.connect(tool_active)
-	
+	_global_datas.open_tool_selector.connect(tool_active)
+	tool_clock.tool_active_signal.connect(tool_active)
 	
 
 func tool_active(condition : bool):

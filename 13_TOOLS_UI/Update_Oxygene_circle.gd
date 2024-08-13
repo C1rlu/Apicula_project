@@ -6,8 +6,8 @@ extends Node
 func _ready():
 	_global_datas._go_Subscene.connect(show)
 	_global_datas._backFrom_subscene.connect(hide)
-	
-	
+
+
 func show():
 	oxygene_circle.visible = true
 
@@ -20,8 +20,7 @@ func _process(delta):
 		return
 		
 	var angle = _global_datas.clock_timer
-	#print(angle)
-	if angle >= 270 and angle <= 360:
-		var value = lerp(0.0, 1.0, (angle - 270) / 270)	
-		oxygene_circle_mat.set_shader_parameter("Opacity",value)
-	
+
+	var value = lerp(0.0, 1.0, (angle / 360))	
+	oxygene_circle_mat.set_shader_parameter("Opacity",value )
+	print(value)

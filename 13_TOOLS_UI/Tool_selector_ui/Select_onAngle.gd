@@ -9,6 +9,7 @@ var target_position : Vector3
 var using_pad : bool = false
 var previous_angle_selected : float
 
+signal select_tool(tool : tool_data)
 
 func _ready():
 	_global_datas.open_tool_selector.connect(_active)
@@ -94,5 +95,5 @@ func get_closet_button(angle : float):
 			_closest_button = b
 			b.grab_focus()
 			previous_angle_selected = angle
-		
+			select_tool.emit(b.tool)
 
