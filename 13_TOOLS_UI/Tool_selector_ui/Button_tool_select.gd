@@ -1,14 +1,14 @@
-
 extends Button
 
 @export var tool : tool_data
 
 func _ready():
 	
-	connect("button_down",select_this_tool)
-	connect("focus_entered",select_this)
-	$img.texture = tool.ui_img
-	tool.selector_button = self
+	if tool:
+		connect("button_down",select_this_tool)
+		connect("focus_entered",select_this)
+		$img.texture = tool.ui_img
+		tool.selector_button = self
 	
 func select_this_tool():
 	
@@ -17,3 +17,8 @@ func select_this_tool():
 
 func select_this():	
 	_global_datas.set_tool_ui.emit(tool)
+	
+func _run():
+	if tool:
+		$img.texture = tool.ui_img	
+	

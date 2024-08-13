@@ -5,8 +5,6 @@ extends Node
 
 var button_list : Array[Button]
 var select_index : int = 0
-@onready var timer = $Timer
-
 
 signal _fade(condition : bool)
 var is_active : bool = false
@@ -22,24 +20,24 @@ func _lock_selector(condition : bool):
 
 	lock_selector = condition
 				
-func _input(event):
-	
-	if  !_global_datas.Player_InSubScene:
-		return
-	
-	if _global_datas.Player_InDialogue:
-		return
-		
-		
-	if !lock_selector:
-		return
-		
-	if event.is_action_pressed("move_right"):	
-		select_next_index()
-		
-	if event.is_action_pressed("move_left"):	
-		select_previous_index()	
-		
+#func _input(event):
+	#
+	#if  !_global_datas.Player_InSubScene:
+		#return
+	#
+	#if _global_datas.Player_InDialogue:
+		#return
+		#
+		#
+	#if !lock_selector:
+		#return
+		#
+	#if event.is_action_pressed("move_right"):	
+		#select_next_index()
+		#
+	#if event.is_action_pressed("move_left"):	
+		#select_previous_index()	
+		#
 
 			
 func hide():
@@ -80,14 +78,7 @@ func select_next_index():
 	
 func select_previous_index():
 	
-	#timer.start()
 
-	
-	#if !is_active:
-		#_global_datas.open_tool_selector.emit(true)
-		#button_list[select_index].grab_focus()
-		#is_active = true
-		#return
 	
 	select_index -= 1
 	
@@ -124,5 +115,4 @@ func update_button_list_after_removed():
 	selected_button.grab_focus()
 	selected_button.button_down.emit()
 
-func _on_timer_timeout():
-	hide()
+

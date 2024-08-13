@@ -3,6 +3,10 @@ extends Node
 @onready var h_box_container = $"../Center"
 @onready var backdrop_focus = $"../BACKDROP_FOCUS"
 @onready var backdrop_focus_mat : Material = backdrop_focus.get_material()
+
+@export var to_show : Array[Control]
+
+
 var fade_in
 var current_value : float 
 
@@ -10,7 +14,13 @@ var current_value : float
 func _ready():
 	h_box_container.modulate.a = 0.0
 
+	for e in to_show:
+		e.visible = false
+		
 func fade(condition : bool):
+	
+	for e in to_show:
+		e.visible = condition
 	
 	if fade_in:
 		fade_in.kill()
