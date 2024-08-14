@@ -29,11 +29,11 @@ func fade(condition : bool):
 		
 		h_box_container.visible = true
 		fade_in = create_tween()
-		fade_in.tween_method(set_shader_value,0.0,1,0.3)#.set_trans(Tween.TRANS_SINE)
+		fade_in.tween_method(set_shader_value,current_value,1,0.3)#.set_trans(Tween.TRANS_SINE)
 	else:
 		h_box_container.visible = false
 		fade_in = create_tween()
-		fade_in.tween_method(set_shader_value,1.0,0.0,0.3)#.set_trans(Tween.TRANS_SINE)
+		fade_in.tween_method(set_shader_value,current_value,0.0,0.3)#.set_trans(Tween.TRANS_SINE)
 		fade_in.connect("finished",done)
 
 func done():
@@ -43,6 +43,6 @@ func set_shader_value(value):
 	h_box_container.modulate.a = value
 	var clamp_value = clamp(value,0.0,0.8)
 	backdrop_focus_mat.set_shader_parameter("Opacity",clamp_value)
-	
+	current_value = value
 func _fade(condition):
 	fade(condition)	

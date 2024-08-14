@@ -11,12 +11,12 @@ func _input(event):
 	if _global_datas.camera_current_state != game_state.camera_state.Scanner:
 		return
 
-	if event.is_action_pressed("Select_next_orbre"):
-		next_scanner()	
-		
-	if event.is_action_pressed("Select_previous_orbre"):
-		previous_scanner()		
-		
+	#if event.is_action_pressed("Select_next_orbre"):
+		#next_scanner()	
+		#
+	#if event.is_action_pressed("Select_previous_orbre"):
+		#previous_scanner()		
+		#
 		
 func next_scanner():
 	

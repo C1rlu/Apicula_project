@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=3 uid="uid://d0skcajnuhv37"]
+[gd_scene load_steps=56 format=3 uid="uid://d0skcajnuhv37"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/Tool_selector_ui/Select_tool_button.gd" id="1_npeg6"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/Tool_selector_ui/Fade_selector.gd" id="2_5eyta"]
@@ -15,11 +15,15 @@
 [ext_resource type="Resource" uid="uid://cfgfc4mex2tlo" path="res://08_SUBSCENES/Tools/Call_loader_tool.tres" id="6_yvre6"]
 [ext_resource type="Texture2D" uid="uid://c0gbxggal0yov" path="res://13_TOOLS_UI/Tool_selector_ui/img/scanner_all_img.png" id="7_oimdi"]
 [ext_resource type="Resource" uid="uid://bkjhpngeq4pbp" path="res://08_SUBSCENES/Tools/Vortex_tool.tres" id="7_ruh6l"]
+[ext_resource type="Script" path="res://13_TOOLS_UI/Tool_selector_ui/mouse_click_button.gd" id="8_1udjc"]
 [ext_resource type="Texture2D" uid="uid://nu8y3gn02u68" path="res://13_TOOLS_UI/Tool_selector_ui/img/loader.png" id="11_qh4ny"]
+[ext_resource type="Texture2D" uid="uid://d1oa7syfbxit1" path="res://13_TOOLS_UI/Clock_montre/Clock_ui_img.png" id="16_0ude0"]
 [ext_resource type="Texture2D" uid="uid://dxgdl2skk7cfp" path="res://13_TOOLS_UI/Tool_selector_ui/img/disque_tool_img.png" id="16_4wgb3"]
 [ext_resource type="Resource" uid="uid://df0swhar7lchv" path="res://08_SUBSCENES/Tools/Jet_tool.tres" id="16_26mm8"]
-[ext_resource type="Texture2D" uid="uid://ddb7i0ao0igd3" path="res://13_TOOLS_UI/Tool_selector_ui/img/Vortex_img.png" id="16_gcsg1"]
 [ext_resource type="Texture2D" uid="uid://lptuntfjibs2" path="res://13_TOOLS_UI/Tool_selector_ui/img/Jetpack_img.png" id="18_xvekh"]
+[ext_resource type="Resource" uid="uid://5fjsfr4toudr" path="res://08_SUBSCENES/Tools/Main_tool/Open_Board.tres" id="21_gmbva"]
+[ext_resource type="Resource" uid="uid://ksip8hb5jjsr" path="res://08_SUBSCENES/Tools/Main_tool/Open_Menu.tres" id="22_ndc73"]
+[ext_resource type="Resource" uid="uid://b0qiojwjgb5l7" path="res://08_SUBSCENES/Tools/Main_tool/Main_scene.tres" id="23_wd4qf"]
 
 [sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_6mfos"]
 parameter_name = "Dither_size"
@@ -71,7 +75,6 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-489.305, -43.6119)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(760, 140)
@@ -102,7 +105,7 @@ nodes/fragment/connections = PackedInt32Array(9, 0, 0, 0, 31, 0, 32, 1, 5, 0, 32
 shader = SubResource("VisualShader_hgt7l")
 shader_parameter/Opacity = 0.0
 
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_6ph61"]
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_vygo7"]
 size = Vector2(724.789, 654.559)
 expression = "const float DITHER_THRESHOLDS[16] ={
 		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
@@ -115,16 +118,16 @@ vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
 
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_0ybtm"]
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_nebyk"]
 
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_5kmiw"]
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_0dnjy"]
 parameter_name = "Dither_size"
 qualifier = 1
 
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_2ydh8"]
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_dlhvf"]
 constant = 0.616
 
-[sub_resource type="VisualShader" id="VisualShader_ypu8s"]
+[sub_resource type="VisualShader" id="VisualShader_ltbre"]
 code = "shader_type canvas_item;
 render_mode blend_mix;
 
@@ -171,7 +174,7 @@ void fragment() {
 "
 mode = 1
 flags/light_only = false
-nodes/fragment/11/node = SubResource("VisualShaderNodeExpression_6ph61")
+nodes/fragment/11/node = SubResource("VisualShaderNodeExpression_vygo7")
 nodes/fragment/11/position = Vector2(-1200, 400)
 nodes/fragment/11/size = Vector2(724.789, 654.559)
 nodes/fragment/11/input_ports = "0,0,In;1,0,Size;"
@@ -186,16 +189,16 @@ nodes/fragment/11/expression = "const float DITHER_THRESHOLDS[16] ={
 vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/13/node = SubResource("VisualShaderNodeStep_0ybtm")
+nodes/fragment/13/node = SubResource("VisualShaderNodeStep_nebyk")
 nodes/fragment/13/position = Vector2(-380, 180)
-nodes/fragment/14/node = SubResource("VisualShaderNodeFloatParameter_5kmiw")
+nodes/fragment/14/node = SubResource("VisualShaderNodeFloatParameter_0dnjy")
 nodes/fragment/14/position = Vector2(-2045.34, 655.737)
-nodes/fragment/15/node = SubResource("VisualShaderNodeFloatConstant_2ydh8")
+nodes/fragment/15/node = SubResource("VisualShaderNodeFloatConstant_dlhvf")
 nodes/fragment/15/position = Vector2(-1740, 380)
 nodes/fragment/connections = PackedInt32Array(13, 0, 0, 1, 11, 0, 13, 1, 15, 0, 11, 0, 14, 0, 11, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_g24mn"]
-shader = SubResource("VisualShader_ypu8s")
+shader = SubResource("VisualShader_ltbre")
 
 [sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_im68i"]
 size = Vector2(724.789, 654.559)
@@ -331,6 +334,16 @@ anti_aliasing = false
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ow8s6"]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_j8rtv"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_871k7"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0832w"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gahu5"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jh8yn"]
+
 [node name="Selector_tool_ui_Linear" type="Control"]
 process_mode = 3
 layout_mode = 3
@@ -346,17 +359,21 @@ metadata/_edit_horizontal_guides_ = [362.0]
 [node name="Open_Selector" type="Node" parent="."]
 script = ExtResource("1_npeg6")
 
-[node name="Select_onAngle" type="Node" parent="."]
+[node name="Select_onAngle" type="Node" parent="." node_paths=PackedStringArray("subscene_tool", "Main_tool")]
 script = ExtResource("2_ub62y")
+subscene_tool = NodePath("../Center/Subscene_tool")
+Main_tool = NodePath("../Center/Main_tool")
 
 [node name="Fade_selector" type="Node" parent="." node_paths=PackedStringArray("to_show")]
 script = ExtResource("2_5eyta")
 to_show = [NodePath("../Circle")]
 
-[node name="Organize_wheel" type="Node" parent="."]
+[node name="Organize_wheel" type="Node" parent="." node_paths=PackedStringArray("subscene_tool", "Main_tool")]
 script = ExtResource("3_318rv")
 button_radius = 165
 offset_position = 1.55
+subscene_tool = NodePath("../Center/Subscene_tool")
+Main_tool = NodePath("../Center/Main_tool")
 
 [node name="Tool_Legend" type="Node" parent="."]
 script = ExtResource("5_skdxn")
@@ -384,9 +401,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("6_karuv")
-color = Color(0.0235294, 0.176471, 0.2, 1)
 line_color = Color(0.607843, 0.498039, 0.313726, 1)
-outer_radius = 141
 inner_radius = 164
 
 [node name="Circle2" type="Control" parent="Circle"]
@@ -400,9 +415,7 @@ anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("6_karuv")
-color = Color(0.0235294, 0.176471, 0.2, 1)
 line_color = Color(0.607843, 0.498039, 0.313726, 1)
-outer_radius = 141
 inner_radius = 154
 
 [node name="Circle3" type="Control" parent="Circle"]
@@ -449,7 +462,13 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Scanner" type="Button" parent="Center"]
+[node name="Subscene_tool" type="Control" parent="Center"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+
+[node name="Scanner" type="Button" parent="Center/Subscene_tool"]
 process_mode = 3
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 0
@@ -467,7 +486,7 @@ theme_override_styles/focus = SubResource("StyleBoxFlat_ch3xb")
 script = ExtResource("3_x5nql")
 tool = ExtResource("4_kpv76")
 
-[node name="img" type="TextureRect" parent="Center/Scanner"]
+[node name="img" type="TextureRect" parent="Center/Subscene_tool/Scanner"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -477,14 +496,14 @@ grow_vertical = 2
 texture = ExtResource("7_oimdi")
 expand_mode = 2
 
-[node name="Magnet" type="Button" parent="Center"]
+[node name="Magnet" type="Button" parent="Center/Subscene_tool"]
 process_mode = 3
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
 offset_left = 104.579
 offset_top = -119.511
 offset_right = 184.579
-offset_bottom = -39.5101
+offset_bottom = -39.5095
 focus_mode = 1
 mouse_filter = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_6tshm")
@@ -495,7 +514,7 @@ theme_override_styles/focus = SubResource("StyleBoxFlat_ch3xb")
 script = ExtResource("3_x5nql")
 tool = ExtResource("5_je66b")
 
-[node name="img" type="TextureRect" parent="Center/Magnet"]
+[node name="img" type="TextureRect" parent="Center/Subscene_tool/Magnet"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -505,7 +524,7 @@ grow_vertical = 2
 texture = ExtResource("6_00bfl")
 expand_mode = 2
 
-[node name="CallLoader" type="Button" parent="Center"]
+[node name="CallLoader" type="Button" parent="Center/Subscene_tool"]
 process_mode = 3
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
@@ -523,7 +542,7 @@ theme_override_styles/focus = SubResource("StyleBoxFlat_ch3xb")
 script = ExtResource("3_x5nql")
 tool = ExtResource("6_yvre6")
 
-[node name="img" type="TextureRect" parent="Center/CallLoader"]
+[node name="img" type="TextureRect" parent="Center/Subscene_tool/CallLoader"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -533,7 +552,7 @@ grow_vertical = 2
 texture = ExtResource("11_qh4ny")
 expand_mode = 2
 
-[node name="Vortex" type="Button" parent="Center"]
+[node name="Vortex" type="Button" parent="Center/Subscene_tool"]
 process_mode = 3
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
@@ -551,17 +570,17 @@ theme_override_styles/focus = SubResource("StyleBoxFlat_ch3xb")
 script = ExtResource("3_x5nql")
 tool = ExtResource("7_ruh6l")
 
-[node name="img" type="TextureRect" parent="Center/Vortex"]
+[node name="img" type="TextureRect" parent="Center/Subscene_tool/Vortex"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("16_gcsg1")
+texture = ExtResource("16_0ude0")
 expand_mode = 2
 
-[node name="Button6" type="Button" parent="Center"]
+[node name="JetPack" type="Button" parent="Center/Subscene_tool"]
 process_mode = 3
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
@@ -579,7 +598,7 @@ theme_override_styles/focus = SubResource("StyleBoxFlat_ch3xb")
 script = ExtResource("3_x5nql")
 tool = ExtResource("16_26mm8")
 
-[node name="img" type="TextureRect" parent="Center/Button6"]
+[node name="img" type="TextureRect" parent="Center/Subscene_tool/JetPack"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -589,14 +608,14 @@ grow_vertical = 2
 texture = ExtResource("18_xvekh")
 expand_mode = 2
 
-[node name="Button5" type="Button" parent="Center"]
+[node name="DisqueTool" type="Button" parent="Center/Subscene_tool"]
 process_mode = 3
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
 offset_left = -181.148
 offset_top = -125.454
 offset_right = -101.148
-offset_bottom = -45.4528
+offset_bottom = -45.452
 focus_mode = 1
 mouse_filter = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_6tshm")
@@ -607,7 +626,97 @@ theme_override_styles/focus = SubResource("StyleBoxFlat_ch3xb")
 script = ExtResource("3_x5nql")
 tool = ExtResource("6_pkjtd")
 
-[node name="img" type="TextureRect" parent="Center/Button5"]
+[node name="img" type="TextureRect" parent="Center/Subscene_tool/DisqueTool"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("16_4wgb3")
+expand_mode = 2
+
+[node name="Main_tool" type="Control" parent="Center"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+
+[node name="Board" type="Button" parent="Center/Main_tool"]
+process_mode = 3
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+offset_left = -181.148
+offset_top = -125.454
+offset_right = -101.148
+offset_bottom = -45.452
+focus_mode = 1
+mouse_filter = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_6tshm")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_6yqa4")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_i8msu")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_ow8s6")
+theme_override_styles/focus = SubResource("StyleBoxFlat_ch3xb")
+script = ExtResource("3_x5nql")
+tool = ExtResource("21_gmbva")
+
+[node name="img" type="TextureRect" parent="Center/Main_tool/Board"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("16_4wgb3")
+expand_mode = 2
+
+[node name="BackSea" type="Button" parent="Center/Main_tool"]
+process_mode = 3
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+offset_left = -181.148
+offset_top = -125.454
+offset_right = -101.148
+offset_bottom = -45.452
+focus_mode = 1
+mouse_filter = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_6tshm")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_6yqa4")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_i8msu")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_ow8s6")
+theme_override_styles/focus = SubResource("StyleBoxFlat_ch3xb")
+script = ExtResource("3_x5nql")
+tool = ExtResource("23_wd4qf")
+
+[node name="img" type="TextureRect" parent="Center/Main_tool/BackSea"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("16_4wgb3")
+expand_mode = 2
+
+[node name="GameMenu" type="Button" parent="Center/Main_tool"]
+process_mode = 3
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+offset_left = -181.148
+offset_top = -125.454
+offset_right = -101.148
+offset_bottom = -45.452
+focus_mode = 1
+mouse_filter = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_6tshm")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_6yqa4")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_i8msu")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_ow8s6")
+theme_override_styles/focus = SubResource("StyleBoxFlat_ch3xb")
+script = ExtResource("3_x5nql")
+tool = ExtResource("22_ndc73")
+
+[node name="img" type="TextureRect" parent="Center/Main_tool/GameMenu"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -625,9 +734,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -20.0
-offset_top = -107.0
+offset_top = -108.0
 offset_right = 20.0
-offset_bottom = -67.0
+offset_bottom = -68.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
@@ -653,6 +762,21 @@ text = "Tool legend "
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
+
+[node name="Selected_Button_mouseClick" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_j8rtv")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_871k7")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_0832w")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_gahu5")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_jh8yn")
+disabled = true
+script = ExtResource("8_1udjc")
 
 [connection signal="_fade" from="Open_Selector" to="Fade_selector" method="_fade"]
 [connection signal="_fade" from="Open_Selector" to="Tool_Legend" method="_on_open_selector__fade"]

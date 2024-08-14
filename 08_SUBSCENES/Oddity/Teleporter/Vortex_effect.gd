@@ -10,6 +10,7 @@ extends Node
 
 
 var t
+var f
 
 func scale_effect():
 	
@@ -18,13 +19,20 @@ func scale_effect():
 	t = create_tween()	
 	t.tween_method(_value,1.0,0.5,0.5).set_trans(Tween.TRANS_SINE)
 	
+	if f:
+		f.kill()
+	f = create_tween()
+	f.tween_method(_f_value,0.25,0.02,0.5)
 	
 func _value(value : float):
 
 	vortex_part.amount_ratio = value
 	mesh_mat.set_shader_parameter("Speed",value)
 
-
+func _f_value(value : float):
+	
+	RenderingServer.global_shader_parameter_set("mirror_wave_speed", value)	
+	
 func _on_teleporter_teleport_effect():
 	explose_part.emitting = true
 	scale_effect()

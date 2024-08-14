@@ -4,11 +4,13 @@ var Main_Camera : Camera3D
 var Subscene_Camera : Camera3D
 var player_position : Vector3
 var Player_In_Inventory : bool
-var Player_InSubScene : bool
+var Player_InSubScene : bool = false
 var Player_InMenu : bool
 var Player_InDialogue : bool
 var Player_InDialogue_zone : bool
 
+var current_scene_state : game_state.scene_state = game_state.scene_state._Main
+ 
 # menu signals
 signal _start_ini_subscene
 signal _end_ini_subscene

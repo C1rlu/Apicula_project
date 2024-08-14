@@ -24,7 +24,8 @@ func set_loader():
 	Oxy_loader.move_to(player_position) 
 
 func disable():
-	caller_tool.disable_button = true
+	pass
+	#caller_tool.disable_button = true
 	#_global_datas.update_selector.emit()
 
 

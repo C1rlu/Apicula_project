@@ -3,15 +3,18 @@ extends Node
 
 @export var button_radius = 100 
 @export var offset_position : float = 100.0
-@onready var center : Control = $"../Center"
 var button_list : Array[Button]
+
+@export var subscene_tool : Control
+@export var Main_tool : Control
+
 
 func _ready():
 	_global_datas.open_tool_selector.connect(update)
 
 
 func update(condition : bool):
-	
+
 	if condition:
 		organize()	
 		
@@ -30,8 +33,14 @@ func organize():
 
 func update_list():
 
+	subscene_tool.visible = false
+	Main_tool.visible = false
+	
+	var all_b = subscene_tool.get_children()
+	subscene_tool.visible = true
+				
 	button_list.clear()
-	var all_b = center.get_children()	
+		
 	
 	for b in all_b:
 		if b.visible:
@@ -40,8 +49,8 @@ func update_list():
 func _run():
 	organize()	
 
-func _process(delta):
-	
-	if Engine.is_editor_hint():
-		organize()
+#func _process(delta):
+	#
+	#if Engine.is_editor_hint():
+		#organize()
 

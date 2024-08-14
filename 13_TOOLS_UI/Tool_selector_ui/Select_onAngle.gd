@@ -11,6 +11,11 @@ var previous_angle_selected : float
 
 signal select_tool(tool : tool_data)
 
+@export var subscene_tool : Control
+@export var Main_tool : Control
+
+@onready var selected_button_mouse_click = $"../Selected_Button_mouseClick"
+
 func _ready():
 	_global_datas.open_tool_selector.connect(_active)
 	_global_datas.using_pad.connect(is_pad)
@@ -22,8 +27,6 @@ func is_pad(condition : bool):
 func _active(condition : bool):
 	_is_active = condition	
 	update_button_list()
-
-
 
 	if condition:
 		get_closet_button(previous_angle_selected)
@@ -38,8 +41,8 @@ func _active(condition : bool):
 				
 func _input(event):
 	
-	if  !_global_datas.Player_InSubScene:
-		return
+	#if  !_global_datas.Player_InSubScene:
+		#return
 	
 	if !_is_active:
 		return
@@ -47,20 +50,32 @@ func _input(event):
 	check_angle()
 func update_button_list():
 
+	var all_b 
+
+
+
+	if _global_datas.current_scene_state == game_state.scene_state._Main:
+		all_b = Main_tool.get_children()	
+		
+	if _global_datas.current_scene_state == game_state.scene_state._Subscene:
+		all_b = subscene_tool.get_children()
+		
+	if _global_datas.current_scene_state == game_state.scene_state._Boardscene:
+		all_b = subscene_tool.get_children()
+				
 	button_list.clear()
-	var all_b = center.get_children()	
+		
 	
 	for b in all_b:
 		if b.visible:
 			button_list.append(b)	
-
 
 func check_angle():
 	
 	var target_angle : Vector2
 	
 	if using_pad:
-		#target_angle = Input.get_vector("move_right", "move_left","move_backward" , "move_forward")
+		#target_angle = Input.get_vector("move_right","move_left","move_forward","move_backward")
 		target_angle = Input.get_vector("Joy_2_right","Joy_2_left","Joy_2_bottom","Joy_2_top")
 		if target_angle == Vector2.ZERO:
 			return
@@ -96,4 +111,4 @@ func get_closet_button(angle : float):
 			b.grab_focus()
 			previous_angle_selected = angle
 			select_tool.emit(b.tool)
-
+			selected_button_mouse_click.selected_button = b

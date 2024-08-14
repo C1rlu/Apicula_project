@@ -1,8 +1,9 @@
-[gd_scene load_steps=80 format=3 uid="uid://cein0q2eirkay"]
+[gd_scene load_steps=81 format=3 uid="uid://cein0q2eirkay"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_g3pi7"]
 [ext_resource type="Script" path="res://10_BOARD/Board_CamTarget.gd" id="1_janbq"]
 [ext_resource type="Script" path="res://10_BOARD/Active_3D_BoardScene.gd" id="1_n6a4y"]
+[ext_resource type="Resource" uid="uid://5fjsfr4toudr" path="res://08_SUBSCENES/Tools/Main_tool/Open_Board.tres" id="1_qgjbu"]
 [ext_resource type="Script" path="res://10_BOARD/Input_switch.gd" id="2_00g5f"]
 [ext_resource type="PackedScene" uid="uid://dr73p5vs0sixe" path="res://10_BOARD/board_scene.tscn" id="2_6c571"]
 [ext_resource type="Script" path="res://10_BOARD/Pad_clic_raycast.gd" id="3_rqf42"]
@@ -44,7 +45,7 @@
 [sub_resource type="GDScript" id="GDScript_w13ry"]
 script/source = "extends Node
 
-
+@export var Board_tool : tool_data
 @export var debug_board = true
 
 
@@ -52,15 +53,19 @@ script/source = "extends Node
 func _ready():
 	_global_datas.Player_In_Inventory = debug_board
 	_global_datas.open_inventory.connect(open_inventory)
-	
+	Board_tool.tool_active_signal.connect(open_inventory)
+
 func open_inventory(condition : bool):
 	if !condition:
 		_global_datas.show_on_scanner.emit(false)
 		_global_datas.show_ui_scanner_dots.emit(false)	
 		
+		_global_datas.current_scene_state = game_state.scene_state._Main
 	else:
 		_global_datas._add_back_call.emit(_back_call)
 		_global_datas.show_on_scanner.emit(true)
+		
+		_global_datas.current_scene_state = game_state.scene_state._Boardscene
 		
 func _back_call():
 	_global_datas.Player_In_Inventory = false
@@ -70,6 +75,9 @@ func _back_call():
 
 [sub_resource type="GDScript" id="GDScript_1a2yk"]
 script/source = "extends Node
+
+
+
 
 func _input(event):
 	
@@ -526,6 +534,7 @@ blend_shape_mode = 0
 
 [node name="04_BOARD" type="Node"]
 script = SubResource("GDScript_w13ry")
+Board_tool = ExtResource("1_qgjbu")
 debug_board = false
 metadata/_edit_horizontal_guides_ = [-58.0]
 

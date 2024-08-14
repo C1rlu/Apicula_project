@@ -37,9 +37,11 @@ func active_subscene():
 	_global_datas.Player_InSubScene = true
 	_global_datas._start_ini_subscene.emit()
 	
+	_global_datas.current_scene_state = game_state.scene_state._Subscene
+	
 func disable_subscene():
 	_global_datas.Player_InSubScene = false
-
+	_global_datas.current_scene_state = game_state.scene_state._Main
 func instance_loaded_scene():
 	
 	_global_datas._photo_data_scene_list.clear()
