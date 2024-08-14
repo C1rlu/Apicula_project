@@ -9,6 +9,9 @@ func _ready():
 	
 func call_loader(condition : bool):
 	
+	if caller_tool.disable_button:
+		return
+		
 	if condition:
 		disable()
 		set_loader()
@@ -21,7 +24,7 @@ func set_loader():
 	Oxy_loader.move_to(player_position) 
 
 func disable():
-	caller_tool.selector_button.visible = false
+	caller_tool.disable_button = true
 	#_global_datas.update_selector.emit()
 
 

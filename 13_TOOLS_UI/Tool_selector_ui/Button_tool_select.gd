@@ -13,7 +13,7 @@ func _ready():
 func select_this_tool():
 	
 	_global_datas.set_tool_ui.emit(tool)
-	#_global_datas.open_tool_selector.emit(false)
+	_global_datas.open_tool_selector.emit(false)
 
 func select_this():	
 	_global_datas.set_tool_ui.emit(tool)

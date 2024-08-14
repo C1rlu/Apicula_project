@@ -13,7 +13,7 @@ var lock_selector : bool = false
 func _ready():
 	_global_datas.open_tool_selector.connect(show_ui)
 	_global_datas._backFrom_subscene.connect(hide)
-	_global_datas.update_selector.connect(update_button_list_after_removed)
+	#_global_datas.update_selector.connect(update_button_list_after_removed)
 	_global_datas.open_tool_selector.connect(_lock_selector)
 	
 func _lock_selector(condition : bool):
@@ -104,7 +104,7 @@ func update_button_list_after_removed():
 
 	button_list.clear()
 	var all_b = h_box_container.get_children()	
-	
+
 	for b in all_b:
 		if b.visible:
 			button_list.append(b)	
