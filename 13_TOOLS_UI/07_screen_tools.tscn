@@ -1,4 +1,4 @@
-[gd_scene load_steps=81 format=3 uid="uid://bwmu5iwushsl5"]
+[gd_scene load_steps=96 format=3 uid="uid://bwmu5iwushsl5"]
 
 [ext_resource type="Texture2D" uid="uid://d31xi5f7tan5w" path="res://05_SHADER_TEST/Full_screen/Dither_pattners/Blue_noise/HDR_LA_7.png" id="1_2l1ih"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/INSTANCE_NOTE.gd" id="1_fcb2u"]
@@ -15,7 +15,7 @@
 [ext_resource type="Script" path="res://13_TOOLS_UI/Update_Oxygene_circle.gd" id="8_yad8n"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/Oxy_effect.gd" id="9_uo762"]
 [ext_resource type="Shader" uid="uid://bkktb8p3u13bf" path="res://05_SHADER_TEST/Full_screen/Oxy_effect_sh.tres" id="10_arfkb"]
-[ext_resource type="Texture2D" uid="uid://70cj5dx4kocl" path="res://screenshot/ghost_img.png" id="10_jnq80"]
+[ext_resource type="Script" path="res://13_TOOLS_UI/fade_element.gd" id="12_4syag"]
 [ext_resource type="PackedScene" uid="uid://d0skcajnuhv37" path="res://13_TOOLS_UI/Tool_selector_ui/Selector_ui_linear.tscn" id="14_ew3o0"]
 
 [sub_resource type="GDScript" id="GDScript_ebu32"]
@@ -584,7 +584,7 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-160.211, -84.9687)
+graph_offset = Vector2(-225.102, -67.4545)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(1720, -380)
@@ -661,7 +661,170 @@ nodes/fragment/connections = PackedInt32Array(17, 0, 18, 0, 18, 0, 19, 0, 16, 0,
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_l1dvu"]
 resource_local_to_scene = true
 shader = SubResource("VisualShader_0t0su")
-shader_parameter/Opacity = 1.765
+shader_parameter/Opacity = 1.195
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_y4hmw"]
+noise_type = 0
+frequency = 0.0019
+fractal_type = 2
+fractal_octaves = 10
+fractal_lacunarity = 1.395
+fractal_gain = 0.525
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ine8t"]
+width = 1280
+height = 720
+noise = SubResource("FastNoiseLite_y4hmw")
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_f3wcc"]
+texture = SubResource("NoiseTexture2D_ine8t")
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_xwb8q"]
+input_name = "screen_uv"
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_t4awy"]
+default_input_values = [0, 0.0, 1, 1.0, 2, 0.44]
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_86eju"]
+parameter_name = "Dither_size"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_sy5mw"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_5ypvd"]
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_87etq"]
+parameter_name = "Opacity"
+hint = 1
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_2ohyv"]
+input_name = "texture"
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_6tsi6"]
+expanded_output_ports = [0]
+source = 5
+
+[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_t8vew"]
+function = 31
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_ce8dn"]
+parameter_name = "ColorParameter"
+
+[sub_resource type="VisualShader" id="VisualShader_rg1ri"]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+uniform sampler2D tex_frg_10;
+uniform float Opacity : hint_range(0, 1);
+global uniform float Dither_size;
+
+
+
+void fragment() {
+// Input:11
+	vec2 n_out11p0 = SCREEN_UV;
+
+
+// Texture2D:10
+	vec4 n_out10p0 = texture(tex_frg_10, n_out11p0);
+
+
+// Mix:12
+	float n_in12p1 = 1.00000;
+	float n_in12p2 = 0.44000;
+	float n_out12p0 = mix(n_out10p0.x, n_in12p1, n_in12p2);
+
+
+// FloatParameter:5
+	float n_out5p0 = Opacity;
+
+
+// FloatParameter:2
+	float n_out2p0 = Dither_size;
+
+
+	float n_out3p0;
+// Expression:3
+	n_out3p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out2p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out3p0 = n_out5p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Step:4
+	float n_out4p0 = step(n_out12p0, n_out3p0);
+
+
+// Output:0
+	COLOR.a = n_out4p0;
+
+
+}
+"
+graph_offset = Vector2(-568.869, -86.9181)
+mode = 1
+flags/light_only = false
+nodes/fragment/0/position = Vector2(1160, 180)
+nodes/fragment/2/node = SubResource("VisualShaderNodeFloatParameter_86eju")
+nodes/fragment/2/position = Vector2(-963.538, 612.53)
+nodes/fragment/3/node = SubResource("VisualShaderNodeExpression_sy5mw")
+nodes/fragment/3/position = Vector2(-503.538, 372.53)
+nodes/fragment/3/size = Vector2(724.789, 654.559)
+nodes/fragment/3/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/3/output_ports = "0,0,Dither_Node;"
+nodes/fragment/3/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/4/node = SubResource("VisualShaderNodeStep_5ypvd")
+nodes/fragment/4/position = Vector2(280, 220)
+nodes/fragment/5/node = SubResource("VisualShaderNodeFloatParameter_87etq")
+nodes/fragment/5/position = Vector2(-763.538, 152.53)
+nodes/fragment/6/node = SubResource("VisualShaderNodeInput_2ohyv")
+nodes/fragment/6/position = Vector2(-1580, -200)
+nodes/fragment/7/node = SubResource("VisualShaderNodeTexture_6tsi6")
+nodes/fragment/7/position = Vector2(-1180, -140)
+nodes/fragment/8/node = SubResource("VisualShaderNodeFloatFunc_t8vew")
+nodes/fragment/8/position = Vector2(-820, -140)
+nodes/fragment/9/node = SubResource("VisualShaderNodeColorParameter_ce8dn")
+nodes/fragment/9/position = Vector2(564.674, -101.386)
+nodes/fragment/10/node = SubResource("VisualShaderNodeTexture_f3wcc")
+nodes/fragment/10/position = Vector2(-404.433, -426.528)
+nodes/fragment/11/node = SubResource("VisualShaderNodeInput_xwb8q")
+nodes/fragment/11/position = Vector2(-940, -400)
+nodes/fragment/12/node = SubResource("VisualShaderNodeMix_t4awy")
+nodes/fragment/12/position = Vector2(20, -180)
+nodes/fragment/connections = PackedInt32Array(2, 0, 3, 1, 3, 0, 4, 1, 5, 0, 3, 0, 6, 0, 7, 2, 7, 0, 8, 0, 11, 0, 10, 0, 4, 0, 0, 1, 10, 0, 12, 0, 12, 0, 4, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v7gg3"]
+shader = SubResource("VisualShader_rg1ri")
+shader_parameter/Opacity = 0.0
 
 [sub_resource type="GDScript" id="GDScript_1c22g"]
 script/source = "extends Node
@@ -1023,6 +1186,11 @@ oxygene_circle = NodePath("../Oxygene_border")
 [node name="Oxy_effect" type="Node" parent="."]
 script = ExtResource("9_uo762")
 
+[node name="check_effect_state" type="Timer" parent="Oxy_effect"]
+
+[node name="Apply_timer" type="Timer" parent="Oxy_effect"]
+one_shot = true
+
 [node name="Oxygene_miss_effet" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_mijnj")
 anchors_preset = 15
@@ -1030,7 +1198,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("10_jnq80")
+mouse_filter = 2
 
 [node name="Oxygene_border" type="ColorRect" parent="."]
 visible = false
@@ -1042,6 +1210,17 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(0.180392, 0.462745, 0.337255, 1)
+
+[node name="Oxy_vaine_effect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_v7gg3")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.180392, 0.462745, 0.337255, 1)
+script = ExtResource("12_4syag")
 
 [node name="Inputs_used" type="Control" parent="."]
 layout_mode = 3
@@ -1055,6 +1234,7 @@ offset_top = -111.0
 offset_bottom = 17.0
 grow_horizontal = 0
 grow_vertical = 0
+mouse_filter = 2
 
 [node name="Show_Use_inputs" type="Node" parent="Inputs_used"]
 script = SubResource("GDScript_1c22g")
@@ -1122,3 +1302,5 @@ stretch_mode = 4
 [node name="Selector_tool_ui_Linear" parent="." instance=ExtResource("14_ew3o0")]
 
 [connection signal="timeout" from="Description/Update_description/Timer" to="Description/Update_description" method="_on_timer_timeout"]
+[connection signal="timeout" from="Oxy_effect/check_effect_state" to="Oxy_effect" method="_on_check"]
+[connection signal="timeout" from="Oxy_effect/Apply_timer" to="Oxy_effect" method="_on_apply"]

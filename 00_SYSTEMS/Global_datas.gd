@@ -160,6 +160,7 @@ var selected_photoData : PhotoData
 
 #tools_ui
 var clock_timer : float
+var oxy_current_state : game_state.oxy_state
 signal active_photo_button(condition : bool)
 signal active_scanner_button(condition : bool)
 
