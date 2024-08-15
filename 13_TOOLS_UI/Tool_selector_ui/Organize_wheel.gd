@@ -4,10 +4,7 @@ extends Node
 @export var button_radius = 100 
 @export var offset_position : float = 100.0
 var button_list : Array[Button]
-
-@export var subscene_tool : Control
-@export var Main_tool : Control
-
+@onready var center = $"../Center"
 
 func _ready():
 	_global_datas.open_tool_selector.connect(update)
@@ -33,12 +30,7 @@ func organize():
 
 func update_list():
 
-	subscene_tool.visible = false
-	Main_tool.visible = false
-	
-	var all_b = subscene_tool.get_children()
-	subscene_tool.visible = true
-				
+	var all_b = center.get_children()	
 	button_list.clear()
 		
 	

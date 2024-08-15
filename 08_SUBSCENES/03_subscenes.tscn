@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://nigmie4bbn6"]
+[gd_scene load_steps=52 format=3 uid="uid://nigmie4bbn6"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/00_Scripts/Subscene_loader.gd" id="1_7uoo0"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="2_3srhu"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://08_SUBSCENES/Tools/Switch_tools_input.gd" id="3_2mtx3"]
 [ext_resource type="Material" uid="uid://dbu2q4lhlk8w5" path="res://05_SHADER_TEST/Full_screen/Subscene_screen/Main_subscene_dither.tres" id="3_w42nb"]
 [ext_resource type="Material" uid="uid://b7ffjkgpmtkc6" path="res://05_SHADER_TEST/Full_screen/Subscene_screen/Scanner_x_subscene_dither.tres" id="4_bkck3"]
+[ext_resource type="Resource" uid="uid://bcj27libgpl5g" path="res://08_SUBSCENES/Tools/Check_clock.tres" id="5_tnaul"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Tools/Tool_selector.gd" id="5_xafm0"]
 [ext_resource type="Resource" uid="uid://vv3dws7dmhtd" path="res://08_SUBSCENES/Tools/Scanner.tres" id="6_b80v7"]
 [ext_resource type="Resource" uid="uid://380xcgsxw62f" path="res://08_SUBSCENES/Tools/magnet_tool.tres" id="7_28d8b"]
@@ -154,19 +155,7 @@ var actual_value : float
 func _ready():
 	
 	_global_datas._scan_mirror_xray.connect(_flash_mirror)
-	_global_datas._traceur_pause.connect(_set_paused)
-	
 
-func _set_paused(condition : bool):
-	
-	if condition:
-		if t:
-			t.kill()
-	else :
-		if t:
-			t.kill()
-		t = create_tween()
-		t .tween_method(_set_opacity_value,actual_value,0,3.0)	
 					
 func _flash_mirror():
 
@@ -501,6 +490,7 @@ script = SubResource("GDScript_71vlv")
 [node name="Action_inputs_call" type="Node" parent="TOOLS"]
 process_mode = 3
 script = ExtResource("5_xafm0")
+check_clock = ExtResource("5_tnaul")
 
 [node name="Switch_tools_input" type="Node" parent="TOOLS"]
 script = ExtResource("3_2mtx3")

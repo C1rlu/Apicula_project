@@ -1,22 +1,92 @@
-[gd_scene load_steps=5 format=3 uid="uid://kywo064rxmwa"]
+[gd_scene load_steps=9 format=3 uid="uid://kywo064rxmwa"]
 
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER_TEST/Subscene_materials/Subscene_basic_mat.tres" id="2_7k31q"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Tools/BackPath/Start_anim.gd" id="3_agcb4"]
 [ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER_TEST/Subscene_materials/Subscene_shine_elements_mat.tres" id="3_k415j"]
 
-[sub_resource type="SphereMesh" id="SphereMesh_c7kia"]
+[sub_resource type="BoxMesh" id="BoxMesh_43olr"]
 
-[sub_resource type="PrismMesh" id="PrismMesh_8bd8o"]
+[sub_resource type="SphereMesh" id="SphereMesh_swbqk"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_f4dby"]
+top_radius = 0.25
+bottom_radius = 0.25
+height = 7.6
+
+[sub_resource type="Animation" id="Animation_qpe2j"]
+resource_name = "rotation_loop"
+loop_mode = 1
+tracks/0/type = "rotation_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Rotation_root")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 1, 1, 0, 0, -1, 0)
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_4buf5"]
+_data = {
+"rotation_loop": SubResource("Animation_qpe2j")
+}
 
 [node name="Spots" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.186741, 0, 0, 0, 0.186741, 0, 0, 0, 0.186741, -0.000321721, 0, -0.166518)
+[node name="Rotation_root" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.16176)
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Rotation_root"]
+transform = Transform3D(-1.99377e-09, 0.0456121, 0, -0.0456121, -1.99377e-09, 0, 0, 0, 0.0456121, 0, 0, 0)
 layers = 4
-mesh = SubResource("SphereMesh_c7kia")
+mesh = SubResource("BoxMesh_43olr")
+skeleton = NodePath("../..")
 surface_material_override/0 = ExtResource("2_7k31q")
 
-[node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.0610726, 0, 0, 0, 0.0610726, 0, 0, 0, 0.0610726, 0.000930779, 0, -0.0847209)
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="Rotation_root"]
+transform = Transform3D(-1.99377e-09, 0.0456121, 0, -0.0456121, -1.99377e-09, 0, 0, 0, 0.0456121, 0.09, 0, 0)
 layers = 4
-mesh = SubResource("PrismMesh_8bd8o")
+mesh = SubResource("SphereMesh_swbqk")
+skeleton = NodePath("../..")
 surface_material_override/0 = ExtResource("3_k415j")
+
+[node name="MeshInstance3D10" type="MeshInstance3D" parent="Rotation_root"]
+transform = Transform3D(-1.99377e-09, 0.0456121, 0, -0.0456121, -1.99377e-09, 0, 0, 0, 0.0456121, 0, 0.09, 0)
+layers = 4
+mesh = SubResource("SphereMesh_swbqk")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("3_k415j")
+
+[node name="MeshInstance3D11" type="MeshInstance3D" parent="Rotation_root"]
+transform = Transform3D(-1.99377e-09, 0.0456121, 0, -0.0456121, -1.99377e-09, 0, 0, 0, 0.0456121, 0, -0.09, 0)
+layers = 4
+mesh = SubResource("SphereMesh_swbqk")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("3_k415j")
+
+[node name="MeshInstance3D8" type="MeshInstance3D" parent="Rotation_root"]
+transform = Transform3D(-1.99377e-09, 0.0456121, 0, -0.0456121, -1.99377e-09, 0, 0, 0, 0.0456121, -0.09, 0, 0)
+layers = 4
+mesh = SubResource("SphereMesh_swbqk")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("3_k415j")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="Rotation_root"]
+transform = Transform3D(-0.0197681, -1.72819e-09, 0, 1.72819e-09, -0.0197681, 0, 0, 0, 0.0197681, 0, 0, 0)
+layers = 4
+mesh = SubResource("CylinderMesh_f4dby")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("2_7k31q")
+
+[node name="MeshInstance3D9" type="MeshInstance3D" parent="Rotation_root"]
+transform = Transform3D(-8.64093e-10, 0.0197681, 0, -0.0197681, -8.64093e-10, 0, 0, 0, 0.0197681, 0, 0, 0)
+layers = 4
+mesh = SubResource("CylinderMesh_f4dby")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("2_7k31q")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_4buf5")
+}
+speed_scale = 0.5
+script = ExtResource("3_agcb4")

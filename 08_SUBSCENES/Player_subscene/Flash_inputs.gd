@@ -11,8 +11,8 @@ extends Node
 func _ready():
 	light_tool.tool_active_signal.connect(_start_light)
 
-	_global_datas._end_ini_subscene.connect(start_loop)
-	_global_datas._backFrom_subscene.connect(stop_loop)
+	#_global_datas._end_ini_subscene.connect(start_loop)
+	#_global_datas._backFrom_subscene.connect(stop_loop)
 
 	
 func start_loop():

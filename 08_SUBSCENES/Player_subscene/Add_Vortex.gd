@@ -13,23 +13,23 @@ var active : bool
 
 func _ready():
 	vortex_tool.tool_active_signal.connect(add_vortex)
-	_global_datas.in_mirror_zone.connect(check_mirror)	
-	
-	
-func check_mirror():
-
-	var player_state = _global_datas.player_state
-					 
-	if player_state == game_state.visible_state.normal:
-		vortex_tool.disable_button = false
-	if player_state == game_state.visible_state.mirror:
-		vortex_tool.disable_button = true
-	
+	#_global_datas.in_mirror_zone.connect(check_mirror)	
+	#
+	#
+#func check_mirror():
+#
+	#var player_state = _global_datas.player_state
+					 #
+	#if player_state == game_state.visible_state.normal:
+		#vortex_tool.disable_button = false
+	#if player_state == game_state.visible_state.mirror:
+		#vortex_tool.disable_button = true
+	#
 	
 func add_vortex(condition : bool):
 	
-	if vortex_tool.disable_button:
-		return
+	#if vortex_tool.disable_button:
+		#return
 	
 	if condition:
 		vortex_creation_part.emitting = true

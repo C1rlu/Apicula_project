@@ -11,10 +11,7 @@ var previous_angle_selected : float
 
 signal select_tool(tool : tool_data)
 
-@export var subscene_tool : Control
-@export var Main_tool : Control
 
-@onready var selected_button_mouse_click = $"../Selected_Button_mouseClick"
 
 func _ready():
 	_global_datas.open_tool_selector.connect(_active)
@@ -50,19 +47,7 @@ func _input(event):
 	check_angle()
 func update_button_list():
 
-	var all_b 
-
-
-
-	if _global_datas.current_scene_state == game_state.scene_state._Main:
-		all_b = Main_tool.get_children()	
-		
-	if _global_datas.current_scene_state == game_state.scene_state._Subscene:
-		all_b = subscene_tool.get_children()
-		
-	if _global_datas.current_scene_state == game_state.scene_state._Boardscene:
-		all_b = subscene_tool.get_children()
-				
+	var all_b = center.get_children()	
 	button_list.clear()
 		
 	
@@ -111,4 +96,4 @@ func get_closet_button(angle : float):
 			b.grab_focus()
 			previous_angle_selected = angle
 			select_tool.emit(b.tool)
-			selected_button_mouse_click.selected_button = b
+		
