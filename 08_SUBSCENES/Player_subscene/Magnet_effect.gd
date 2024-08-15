@@ -6,8 +6,6 @@ extends Node
 @onready var root = $".."
 var magneting : bool = false
 var list_of_magnetable : Array[Node]
-@onready var timer = $Timer
-@onready var magnet_zone = $"../Magnet_zone"
 
 func _ready():
 	manget_tool.tool_active_signal.connect(_active)
@@ -31,6 +29,7 @@ func _magnet_enter(area_rid, area, area_shape_index, local_shape_index):
 	
 	if area:
 		var magnetable = area.get_node_or_null("Attract_me")
+
 		if magnetable:
 			list_of_magnetable.append(magnetable)
 			
@@ -43,8 +42,3 @@ func _magnet_exited(area_rid, area, area_shape_index, local_shape_index):
 			list_of_magnetable.erase(magnetable)
 			
 
-func _on_timer_timeout():
-	
-	_active(false)
-	for a in list_of_magnetable:
-		a.Push(2)

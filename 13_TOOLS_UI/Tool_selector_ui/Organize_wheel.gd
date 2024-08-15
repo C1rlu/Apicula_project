@@ -41,8 +41,8 @@ func update_list():
 func _run():
 	organize()	
 
-#func _process(delta):
-	#
-	#if Engine.is_editor_hint():
-		#organize()
+func _process(delta):
+
+	if Engine.is_editor_hint():
+		organize()
 

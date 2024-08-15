@@ -13,8 +13,13 @@ func hide():
 
 func show_ui(condition : bool):
 	
-	get_tree().paused = condition
+	#get_tree().paused = condition
 	_show_ui.visible = condition
-	_fade.emit(condition)
+	
+	
+	if condition:
+		Engine.time_scale = 0.1
+	else:
+		Engine.time_scale = 1.0	
 		
-
+	_fade.emit(condition)

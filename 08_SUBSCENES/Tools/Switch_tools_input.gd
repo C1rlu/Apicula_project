@@ -22,12 +22,12 @@ func select_this(tool : tool_data):
 func switch_active_tool(tool : tool_data):
 
 	#SELECT VISUAL TOOLS IN SCENE
-	for t in all_tool:
-		t.select_this_tool_scene_prefabs.emit(false)
-		t.cancel_action_signal.emit()
-		t.tool_active_signal.emit(false)
+	#for t in all_tool:
+		#t.select_this_tool_scene_prefabs.emit(false)
+		#t.cancel_action_signal.emit()
+		#t.tool_active_signal.emit(false)
 		
 	_global_datas._selected_tool = tool	
 	
-	_global_datas._selected_tool.select_this_tool_scene_prefabs.emit(true)
+	#_global_datas._selected_tool.select_this_tool_scene_prefabs.emit(true)
 	_global_datas._selected_tool.tool_active_signal.emit(false)

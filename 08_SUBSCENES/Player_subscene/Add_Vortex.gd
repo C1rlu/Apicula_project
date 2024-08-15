@@ -11,6 +11,8 @@ var t
 @onready var timer_check = $Timer_check
 var active : bool
 
+var current_value : float
+
 func _ready():
 	vortex_tool.tool_active_signal.connect(add_vortex)
 	#_global_datas.in_mirror_zone.connect(check_mirror)	
@@ -40,16 +42,24 @@ func add_vortex(condition : bool):
 			t.kill()
 		t = create_tween()
 		
-		t.tween_method(_value,0.0,1.0,1.0)
+		t.tween_method(_value,current_value,1.0,1.0)
 		t.connect("finished",set_vortex)
 		
 	else:
+	
+		vortex_creation_part.emitting = false
+		timer_check.stop()	
+		
 		if t:
 			t.kill()
-		vortex_creation_part.emitting = false
+		t = create_tween()
 		
-		timer_check.stop()	
-		vortex_creation_msh.visible = false
+		t.tween_method(_value,current_value,0.0,0.25)
+		t.connect("finished",dont_set_vortex)
+
+func dont_set_vortex():
+	vortex_creation_msh.visible = false	
+	
 func set_vortex():
 	
 	if check_zone(): #check is a zone is overlapping return true
@@ -63,7 +73,7 @@ func set_vortex():
 	teleporter.global_position = player_position
 	timer_check.stop()	
 	vortex_creation_msh.visible = false
-	
+	current_value = 0.0
 	disable()
 	
 func disable():
@@ -74,7 +84,8 @@ func disable():
 func _value(value : float):
 	vortex_creation_part.amount_ratio = value	
 	vortex_creation_msh.scale = Vector3(value,value,value)
-
+	current_value = value
+	
 func check_zone() -> bool :
 	
 	var areas = area.get_overlapping_areas()

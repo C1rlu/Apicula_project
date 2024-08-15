@@ -2,7 +2,7 @@ extends Node
 
 const SUBSCENE_SONAR_VFX = preload("res://08_SUBSCENES/VFX/subscene_sonar_VFX.tscn")
 @onready var load_scene = $"../LoadScene"
-@onready var sonar_pos = $"../Sonar_pos"
+
 
 
 func _ready():
