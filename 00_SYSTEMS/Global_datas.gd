@@ -89,6 +89,7 @@ signal _photo_flash
 var _selected_tool : tool_data 
 signal set_tool_ui(tool : tool_data)
 signal open_tool_selector(condition : bool)
+var selector_is_open: bool = false
 signal subscene_sonar_effect(position : Vector3)
 var LoadScene : Node3D
 #teleporter vertex variable

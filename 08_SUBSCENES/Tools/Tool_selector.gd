@@ -1,6 +1,6 @@
 extends Node
 
-@export var check_clock : tool_data
+@export var flash_tool : tool_data
 var lock_active_tool : bool = false
 
 func _ready():
@@ -33,10 +33,6 @@ func _input(event):
 		_global_datas.open_tool_selector.emit(false)
 		lock_active_tool = false
 	
-	#if event.is_action_pressed("show_timer"):	
-		#check_clock.tool_active_signal.emit(true)
-	#if event.is_action_released("show_timer"):	
-		#check_clock.tool_active_signal.emit(false)
 
 	if lock_active_tool:
 		return	
@@ -49,3 +45,5 @@ func _input(event):
 		_global_datas._selected_tool.tool_active_signal.emit(false)
 		
 
+	if event.is_action_pressed("Flash"):
+		flash_tool.tool_active_signal.emit(true)

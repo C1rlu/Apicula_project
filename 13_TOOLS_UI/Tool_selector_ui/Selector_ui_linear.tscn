@@ -1,10 +1,8 @@
-[gd_scene load_steps=50 format=3 uid="uid://d0skcajnuhv37"]
+[gd_scene load_steps=48 format=3 uid="uid://d0skcajnuhv37"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/Tool_selector_ui/Select_tool_button.gd" id="1_npeg6"]
-[ext_resource type="Script" path="res://13_TOOLS_UI/Tool_selector_ui/Fade_selector.gd" id="2_5eyta"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/Tool_selector_ui/Select_onAngle.gd" id="2_ub62y"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/Tool_selector_ui/Organize_wheel.gd" id="3_318rv"]
-[ext_resource type="PackedScene" uid="uid://clc3sbquuu1us" path="res://13_TOOLS_UI/Clock_montre/Clock_ui_prefab.tscn" id="3_is6m6"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/Tool_selector_ui/Button_tool_select.gd" id="3_x5nql"]
 [ext_resource type="Resource" uid="uid://vv3dws7dmhtd" path="res://08_SUBSCENES/Tools/Scanner.tres" id="4_kpv76"]
 [ext_resource type="Resource" uid="uid://380xcgsxw62f" path="res://08_SUBSCENES/Tools/magnet_tool.tres" id="5_je66b"]
@@ -103,7 +101,7 @@ nodes/fragment/connections = PackedInt32Array(9, 0, 0, 0, 31, 0, 32, 1, 5, 0, 32
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cvehy"]
 shader = SubResource("VisualShader_hgt7l")
-shader_parameter/Opacity = 0.0
+shader_parameter/Opacity = 0.5
 
 [sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_vygo7"]
 size = Vector2(724.789, 654.559)
@@ -349,10 +347,6 @@ script = ExtResource("1_npeg6")
 [node name="Select_onAngle" type="Node" parent="."]
 script = ExtResource("2_ub62y")
 
-[node name="Fade_selector" type="Node" parent="." node_paths=PackedStringArray("to_show")]
-script = ExtResource("2_5eyta")
-to_show = [NodePath("../Circle")]
-
 [node name="Organize_wheel" type="Node" parent="."]
 script = ExtResource("3_318rv")
 button_radius = 165
@@ -424,16 +418,6 @@ points = PackedVector2Array(225, -141, 329, -141)
 width = 1.25
 default_color = Color(0.780392, 0.627451, 0.396078, 1)
 
-[node name="Clock" parent="." instance=ExtResource("3_is6m6")]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-grow_horizontal = 2
-grow_vertical = 2
-
 [node name="Center" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 8
@@ -446,6 +430,7 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="LightDetector" type="Button" parent="Center"]
+visible = false
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
 offset_left = -36.5689
@@ -475,10 +460,10 @@ expand_mode = 2
 [node name="Scanner" type="Button" parent="Center"]
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 0
-offset_left = 117.951
-offset_top = -87.7136
-offset_right = 197.951
-offset_bottom = -7.71358
+offset_left = -36.5689
+offset_top = -204.964
+offset_right = 43.4312
+offset_bottom = -124.964
 focus_mode = 1
 mouse_filter = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_3gf3c")
@@ -502,10 +487,10 @@ expand_mode = 2
 [node name="Magnet" type="Button" parent="Center"]
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
-offset_left = 54.1875
-offset_top = 95.4755
-offset_right = 134.188
-offset_bottom = 175.476
+offset_left = 117.95
+offset_top = -87.7138
+offset_right = 197.951
+offset_bottom = -7.71329
 focus_mode = 1
 mouse_filter = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_3gf3c")
@@ -585,10 +570,10 @@ expand_mode = 2
 [node name="Vortex" type="Button" parent="Center"]
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
-offset_left = -139.739
-offset_top = 91.4422
-offset_right = -59.7394
-offset_bottom = 171.442
+offset_left = 54.1877
+offset_top = 95.4757
+offset_right = 134.188
+offset_bottom = 175.476
 focus_mode = 1
 mouse_filter = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_3gf3c")
@@ -610,13 +595,12 @@ texture = ExtResource("16_0ude0")
 expand_mode = 2
 
 [node name="JetPack" type="Button" parent="Center"]
-visible = false
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
-offset_left = -184.579
-offset_top = 39.5107
-offset_right = -104.579
-offset_bottom = 119.511
+offset_left = -139.739
+offset_top = 91.4422
+offset_right = -59.7394
+offset_bottom = 171.442
 focus_mode = 1
 mouse_filter = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_3gf3c")
@@ -672,9 +656,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -20.0
-offset_top = -108.0
+offset_top = -122.0
 offset_right = 20.0
-offset_bottom = -68.0
+offset_bottom = -82.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
@@ -701,6 +685,4 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[connection signal="_fade" from="Open_Selector" to="Fade_selector" method="_fade"]
-[connection signal="_fade" from="Open_Selector" to="Tool_Legend" method="_on_open_selector__fade"]
 [connection signal="select_tool" from="Select_onAngle" to="Tool_Legend" method="_on_select_on_angle_select_tool"]

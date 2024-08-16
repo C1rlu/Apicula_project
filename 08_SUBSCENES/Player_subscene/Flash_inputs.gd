@@ -7,14 +7,13 @@ extends Node
 
 @onready var Mirror_scanner_area = $"../Magnet_zone"
 
-
+var is_active : bool = false
 func _ready():
 	light_tool.tool_active_signal.connect(_start_light)
 
 	#_global_datas._end_ini_subscene.connect(start_loop)
 	#_global_datas._backFrom_subscene.connect(stop_loop)
 
-	
 func start_loop():
 	timer_mirror_check.start()	
 
@@ -33,7 +32,7 @@ func _start_light(condition : bool):
 		_global_datas._scan_mirror_xray.emit()
 		_global_datas._photo_flash.emit()
 	
-
+	
 func check_flash_zone():
 	
 	
@@ -50,7 +49,5 @@ func check_flash_zone():
 							
 				
 
-func _on_loop_lighter_timeout():
-	check_flash_zone()
-	
+
 

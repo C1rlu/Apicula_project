@@ -25,6 +25,15 @@ func _ready():
 	_global_datas._backFrom_subscene.connect(cant_Move)
 
 	_global_datas.player_rg = self
+	orbe_tool.tool_active_signal.connect(speed_up)
+	
+	
+func speed_up(condition : bool):
+	
+	if condition:
+		actual_speed = hight_speed
+	else:
+		actual_speed = normal_speed		
 	
 func ini_Pos():
 	_canMove = true
@@ -65,6 +74,7 @@ func _physics_process(_delta):
 	if !_global_datas.Player_InSubScene:
 		return
 		
+
 	_global_datas.subbscene_playerPosition = transform.origin	
 	
 	

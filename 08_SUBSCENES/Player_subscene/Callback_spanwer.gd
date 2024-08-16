@@ -15,11 +15,11 @@ var _active : bool = false
 
 
 func _ready():
-	
-	BackPath.tool_active_signal.connect(drag_path_target)
-	_global_datas._go_Subscene.connect(reset)
-	
-	JetPath.tool_active_signal.connect(active)
+	pass	
+	#BackPath.tool_active_signal.connect(drag_path_target)
+	#_global_datas._go_Subscene.connect(reset)
+	#
+	#JetPath.tool_active_signal.connect(active)
 	
 	
 func active(condition : bool):
