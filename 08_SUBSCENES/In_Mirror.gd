@@ -24,5 +24,7 @@ func show(condition):
 	
 	all_render.visible = condition
 	all_render_x_ray.visible = !condition
-	col.call_deferred("set_disabled",!condition)
+	
+	if col:
+		col.call_deferred("set_disabled",!condition)
 		
