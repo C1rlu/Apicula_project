@@ -1,4 +1,4 @@
-[gd_scene load_steps=86 format=3 uid="uid://cnmptm7i0xxmj"]
+[gd_scene load_steps=87 format=3 uid="uid://cnmptm7i0xxmj"]
 
 [ext_resource type="Script" path="res://00_SCENE/Active_Decor_Scene.gd" id="1_ounvv"]
 [ext_resource type="PackedScene" uid="uid://vpdvl0v7dubd" path="res://00_PLAYER/Player_boat.tscn" id="1_qltht"]
@@ -25,10 +25,11 @@
 [ext_resource type="PackedScene" uid="uid://biiofg53lwx38" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Mountain/Mountain_03.tscn" id="14_fqdgl"]
 [ext_resource type="PackedScene" uid="uid://bjfuwgxyiffs4" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Mountain/Mountain_01.tscn" id="15_bqwbg"]
 [ext_resource type="PackedScene" uid="uid://fcjcvy77lg0o" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Lighthouse/lighthouse_prefabs.tscn" id="16_u78ww"]
-[ext_resource type="PackedScene" uid="uid://dnxexehkt6k6v" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Banquise/banquise_01_prefabs.tscn" id="17_4pwgg"]
 [ext_resource type="Script" path="res://00_PLAYER/Check_zone.gd" id="17_unqeu"]
 [ext_resource type="Material" uid="uid://dgl2um0yp8e3c" path="res://05_SHADER_TEST/All_Materials/Building_mat.tres" id="20_24d3w"]
 [ext_resource type="PackedScene" uid="uid://cp1aidnp626l4" path="res://04_SCENE_MAIN_MAP/Birds/Birds_prefabs.tscn" id="21_py3bv"]
+[ext_resource type="Script" path="res://00_SCENE/Location_state.gd" id="21_v3ftk"]
+[ext_resource type="Resource" uid="uid://5vga3uadhx5n" path="res://15_GAME_RESSOURCE/00_Main_Location/First_island.tres" id="22_axesb"]
 [ext_resource type="PackedScene" uid="uid://bw5vovfbghh6f" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Mountain/Moutain_set/mountain_set_02_prefab.tscn" id="23_e4he1"]
 [ext_resource type="Material" uid="uid://dkpo8pe6k46g6" path="res://05_SHADER_TEST/All_Materials/Light_mat.tres" id="23_o3pq1"]
 [ext_resource type="PackedScene" uid="uid://dti7l20thp2rk" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Subscene_elements/epave_zone.tscn" id="23_txlwt"]
@@ -846,11 +847,8 @@ transform = Transform3D(-0.601958, 0, -0.117467, 0, 0.613312, 0, 0.117467, 0, -0
 [node name="IceBerg_09" parent="--DECOR--/WORLD_ELEMENTS/Node3D" instance=ExtResource("15_bqwbg")]
 transform = Transform3D(-4.85638, 0, 4.85638, 0, 6.86796, 0, -4.85638, 0, -4.85638, 9.52378, -7.44586, 5.37502)
 
-[node name="IceBerg_06" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_h0nl5")]
-transform = Transform3D(0.437557, 0, -0.0971482, 0, 0.448212, 0, 0.0971482, 0, 0.437557, -0.559818, -0.479977, -5.12929)
-
 [node name="IceBerg_07" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_h0nl5")]
-transform = Transform3D(0.717731, 0, -0.0726512, 0, 0.721399, 0, 0.0726512, 0, 0.717731, -5.977, -0.656455, -3.08)
+transform = Transform3D(0.717731, 0, -0.0726512, 0, 0.721399, 0, 0.0726512, 0, 0.717731, -8.37715, -0.656455, -5.633)
 
 [node name="IceBerg_05" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("11_086vv")]
 transform = Transform3D(-0.451264, 0, -0.0157661, 0, 0.45154, 0, 0.0157661, 0, -0.451264, 4.03894, -0.477896, -1.90279)
@@ -865,8 +863,19 @@ layers = 1
 transform = Transform3D(-0.334611, 0, 0.0349742, 0, 0.336434, 0, -0.0349742, 0, -0.334611, 0.135678, -0.414282, 3.39587)
 layers = 1
 
-[node name="IceBerg_03" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("14_fqdgl")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7709, -0.215266, -7.01901)
+[node name="Location_test" type="Node3D" parent="--DECOR--/WORLD_ELEMENTS"]
+transform = Transform3D(-0.0418233, 0, 0.999125, 0, 1, 0, -0.999125, 0, -0.0418233, -2.88266, -0.215266, -6.54418)
+script = ExtResource("21_v3ftk")
+location = ExtResource("22_axesb")
+
+[node name="IceBerg_06" parent="--DECOR--/WORLD_ELEMENTS/Location_test" instance=ExtResource("10_h0nl5")]
+transform = Transform3D(-0.115363, 0, -0.433111, 0, 0.448212, 0, 0.433111, 0, -0.115363, -1.5108, -0.264711, 2.26163)
+
+[node name="Mountain_set_02_Prefab2" parent="--DECOR--/WORLD_ELEMENTS/Location_test" instance=ExtResource("23_e4he1")]
+transform = Transform3D(0.329637, 0, -0.557163, 0, 0.647372, 0, 0.557163, 0, 0.329637, -2.65367, 0.005604, 0.133411)
+
+[node name="IceBerg_03" parent="--DECOR--/WORLD_ELEMENTS/Location_test" instance=ExtResource("14_fqdgl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="IceBerg_01" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("15_bqwbg")]
 transform = Transform3D(-0.529492, 0, 2.98023e-08, 0, 0.529492, 0, -2.98023e-08, 0, -0.529492, 5.51049, -0.219669, -3.51967)
@@ -882,9 +891,6 @@ transform = Transform3D(-0.300319, 0, -1.1208, 0, 1.16034, 0, 1.1208, 0, -0.3003
 
 [node name="Mountain_set_02_Prefab" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("23_e4he1")]
 transform = Transform3D(0.647372, 0, 0, 0, 0.647372, 0, 0, 0, 0.647372, -6.97561, -0.209662, 2.41715)
-
-[node name="Mountain_set_02_Prefab2" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("23_e4he1")]
-transform = Transform3D(0.542889, 0, 0.352651, 0, 0.647372, 0, -0.352651, 0, 0.542889, -4.51793, -0.209662, -5.10977)
 
 [node name="Mountain_set_02_Prefab3" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("23_e4he1")]
 transform = Transform3D(0.147306, 0, 1.06567, 0, 1.07581, 0, -1.06567, 0, 0.147306, 0.280873, -0.221378, 5.58614)
@@ -933,9 +939,6 @@ transform = Transform3D(0.0448409, 0, -0.0339498, 0, 0.0562434, 0, 0.0339498, 0,
 
 [node name="Pine_prefabs34" parent="--DECOR--/WORLD_ELEMENTS/Mountain_set_02_Prefab3" instance=ExtResource("10_c6r5x")]
 transform = Transform3D(0.023463, 0, -0.0511154, 0, 0.0562434, 0, 0.0511154, 0, 0.023463, 1.14791, 0.49971, -0.706503)
-
-[node name="Banquise_05" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("17_4pwgg")]
-transform = Transform3D(-0.522002, 0, 0.559075, 0, 0.764886, 0, -0.559075, 0, -0.522002, -2.36794, -0.216037, -5.03695)
 
 [node name="Lighthouse2" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("16_u78ww")]
 transform = Transform3D(-0.271044, 0, 2.89823e-08, 0, 0.271044, 0, -2.89823e-08, 0, -0.271044, 2.95369, 0.241196, -3.30812)

@@ -14,6 +14,8 @@ signal scanner_effect_condition(condition : bool)
 
 var is_scanning : bool = false
 
+signal scaning_done
+
 func _ready():
 	_global_datas._photo_data_scene_list.append(self)	
 	
@@ -48,6 +50,7 @@ func stop_scanning():
 
 func scanning_done():
 	
+	scaning_done.emit()
 	stop_scanning()
 	
 	_global_datas.selected_photoData = photoData

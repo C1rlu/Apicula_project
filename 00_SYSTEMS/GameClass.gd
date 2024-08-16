@@ -11,8 +11,6 @@ enum scene_state {
 	_Menu
 }
 
-
-
 enum visible_state {
 	normal,
 	mirror
@@ -29,12 +27,3 @@ enum camera_state {
 	BoardZoom
 }
 
-
-enum oxy_state {
-	
-	_no_effect,
-	_low_effect,
-	_mid_effect,
-	_hard_effect,
-	_crazy_effect
-}
