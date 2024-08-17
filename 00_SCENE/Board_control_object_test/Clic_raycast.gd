@@ -3,22 +3,18 @@ extends Node
 
 
 @export var Camera : Camera3D
-
-var previous_on_over
 var On_Over
-
 var _selectec_object : Node
+var raycast
+
 func _input(event):
 
-
-	if !_selectec_object:
-		var target = get_viewport().get_mouse_position()
-		check_on_over(target)		
-				
+	var target = get_viewport().get_mouse_position()
+	
 	if event.is_action_pressed("Click_on_board"):	
-		var n_target = get_viewport().get_mouse_position()
-		check_cast(n_target)
-		
+		check_cast(target)
+	
+	check_on_over(target)	
 		
 func check_cast(targetPos : Vector2):
 	
@@ -39,20 +35,21 @@ func check_cast(targetPos : Vector2):
 	#print(result)
 	if !result:	
 		return
-	
-	if _selectec_object:
-		if result.collider.get_node_or_null("Position_zone"): 			
-			_selectec_object.On_Position.emit(result.position)
-			_selectec_object = null
-			
+
 	if !_selectec_object:
+		
 		if result.collider.get_node_or_null("On_click"): 
 			var _On_click = result.collider.get_node_or_null("On_click")
 			_selectec_object = _On_click
-			_On_click.On_click.emit()
+			_On_click.On_Move.emit(true)
+	else:
+		_selectec_object.On_Move.emit(false)
+		_selectec_object = null	
+		_global_datas.select_movable_object.emit(null)
+	
 
 		
-		
+			
 func check_on_over(targetPos : Vector2):
 	
 	var rayLengh = 250.0
@@ -67,18 +64,18 @@ func check_on_over(targetPos : Vector2):
 	rayQuery.collide_with_bodies = false
 	
 	var result = space.intersect_ray(rayQuery)
-	
+
 	if !result:
 		if On_Over:
 			On_Over.on_over(false)	
 			On_Over = null	
 		return
-		
-	if previous_on_over:
-		previous_on_over.on_over(false)
-		previous_on_over = null	
-		
 
+
+	if _selectec_object:
+		if result.collider.get_node_or_null("Position_zone"):
+			_selectec_object.On_Position.emit(result.position)
+		return			
 	if On_Over:
 		On_Over.on_over(false)	
 		On_Over = false
@@ -87,5 +84,6 @@ func check_on_over(targetPos : Vector2):
 	if result.collider.get_node_or_null("On_Over"): 
 		On_Over = result.collider.get_node_or_null("On_Over")
 		On_Over.on_over(true)	
-	
+
+
 

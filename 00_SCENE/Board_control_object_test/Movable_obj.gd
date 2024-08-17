@@ -1,15 +1,12 @@
 extends Node3D
 
-
-var previous_position : Vector3
-func _ready():
-	previous_position = global_position
-	
-
-
-func _on_on_click_on_click():
-	print("ON MOVE OBJECT")
+@export var collider : CollisionShape3D
 
 
 func _on_on_click_on_position(Position):
 	global_position = Position
+	
+func _on_on_click_on_move(condition):
+	if condition:
+		_global_datas.select_movable_object.emit(self)
+	collider.disabled = condition

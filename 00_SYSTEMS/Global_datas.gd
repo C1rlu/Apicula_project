@@ -176,3 +176,8 @@ func _ready():
 	_back_call_list.clear()
 	_selected_tool = null
 	_photo_data_scene_list.clear()
+
+
+# TEST BOARD NEWS PROTO SCENE
+signal select_movable_object( object : Node3D)
+
