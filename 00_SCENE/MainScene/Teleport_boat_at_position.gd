@@ -12,4 +12,4 @@ func _ready():
 	
 func _teleport(n_position : Vector3):
 	player_boat.global_position = n_position	
-	_global_datas._active_sonar.emit(n_position)
+

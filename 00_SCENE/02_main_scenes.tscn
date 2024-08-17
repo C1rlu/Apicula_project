@@ -1,4 +1,4 @@
-[gd_scene load_steps=87 format=3 uid="uid://cnmptm7i0xxmj"]
+[gd_scene load_steps=88 format=3 uid="uid://cnmptm7i0xxmj"]
 
 [ext_resource type="Script" path="res://00_SCENE/Active_Decor_Scene.gd" id="1_ounvv"]
 [ext_resource type="PackedScene" uid="uid://vpdvl0v7dubd" path="res://00_PLAYER/Player_boat.tscn" id="1_qltht"]
@@ -14,6 +14,7 @@
 [ext_resource type="Shader" uid="uid://bxavm32wwtse2" path="res://05_SHADER_TEST/Clouds_sh.tres" id="5_83wu6"]
 [ext_resource type="Material" uid="uid://chlrh834uha8l" path="res://05_SHADER_TEST/Full_screen/Grid_dither_viewport.tres" id="5_jwi16"]
 [ext_resource type="PackedScene" uid="uid://crxoyweriianl" path="res://04_SCENE_MAIN_MAP/Grid/grid_map.tscn" id="6_8jesf"]
+[ext_resource type="Script" path="res://00_SCENE/Location_state_check.gd" id="6_g645d"]
 [ext_resource type="Material" uid="uid://ctnqf5d3uj1g7" path="res://05_SHADER_TEST/All_Materials/dark_mask.tres" id="6_vcmny"]
 [ext_resource type="Material" uid="uid://b64juw612xqpu" path="res://05_SHADER_TEST/Sea_sh/Sea_mat.tres" id="7_4y8ld"]
 [ext_resource type="Script" path="res://00_SCENE/Active_divingZone.gd" id="7_f3xb7"]
@@ -364,7 +365,7 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-172.891, -224.716)
+graph_offset = Vector2(-269.927, -207.461)
 modes/depth_draw = 2
 modes/cull = 1
 flags/unshaded = true
@@ -567,6 +568,14 @@ script = ExtResource("4_xkpot")
 
 [node name="Active_divingZone" type="Node" parent="."]
 script = ExtResource("7_f3xb7")
+
+[node name="Location_check" type="Node" parent="."]
+script = ExtResource("6_g645d")
+locations_list = Array[Resource("res://15_GAME_RESSOURCE/00_Main_Location/Location_data.gd")]([ExtResource("22_axesb")])
+
+[node name="Timer" type="Timer" parent="Location_check"]
+wait_time = 1.5
+one_shot = true
 
 [node name="01_GAME_UI" type="Node" parent="." node_paths=PackedStringArray("all_renders")]
 script = SubResource("GDScript_8cfdp")
@@ -872,7 +881,7 @@ location = ExtResource("22_axesb")
 transform = Transform3D(-0.115363, 0, -0.433111, 0, 0.448212, 0, 0.433111, 0, -0.115363, -1.5108, -0.264711, 2.26163)
 
 [node name="Mountain_set_02_Prefab2" parent="--DECOR--/WORLD_ELEMENTS/Location_test" instance=ExtResource("23_e4he1")]
-transform = Transform3D(0.329637, 0, -0.557163, 0, 0.647372, 0, 0.557163, 0, 0.329637, -2.65367, 0.005604, 0.133411)
+transform = Transform3D(0.329637, 0, -0.557163, 0, 0.647372, 0, 0.557163, 0, 0.329637, -2.65367, -0.00183177, 0.133411)
 
 [node name="IceBerg_03" parent="--DECOR--/WORLD_ELEMENTS/Location_test" instance=ExtResource("14_fqdgl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
@@ -1212,6 +1221,7 @@ layers = 2048
 mesh = SubResource("BoxMesh_wmrfd")
 skeleton = NodePath("")
 
+[connection signal="timeout" from="Location_check/Timer" to="Location_check" method="_on_timer_timeout"]
 [connection signal="area_entered" from="--DECOR--/Player_Boat/Enter_dialogue_zone" to="--DECOR--/Player_Boat/Check_zone_ui" method="_on_enter_dialogue_zone_area_entered"]
 [connection signal="area_exited" from="--DECOR--/Player_Boat/Enter_dialogue_zone" to="--DECOR--/Player_Boat/Check_zone_ui" method="_on_enter_dialogue_zone_area_exited"]
 [connection signal="area_entered" from="--DECOR--/NPC_TRIGGER_ZONE/Maurice_NPC_Area" to="--DECOR--/NPC_TRIGGER_ZONE/Maurice_NPC_Area" method="_on_area_entered"]
