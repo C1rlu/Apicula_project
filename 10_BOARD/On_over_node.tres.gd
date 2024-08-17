@@ -56,13 +56,14 @@ func on_over(condition):
 func move(condition : bool):
 	
 	if condition:
-		
 		move_node.global_position = move_node_position + position_over
 		if rotation_over != Vector3.ZERO:
 			move_node.rotation_degrees = node_rotation_degrees + rotation_over	
 	else:
 		move_node.global_position  = move_node_position	
 		move_node.rotation_degrees = node_rotation_degrees
+		
+
 func close():
 		
 	if _on_over:

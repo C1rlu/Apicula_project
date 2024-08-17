@@ -1,0 +1,156 @@
+[gd_scene load_steps=9 format=3 uid="uid://bgl5a6kyd68tc"]
+
+[ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Clic_raycast.gd" id="1_ofpfv"]
+[ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Movable_obj.gd" id="3_ywbag"]
+[ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/On_click_object.gd" id="5_ahau7"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_c5gkq"]
+size = Vector3(2, 0.1, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7sn4d"]
+size = Vector3(2, 0, 1)
+
+[sub_resource type="GDScript" id="GDScript_0ewjc"]
+script/source = "extends Node
+
+
+@export var scanner_focus_data : boardCamState_data
+@export var _on_over : Node3D
+@export var _on_over_second: Node3D
+@export var icon_type : icon_class.icon_list
+@export var move_node : Node3D
+@export var position_over : Vector3 = Vector3(0.002,0.01,0.01)
+@export var rotation_over : Vector3 = Vector3.ZERO
+
+var move_node_position : Vector3
+var node_rotation_degrees : Vector3
+
+signal on_over_signal(condition : bool)
+
+var _photo_data : PhotoData
+
+func _ready():
+	
+	_global_datas.close_all_over_ui.connect(close)
+	if move_node:
+		move_node_position = move_node.global_position
+		node_rotation_degrees = move_node.rotation_degrees
+	
+		_photo_data = _photo_data
+		
+
+
+func _focus_scanner():
+	
+	if _photo_data:
+		if scanner_focus_data:
+			if _global_datas.camera_current_state == scanner_focus_data.cam_state:
+				return
+			
+			_global_datas.selected_photoData = _photo_data	
+			_global_datas.camera_focus_On.emit(scanner_focus_data)
+			
+			
+func on_over(condition):
+	
+	if _on_over:
+		_on_over.visible = condition	
+	if _on_over_second:
+		_on_over_second.visible = condition
+		
+	_global_datas.switch_icon_cursor.emit(icon_type)
+
+	on_over_signal.emit(condition)
+	
+	if move_node:
+		move(condition)
+	
+		
+func move(condition : bool):
+	
+	
+	var n_move_node_position = move_node.global_position  
+	if condition:
+		move_node.global_position = n_move_node_position + position_over
+		if rotation_over != Vector3.ZERO:
+			move_node.rotation_degrees = node_rotation_degrees + rotation_over	
+	else:
+		move_node.global_position  = n_move_node_position	
+		move_node.rotation_degrees = node_rotation_degrees
+		
+
+func close():
+		
+	if _on_over:
+		_on_over.visible = false	
+	if _on_over_second:
+		_on_over_second.visible = false
+	if move_node:
+		move(false)
+		
+	on_over_signal.emit(false)
+"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ud465"]
+size = Vector3(0.2, 0.2, 0.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_v4iu2"]
+size = Vector3(0.2, 0.2, 0.2)
+
+[node name="Proto_board_grid" type="Node"]
+
+[node name="Clic_raycast" type="Node" parent="." node_paths=PackedStringArray("Camera")]
+script = ExtResource("1_ofpfv")
+Camera = NodePath("../Main_Cam")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.240159, 0.983117, 0.394259)
+shadow_enabled = true
+shadow_normal_bias = 0.0
+shadow_opacity = 0.31
+shadow_blur = 10.0
+distance_fade_begin = 35.4
+omni_range = 1.96214
+
+[node name="Main_Cam" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.819152, 0.573576, 0, -0.573576, 0.819152, 0, 1.133, 1.479)
+current = true
+fov = 40.0
+
+[node name="Main_root" type="Node3D" parent="."]
+
+[node name="Desk_msh" type="MeshInstance3D" parent="Main_root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
+mesh = SubResource("BoxMesh_c5gkq")
+
+[node name="Area3D" type="Area3D" parent="Main_root"]
+
+[node name="Position_zone" type="Node" parent="Main_root/Area3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Main_root/Area3D"]
+shape = SubResource("BoxShape3D_7sn4d")
+
+[node name="Movable_obj" type="Node3D" parent="."]
+script = ExtResource("3_ywbag")
+
+[node name="Area3D" type="Area3D" parent="Movable_obj"]
+
+[node name="On_Over" type="Node" parent="Movable_obj/Area3D"]
+script = SubResource("GDScript_0ewjc")
+position_over = Vector3(0, 0.05, 0)
+rotation_over = Vector3(2, 0, 0)
+
+[node name="On_click" type="Node" parent="Movable_obj/Area3D"]
+script = ExtResource("5_ahau7")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Movable_obj/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+shape = SubResource("BoxShape3D_ud465")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Movable_obj"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+mesh = SubResource("BoxMesh_v4iu2")
+skeleton = NodePath("../..")
+
+[connection signal="On_Position" from="Movable_obj/Area3D/On_click" to="Movable_obj" method="_on_on_click_on_position"]
+[connection signal="On_click" from="Movable_obj/Area3D/On_click" to="Movable_obj" method="_on_on_click_on_click"]
