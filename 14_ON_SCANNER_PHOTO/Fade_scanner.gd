@@ -11,7 +11,7 @@ extends Node
 var current_scanner_value : float
 var actual_value_b : float
 var fade_in
-
+var fade_in_b
 
 func _ready():
 	_global_datas.show_on_scanner.connect(show_scanner)
@@ -46,25 +46,25 @@ func show_scanner(condition : bool):
 func show_backdrop(condition : bool):
 
 
-	
+
 
 	if condition:
 		
 		backdrop_focus.visible = true
 		
-		if fade_in:
-			fade_in.kill()
+		if fade_in_b:
+			fade_in_b.kill()
 	
-		fade_in = create_tween()
-		fade_in.tween_method(set_backdrop_shader_value,actual_value_b,1.0,1.0).set_trans(Tween.TRANS_SINE)
+		fade_in_b = create_tween()
+		fade_in_b.tween_method(set_backdrop_shader_value,actual_value_b,0.8,1.0).set_trans(Tween.TRANS_SINE)
 		
 	else:		
-		if fade_in:
-			fade_in.kill()
+		if fade_in_b:
+			fade_in_b.kill()
 	
-		fade_in = create_tween()
-		fade_in.tween_method(set_backdrop_shader_value,actual_value_b,0.0,0.5).set_trans(Tween.TRANS_SINE)
-		fade_in.connect("finished",done)
+		fade_in_b = create_tween()
+		fade_in_b.tween_method(set_backdrop_shader_value,actual_value_b,0.0,0.5).set_trans(Tween.TRANS_SINE)
+		fade_in_b.connect("finished",done)
 		
 func done():
 	backdrop_focus.visible = false

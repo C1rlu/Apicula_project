@@ -1,4 +1,4 @@
-[gd_scene load_steps=81 format=3 uid="uid://cein0q2eirkay"]
+[gd_scene load_steps=78 format=3 uid="uid://cein0q2eirkay"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_g3pi7"]
 [ext_resource type="Script" path="res://10_BOARD/Board_CamTarget.gd" id="1_janbq"]
@@ -16,7 +16,6 @@
 [ext_resource type="Script" path="res://10_BOARD/Set_focus_data.gd" id="9_2ajy3"]
 [ext_resource type="Script" path="res://10_BOARD/Zoom_state.gd" id="9_8at4f"]
 [ext_resource type="Script" path="res://10_BOARD/Json_reader_test.gd" id="9_tfybn"]
-[ext_resource type="Script" path="res://10_BOARD/Set_back_Call.gd" id="9_xskqn"]
 [ext_resource type="Script" path="res://14_ON_SCANNER_PHOTO/Show_OnScanner.gd" id="10_354m8"]
 [ext_resource type="Script" path="res://14_ON_SCANNER_PHOTO/Fade_scanner.gd" id="11_2x7ah"]
 [ext_resource type="Resource" uid="uid://d15m8513w4wv2" path="res://15_GAME_RESSOURCE/03_BoardCam_state/AppiculaM_focus_data.tres" id="11_clmas"]
@@ -39,8 +38,13 @@
 [ext_resource type="Resource" uid="uid://dm0uus2gow50q" path="res://15_GAME_RESSOURCE/Otis_photoData.tres" id="21_ko3r3"]
 [ext_resource type="Texture2D" uid="uid://d1kttlfg1wwvk" path="res://10_BOARD/00_BOOK/01_UI/cursor_Circle.png" id="21_qhnbf"]
 [ext_resource type="Resource" uid="uid://cd5pseveq582t" path="res://15_GAME_RESSOURCE/03_BoardCam_state/Main_focus_data.tres" id="24_pisk2"]
+[ext_resource type="Script" path="res://10_BOARD/Select_intrigue.gd" id="27_qyfnp"]
 [ext_resource type="Resource" uid="uid://cyu7mo6v7aaij" path="res://15_GAME_RESSOURCE/03_BoardCam_state/Board_focus_data.tres" id="27_vvxtf"]
+[ext_resource type="Resource" uid="uid://b2bkxyfxws3e3" path="res://15_GAME_RESSOURCE/02_BOARD_INFO/Board_intrigue/Chapitre_I.tres" id="28_bli5v"]
 [ext_resource type="Resource" uid="uid://cjwmwf4frvq3c" path="res://15_GAME_RESSOURCE/03_BoardCam_state/BoardZoom_focus_data.tres" id="28_njdgu"]
+[ext_resource type="Resource" uid="uid://jx3jbwgl8gm0" path="res://15_GAME_RESSOURCE/02_BOARD_INFO/Board_intrigue/Chapitre_II.tres" id="29_fp4yn"]
+[ext_resource type="Resource" uid="uid://qo6th56oqlhi" path="res://15_GAME_RESSOURCE/02_BOARD_INFO/Board_intrigue/Chapitre_III.tres" id="30_difyj"]
+[ext_resource type="Resource" uid="uid://dsi20xus8cnkw" path="res://15_GAME_RESSOURCE/02_BOARD_INFO/Board_intrigue/Chapitre_IV.tres" id="31_g1wpo"]
 
 [sub_resource type="GDScript" id="GDScript_w13ry"]
 script/source = "extends Node
@@ -63,7 +67,7 @@ func open_inventory(condition : bool):
 		_global_datas.current_scene_state = game_state.scene_state._Main
 	else:
 		_global_datas._add_back_call.emit(_back_call)
-		_global_datas.show_on_scanner.emit(true)
+		#_global_datas.show_on_scanner.emit(true)
 		
 		_global_datas.current_scene_state = game_state.scene_state._Boardscene
 		
@@ -144,40 +148,24 @@ func set_shader_value(value):
 [sub_resource type="ViewportTexture" id="ViewportTexture_gpfe8"]
 viewport_path = NodePath("3D_SCENE/SubViewport")
 
-[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_ywm6m"]
-source = 5
-
-[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_nrm5g"]
-function = 1
-
-[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_6ucd3"]
-default_input_values = [1, Vector2(1, 0.5), 2, Vector2(0, 0)]
-function = 1
-
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_ladcr"]
-input_name = "time"
-
-[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_hxvtl"]
-default_input_values = [0, 0.0, 1, 0.001]
-operator = 2
-
-[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_7770h"]
-default_input_values = [0, 0.0, 1, 0.1]
-operator = 2
-
 [sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_5dsty"]
 
-[sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_e4yov"]
-parameter_name = "BlueNoise"
-qualifier = 1
-texture_repeat = 1
-
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_6uurj"]
-parameter_name = "Dither_blue_noise_size"
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_mk6l5"]
+parameter_name = "Dither_size"
 qualifier = 1
 
-[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_v4gxq"]
-default_input_values = [0, 0.0, 1, 0.7, 2, 0.71]
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_cjrkd"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
 
 [sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_mt86t"]
 parameter_name = "Opacity"
@@ -192,8 +180,6 @@ input_name = "color"
 code = "shader_type canvas_item;
 render_mode blend_mix;
 
-global uniform float Dither_blue_noise_size;
-global uniform sampler2D BlueNoise : repeat_enable;
 uniform float Opacity : hint_range(0, 1) = 0.5;
 
 
@@ -203,60 +189,18 @@ void fragment() {
 	vec4 n_out9p0 = COLOR;
 
 
-// UVFunc:16
-	vec2 n_in16p1 = vec2(1.00000, 0.50000);
-	vec2 n_in16p2 = vec2(0.00000, 0.00000);
-	vec2 n_out16p0 = (UV - n_in16p2) * n_in16p1 + n_in16p2;
-
-
-// FloatParameter:30
-	float n_out30p0 = Dither_blue_noise_size;
-
-
-// Input:17
-	float n_out17p0 = TIME;
-
-
-// FloatOp:18
-	float n_in18p1 = 0.00100;
-	float n_out18p0 = n_out17p0 * n_in18p1;
-
-
-// FloatOp:19
-	float n_in19p1 = 0.10000;
-	float n_out19p0 = n_out18p0 * n_in19p1;
-
-
-// UVFunc:15
-	vec2 n_out15p0 = (n_out16p0 - vec2(n_out19p0)) * vec2(n_out30p0) + vec2(n_out19p0);
-
-
-	vec4 n_out13p0;
-// Texture2D:13
-	n_out13p0 = texture(BlueNoise, n_out15p0);
-
-
 // FloatParameter:5
 	float n_out5p0 = Opacity;
 
 
-// Mix:31
-	float n_in31p0 = 0.00000;
-	float n_in31p1 = 0.70000;
-	float n_out31p0 = mix(n_in31p0, n_in31p1, n_out5p0);
-
-
-// Step:2
-	float n_out2p0 = step(n_out13p0.x, n_out31p0);
-
-
 // Output:0
 	COLOR.rgb = vec3(n_out9p0.xyz);
-	COLOR.a = n_out2p0;
+	COLOR.a = n_out5p0;
 
 
 }
 "
+graph_offset = Vector2(-446.087, -175.571)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(680, 140)
@@ -266,25 +210,24 @@ nodes/fragment/5/node = SubResource("VisualShaderNodeFloatParameter_mt86t")
 nodes/fragment/5/position = Vector2(-440, 460)
 nodes/fragment/9/node = SubResource("VisualShaderNodeInput_hryqf")
 nodes/fragment/9/position = Vector2(740, -640)
-nodes/fragment/13/node = SubResource("VisualShaderNodeTexture_ywm6m")
-nodes/fragment/13/position = Vector2(-820, -580)
-nodes/fragment/15/node = SubResource("VisualShaderNodeUVFunc_nrm5g")
-nodes/fragment/15/position = Vector2(-1420, -460)
-nodes/fragment/16/node = SubResource("VisualShaderNodeUVFunc_6ucd3")
-nodes/fragment/16/position = Vector2(-1740, -580)
-nodes/fragment/17/node = SubResource("VisualShaderNodeInput_ladcr")
-nodes/fragment/17/position = Vector2(-2020, -200)
-nodes/fragment/18/node = SubResource("VisualShaderNodeFloatOp_hxvtl")
-nodes/fragment/18/position = Vector2(-1700, -220)
-nodes/fragment/19/node = SubResource("VisualShaderNodeFloatOp_7770h")
-nodes/fragment/19/position = Vector2(-1640, -20)
-nodes/fragment/21/node = SubResource("VisualShaderNodeTexture2DParameter_e4yov")
-nodes/fragment/21/position = Vector2(-1180, -300)
-nodes/fragment/30/node = SubResource("VisualShaderNodeFloatParameter_6uurj")
-nodes/fragment/30/position = Vector2(-2140, -440)
-nodes/fragment/31/node = SubResource("VisualShaderNodeMix_v4gxq")
-nodes/fragment/31/position = Vector2(-38.2298, 375.804)
-nodes/fragment/connections = PackedInt32Array(9, 0, 0, 0, 17, 0, 18, 0, 18, 0, 19, 0, 16, 0, 15, 0, 19, 0, 15, 2, 15, 0, 13, 0, 21, 0, 13, 2, 13, 0, 2, 0, 30, 0, 15, 1, 2, 0, 0, 1, 31, 0, 2, 1, 5, 0, 31, 2)
+nodes/fragment/32/node = SubResource("VisualShaderNodeFloatParameter_mk6l5")
+nodes/fragment/32/position = Vector2(-1289.82, 1091.99)
+nodes/fragment/34/node = SubResource("VisualShaderNodeExpression_cjrkd")
+nodes/fragment/34/position = Vector2(-809.816, 871.99)
+nodes/fragment/34/size = Vector2(724.789, 654.559)
+nodes/fragment/34/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/34/output_ports = "0,0,Dither_Node;"
+nodes/fragment/34/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/connections = PackedInt32Array(9, 0, 0, 0, 32, 0, 34, 1, 5, 0, 34, 0, 5, 0, 0, 1, 34, 0, 2, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pfnxx"]
 shader = SubResource("VisualShader_7x25n")
@@ -569,11 +512,6 @@ focus_target = NodePath("../3D_SCENE/CamTarget")
 [node name="Set_state_call" type="Node" parent="Cam_focus"]
 script = ExtResource("7_m8teq")
 
-[node name="Set_back_Call" type="Node" parent="Cam_focus"]
-script = ExtResource("9_xskqn")
-Main_camera_data = ExtResource("24_pisk2")
-Board_camera_data = ExtResource("27_vvxtf")
-
 [node name="Zoom_state" type="Node" parent="Cam_focus"]
 script = ExtResource("9_8at4f")
 main_state = ExtResource("24_pisk2")
@@ -597,6 +535,10 @@ script = ExtResource("3_rqf42")
 [node name="Board_OBJ_Manager" type="Node" parent="."]
 script = ExtResource("14_johxk")
 all_object_list = Array[Resource("res://10_BOARD/Board_OBJ_data/object_data.gd")]([ExtResource("15_6vhht")])
+
+[node name="Select_intrigue" type="Node" parent="."]
+script = ExtResource("27_qyfnp")
+all_intrigue = Array[Resource("res://15_GAME_RESSOURCE/02_BOARD_INFO/Board_intrigue/Board_intrigue_data.gd")]([ExtResource("28_bli5v"), ExtResource("29_fp4yn"), ExtResource("30_difyj"), ExtResource("31_g1wpo")])
 
 [node name="Show_OnScanner" type="Node" parent="."]
 script = ExtResource("10_354m8")
@@ -809,5 +751,4 @@ position = Vector2(23.6249, -16.3751)
 scale = Vector2(0.12207, 0.12207)
 texture = ExtResource("20_cuebq")
 
-[connection signal="set_back_call" from="Cam_focus" to="Cam_focus/Set_back_Call" method="_set_back_call"]
 [connection signal="set_state_call" from="Cam_focus" to="Cam_focus/Set_state_call" method="_set_state_call"]

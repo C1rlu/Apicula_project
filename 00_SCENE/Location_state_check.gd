@@ -5,7 +5,8 @@ extends Node
 
 
 func _ready():
-	_global_datas._backFrom_subscene.connect(location_check)
+	pass
+	#_global_datas._backFrom_subscene.connect(location_check)
 	
 
 func location_check():

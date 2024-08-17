@@ -1,4 +1,4 @@
-[gd_scene load_steps=69 format=3 uid="uid://uwg2qc3svu11"]
+[gd_scene load_steps=70 format=3 uid="uid://uwg2qc3svu11"]
 
 [ext_resource type="Script" path="res://10_BOARD/Photo_element.gd" id="1_0a8jl"]
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Legend/Legend_behaviour.gd" id="1_f7rkq"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Show_this_page.gd" id="2_653je"]
 [ext_resource type="Resource" uid="uid://cjwmwf4frvq3c" path="res://15_GAME_RESSOURCE/03_BoardCam_state/BoardZoom_focus_data.tres" id="3_tu215"]
 [ext_resource type="Texture2D" uid="uid://38btbw60olcn" path="res://12_INVENTORY/Photo/IMG/Boat.png" id="4_wljme"]
+[ext_resource type="Resource" uid="uid://3pilop3f4m6r" path="res://15_GAME_RESSOURCE/03_BoardCam_state/ScannerM_focus_data.tres" id="7_8v556"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="7_vd1wc"]
 
 [sub_resource type="GDScript" id="GDScript_32kbr"]
@@ -706,12 +707,13 @@ nodes/fragment/connections = PackedInt32Array(3, 0, 4, 1, 5, 0, 3, 0, 5, 0, 4, 0
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jbhxr"]
 shader = SubResource("VisualShader_sxcgk")
 
-[node name="Photo_element_root" type="Node3D"]
+[node name="Photo_element_root" type="Node3D" node_paths=PackedStringArray("On_over")]
 script = ExtResource("1_0a8jl")
 Photo_data = ExtResource("2_8x1kk")
 book_position_offset = Vector3(0.025, 0.008, 0.08)
 book_rotation_angle = -80.0
 camera_state = ExtResource("3_tu215")
+On_over = NodePath("legend/Legend_area/On_Over")
 
 [node name="Photo" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0468789)
@@ -746,6 +748,7 @@ one_shot = true
 
 [node name="On_Over" type="Node" parent="legend/Legend_area" node_paths=PackedStringArray("_on_over", "move_node")]
 script = ExtResource("7_vd1wc")
+scanner_focus_data = ExtResource("7_8v556")
 _on_over = NodePath("../../All_over")
 icon_type = 1
 move_node = NodePath("../../..")

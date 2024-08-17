@@ -35,9 +35,9 @@ func _on_area_3d_teleport_area_entered(area):
 			_teleport()
 			_global_datas.subscene_sonar_effect.emit(root.global_position)
 			teleport_effect.emit()	
-		
-		var element = area.get_node_or_null("Switch_mirror")
-		if element:
-			_global_datas.subscene_sonar_effect.emit(root.global_position)
-			element.switch()	
-			teleport_effect.emit()
+		#
+		#var element = area.get_node_or_null("Switch_mirror")
+		#if element:
+			#_global_datas.subscene_sonar_effect.emit(root.global_position)
+			#element.switch()	
+			#teleport_effect.emit()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=262 format=3 uid="uid://dr73p5vs0sixe"]
+[gd_scene load_steps=267 format=3 uid="uid://dr73p5vs0sixe"]
 
 [ext_resource type="PackedScene" uid="uid://cyb6my1srlcpw" path="res://10_BOARD/Candle/Candle_set.blend" id="1_3ummb"]
 [ext_resource type="Script" path="res://10_BOARD/photos_check.gd" id="1_bcxwj"]
@@ -13,7 +13,9 @@
 [ext_resource type="Resource" uid="uid://blxuee4l6ey2g" path="res://10_BOARD/Board_OBJ_data/Map_data.tres" id="7_ajhp1"]
 [ext_resource type="PackedScene" uid="uid://6pkqjlcwbqu1" path="res://13_TOOLS_UI/Clock_montre/clock_3d_prefab.tscn" id="8_x5b6k"]
 [ext_resource type="PackedScene" uid="uid://qgyjfq88teq8" path="res://10_BOARD/letters_area.tscn" id="9_ajmma"]
+[ext_resource type="Script" path="res://10_BOARD/board_intrigue.gd" id="10_3xiq4"]
 [ext_resource type="Resource" uid="uid://61umivwjjcjs" path="res://12_INVENTORY/Words_note/Birds_goLighthouse_note.tres" id="10_shcmw"]
+[ext_resource type="Resource" uid="uid://b2bkxyfxws3e3" path="res://15_GAME_RESSOURCE/02_BOARD_INFO/Board_intrigue/Chapitre_I.tres" id="11_i6fvc"]
 [ext_resource type="PackedScene" uid="uid://b3i04ha2iqr4l" path="res://10_BOARD/Loupe/loupe_rg.tscn" id="12_alpcj"]
 [ext_resource type="Script" path="res://10_BOARD/Letters_checks.gd" id="14_vbqye"]
 [ext_resource type="Resource" uid="uid://cooqi0giysm3w" path="res://15_GAME_RESSOURCE/MrBirs_photoData.tres" id="14_ycmhi"]
@@ -26,7 +28,10 @@
 [ext_resource type="Script" path="res://10_BOARD/Boue/Boue_check.gd" id="18_tu2nn"]
 [ext_resource type="PackedScene" uid="uid://b0j7tl0gn4vg8" path="res://10_BOARD/Boue/boue_map_prefab.tscn" id="19_bi3qi"]
 [ext_resource type="Resource" uid="uid://duqn0ehtc8aao" path="res://12_INVENTORY/Words_note/FindSeagull_orders.tres" id="19_fvuwa"]
+[ext_resource type="Resource" uid="uid://jx3jbwgl8gm0" path="res://15_GAME_RESSOURCE/02_BOARD_INFO/Board_intrigue/Chapitre_II.tres" id="19_i4sfl"]
+[ext_resource type="Resource" uid="uid://qo6th56oqlhi" path="res://15_GAME_RESSOURCE/02_BOARD_INFO/Board_intrigue/Chapitre_III.tres" id="20_bqklc"]
 [ext_resource type="PackedScene" uid="uid://dgvsf84egy43d" path="res://10_BOARD/Decor/Chavet_part.blend" id="20_d7w3e"]
+[ext_resource type="Resource" uid="uid://dsi20xus8cnkw" path="res://15_GAME_RESSOURCE/02_BOARD_INFO/Board_intrigue/Chapitre_IV.tres" id="21_eaghd"]
 [ext_resource type="PackedScene" uid="uid://bi5gcavnclfud" path="res://10_BOARD/Decor/Bell.blend" id="22_4fabq"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="23_4ws66"]
 [ext_resource type="Script" path="res://10_BOARD/Close_book.gd" id="24_4lsou"]
@@ -2373,10 +2378,6 @@ surface_material_override/0 = ExtResource("6_kkuc8")
 transform = Transform3D(1.46935, 0, 0.301668, 0, 1.5, 0, -0.301668, 0, 1.46935, -0.232287, 0, -0.239616)
 legend_name = "Apicula ?"
 
-[node name="Legend_only_scanner" parent="." instance=ExtResource("51_gvukx")]
-transform = Transform3D(1.49764, 0, 0.0840982, 0, 1.5, 0, -0.0840982, 0, 1.49764, 0.0105427, -2.98023e-08, 0.000631027)
-legend_name = "Scanner reader"
-
 [node name="Legend_only_scanner2" parent="." instance=ExtResource("51_gvukx")]
 transform = Transform3D(1.24688, 0, -0.833834, 0, 1.5, 0, 0.833834, 0, 1.24688, 0.290748, -2.98023e-08, -0.127963)
 legend_name = "Disque"
@@ -2389,55 +2390,60 @@ legend_name = "First Oddities"
 transform = Transform3D(0.976631, 0, -0.214923, 0, 1, 0, 0.214923, 0, 0.976631, 0.302058, 0.00379267, 0.405704)
 legend_name = "Old Boat"
 
-[node name="LINKS" type="Node3D" parent="."]
+[node name="Intrigue_01" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0245579, 0, 0.0630898)
+script = ExtResource("10_3xiq4")
+board_intrigue = ExtResource("11_i6fvc")
 
-[node name="link_01" type="MeshInstance3D" parent="LINKS"]
+[node name="LINKS" type="Node3D" parent="Intrigue_01"]
+visible = false
+
+[node name="link_01" type="MeshInstance3D" parent="Intrigue_01/LINKS"]
 transform = Transform3D(0.000456509, -0.00359012, 0.0733711, 0.000444627, 0.0735535, -3.16624e-09, -0.00198748, 0.0156302, 0.0168527, -0.251748, 0.00441995, 0.135754)
 layers = 2
 mesh = SubResource("PlaneMesh_a362u")
 surface_material_override/0 = SubResource("ShaderMaterial_ev73a")
 
-[node name="link_02" type="MeshInstance3D" parent="LINKS"]
+[node name="link_02" type="MeshInstance3D" parent="Intrigue_01/LINKS"]
 transform = Transform3D(-0.00183584, 0, 0.0106189, 0, 0.0752815, 0, -0.000203621, 0, -0.0957412, -0.296288, 0.00408486, 0.0520827)
 layers = 2
 mesh = SubResource("PlaneMesh_nh317")
 surface_material_override/0 = SubResource("ShaderMaterial_ev73a")
 
-[node name="link_03" type="MeshInstance3D" parent="LINKS"]
+[node name="link_03" type="MeshInstance3D" parent="Intrigue_01/LINKS"]
 transform = Transform3D(-3.65946e-05, 0.000292605, 0.0752694, 0.000451741, 0.0734971, 1.16253e-09, -0.00203735, 0.0162913, -0.00135192, -0.36613, 0.00487708, 0.000759576)
 layers = 2
 mesh = SubResource("PlaneMesh_5heux")
 surface_material_override/0 = SubResource("ShaderMaterial_ev73a")
 
-[node name="PHOTO" type="Node3D" parent="."]
-transform = Transform3D(0.882135, 0, -0.470996, 0, 1, 0, 0.470996, 0, 0.882135, 0.189478, 0.00272226, 0.0787499)
+[node name="PHOTO" type="Node3D" parent="Intrigue_01"]
+transform = Transform3D(0.882135, 0, -0.470996, 0, 1, 0, 0.470996, 0, 0.882135, 0.16492, 0.00272226, 0.0156601)
 script = ExtResource("1_bcxwj")
 
-[node name="MrBird_Photo" parent="PHOTO" node_paths=PackedStringArray("next_photo_data_question", "_question_link") instance=ExtResource("1_mtaom")]
-transform = Transform3D(0.605643, 0, 0.795737, 0, 1, 0, -0.795737, 0, 0.605643, -0.522419, 0.00081823, 0.280512)
+[node name="MrBird_Photo" parent="Intrigue_01/PHOTO" node_paths=PackedStringArray("next_photo_data_question", "_question_link") instance=ExtResource("1_mtaom")]
+transform = Transform3D(0.605643, 0, 0.795737, 0, 1, 0, -0.795737, 0, 0.605643, -0.577348, 0.00081826, 0.256736)
 Photo_data = ExtResource("14_ycmhi")
 next_photo_data_question = [NodePath("../Maurice_Photo")]
 _question_link = [NodePath("../../LINKS/link_03")]
 
-[node name="Otis_Photo" parent="PHOTO" instance=ExtResource("1_mtaom")]
-transform = Transform3D(0.83752, 0, 0.546407, 0, 1, 0, -0.546407, 0, 0.83752, -0.375555, 0.00109485, 0.118123)
+[node name="Otis_Photo" parent="Intrigue_01/PHOTO" instance=ExtResource("1_mtaom")]
+transform = Transform3D(0.837521, 0, 0.546407, 0, 1, 0, -0.546407, 0, 0.837521, -0.550399, 0.00109488, 0.179597)
 Photo_data = ExtResource("15_m1itl")
 
-[node name="Maurice_Photo" parent="PHOTO" node_paths=PackedStringArray("next_photo_data_question", "_question_link") instance=ExtResource("1_mtaom")]
-transform = Transform3D(0.770505, 0.00116027, 0.637433, -0.00136848, 0.999999, -0.000166057, -0.637433, -0.000744368, 0.770506, -0.425125, 0.000537969, 0.209845)
+[node name="Maurice_Photo" parent="Intrigue_01/PHOTO" node_paths=PackedStringArray("next_photo_data_question", "_question_link") instance=ExtResource("1_mtaom")]
+transform = Transform3D(0.770505, 0.00116027, 0.637433, -0.00136848, 0.999999, -0.000166057, -0.637433, -0.000744368, 0.770506, -0.472463, 0.000537999, 0.234522)
 Photo_data = ExtResource("16_14mtd")
 next_photo_data_question = [NodePath("../GhostFollower_Photo")]
 _question_link = [NodePath("../../LINKS/link_03")]
 
-[node name="GhostFollower_Photo" parent="PHOTO" node_paths=PackedStringArray("next_photo_data_question", "_question_link") instance=ExtResource("1_mtaom")]
-transform = Transform3D(0.829898, 0.00122835, 0.557914, -0.00136848, 0.999999, -0.000166055, -0.557914, -0.000625687, 0.829899, -0.356209, 0.00132003, 0.336253)
+[node name="GhostFollower_Photo" parent="Intrigue_01/PHOTO" node_paths=PackedStringArray("next_photo_data_question", "_question_link") instance=ExtResource("1_mtaom")]
+transform = Transform3D(0.829899, 0.00122835, 0.557914, -0.00136848, 0.999999, -0.000166055, -0.557914, -0.000625688, 0.8299, -0.199284, 0.00132012, 0.128091)
 Photo_data = ExtResource("18_gjhpl")
 next_photo_data_question = [NodePath("../Epave_Photo")]
 _question_link = [NodePath("../../LINKS/link_02")]
 
-[node name="Epave_Photo" parent="PHOTO" node_paths=PackedStringArray("_question_link") instance=ExtResource("1_mtaom")]
-transform = Transform3D(0.79225, 0.00118551, 0.610195, -0.00136848, 0.999999, -0.000166059, -0.610195, -0.00070348, 0.792251, -0.267995, 0.000166826, 0.291427)
+[node name="Epave_Photo" parent="Intrigue_01/PHOTO" node_paths=PackedStringArray("_question_link") instance=ExtResource("1_mtaom")]
+transform = Transform3D(0.79225, 0.00118551, 0.610195, -0.00136848, 0.999999, -0.000166059, -0.610195, -0.00070348, 0.792251, -0.286387, 0.000166796, 0.320743)
 _question_link = [NodePath("../../LINKS/link_01")]
 
 [node name="Letters" type="Node3D" parent="." node_paths=PackedStringArray("all_note")]
@@ -2447,18 +2453,22 @@ all_note = [NodePath("note_01"), NodePath("note_02"), NodePath("note_03"), NodeP
 [node name="note_01" parent="Letters" instance=ExtResource("9_ajmma")]
 transform = Transform3D(0.995549, 0, 0.0942469, 0, 1, 0, -0.0942469, 0, 0.995549, -0.333105, 0.00367881, 0.364413)
 Note_data = ExtResource("19_fvuwa")
+intrigue_data = ExtResource("11_i6fvc")
 
 [node name="note_02" parent="Letters" instance=ExtResource("9_ajmma")]
 transform = Transform3D(0.962041, 0, 0.272902, 0, 1, 0, -0.272902, 0, 0.962041, -0.226689, 0.00521253, 0.335166)
 Note_data = ExtResource("10_shcmw")
+intrigue_data = ExtResource("19_i4sfl")
 
 [node name="note_03" parent="Letters" instance=ExtResource("9_ajmma")]
 transform = Transform3D(0.974994, 0, 0.222229, 0, 1, 0, -0.222229, 0, 0.974994, -0.115264, 0.00855086, 0.327895)
 Note_data = ExtResource("18_e0vtf")
+intrigue_data = ExtResource("20_bqklc")
 
 [node name="note_04" parent="Letters" instance=ExtResource("9_ajmma")]
 transform = Transform3D(0.999445, 0, -0.033295, 0, 1, 0, 0.033295, 0, 0.999445, 0.0047554, 0.00658163, 0.296676)
 Note_data = ExtResource("17_3gp1t")
+intrigue_data = ExtResource("21_eaghd")
 
 [node name="clock_3d_prefab" parent="." instance=ExtResource("8_x5b6k")]
 transform = Transform3D(0.04829, -2.43708e-05, -0.0129643, 2.4116e-05, 0.05, -4.16356e-06, 0.0129643, -2.23175e-06, 0.04829, 0.0335523, -0.00191151, 0.443388)
@@ -2531,10 +2541,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0221759, 0, -0.122532)
 script = ExtResource("45_37758")
 focus_data = ExtResource("30_1ohc7")
 
-[node name="On_click" type="Node" parent="Scanner_reader/Area3D"]
+[node name="On_click_off" type="Node" parent="Scanner_reader/Area3D"]
 script = ExtResource("17_gpvpy")
 
-[node name="On_Over" type="Node" parent="Scanner_reader/Area3D" node_paths=PackedStringArray("move_node")]
+[node name="On_Over_off" type="Node" parent="Scanner_reader/Area3D" node_paths=PackedStringArray("move_node")]
 script = ExtResource("23_4ws66")
 icon_type = 1
 move_node = NodePath("../../scanner_reader_msh")
@@ -2576,7 +2586,7 @@ surface_material_override/0 = SubResource("ShaderMaterial_isdhd")
 surface_material_override/1 = ExtResource("6_kkuc8")
 
 [node name="pot" parent="PLume_pot" index="1"]
-transform = Transform3D(0.9248, -1.49012e-08, 0.380456, 6.51926e-09, 1, 7.45058e-09, -0.380457, -7.45058e-09, 0.924799, 0.106257, 0.00155029, -0.202432)
+transform = Transform3D(0.9248, -1.59489e-08, 0.380456, 5.58794e-09, 1, 9.31323e-09, -0.380457, -7.45058e-09, 0.924799, 0.106257, 0.0015503, -0.202432)
 layers = 2
 surface_material_override/0 = ExtResource("6_kkuc8")
 
@@ -2770,7 +2780,7 @@ move_node = NodePath("../../Disque_prefab")
 transform = Transform3D(0.871195, 0, 0.490913, 0, 1, 0, -0.490913, 0, 0.871195, 0.015209, 0.134239, -0.0155258)
 shape = SubResource("BoxShape3D_64lbo")
 
-[connection signal="On_click" from="Scanner_reader/Area3D/On_click" to="Scanner_reader/Area3D/Focus_state" method="_on_on_click_on_click"]
+[connection signal="On_click" from="Scanner_reader/Area3D/On_click_off" to="Scanner_reader/Area3D/Focus_state" method="_on_on_click_on_click"]
 [connection signal="On_click" from="Book_Close_root/Area3D/On_click_off" to="Book_Close_root/Area3D/On_click_off" method="_on_on_click"]
 [connection signal="On_click" from="Apicula_maquette_v01blend/Area3D/On_click" to="Apicula_maquette_v01blend/Area3D/Focus_state" method="_on_on_click_on_click"]
 [connection signal="On_click" from="TOURNE_DISQUE/Area3D/On_click" to="TOURNE_DISQUE/Area3D/Focus_state" method="_on_on_click_on_click"]

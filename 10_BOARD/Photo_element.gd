@@ -17,9 +17,14 @@ signal update_legend( legend : String)
 
 @onready var on_over_full = $legend/All_over/On_Over_full
 @export var camera_state : boardCamState_data
+
+@export var On_over : Node
+
 func _ready():
 	
 	Photo_data.photo_element = self
+	if On_over:
+		On_over._photo_data = Photo_data
 		
 func check_state():
 		

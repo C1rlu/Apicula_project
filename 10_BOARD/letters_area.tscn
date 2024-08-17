@@ -1,6 +1,6 @@
 [gd_scene load_steps=25 format=3 uid="uid://qgyjfq88teq8"]
 
-[ext_resource type="Script" path="res://10_BOARD/On_Click_clock.gd" id="1_vimos"]
+[ext_resource type="Script" path="res://10_BOARD/00_BOOK/Show_this_page.gd" id="1_va6lq"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="2_ke4da"]
 [ext_resource type="Shader" uid="uid://upo0fuo5sqgd" path="res://05_SHADER_TEST/Board/Board_sh.tres" id="3_ydeap"]
 
@@ -8,7 +8,7 @@
 script/source = "extends Area3D
 
 @export var Note_data : Note_Data
-
+@export var intrigue_data : board_intrigue_data
 @onready var collision_shape_3d = $CollisionShape3D
 @onready var photo = $photo
 @onready var note_text = $Render_text
@@ -35,6 +35,10 @@ func _disable():
 	note_text.visible = false
 	render_responce.visible = false
 	
+
+
+func _on_on_click_on_click():
+	_global_datas.select_intrigue.emit(intrigue_data)
 "
 
 [sub_resource type="GDScript" id="GDScript_4uwx0"]
@@ -260,7 +264,7 @@ script = SubResource("GDScript_ypp87")
 script = SubResource("GDScript_4uwx0")
 
 [node name="On_click" type="Node" parent="."]
-script = ExtResource("1_vimos")
+script = ExtResource("1_va6lq")
 
 [node name="On_Over" type="Node" parent="." node_paths=PackedStringArray("_on_over", "move_node")]
 script = ExtResource("2_ke4da")
@@ -358,3 +362,5 @@ theme_override_font_sizes/font_size = 50
 text = "..."
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[connection signal="On_click" from="On_click" to="." method="_on_on_click_on_click"]

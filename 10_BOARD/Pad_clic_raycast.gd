@@ -38,7 +38,12 @@ func _input(event):
 		check_on_over(target)	
 		
 
-			
+	if event.is_action_pressed("Show_on_scanner"):
+		if On_Over:
+			if On_Over:
+				On_Over._focus_scanner()
+	
+					
 	if event.is_action_pressed("Click_on_board"):	
 
 		if _pad: 
@@ -51,7 +56,7 @@ func _input(event):
 			check_cast(target)
 	
 	
-				
+			
 	if event.is_action_released("Click_on_board"):	
 		if boue_click:
 			boue_click.lunch_teleport(false)	

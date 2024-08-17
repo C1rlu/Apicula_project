@@ -1,6 +1,7 @@
 extends Node
 
 
+@export var scanner_focus_data : boardCamState_data
 @export var _on_over : Node3D
 @export var _on_over_second: Node3D
 @export var icon_type : icon_class.icon_list
@@ -13,13 +14,30 @@ var node_rotation_degrees : Vector3
 
 signal on_over_signal(condition : bool)
 
+var _photo_data : PhotoData
+
 func _ready():
 	
 	_global_datas.close_all_over_ui.connect(close)
 	if move_node:
 		move_node_position = move_node.global_position
 		node_rotation_degrees = move_node.rotation_degrees
+	
+		_photo_data = _photo_data
 		
+
+
+func _focus_scanner():
+	
+	if _photo_data:
+		if scanner_focus_data:
+			if _global_datas.camera_current_state == scanner_focus_data.cam_state:
+				return
+			
+			_global_datas.selected_photoData = _photo_data	
+			_global_datas.camera_focus_On.emit(scanner_focus_data)
+			
+			
 func on_over(condition):
 	
 	if _on_over:
@@ -33,6 +51,7 @@ func on_over(condition):
 	
 	if move_node:
 		move(condition)
+	
 		
 func move(condition : bool):
 	

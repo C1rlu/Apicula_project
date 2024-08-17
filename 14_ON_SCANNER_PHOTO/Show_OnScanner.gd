@@ -2,11 +2,7 @@ extends Node
 
 @onready var render_scanner = $"../3D_SCENE/RENDER_Scanner"
 @onready var loader = $"../3D_SCENE/Loader"
-
-@onready var scanner_light = $"../3D_SCENE/Scanner_light"
-
 @export var scanner_first_data : PhotoData
-
 
 
 
@@ -17,13 +13,11 @@ func _ready():
 
 	stop_scanner()
 	_global_datas.selected_photoData = scanner_first_data
-
+	
 
 func _show_scanner(condition : bool):
 	
-
 	if condition:
-	
 		#loader.rotation = Vector3.ZERO
 		stop_scanner()
 		if !_global_datas.selected_photoData:
@@ -32,7 +26,7 @@ func _show_scanner(condition : bool):
 			var instance = _global_datas.selected_photoData.scanner_prefab.instantiate()
 			loader.add_child(instance)
 	
-	#scanner_light.visible = condition
+
 			
 func stop_scanner():
 

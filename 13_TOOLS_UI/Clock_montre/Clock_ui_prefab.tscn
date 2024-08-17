@@ -19,6 +19,7 @@ var t
 func _ready():
 
 	_global_datas._active_progress_subscene.connect(load_clock)
+	_global_datas.player_in_diveZone.connect(selector)
 	#_global_datas._go_Subscene.connect(hide)
 	#_global_datas._go_Subscene.connect(_start_clock)
 	#_global_datas._backFrom_subscene.connect(_stop)
@@ -27,6 +28,8 @@ func _ready():
 	#tool_clock.tool_active_signal.connect(selector)
 	#
 	#_global_datas.open_tool_selector.connect(selector)
+	
+	
 	
 func reload_timer(condition):
 	
@@ -70,12 +73,12 @@ func load_clock(condition : bool):
 		t = create_tween()
 		t.tween_method(_value,360,0.0,1)
 		t.connect(\"finished\",go_subscene)
-		show()
+		#show()
 		
 	else:
 		if t:
 			t.kill()
-		hide()
+		clock_root.rotation_degrees.y = 0.0
 		
 		
 func go_subscene():

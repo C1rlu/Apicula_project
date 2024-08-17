@@ -12,4 +12,5 @@ func back_call()-> void:
 func set_back_call():
 	_global_datas.camera_focus_On.emit(back_call_state)
 	_global_datas.show_on_scanner_backdrop.emit(false)		
-	#_global_datas.show_on_scanner.emit(false)
+	_global_datas.show_on_scanner.emit(false)
+

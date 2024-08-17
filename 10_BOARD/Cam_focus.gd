@@ -50,7 +50,7 @@ func _focus(focus_data : boardCamState_data):
 	
 	# could set a emit call class here as well for more flexibility
 	set_state_call.emit()
-	#set_back_call.emit()
+
 
 	if _global_datas.camera_current_state == game_state.camera_state.Main:
 		cam_state = 0
