@@ -1,8 +1,18 @@
-[gd_scene load_steps=6 format=3 uid="uid://xpunnioeu7vl"]
+[gd_scene load_steps=8 format=3 uid="uid://xpunnioeu7vl"]
 
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Movable_obj.gd" id="1_l0jbp"]
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/On_Over_object.tres.gd" id="2_krkkq"]
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/On_click_object.gd" id="3_6h2ti"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xyw0o"]
+size = Vector3(0.146436, 0.00162354, 0.167615)
+
+[sub_resource type="GDScript" id="GDScript_48mwa"]
+script/source = "extends Node
+
+signal On_View
+
+"
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ud465"]
 size = Vector3(0.2, 0.2, 0.2)
@@ -14,6 +24,15 @@ size = Vector3(0.2, 0.2, 0.2)
 script = ExtResource("1_l0jbp")
 collider = NodePath("Area3D/CollisionShape3D")
 
+[node name="Zone" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Zone"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00144044, 0.201068, 0.00493774)
+shape = SubResource("BoxShape3D_xyw0o")
+disabled = true
+
+[node name="Position_zone" type="Node" parent="Zone"]
+
 [node name="Area3D" type="Area3D" parent="."]
 
 [node name="On_Over" type="Node" parent="Area3D"]
@@ -21,8 +40,11 @@ script = ExtResource("2_krkkq")
 position_over = Vector3(0, 0.05, 0)
 rotation_over = Vector3(2, 0, 0)
 
-[node name="On_click" type="Node" parent="Area3D"]
+[node name="On_Move" type="Node" parent="Area3D"]
 script = ExtResource("3_6h2ti")
+
+[node name="On_View" type="Node" parent="Area3D"]
+script = SubResource("GDScript_48mwa")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
@@ -33,6 +55,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 mesh = SubResource("BoxMesh_v4iu2")
 skeleton = NodePath("../..")
 
-[connection signal="On_Move" from="Area3D/On_click" to="." method="_on_on_click_on_move"]
-[connection signal="On_Position" from="Area3D/On_click" to="." method="_on_on_click_on_position"]
-[connection signal="On_Position" from="Area3D/On_click" to="Area3D/On_Over" method="_on_on_click_on_position"]
+[connection signal="On_Move" from="Area3D/On_Move" to="." method="_on_on_click_on_move"]
+[connection signal="On_Position" from="Area3D/On_Move" to="." method="_on_on_click_on_position"]
+[connection signal="On_Position" from="Area3D/On_Move" to="Area3D/On_Over" method="_on_on_click_on_position"]
+[connection signal="On_View" from="Area3D/On_View" to="." method="on_view"]

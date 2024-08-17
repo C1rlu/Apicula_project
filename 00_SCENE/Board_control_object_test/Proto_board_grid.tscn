@@ -1,8 +1,44 @@
-[gd_scene load_steps=11 format=3 uid="uid://bgl5a6kyd68tc"]
+[gd_scene load_steps=17 format=3 uid="uid://bgl5a6kyd68tc"]
 
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Movable_manager.gd" id="1_k6iyl"]
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Clic_raycast.gd" id="1_ofpfv"]
+[ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Board_state.gd" id="1_qcx27"]
 [ext_resource type="PackedScene" uid="uid://xpunnioeu7vl" path="res://00_SCENE/Board_control_object_test/movable_obj.tscn" id="3_kwpp8"]
+[ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Main_Cam.gd" id="4_20uu6"]
+
+[sub_resource type="GDScript" id="GDScript_b676x"]
+script/source = "extends Node
+
+
+
+func _ready():
+	_global_datas.using_pad.connect(_switch_inputs)
+	_switch_inputs(false)
+	
+func _input(event):
+	
+	if event is InputEventJoypadButton or event is InputEventJoypadMotion:
+	
+		_global_datas.using_pad.emit(true)
+	else:
+		_global_datas.using_pad.emit(false)
+
+			
+			
+			
+func _switch_inputs(condition : bool):
+	if condition:
+		
+		_global_datas.move_right = \"move_right_joy\"
+		_global_datas.move_left = \"move_left_joy\"
+		_global_datas.move_forward = \"move_forward_joy\"
+		_global_datas.move_backward = \"move_backward_joy\"	
+	else:
+		_global_datas.move_right = \"move_right\"
+		_global_datas.move_left = \"move_left\"
+		_global_datas.move_forward = \"move_forward\"
+		_global_datas.move_backward = \"move_backward\"
+"
 
 [sub_resource type="BoxMesh" id="BoxMesh_c5gkq"]
 size = Vector3(2, 0.1, 1)
@@ -14,7 +50,7 @@ size = Vector3(2, 0, 1)
 size = Vector3(0.5, 0.1, 0.5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_7sn4d"]
-size = Vector3(0.5, 0, 0.5)
+size = Vector3(0.585876, 0, 0.500488)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_6q586"]
 size = Vector3(0.2, 0.0418945, 0.2)
@@ -24,11 +60,90 @@ size = Vector3(0.2, 0.0418945, 0.2)
 [sub_resource type="QuadMesh" id="QuadMesh_lw8vb"]
 size = Vector2(8, 5)
 
+[sub_resource type="GDScript" id="GDScript_oy00j"]
+script/source = "extends Node3D
+
+@export var speed : float = 0.5
+var current_speed : float
+@export var min_x : float = -2.0
+@export var max_x : float = 2.0
+@export var min_z : float = -2.0
+@export var max_z : float = 2.0
+var border_ratio : float = 22
+
+var target_position : Vector3
+var f
+var on_auto_move = false
+
+var no_zoom_positon : Vector3
+
+func _ready():
+
+	no_zoom_positon = global_position
+	target_position = no_zoom_positon 
+	current_speed = speed
+	
+	_global_datas.camera_current_state = game_state.camera_state.Board
+	
+
+func _process(delta):
+	
+
+	if _global_datas.camera_current_state == game_state.camera_state.Board:
+		move(delta)	
+		current_speed = speed 	
+		return
+	
+	if _global_datas.camera_current_state == game_state.camera_state.BoardZoom:
+		move(delta)
+		current_speed = speed /2		
+		return
+		
+func move(delta):
+	
+	if Input.is_action_pressed(_global_datas.move_right):
+		var _magnitude = Input.get_action_strength(_global_datas.move_right)
+		target_position.x += _magnitude * current_speed * delta
+	if Input.is_action_pressed(_global_datas.move_left):
+		var _magnitude = Input.get_action_strength(_global_datas.move_left)
+		target_position.x -= _magnitude * current_speed * delta	
+	if Input.is_action_pressed(_global_datas.move_forward):
+		var _magnitude = Input.get_action_strength(_global_datas.move_forward)
+		target_position.z -= _magnitude * current_speed * delta	
+	if Input.is_action_pressed(_global_datas.move_backward):
+		var _magnitude = Input.get_action_strength(_global_datas.move_backward)
+		target_position.z += _magnitude * current_speed * delta
+	
+	var lerp_value = (border_ratio - 22.0) / (42.0 - 22.0)	
+	var oneminus = lerp(1.0,0.0,lerp_value)
+	
+	target_position.x = clamp(target_position.x, oneminus * min_x, oneminus * max_x)
+	target_position.z = clamp(target_position.z, oneminus * min_z, oneminus * max_z)
+
+
+	position = target_position
+	
+
+func done():
+	target_position = position
+	on_auto_move = false
+	
+"
+
+[sub_resource type="SphereMesh" id="SphereMesh_iscb1"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_bmorv"]
+
 [node name="Proto_board_grid" type="Node"]
 
-[node name="Movable_manager" type="Node" parent="." node_paths=PackedStringArray("movable_object")]
+[node name="Board_state" type="Node" parent="."]
+script = ExtResource("1_qcx27")
+
+[node name="Controllers_inputs_Type" type="Node" parent="."]
+script = SubResource("GDScript_b676x")
+
+[node name="Movable_manager" type="Node" parent="."]
 script = ExtResource("1_k6iyl")
-movable_object = NodePath("../Movable_obj")
 
 [node name="Clic_raycast" type="Node" parent="." node_paths=PackedStringArray("Camera")]
 script = ExtResource("1_ofpfv")
@@ -44,9 +159,10 @@ distance_fade_begin = 35.4
 omni_range = 1.96214
 
 [node name="Main_Cam" type="Camera3D" parent="."]
-transform = Transform3D(0.951594, 0.213122, -0.221466, 0, 0.720551, 0.693402, 0.307357, -0.659837, 0.685672, -0.5, 1.498, 1.369)
+transform = Transform3D(0.972776, 0.162145, -0.165578, 0, 0.714472, 0.699663, 0.231748, -0.680615, 0.695022, -0.19, 0.985, 0.88)
 current = true
 fov = 40.0
+script = ExtResource("4_20uu6")
 
 [node name="Main_root" type="Node3D" parent="."]
 
@@ -71,6 +187,7 @@ transform = Transform3D(0.955829, 0, -0.293924, 0, 1, 0, 0.293924, 0, 0.955829, 
 [node name="Position_zone" type="Node" parent="Main_root/Area3D2"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Main_root/Area3D2"]
+transform = Transform3D(1, 0, -1.78814e-07, 0, 1, 0, 1.78814e-07, 0, 1, -0.00399813, 0, 0.0397947)
 shape = SubResource("BoxShape3D_7sn4d")
 
 [node name="Desk_msh3" type="MeshInstance3D" parent="Main_root"]
@@ -86,6 +203,7 @@ transform = Transform3D(0.943072, 0, 0.332589, 0, 1, 0, -0.332589, 0, 0.943072, 
 shape = SubResource("BoxShape3D_7sn4d")
 
 [node name="Movable_obj" parent="." instance=ExtResource("3_kwpp8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.225, 0, 0)
 
 [node name="Movable_obj2" parent="." instance=ExtResource("3_kwpp8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.479224, 0, 0)
@@ -93,14 +211,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.479224, 0, 0)
 [node name="Movable_obj3" parent="." instance=ExtResource("3_kwpp8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.245, 0, -0.232)
 
-[node name="Area3D" parent="Movable_obj3" index="0"]
+[node name="CollisionShape3D" parent="Movable_obj3/Zone" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0554592, 0)
+
+[node name="Area3D" parent="Movable_obj3" index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0692496, 0)
 
-[node name="CollisionShape3D" parent="Movable_obj3/Area3D" index="2"]
+[node name="CollisionShape3D" parent="Movable_obj3/Area3D" index="3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2368e-06, -0.0345497, 6.4224e-05)
 shape = SubResource("BoxShape3D_6q586")
 
-[node name="MeshInstance3D" parent="Movable_obj3" index="1"]
+[node name="MeshInstance3D" parent="Movable_obj3" index="2"]
 transform = Transform3D(0.0977226, 0, 0, 0, 0.0977226, 0, 0, 0, 0.0977226, 0, 0.0321474, 0)
 mesh = SubResource("TorusMesh_fkd6f")
 
@@ -112,5 +233,46 @@ mesh = SubResource("QuadMesh_lw8vb")
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -1, 0)
 mesh = SubResource("QuadMesh_lw8vb")
 skeleton = NodePath("../..")
+
+[node name="CamTarget" type="Node3D" parent="."]
+script = SubResource("GDScript_oy00j")
+speed = 1.0
+min_x = -1.0
+max_x = 1.0
+min_z = -1.0
+max_z = 1.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CamTarget"]
+transform = Transform3D(0.148391, 0, 0, 0, 0.108256, 0, 0, 0, 0.148391, 0, 0.0134413, 0)
+visible = false
+mesh = SubResource("SphereMesh_iscb1")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="CamTarget"]
+transform = Transform3D(0.0808016, 0, 0, 0, -3.53195e-09, 0.0379354, 0, -0.0808016, -1.65821e-09, 0, 0.0575669, 0)
+visible = false
+mesh = SubResource("PrismMesh_bmorv")
+
+[node name="Pad_target" type="ColorRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -5.0
+offset_top = -5.0
+offset_right = 5.0
+offset_bottom = 5.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 0.619608, 1)
+
+[node name="Move_state_UI" type="ColorRect" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 0.8, 0.639216, 0.266667)
 
 [editable path="Movable_obj3"]

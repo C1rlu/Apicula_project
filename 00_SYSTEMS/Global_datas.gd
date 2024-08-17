@@ -180,4 +180,5 @@ func _ready():
 
 # TEST BOARD NEWS PROTO SCENE
 signal select_movable_object( object : Node3D)
-
+signal switch_state(condition : bool)
+var board_state : game_state.board_state = game_state.board_state.view_obj

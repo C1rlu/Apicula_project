@@ -17,15 +17,15 @@ func _update_movable_object(object : Node3D):
 	
 func _input(event):
 	
-	if event.is_action_pressed("move_right"):
+	if event.is_action_pressed("next_right"):
 		rotate_right = true
-	if event.is_action_released("move_right"):
+	if event.is_action_released("next_right"):
 		rotate_right = false
 	
 	
-	if event.is_action_pressed("move_left"):
+	if event.is_action_pressed("next_left"):
 		rotate_left = true
-	if event.is_action_released("move_left"):
+	if event.is_action_released("next_left"):
 		rotate_left = false
 		
 
@@ -39,3 +39,6 @@ func _process(delta):
 		movable_object.rotation_degrees.y += 120 * delta	
 	if rotate_left:
 		movable_object.rotation_degrees.y -= 120 * delta	
+
+
+
