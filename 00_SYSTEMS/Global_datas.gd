@@ -179,6 +179,9 @@ func _ready():
 
 
 # TEST BOARD NEWS PROTO SCENE
-signal select_movable_object( object : Node3D)
+signal select_movable_object(object)
 signal switch_state(condition : bool)
 var board_state : game_state.board_state = game_state.board_state.view_obj
+var grid_points : Array
+var locked_points : Array
+signal update_locked_points

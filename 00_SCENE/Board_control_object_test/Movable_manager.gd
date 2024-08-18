@@ -1,7 +1,7 @@
 extends Node
 
 
-@export var movable_object : Node3D
+var movable_object 
 
 
 var rotate_right : bool = false
@@ -11,7 +11,7 @@ var rotate_left: bool = false
 func _ready():
 	_global_datas.select_movable_object.connect(_update_movable_object)
 
-func _update_movable_object(object : Node3D):
+func _update_movable_object(object):
 	movable_object = object
 	
 	
@@ -36,9 +36,10 @@ func _process(delta):
 		return
 		
 	if rotate_right:
-		movable_object.rotation_degrees.y += 120 * delta	
+		movable_object._rotate.emit(120 ,delta)
+
 	if rotate_left:
-		movable_object.rotation_degrees.y -= 120 * delta	
+		movable_object._rotate.emit(-120 ,delta)
 
 
 

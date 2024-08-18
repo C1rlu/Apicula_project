@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://dqhb3dxubjse"]
+
+[ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Grid_point/Grid_point_prefab.gd" id="1_an07q"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_edqvh"]
+radius = 0.1
+height = 0.2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wbd3g"]
+shading_mode = 0
+albedo_color = Color(0.392157, 1, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_or1mr"]
+shading_mode = 0
+albedo_color = Color(1, 0, 0, 1)
+
+[node name="GridPointPrefab" type="Node3D" node_paths=PackedStringArray("free", "lock")]
+script = ExtResource("1_an07q")
+free = NodePath("free")
+lock = NodePath("lock")
+
+[node name="free" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.231841, 0, 0, 0, 0.231841, 0, 0, 0, 0.231841, 0, 0, 0)
+mesh = SubResource("SphereMesh_edqvh")
+surface_material_override/0 = SubResource("StandardMaterial3D_wbd3g")
+
+[node name="lock" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.231841, 0, 0, 0, 0.231841, 0, 0, 0, 0.231841, 0, 0, 0)
+visible = false
+mesh = SubResource("SphereMesh_edqvh")
+surface_material_override/0 = SubResource("StandardMaterial3D_or1mr")
