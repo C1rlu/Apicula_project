@@ -1,13 +1,12 @@
-[gd_scene load_steps=18 format=3 uid="uid://bgl5a6kyd68tc"]
+[gd_scene load_steps=17 format=3 uid="uid://bgl5a6kyd68tc"]
 
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Movable_manager.gd" id="1_k6iyl"]
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Clic_raycast.gd" id="1_ofpfv"]
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Board_state.gd" id="1_qcx27"]
 [ext_resource type="PackedScene" uid="uid://xpunnioeu7vl" path="res://00_SCENE/Board_control_object_test/movable_obj.tscn" id="3_kwpp8"]
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Main_Cam.gd" id="4_20uu6"]
-[ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Generate_Grid.gd" id="4_od40u"]
-[ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Update_locked_points.gd" id="4_vdpok"]
-[ext_resource type="PackedScene" uid="uid://dqhb3dxubjse" path="res://00_SCENE/Board_control_object_test/Grid_point/Grid_point_prefab.tscn" id="7_042b7"]
+[ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Generate_Grid.gd" id="4_ifxw1"]
+[ext_resource type="PackedScene" uid="uid://derylpvlrv2td" path="res://00_SCENE/Board_control_object_test/movable_ob_flat.tscn" id="6_58ini"]
 
 [sub_resource type="GDScript" id="GDScript_b676x"]
 script/source = "extends Node
@@ -147,11 +146,8 @@ script = ExtResource("1_k6iyl")
 script = ExtResource("1_ofpfv")
 Camera = NodePath("../Main_Cam")
 
-[node name="Update_locked_points" type="Node" parent="."]
-script = ExtResource("4_vdpok")
-
-[node name="Generate_Grid" type="Node" parent="." node_paths=PackedStringArray("grid_area")]
-script = ExtResource("4_od40u")
+[node name="Grid_Points" type="Node" parent="." node_paths=PackedStringArray("grid_area")]
+script = ExtResource("4_ifxw1")
 grid_area = NodePath("../Main_root/Desk_msh")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
@@ -184,40 +180,34 @@ shape = SubResource("BoxShape3D_d47rl")
 
 [node name="Desk_msh2" type="MeshInstance3D" parent="Main_root"]
 transform = Transform3D(0.955829, 0, -0.293924, 0, 1, 0, 0.293924, 0, 0.955829, 0.63115, 0.05, -0.346866)
-visible = false
 mesh = SubResource("BoxMesh_k08k5")
 
 [node name="Area3D2" type="Area3D" parent="Main_root"]
 transform = Transform3D(0.955829, 0, -0.293924, 0, 1, 0, 0.293924, 0, 0.955829, 0.63115, 0.1, -0.346866)
-visible = false
 
 [node name="Position_zone" type="Node" parent="Main_root/Area3D2"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Main_root/Area3D2"]
 transform = Transform3D(1, 0, -1.78814e-07, 0, 1, 0, 1.78814e-07, 0, 1, -0.00399813, 0, 0.0397947)
 shape = SubResource("BoxShape3D_7sn4d")
-disabled = true
 
 [node name="Desk_msh3" type="MeshInstance3D" parent="Main_root"]
 transform = Transform3D(0.943072, 0, 0.332589, 0, 1, 0, -0.332589, 0, 0.943072, -0.7455, 0.05, -0.476374)
-visible = false
 mesh = SubResource("BoxMesh_k08k5")
 
 [node name="Area3D3" type="Area3D" parent="Main_root"]
 transform = Transform3D(0.943072, 0, 0.332589, 0, 1, 0, -0.332589, 0, 0.943072, -0.7455, 0.1, -0.476374)
-visible = false
 
 [node name="Position_zone" type="Node" parent="Main_root/Area3D3"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Main_root/Area3D3"]
 shape = SubResource("BoxShape3D_7sn4d")
-disabled = true
 
 [node name="Movable_obj" parent="." instance=ExtResource("3_kwpp8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.225, 0, 0)
 
 [node name="Movable_obj2" parent="." instance=ExtResource("3_kwpp8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.407128, 0, -0.162347)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.676446, -5.96046e-08, -0.0306298)
 
 [node name="Movable_obj3" parent="." instance=ExtResource("3_kwpp8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.175875, -1.78814e-07, -0.360276)
@@ -251,9 +241,6 @@ mesh = SubResource("PrismMesh_bmorv")
 
 [node name="Grid_root" type="Node3D" parent="."]
 
-[node name="GridPointPrefab" parent="Grid_root" instance=ExtResource("7_042b7")]
-visible = false
-
 [node name="Pad_target" type="ColorRect" parent="."]
 anchors_preset = 8
 anchor_left = 0.5
@@ -276,6 +263,18 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(1, 0.8, 0.639216, 0.266667)
+
+[node name="Movable_obj_flat_00" parent="." instance=ExtResource("6_58ini")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.392625, 0, -0.0710238)
+
+[node name="Movable_obj_flat_01" parent="." instance=ExtResource("6_58ini")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.228456, 0, -0.0465967)
+
+[node name="Movable_obj_flat_02" parent="." instance=ExtResource("6_58ini")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.341508, 0, 0.0627547)
+
+[node name="Movable_obj_flat_03" parent="." instance=ExtResource("6_58ini")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.211212, 0, 0.0781384)
 
 [connection signal="_move" from="Movable_obj3/Rotation_root/Area/On_Move" to="Movable_obj3" method="_move"]
 [connection signal="_rotate" from="Movable_obj3/Rotation_root/Area/On_Move" to="Movable_obj3" method="_rotate"]

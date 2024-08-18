@@ -6,6 +6,7 @@ var pad : bool = false
 @onready var pad_target = $"../Pad_target"
 var target 
 var offset
+var last_target : Vector3
 func _ready():
 	
 	_global_datas.using_pad.connect(is_pad)
@@ -30,7 +31,11 @@ func _input(event):
 		check_move(target)
 		
 	if event.is_action_pressed("Click_on_board"):	
-		if _selectec_object:	
+		if _selectec_object:
+			
+			if _global_datas.limit_zone:
+				return
+					
 			_global_datas.switch_state.emit(false)
 			_selectec_object.On_Move.emit(false)
 			_global_datas.select_movable_object.emit(null)
@@ -72,7 +77,7 @@ func get_raycast_target(targetPos : Vector2) -> Dictionary:
 	var to = from + Camera.project_ray_normal(targetPos) * rayLengh
 	var space = Camera.get_world_3d().direct_space_state
 	var rayQuery = PhysicsRayQueryParameters3D.new()
-	rayQuery.collision_mask = 7
+	rayQuery.collision_mask = 1
 	rayQuery.from = from
 	rayQuery.to = to
 	rayQuery.collide_with_areas = true
@@ -82,22 +87,14 @@ func get_raycast_target(targetPos : Vector2) -> Dictionary:
 	return result
 	
 func _process(delta):
-	
+		
 		if _selectec_object:
 			
-	
 			var ray_target = get_raycast_target(target)
+			
 			if ray_target:
 				if ray_target.collider.get_node_or_null("Position_zone"):
-					var target_position = ray_target.position
-					
-					for p in _global_datas.grid_points:	
-						var distance = target_position.distance_squared_to(p.position)		
-						if distance < 0.01:
-							if p.is_lock:
-								return
-							_selectec_object._move.emit(target_position ,10,delta)	
-					
-					
-				
-
+					_selectec_object._move.emit(ray_target.position ,10,delta)	
+					last_target = ray_target.position
+			else:
+				_selectec_object._move.emit(last_target ,10,delta)		

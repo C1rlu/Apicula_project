@@ -6,9 +6,11 @@ extends Node
 const GRID_POINT_PREFAB = preload("res://00_SCENE/Board_control_object_test/Grid_point/Grid_point_prefab.tscn")
 @onready var grid_root = $"../Grid_root"
 
-
+@export var disable = true
 func _ready():
 	
+	if disable:
+		return
 	var aabb = grid_area.get_aabb()
 	var size = aabb.size
 	var points = generate_grid_points(size.x,size.z,0.05)

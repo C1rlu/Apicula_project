@@ -11,9 +11,9 @@ func switch_board_state(condition : bool):
 	
 	if condition:
 		_global_datas.board_state = game_state.board_state.Moving_obj
-		move_state_ui.visible = true
+		#move_state_ui.visible = true
 	else:	
 		_global_datas.board_state = game_state.board_state.view_obj
-		move_state_ui.visible = false
+		#move_state_ui.visible = false
 	
 	
