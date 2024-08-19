@@ -1,4 +1,4 @@
-[gd_scene load_steps=79 format=3 uid="uid://cein0q2eirkay"]
+[gd_scene load_steps=80 format=3 uid="uid://cein0q2eirkay"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_g3pi7"]
 [ext_resource type="Script" path="res://10_BOARD/Board_CamTarget.gd" id="1_janbq"]
@@ -39,6 +39,7 @@
 [ext_resource type="Texture2D" uid="uid://d1kttlfg1wwvk" path="res://10_BOARD/00_BOOK/01_UI/cursor_Circle.png" id="21_qhnbf"]
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Clic_raycast.gd" id="23_osxq7"]
 [ext_resource type="Resource" uid="uid://cd5pseveq582t" path="res://15_GAME_RESSOURCE/03_BoardCam_state/Main_focus_data.tres" id="24_pisk2"]
+[ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Movable_manager.gd" id="24_tox7b"]
 [ext_resource type="Script" path="res://10_BOARD/Select_intrigue.gd" id="27_qyfnp"]
 [ext_resource type="Resource" uid="uid://cyu7mo6v7aaij" path="res://15_GAME_RESSOURCE/03_BoardCam_state/Board_focus_data.tres" id="27_vvxtf"]
 [ext_resource type="Resource" uid="uid://b2bkxyfxws3e3" path="res://15_GAME_RESSOURCE/02_BOARD_INFO/Board_intrigue/Chapitre_I.tres" id="28_bli5v"]
@@ -530,13 +531,16 @@ Cam_to_move_scanner = NodePath("../../3D_SCENE/SubViewport_scanner/Camera3D_Scan
 script = ExtResource("16_l7ebl")
 all_scanner = Array[Resource("res://12_INVENTORY/Photo/Photo_data.gd")]([ExtResource("11_ldr1y"), ExtResource("17_mbuj8"), ExtResource("18_aukda"), ExtResource("19_8dlfp"), ExtResource("20_0rbh6"), ExtResource("21_ko3r3")])
 
-[node name="Clic_raycast" type="Node" parent="." node_paths=PackedStringArray("Camera")]
+[node name="Clic_raycast" type="Node" parent="." node_paths=PackedStringArray("Camera", "pad_target")]
 script = ExtResource("23_osxq7")
 Camera = NodePath("../3D_SCENE/Camera_xray")
+pad_target = NodePath("../3D_SCENE/Pad_target")
+
+[node name="Movable_manager" type="Node" parent="Clic_raycast"]
+script = ExtResource("24_tox7b")
 
 [node name="Pad_clic_raycast" type="Node" parent="."]
 script = ExtResource("3_rqf42")
-active = true
 
 [node name="Board_OBJ_Manager" type="Node" parent="."]
 script = ExtResource("14_johxk")

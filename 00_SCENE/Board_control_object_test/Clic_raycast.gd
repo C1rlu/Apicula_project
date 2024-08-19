@@ -3,7 +3,7 @@ extends Node
 @export var Camera : Camera3D
 var _selectec_object 
 var pad : bool = false
-@onready var pad_target = $"../3D_SCENE/Pad_target"
+@export var pad_target : ColorRect
 
 var target 
 var last_target : Vector3
@@ -46,6 +46,8 @@ func _input(event):
 
 func check_move(targetPos : Vector2):
 	
+
+	
 	var ray_target = get_raycast_target(targetPos)
 	#print( ray_target)
 	if !ray_target:	
@@ -60,6 +62,7 @@ func check_move(targetPos : Vector2):
 					
 			
 func check_view(targetPos : Vector2):
+	
 	
 	var ray_target = get_raycast_target(targetPos)
 	#print( ray_target)

@@ -24,8 +24,8 @@ func _ready():
 	if On_over:
 		On_over._photo_data = Photo_data
 
-
-
+	update_legend.emit(Photo_data.legend)
+	
 func show_this_on_book():
 	
 
@@ -44,10 +44,11 @@ func show_this_on_book():
 	
 	_global_datas.book_idle_pos = false		
 	_global_datas.book_back_idle_position.emit(true)
+
+
 	
 	
 func _on_show_this_page():
-
 	show_this_on_book()	
 
 		

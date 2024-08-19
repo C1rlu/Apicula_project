@@ -1,4 +1,4 @@
-[gd_scene load_steps=263 format=3 uid="uid://dr73p5vs0sixe"]
+[gd_scene load_steps=256 format=3 uid="uid://dr73p5vs0sixe"]
 
 [ext_resource type="PackedScene" uid="uid://cyb6my1srlcpw" path="res://10_BOARD/Candle/Candle_set.blend" id="1_3ummb"]
 [ext_resource type="Shader" uid="uid://upo0fuo5sqgd" path="res://05_SHADER_TEST/Board/Board_sh.tres" id="1_k1enu"]
@@ -12,7 +12,6 @@
 [ext_resource type="Resource" uid="uid://blxuee4l6ey2g" path="res://10_BOARD/Board_OBJ_data/Map_data.tres" id="7_ajhp1"]
 [ext_resource type="PackedScene" uid="uid://6pkqjlcwbqu1" path="res://13_TOOLS_UI/Clock_montre/clock_3d_prefab.tscn" id="8_x5b6k"]
 [ext_resource type="PackedScene" uid="uid://qgyjfq88teq8" path="res://10_BOARD/letters_area.tscn" id="9_ajmma"]
-[ext_resource type="Script" path="res://10_BOARD/board_intrigue.gd" id="10_3xiq4"]
 [ext_resource type="Resource" uid="uid://61umivwjjcjs" path="res://12_INVENTORY/Words_note/Birds_goLighthouse_note.tres" id="10_shcmw"]
 [ext_resource type="Resource" uid="uid://b2bkxyfxws3e3" path="res://15_GAME_RESSOURCE/02_BOARD_INFO/Board_intrigue/Chapitre_I.tres" id="11_i6fvc"]
 [ext_resource type="PackedScene" uid="uid://b3i04ha2iqr4l" path="res://10_BOARD/Loupe/loupe_rg.tscn" id="12_alpcj"]
@@ -57,6 +56,7 @@
 [ext_resource type="Material" uid="uid://c0oms0qis0dcm" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_mat_02.tres" id="46_tmbd7"]
 [ext_resource type="Material" uid="uid://cfi5jyq3utqd4" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_mat_04.tres" id="47_r4p1c"]
 [ext_resource type="Resource" uid="uid://cd1asdnwwphju" path="res://15_GAME_RESSOURCE/03_BoardCam_state/TourneDisque_focus_data.tres" id="50_v3523"]
+[ext_resource type="PackedScene" uid="uid://xpunnioeu7vl" path="res://00_SCENE/Board_control_object_test/movable_obj.tscn" id="51_gd7bb"]
 [ext_resource type="PackedScene" uid="uid://c5fv4g2cle0l1" path="res://10_BOARD/legend_only.tscn" id="51_gvukx"]
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_6pb33"]
@@ -1069,135 +1069,6 @@ shader = SubResource("VisualShader_tl2py")
 [sub_resource type="BoxShape3D" id="BoxShape3D_gphou"]
 size = Vector3(0.132582, 0.0369263, 0.180239)
 
-[sub_resource type="BoxMesh" id="BoxMesh_p7wk2"]
-material = SubResource("ShaderMaterial_isdhd")
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_i55er"]
-material = ExtResource("35_xg8pc")
-size = Vector2(1.21, 0.795)
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_gt8if"]
-size = Vector2(2.285, 2.365)
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_y2ya2"]
-constant = 1.0
-
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_s4ysl"]
-size = Vector2(724.789, 654.559)
-expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_q8vyi"]
-parameter_name = "Dither_size"
-qualifier = 1
-
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_miwpn"]
-default_input_values = [0, 0.925, 1, 0.0]
-
-[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_lb24c"]
-constant = Color(0.73, 0.47377, 0.1606, 1)
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_kwi55"]
-noise_type = 0
-frequency = 0.0999
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_28523"]
-noise = SubResource("FastNoiseLite_kwi55")
-
-[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_h2c8f"]
-texture = SubResource("NoiseTexture2D_28523")
-
-[sub_resource type="VisualShader" id="VisualShader_j3ooe"]
-code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
-
-global uniform float Dither_size;
-
-
-
-void fragment() {
-// ColorConstant:7
-	vec4 n_out7p0 = vec4(0.730000, 0.473770, 0.160600, 1.000000);
-
-
-// FloatConstant:3
-	float n_out3p0 = 1.000000;
-
-
-// FloatParameter:5
-	float n_out5p0 = Dither_size;
-
-
-	float n_out4p0;
-// Expression:4
-	n_out4p0 = 0.0;
-	{
-		const float DITHER_THRESHOLDS[16] ={
-				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-			};
-			
-		vec2 uv = FRAGCOORD.xy * n_out5p0;
-		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-		n_out4p0 = n_out3p0 - DITHER_THRESHOLDS[index];
-	}
-
-
-// Step:6
-	float n_in6p0 = 0.92500;
-	float n_out6p0 = step(n_in6p0, n_out4p0);
-
-
-// Output:0
-	ALBEDO = vec3(n_out7p0.xyz);
-	ALPHA = n_out6p0;
-
-
-}
-"
-flags/unshaded = true
-nodes/fragment/0/position = Vector2(580, 220)
-nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_y2ya2")
-nodes/fragment/3/position = Vector2(-1160, 460)
-nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_s4ysl")
-nodes/fragment/4/position = Vector2(-900, 460)
-nodes/fragment/4/size = Vector2(724.789, 654.559)
-nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
-nodes/fragment/4/output_ports = "0,0,Dither_Node;"
-nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/5/node = SubResource("VisualShaderNodeFloatParameter_q8vyi")
-nodes/fragment/5/position = Vector2(-1540, 620)
-nodes/fragment/6/node = SubResource("VisualShaderNodeStep_miwpn")
-nodes/fragment/6/position = Vector2(130.23, 516.22)
-nodes/fragment/7/node = SubResource("VisualShaderNodeColorConstant_lb24c")
-nodes/fragment/7/position = Vector2(226.136, 51.1274)
-nodes/fragment/8/node = SubResource("VisualShaderNodeTexture_h2c8f")
-nodes/fragment/8/position = Vector2(-140, 260)
-nodes/fragment/connections = PackedInt32Array(3, 0, 4, 0, 4, 0, 6, 1, 6, 0, 0, 1, 7, 0, 0, 0, 5, 0, 4, 1)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_u4lgv"]
-render_priority = 0
-shader = SubResource("VisualShader_j3ooe")
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_tu3ii"]
 size = Vector3(0.25, 0.5, 0.25)
 
@@ -1725,6 +1596,13 @@ default_input_values = [0, 0.925, 1, 0.0]
 [sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_hewv1"]
 constant = Color(0.133333, 0.576471, 0.517647, 1)
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_kwi55"]
+noise_type = 0
+frequency = 0.0999
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_28523"]
+noise = SubResource("FastNoiseLite_kwi55")
+
 [sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_64agl"]
 texture = SubResource("NoiseTexture2D_28523")
 
@@ -2149,6 +2027,16 @@ size = Vector2(0.795, 0.795)
 [sub_resource type="BoxShape3D" id="BoxShape3D_cov0w"]
 size = Vector3(1.4397, 0.0161209, 1.44803)
 
+[sub_resource type="BoxMesh" id="BoxMesh_p7wk2"]
+material = SubResource("ShaderMaterial_isdhd")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8k1bl"]
+size = Vector3(1.04495, 2.17786, 1.04868)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_i55er"]
+material = ExtResource("35_xg8pc")
+size = Vector2(1.21, 0.795)
+
 [sub_resource type="BoxMesh" id="BoxMesh_1smid"]
 material = ExtResource("6_kkuc8")
 
@@ -2157,6 +2045,8 @@ size = Vector3(0.999657, 0, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_v3rv8"]
 material = ExtResource("6_kkuc8")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6ryte"]
 
 [node name="Board_scene" type="Node3D"]
 
@@ -2193,8 +2083,6 @@ legend_name = "Old Boat"
 
 [node name="Intrigue_01" type="Node3D" parent="Movable"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0245579, 0, 0.0630898)
-script = ExtResource("10_3xiq4")
-board_intrigue = ExtResource("11_i6fvc")
 
 [node name="PHOTO" type="Node3D" parent="Movable/Intrigue_01"]
 transform = Transform3D(0.882135, 0, -0.470996, 0, 1, 0, 0.470996, 0, 0.882135, 0.16492, 0.00272226, 0.0156601)
@@ -2205,7 +2093,7 @@ Photo_data = ExtResource("14_ycmhi")
 next_photo_data_question = [NodePath("../Maurice_Photo")]
 
 [node name="Otis_Photo" parent="Movable/Intrigue_01/PHOTO" instance=ExtResource("1_mtaom")]
-transform = Transform3D(0.837521, 0, 0.546407, 0, 1, 0, -0.546407, 0, 0.837521, -0.550399, 0.00109488, 0.179597)
+transform = Transform3D(0.837521, 0, 0.546407, 0, 1, 0, -0.546407, 0, 0.837521, -0.542216, 0.00109488, 0.138382)
 Photo_data = ExtResource("15_m1itl")
 
 [node name="Maurice_Photo" parent="Movable/Intrigue_01/PHOTO" node_paths=PackedStringArray("next_photo_data_question") instance=ExtResource("1_mtaom")]
@@ -2417,26 +2305,6 @@ _on_over = NodePath("../../IS_SELECT")
 transform = Transform3D(0.958621, 0, -0.284685, 0, 1, 0, 0.284685, 0, 0.958621, -0.0162398, 0.0219561, 0.0325306)
 shape = SubResource("BoxShape3D_gphou")
 
-[node name="PhotoZone" type="MeshInstance3D" parent="Movable"]
-transform = Transform3D(-0.13068, 0, 0.738866, 0, 0.00252979, 0, -0.608021, 0, -0.158803, -0.162295, 0.00267054, 0.0875484)
-layers = 2
-mesh = SubResource("BoxMesh_p7wk2")
-skeleton = NodePath("../../..")
-
-[node name="MeshInstance3D5" type="MeshInstance3D" parent="Movable/PhotoZone"]
-transform = Transform3D(-0.00523905, 0, -1.16649, 0, 67.9976, 0, 0.785872, 0, -0.0085845, -0.00500987, 0.53237, -0.0019574)
-layers = 2
-mesh = SubResource("PlaneMesh_i55er")
-skeleton = NodePath("../../../..")
-
-[node name="On_Over" type="MeshInstance3D" parent="Movable/PhotoZone"]
-transform = Transform3D(0.44437, 0, -0.000342503, 0, 0.387303, 0, 0.000341229, 0, 0.445962, -0.0122902, 0.613576, -0.00293779)
-visible = false
-layers = 2
-mesh = SubResource("PlaneMesh_gt8if")
-skeleton = NodePath("../../..")
-surface_material_override/0 = SubResource("ShaderMaterial_u4lgv")
-
 [node name="TUBE_oddity" type="Node3D" parent="Movable"]
 transform = Transform3D(-0.00525478, 0, 0.39937, 0, 0.00522373, 0, -0.260425, 0, -0.00805836, 0.890351, 0.00372961, 0.0322637)
 
@@ -2555,6 +2423,9 @@ move_node = NodePath("../../Disque_prefab")
 transform = Transform3D(0.871195, 0, 0.490913, 0, 1, 0, -0.490913, 0, 0.871195, 0.015209, 0.134239, -0.0155258)
 shape = SubResource("BoxShape3D_64lbo")
 
+[node name="Movable_obj" parent="Movable" instance=ExtResource("51_gd7bb")]
+transform = Transform3D(0.358245, 0, 0, 0, 0.358245, 0, 0, 0, 0.358245, -0.175592, 0, 0.00515395)
+
 [node name="Static" type="Node3D" parent="."]
 
 [node name="Deco" type="Node3D" parent="Static"]
@@ -2586,7 +2457,7 @@ layers = 2
 surface_material_override/0 = ExtResource("5_8m368")
 
 [node name="Candle_set3" parent="Static/Deco" instance=ExtResource("1_3ummb")]
-transform = Transform3D(0.00320645, 0, 0.0606963, 0, 0.0607809, 0, -0.0606963, 0, 0.00320645, -0.735374, 0.120863, 0.0104294)
+transform = Transform3D(0.00320645, 0, 0.0606963, 0, 0.0607809, 0, -0.0606963, 0, 0.00320645, -0.797466, 0.120863, -0.00518165)
 
 [node name="candle_msh_01" parent="Static/Deco/Candle_set3" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.791507, 0, 0.817728)
@@ -2598,7 +2469,7 @@ layers = 2
 surface_material_override/0 = ExtResource("5_8m368")
 
 [node name="candle_msh_03" parent="Static/Deco/Candle_set3" index="2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.23704, 0, 0.34541)
+transform = Transform3D(1, 0, -7.45058e-09, 0, 1, 0, 7.45058e-09, 0, 1, -1.23704, 0, 0.345411)
 layers = 2
 surface_material_override/0 = ExtResource("5_8m368")
 
@@ -2665,6 +2536,27 @@ script = ExtResource("23_4ws66")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000610292, 0.00323869, -0.000259392)
 shape = SubResource("BoxShape3D_cov0w")
 
+[node name="PhotoZone" type="MeshInstance3D" parent="Static/Deco"]
+transform = Transform3D(-0.13068, 0, 0.738866, 0, 0.00252979, 0, -0.608021, 0, -0.158803, -0.162295, 0.00267054, 0.0875484)
+layers = 2
+mesh = SubResource("BoxMesh_p7wk2")
+skeleton = NodePath("../../../..")
+
+[node name="Area3D" type="Area3D" parent="Static/Deco/PhotoZone"]
+transform = Transform3D(1, 0, -4.47035e-08, 0, 1, 0, 0, 0, 1, -0.0329668, -14.3499, -0.0321103)
+
+[node name="Position_zone" type="Node" parent="Static/Deco/PhotoZone/Area3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Static/Deco/PhotoZone/Area3D"]
+transform = Transform3D(0.999998, 0, 0, 0, 1, 0, 4.47035e-08, 0, 1, 0.0327779, 13.9199, 0.0276948)
+shape = SubResource("BoxShape3D_8k1bl")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Static/Deco/PhotoZone"]
+transform = Transform3D(-0.00523905, 0, -1.16649, 0, 67.9976, 0, 0.785872, 0, -0.0085845, -0.00500987, 0.53237, -0.0019574)
+layers = 2
+mesh = SubResource("PlaneMesh_i55er")
+skeleton = NodePath("../../../../..")
+
 [node name="Table" type="MeshInstance3D" parent="Static/Deco"]
 transform = Transform3D(2.1172, 0, 0, 0, 0.066768, 0, 0, 0, 1.08416, 0, -0.0336317, 0)
 layers = 2
@@ -2696,6 +2588,13 @@ transform = Transform3D(0.15662, 0, 0.135986, 0, 0.0376968, 0, -0.213134, 0, 0.0
 layers = 2
 mesh = SubResource("BoxMesh_v3rv8")
 skeleton = NodePath("../../..")
+
+[node name="Area3D" type="Area3D" parent="Static/Deco/MeshInstance3D5"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Static/Deco/MeshInstance3D5/Area3D"]
+shape = SubResource("BoxShape3D_6ryte")
+
+[node name="Position_zone" type="Node" parent="Static/Deco/MeshInstance3D5/Area3D"]
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="Static/Deco"]
 transform = Transform3D(0.190009, 0, 0.117391, 0, 0.0376968, 0, -0.18399, 0, 0.121232, -0.646381, 0.0218655, -0.33069)

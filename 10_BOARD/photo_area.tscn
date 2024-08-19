@@ -1,11 +1,13 @@
-[gd_scene load_steps=70 format=3 uid="uid://uwg2qc3svu11"]
+[gd_scene load_steps=72 format=3 uid="uid://uwg2qc3svu11"]
 
 [ext_resource type="Script" path="res://10_BOARD/Photo_element.gd" id="1_0a8jl"]
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Legend/Legend_behaviour.gd" id="1_f7rkq"]
 [ext_resource type="Resource" uid="uid://dyh1qg1u652pl" path="res://15_GAME_RESSOURCE/Epave_ch_photoData.tres" id="2_8x1kk"]
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Show_this_page.gd" id="2_653je"]
 [ext_resource type="Resource" uid="uid://cjwmwf4frvq3c" path="res://15_GAME_RESSOURCE/03_BoardCam_state/BoardZoom_focus_data.tres" id="3_tu215"]
+[ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Movable_obj.gd" id="4_4uyoa"]
 [ext_resource type="Texture2D" uid="uid://38btbw60olcn" path="res://12_INVENTORY/Photo/IMG/Boat.png" id="4_wljme"]
+[ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/On_click_object.gd" id="6_46a1v"]
 [ext_resource type="Resource" uid="uid://3pilop3f4m6r" path="res://15_GAME_RESSOURCE/03_BoardCam_state/ScannerM_focus_data.tres" id="7_8v556"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="7_vd1wc"]
 
@@ -513,7 +515,7 @@ material = SubResource("ShaderMaterial_hy8dn")
 size = Vector3(1, 1, 1.075)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_nnxyu"]
-size = Vector3(0.0735859, 0.0129531, 0.0840869)
+size = Vector3(0.0849429, 0.0129531, 0.0916202)
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_lyxt3"]
 viewport_path = NodePath("legend/legend_render")
@@ -713,23 +715,29 @@ Photo_data = ExtResource("2_8x1kk")
 book_position_offset = Vector3(0.025, 0.008, 0.08)
 book_rotation_angle = -80.0
 camera_state = ExtResource("3_tu215")
-On_over = NodePath("legend/Legend_area/On_Over")
+On_over = NodePath("legend/Click_Move/On_Over")
+
+[node name="Movable_object" type="Node" parent="." node_paths=PackedStringArray("collider", "move_root", "rotation_root", "On_Move")]
+script = ExtResource("4_4uyoa")
+collider = NodePath("../legend/Click_Move/CollisionShape3D")
+move_root = NodePath("..")
+rotation_root = NodePath("..")
+On_Move = NodePath("../legend/Click_Move/On_Move")
 
 [node name="Photo" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0468789)
 
 [node name="texture" type="Node" parent="Photo"]
 script = SubResource("GDScript_32kbr")
 
 [node name="IMG" type="MeshInstance3D" parent="Photo"]
-transform = Transform3D(0.0595463, 0, 0, 0, -2.60285e-09, 0.0595463, 0, -0.0595463, -2.60285e-09, 0, 0.00265636, 0.00115996)
+transform = Transform3D(0.0753365, 0, 0, 0, -3.29306e-09, 0.0753365, 0, -0.0753365, -3.29306e-09, 0, 0.00265636, 0.002758)
 layers = 2
 mesh = SubResource("QuadMesh_1i4du")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("ShaderMaterial_trilb")
 
 [node name="render_base" type="MeshInstance3D" parent="Photo"]
-transform = Transform3D(0.0682586, 0, 0, 0, 0.000958014, 0, 0, 0, 0.0682586, 0, 0.00166521, 0.00110302)
+transform = Transform3D(0.08478, 0, 0, 0, 0.00135893, 0, 0, 0, 0.0810078, 0, 0.00166521, 0.00384115)
 layers = 2
 mesh = SubResource("BoxMesh_8e2mh")
 skeleton = NodePath("../..")
@@ -744,9 +752,13 @@ script = ExtResource("1_f7rkq")
 wait_time = 0.1
 one_shot = true
 
-[node name="Legend_area" type="Area3D" parent="legend"]
+[node name="Click_Move" type="Area3D" parent="legend"]
 
-[node name="On_Over" type="Node" parent="legend/Legend_area" node_paths=PackedStringArray("_on_over", "move_node")]
+[node name="On_Move" type="Node" parent="legend/Click_Move" node_paths=PackedStringArray("Root")]
+script = ExtResource("6_46a1v")
+Root = NodePath("../../..")
+
+[node name="On_Over" type="Node" parent="legend/Click_Move" node_paths=PackedStringArray("_on_over", "move_node")]
 script = ExtResource("7_vd1wc")
 scanner_focus_data = ExtResource("7_8v556")
 _on_over = NodePath("../../All_over")
@@ -755,15 +767,16 @@ move_node = NodePath("../../..")
 position_over = Vector3(0, 0.005, 0)
 rotation_over = Vector3(10, 0, 0)
 
-[node name="On_click" type="Node" parent="legend/Legend_area"]
+[node name="On_click" type="Node" parent="legend/Click_Move"]
 script = ExtResource("2_653je")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="legend/Legend_area"]
-transform = Transform3D(0.99999, 0, -1.86265e-09, 0, 1, 0, 1.86265e-09, 0, 0.99999, 0.000850344, 0.00687685, -0.0322746)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="legend/Click_Move"]
+transform = Transform3D(0.999997, 0, 4.14439e-08, 0, 1, 0, -4.14439e-08, 0, 0.999997, 0.0014558, 0, 0.0114536)
 shape = SubResource("BoxShape3D_nnxyu")
 
 [node name="Render_text" type="Sprite3D" parent="legend"]
 transform = Transform3D(0.0164991, -0.0008441, -1.17144e-05, 1.16724e-05, -1.12108e-06, 0.0165207, -0.000844101, -0.0164991, -5.23245e-07, 0.00900734, -0.00159823, -0.00282747)
+visible = false
 layers = 2
 sorting_offset = 1.0
 texture = SubResource("ViewportTexture_lyxt3")
@@ -842,4 +855,4 @@ vertical_alignment = 1
 
 [connection signal="update_legend" from="." to="legend/legend_behaviour" method="_on_photo_element_root_update_legend"]
 [connection signal="timeout" from="legend/legend_behaviour/Timer" to="legend/legend_behaviour" method="_on_timer_timeout"]
-[connection signal="On_click" from="legend/Legend_area/On_click" to="." method="_on_show_this_page"]
+[connection signal="On_click" from="legend/Click_Move/On_click" to="." method="_on_show_this_page"]

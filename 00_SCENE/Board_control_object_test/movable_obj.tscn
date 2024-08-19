@@ -19,14 +19,17 @@ size = Vector3(0.2, 0.2, 0.2)
 [sub_resource type="BoxMesh" id="BoxMesh_v4iu2"]
 size = Vector3(0.2, 0.2, 0.2)
 
-[node name="Movable_obj" type="Node3D" node_paths=PackedStringArray("collider", "rotation_root", "move_root", "On_Move", "On_View", "Render")]
+[node name="Movable_obj" type="Node3D"]
+
+[node name="Movable_obj" type="Node" parent="." node_paths=PackedStringArray("collider", "limit_zone", "move_root", "rotation_root", "On_Move", "On_View", "Render")]
 script = ExtResource("1_l0jbp")
-collider = NodePath("Rotation_root/Area/CollisionShape3D")
-rotation_root = NodePath("Rotation_root")
-move_root = NodePath(".")
-On_Move = NodePath("Rotation_root/Area/On_Move")
-On_View = NodePath("Rotation_root/Area/On_View")
-Render = NodePath("Rotation_root/MeshInstance3D")
+collider = NodePath("../Rotation_root/Area/CollisionShape3D")
+limit_zone = NodePath("../Rotation_root/Limit_zone/CollisionShape3D")
+move_root = NodePath("..")
+rotation_root = NodePath("../Rotation_root")
+On_Move = NodePath("../Rotation_root/Area/On_Move")
+On_View = NodePath("../Rotation_root/Area/On_View")
+Render = NodePath("../Rotation_root/MeshInstance3D")
 moving_material = ExtResource("2_yhtnr")
 overlaping_object = ExtResource("3_21sgw")
 
@@ -58,6 +61,7 @@ shape = SubResource("BoxShape3D_ud465")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Rotation_root"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+layers = 3
 mesh = SubResource("BoxMesh_v4iu2")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("5_c444e")

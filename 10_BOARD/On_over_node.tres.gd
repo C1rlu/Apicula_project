@@ -18,7 +18,7 @@ var _photo_data : PhotoData
 
 func _ready():
 	
-	_global_datas.close_all_over_ui.connect(close)
+	#_global_datas.close_all_over_ui.connect(close)
 	if move_node:
 		move_node_position = move_node.global_position
 		node_rotation_degrees = move_node.rotation_degrees

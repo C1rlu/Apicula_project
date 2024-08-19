@@ -1,11 +1,13 @@
-[gd_scene load_steps=9 format=3 uid="uid://6pkqjlcwbqu1"]
+[gd_scene load_steps=11 format=3 uid="uid://6pkqjlcwbqu1"]
 
 [ext_resource type="Script" path="res://10_BOARD/On_Click_clock.gd" id="1_4hlwm"]
 [ext_resource type="PackedScene" uid="uid://c50aeg7d1nugi" path="res://13_TOOLS_UI/Clock_montre/clock_3d.blend" id="1_rylyw"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/Clock_montre/Clock_OnBoard.gd" id="1_yna5a"]
 [ext_resource type="Material" uid="uid://6wrt67enhwi2" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_mat_01.tres" id="2_3cdak"]
+[ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Movable_obj.gd" id="2_ppcq6"]
 [ext_resource type="Material" uid="uid://c0oms0qis0dcm" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_mat_02.tres" id="3_0pi8f"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="3_2yp0q"]
+[ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/On_click_object.gd" id="3_sdj0d"]
 [ext_resource type="Material" uid="uid://bk1u0r8smgwsu" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_mat_03.tres" id="4_8j1ll"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_t0fwk"]
@@ -16,8 +18,19 @@ size = Vector3(1.59534, 0.703857, 1.86029)
 [node name="Clock_OnBoard" type="Node" parent="."]
 script = ExtResource("1_yna5a")
 
+[node name="Movable_object" type="Node" parent="." node_paths=PackedStringArray("collider", "move_root", "rotation_root", "On_Move")]
+script = ExtResource("2_ppcq6")
+collider = NodePath("../Area3D/CollisionShape3D")
+move_root = NodePath("..")
+rotation_root = NodePath("..")
+On_Move = NodePath("../Area3D/On_Move")
+
 [node name="Area3D" type="Area3D" parent="."]
 transform = Transform3D(1, -2.36469e-11, 0, 4.09273e-11, 1, -7.27596e-12, 2.98023e-08, -7.27596e-12, 1, 0, 0, 0)
+
+[node name="On_Move" type="Node" parent="Area3D" node_paths=PackedStringArray("Root")]
+script = ExtResource("3_sdj0d")
+Root = NodePath("../..")
 
 [node name="On_click" type="Node" parent="Area3D"]
 script = ExtResource("1_4hlwm")

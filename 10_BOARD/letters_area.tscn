@@ -1,7 +1,9 @@
-[gd_scene load_steps=25 format=3 uid="uid://qgyjfq88teq8"]
+[gd_scene load_steps=27 format=3 uid="uid://qgyjfq88teq8"]
 
+[ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Movable_obj.gd" id="1_3c8dm"]
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Show_this_page.gd" id="1_va6lq"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="2_ke4da"]
+[ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/On_click_object.gd" id="2_rje64"]
 [ext_resource type="Shader" uid="uid://upo0fuo5sqgd" path="res://05_SHADER_TEST/Board/Board_sh.tres" id="3_ydeap"]
 
 [sub_resource type="GDScript" id="GDScript_ypp87"]
@@ -259,6 +261,17 @@ shader = SubResource("VisualShader_sxcgk")
 [node name="Letter_area" type="Area3D"]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0.00272226, 0)
 script = SubResource("GDScript_ypp87")
+
+[node name="Movable_obj" type="Node" parent="." node_paths=PackedStringArray("collider", "move_root", "rotation_root", "On_Move")]
+script = ExtResource("1_3c8dm")
+collider = NodePath("../CollisionShape3D")
+move_root = NodePath("..")
+rotation_root = NodePath("..")
+On_Move = NodePath("../On_Move")
+
+[node name="On_Move" type="Node" parent="." node_paths=PackedStringArray("Root")]
+script = ExtResource("2_rje64")
+Root = NodePath("..")
 
 [node name="Note" type="Node" parent="."]
 script = SubResource("GDScript_4uwx0")
