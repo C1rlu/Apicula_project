@@ -7,9 +7,7 @@ extends Node
 @export var rotation_root : Node3D
 
 @export var On_Move : Node
-@export var On_View: Node
-
-
+@export var rotation_degrees : float = 45.0
 
 @export var Render : MeshInstance3D
 var Normal_material : Material
@@ -23,7 +21,7 @@ func _ready():
 	On_Move.On_Move.connect(_On_move)
 	On_Move._move.connect(_on_move)
 	On_Move._rotate.connect(_on_rotate)
-	#On_View.On_View.connect(_on_view)
+
 	
 	if Render:
 		Normal_material = Render.get_surface_override_material(0)
@@ -45,8 +43,6 @@ func _On_move(condition):
 		if Render:
 			Render.set_surface_override_material(0,Normal_material)
 	
-func _on_view():
-	print("ON VIEW OBJECT")
 
 func _on_move(target, speed, delta):
 	
@@ -63,13 +59,12 @@ func _on_rotate(direction):
 		t.kill()
 		
 	if direction == 1:
-		var target_rotation = rotation_root.rotation_degrees.y + 45.0
-		rotating = true
+		var target_rotation = rotation_root.rotation_degrees.y + rotation_degrees
 		t = create_tween()
 		t.tween_property(rotation_root,"rotation_degrees",Vector3(0.0,target_rotation,0.0),0.1)
 		t.connect("finished",done)
 	if direction == -1:
-		var target_rotation = rotation_root.rotation_degrees.y - 45.0
+		var target_rotation = rotation_root.rotation_degrees.y - rotation_degrees
 		rotating = true
 		t = create_tween()
 		t.tween_property(rotation_root,"rotation_degrees",Vector3(0.0,target_rotation,0.0),0.1)

@@ -4,8 +4,8 @@ extends Node
 @onready var collision_shape_3d = $"../Area3D/CollisionShape3D"
 
 func _ready():
-	
-	_global_datas.book_back_idle_position.connect(_show)
+	pass
+	#_global_datas.book_back_idle_position.connect(_show)
 	
 	
 func _show(condition):
