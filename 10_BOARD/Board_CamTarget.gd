@@ -13,17 +13,26 @@ var f
 var on_auto_move = false
 
 var no_zoom_positon : Vector3
-
+var stop_move : bool = false
 func _ready():
 	_global_datas.focus_this_on_board.connect(_focus_this)
 	no_zoom_positon = global_position
 	target_position = no_zoom_positon 
 	_global_datas.camera_focus_On.connect(check_focus)
 	current_speed = speed
+	
+	
+	_global_datas.open_3d_book.connect(stop)
+	
+	
+func stop(condition : bool):
+	stop_move = condition 	
+	
 func check_focus(focus_state : boardCamState_data):
-		
-	if focus_state.cam_state == game_state.camera_state.Main:
-		_focus_this(no_zoom_positon)
+	pass
+	#Recenter Min View
+	#if focus_state.cam_state == game_state.camera_state.Main:
+		#_focus_this(no_zoom_positon)
 
 
 func _process(delta):
@@ -33,6 +42,13 @@ func _process(delta):
 		return
 	
 	if !_global_datas.Player_In_Inventory:
+		return
+
+	if stop_move:
+		return
+	if _global_datas.camera_current_state == game_state.camera_state.Main:
+		move(delta)	
+		current_speed = speed *1.5	
 		return
 
 	if _global_datas.camera_current_state == game_state.camera_state.Board:

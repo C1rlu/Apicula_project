@@ -136,7 +136,7 @@ signal active_diving
 
 
 
-signal book_back_idle_position(condition : bool)
+signal open_3d_book(condition : bool)
 var book_idle_pos : bool = true
 
 
@@ -180,9 +180,7 @@ func _ready():
 
 # TEST BOARD NEWS PROTO SCENE
 signal select_movable_object(object)
-signal switch_state(condition : bool)
-var board_state : game_state.board_state = game_state.board_state.view_obj
-var grid_points : Array
-var locked_points : Array
+signal moving_state(condition : bool)
 
 var limit_zone : bool = false
+var grid_points : Array

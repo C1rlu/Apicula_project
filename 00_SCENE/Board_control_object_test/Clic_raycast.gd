@@ -6,7 +6,7 @@ var pad : bool = false
 @export var pad_target : ColorRect
 
 var target 
-var last_target : Vector3
+var last_target 
 
 func _ready():
 	
@@ -28,25 +28,18 @@ func _input(event):
 	else:
 		target = get_viewport().get_mouse_position()	
 		
-	if event.is_action_pressed("edit_board_state"):	
-		check_move(target)
-		
-	if event.is_action_pressed("Click_on_board"):	
-		if _selectec_object:
-			
-			if _global_datas.limit_zone:
-				return
+	if event.is_action_pressed("On_Move"):
 
-			_global_datas.switch_state.emit(false)
+		
+		if _selectec_object:
 			_selectec_object.On_Move.emit(false)
-			_global_datas.select_movable_object.emit(null)
-			
 		else:
-			check_view(target)
+			check_move(target)
+			
+	if event.is_action_pressed("On_View"):	
+		check_view(target)
 
 func check_move(targetPos : Vector2):
-	
-
 	
 	var ray_target = get_raycast_target(targetPos)
 	#print( ray_target)
@@ -55,8 +48,7 @@ func check_move(targetPos : Vector2):
 		
 	if !_selectec_object:
 		if  ray_target.collider.get_node_or_null("On_Move"): 
-			
-			_global_datas.switch_state.emit(true)
+	
 			var _On_click =  ray_target.collider.get_node_or_null("On_Move")
 			_On_click.On_Move.emit(true)
 					
@@ -88,6 +80,7 @@ func get_raycast_target(targetPos : Vector2) -> Dictionary:
 	rayQuery.collide_with_bodies = false
 	
 	var result = space.intersect_ray(rayQuery)
+
 	return result
 	
 func _process(delta):
@@ -99,7 +92,10 @@ func _process(delta):
 			
 			if ray_target:
 				if ray_target.collider.get_node_or_null("Position_zone"):
-					_selectec_object._move.emit(ray_target.position,10,delta)	
-					last_target = ray_target.position
+
+					_selectec_object._move.emit(ray_target,10,delta)	
+					last_target = ray_target
 			else:
+				if !ray_target:
+					return
 				_selectec_object._move.emit(last_target,10,delta)

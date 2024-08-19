@@ -27,9 +27,4 @@ enum camera_state {
 	BoardZoom
 }
 
-enum board_state {
-	
-	Moving_obj,
-	view_obj
-}
 

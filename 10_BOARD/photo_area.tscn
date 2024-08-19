@@ -1,15 +1,15 @@
-[gd_scene load_steps=73 format=3 uid="uid://uwg2qc3svu11"]
+[gd_scene load_steps=72 format=3 uid="uid://uwg2qc3svu11"]
 
 [ext_resource type="Script" path="res://10_BOARD/Photo_element.gd" id="1_0a8jl"]
 [ext_resource type="Script" path="res://10_BOARD/00_BOOK/Legend/Legend_behaviour.gd" id="1_f7rkq"]
 [ext_resource type="Resource" uid="uid://dyh1qg1u652pl" path="res://15_GAME_RESSOURCE/Epave_ch_photoData.tres" id="2_8x1kk"]
-[ext_resource type="Script" path="res://10_BOARD/00_BOOK/Show_this_page.gd" id="2_653je"]
 [ext_resource type="Resource" uid="uid://cjwmwf4frvq3c" path="res://15_GAME_RESSOURCE/03_BoardCam_state/BoardZoom_focus_data.tres" id="3_tu215"]
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Movable_obj.gd" id="4_4uyoa"]
 [ext_resource type="Texture2D" uid="uid://38btbw60olcn" path="res://12_INVENTORY/Photo/IMG/Boat.png" id="4_wljme"]
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/On_click_object.gd" id="6_46a1v"]
 [ext_resource type="Resource" uid="uid://3pilop3f4m6r" path="res://15_GAME_RESSOURCE/03_BoardCam_state/ScannerM_focus_data.tres" id="7_8v556"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="7_vd1wc"]
+[ext_resource type="Script" path="res://10_BOARD/On_View.tres.gd" id="8_2nycl"]
 
 [sub_resource type="GDScript" id="GDScript_32kbr"]
 script/source = "@tool
@@ -514,13 +514,6 @@ shader_parameter/light_color = Color(0.67451, 0.639216, 0.529412, 1)
 material = SubResource("ShaderMaterial_hy8dn")
 size = Vector3(1, 1, 1.075)
 
-[sub_resource type="GDScript" id="GDScript_cx1j3"]
-script/source = "extends Node
-
-signal On_View
-
-"
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_nnxyu"]
 size = Vector3(0.0849429, 0.0129531, 0.0916202)
 
@@ -725,13 +718,15 @@ camera_state = ExtResource("3_tu215")
 On_over = NodePath("legend/Click/On_Over")
 On_View = NodePath("legend/Click/On_View")
 
-[node name="Movable_object" type="Node" parent="." node_paths=PackedStringArray("collider", "move_root", "rotation_root", "On_Move")]
+[node name="Movable_object" type="Node" parent="." node_paths=PackedStringArray("collider", "limit_zone", "move_root", "rotation_root", "On_Move", "Render")]
 script = ExtResource("4_4uyoa")
 collider = NodePath("../legend/Click/CollisionShape3D")
+limit_zone = NodePath("../legend/Limit")
 move_root = NodePath("..")
 rotation_root = NodePath("..")
 On_Move = NodePath("../legend/Click/On_Move")
 rotation_degrees = 15.0
+Render = NodePath("../Photo/render_base")
 
 [node name="Photo" type="Node3D" parent="."]
 
@@ -768,7 +763,7 @@ script = ExtResource("6_46a1v")
 Root = NodePath("../../..")
 
 [node name="On_View" type="Node" parent="legend/Click"]
-script = SubResource("GDScript_cx1j3")
+script = ExtResource("8_2nycl")
 
 [node name="On_Over" type="Node" parent="legend/Click" node_paths=PackedStringArray("_on_over", "move_node")]
 script = ExtResource("7_vd1wc")
@@ -779,10 +774,17 @@ move_node = NodePath("../../..")
 position_over = Vector3(0, 0.005, 0)
 rotation_over = Vector3(10, 0, 0)
 
-[node name="On_click" type="Node" parent="legend/Click"]
-script = ExtResource("2_653je")
-
 [node name="CollisionShape3D" type="CollisionShape3D" parent="legend/Click"]
+transform = Transform3D(0.999997, 0, 4.14439e-08, 0, 1, 0, -4.14439e-08, 0, 0.999997, 0.0014558, 0, 0.0114536)
+shape = SubResource("BoxShape3D_nnxyu")
+
+[node name="Limit" type="Area3D" parent="legend"]
+collision_layer = 4
+collision_mask = 4
+
+[node name="Limit" type="Node" parent="legend/Limit"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="legend/Limit"]
 transform = Transform3D(0.999997, 0, 4.14439e-08, 0, 1, 0, -4.14439e-08, 0, 0.999997, 0.0014558, 0, 0.0114536)
 shape = SubResource("BoxShape3D_nnxyu")
 
@@ -867,4 +869,3 @@ vertical_alignment = 1
 
 [connection signal="update_legend" from="." to="legend/legend_behaviour" method="_on_photo_element_root_update_legend"]
 [connection signal="timeout" from="legend/legend_behaviour/Timer" to="legend/legend_behaviour" method="_on_timer_timeout"]
-[connection signal="On_click" from="legend/Click/On_click" to="." method="_on_show_this_page"]

@@ -1,0 +1,211 @@
+[gd_scene load_steps=15 format=3 uid="uid://bgl5a6kyd68tc"]
+
+[ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Movable_manager.gd" id="1_k6iyl"]
+[ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Clic_raycast.gd" id="1_ofpfv"]
+[ext_resource type="PackedScene" uid="uid://xpunnioeu7vl" path="res://00_SCENE/Board_control_object_test/movable_obj.tscn" id="3_kwpp8"]
+[ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Main_Cam.gd" id="4_20uu6"]
+[ext_resource type="PackedScene" uid="uid://derylpvlrv2td" path="res://00_SCENE/Board_control_object_test/movable_ob_flat.tscn" id="6_58ini"]
+
+[sub_resource type="GDScript" id="GDScript_b676x"]
+script/source = "extends Node
+
+
+
+func _ready():
+	_global_datas.using_pad.connect(_switch_inputs)
+	_switch_inputs(false)
+	
+func _input(event):
+	
+	if event is InputEventJoypadButton or event is InputEventJoypadMotion:
+	
+		_global_datas.using_pad.emit(true)
+	else:
+		_global_datas.using_pad.emit(false)
+
+			
+			
+			
+func _switch_inputs(condition : bool):
+	if condition:
+		
+		_global_datas.move_right = \"move_right_joy\"
+		_global_datas.move_left = \"move_left_joy\"
+		_global_datas.move_forward = \"move_forward_joy\"
+		_global_datas.move_backward = \"move_backward_joy\"	
+	else:
+		_global_datas.move_right = \"move_right\"
+		_global_datas.move_left = \"move_left\"
+		_global_datas.move_forward = \"move_forward\"
+		_global_datas.move_backward = \"move_backward\"
+"
+
+[sub_resource type="GDScript" id="GDScript_oy00j"]
+script/source = "extends Node3D
+
+@export var speed : float = 0.5
+var current_speed : float
+@export var min_x : float = -2.0
+@export var max_x : float = 2.0
+@export var min_z : float = -2.0
+@export var max_z : float = 2.0
+var border_ratio : float = 22
+
+var target_position : Vector3
+var f
+var on_auto_move = false
+
+var no_zoom_positon : Vector3
+
+func _ready():
+
+	no_zoom_positon = global_position
+	target_position = no_zoom_positon 
+	current_speed = speed
+	
+	_global_datas.camera_current_state = game_state.camera_state.Board
+	
+
+func _process(delta):
+	
+
+	if _global_datas.camera_current_state == game_state.camera_state.Board:
+		move(delta)	
+		current_speed = speed 	
+		return
+	
+	if _global_datas.camera_current_state == game_state.camera_state.BoardZoom:
+		move(delta)
+		current_speed = speed /2		
+		return
+		
+func move(delta):
+	
+	if Input.is_action_pressed(_global_datas.move_right):
+		var _magnitude = Input.get_action_strength(_global_datas.move_right)
+		target_position.x += _magnitude * current_speed * delta
+	if Input.is_action_pressed(_global_datas.move_left):
+		var _magnitude = Input.get_action_strength(_global_datas.move_left)
+		target_position.x -= _magnitude * current_speed * delta	
+	if Input.is_action_pressed(_global_datas.move_forward):
+		var _magnitude = Input.get_action_strength(_global_datas.move_forward)
+		target_position.z -= _magnitude * current_speed * delta	
+	if Input.is_action_pressed(_global_datas.move_backward):
+		var _magnitude = Input.get_action_strength(_global_datas.move_backward)
+		target_position.z += _magnitude * current_speed * delta
+	
+	var lerp_value = (border_ratio - 22.0) / (42.0 - 22.0)	
+	var oneminus = lerp(1.0,0.0,lerp_value)
+	
+	target_position.x = clamp(target_position.x, oneminus * min_x, oneminus * max_x)
+	target_position.z = clamp(target_position.z, oneminus * min_z, oneminus * max_z)
+
+
+	position = target_position
+	
+
+func done():
+	target_position = position
+	on_auto_move = false
+	
+"
+
+[sub_resource type="SphereMesh" id="SphereMesh_iscb1"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_bmorv"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_c5gkq"]
+size = Vector3(2, 0.1, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_d47rl"]
+size = Vector3(2, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_2gct7"]
+size = Vector3(0.35, 0.05, 0.25)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_utgie"]
+size = Vector3(0.35, 0.0510588, 0.25)
+
+[sub_resource type="QuadMesh" id="QuadMesh_lw8vb"]
+size = Vector2(8, 5)
+
+[node name="Proto_board_grid" type="Node"]
+
+[node name="Controllers_inputs_Type" type="Node" parent="."]
+script = SubResource("GDScript_b676x")
+
+[node name="Movable_manager" type="Node" parent="."]
+script = ExtResource("1_k6iyl")
+
+[node name="Clic_raycast" type="Node" parent="." node_paths=PackedStringArray("Camera", "pad_target")]
+script = ExtResource("1_ofpfv")
+Camera = NodePath("../Main_Cam")
+pad_target = NodePath("../Pad_target")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.240159, 0.983117, 0.394259)
+shadow_enabled = true
+shadow_normal_bias = 0.0
+shadow_opacity = 0.31
+shadow_blur = 10.0
+distance_fade_begin = 35.4
+omni_range = 1.96214
+
+[node name="Main_Cam" type="Camera3D" parent="."]
+transform = Transform3D(0.972776, 0.162146, -0.165578, 0, 0.714473, 0.699663, 0.231748, -0.680616, 0.695022, -0.19, 0.985, 0.88)
+current = true
+fov = 40.0
+script = ExtResource("4_20uu6")
+
+[node name="CamTarget" type="Node3D" parent="."]
+script = SubResource("GDScript_oy00j")
+speed = 1.0
+min_x = -1.0
+max_x = 1.0
+min_z = -1.0
+max_z = 1.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CamTarget"]
+transform = Transform3D(0.148391, 0, 0, 0, 0.108256, 0, 0, 0, 0.148391, 0, 0.0134413, 0)
+visible = false
+mesh = SubResource("SphereMesh_iscb1")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="CamTarget"]
+transform = Transform3D(0.0808016, 0, 0, 0, -3.53195e-09, 0.0379354, 0, -0.0808016, -1.65821e-09, 0, 0.0575669, 0)
+visible = false
+mesh = SubResource("PrismMesh_bmorv")
+
+[node name="Moving_Element" type="Node3D" parent="."]
+
+[node name="Movable_obj" parent="Moving_Element" instance=ExtResource("3_kwpp8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.225, 0, 0)
+
+[node name="Movable_obj" parent="Moving_Element/Movable_obj" index="0"]
+collider = Object(CollisionShape3D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","transform":Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0),"rotation_edit_mode":0,"rotation_order":2,"top_level":false,"visible":true,"visibility_parent":NodePath(""),"shape":null,"disabled":false,"script":null)
+
+limit_zone = Object(Area3D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","transform":Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0),"rotation_edit_mode":0,"rotation_order":2,"top_level":false,"visible":true,"visibility_parent":NodePath(""),"disable_mode":0,"collision_layer":4,"collision_mask":4,"collision_priority":1.0,"input_ray_pickable":false,"input_capture_on_drag":false,"monitoring":true,"monitorable":true,"priority":0,"gravity_space_override":0,"gravity_point":false,"gravity_point_unit_distance":0.0,"gravity_point_center":Vector3(0, -1, 0),"gravity_direction":Vector3(0, -1, 0),"gravity":9.8,"linear_damp_space_override":0,"linear_damp":0.1,"angular_damp_space_override":0,"angular_damp":0.1,"wind_force_magnitude":0.0,"wind_attenuation_factor":0.0,"wind_source_path":NodePath(""),"audio_bus_override":false,"audio_bus_name":&"Master","reverb_bus_enabled":false,"reverb_bus_name":&"Master","reverb_bus_amount":0.0,"reverb_bus_uniformity":0.0,"script":null)
+
+move_root = Object(Node3D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","transform":Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.225, 0, 0),"rotation_edit_mode":0,"rotation_order":2,"top_level":false,"visible":true,"visibility_parent":NodePath(""),"script":null)
+
+rotation_root = Object(Node3D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","transform":Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0),"rotation_edit_mode":0,"rotation_order":2,"top_level":false,"visible":true,"visibility_parent":NodePath(""),"script":null)
+
+On_Move = Object(Node,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","script":Resource("res://00_SCENE/Board_control_object_test/On_click_object.gd"),"Root":Object(Node3D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","transform":Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.225, 0, 0),"rotation_edit_mode":0,"rotation_order":2,"top_level":false,"visible":true,"visibility_parent":NodePath(""),"script":null)
+)
+
+Render = Object(MeshInstance3D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","transform":Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0),"rotation_edit_mode":0,"rotation_order":2,"top_level":false,"visible":true,"visibility_parent":NodePath(""),"layers":3,"sorting_offset":0.0,"sorting_use_aabb_center":true,"material_override":null,"material_overlay":null,"transparency":0.0,"cast_shadow":1,"extra_cull_margin":0.0,"custom_aabb":AABB(0, 0, 0, 0, 0, 0),"lod_bias":1.0,"ignore_occlusion_culling":false,"gi_mode":1,"gi_lightmap_scale":0,"visibility_range_begin":0.0,"visibility_range_begin_margin":0.0,"visibility_range_end":0.0,"visibility_range_end_margin":0.0,"visibility_range_fade_mode":0,"mesh":null,"skin":null,"skeleton":NodePath(""),"surface_material_override/0":Resource("res://00_SCENE/Board_control_object_test/Material/movable_ob_flat.tres"),"script":null)
+
+
+[node name="Movable_obj2" parent="Moving_Element" instance=ExtResource("3_kwpp8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.676446, -5.96046e-08, -0.0306298)
+
+[node name="Movable_obj3" parent="Moving_Element" instance=ExtResource("3_kwpp8")]
+transform = Transform3D(0.380441, 0, 0, 0, 0.380441, 0, 0, 0, 0.380441, 0.419857, -0.00141853, 0.261731)
+
+[node name="Movable_obj" parent="Moving_Element/Movable_obj3" index="0"]
+collider = Object(CollisionShape3D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","transform":Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0),"rotation_edit_mode":0,"rotation_order":2,"top_level":false,"visible":true,"visibility_parent":NodePath(""),"shape":null,"disabled":false,"script":null)
+
+limit_zone = Object(Area3D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","transform":Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0),"rotation_edit_mode":0,"rotation_order":2,"top_level":false,"visible":true,"visibility_parent":NodePath(""),"disable_mode":0,"collision_layer":4,"collision_mask":4,"collision_priority":1.0,"input_ray_pickable":false,"input_capture_on_drag":false,"monitoring":true,"monitorable":true,"priority":0,"gravity_space_override":0,"gravity_point":false,"gravity_point_unit_distance":0.0,"gravity_point_center":Vector3(0, -1, 0),"gravity_direction":Vector3(0, -1, 0),"gravity":9.8,"linear_damp_space_override":0,"linear_damp":0.1,"angular_damp_space_override":0,"angular_damp":0.1,"wind_force_magnitude":0.0,"wind_attenuation_factor":0.0,"wind_source_path":NodePath(""),"audio_bus_override":false,"audio_bus_name":&"Master","reverb_bus_enabled":false,"reverb_bus_name":&"Master","reverb_bus_amount":0.0,"reverb_bus_uniformity":0.0,"script":null)
+
+move_root = Object(Node3D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","transform":Transform3D(0.380441, 0, 0, 0, 0.380441, 0, 0, 0, 0.380441, 0.419857, -0.00141853, 0.261731),"rotation_edit_mode":0,"rotation_order":2,"top_level":false,"visible":true,"visibility_parent":NodePath(""),"script":null)
+
+rotation_root = Object(Node3D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_

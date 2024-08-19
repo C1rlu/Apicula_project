@@ -2,9 +2,14 @@ extends Node
 
 @export var focus_data : boardCamState_data
 
-func _on_on_click_on_click():
-	
+@export var On_View : Node
 
+func _ready():
+	if On_View :
+		On_View.On_View.connect(on_click)
+
+
+func on_click():
 	if focus_data:
 		
 		if _global_datas.camera_current_state == focus_data.cam_state:

@@ -31,22 +31,22 @@ func _ready():
 	
 func show_this_on_book():
 	
-
+	_global_datas.open_3d_book.emit(true)
 	_global_datas.show_page.emit(Photo_data.page_prefab)
-
-	var book = _global_datas.book_data.book_node
+	
+	#var book = _global_datas.book_data.book_node
 	#book.position = photo_element_root.global_position  + book_position_offset
 	#var rotation_offset = book_rotation_angle - book.position.x * 25
 	#book.rotation_degrees = Vector3(0,rotation_offset,0)
 	#
-	var target = book.global_position
+	#var target = book.global_position
 #
-	_global_datas.focus_this_on_board.emit(target)
+	#_global_datas.focus_this_on_board.emit(target)
 	#_global_datas.camera_focus_On.emit(camera_state)
 	
 	
-	_global_datas.book_idle_pos = false		
-	_global_datas.book_back_idle_position.emit(true)
+	#_global_datas.book_idle_pos = false		
+	
 
 
 	

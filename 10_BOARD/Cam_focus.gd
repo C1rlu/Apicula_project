@@ -13,6 +13,8 @@ var target_rotation : Vector3
 var offset : Vector3
 var offset_rotation : Vector3
 
+
+var main_cam_offset : Vector3
 var board_cam_offset : Vector3
 var boardZoom_cam_offset : Vector3
 
@@ -31,7 +33,7 @@ func _ready():
 	target_position = all_Cam[0].global_position
 	target_rotation = all_Cam[0].global_rotation_degrees
 	
-		
+	main_cam_offset = all_Cam[0].global_position - focus_target.global_position 
 	board_cam_offset = board_cam_ref.global_position - focus_target.global_position 
 	boardZoom_cam_offset = board_cam_zoom.global_position - focus_target.global_position	
 
@@ -69,8 +71,8 @@ func _process(delta):
 	if cam_state == 0:
 		rotation_angle(delta)	
 		for c in all_Cam:
-			c.global_position  = lerp(c.global_position, target_position, 3.0 * delta)	
-			c.rotation_degrees = lerp(c.rotation_degrees, target_rotation , 3.0 * delta)	
+			c.global_position  = lerp(c.global_position, focus_target.global_position + main_cam_offset + (offset_rotation*2), 3.0 * delta)	
+			c.rotation_degrees = lerp(c.rotation_degrees, target_rotation + focus_target.rotation_degrees, 3.0 * delta)	
 			
 	if cam_state == 1:
 		rotation_angle(delta)
@@ -96,14 +98,25 @@ func _process(delta):
 
 func rotation_angle(delta):
 
+	#x
 	var angle_target = focus_target.global_position.x
-	
 	var angle_target_clamp = clampf(angle_target,-0.5,0.5)
 	var t = (angle_target_clamp - -0.5) / ( 0.5 -- 0.5)
 	var target_angle = lerp(-20, 20, t)
+	#y
+	#var angle_target_y = focus_target.global_position.z
+	#var angle_target_clamp_y = clampf(angle_target_y,-0.2,1.0)
+	#var t_y = (angle_target_clamp_y - -0.5) / ( 0.5 -- 1.0)
+	#var target_angle_y = lerp(-20, 10, t_y)
+
 	var rotation_target = Vector3(0.0, -target_angle,0.0)
+	
 	focus_target.rotation_degrees = rotation_target
 	
+	#for offset correction here
 	var target_offset_x = lerp(-0.125,0.125, t)
 	var target_offset_y = lerp(-0.05,0.05, t)
 	offset_rotation = Vector3(-target_offset_x, target_offset_y,0.0)
+
+
+	
