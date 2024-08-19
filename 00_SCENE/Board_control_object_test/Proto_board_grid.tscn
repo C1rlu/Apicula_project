@@ -42,21 +42,6 @@ func _switch_inputs(condition : bool):
 		_global_datas.move_backward = \"move_backward\"
 "
 
-[sub_resource type="BoxMesh" id="BoxMesh_c5gkq"]
-size = Vector3(2, 0.1, 1)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_d47rl"]
-size = Vector3(2, 0, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_k08k5"]
-size = Vector3(0.5, 0.1, 0.5)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_7sn4d"]
-size = Vector3(0.585876, 0, 0.500488)
-
-[sub_resource type="QuadMesh" id="QuadMesh_lw8vb"]
-size = Vector2(8, 5)
-
 [sub_resource type="GDScript" id="GDScript_oy00j"]
 script/source = "extends Node3D
 
@@ -131,6 +116,21 @@ func done():
 
 [sub_resource type="PrismMesh" id="PrismMesh_bmorv"]
 
+[sub_resource type="BoxMesh" id="BoxMesh_c5gkq"]
+size = Vector3(2, 0.1, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_d47rl"]
+size = Vector3(2, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_k08k5"]
+size = Vector3(0.5, 0.1, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7sn4d"]
+size = Vector3(0.585876, 0, 0.500488)
+
+[sub_resource type="QuadMesh" id="QuadMesh_lw8vb"]
+size = Vector2(8, 5)
+
 [node name="Proto_board_grid" type="Node"]
 
 [node name="Board_state" type="Node" parent="."]
@@ -148,7 +148,7 @@ Camera = NodePath("../Main_Cam")
 
 [node name="Grid_Points" type="Node" parent="." node_paths=PackedStringArray("grid_area")]
 script = ExtResource("4_ifxw1")
-grid_area = NodePath("../Main_root/Desk_msh")
+grid_area = NodePath("../Static_Element/Main_root/Desk_msh")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.240159, 0.983117, 0.394259)
@@ -160,66 +160,10 @@ distance_fade_begin = 35.4
 omni_range = 1.96214
 
 [node name="Main_Cam" type="Camera3D" parent="."]
-transform = Transform3D(0.972776, 0.162145, -0.165578, 0, 0.714472, 0.699663, 0.231748, -0.680615, 0.695022, -0.19, 0.985, 0.88)
+transform = Transform3D(0.972776, 0.162146, -0.165578, 0, 0.714473, 0.699663, 0.231748, -0.680616, 0.695022, -0.19, 0.985, 0.88)
 current = true
 fov = 40.0
 script = ExtResource("4_20uu6")
-
-[node name="Main_root" type="Node3D" parent="."]
-
-[node name="Desk_msh" type="MeshInstance3D" parent="Main_root"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
-mesh = SubResource("BoxMesh_c5gkq")
-
-[node name="Area3D" type="Area3D" parent="Main_root"]
-
-[node name="Position_zone" type="Node" parent="Main_root/Area3D"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Main_root/Area3D"]
-shape = SubResource("BoxShape3D_d47rl")
-
-[node name="Desk_msh2" type="MeshInstance3D" parent="Main_root"]
-transform = Transform3D(0.955829, 0, -0.293924, 0, 1, 0, 0.293924, 0, 0.955829, 0.63115, 0.05, -0.346866)
-mesh = SubResource("BoxMesh_k08k5")
-
-[node name="Area3D2" type="Area3D" parent="Main_root"]
-transform = Transform3D(0.955829, 0, -0.293924, 0, 1, 0, 0.293924, 0, 0.955829, 0.63115, 0.1, -0.346866)
-
-[node name="Position_zone" type="Node" parent="Main_root/Area3D2"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Main_root/Area3D2"]
-transform = Transform3D(1, 0, -1.78814e-07, 0, 1, 0, 1.78814e-07, 0, 1, -0.00399813, 0, 0.0397947)
-shape = SubResource("BoxShape3D_7sn4d")
-
-[node name="Desk_msh3" type="MeshInstance3D" parent="Main_root"]
-transform = Transform3D(0.943072, 0, 0.332589, 0, 1, 0, -0.332589, 0, 0.943072, -0.7455, 0.05, -0.476374)
-mesh = SubResource("BoxMesh_k08k5")
-
-[node name="Area3D3" type="Area3D" parent="Main_root"]
-transform = Transform3D(0.943072, 0, 0.332589, 0, 1, 0, -0.332589, 0, 0.943072, -0.7455, 0.1, -0.476374)
-
-[node name="Position_zone" type="Node" parent="Main_root/Area3D3"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Main_root/Area3D3"]
-shape = SubResource("BoxShape3D_7sn4d")
-
-[node name="Movable_obj" parent="." instance=ExtResource("3_kwpp8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.225, 0, 0)
-
-[node name="Movable_obj2" parent="." instance=ExtResource("3_kwpp8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.676446, -5.96046e-08, -0.0306298)
-
-[node name="Movable_obj3" parent="." instance=ExtResource("3_kwpp8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.175875, -1.78814e-07, -0.360276)
-
-[node name="BACK" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
-mesh = SubResource("QuadMesh_lw8vb")
-
-[node name="BACK2" type="MeshInstance3D" parent="BACK"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -1, 0)
-mesh = SubResource("QuadMesh_lw8vb")
-skeleton = NodePath("../..")
 
 [node name="CamTarget" type="Node3D" parent="."]
 script = SubResource("GDScript_oy00j")
@@ -238,6 +182,78 @@ mesh = SubResource("SphereMesh_iscb1")
 transform = Transform3D(0.0808016, 0, 0, 0, -3.53195e-09, 0.0379354, 0, -0.0808016, -1.65821e-09, 0, 0.0575669, 0)
 visible = false
 mesh = SubResource("PrismMesh_bmorv")
+
+[node name="Moving_Element" type="Node3D" parent="."]
+
+[node name="Movable_obj" parent="Moving_Element" instance=ExtResource("3_kwpp8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.225, 0, 0)
+
+[node name="Movable_obj2" parent="Moving_Element" instance=ExtResource("3_kwpp8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.676446, -5.96046e-08, -0.0306298)
+
+[node name="Movable_obj3" parent="Moving_Element" instance=ExtResource("3_kwpp8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.175875, -1.78814e-07, -0.360276)
+
+[node name="Movable_obj_flat_00" parent="Moving_Element" instance=ExtResource("6_58ini")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.392625, 0, -0.0710238)
+
+[node name="Movable_obj_flat_01" parent="Moving_Element" instance=ExtResource("6_58ini")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.228456, 0, -0.0465967)
+
+[node name="Movable_obj_flat_02" parent="Moving_Element" instance=ExtResource("6_58ini")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.341508, 0, 0.0627547)
+
+[node name="Movable_obj_flat_03" parent="Moving_Element" instance=ExtResource("6_58ini")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.211212, 0, 0.0781384)
+
+[node name="Static_Element" type="Node3D" parent="."]
+
+[node name="Main_root" type="Node3D" parent="Static_Element"]
+
+[node name="Desk_msh" type="MeshInstance3D" parent="Static_Element/Main_root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
+mesh = SubResource("BoxMesh_c5gkq")
+
+[node name="Area3D" type="Area3D" parent="Static_Element/Main_root"]
+
+[node name="Position_zone" type="Node" parent="Static_Element/Main_root/Area3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Static_Element/Main_root/Area3D"]
+shape = SubResource("BoxShape3D_d47rl")
+
+[node name="Desk_msh2" type="MeshInstance3D" parent="Static_Element/Main_root"]
+transform = Transform3D(0.955829, 0, -0.293924, 0, 1, 0, 0.293924, 0, 0.955829, 0.63115, 0.05, -0.346866)
+mesh = SubResource("BoxMesh_k08k5")
+
+[node name="Area3D2" type="Area3D" parent="Static_Element/Main_root"]
+transform = Transform3D(0.955829, 0, -0.293924, 0, 1, 0, 0.293924, 0, 0.955829, 0.63115, 0.1, -0.346866)
+
+[node name="Position_zone" type="Node" parent="Static_Element/Main_root/Area3D2"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Static_Element/Main_root/Area3D2"]
+transform = Transform3D(1, 0, -1.78814e-07, 0, 1, 0, 1.78814e-07, 0, 1, -0.00399813, 0, 0.0397947)
+shape = SubResource("BoxShape3D_7sn4d")
+
+[node name="Desk_msh3" type="MeshInstance3D" parent="Static_Element/Main_root"]
+transform = Transform3D(0.943072, 0, 0.332589, 0, 1, 0, -0.332589, 0, 0.943072, -0.7455, 0.05, -0.476374)
+mesh = SubResource("BoxMesh_k08k5")
+
+[node name="Area3D3" type="Area3D" parent="Static_Element/Main_root"]
+transform = Transform3D(0.943072, 0, 0.332589, 0, 1, 0, -0.332589, 0, 0.943072, -0.7455, 0.1, -0.476374)
+
+[node name="Position_zone" type="Node" parent="Static_Element/Main_root/Area3D3"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Static_Element/Main_root/Area3D3"]
+shape = SubResource("BoxShape3D_7sn4d")
+
+[node name="BACK" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+mesh = SubResource("QuadMesh_lw8vb")
+
+[node name="BACK2" type="MeshInstance3D" parent="BACK"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -1, 0)
+mesh = SubResource("QuadMesh_lw8vb")
+skeleton = NodePath("../..")
 
 [node name="Grid_root" type="Node3D" parent="."]
 
@@ -264,19 +280,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(1, 0.8, 0.639216, 0.266667)
 
-[node name="Movable_obj_flat_00" parent="." instance=ExtResource("6_58ini")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.392625, 0, -0.0710238)
+[connection signal="_move" from="Moving_Element/Movable_obj3/Rotation_root/Area/On_Move" to="Moving_Element/Movable_obj3" method="_move"]
+[connection signal="_rotate" from="Moving_Element/Movable_obj3/Rotation_root/Area/On_Move" to="Moving_Element/Movable_obj3" method="_rotate"]
 
-[node name="Movable_obj_flat_01" parent="." instance=ExtResource("6_58ini")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.228456, 0, -0.0465967)
-
-[node name="Movable_obj_flat_02" parent="." instance=ExtResource("6_58ini")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.341508, 0, 0.0627547)
-
-[node name="Movable_obj_flat_03" parent="." instance=ExtResource("6_58ini")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.211212, 0, 0.0781384)
-
-[connection signal="_move" from="Movable_obj3/Rotation_root/Area/On_Move" to="Movable_obj3" method="_move"]
-[connection signal="_rotate" from="Movable_obj3/Rotation_root/Area/On_Move" to="Movable_obj3" method="_rotate"]
-
-[editable path="Movable_obj3"]
+[editable path="Moving_Element/Movable_obj3"]

@@ -3,10 +3,11 @@ extends Node
 @export var Camera : Camera3D
 var _selectec_object 
 var pad : bool = false
-@onready var pad_target = $"../Pad_target"
+@onready var pad_target = $"../3D_SCENE/Pad_target"
+
 var target 
-var offset
 var last_target : Vector3
+
 func _ready():
 	
 	_global_datas.using_pad.connect(is_pad)
@@ -35,7 +36,7 @@ func _input(event):
 			
 			if _global_datas.limit_zone:
 				return
-					
+
 			_global_datas.switch_state.emit(false)
 			_selectec_object.On_Move.emit(false)
 			_global_datas.select_movable_object.emit(null)
@@ -52,11 +53,11 @@ func check_move(targetPos : Vector2):
 		
 	if !_selectec_object:
 		if  ray_target.collider.get_node_or_null("On_Move"): 
+			
+			_global_datas.switch_state.emit(true)
 			var _On_click =  ray_target.collider.get_node_or_null("On_Move")
 			_On_click.On_Move.emit(true)
-			_global_datas.switch_state.emit(true)
-
-			
+					
 			
 func check_view(targetPos : Vector2):
 	
@@ -88,13 +89,14 @@ func get_raycast_target(targetPos : Vector2) -> Dictionary:
 	
 func _process(delta):
 		
+
 		if _selectec_object:
 			
 			var ray_target = get_raycast_target(target)
 			
 			if ray_target:
 				if ray_target.collider.get_node_or_null("Position_zone"):
-					_selectec_object._move.emit(ray_target.position ,10,delta)	
+					_selectec_object._move.emit(ray_target.position,10,delta)	
 					last_target = ray_target.position
 			else:
-				_selectec_object._move.emit(last_target ,10,delta)		
+				_selectec_object._move.emit(last_target,10,delta)

@@ -10,8 +10,11 @@ var On_Over
 var boue_click
 signal active_scanner(condition : bool)
 
+@export var active = false
 func _ready():
 
+	if !active:
+		return
 	_global_datas.using_pad.connect(_active_raycast)
 
 	
@@ -20,7 +23,9 @@ func _active_raycast(condition : bool):
 
 func _input(event):
 	
-
+	if !active:
+		return
+			
 	if _global_datas.camera_current_state == game_state.camera_state.Scanner:
 		return
 	if _global_datas.camera_current_state == game_state.camera_state.Book:

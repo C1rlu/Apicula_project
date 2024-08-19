@@ -7,6 +7,8 @@ const GRID_POINT_PREFAB = preload("res://00_SCENE/Board_control_object_test/Grid
 @onready var grid_root = $"../Grid_root"
 
 @export var disable = true
+
+
 func _ready():
 	
 	if disable:

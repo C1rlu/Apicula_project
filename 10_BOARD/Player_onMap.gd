@@ -7,6 +7,11 @@ extends Node3D
 
 
 func _ready():
+	
+	var active = false
+	if !active:
+		return
+	
 	_global_datas.open_inventory.connect(_updade_playerMapPosition)
 
 

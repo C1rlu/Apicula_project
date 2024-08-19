@@ -5,14 +5,21 @@ extends Camera3D
 var offset : Vector3
 var offset_rotation : Vector3
 
+
+var target_camera
+
 func _ready():
 	
 	offset = global_position - focus_target.global_position	
 	offset_rotation = rotation_degrees
 
 
+
+
 func _process(delta):
+	
 	rotation_angle(delta)	
+	
 	global_position  = lerp(global_position, focus_target.global_position	+ offset, 3.0 * delta)	
 	rotation_degrees = lerp(rotation_degrees, offset_rotation + focus_target.rotation_degrees, 3.0 * delta)	
 	
