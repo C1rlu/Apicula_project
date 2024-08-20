@@ -130,6 +130,7 @@ signal camera_focus_On(focus_data : boardCamState_data)
 signal camera_focus_update(focus_data : boardCamState_data)
 var camera_current_state : game_state.camera_state 
 
+signal  show_element_info(condition : bool, information : info_data)
 
 # quest_state signal in order
 signal active_diving

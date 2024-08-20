@@ -8,6 +8,8 @@ var pad : bool = false
 var target 
 var last_target 
 
+var active_on_Over
+
 func _ready():
 	
 	_global_datas.using_pad.connect(is_pad)
@@ -23,14 +25,17 @@ func is_pad(condition : bool):
 	
 func _input(event):
 	
+	
+	#if !_global_datas.Player_In_Inventory:
+		#return
+	
 	if pad:
 		target = pad_target.position
 	else:
 		target = get_viewport().get_mouse_position()	
-		
+	
+	#action click below 	
 	if event.is_action_pressed("On_Move"):
-
-		
 		if _selectec_object:
 			_selectec_object.On_Move.emit(false)
 		else:
@@ -38,6 +43,11 @@ func _input(event):
 			
 	if event.is_action_pressed("On_View"):	
 		check_view(target)
+
+	# On Over check
+	check_over(target)	
+		
+
 
 func check_move(targetPos : Vector2):
 	
@@ -65,7 +75,28 @@ func check_view(targetPos : Vector2):
 		var _on_view =  ray_target.collider.get_node_or_null("On_View")
 		if _on_view:
 			_on_view.On_View.emit()
+			
+func check_over(targetPos : Vector2):
 	
+	
+	if active_on_Over:
+		_global_datas.show_element_info.emit(false,null)
+		active_on_Over = null
+	
+	var ray_target = get_raycast_target(targetPos)
+	#print( ray_target)
+	if !ray_target:	
+		return
+		
+	if !_selectec_object:
+		if  ray_target.collider.get_node_or_null("On_Over"): 
+	
+			var _On_Over =  ray_target.collider.get_node_or_null("On_Over")
+			_On_Over.On_Over.emit()
+			active_on_Over = _On_Over
+	
+
+								
 func get_raycast_target(targetPos : Vector2) -> Dictionary:
 	
 	var rayLengh = 250.0

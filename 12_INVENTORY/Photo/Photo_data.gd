@@ -10,9 +10,7 @@ class_name PhotoData
 @export var page_prefab : PackedScene
 @export var intrige_state : intrigue_s
 
-@export var info_list : Array[info_data] #just to have the list of the info page here
-
-var photo_element
+@export var info : info_data #Array[info_data] #just to have the list of the info page here
 
 enum intrigue_s {
 	

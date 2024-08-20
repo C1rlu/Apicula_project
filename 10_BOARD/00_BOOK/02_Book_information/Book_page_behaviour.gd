@@ -21,7 +21,8 @@ func _ready():
 	_book_data.book_node = $"." 
 	_global_datas.book_data = _book_data
 	
-	_global_datas.show_page.connect(_show_from_index)
+	
+	#_global_datas.show_page.connect(_show_from_index)
 	
 func _show_from_index(content):
 	

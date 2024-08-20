@@ -1,4 +1,4 @@
-[gd_scene load_steps=78 format=3 uid="uid://cein0q2eirkay"]
+[gd_scene load_steps=77 format=3 uid="uid://cein0q2eirkay"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_g3pi7"]
 [ext_resource type="Script" path="res://10_BOARD/Board_CamTarget.gd" id="1_janbq"]
@@ -6,7 +6,6 @@
 [ext_resource type="Resource" uid="uid://5fjsfr4toudr" path="res://08_SUBSCENES/Tools/Main_tool/Open_Board.tres" id="1_qgjbu"]
 [ext_resource type="Script" path="res://10_BOARD/Input_switch.gd" id="2_00g5f"]
 [ext_resource type="PackedScene" uid="uid://dr73p5vs0sixe" path="res://10_BOARD/board_scene.tscn" id="2_6c571"]
-[ext_resource type="Script" path="res://10_BOARD/Pad_clic_raycast.gd" id="3_rqf42"]
 [ext_resource type="Script" path="res://10_BOARD/Cam_focus.gd" id="6_7tgl6"]
 [ext_resource type="Material" uid="uid://5qv6cc3a63nt" path="res://05_SHADER_TEST/Full_screen/04_board_simple_disolved.tres" id="7_fiqjo"]
 [ext_resource type="Script" path="res://10_BOARD/Set_state_call.gd" id="7_m8teq"]
@@ -16,10 +15,8 @@
 [ext_resource type="Script" path="res://10_BOARD/Json_reader_test.gd" id="9_tfybn"]
 [ext_resource type="Script" path="res://14_ON_SCANNER_PHOTO/Show_OnScanner.gd" id="10_354m8"]
 [ext_resource type="Script" path="res://14_ON_SCANNER_PHOTO/Fade_scanner.gd" id="11_2x7ah"]
-[ext_resource type="Resource" uid="uid://d15m8513w4wv2" path="res://15_GAME_RESSOURCE/03_BoardCam_state/AppiculaM_focus_data.tres" id="11_clmas"]
 [ext_resource type="Resource" uid="uid://dyh1qg1u652pl" path="res://15_GAME_RESSOURCE/Epave_ch_photoData.tres" id="11_ldr1y"]
 [ext_resource type="Script" path="res://10_BOARD/TurnScanner.gd" id="12_2daja"]
-[ext_resource type="Resource" uid="uid://cd1asdnwwphju" path="res://15_GAME_RESSOURCE/03_BoardCam_state/TourneDisque_focus_data.tres" id="12_ceb6p"]
 [ext_resource type="Resource" uid="uid://3pilop3f4m6r" path="res://15_GAME_RESSOURCE/03_BoardCam_state/ScannerM_focus_data.tres" id="13_87a1q"]
 [ext_resource type="Script" path="res://10_BOARD/Board_OBJ_Manager.gd" id="14_johxk"]
 [ext_resource type="Resource" uid="uid://blxuee4l6ey2g" path="res://10_BOARD/Board_OBJ_data/Map_data.tres" id="15_6vhht"]
@@ -45,6 +42,8 @@
 [ext_resource type="Resource" uid="uid://jx3jbwgl8gm0" path="res://15_GAME_RESSOURCE/02_BOARD_INFO/Board_intrigue/Chapitre_II.tres" id="29_fp4yn"]
 [ext_resource type="Resource" uid="uid://qo6th56oqlhi" path="res://15_GAME_RESSOURCE/02_BOARD_INFO/Board_intrigue/Chapitre_III.tres" id="30_difyj"]
 [ext_resource type="Resource" uid="uid://dsi20xus8cnkw" path="res://15_GAME_RESSOURCE/02_BOARD_INFO/Board_intrigue/Chapitre_IV.tres" id="31_g1wpo"]
+[ext_resource type="Resource" uid="uid://dlqqpo5rncbhs" path="res://15_GAME_RESSOURCE/03_BoardCam_state/Board_Element_focus_data.tres" id="35_wjkn0"]
+[ext_resource type="Script" path="res://10_BOARD/Element_infos.gd" id="38_p1kbf"]
 [ext_resource type="PackedScene" uid="uid://bh5a7fhvftxmm" path="res://10_BOARD/00_BOOK/02_Book_information/00_Book_journal.tscn" id="38_xp1m1"]
 
 [sub_resource type="GDScript" id="GDScript_w13ry"]
@@ -521,9 +520,6 @@ pad_target = NodePath("../3D_SCENE/Pad_target")
 [node name="Movable_manager" type="Node" parent="Clic_raycast"]
 script = ExtResource("24_tox7b")
 
-[node name="Pad_clic_raycast" type="Node" parent="."]
-script = ExtResource("3_rqf42")
-
 [node name="Board_OBJ_Manager" type="Node" parent="."]
 script = ExtResource("14_johxk")
 all_object_list = Array[Resource("res://10_BOARD/Board_OBJ_data/object_data.gd")]([ExtResource("15_6vhht")])
@@ -557,33 +553,19 @@ fov = 40.0
 script = ExtResource("9_2ajy3")
 focus_data = ExtResource("28_njdgu")
 
+[node name="Camera_OnElement_focus" type="Camera3D" parent="3D_SCENE/Camera_state"]
+transform = Transform3D(1, 0, 0, 0, 0.939693, 0.34202, 0, -0.34202, 0.939693, 0, 0.135, 0.1)
+cull_mask = 2
+fov = 40.0
+script = ExtResource("9_2ajy3")
+focus_data = ExtResource("35_wjkn0")
+
 [node name="Camera_OnMain" type="Camera3D" parent="3D_SCENE/Camera_state"]
 transform = Transform3D(0.994881, 0.0700724, -0.072816, 0, 0.720551, 0.693402, 0.101056, -0.689852, 0.716862, -0.08, 0.945, 1.035)
 cull_mask = 2
 fov = 40.0
 script = ExtResource("9_2ajy3")
 focus_data = ExtResource("24_pisk2")
-
-[node name="Camera_OnScanner" type="Camera3D" parent="3D_SCENE/Camera_state"]
-transform = Transform3D(0.990024, 0.0738302, -0.120009, 0, 0.851727, 0.523986, 0.140901, -0.518759, 0.84323, 0, 0.24, 0.151)
-cull_mask = 2
-fov = 40.0
-script = ExtResource("9_2ajy3")
-focus_data = ExtResource("13_87a1q")
-
-[node name="Camera_OnBoat" type="Camera3D" parent="3D_SCENE/Camera_state"]
-transform = Transform3D(0.983885, -0.0331976, 0.175693, 0, 0.982613, 0.185667, -0.178802, -0.182675, 0.966778, -0.214, 0.256, 0.182)
-cull_mask = 2
-fov = 40.0
-script = ExtResource("9_2ajy3")
-focus_data = ExtResource("11_clmas")
-
-[node name="Camera_OnDisque" type="Camera3D" parent="3D_SCENE/Camera_state"]
-transform = Transform3D(0.957822, 0.147572, -0.246574, 0, 0.858065, 0.513541, 0.28736, -0.491882, 0.821874, 0.308, 0.571, 0.518)
-cull_mask = 2
-fov = 40.0
-script = ExtResource("9_2ajy3")
-focus_data = ExtResource("12_ceb6p")
 
 [node name="Camera_xray" type="Camera3D" parent="3D_SCENE"]
 transform = Transform3D(0.994881, 0.0700724, -0.072816, 0, 0.720551, 0.693402, 0.101056, -0.689852, 0.716862, -0.08, 0.945, 1.035)
@@ -629,6 +611,50 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("ViewportTexture_gpfe8")
 expand_mode = 3
+
+[node name="Element_infos" type="Control" parent="3D_SCENE"]
+layout_mode = 3
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -443.0
+offset_top = -271.0
+offset_right = -84.0
+offset_bottom = 135.0
+grow_horizontal = 0
+grow_vertical = 0
+rotation = 0.091541
+
+[node name="Element_info_update" type="Node" parent="3D_SCENE/Element_infos" node_paths=PackedStringArray("info_text")]
+script = ExtResource("38_p1kbf")
+info_text = NodePath("../Info_text")
+
+[node name="ColorRect" type="ColorRect" parent="3D_SCENE/Element_infos"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.545098, 0.509804, 0.439216, 1)
+
+[node name="Info_text" type="Label" parent="3D_SCENE/Element_infos"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 19.0
+offset_top = 26.0
+offset_right = -24.0
+offset_bottom = -151.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.317647, 0.262745, 0.156863, 1)
+theme_override_font_sizes/font_size = 21
+text = "Lorem ipusm info textfffffffffffffffffffffffffffffff"
+autowrap_mode = 3
 
 [node name="BACKDROP_FOCUS" type="ColorRect" parent="3D_SCENE"]
 material = SubResource("ShaderMaterial_pfnxx")

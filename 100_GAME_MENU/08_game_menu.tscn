@@ -12,8 +12,11 @@
 script/source = "extends Node
 
 
-@onready var menu_backdrop_normal = $\"../Game_Menu_Root/Menu_Backdrop_Dither\"
+@export var menu_backdrop_normal : ColorRect
 @onready var material_normal : Material = menu_backdrop_normal.get_material()
+
+
+
 var actual_value : float
 var t
 
@@ -36,7 +39,7 @@ func _fade_in():
 		t.kill()
 	t = create_tween()
 	
-	t .tween_method(set_shader_value,actual_value,0.9,0.5)
+	t .tween_method(set_shader_value,actual_value,0.8,0.25)
 
 func _fade_out():
 	
@@ -44,11 +47,10 @@ func _fade_out():
 		t.kill()
 	t = create_tween()
 	
-	t .tween_method(set_shader_value,actual_value,0.0,0.5)
+	t .tween_method(set_shader_value,actual_value,0.0,0.25)
 
 
 func set_shader_value(value):
-
 	material_normal.set_shader_parameter(\"Opacity\",value)
 	actual_value = value
 
@@ -79,7 +81,7 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-682.377, -35.7413)
+graph_offset = Vector2(-360.316, 51.5815)
 mode = 1
 flags/light_only = false
 nodes/fragment/3/node = SubResource("VisualShaderNodeFloatParameter_jtw7b")
@@ -136,7 +138,7 @@ func _on_pressed():
 "
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_hcfes"]
-color = Color(0.180392, 0.388235, 0.329412, 1)
+color = Color(0.329412, 0.313726, 0.278431, 1)
 thickness = 10
 
 [node name="08_GAME_MENU" type="Node"]
@@ -151,9 +153,10 @@ script = ExtResource("2_gelwi")
 [node name="Restart" type="Node" parent="."]
 script = ExtResource("4_0detv")
 
-[node name="Open_backdrop" type="Node" parent="."]
+[node name="Open_backdrop" type="Node" parent="." node_paths=PackedStringArray("menu_backdrop_normal")]
 process_mode = 3
 script = SubResource("GDScript_8vnul")
+menu_backdrop_normal = NodePath("../Menu_Backdrop_Dither")
 
 [node name="Language_state_Menu" type="Node" parent="."]
 script = ExtResource("4_34xg6")
@@ -169,8 +172,19 @@ theme_override_font_sizes/font_size = 10
 text = "FPS COUNTER"
 script = ExtResource("4_86v10")
 
+[node name="Menu_Backdrop_Dither" type="ColorRect" parent="."]
+process_mode = 3
+material = SubResource("ShaderMaterial_bglt3")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.0588235, 0.141176, 0.145098, 1)
+metadata/_edit_use_anchors_ = true
+
 [node name="Game_Menu_Root" type="Control" parent="."]
-visible = false
 custom_minimum_size = Vector2(600, 720)
 layout_direction = 1
 layout_mode = 3
@@ -181,26 +195,13 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Menu_Backdrop_Dither" type="ColorRect" parent="Game_Menu_Root"]
-process_mode = 3
-material = SubResource("ShaderMaterial_bglt3")
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-color = Color(0.0588235, 0.141176, 0.145098, 1)
-metadata/_edit_use_anchors_ = true
-
 [node name="MainMenu_Box" type="Control" parent="Game_Menu_Root"]
 layout_mode = 1
 anchors_preset = 0
-offset_left = 24.0
-offset_top = 34.0
-offset_right = 24.0
-offset_bottom = 34.0
+offset_left = 20.0
+offset_top = 45.0
+offset_right = 20.0
+offset_bottom = 45.0
 
 [node name="Title" type="Label" parent="Game_Menu_Root/MainMenu_Box"]
 clip_contents = true
@@ -210,7 +211,7 @@ offset_left = 25.0
 offset_top = 5.0
 offset_right = 439.0
 offset_bottom = 74.0
-theme_override_colors/font_color = Color(0.317647, 0.615686, 0.529412, 1)
+theme_override_colors/font_color = Color(0.34902, 0.313726, 0.219608, 1)
 theme_override_font_sizes/font_size = 35
 text = "APICULA (PROTOTYPE)"
 horizontal_alignment = 1
@@ -233,7 +234,7 @@ focus_neighbor_right = NodePath("../Exit_Button")
 focus_neighbor_bottom = NodePath("../../Options/VBoxContainer/Fullscreen_button")
 focus_mode = 1
 theme_type_variation = &"FlatButton"
-theme_override_colors/font_color = Color(0.721569, 0.580392, 0.407843, 1)
+theme_override_colors/font_color = Color(0.329412, 0.313726, 0.278431, 1)
 theme_override_font_sizes/font_size = 25
 text = "RESUME"
 script = SubResource("GDScript_rl0qu")
@@ -246,7 +247,7 @@ focus_neighbor_left = NodePath("../Resum_Button2")
 focus_neighbor_bottom = NodePath("../../Options/VBoxContainer/Fullscreen_button")
 focus_mode = 1
 theme_type_variation = &"FlatButton"
-theme_override_colors/font_color = Color(0.721569, 0.580392, 0.407843, 1)
+theme_override_colors/font_color = Color(0.329412, 0.313726, 0.278431, 1)
 theme_override_font_sizes/font_size = 25
 text = "EXIT "
 script = SubResource("GDScript_e1pe5")
@@ -293,7 +294,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.180392, 0.388235, 0.329412, 1)
+color = Color(0.329412, 0.313726, 0.278431, 1)
 
 [node name="Checker_on" type="ColorRect" parent="Game_Menu_Root/MainMenu_Box/Options/VBoxContainer/Fullscreen_button/Checker_off"]
 visible = false
@@ -325,7 +326,7 @@ offset_right = -38.0
 offset_bottom = 15.0
 grow_horizontal = 0
 grow_vertical = 2
-theme_override_colors/font_color = Color(0.317647, 0.615686, 0.529412, 1)
+theme_override_colors/font_color = Color(0.329412, 0.313726, 0.278431, 1)
 theme_override_font_sizes/font_size = 25
 text = "Fullscreen ............................"
 script = ExtResource("6_sios4")
@@ -347,7 +348,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.180392, 0.388235, 0.329412, 1)
+color = Color(0.329412, 0.313726, 0.278431, 1)
 
 [node name="Checker_on" type="ColorRect" parent="Game_Menu_Root/MainMenu_Box/Options/VBoxContainer/Vsync_button/Checker_off"]
 visible = false
@@ -379,7 +380,7 @@ offset_right = -36.0
 offset_bottom = 15.0
 grow_horizontal = 0
 grow_vertical = 2
-theme_override_colors/font_color = Color(0.317647, 0.615686, 0.529412, 1)
+theme_override_colors/font_color = Color(0.329412, 0.313726, 0.278431, 1)
 theme_override_font_sizes/font_size = 25
 text = "Vsync ...................................."
 script = ExtResource("6_sios4")
@@ -401,7 +402,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.180392, 0.388235, 0.329412, 1)
+color = Color(0.329412, 0.313726, 0.278431, 1)
 
 [node name="Checker_on" type="ColorRect" parent="Game_Menu_Root/MainMenu_Box/Options/VBoxContainer/ActiveDither_button/Checker_off"]
 visible = false
@@ -433,7 +434,7 @@ offset_right = -36.0
 offset_bottom = 15.0
 grow_horizontal = 0
 grow_vertical = 2
-theme_override_colors/font_color = Color(0.317647, 0.615686, 0.529412, 1)
+theme_override_colors/font_color = Color(0.329412, 0.313726, 0.278431, 1)
 theme_override_font_sizes/font_size = 25
 text = "Active Dither........................"
 script = ExtResource("6_sios4")
@@ -441,6 +442,7 @@ language_state = Array[String](["Active Dither........................", "Active
 
 [node name="Label" type="Label" parent="Game_Menu_Root/MainMenu_Box/Options/VBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.329412, 0.313726, 0.278431, 1)
 text = "0.3"
 
 [node name="HSlider_dither" type="HSlider" parent="Game_Menu_Root/MainMenu_Box/Options/VBoxContainer/Label"]

@@ -1,15 +1,16 @@
-[gd_scene load_steps=72 format=3 uid="uid://uwg2qc3svu11"]
+[gd_scene load_steps=62 format=3 uid="uid://uwg2qc3svu11"]
 
 [ext_resource type="Script" path="res://10_BOARD/Photo_element.gd" id="1_0a8jl"]
-[ext_resource type="Script" path="res://10_BOARD/00_BOOK/Legend/Legend_behaviour.gd" id="1_f7rkq"]
 [ext_resource type="Resource" uid="uid://dyh1qg1u652pl" path="res://15_GAME_RESSOURCE/Epave_ch_photoData.tres" id="2_8x1kk"]
 [ext_resource type="Resource" uid="uid://cjwmwf4frvq3c" path="res://15_GAME_RESSOURCE/03_BoardCam_state/BoardZoom_focus_data.tres" id="3_tu215"]
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Movable_obj.gd" id="4_4uyoa"]
 [ext_resource type="Texture2D" uid="uid://38btbw60olcn" path="res://12_INVENTORY/Photo/IMG/Boat.png" id="4_wljme"]
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/On_click_object.gd" id="6_46a1v"]
-[ext_resource type="Resource" uid="uid://3pilop3f4m6r" path="res://15_GAME_RESSOURCE/03_BoardCam_state/ScannerM_focus_data.tres" id="7_8v556"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="7_vd1wc"]
 [ext_resource type="Script" path="res://10_BOARD/On_View.tres.gd" id="8_2nycl"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nnxyu"]
+size = Vector3(0.0849429, 0.0129531, 0.0916202)
 
 [sub_resource type="GDScript" id="GDScript_32kbr"]
 script/source = "@tool
@@ -514,12 +515,6 @@ shader_parameter/light_color = Color(0.67451, 0.639216, 0.529412, 1)
 material = SubResource("ShaderMaterial_hy8dn")
 size = Vector3(1, 1, 1.075)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_nnxyu"]
-size = Vector3(0.0849429, 0.0129531, 0.0916202)
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_lyxt3"]
-viewport_path = NodePath("legend/legend_render")
-
 [sub_resource type="PlaneMesh" id="PlaneMesh_l1221"]
 resource_local_to_scene = true
 
@@ -631,102 +626,40 @@ nodes/fragment/connections = PackedInt32Array(3, 0, 4, 0, 5, 0, 4, 1, 4, 0, 6, 1
 render_priority = 0
 shader = SubResource("VisualShader_tl2py")
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_seomj"]
-resource_local_to_scene = true
-size = Vector2(1.8, 1.615)
-
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_4dsm5"]
-size = Vector2(620, 200)
-expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
-grey_value = luminance;"
-
-[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_y3xem"]
-default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
-op_type = 3
-
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_rax8w"]
-input_name = "color"
-
-[sub_resource type="VisualShaderNodeBooleanParameter" id="VisualShaderNodeBooleanParameter_4daqk"]
-parameter_name = "isGray"
-qualifier = 1
-
-[sub_resource type="VisualShader" id="VisualShader_sxcgk"]
-code = "shader_type canvas_item;
-render_mode blend_mix;
-
-global uniform bool isGray;
-
-
-
-void fragment() {
-// Input:5
-	vec4 n_out5p0 = COLOR;
-
-
-	float n_out3p0;
-// Expression:3
-	n_out3p0 = 0.0;
-	{
-		float luminance = 0.299 * vec3(n_out5p0.xyz).x + 0.587 * vec3(n_out5p0.xyz).y + 0.114 * vec3(n_out5p0.xyz).z;
-		n_out3p0 = luminance;
-	}
-
-
-// BooleanParameter:6
-	bool n_out6p0 = isGray;
-
-
-// Mix:4
-	vec3 n_out4p0 = mix(vec3(n_out5p0.xyz), vec3(n_out3p0), vec3(n_out6p0 ? 1.0 : 0.0));
-
-
-// Output:0
-	COLOR.rgb = n_out4p0;
-
-
-}
-"
-graph_offset = Vector2(-584.26, -98.1041)
-mode = 1
-flags/light_only = false
-nodes/fragment/0/position = Vector2(720, 200)
-nodes/fragment/3/node = SubResource("VisualShaderNodeExpression_4dsm5")
-nodes/fragment/3/position = Vector2(-220, -260)
-nodes/fragment/3/size = Vector2(620, 200)
-nodes/fragment/3/input_ports = "0,4,color;"
-nodes/fragment/3/output_ports = "0,0,grey_value;"
-nodes/fragment/3/expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
-grey_value = luminance;"
-nodes/fragment/4/node = SubResource("VisualShaderNodeMix_y3xem")
-nodes/fragment/4/position = Vector2(540, 60)
-nodes/fragment/5/node = SubResource("VisualShaderNodeInput_rax8w")
-nodes/fragment/5/position = Vector2(-580, -20)
-nodes/fragment/6/node = SubResource("VisualShaderNodeBooleanParameter_4daqk")
-nodes/fragment/6/position = Vector2(-646.713, 403.75)
-nodes/fragment/connections = PackedInt32Array(3, 0, 4, 1, 5, 0, 3, 0, 5, 0, 4, 0, 4, 0, 0, 0, 6, 0, 4, 2)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_jbhxr"]
-shader = SubResource("VisualShader_sxcgk")
-
-[node name="Photo_element_root" type="Node3D" node_paths=PackedStringArray("On_over", "On_View")]
+[node name="Photo_element_root" type="Node3D" node_paths=PackedStringArray("_On_View", "_On_Over", "on_over_node")]
 script = ExtResource("1_0a8jl")
 Photo_data = ExtResource("2_8x1kk")
-book_position_offset = Vector3(0.025, 0.008, 0.08)
-book_rotation_angle = -80.0
 camera_state = ExtResource("3_tu215")
-On_over = NodePath("legend/Click/On_Over")
-On_View = NodePath("legend/Click/On_View")
+_On_View = NodePath("Click/On_View")
+_On_Over = NodePath("Click/On_Over")
+on_over_node = NodePath("All_over")
 
 [node name="Movable_object" type="Node" parent="." node_paths=PackedStringArray("collider", "limit_zone", "move_root", "rotation_root", "On_Move", "Render")]
 script = ExtResource("4_4uyoa")
-collider = NodePath("../legend/Click/CollisionShape3D")
-limit_zone = NodePath("../legend/Limit")
+collider = NodePath("../Click/CollisionShape3D")
+limit_zone = NodePath("../Limit")
 move_root = NodePath("..")
 rotation_root = NodePath("..")
-On_Move = NodePath("../legend/Click/On_Move")
+On_Move = NodePath("../Click/On_Move")
 rotation_degrees = 15.0
 Render = NodePath("../Photo/render_base")
+
+[node name="Click" type="Area3D" parent="."]
+transform = Transform3D(0.999989, 0, 0.00467785, 0, 1, 0, -0.00467785, 0, 0.999989, -0.000246863, 0.00516227, -0.00658954)
+
+[node name="On_Move" type="Node" parent="Click" node_paths=PackedStringArray("Root")]
+script = ExtResource("6_46a1v")
+Root = NodePath("../..")
+
+[node name="On_View" type="Node" parent="Click"]
+script = ExtResource("8_2nycl")
+
+[node name="On_Over" type="Node" parent="Click"]
+script = ExtResource("7_vd1wc")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Click"]
+transform = Transform3D(0.999997, 0, 4.14439e-08, 0, 1, 0, -4.14439e-08, 0, 0.999997, 0.0014558, 0, 0.0114536)
+shape = SubResource("BoxShape3D_nnxyu")
 
 [node name="Photo" type="Node3D" parent="."]
 
@@ -746,126 +679,24 @@ layers = 2
 mesh = SubResource("BoxMesh_8e2mh")
 skeleton = NodePath("../..")
 
-[node name="legend" type="Node3D" parent="."]
+[node name="Limit" type="Area3D" parent="."]
 transform = Transform3D(0.999989, 0, 0.00467785, 0, 1, 0, -0.00467785, 0, 0.999989, -0.000246863, 0.00516227, -0.00658954)
-
-[node name="legend_behaviour" type="Node" parent="legend"]
-script = ExtResource("1_f7rkq")
-
-[node name="Timer" type="Timer" parent="legend/legend_behaviour"]
-wait_time = 0.1
-one_shot = true
-
-[node name="Click" type="Area3D" parent="legend"]
-
-[node name="On_Move" type="Node" parent="legend/Click" node_paths=PackedStringArray("Root")]
-script = ExtResource("6_46a1v")
-Root = NodePath("../../..")
-
-[node name="On_View" type="Node" parent="legend/Click"]
-script = ExtResource("8_2nycl")
-
-[node name="On_Over" type="Node" parent="legend/Click" node_paths=PackedStringArray("_on_over", "move_node")]
-script = ExtResource("7_vd1wc")
-scanner_focus_data = ExtResource("7_8v556")
-_on_over = NodePath("../../All_over")
-icon_type = 1
-move_node = NodePath("../../..")
-position_over = Vector3(0, 0.005, 0)
-rotation_over = Vector3(10, 0, 0)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="legend/Click"]
-transform = Transform3D(0.999997, 0, 4.14439e-08, 0, 1, 0, -4.14439e-08, 0, 0.999997, 0.0014558, 0, 0.0114536)
-shape = SubResource("BoxShape3D_nnxyu")
-
-[node name="Limit" type="Area3D" parent="legend"]
 collision_layer = 4
 collision_mask = 4
 
-[node name="Limit" type="Node" parent="legend/Limit"]
+[node name="Limit" type="Node" parent="Limit"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="legend/Limit"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Limit"]
 transform = Transform3D(0.999997, 0, 4.14439e-08, 0, 1, 0, -4.14439e-08, 0, 0.999997, 0.0014558, 0, 0.0114536)
 shape = SubResource("BoxShape3D_nnxyu")
 
-[node name="Render_text" type="Sprite3D" parent="legend"]
-transform = Transform3D(0.0164991, -0.0008441, -1.17144e-05, 1.16724e-05, -1.12108e-06, 0.0165207, -0.000844101, -0.0164991, -5.23245e-07, 0.00900734, -0.00159823, -0.00282747)
-visible = false
-layers = 2
-sorting_offset = 1.0
-texture = SubResource("ViewportTexture_lyxt3")
-
-[node name="All_over" type="Node3D" parent="legend"]
-transform = Transform3D(1, 0, 4.65661e-10, 0, 1, 0, -4.65661e-10, 0, 1, 0, 0, 0)
+[node name="All_over" type="Node3D" parent="."]
+transform = Transform3D(0.999989, 0, 0.00467785, 0, 1, 0, -0.00467785, 0, 0.999989, -0.000246863, 0.00516227, 0.038578)
 visible = false
 
-[node name="On_Over_full" type="MeshInstance3D" parent="legend/All_over"]
-transform = Transform3D(0.0396492, 0, 0.000245142, 0, 0.034558, 0, -0.000244269, 0, 0.0397913, 0.000781664, -0.00162126, -0.0402862)
+[node name="On_Over_full" type="MeshInstance3D" parent="All_over"]
+transform = Transform3D(0.0474709, 0, -0.000336778, 0, 0.0413756, 0, 0.000335574, 0, 0.047641, 0.000755743, -0.00282692, -0.0347451)
 layers = 2
 mesh = SubResource("PlaneMesh_l1221")
-skeleton = NodePath("../../../..")
-surface_material_override/0 = SubResource("ShaderMaterial_gfhbg")
-
-[node name="On_Over" type="MeshInstance3D" parent="legend/All_over"]
-transform = Transform3D(0.0420304, -1.28734e-06, 0.000787211, 1.51669e-06, 0.0357813, -1.30085e-08, -0.00190124, 8.49778e-08, 0.0174028, 0.00832754, -0.00164047, -0.00361389)
-layers = 2
-mesh = SubResource("PlaneMesh_seomj")
 skeleton = NodePath("../../..")
 surface_material_override/0 = SubResource("ShaderMaterial_gfhbg")
-
-[node name="legend_render" type="SubViewport" parent="legend"]
-transparent_bg = true
-size = Vector2i(600, 400)
-
-[node name="text_for_size" type="Label" parent="legend/legend_render"]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -198.0
-offset_top = -55.0
-offset_right = 198.0
-offset_bottom = 55.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.360784, 0.341176, 0.294118, 1)
-theme_override_font_sizes/font_size = 80
-text = "?"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="ColorRect" type="ColorRect" parent="legend/legend_render/text_for_size"]
-material = SubResource("ShaderMaterial_jbhxr")
-layout_direction = 1
-layout_mode = 1
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_top = -68.77
-offset_bottom = 56.2299
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.831373, 0.796078, 0.639216, 1)
-
-[node name="text" type="Label" parent="legend/legend_render"]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -198.0
-offset_top = -48.775
-offset_right = 198.0
-offset_bottom = 34.225
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.360784, 0.341176, 0.294118, 1)
-theme_override_font_sizes/font_size = 50
-text = "?"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[connection signal="update_legend" from="." to="legend/legend_behaviour" method="_on_photo_element_root_update_legend"]
-[connection signal="timeout" from="legend/legend_behaviour/Timer" to="legend/legend_behaviour" method="_on_timer_timeout"]

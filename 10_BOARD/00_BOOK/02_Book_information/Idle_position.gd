@@ -8,12 +8,12 @@ var book_idle_rotation : float
 @onready var collision_shape_3d = $"../Area3D/CollisionShape3D"
 
 func _ready():
-	
-	_global_datas.open_3d_book.connect(back_idle)
+	pass
+	#_global_datas.open_3d_book.connect(back_idle)
 	book_idle_position = book.global_position
 	book_idle_rotation = book.rotation_degrees.y
 	
-	On_View.On_View.connect(close)
+	#On_View.On_View.connect(close)
 func back_idle(condition: bool):
 	
 	#if !condition:
