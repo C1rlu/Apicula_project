@@ -1,5 +1,6 @@
 extends Node
 
+@export var back_focus_state: boardCamState_data
 @export var Camera : Camera3D
 var _selectec_object 
 var pad : bool = false
@@ -26,13 +27,18 @@ func is_pad(condition : bool):
 func _input(event):
 	
 	
-	#if !_global_datas.Player_In_Inventory:
-		#return
+	if !_global_datas.Player_In_Inventory:
+		return
 	
 	if pad:
 		target = pad_target.position
 	else:
 		target = get_viewport().get_mouse_position()	
+	
+	if _global_datas.camera_current_state == game_state.camera_state.Board_Focus_element:
+		if event.is_action_pressed("On_View"):	
+			_global_datas.camera_focus_On.emit(back_focus_state)	
+		return
 	
 	#action click below 	
 	if event.is_action_pressed("On_Move"):

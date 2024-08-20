@@ -48,11 +48,11 @@
 [ext_resource type="Script" path="res://10_BOARD/Set_focus_data.gd" id="43_ydgdc"]
 [ext_resource type="PackedScene" uid="uid://dh8xiu7ntj52y" path="res://10_BOARD/TourneDisque/Disque_prefab.blend" id="44_0qqs5"]
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/On_click_object.gd" id="44_64ctv"]
-[ext_resource type="Resource" uid="uid://d15m8513w4wv2" path="res://15_GAME_RESSOURCE/03_BoardCam_state/AppiculaM_focus_data.tres" id="44_u68du"]
 [ext_resource type="Resource" uid="uid://2wvymfu1i442" path="res://15_GAME_RESSOURCE/01_info_data/Boat_subscene/i_should_check.tres" id="45_tllkl"]
 [ext_resource type="Material" uid="uid://t4qtyso7w6ee" path="res://05_SHADER_TEST/Board/board_boat.tres" id="46_tk8m3"]
 [ext_resource type="Material" uid="uid://c0oms0qis0dcm" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_mat_02.tres" id="46_tmbd7"]
 [ext_resource type="Material" uid="uid://xcmes75nexaq" path="res://00_SCENE/Board_control_object_test/Material/moving_object.tres" id="46_wf22w"]
+[ext_resource type="Resource" uid="uid://dlqqpo5rncbhs" path="res://15_GAME_RESSOURCE/03_BoardCam_state/Board_Element_focus_data.tres" id="46_y5tcg"]
 [ext_resource type="Material" uid="uid://hnc22lq0or5t" path="res://00_SCENE/Board_control_object_test/Material/moving_overlap_object.tres" id="47_gaq4f"]
 [ext_resource type="Material" uid="uid://cfi5jyq3utqd4" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_mat_04.tres" id="47_r4p1c"]
 [ext_resource type="PackedScene" uid="uid://xpunnioeu7vl" path="res://00_SCENE/Board_control_object_test/movable_obj.tscn" id="51_gd7bb"]
@@ -2162,26 +2162,35 @@ transform = Transform3D(0.79225, 0.00118551, 0.610195, -0.00136848, 0.999999, -0
 
 [node name="Letters" type="Node3D" parent="Movable" node_paths=PackedStringArray("all_note")]
 transform = Transform3D(1.00779, 0, 0, 0, 1.00779, 0, 0, 0, 1.00779, 0, 0, 0)
+visible = false
 script = ExtResource("14_vbqye")
 all_note = [NodePath("note_01"), NodePath("note_02"), NodePath("note_03"), NodePath("note_04")]
 
 [node name="note_01" parent="Movable/Letters" instance=ExtResource("9_ajmma")]
 transform = Transform3D(0.995549, 0, 0.0942469, 0, 1, 0, -0.0942469, 0, 0.995549, -0.333105, 0.00367881, 0.364413)
+monitoring = false
+monitorable = false
 Note_data = ExtResource("19_fvuwa")
 intrigue_data = ExtResource("11_i6fvc")
 
 [node name="note_02" parent="Movable/Letters" instance=ExtResource("9_ajmma")]
 transform = Transform3D(0.962041, 0, 0.272902, 0, 1, 0, -0.272902, 0, 0.962041, -0.226689, 0.00521253, 0.335166)
+monitoring = false
+monitorable = false
 Note_data = ExtResource("10_shcmw")
 intrigue_data = ExtResource("19_i4sfl")
 
 [node name="note_03" parent="Movable/Letters" instance=ExtResource("9_ajmma")]
 transform = Transform3D(0.974994, 0, 0.222229, 0, 1, 0, -0.222229, 0, 0.974994, -0.115264, 0.00855086, 0.327895)
+monitoring = false
+monitorable = false
 Note_data = ExtResource("18_e0vtf")
 intrigue_data = ExtResource("20_bqklc")
 
 [node name="note_04" parent="Movable/Letters" instance=ExtResource("9_ajmma")]
 transform = Transform3D(0.999445, 0, -0.033295, 0, 1, 0, 0.033295, 0, 0.999445, 0.0047554, 0.00658163, 0.296676)
+monitoring = false
+monitorable = false
 Note_data = ExtResource("17_3gp1t")
 intrigue_data = ExtResource("21_eaghd")
 
@@ -2458,10 +2467,11 @@ surface_material_override/0 = SubResource("ShaderMaterial_l3nap")
 [node name="Area3D" type="Area3D" parent="Movable/Apicula_maquette_v01blend"]
 transform = Transform3D(0.0375899, 0, 0.000885201, 0, 0.0376003, 0, -0.000885201, 0, 0.0375899, -0.000760213, 0.0795341, 0.00198969)
 
-[node name="On_View_Event" type="Node" parent="Movable/Apicula_maquette_v01blend/Area3D" node_paths=PackedStringArray("On_View", "On_Over")]
+[node name="On_View_Event" type="Node" parent="Movable/Apicula_maquette_v01blend/Area3D" node_paths=PackedStringArray("root", "On_View", "On_Over")]
 script = ExtResource("43_i0i3o")
+root = NodePath("../..")
 info = ExtResource("45_tllkl")
-focus_data = ExtResource("44_u68du")
+focus_data = ExtResource("46_y5tcg")
 On_View = NodePath("../On_View")
 On_Over = NodePath("../On_Over")
 

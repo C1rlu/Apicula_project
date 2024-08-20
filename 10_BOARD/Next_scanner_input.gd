@@ -8,9 +8,9 @@ var _index : int = 0
 
 func _input(event):
 	
-	if _global_datas.camera_current_state != game_state.camera_state.Scanner:
-		return
-
+	#if _global_datas.camera_current_state != game_state.camera_state.Scanner:
+		#return
+	pass
 	#if event.is_action_pressed("Select_next_orbre"):
 		#next_scanner()	
 		#

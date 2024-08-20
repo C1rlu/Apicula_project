@@ -19,12 +19,9 @@ enum visible_state {
 enum camera_state {
 	
 	Main,
-	Apicula,
-	Scanner,
-	Disque,
-	Book,
 	Board,
-	BoardZoom
+	BoardZoom,
+	Board_Focus_element
 }
 
 

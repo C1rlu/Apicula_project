@@ -81,6 +81,7 @@ var player_rg : RigidBody3D
 
 var selected_subscene : PackedScene
 signal player_in_diveZone(condition : bool)
+signal show_dive_zone_info(condition : bool, dive_data : BoueData)
 signal _load_subscene(condition : bool)
 signal _go_Subscene
 var subbscene_playerPosition : Vector3

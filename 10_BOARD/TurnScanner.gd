@@ -32,10 +32,14 @@ func _set_camZoom(Cam_ref : boardCamState_data):
 func _process(delta):
 	
 	
-	if !_global_datas.camera_current_state == game_state.camera_state.Scanner:
-		return	
+	#if !_global_datas.camera_current_state == game_state.camera_state.Scanner:
+		#return	
 		
-
+	
+	var disable = true
+	if disable:
+		return
+	
 	if Input.is_action_pressed((_global_datas.move_right)):
 	
 		loader.rotation_degrees.y -=  100 * delta

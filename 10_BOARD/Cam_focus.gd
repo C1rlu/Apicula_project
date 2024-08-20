@@ -6,6 +6,7 @@ extends Node
 
 @onready var board_cam_ref : Camera3D = $"../3D_SCENE/Camera_state/Camera_OnBoard"
 @onready var board_cam_zoom : Camera3D = $"../3D_SCENE/Camera_state/Camera_OnBoard_zoom"
+@onready var board_cam_focus : Camera3D = $"../3D_SCENE/Camera_state/Camera_OnElement_focus"
 
 var target_position : Vector3
 
@@ -17,7 +18,7 @@ var offset_rotation : Vector3
 var main_cam_offset : Vector3
 var board_cam_offset : Vector3
 var boardZoom_cam_offset : Vector3
-
+var boardFocus_cam_offset : Vector3
 signal set_state_call
 signal set_back_call
 
@@ -36,7 +37,7 @@ func _ready():
 	main_cam_offset = all_Cam[0].global_position - focus_target.global_position 
 	board_cam_offset = board_cam_ref.global_position - focus_target.global_position 
 	boardZoom_cam_offset = board_cam_zoom.global_position - focus_target.global_position	
-
+	boardFocus_cam_offset = board_cam_focus.global_position -  focus_target.global_position	
 	
 func _focus(focus_data : boardCamState_data):
 	
@@ -51,7 +52,7 @@ func _focus(focus_data : boardCamState_data):
 		focus_data.back_call.back_call()
 	
 	# could set a emit call class here as well for more flexibility
-	set_state_call.emit()
+	#set_state_call.emit()
 
 
 	if _global_datas.camera_current_state == game_state.camera_state.Main:
@@ -60,12 +61,10 @@ func _focus(focus_data : boardCamState_data):
 		cam_state = 1
 	if _global_datas.camera_current_state == game_state.camera_state.BoardZoom:
 		cam_state = 2
-	if _global_datas.camera_current_state == game_state.camera_state.Disque:
+	if _global_datas.camera_current_state == game_state.camera_state.Board_Focus_element:
 		cam_state = 3
-	if _global_datas.camera_current_state == game_state.camera_state.Apicula:
-		cam_state = 3
-	if _global_datas.camera_current_state == game_state.camera_state.Scanner:
-		cam_state = 3
+		
+	print(cam_state)	
 func _process(delta):
 
 	if cam_state == 0:
@@ -91,8 +90,8 @@ func _process(delta):
 	if cam_state == 3:
 		
 		for c in all_Cam:
-			c.global_position = lerp(c.global_position, target_position, 3.0 * delta)	
-			c.rotation_degrees = lerp(c.rotation_degrees, target_rotation, 3.0 * delta)		
+			c.global_position = lerp(c.global_position, focus_target.global_position + boardFocus_cam_offset , 3.0 * delta)	
+			c.rotation_degrees = lerp(c.rotation_degrees, target_rotation , 3.0 * delta)		
 			
 
 

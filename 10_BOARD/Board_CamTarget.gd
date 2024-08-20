@@ -46,6 +46,9 @@ func _process(delta):
 
 	if stop_move:
 		return
+		
+	if _global_datas.camera_current_state == game_state.camera_state.Board_Focus_element:
+		return	
 	if _global_datas.camera_current_state == game_state.camera_state.Main:
 		move(delta)	
 		current_speed = speed *1.5	

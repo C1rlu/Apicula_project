@@ -23,8 +23,8 @@ func show_scanner(condition : bool):
 	if condition:
 		
 		
-		if _global_datas.camera_current_state == game_state.camera_state.Scanner:
-			current_scanner_value = 0.0
+		#if _global_datas.camera_current_state == game_state.camera_state.Scanner:
+		current_scanner_value = 0.0
 		
 		if fade_in:
 			fade_in.kill()
@@ -34,8 +34,8 @@ func show_scanner(condition : bool):
 		
 	else:
 		
-		if _global_datas.camera_current_state == game_state.camera_state.Scanner:
-			current_scanner_value = 1.0
+		#if _global_datas.camera_current_state == game_state.camera_state.Scanner:
+		current_scanner_value = 1.0
 					
 		if fade_in:
 			fade_in.kill()
