@@ -1,5 +1,6 @@
 extends Node
 
+@export var _focus_board : boardCamState_data
 @export var all_Cam : Array[Camera3D]
 
 @export var focus_target : Node3D
@@ -19,8 +20,6 @@ var main_cam_offset : Vector3
 var board_cam_offset : Vector3
 var boardZoom_cam_offset : Vector3
 var boardFocus_cam_offset : Vector3
-signal set_state_call
-signal set_back_call
 
 var cam_state : int = 0
 
@@ -39,20 +38,22 @@ func _ready():
 	boardZoom_cam_offset = board_cam_zoom.global_position - focus_target.global_position	
 	boardFocus_cam_offset = board_cam_focus.global_position -  focus_target.global_position	
 	
-func _focus(focus_data : boardCamState_data):
+	_global_datas.back_to_element_state.connect(back_to_element_state)
+	_global_datas.previous_cam_state = _focus_board
+		
+func back_to_element_state():
 	
-	_global_datas.close_all_over_ui.emit()
+	_global_datas.camera_focus_On.emit(_focus_board)	
+	
+func _focus(focus_data : boardCamState_data):
+
 	_global_datas.camera_current_state = focus_data.cam_state
+	
+	
 	
 	target_position = focus_data.camera_position_node.global_position
 	target_rotation = focus_data.camera_position_node.rotation_degrees
 
-	# back call will be set here in a back_call class for more flexibility
-	if focus_data.back_call:
-		focus_data.back_call.back_call()
-	
-	# could set a emit call class here as well for more flexibility
-	#set_state_call.emit()
 
 
 	if _global_datas.camera_current_state == game_state.camera_state.Main:
@@ -61,16 +62,22 @@ func _focus(focus_data : boardCamState_data):
 	if _global_datas.camera_current_state == game_state.camera_state.Board:
 		cam_state = 1
 		_global_datas.previous_cam_state = focus_data
+		
+		
+		
 	if _global_datas.camera_current_state == game_state.camera_state.BoardZoom:
 		cam_state = 2
-		_global_datas.previous_cam_state = focus_data
-		
 	if _global_datas.camera_current_state == game_state.camera_state.Board_Focus_element:
 		cam_state = 3
 	if _global_datas.camera_current_state == game_state.camera_state.Scanner:
 		cam_state = 4	
+		
+	_global_datas.close_all_over_ui.emit()	
+	
 	#print(cam_state)	
 func _process(delta):
+
+
 
 	if cam_state == 0:
 		rotation_angle(delta)	

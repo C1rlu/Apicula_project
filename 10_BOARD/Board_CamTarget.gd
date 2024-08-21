@@ -12,36 +12,37 @@ var target_position : Vector3
 var f
 var on_auto_move = false
 
-var no_zoom_positon : Vector3
+var center_position : Vector3
 var stop_move : bool = false
 
 
 func _ready():
 	_global_datas.focus_this_on_board.connect(_focus_this)
-	no_zoom_positon = global_position
-	target_position = no_zoom_positon 
-	_global_datas.camera_focus_On.connect(check_focus)
+	center_position = global_position
+	target_position =  center_position
+	_global_datas.camera_focus_On.connect(check_if_previous_focus)
 	current_speed = speed
 	
-	
-	_global_datas.open_3d_book.connect(stop)
-	
+	_global_datas.back_to_element_state.connect(back_to_element_state)
 	
 func stop(condition : bool):
 	stop_move = condition 	
 	
-func check_focus(focus_state : boardCamState_data):
+	
+func back_to_element_state():
+	_focus_this(center_position)	
 
-	#Recenter Min View
-	#if focus_state.cam_state != game_state.camera_state.Board_Focus_element:
-		#var reset_y = Vector3(position.x,position.y, position.z)
-		#_focus_this(reset_y)
+	
+func check_if_previous_focus(focus_state : boardCamState_data):
+
+	# to return to the last position after a focus
 
 	if _global_datas.camera_current_state == game_state.camera_state.Board_Focus_element:
 		_global_datas.previous_cam_target = global_position 
 	if _global_datas.camera_current_state == game_state.camera_state.Scanner:
 		_global_datas.previous_cam_target = global_position 
-
+	if _global_datas.camera_current_state == game_state.camera_state.BoardZoom:
+		_global_datas.previous_cam_target = global_position 
 
 func _process(delta):
 	
@@ -54,6 +55,9 @@ func _process(delta):
 
 	if stop_move:
 		return
+		
+	if _global_datas.in_open_element_state:
+		return	
 		
 	if _global_datas.camera_current_state == game_state.camera_state.Board_Focus_element:
 		return	
@@ -68,8 +72,8 @@ func _process(delta):
 		return
 	
 	if _global_datas.camera_current_state == game_state.camera_state.BoardZoom:
-		move(delta)
-		current_speed = speed /2		
+		#move(delta)
+		#current_speed = speed /2		
 		return
 		
 func move(delta):

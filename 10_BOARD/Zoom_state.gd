@@ -9,7 +9,10 @@ func _input(event):
 	
 	if !_global_datas.Player_In_Inventory:
 		return
-		
+	
+	if _global_datas.in_open_element_state:
+		return
+			
 	if event.is_action_pressed("Board_zoom_in"):
 		zoom_in()
 			
@@ -18,21 +21,21 @@ func _input(event):
 		
 		
 func zoom_in():
-	
+
 	if _global_datas.camera_current_state == game_state.camera_state.Main:
 		_global_datas.camera_focus_On.emit(board_state)	
 		return
 		
-	if _global_datas.camera_current_state == game_state.camera_state.Board:
-		_global_datas.camera_focus_On.emit(board_zoom_state)	
-		return	
+	#if _global_datas.camera_current_state == game_state.camera_state.Board:
+		#_global_datas.camera_focus_On.emit(board_zoom_state)	
+		#return	
 func zoom_out():
 	
 	if _global_datas.camera_current_state == game_state.camera_state.Board:
 		_global_datas.camera_focus_On.emit(main_state)	
 		return	
 		
-	if _global_datas.camera_current_state == game_state.camera_state.BoardZoom:
-		_global_datas.camera_focus_On.emit(board_state)
-		_global_datas.open_3d_book.emit(false)	
-		return
+	#if _global_datas.camera_current_state == game_state.camera_state.BoardZoom:
+		#_global_datas.camera_focus_On.emit(board_state)
+		#_global_datas.open_3d_book.emit(false)	
+		#return

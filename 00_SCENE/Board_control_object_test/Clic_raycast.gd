@@ -1,6 +1,5 @@
 extends Node
 
-@export var back_focus_state: boardCamState_data
 @export var Camera : Camera3D
 var _selectec_object 
 var pad : bool = false
@@ -27,13 +26,13 @@ func check_if_on_focus(condition):
 		
 	if _global_datas.camera_current_state == game_state.camera_state.Board_Focus_element:
 		_global_datas.camera_focus_On.emit(_global_datas.previous_cam_state)
-		
+		_global_datas.show_element_info.emit(false,null)
 		return
 	
 	if _global_datas.camera_current_state == game_state.camera_state.Scanner:
 		_global_datas.show_on_scanner.emit(false)
 		_global_datas.camera_focus_On.emit(_global_datas.previous_cam_state)
-		
+		_global_datas.show_element_info.emit(false,null)
 		return	
 		
 func select_object(object):
@@ -55,10 +54,15 @@ func _input(event):
 	else:
 		target = get_viewport().get_mouse_position()	
 	
+	
+	if _global_datas.in_open_element_state:
+		return
+	
 	if _global_datas.camera_current_state == game_state.camera_state.Board_Focus_element:
 		if event.is_action_pressed("On_View"):	
 			_global_datas.focus_this_on_board.emit(_global_datas.previous_cam_target)
-			_global_datas.camera_focus_On.emit(_global_datas.previous_cam_state)	
+			_global_datas.camera_focus_On.emit(_global_datas.previous_cam_state)
+			_global_datas.show_element_info.emit(false,null)	
 		return
 	
 	if _global_datas.camera_current_state == game_state.camera_state.Scanner:
@@ -66,14 +70,22 @@ func _input(event):
 			_global_datas.show_on_scanner.emit(false)
 			_global_datas.focus_this_on_board.emit(_global_datas.previous_cam_target)
 			_global_datas.camera_focus_On.emit(_global_datas.previous_cam_state)	
-			
+			_global_datas.show_element_info.emit(false,null)
 		return
 	
-	
+	if _global_datas.camera_current_state == game_state.camera_state.BoardZoom:
+		if event.is_action_pressed("On_View"):	
+			_global_datas.focus_this_on_board.emit(_global_datas.previous_cam_target)
+			_global_datas.camera_focus_On.emit(_global_datas.previous_cam_state)	
+			_global_datas.show_element_info.emit(false,null)
+		return
+		
+		
 	#action click below 	
 	if event.is_action_pressed("On_Move"):
 		if _selectec_object:
 			_selectec_object.On_Move.emit(false)
+			
 		else:
 			check_move(target)
 			
@@ -81,7 +93,7 @@ func _input(event):
 		check_view(target)
 
 	# On Over check
-	check_over(target)	
+	#check_over(target)	
 		
 
 

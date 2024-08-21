@@ -1,4 +1,4 @@
-[gd_scene load_steps=71 format=3 uid="uid://cein0q2eirkay"]
+[gd_scene load_steps=78 format=3 uid="uid://cein0q2eirkay"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_g3pi7"]
 [ext_resource type="Script" path="res://10_BOARD/Board_CamTarget.gd" id="1_janbq"]
@@ -6,14 +6,21 @@
 [ext_resource type="Resource" uid="uid://5fjsfr4toudr" path="res://08_SUBSCENES/Tools/Main_tool/Open_Board.tres" id="1_qgjbu"]
 [ext_resource type="Script" path="res://10_BOARD/Input_switch.gd" id="2_00g5f"]
 [ext_resource type="PackedScene" uid="uid://dr73p5vs0sixe" path="res://10_BOARD/board_scene.tscn" id="2_6c571"]
+[ext_resource type="Resource" uid="uid://vx7lgrlssiw5" path="res://15_GAME_RESSOURCE/04_Element/Cube_element.tres" id="5_8lgyd"]
+[ext_resource type="Script" path="res://10_BOARD/Instantiate_element.gd" id="5_dn45r"]
 [ext_resource type="Script" path="res://10_BOARD/Cam_focus.gd" id="6_7tgl6"]
+[ext_resource type="Resource" uid="uid://cmp0pwiuhoh2j" path="res://15_GAME_RESSOURCE/04_Element/Cube_03_element.tres" id="6_h5ap1"]
 [ext_resource type="Material" uid="uid://5qv6cc3a63nt" path="res://05_SHADER/Full_screen/04_board_simple_disolved.tres" id="7_fiqjo"]
-[ext_resource type="Script" path="res://10_BOARD/Set_state_call.gd" id="7_m8teq"]
+[ext_resource type="Script" path="res://10_BOARD/Drop_Element_State.gd" id="7_io232"]
+[ext_resource type="Resource" uid="uid://cim2mu11bktke" path="res://15_GAME_RESSOURCE/04_Element/Cube_04_element.tres" id="7_sglhn"]
 [ext_resource type="Script" path="res://10_BOARD/Information_manager.gd" id="7_v3hdy"]
+[ext_resource type="Resource" uid="uid://drbtl8kjyf8n1" path="res://15_GAME_RESSOURCE/04_Element/Cube_05_element.tres" id="8_sgf7i"]
 [ext_resource type="Script" path="res://10_BOARD/Set_focus_data.gd" id="9_2ajy3"]
 [ext_resource type="Script" path="res://10_BOARD/Zoom_state.gd" id="9_8at4f"]
+[ext_resource type="Resource" uid="uid://ci4gnshy63pep" path="res://15_GAME_RESSOURCE/04_Element/Cube_06_element.tres" id="9_rs7n7"]
 [ext_resource type="Script" path="res://10_BOARD/Json_reader_test.gd" id="9_tfybn"]
 [ext_resource type="Script" path="res://14_ON_SCANNER_PHOTO/Show_OnScanner.gd" id="10_354m8"]
+[ext_resource type="Resource" uid="uid://dbi5eh1hx08eb" path="res://15_GAME_RESSOURCE/04_Element/Cube_07_element.tres" id="10_q6p6j"]
 [ext_resource type="Script" path="res://14_ON_SCANNER_PHOTO/Fade_scanner.gd" id="11_2x7ah"]
 [ext_resource type="Resource" uid="uid://dyh1qg1u652pl" path="res://15_GAME_RESSOURCE/Epave_ch_photoData.tres" id="11_ldr1y"]
 [ext_resource type="Script" path="res://10_BOARD/TurnScanner.gd" id="12_2daja"]
@@ -466,6 +473,14 @@ script = ExtResource("9_tfybn")
 
 [node name="Element_Manager" type="Node" parent="."]
 script = ExtResource("14_johxk")
+Proto_element = Array[Resource("res://15_GAME_RESSOURCE/04_Element/Element_Data/object_data.gd")]([ExtResource("5_8lgyd"), ExtResource("6_h5ap1"), ExtResource("7_sglhn"), ExtResource("8_sgf7i"), ExtResource("9_rs7n7"), ExtResource("10_q6p6j")])
+
+[node name="Drop_Element_State" type="Node" parent="Element_Manager"]
+script = ExtResource("7_io232")
+
+[node name="Instantiate_element" type="Node" parent="Element_Manager" node_paths=PackedStringArray("Drop_Element_State")]
+script = ExtResource("5_dn45r")
+Drop_Element_State = NodePath("../Drop_Element_State")
 
 [node name="Open_Inventory" type="Node" parent="."]
 script = SubResource("GDScript_1a2yk")
@@ -486,11 +501,9 @@ script = SubResource("GDScript_52477")
 
 [node name="Cam_focus" type="Node" parent="." node_paths=PackedStringArray("all_Cam", "focus_target")]
 script = ExtResource("6_7tgl6")
+_focus_board = ExtResource("24_pisk2")
 all_Cam = [NodePath("../3D_SCENE/SubViewport/Camera3D_Main"), NodePath("../3D_SCENE/SubViewport_scanner/Camera3D_Scanner"), NodePath("../3D_SCENE/Camera_xray")]
 focus_target = NodePath("../3D_SCENE/CamTarget")
-
-[node name="Set_state_call" type="Node" parent="Cam_focus"]
-script = ExtResource("7_m8teq")
 
 [node name="Zoom_state" type="Node" parent="Cam_focus"]
 script = ExtResource("9_8at4f")
@@ -504,7 +517,6 @@ all_scanner = Array[Resource("res://12_INVENTORY/Photo/Photo_data.gd")]([ExtReso
 
 [node name="Clic_raycast" type="Node" parent="." node_paths=PackedStringArray("Camera", "pad_target")]
 script = ExtResource("23_osxq7")
-back_focus_state = ExtResource("27_vvxtf")
 Camera = NodePath("../3D_SCENE/Camera_xray")
 pad_target = NodePath("../3D_SCENE/Pad_target")
 
@@ -531,6 +543,7 @@ script = ExtResource("12_2daja")
 
 [node name="Camera_OnElement_focus" type="Camera3D" parent="3D_SCENE/Camera_state"]
 transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0.2, 0.55)
+visible = false
 cull_mask = 2
 fov = 40.0
 script = ExtResource("9_2ajy3")
@@ -538,6 +551,7 @@ focus_data = ExtResource("35_wjkn0")
 
 [node name="Camera_OnBoard_zoom" type="Camera3D" parent="3D_SCENE/Camera_state"]
 transform = Transform3D(1, 0, 0, 0, 0.34202, 0.939693, 0, -0.939693, 0.34202, 0, 0.232, 0.214)
+visible = false
 cull_mask = 2
 fov = 40.0
 script = ExtResource("9_2ajy3")
@@ -545,6 +559,7 @@ focus_data = ExtResource("28_njdgu")
 
 [node name="Camera_OnBoard" type="Camera3D" parent="3D_SCENE/Camera_state"]
 transform = Transform3D(1, 0, 0, 0, 0.642788, 0.766044, 0, -0.766044, 0.642788, 0, 0.48, 0.49)
+visible = false
 cull_mask = 2
 fov = 40.0
 script = ExtResource("9_2ajy3")
@@ -552,6 +567,7 @@ focus_data = ExtResource("27_vvxtf")
 
 [node name="Camera_OnMain" type="Camera3D" parent="3D_SCENE/Camera_state"]
 transform = Transform3D(0.994881, 0.0700724, -0.072816, 0, 0.720551, 0.693402, 0.101056, -0.689852, 0.716862, -0.08, 0.945, 1.035)
+visible = false
 cull_mask = 2
 fov = 40.0
 script = ExtResource("9_2ajy3")

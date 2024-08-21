@@ -12,10 +12,10 @@ func _ready():
 func _focus():
 
 
-	
 	var focus_target = root.global_position
 	_global_datas.focus_this_on_board.emit(focus_target)
 	_global_datas.camera_focus_On.emit(focus_data)
+	_global_datas.show_element_info.emit(true,info)
 	
 func _on_over():
 	_global_datas.show_element_info.emit(true,info)

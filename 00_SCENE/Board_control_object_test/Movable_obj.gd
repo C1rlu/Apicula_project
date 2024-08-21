@@ -18,15 +18,18 @@ var rotating : bool
 func _ready():
 	_global_datas.moving_state.connect(move_is_active)
 	
-	On_Move.On_Move.connect(_On_move)
-	On_Move._move.connect(_on_move)
-	On_Move._rotate.connect(_on_rotate)
+	if On_Move:
+		On_Move.On_Move.connect(_On_move)
+		On_Move._move.connect(_on_move)
+		On_Move._rotate.connect(_on_rotate)
 
 	
 	if Render:
 		Normal_material = Render.get_surface_override_material(0)
 	
 func move_is_active(condition : bool):
+
+
 	collider.disabled = condition
 
 func _On_move(condition):
@@ -47,8 +50,10 @@ func _On_move(condition):
 		_global_datas.select_movable_object.emit(null)
 		if Render:
 			Render.set_surface_override_material(0,Normal_material)
+			
+		# we check here if we still need to put an object	
+		_global_datas.check_element_state.emit()
 	
-
 func _on_move(target, speed, delta):
 	
 	check_limit(target)

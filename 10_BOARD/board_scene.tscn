@@ -1,5 +1,6 @@
 [gd_scene load_steps=274 format=3 uid="uid://dr73p5vs0sixe"]
 
+[ext_resource type="Script" path="res://10_BOARD/Movable_root.gd" id="1_2yoh7"]
 [ext_resource type="PackedScene" uid="uid://cyb6my1srlcpw" path="res://10_BOARD/Candle/Candle_set.blend" id="1_3ummb"]
 [ext_resource type="Shader" uid="uid://upo0fuo5sqgd" path="res://05_SHADER/Board/Board_sh.tres" id="1_k1enu"]
 [ext_resource type="PackedScene" uid="uid://c1a6gtlbfww5v" path="res://10_BOARD/Map/Lanterne/Lanterne.blend" id="1_l5l52"]
@@ -1520,8 +1521,6 @@ blend_shape_mode = 0
 [sub_resource type="BoxShape3D" id="BoxShape3D_jcnam"]
 size = Vector3(0.432556, 0.539551, 1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_cbq2a"]
-
 [sub_resource type="GDScript" id="GDScript_l8jpj"]
 script/source = "extends Node
 
@@ -2142,6 +2141,7 @@ omni_attenuation = 1.14868
 omni_shadow_mode = 0
 
 [node name="Movable" type="Node3D" parent="."]
+script = ExtResource("1_2yoh7")
 
 [node name="PHOTO" type="Node3D" parent="Movable"]
 transform = Transform3D(0.882135, 0, -0.470996, 0, 1, 0, 0.470996, 0, 0.882135, 0.189478, 0.00272226, 0.0787499)
@@ -2305,6 +2305,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00334841, 0, -0.10665)
 
 [node name="Camera_OnScanner" type="Camera3D" parent="Movable/Scanner_reader"]
 transform = Transform3D(0.996041, 0.0409091, -0.0789217, 0, 0.887815, 0.4602, 0.0888943, -0.458378, 0.884301, -0.02, 0.196, 0.239)
+visible = false
 cull_mask = 130
 fov = 40.0
 script = ExtResource("43_ydgdc")
@@ -2338,9 +2339,8 @@ script = ExtResource("23_5ghgr")
 [node name="On_View" type="Node" parent="Movable/Scanner_reader/Area3D"]
 script = SubResource("GDScript_lrtc7")
 
-[node name="On_Move_off" type="Node" parent="Movable/Scanner_reader/Area3D" node_paths=PackedStringArray("Root")]
+[node name="On_Move_off" type="Node" parent="Movable/Scanner_reader/Area3D"]
 script = ExtResource("44_64ctv")
-Root = NodePath("../..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Movable/Scanner_reader/Area3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00346069, 0.0374634, -4.88311e-05)
@@ -2348,19 +2348,19 @@ shape = SubResource("BoxShape3D_c0r5v")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Movable/Scanner_reader"]
 transform = Transform3D(1.46563, 0, 0, 0, 1.46563, 0, 0, 0, 1.46563, -9.96515e-06, 0.00714402, 9.48608e-05)
-layers = 2
+layers = 130
 mesh = SubResource("CylinderMesh_3wbgg")
 surface_material_override/0 = SubResource("ShaderMaterial_l3nap")
 
 [node name="MeshInstance3D3" type="MeshInstance3D" parent="Movable/Scanner_reader"]
 transform = Transform3D(1.36712, 0, 0, 0, 1.36712, 0, 0, 0, 1.36712, -9.96515e-06, 0.0211506, 9.48608e-05)
-layers = 2
+layers = 130
 mesh = SubResource("CylinderMesh_3wbgg")
 surface_material_override/0 = ExtResource("6_kkuc8")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="Movable/Scanner_reader"]
 transform = Transform3D(1.14099, 0, 0, 0, 1.21305, 0, 0, 0, 1.14099, 8.41208e-05, 0.0288101, -0.000800952)
-layers = 2
+layers = 130
 mesh = SubResource("CylinderMesh_3wbgg")
 surface_material_override/0 = SubResource("ShaderMaterial_1satu")
 
@@ -2474,12 +2474,12 @@ surface_material_override/0 = SubResource("ShaderMaterial_th3mc")
 transform = Transform3D(0.898143, 0, 0.439704, 0, 1, 0, -0.439704, 0, 0.898143, -0.401642, -0.00482094, -0.280822)
 
 [node name="fregate_all_msh" parent="Movable/Apicula_maquette_v01blend" index="0"]
-transform = Transform3D(0.023153, 0, -3.72529e-09, 0, 0.023153, 0, 3.72529e-09, 0, 0.023153, -0.000520825, 0.0744032, 0.00560153)
+transform = Transform3D(0.0314273, 0, -8.3819e-09, 0, 0.0314273, 0, 8.3819e-09, 0, 0.0314273, 0.000365108, 0.0835726, 0.0056017)
 layers = 2
 surface_material_override/0 = SubResource("ShaderMaterial_l3nap")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Movable/Apicula_maquette_v01blend"]
-transform = Transform3D(0.137909, 0, 0.00434151, 0, -0.00539462, 0, 0.00770535, 0, -0.0777038, 0.00572145, 0.0156349, 0.00298697)
+transform = Transform3D(0.137909, 0, 0.00434151, 0, -0.00539462, 0, 0.00770535, 0, -0.0777038, 0.00572145, 0.0156349, 0.00298703)
 layers = 2
 mesh = SubResource("CylinderMesh_xsjxl")
 skeleton = NodePath("")
@@ -2516,9 +2516,8 @@ move_root = NodePath("../..")
 rotation_root = NodePath("../..")
 On_Move = NodePath("../On_Move")
 
-[node name="On_Move" type="Node" parent="Movable/Apicula_maquette_v01blend/Area3D" node_paths=PackedStringArray("Root")]
+[node name="On_Move" type="Node" parent="Movable/Apicula_maquette_v01blend/Area3D"]
 script = ExtResource("44_64ctv")
-Root = NodePath("../..")
 
 [node name="On_View" type="Node" parent="Movable/Apicula_maquette_v01blend/Area3D"]
 script = SubResource("GDScript_mevdj")
@@ -2533,7 +2532,15 @@ shape = SubResource("BoxShape3D_yuede")
 [node name="Node" type="Node" parent="Movable/Apicula_maquette_v01blend/Area3D"]
 
 [node name="TOURNE_DISQUE" type="Node3D" parent="Movable"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.495269, -1.19209e-07, -0.172643)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.539401, -1.78814e-07, -0.275405)
+
+[node name="On_View_Event" type="Node" parent="Movable/TOURNE_DISQUE" node_paths=PackedStringArray("root", "On_View", "On_Over")]
+script = ExtResource("43_i0i3o")
+root = NodePath("..")
+info = ExtResource("45_tllkl")
+focus_data = ExtResource("46_y5tcg")
+On_View = NodePath("../Area3D/On_View")
+On_Over = NodePath("../../Apicula_maquette_v01blend/Area3D/On_Over")
 
 [node name="Movable_object" type="Node" parent="Movable/TOURNE_DISQUE" node_paths=PackedStringArray("collider", "move_root", "rotation_root", "On_Move")]
 script = ExtResource("43_usyd2")
@@ -2572,9 +2579,8 @@ surface_material_override/1 = ExtResource("46_tmbd7")
 
 [node name="Area3D" type="Area3D" parent="Movable/TOURNE_DISQUE"]
 
-[node name="On_Move" type="Node" parent="Movable/TOURNE_DISQUE/Area3D" node_paths=PackedStringArray("Root")]
+[node name="On_Move" type="Node" parent="Movable/TOURNE_DISQUE/Area3D"]
 script = ExtResource("44_64ctv")
-Root = NodePath("../..")
 
 [node name="On_View" type="Node" parent="Movable/TOURNE_DISQUE/Area3D"]
 script = SubResource("GDScript_0k00m")
@@ -2612,9 +2618,8 @@ skeleton = NodePath("")
 monitoring = false
 monitorable = false
 
-[node name="On_Move" type="Node" parent="Movable/Player_on_map/Area3D" node_paths=PackedStringArray("Root")]
+[node name="On_Move" type="Node" parent="Movable/Player_on_map/Area3D"]
 script = ExtResource("44_64ctv")
-Root = NodePath("../..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Movable/Player_on_map/Area3D"]
 transform = Transform3D(0.0410813, 0, 4.52971e-14, 0, 0.0410813, 0, -4.52971e-14, 0, 0.0410813, -0.000743445, 0.00975882, 1.18655e-15)
@@ -2622,12 +2627,6 @@ shape = SubResource("BoxShape3D_jcnam")
 disabled = true
 
 [node name="Static" type="Node3D" parent="."]
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Static"]
-transform = Transform3D(0.305613, 0, 0, 0, 0.00726986, 0, 0, 0, 0.195712, 0.0271931, 0.00414611, 0.417721)
-layers = 2
-mesh = SubResource("BoxMesh_cbq2a")
-surface_material_override/0 = SubResource("ShaderMaterial_isdhd")
 
 [node name="Deco" type="Node3D" parent="Static"]
 
@@ -2650,9 +2649,8 @@ On_Move = NodePath("../Area3D/On_Move_off")
 [node name="Area3D" type="Area3D" parent="Static/Deco/Lanterne2"]
 transform = Transform3D(0.691992, 0, -0.721905, 0, 1, 0, 0.721905, 0, 0.691992, 0.114583, 1.31694e-06, -0.454325)
 
-[node name="On_Move_off" type="Node" parent="Static/Deco/Lanterne2/Area3D" node_paths=PackedStringArray("Root")]
+[node name="On_Move_off" type="Node" parent="Static/Deco/Lanterne2/Area3D"]
 script = ExtResource("44_64ctv")
-Root = NodePath("../../../Candle_01")
 
 [node name="On_View_off" type="Node" parent="Static/Deco/Lanterne2/Area3D"]
 script = SubResource("GDScript_l8jpj")
@@ -2693,9 +2691,8 @@ On_Move = NodePath("../Area3D/On_Move")
 
 [node name="Area3D" type="Area3D" parent="Static/Deco/Candle_00"]
 
-[node name="On_Move" type="Node" parent="Static/Deco/Candle_00/Area3D" node_paths=PackedStringArray("Root")]
+[node name="On_Move" type="Node" parent="Static/Deco/Candle_00/Area3D"]
 script = ExtResource("44_64ctv")
-Root = NodePath("../..")
 
 [node name="On_View" type="Node" parent="Static/Deco/Candle_00/Area3D"]
 script = SubResource("GDScript_l8jpj")
@@ -2744,9 +2741,8 @@ On_Move = NodePath("../Area3D/On_Move")
 
 [node name="Area3D" type="Area3D" parent="Static/Deco/Candle_01"]
 
-[node name="On_Move" type="Node" parent="Static/Deco/Candle_01/Area3D" node_paths=PackedStringArray("Root")]
+[node name="On_Move" type="Node" parent="Static/Deco/Candle_01/Area3D"]
 script = ExtResource("44_64ctv")
-Root = NodePath("../..")
 
 [node name="On_View" type="Node" parent="Static/Deco/Candle_01/Area3D"]
 script = SubResource("GDScript_l8jpj")
