@@ -15,16 +15,13 @@ var fade_in_b
 
 func _ready():
 	_global_datas.show_on_scanner.connect(show_scanner)
-	_global_datas.show_on_scanner_backdrop.connect(show_backdrop)
+	_global_datas.show_on_scanner.connect(show_backdrop)
+	#_global_datas.show_on_scanner_backdrop.connect(show_backdrop)
 
 func show_scanner(condition : bool):
 	
 
 	if condition:
-		
-		
-		#if _global_datas.camera_current_state == game_state.camera_state.Scanner:
-		current_scanner_value = 0.0
 		
 		if fade_in:
 			fade_in.kill()
@@ -34,9 +31,7 @@ func show_scanner(condition : bool):
 		
 	else:
 		
-		#if _global_datas.camera_current_state == game_state.camera_state.Scanner:
-		current_scanner_value = 1.0
-					
+	
 		if fade_in:
 			fade_in.kill()
 	
@@ -56,7 +51,7 @@ func show_backdrop(condition : bool):
 			fade_in_b.kill()
 	
 		fade_in_b = create_tween()
-		fade_in_b.tween_method(set_backdrop_shader_value,actual_value_b,0.8,1.0).set_trans(Tween.TRANS_SINE)
+		fade_in_b.tween_method(set_backdrop_shader_value,actual_value_b,0.7,1.0).set_trans(Tween.TRANS_SINE)
 		
 	else:		
 		if fade_in_b:

@@ -1,13 +1,17 @@
 extends Node
 
-@export var all_object_list : Array[Board_OBJ]
 
 func _ready():
-	_global_datas.add_OBJ.connect(add_this_obj)
-	
+	_global_datas.add_collect_element.connect(_add_element)
+	_global_datas.open_inventory.connect(_check_element)
 
-func add_this_obj(obj_name):
+func _add_element(element : element_data):
+	print(element.element_name, " is collected")
 	
-	for o in all_object_list:
-		if o.obj_name == obj_name:
-			o.Object_on_Board = true
+	_global_datas.element_collected.append(element)
+
+
+func _check_element(condition):
+	if condition:
+		for e in _global_datas.element_collected:
+			print(e.element_name)	

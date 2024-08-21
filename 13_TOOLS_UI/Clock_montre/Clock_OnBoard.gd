@@ -13,4 +13,4 @@ func _process(delta):
 	
 	if !active:
 		return
-	root_equille.rotation_degrees.y = -_global_datas.clock_timer
+	root_equille.rotation_degrees.y -= 10 * delta

@@ -16,13 +16,33 @@ func _ready():
 	_global_datas.using_pad.connect(is_pad)
 	_global_datas.select_movable_object.connect(select_object)
 
+
+	_global_datas.open_inventory.connect(check_if_on_focus)
+	
+	
+func check_if_on_focus(condition):
+	
+	if condition:
+		return
+		
+	if _global_datas.camera_current_state == game_state.camera_state.Board_Focus_element:
+		_global_datas.camera_focus_On.emit(_global_datas.previous_cam_state)
+		
+		return
+	
+	if _global_datas.camera_current_state == game_state.camera_state.Scanner:
+		_global_datas.show_on_scanner.emit(false)
+		_global_datas.camera_focus_On.emit(_global_datas.previous_cam_state)
+		
+		return	
+		
 func select_object(object):
 	_selectec_object = object
 
 func is_pad(condition : bool):
 	
 	pad = condition
-	pad_target.visible = condition
+
 	
 func _input(event):
 	
@@ -37,8 +57,18 @@ func _input(event):
 	
 	if _global_datas.camera_current_state == game_state.camera_state.Board_Focus_element:
 		if event.is_action_pressed("On_View"):	
-			_global_datas.camera_focus_On.emit(back_focus_state)	
+			_global_datas.focus_this_on_board.emit(_global_datas.previous_cam_target)
+			_global_datas.camera_focus_On.emit(_global_datas.previous_cam_state)	
 		return
+	
+	if _global_datas.camera_current_state == game_state.camera_state.Scanner:
+		if event.is_action_pressed("On_View"):	
+			_global_datas.show_on_scanner.emit(false)
+			_global_datas.focus_this_on_board.emit(_global_datas.previous_cam_target)
+			_global_datas.camera_focus_On.emit(_global_datas.previous_cam_state)	
+			
+		return
+	
 	
 	#action click below 	
 	if event.is_action_pressed("On_Move"):

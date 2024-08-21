@@ -68,7 +68,7 @@ signal _give_letter( index : int)
 #var photo_archives : Array[PhotoData] 
 var boue_archives : Array[BoueData]
 var tools_list : Array[tool_data]
-var objects_data_list : Array[Board_OBJ]
+var element_collected : Array[element_data]
 
 #UI VAR 
 signal set_resolution(resolution : Vector2i)
@@ -120,7 +120,7 @@ signal mouse_raycast
 var board_camera : Camera3D
 var Cursor_mode : Node
 signal close_all_over_ui
-signal add_OBJ(obj_name : String)
+signal add_collect_element(element : element_data)
 
 signal information_added(information : info_data)
 signal ui_noted_taked
@@ -128,8 +128,10 @@ signal map_fade(condition : bool) # true is in : false is out
 
 
 signal camera_focus_On(focus_data : boardCamState_data)
-signal camera_focus_update(focus_data : boardCamState_data)
 var camera_current_state : game_state.camera_state 
+
+var previous_cam_state : boardCamState_data
+var previous_cam_target : Vector3
 
 signal  show_element_info(condition : bool, information : info_data)
 
@@ -150,12 +152,14 @@ signal switch_icon_cursor(icon_type : icon_class.icon_list)
 signal focus_this_on_board(target : Vector3)
 signal Open_ui_dark_backdrop(condition : bool)
 signal show_on_scanner(condition : bool)
+var scanner_root : Node3D
 signal show_on_scanner_backdrop(condition : bool)
 signal flash_scanner
 signal show_ui_scanner_dots(condition : bool)
 signal select_intrigue(intrigue : board_intrigue_data)
 var selected_book : book_page_data
 var legend_page_index : int
+
 
 
 var selected_photoData : PhotoData

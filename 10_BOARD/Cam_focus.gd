@@ -57,14 +57,19 @@ func _focus(focus_data : boardCamState_data):
 
 	if _global_datas.camera_current_state == game_state.camera_state.Main:
 		cam_state = 0
+		_global_datas.previous_cam_state = focus_data
 	if _global_datas.camera_current_state == game_state.camera_state.Board:
 		cam_state = 1
+		_global_datas.previous_cam_state = focus_data
 	if _global_datas.camera_current_state == game_state.camera_state.BoardZoom:
 		cam_state = 2
+		_global_datas.previous_cam_state = focus_data
+		
 	if _global_datas.camera_current_state == game_state.camera_state.Board_Focus_element:
 		cam_state = 3
-		
-	print(cam_state)	
+	if _global_datas.camera_current_state == game_state.camera_state.Scanner:
+		cam_state = 4	
+	#print(cam_state)	
 func _process(delta):
 
 	if cam_state == 0:
@@ -85,15 +90,20 @@ func _process(delta):
 		for c in all_Cam:
 			c.global_position = lerp(c.global_position,focus_target.global_position + boardZoom_cam_offset + (offset_rotation/4), 3.0 * delta)	
 			c.rotation_degrees = lerp(c.rotation_degrees, target_rotation + focus_target.rotation_degrees, 3.0 * delta)	
-		
-
-	if cam_state == 3:
-		
+			
+			
+	if cam_state == 3:	
 		for c in all_Cam:
 			c.global_position = lerp(c.global_position, focus_target.global_position + boardFocus_cam_offset , 3.0 * delta)	
 			c.rotation_degrees = lerp(c.rotation_degrees, target_rotation , 3.0 * delta)		
-			
+	
 
+	if cam_state == 4:
+		
+		for c in all_Cam:
+			c.global_position = lerp(c.global_position, target_position, 3.0 * delta)	
+			c.rotation_degrees = lerp(c.rotation_degrees, target_rotation , 3.0 * delta)		
+			
 
 func rotation_angle(delta):
 

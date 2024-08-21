@@ -21,7 +21,8 @@ enum camera_state {
 	Main,
 	Board,
 	BoardZoom,
-	Board_Focus_element
+	Board_Focus_element,
+	Scanner
 }
 
 

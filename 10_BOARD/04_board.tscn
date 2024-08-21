@@ -1,4 +1,4 @@
-[gd_scene load_steps=75 format=3 uid="uid://cein0q2eirkay"]
+[gd_scene load_steps=71 format=3 uid="uid://cein0q2eirkay"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_g3pi7"]
 [ext_resource type="Script" path="res://10_BOARD/Board_CamTarget.gd" id="1_janbq"]
@@ -17,17 +17,13 @@
 [ext_resource type="Script" path="res://14_ON_SCANNER_PHOTO/Fade_scanner.gd" id="11_2x7ah"]
 [ext_resource type="Resource" uid="uid://dyh1qg1u652pl" path="res://15_GAME_RESSOURCE/Epave_ch_photoData.tres" id="11_ldr1y"]
 [ext_resource type="Script" path="res://10_BOARD/TurnScanner.gd" id="12_2daja"]
-[ext_resource type="Resource" uid="uid://3pilop3f4m6r" path="res://15_GAME_RESSOURCE/03_BoardCam_state/ScannerM_focus_data.tres" id="13_87a1q"]
 [ext_resource type="Script" path="res://10_BOARD/Board_OBJ_Manager.gd" id="14_johxk"]
-[ext_resource type="Resource" uid="uid://blxuee4l6ey2g" path="res://10_BOARD/Board_OBJ_data/Map_data.tres" id="15_6vhht"]
-[ext_resource type="Resource" uid="uid://cvrp1lkxdf4md" path="res://15_GAME_RESSOURCE/03_BoardCam_state/Book_focus_data.tres" id="15_a7u4q"]
 [ext_resource type="Script" path="res://10_BOARD/Next_scanner_input.gd" id="16_l7ebl"]
 [ext_resource type="Resource" uid="uid://ctxrmh1elpnm1" path="res://15_GAME_RESSOURCE/Follower_photoData.tres" id="17_mbuj8"]
 [ext_resource type="Resource" uid="uid://dlm0knnql1e6h" path="res://15_GAME_RESSOURCE/Ghost_Scanner_photoData.tres" id="18_aukda"]
 [ext_resource type="Resource" uid="uid://bcid58kxecbk2" path="res://15_GAME_RESSOURCE/Maurice_photoData.tres" id="19_8dlfp"]
 [ext_resource type="Script" path="res://10_BOARD/Switch_Cursor_icon.gd" id="19_t6o6e"]
 [ext_resource type="Resource" uid="uid://cooqi0giysm3w" path="res://15_GAME_RESSOURCE/MrBirs_photoData.tres" id="20_0rbh6"]
-[ext_resource type="PackedScene" uid="uid://b4hspc8dsyv14" path="res://08_SUBSCENES/Elements/Tiny_boat/scene_boat_ch_test.tscn" id="20_60dek"]
 [ext_resource type="Texture2D" uid="uid://bb53vqhy3jx8j" path="res://10_BOARD/00_BOOK/01_UI/cursor_eyes.png" id="20_cuebq"]
 [ext_resource type="Script" path="res://10_BOARD/Follow_cursor.gd" id="20_vjjnn"]
 [ext_resource type="Resource" uid="uid://dm0uus2gow50q" path="res://15_GAME_RESSOURCE/Otis_photoData.tres" id="21_ko3r3"]
@@ -65,7 +61,7 @@ func open_inventory(condition : bool):
 		_global_datas.current_scene_state = game_state.scene_state._Main
 	else:
 		_global_datas._add_back_call.emit(_back_call)
-		#_global_datas.show_on_scanner.emit(true)
+		_global_datas.show_on_scanner.emit(false)
 		
 		_global_datas.current_scene_state = game_state.scene_state._Boardscene
 		
@@ -229,7 +225,7 @@ nodes/fragment/connections = PackedInt32Array(9, 0, 0, 0, 32, 0, 34, 1, 5, 0, 34
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pfnxx"]
 shader = SubResource("VisualShader_7x25n")
-shader_parameter/Opacity = 0.0
+shader_parameter/Opacity = 1.0
 
 [sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_3q8mc"]
 
@@ -468,6 +464,9 @@ script = ExtResource("7_v3hdy")
 [node name="Board_info_reader_class" type="Node" parent="Information_manager"]
 script = ExtResource("9_tfybn")
 
+[node name="Element_Manager" type="Node" parent="."]
+script = ExtResource("14_johxk")
+
 [node name="Open_Inventory" type="Node" parent="."]
 script = SubResource("GDScript_1a2yk")
 
@@ -499,11 +498,6 @@ main_state = ExtResource("24_pisk2")
 board_state = ExtResource("27_vvxtf")
 board_zoom_state = ExtResource("28_njdgu")
 
-[node name="TurnScanner_and_zoom" type="Node" parent="Cam_focus"]
-script = ExtResource("12_2daja")
-Cam_ref_scanner = ExtResource("13_87a1q")
-Cam_ref_Book = ExtResource("15_a7u4q")
-
 [node name="Next_scanner_input" type="Node" parent="Cam_focus"]
 script = ExtResource("16_l7ebl")
 all_scanner = Array[Resource("res://12_INVENTORY/Photo/Photo_data.gd")]([ExtResource("11_ldr1y"), ExtResource("17_mbuj8"), ExtResource("18_aukda"), ExtResource("19_8dlfp"), ExtResource("20_0rbh6"), ExtResource("21_ko3r3")])
@@ -517,10 +511,6 @@ pad_target = NodePath("../3D_SCENE/Pad_target")
 [node name="Movable_manager" type="Node" parent="Clic_raycast"]
 script = ExtResource("24_tox7b")
 
-[node name="Board_OBJ_Manager" type="Node" parent="."]
-script = ExtResource("14_johxk")
-all_object_list = Array[Resource("res://10_BOARD/Board_OBJ_data/object_data.gd")]([ExtResource("15_6vhht")])
-
 [node name="Select_intrigue" type="Node" parent="."]
 script = ExtResource("27_qyfnp")
 all_intrigue = Array[Resource("res://15_GAME_RESSOURCE/02_BOARD_INFO/Board_intrigue/Board_intrigue_data.gd")]([ExtResource("28_bli5v"), ExtResource("29_fp4yn"), ExtResource("30_difyj"), ExtResource("31_g1wpo")])
@@ -531,6 +521,9 @@ scanner_first_data = ExtResource("11_ldr1y")
 
 [node name="Fade" type="Node" parent="Show_OnScanner"]
 script = ExtResource("11_2x7ah")
+
+[node name="TurnScanner_and_zoom" type="Node" parent="Show_OnScanner"]
+script = ExtResource("12_2daja")
 
 [node name="3D_SCENE" type="Node3D" parent="."]
 
@@ -606,6 +599,7 @@ texture = SubResource("ViewportTexture_gpfe8")
 expand_mode = 3
 
 [node name="BACKDROP_FOCUS" type="ColorRect" parent="3D_SCENE"]
+visible = false
 material = SubResource("ShaderMaterial_pfnxx")
 anchors_preset = 15
 anchor_right = 1.0
@@ -656,25 +650,15 @@ max_z = 0.5
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="3D_SCENE/CamTarget"]
 transform = Transform3D(0.0354637, 0, 0, 0, 0.0354637, 0, 0, 0, 0.0354637, 0, 0, 0)
+visible = false
 layers = 2
 mesh = SubResource("SphereMesh_ycnm1")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="3D_SCENE/CamTarget"]
 transform = Transform3D(0.0176783, 0, 0, 0, -7.72744e-10, 0.0176783, 0, -0.0176783, -7.72744e-10, 0, 0.017216, 0)
+visible = false
 layers = 2
 mesh = SubResource("PrismMesh_2j3nk")
-
-[node name="Scanner_light" type="OmniLight3D" parent="3D_SCENE"]
-transform = Transform3D(0.999998, 0.00205949, 0, -0.00205949, 0.999998, 0, 0, 0, 1, 0.022, 0.186, -0.114)
-layers = 128
-omni_range = 0.240332
-
-[node name="Loader" type="Node3D" parent="3D_SCENE"]
-transform = Transform3D(1.39903, 0.00288128, 0, -0.00288128, 1.39903, 0, 0, 0, 1.39903, 0.0214805, 0.0542918, -0.121138)
-
-[node name="Scene_boat_ch_test" parent="3D_SCENE/Loader" instance=ExtResource("20_60dek")]
-transform = Transform3D(0.0133498, 1.81899e-12, 0, 0, 0.0133497, 0, 0, 0, 0.0133498, -2.22074e-05, 0.0107834, 0)
-visible = false
 
 [node name="Cursor_icon" type="Control" parent="."]
 visible = false

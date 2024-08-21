@@ -9,13 +9,16 @@ func _ready():
 
 func _input(event):
 	
-
+	var disable_backCall : bool = true
+	if disable_backCall:
+		return
 	
 	var top_call = _global_datas._back_call_list.size()
 	if top_call == 0:
 		return
 	
 	if event.is_action_pressed("Back_call"):
+		
 		connect_back_call()
 		_global_datas._back_call.emit()	
 		remove_emited_call()

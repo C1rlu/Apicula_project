@@ -45,5 +45,5 @@ func _input(event):
 		_global_datas._selected_tool.tool_active_signal.emit(false)
 		
 
-	if event.is_action_pressed("Flash"):
-		flash_tool.tool_active_signal.emit(true)
+	#if event.is_action_pressed("Flash"):
+		#flash_tool.tool_active_signal.emit(true)

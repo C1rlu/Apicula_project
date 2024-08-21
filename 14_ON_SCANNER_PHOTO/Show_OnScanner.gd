@@ -1,7 +1,6 @@
 extends Node
 
 @onready var render_scanner = $"../3D_SCENE/RENDER_Scanner"
-@onready var loader = $"../3D_SCENE/Loader"
 @export var scanner_first_data : PhotoData
 
 
@@ -24,14 +23,18 @@ func _show_scanner(condition : bool):
 			return
 		if _global_datas.selected_photoData.scanner_prefab:	
 			var instance = _global_datas.selected_photoData.scanner_prefab.instantiate()
-			loader.add_child(instance)
+			_global_datas.scanner_root.add_child(instance)
 	
-
+	#if condition:
+		#RenderingServer.global_shader_parameter_set("isGray", 1.0)
+	#else:
+		#RenderingServer.global_shader_parameter_set("isGray", 0.0)	
 			
 func stop_scanner():
-
-	var previous = loader.get_children()
-	for e in previous:
-		e.queue_free()
+	
+	if _global_datas.scanner_root:
+		var previous = _global_datas.scanner_root.get_children()
+		for e in previous:
+			e.queue_free()
 
 
