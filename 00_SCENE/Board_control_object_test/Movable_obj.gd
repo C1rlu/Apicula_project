@@ -51,8 +51,7 @@ func _On_move(condition):
 		if Render:
 			Render.set_surface_override_material(0,Normal_material)
 			
-		# we check here if we still need to put an object	
-		_global_datas.check_element_state.emit()
+
 	
 func _on_move(target, speed, delta):
 	

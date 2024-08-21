@@ -1,10 +1,11 @@
-[gd_scene load_steps=274 format=3 uid="uid://dr73p5vs0sixe"]
+[gd_scene load_steps=266 format=3 uid="uid://dr73p5vs0sixe"]
 
 [ext_resource type="Script" path="res://10_BOARD/Movable_root.gd" id="1_2yoh7"]
 [ext_resource type="PackedScene" uid="uid://cyb6my1srlcpw" path="res://10_BOARD/Candle/Candle_set.blend" id="1_3ummb"]
 [ext_resource type="Shader" uid="uid://upo0fuo5sqgd" path="res://05_SHADER/Board/Board_sh.tres" id="1_k1enu"]
 [ext_resource type="PackedScene" uid="uid://c1a6gtlbfww5v" path="res://10_BOARD/Map/Lanterne/Lanterne.blend" id="1_l5l52"]
 [ext_resource type="PackedScene" uid="uid://uwg2qc3svu11" path="res://10_BOARD/photo_area.tscn" id="1_mtaom"]
+[ext_resource type="PackedScene" uid="uid://lf84uqttk6fq" path="res://10_BOARD/Element_Broke/Element_To_Broke.tscn" id="2_oro0m"]
 [ext_resource type="Shader" uid="uid://cw0x3o7tvvdcv" path="res://12_INVENTORY/Map/Map_board_sh.tres" id="3_vh83x"]
 [ext_resource type="Material" uid="uid://dvbomu5aenq4x" path="res://05_SHADER/Board/board_candle.tres" id="5_8m368"]
 [ext_resource type="PackedScene" uid="uid://bru8c4c70eohg" path="res://10_BOARD/Decor/PLume_pot.blend" id="5_m8vsb"]
@@ -59,8 +60,8 @@
 [ext_resource type="Resource" uid="uid://dlqqpo5rncbhs" path="res://15_GAME_RESSOURCE/03_BoardCam_state/Board_Element_focus_data.tres" id="46_y5tcg"]
 [ext_resource type="Material" uid="uid://hnc22lq0or5t" path="res://00_SCENE/Board_control_object_test/Material/moving_overlap_object.tres" id="47_gaq4f"]
 [ext_resource type="Material" uid="uid://cfi5jyq3utqd4" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_mat_04.tres" id="47_r4p1c"]
-[ext_resource type="PackedScene" uid="uid://xpunnioeu7vl" path="res://00_SCENE/Board_control_object_test/movable_obj.tscn" id="51_gd7bb"]
 [ext_resource type="Script" path="res://10_BOARD/Bougie_allume.gd" id="53_go6nm"]
+[ext_resource type="Script" path="res://10_BOARD/Call_next_breackable.gd" id="55_kc7bt"]
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_6pb33"]
 parameter_name = "Dark_color"
@@ -1521,6 +1522,11 @@ blend_shape_mode = 0
 [sub_resource type="BoxShape3D" id="BoxShape3D_jcnam"]
 size = Vector3(0.432556, 0.539551, 1)
 
+[sub_resource type="BoxMesh" id="BoxMesh_bc6ip"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_83ax2"]
+size = Vector3(1, 3, 1)
+
 [sub_resource type="GDScript" id="GDScript_l8jpj"]
 script/source = "extends Node
 
@@ -1637,132 +1643,6 @@ shader_parameter/Grid_color = Color(0.160784, 0.266667, 0.27451, 1)
 shader_parameter/Offset = Vector2(0, -1.36)
 shader_parameter/Size = Vector2(1200, 1200)
 shader_parameter/Ligne_widht = 0.015
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_lnc1b"]
-size = Vector2(3.235, 3.245)
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_05xwe"]
-constant = 0.205
-
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_tcjgw"]
-size = Vector2(724.789, 654.559)
-expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_5hk61"]
-parameter_name = "Dither_size"
-qualifier = 1
-
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_g02t1"]
-default_input_values = [0, 0.925, 1, 0.0]
-
-[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_hewv1"]
-constant = Color(0.133333, 0.576471, 0.517647, 1)
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_kwi55"]
-noise_type = 0
-frequency = 0.0999
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_28523"]
-noise = SubResource("FastNoiseLite_kwi55")
-
-[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_64agl"]
-texture = SubResource("NoiseTexture2D_28523")
-
-[sub_resource type="VisualShader" id="VisualShader_8hu0f"]
-code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
-
-uniform sampler2D tex_frg_8;
-global uniform float Dither_size;
-
-
-
-void fragment() {
-// ColorConstant:7
-	vec4 n_out7p0 = vec4(0.133333, 0.576471, 0.517647, 1.000000);
-
-
-// Texture2D:8
-	vec4 n_out8p0 = texture(tex_frg_8, UV);
-
-
-// FloatConstant:3
-	float n_out3p0 = 0.205000;
-
-
-// FloatParameter:5
-	float n_out5p0 = Dither_size;
-
-
-	float n_out4p0;
-// Expression:4
-	n_out4p0 = 0.0;
-	{
-		const float DITHER_THRESHOLDS[16] ={
-				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-			};
-			
-		vec2 uv = FRAGCOORD.xy * n_out5p0;
-		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-		n_out4p0 = n_out3p0 - DITHER_THRESHOLDS[index];
-	}
-
-
-// Step:6
-	float n_out6p0 = step(n_out8p0.x, n_out4p0);
-
-
-// Output:0
-	ALBEDO = vec3(n_out7p0.xyz);
-	ALPHA = n_out6p0;
-
-
-}
-"
-flags/unshaded = true
-nodes/fragment/0/position = Vector2(580, 220)
-nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_05xwe")
-nodes/fragment/3/position = Vector2(-1160, 460)
-nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_tcjgw")
-nodes/fragment/4/position = Vector2(-900, 460)
-nodes/fragment/4/size = Vector2(724.789, 654.559)
-nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
-nodes/fragment/4/output_ports = "0,0,Dither_Node;"
-nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/5/node = SubResource("VisualShaderNodeFloatParameter_5hk61")
-nodes/fragment/5/position = Vector2(-1540, 620)
-nodes/fragment/6/node = SubResource("VisualShaderNodeStep_g02t1")
-nodes/fragment/6/position = Vector2(130.23, 516.22)
-nodes/fragment/7/node = SubResource("VisualShaderNodeColorConstant_hewv1")
-nodes/fragment/7/position = Vector2(226.136, 51.1274)
-nodes/fragment/8/node = SubResource("VisualShaderNodeTexture_64agl")
-nodes/fragment/8/position = Vector2(-140, 260)
-nodes/fragment/connections = PackedInt32Array(3, 0, 4, 0, 4, 0, 6, 1, 6, 0, 0, 1, 7, 0, 0, 0, 5, 0, 4, 1, 8, 0, 6, 0)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_3gbmy"]
-render_priority = 0
-shader = SubResource("VisualShader_8hu0f")
 
 [sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_otvwy"]
 size = Vector2(620, 200)
@@ -2142,6 +2022,11 @@ omni_shadow_mode = 0
 
 [node name="Movable" type="Node3D" parent="."]
 script = ExtResource("1_2yoh7")
+
+[node name="Board_Instance_Position" type="Node3D" parent="Movable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00101237, 0.00835738, 0.414869)
+
+[node name="ElementToBroke" parent="Movable/Board_Instance_Position" instance=ExtResource("2_oro0m")]
 
 [node name="PHOTO" type="Node3D" parent="Movable"]
 transform = Transform3D(0.882135, 0, -0.470996, 0, 1, 0, 0.470996, 0, 0.882135, 0.189478, 0.00272226, 0.0787499)
@@ -2589,10 +2474,6 @@ script = SubResource("GDScript_0k00m")
 transform = Transform3D(0.871195, 0, 0.490913, 0, 1, 0, -0.490913, 0, 0.871195, 0.015209, 0.134239, -0.0155258)
 shape = SubResource("BoxShape3D_64lbo")
 
-[node name="Movable_obj" parent="Movable" instance=ExtResource("51_gd7bb")]
-transform = Transform3D(0.358245, 0, 0, 0, 0.358245, 0, 0, 0, 0.358245, -0.916014, 0, 0.402471)
-visible = false
-
 [node name="Player_on_map" type="Node3D" parent="Movable"]
 transform = Transform3D(-5.58137e-08, 0, -1.27687, 0, 1.27687, 0, 1.27687, 0, -5.58137e-08, 0.213913, 0.00711238, 0.34609)
 visible = false
@@ -2627,6 +2508,27 @@ shape = SubResource("BoxShape3D_jcnam")
 disabled = true
 
 [node name="Static" type="Node3D" parent="."]
+
+[node name="Board_instanceZone" type="MeshInstance3D" parent="Static"]
+transform = Transform3D(0.292635, 0, 0, 0, 0.00369256, 0, 0, 0, 0.200814, 0.00171441, 0.0050505, 0.410471)
+layers = 2
+mesh = SubResource("BoxMesh_bc6ip")
+surface_material_override/0 = SubResource("ShaderMaterial_isdhd")
+
+[node name="Area3D" type="Area3D" parent="Static/Board_instanceZone"]
+
+[node name="Call_next_breack" type="Node" parent="Static/Board_instanceZone/Area3D" node_paths=PackedStringArray("On_Move")]
+script = ExtResource("55_kc7bt")
+On_Move = NodePath("../On_Move")
+
+[node name="On_Move" type="Node" parent="Static/Board_instanceZone/Area3D"]
+script = ExtResource("44_64ctv")
+
+[node name="Limit" type="Node" parent="Static/Board_instanceZone/Area3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Static/Board_instanceZone/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_83ax2")
 
 [node name="Deco" type="Node3D" parent="Static"]
 
@@ -2778,14 +2680,6 @@ layers = 2
 mesh = SubResource("PlaneMesh_x8wfj")
 skeleton = NodePath("../../../..")
 surface_material_override/0 = SubResource("ShaderMaterial_ok24o")
-
-[node name="On_Over" type="MeshInstance3D" parent="Static/Deco/MAP"]
-transform = Transform3D(0.44437, 0, -0.000342503, 0, 0.387303, 0, 0.000341229, 0, 0.445962, 0, 0.00562999, 0)
-visible = false
-layers = 2
-mesh = SubResource("PlaneMesh_lnc1b")
-skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("ShaderMaterial_3gbmy")
 
 [node name="Map_border" type="MeshInstance3D" parent="Static/Deco/MAP"]
 transform = Transform3D(1.87617, 0, 0, 0, 1.87617, 0, 0, 0, 1.87617, 0, -0.00448075, 0)

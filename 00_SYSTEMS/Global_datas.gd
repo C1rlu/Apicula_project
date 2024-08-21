@@ -136,10 +136,10 @@ var previous_cam_target : Vector3
 signal  show_element_info(condition : bool, information : info_data)
 
 
-signal check_element_state # check if element  from subscene or not in board player need to place it
-signal back_to_element_state # if check true back to 
+signal check_element_to_open 
 var in_open_element_state : bool = false
 var movable_root : Node3D
+var board_instance_position : Node3D
 # quest_state signal in order
 signal active_diving
 

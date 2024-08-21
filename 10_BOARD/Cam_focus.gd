@@ -38,13 +38,9 @@ func _ready():
 	boardZoom_cam_offset = board_cam_zoom.global_position - focus_target.global_position	
 	boardFocus_cam_offset = board_cam_focus.global_position -  focus_target.global_position	
 	
-	_global_datas.back_to_element_state.connect(back_to_element_state)
 	_global_datas.previous_cam_state = _focus_board
 		
-func back_to_element_state():
-	
-	_global_datas.camera_focus_On.emit(_focus_board)	
-	
+
 func _focus(focus_data : boardCamState_data):
 
 	_global_datas.camera_current_state = focus_data.cam_state

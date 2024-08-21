@@ -23,7 +23,7 @@ func _ready():
 	_global_datas.camera_focus_On.connect(check_if_previous_focus)
 	current_speed = speed
 	
-	_global_datas.back_to_element_state.connect(back_to_element_state)
+	#_global_datas.back_to_element_state.connect(back_to_element_state)
 	
 func stop(condition : bool):
 	stop_move = condition 	

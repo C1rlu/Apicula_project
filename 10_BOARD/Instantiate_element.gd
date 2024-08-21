@@ -14,4 +14,5 @@ func _instantiate(element : element_data):
 
 	var _instance = element.element_prefabs.instantiate()
 	_global_datas.movable_root.add_child(_instance)
-	
+	_instance.global_position = _global_datas.board_instance_position.global_position
+

@@ -65,7 +65,7 @@ func _on_ez_dialogue_custom_signal_received(value):
 
 		if variable_name == "add_OBJ":
 			var obj_name = params[2]
-			_global_datas.add_OBJ.emit(obj_name)
+			print(obj_name, " object gave by NPC")
 		
 		if variable_name == "can_dive":
 			_global_datas.active_diving.emit()		
