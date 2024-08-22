@@ -1,0 +1,75 @@
+[gd_scene load_steps=12 format=3 uid="uid://6pkqjlcwbqu1"]
+
+[ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Movable_obj.gd" id="1_bm05n"]
+[ext_resource type="Script" path="res://13_TOOLS_UI/Clock_montre/Clock_OnBoard.gd" id="2_5ja1e"]
+[ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/On_click_object.gd" id="3_3mjtf"]
+[ext_resource type="Script" path="res://10_BOARD/On_Click_clock.gd" id="4_dnn4p"]
+[ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="5_0jje4"]
+[ext_resource type="Script" path="res://13_TOOLS_UI/Clock_montre/Selection_ini.gd" id="5_x8hw0"]
+[ext_resource type="PackedScene" uid="uid://c50aeg7d1nugi" path="res://13_TOOLS_UI/Clock_montre/clock_3d.blend" id="6_vl4ik"]
+[ext_resource type="Material" uid="uid://6wrt67enhwi2" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_mat_01.tres" id="7_efy3a"]
+[ext_resource type="Material" uid="uid://c0oms0qis0dcm" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_mat_02.tres" id="8_rdut6"]
+[ext_resource type="Material" uid="uid://bk1u0r8smgwsu" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_mat_03.tres" id="9_wygep"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_2trqt"]
+height = 0.570361
+radius = 0.884635
+
+[node name="Clock_prefab" type="Node3D" node_paths=PackedStringArray("collider", "limit_zone", "move_root", "rotation_root", "On_Move")]
+script = ExtResource("1_bm05n")
+collider = NodePath("Area3D/CollisionShape3D")
+limit_zone = NodePath("Limit_zone")
+move_root = NodePath(".")
+rotation_root = NodePath("clock_3d")
+On_Move = NodePath("Area3D/On_Move")
+
+[node name="Clock_OnBoard" type="Node" parent="."]
+script = ExtResource("2_5ja1e")
+
+[node name="Selection_ini" type="Node" parent="." node_paths=PackedStringArray("root", "Movable")]
+script = ExtResource("5_x8hw0")
+root = NodePath("..")
+Movable = NodePath("..")
+
+[node name="Area3D" type="Area3D" parent="."]
+transform = Transform3D(1, -2.36469e-11, 0, 4.09273e-11, 1, -7.27596e-12, 2.98023e-08, -7.27596e-12, 1, 0, 0, 0)
+
+[node name="On_Move" type="Node" parent="Area3D"]
+script = ExtResource("3_3mjtf")
+
+[node name="On_click" type="Node" parent="Area3D"]
+script = ExtResource("4_dnn4p")
+
+[node name="On_Over" type="Node" parent="Area3D"]
+script = ExtResource("5_0jje4")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(0.05, -6.25934e-35, 0, 1.0842e-20, 0.05, 0, 0, -3.17129e-18, 0.05, -0.000621778, 0.0136685, 1.29908e-13)
+shape = SubResource("CylinderShape3D_2trqt")
+
+[node name="Limit_zone" type="Area3D" parent="."]
+transform = Transform3D(1, -2.36469e-11, 0, 4.09273e-11, 1, -7.27596e-12, 2.98023e-08, -7.27596e-12, 1, 0, 0, 0)
+collision_layer = 4
+collision_mask = 4
+
+[node name="Limit" type="Node" parent="Limit_zone"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Limit_zone"]
+transform = Transform3D(0.05, -6.25934e-35, 0, 1.0842e-20, 0.05, 0, 0, -3.17129e-18, 0.05, -0.000621778, 0.0136685, 1.29908e-13)
+shape = SubResource("CylinderShape3D_2trqt")
+
+[node name="clock_3d" parent="." instance=ExtResource("6_vl4ik")]
+transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 0, 0)
+
+[node name="clock_all" parent="clock_3d" index="0"]
+layers = 2
+surface_material_override/0 = ExtResource("7_efy3a")
+surface_material_override/1 = ExtResource("8_rdut6")
+surface_material_override/2 = ExtResource("9_wygep")
+surface_material_override/3 = ExtResource("7_efy3a")
+
+[node name="root_equille" parent="clock_3d" index="1"]
+layers = 2
+surface_material_override/0 = ExtResource("8_rdut6")
+
+[editable path="clock_3d"]

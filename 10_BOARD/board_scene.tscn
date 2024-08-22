@@ -1,16 +1,15 @@
-[gd_scene load_steps=266 format=3 uid="uid://dr73p5vs0sixe"]
+[gd_scene load_steps=263 format=3 uid="uid://dr73p5vs0sixe"]
 
 [ext_resource type="Script" path="res://10_BOARD/Movable_root.gd" id="1_2yoh7"]
 [ext_resource type="PackedScene" uid="uid://cyb6my1srlcpw" path="res://10_BOARD/Candle/Candle_set.blend" id="1_3ummb"]
 [ext_resource type="Shader" uid="uid://upo0fuo5sqgd" path="res://05_SHADER/Board/Board_sh.tres" id="1_k1enu"]
 [ext_resource type="PackedScene" uid="uid://c1a6gtlbfww5v" path="res://10_BOARD/Map/Lanterne/Lanterne.blend" id="1_l5l52"]
 [ext_resource type="PackedScene" uid="uid://uwg2qc3svu11" path="res://10_BOARD/photo_area.tscn" id="1_mtaom"]
-[ext_resource type="PackedScene" uid="uid://lf84uqttk6fq" path="res://10_BOARD/Element_Broke/Element_To_Broke.tscn" id="2_oro0m"]
+[ext_resource type="PackedScene" uid="uid://6pkqjlcwbqu1" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab.tscn" id="2_dwu3j"]
 [ext_resource type="Shader" uid="uid://cw0x3o7tvvdcv" path="res://12_INVENTORY/Map/Map_board_sh.tres" id="3_vh83x"]
 [ext_resource type="Material" uid="uid://dvbomu5aenq4x" path="res://05_SHADER/Board/board_candle.tres" id="5_8m368"]
 [ext_resource type="PackedScene" uid="uid://bru8c4c70eohg" path="res://10_BOARD/Decor/PLume_pot.blend" id="5_m8vsb"]
 [ext_resource type="Material" uid="uid://5cye33kgwfo5" path="res://10_BOARD/Shading/Board_shading_base.tres" id="6_kkuc8"]
-[ext_resource type="PackedScene" uid="uid://6pkqjlcwbqu1" path="res://13_TOOLS_UI/Clock_montre/clock_3d_prefab.tscn" id="8_x5b6k"]
 [ext_resource type="PackedScene" uid="uid://qgyjfq88teq8" path="res://10_BOARD/letters_area.tscn" id="9_ajmma"]
 [ext_resource type="Resource" uid="uid://61umivwjjcjs" path="res://12_INVENTORY/Words_note/Birds_goLighthouse_note.tres" id="10_shcmw"]
 [ext_resource type="Resource" uid="uid://b2bkxyfxws3e3" path="res://15_GAME_RESSOURCE/02_BOARD_INFO/Board_intrigue/Chapitre_I.tres" id="11_i6fvc"]
@@ -56,12 +55,10 @@
 [ext_resource type="Resource" uid="uid://2wvymfu1i442" path="res://15_GAME_RESSOURCE/01_info_data/Boat_subscene/i_should_check.tres" id="45_tllkl"]
 [ext_resource type="Material" uid="uid://t4qtyso7w6ee" path="res://05_SHADER/Board/board_boat.tres" id="46_tk8m3"]
 [ext_resource type="Material" uid="uid://c0oms0qis0dcm" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_mat_02.tres" id="46_tmbd7"]
-[ext_resource type="Material" uid="uid://xcmes75nexaq" path="res://00_SCENE/Board_control_object_test/Material/moving_object.tres" id="46_wf22w"]
 [ext_resource type="Resource" uid="uid://dlqqpo5rncbhs" path="res://15_GAME_RESSOURCE/03_BoardCam_state/Board_Element_focus_data.tres" id="46_y5tcg"]
-[ext_resource type="Material" uid="uid://hnc22lq0or5t" path="res://00_SCENE/Board_control_object_test/Material/moving_overlap_object.tres" id="47_gaq4f"]
 [ext_resource type="Material" uid="uid://cfi5jyq3utqd4" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_mat_04.tres" id="47_r4p1c"]
+[ext_resource type="Script" path="res://13_TOOLS_UI/Clock_montre/Selection_ini.gd" id="49_vb8xx"]
 [ext_resource type="Script" path="res://10_BOARD/Bougie_allume.gd" id="53_go6nm"]
-[ext_resource type="Script" path="res://10_BOARD/Call_next_breackable.gd" id="55_kc7bt"]
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_6pb33"]
 parameter_name = "Dark_color"
@@ -1273,7 +1270,7 @@ signal On_View
 "
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_yuede"]
-size = Vector3(0.973007, 0.931641, 0.826416)
+size = Vector3(8.8756, 7.36426, 1.99634)
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_dkrue"]
 constant = 0.826
@@ -2023,10 +2020,11 @@ omni_shadow_mode = 0
 [node name="Movable" type="Node3D" parent="."]
 script = ExtResource("1_2yoh7")
 
+[node name="Clock_prefab" parent="Movable" instance=ExtResource("2_dwu3j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.251042, 0, 0.458327)
+
 [node name="Board_Instance_Position" type="Node3D" parent="Movable"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00101237, 0.00835738, 0.414869)
-
-[node name="ElementToBroke" parent="Movable/Board_Instance_Position" instance=ExtResource("2_oro0m")]
 
 [node name="PHOTO" type="Node3D" parent="Movable"]
 transform = Transform3D(0.882135, 0, -0.470996, 0, 1, 0, 0.470996, 0, 0.882135, 0.189478, 0.00272226, 0.0787499)
@@ -2084,12 +2082,6 @@ monitorable = false
 Note_data = ExtResource("17_3gp1t")
 intrigue_data = ExtResource("21_eaghd")
 
-[node name="clock_3d_prefab" parent="Movable" instance=ExtResource("8_x5b6k")]
-transform = Transform3D(0.04829, -2.43708e-05, -0.0129643, 2.4116e-05, 0.05, -4.16356e-06, 0.0129643, -2.23175e-06, 0.04829, -0.270762, -0.00209092, -0.256776)
-
-[node name="root_equille" parent="Movable/clock_3d_prefab/clock_3d" index="1"]
-transform = Transform3D(0.0326329, -1.25056e-12, 0, 5.68434e-14, 0.0326329, 0, 9.31323e-10, -4.54747e-13, 0.0326329, -4.76837e-07, 0.313993, -2.38419e-07)
-
 [node name="Chavet_part" parent="Movable" instance=ExtResource("20_d7w3e")]
 transform = Transform3D(0.0117306, 0, 0, 0, 0.0117306, 0, 0, 0, 0.0117306, 0.238527, 0.00467773, 0.284068)
 
@@ -2098,15 +2090,12 @@ transform = Transform3D(0.651676, 0, 0, 0, 0.651676, 0, 0, 0, 0.651676, 0, 0, 0)
 layers = 2
 surface_material_override/0 = SubResource("ShaderMaterial_5i6u2")
 
-[node name="Movable_obj" type="Node" parent="Movable/Chavet_part" node_paths=PackedStringArray("collider", "move_root", "rotation_root", "On_Move", "Render")]
+[node name="Movable_obj" type="Node" parent="Movable/Chavet_part" node_paths=PackedStringArray("collider", "move_root", "rotation_root", "On_Move")]
 script = ExtResource("43_usyd2")
 collider = NodePath("../Area3D/CollisionShape3D")
 move_root = NodePath("..")
 rotation_root = NodePath("..")
 On_Move = NodePath("../Area3D/On_Move")
-Render = NodePath("../parts")
-moving_material = ExtResource("46_wf22w")
-overlaping_object = ExtResource("47_gaq4f")
 
 [node name="Area3D" type="Area3D" parent="Movable/Chavet_part"]
 
@@ -2142,7 +2131,6 @@ layers = 2
 surface_material_override/0 = SubResource("ShaderMaterial_5i6u2")
 
 [node name="Boue" type="Node3D" parent="Movable"]
-visible = false
 script = ExtResource("18_tu2nn")
 test_boue_exist = ExtResource("27_l5lxj")
 
@@ -2150,7 +2138,7 @@ test_boue_exist = ExtResource("27_l5lxj")
 transform = Transform3D(-2.95986e-10, 0, -0.00677136, 0, 0.00677136, 0, 0.00677136, 0, -2.95986e-10, 0.328365, 0.00635256, 0.377906)
 
 [node name="Boue_map_prefab2" parent="Movable/Boue" instance=ExtResource("19_bi3qi")]
-transform = Transform3D(-2.95986e-10, 0, -0.00677136, 0, 0.00677136, 0, 0.00677136, 0, -2.95986e-10, 0.174954, 0.00635256, 0.311342)
+transform = Transform3D(-2.95986e-10, 0, -0.00677136, 0, 0.00677136, 0, 0.00677136, 0, -2.95986e-10, 0.174954, 0.0102564, 0.311342)
 Boue_Data = ExtResource("27_l5lxj")
 
 [node name="Bell" parent="Movable" instance=ExtResource("22_4fabq")]
@@ -2208,13 +2196,12 @@ script = ExtResource("27_3hhn3")
 [node name="Scene_boat_ch_test" parent="Movable/Scanner_reader/Loader" instance=ExtResource("27_vmwp0")]
 transform = Transform3D(-0.0128949, 1.63709e-11, -0.00345518, 1.63709e-11, 0.0133497, 2.27374e-12, 0.00345518, 4.33681e-19, -0.0128949, -0.000469681, 0.0107834, 0.000326812)
 
-[node name="Movable_object" type="Node" parent="Movable/Scanner_reader" node_paths=PackedStringArray("collider", "move_root", "rotation_root", "On_Move", "Render")]
+[node name="Movable_object" type="Node" parent="Movable/Scanner_reader" node_paths=PackedStringArray("collider", "move_root", "rotation_root", "On_Move")]
 script = ExtResource("43_usyd2")
 collider = NodePath("../Area3D/CollisionShape3D")
 move_root = NodePath("..")
 rotation_root = NodePath("..")
 On_Move = NodePath("../Area3D/On_Move_off")
-Render = NodePath("../MeshInstance3D")
 
 [node name="On_View_Call" type="Node" parent="Movable/Scanner_reader"]
 script = ExtResource("23_5ghgr")
@@ -2355,38 +2342,46 @@ surface_material_override/0 = ExtResource("35_jujjk")
 layers = 2
 surface_material_override/0 = SubResource("ShaderMaterial_th3mc")
 
-[node name="Apicula_maquette_v01blend" parent="Movable" instance=ExtResource("31_xntsl")]
+[node name="Apicula_root" type="Node3D" parent="Movable" node_paths=PackedStringArray("collider", "limit_zone", "move_root", "rotation_root", "On_Move")]
 transform = Transform3D(0.898143, 0, 0.439704, 0, 1, 0, -0.439704, 0, 0.898143, -0.401642, -0.00482094, -0.280822)
+script = ExtResource("43_usyd2")
+collider = NodePath("Apicula_maquette/Area3D/CollisionShape3D")
+limit_zone = NodePath("Apicula_maquette/Limit_zone")
+move_root = NodePath(".")
+rotation_root = NodePath("Apicula_maquette")
+On_Move = NodePath("Apicula_maquette/Area3D/On_Move")
 
-[node name="fregate_all_msh" parent="Movable/Apicula_maquette_v01blend" index="0"]
+[node name="Apicula_maquette" parent="Movable/Apicula_root" instance=ExtResource("31_xntsl")]
+
+[node name="fregate_all_msh" parent="Movable/Apicula_root/Apicula_maquette" index="0"]
 transform = Transform3D(0.0314273, 0, -8.3819e-09, 0, 0.0314273, 0, 8.3819e-09, 0, 0.0314273, 0.000365108, 0.0835726, 0.0056017)
 layers = 2
 surface_material_override/0 = SubResource("ShaderMaterial_l3nap")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Movable/Apicula_maquette_v01blend"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Movable/Apicula_root/Apicula_maquette"]
 transform = Transform3D(0.137909, 0, 0.00434151, 0, -0.00539462, 0, 0.00770535, 0, -0.0777038, 0.00572145, 0.0156349, 0.00298703)
 layers = 2
 mesh = SubResource("CylinderMesh_xsjxl")
 skeleton = NodePath("")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="Movable/Apicula_maquette_v01blend/MeshInstance3D"]
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Movable/Apicula_root/Apicula_maquette/MeshInstance3D"]
 transform = Transform3D(1.072, 0, -6.38422e-07, 0, -0.77416, 0, 6.38422e-07, 0, 1.072, 4.76837e-07, 1.37648, 0.00683355)
 layers = 2
 mesh = SubResource("CylinderMesh_xsjxl")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("ShaderMaterial_l3nap")
 
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="Movable/Apicula_maquette_v01blend/MeshInstance3D"]
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Movable/Apicula_root/Apicula_maquette/MeshInstance3D"]
 transform = Transform3D(0.145498, 0, -2.29724e-07, 0, -2.37469, 0, 2.29724e-07, 0, 0.145498, -4.76837e-07, -3.97215, 0.00033927)
 layers = 2
 mesh = SubResource("CylinderMesh_xsjxl")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("ShaderMaterial_l3nap")
 
-[node name="Area3D" type="Area3D" parent="Movable/Apicula_maquette_v01blend"]
+[node name="Area3D" type="Area3D" parent="Movable/Apicula_root/Apicula_maquette"]
 transform = Transform3D(0.0375899, 0, 0.000885201, 0, 0.0376003, 0, -0.000885201, 0, 0.0375899, -0.000760213, 0.0795341, 0.00198969)
 
-[node name="On_View_Event" type="Node" parent="Movable/Apicula_maquette_v01blend/Area3D" node_paths=PackedStringArray("root", "On_View", "On_Over")]
+[node name="On_View_Event" type="Node" parent="Movable/Apicula_root/Apicula_maquette/Area3D" node_paths=PackedStringArray("root", "On_View", "On_Over")]
 script = ExtResource("43_i0i3o")
 root = NodePath("../..")
 info = ExtResource("45_tllkl")
@@ -2394,27 +2389,34 @@ focus_data = ExtResource("46_y5tcg")
 On_View = NodePath("../On_View")
 On_Over = NodePath("../On_Over")
 
-[node name="Movable_object" type="Node" parent="Movable/Apicula_maquette_v01blend/Area3D" node_paths=PackedStringArray("collider", "move_root", "rotation_root", "On_Move")]
-script = ExtResource("43_usyd2")
-collider = NodePath("../CollisionShape3D")
-move_root = NodePath("../..")
-rotation_root = NodePath("../..")
-On_Move = NodePath("../On_Move")
+[node name="Selection_ini" type="Node" parent="Movable/Apicula_root/Apicula_maquette/Area3D" node_paths=PackedStringArray("root", "Movable")]
+script = ExtResource("49_vb8xx")
+root = NodePath("../../..")
+Movable = NodePath("../../..")
 
-[node name="On_Move" type="Node" parent="Movable/Apicula_maquette_v01blend/Area3D"]
+[node name="On_Move" type="Node" parent="Movable/Apicula_root/Apicula_maquette/Area3D"]
 script = ExtResource("44_64ctv")
 
-[node name="On_View" type="Node" parent="Movable/Apicula_maquette_v01blend/Area3D"]
+[node name="On_View" type="Node" parent="Movable/Apicula_root/Apicula_maquette/Area3D"]
 script = SubResource("GDScript_mevdj")
 
-[node name="On_Over" type="Node" parent="Movable/Apicula_maquette_v01blend/Area3D"]
+[node name="On_Over" type="Node" parent="Movable/Apicula_root/Apicula_maquette/Area3D"]
 script = ExtResource("23_4ws66")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Movable/Apicula_maquette_v01blend/Area3D"]
-transform = Transform3D(7.02405, 0, -0.20838, 0, 6.1048, 0, 0.420139, 0, 3.4838, 0.484152, 0.845132, 0.0616674)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Movable/Apicula_root/Apicula_maquette/Area3D"]
+transform = Transform3D(0.998216, 0, -0.0597076, 0, 1, 0, 0.0597076, 0, 0.998216, 0.802903, 2.04874, 0.110569)
 shape = SubResource("BoxShape3D_yuede")
 
-[node name="Node" type="Node" parent="Movable/Apicula_maquette_v01blend/Area3D"]
+[node name="Limit_zone" type="Area3D" parent="Movable/Apicula_root/Apicula_maquette"]
+transform = Transform3D(0.0375899, 0, 0.000885201, 0, 0.0376003, 0, -0.000885201, 0, 0.0375899, -0.000760213, 0.0795341, 0.00198969)
+collision_layer = 4
+collision_mask = 4
+
+[node name="Limit" type="Node" parent="Movable/Apicula_root/Apicula_maquette/Limit_zone"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Movable/Apicula_root/Apicula_maquette/Limit_zone"]
+transform = Transform3D(0.998216, 0, -0.0597076, 0, 1, 0, 0.0597076, 0, 0.998216, 0.802903, 2.04874, 0.110569)
+shape = SubResource("BoxShape3D_yuede")
 
 [node name="TOURNE_DISQUE" type="Node3D" parent="Movable"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.539401, -1.78814e-07, -0.275405)
@@ -2425,7 +2427,7 @@ root = NodePath("..")
 info = ExtResource("45_tllkl")
 focus_data = ExtResource("46_y5tcg")
 On_View = NodePath("../Area3D/On_View")
-On_Over = NodePath("../../Apicula_maquette_v01blend/Area3D/On_Over")
+On_Over = NodePath("../../Apicula_root/Apicula_maquette/Area3D/On_Over")
 
 [node name="Movable_object" type="Node" parent="Movable/TOURNE_DISQUE" node_paths=PackedStringArray("collider", "move_root", "rotation_root", "On_Move")]
 script = ExtResource("43_usyd2")
@@ -2435,7 +2437,7 @@ rotation_root = NodePath("..")
 On_Move = NodePath("../Area3D/On_Move")
 
 [node name="Disque_prefab" parent="Movable/TOURNE_DISQUE" instance=ExtResource("44_0qqs5")]
-transform = Transform3D(-0.120931, 0, -0.0692351, 0, 0.139348, 0, 0.0692351, 0, -0.120931, 0, 0, 0)
+transform = Transform3D(-0.0969435, 0, -0.0555018, 0, 0.111707, 0, 0.0555018, 0, -0.0969435, 0, 0, 0)
 
 [node name="Cylinder" parent="Movable/TOURNE_DISQUE/Disque_prefab" index="0"]
 layers = 2
@@ -2478,16 +2480,13 @@ shape = SubResource("BoxShape3D_64lbo")
 transform = Transform3D(-5.58137e-08, 0, -1.27687, 0, 1.27687, 0, 1.27687, 0, -5.58137e-08, 0.213913, 0.00711238, 0.34609)
 visible = false
 
-[node name="Movable_obj" type="Node" parent="Movable/Player_on_map" node_paths=PackedStringArray("collider", "move_root", "rotation_root", "On_Move", "Render")]
+[node name="Movable_obj" type="Node" parent="Movable/Player_on_map" node_paths=PackedStringArray("collider", "move_root", "rotation_root", "On_Move")]
 script = ExtResource("43_usyd2")
 collider = NodePath("../Area3D/CollisionShape3D")
 move_root = NodePath("..")
 rotation_root = NodePath("..")
 On_Move = NodePath("../Area3D/On_Move")
 rotation_degrees = 25.0
-Render = NodePath("../Msh_boat")
-moving_material = ExtResource("46_wf22w")
-overlaping_object = ExtResource("47_gaq4f")
 
 [node name="Msh_boat" type="MeshInstance3D" parent="Movable/Player_on_map"]
 transform = Transform3D(0.00720477, 0, 1.11022e-16, 0, 0.00720477, 0, -1.11022e-16, 0, 0.00720477, -1.16415e-09, 0.00679894, -0.000658046)
@@ -2515,14 +2514,26 @@ layers = 2
 mesh = SubResource("BoxMesh_bc6ip")
 surface_material_override/0 = SubResource("ShaderMaterial_isdhd")
 
+[node name="Board_instanceZone2" type="MeshInstance3D" parent="Static/Board_instanceZone"]
+transform = Transform3D(0.921909, 0, 0, 0, 0.921909, 0, 0, 0, 0.921909, 0, 0.292199, 0)
+layers = 2
+mesh = SubResource("BoxMesh_bc6ip")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("35_xg8pc")
+
+[node name="Area3D" type="Area3D" parent="Static/Board_instanceZone/Board_instanceZone2"]
+collision_layer = 4
+collision_mask = 4
+
+[node name="Limit" type="Node" parent="Static/Board_instanceZone/Board_instanceZone2/Area3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Static/Board_instanceZone/Board_instanceZone2/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_83ax2")
+
 [node name="Area3D" type="Area3D" parent="Static/Board_instanceZone"]
-
-[node name="Call_next_breack" type="Node" parent="Static/Board_instanceZone/Area3D" node_paths=PackedStringArray("On_Move")]
-script = ExtResource("55_kc7bt")
-On_Move = NodePath("../On_Move")
-
-[node name="On_Move" type="Node" parent="Static/Board_instanceZone/Area3D"]
-script = ExtResource("44_64ctv")
+collision_layer = 4
+collision_mask = 4
 
 [node name="Limit" type="Node" parent="Static/Board_instanceZone/Area3D"]
 
@@ -2832,8 +2843,6 @@ surface_material_override/0 = ExtResource("6_kkuc8")
 
 [connection signal="On_click" from="Movable/Book_Close_root/Area3D/On_click_off" to="Movable/Book_Close_root/Area3D/On_click_off" method="_on_on_click"]
 
-[editable path="Movable/clock_3d_prefab"]
-[editable path="Movable/clock_3d_prefab/clock_3d"]
 [editable path="Movable/Chavet_part"]
 [editable path="Movable/Chavet_part2"]
 [editable path="Movable/Chavet_part3"]
@@ -2842,7 +2851,7 @@ surface_material_override/0 = ExtResource("6_kkuc8")
 [editable path="Movable/PLume_pot"]
 [editable path="Movable/TUBE_oddity/Peon_oddity_v01"]
 [editable path="Movable/TUBE_oddity/Tube_oddity"]
-[editable path="Movable/Apicula_maquette_v01blend"]
+[editable path="Movable/Apicula_root/Apicula_maquette"]
 [editable path="Movable/TOURNE_DISQUE/Disque_prefab"]
 [editable path="Static/Deco/Lanterne2"]
 [editable path="Static/Deco/Candle_00"]

@@ -1,0 +1,39 @@
+[gd_resource type="VisualShader" load_steps=3 format=3 uid="uid://8c5nl3vialmc"]
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_rq85s"]
+parameter_name = "Color"
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_pmvsj"]
+parameter_name = "FloatParameter"
+
+[resource]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx;
+
+uniform vec4 Color : source_color;
+uniform float FloatParameter;
+
+
+
+void fragment() {
+// ColorParameter:2
+	vec4 n_out2p0 = Color;
+
+
+// FloatParameter:3
+	float n_out3p0 = FloatParameter;
+
+
+// Output:0
+	ALBEDO = vec3(n_out2p0.xyz);
+	ALPHA = n_out3p0;
+
+
+}
+"
+graph_offset = Vector2(-308.091, 22.5454)
+nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_rq85s")
+nodes/fragment/2/position = Vector2(40, 80)
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatParameter_pmvsj")
+nodes/fragment/3/position = Vector2(36.2, 258)
+nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0, 3, 0, 0, 1)

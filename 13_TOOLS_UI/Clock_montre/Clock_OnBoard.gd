@@ -11,6 +11,7 @@ func set_active(condition : bool):
 	active = condition	
 func _process(delta):
 	
+	
 	if !active:
 		return
 	root_equille.rotation_degrees.y -= 10 * delta

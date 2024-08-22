@@ -13,7 +13,7 @@ var f
 var on_auto_move = false
 
 var center_position : Vector3
-var stop_move : bool = false
+
 
 
 func _ready():
@@ -23,14 +23,12 @@ func _ready():
 	_global_datas.camera_focus_On.connect(check_if_previous_focus)
 	current_speed = speed
 	
-	#_global_datas.back_to_element_state.connect(back_to_element_state)
+	_global_datas.go_to_element_to_open.connect(back_to_element_state)
 	
-func stop(condition : bool):
-	stop_move = condition 	
-	
+
 	
 func back_to_element_state():
-	_focus_this(center_position)	
+	_focus_this(_global_datas.board_instance_position.global_position)	
 
 	
 func check_if_previous_focus(focus_state : boardCamState_data):
@@ -53,11 +51,9 @@ func _process(delta):
 	if !_global_datas.Player_In_Inventory:
 		return
 
-	if stop_move:
+	if on_auto_move:
 		return
 		
-	if _global_datas.in_open_element_state:
-		return	
 		
 	if _global_datas.camera_current_state == game_state.camera_state.Board_Focus_element:
 		return	

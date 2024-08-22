@@ -1,5 +1,6 @@
 extends Node
 
+@export var element : element_data
 @export var collider : CollisionShape3D
 @export  var limit_zone : Area3D
 
@@ -9,12 +10,10 @@ extends Node
 @export var On_Move : Node
 @export var rotation_degrees : float = 45.0
 
-@export var Render : MeshInstance3D
-var Normal_material : Material
-@export var moving_material : Material
-@export var overlaping_object : Material
 
+signal select_render_state(index_state : int)
 var rotating : bool
+
 func _ready():
 	_global_datas.moving_state.connect(move_is_active)
 	
@@ -22,10 +21,6 @@ func _ready():
 		On_Move.On_Move.connect(_On_move)
 		On_Move._move.connect(_on_move)
 		On_Move._rotate.connect(_on_rotate)
-
-	
-	if Render:
-		Normal_material = Render.get_surface_override_material(0)
 	
 func move_is_active(condition : bool):
 
@@ -43,16 +38,17 @@ func _On_move(condition):
 	if condition:
 		_global_datas.moving_state.emit(true)
 		_global_datas.select_movable_object.emit(On_Move)
-		if Render:
-			Render.set_surface_override_material(0,moving_material)
+		select_render_state.emit(1) # moving material
 	else:
 		_global_datas.moving_state.emit(false)
 		_global_datas.select_movable_object.emit(null)
-		if Render:
-			Render.set_surface_override_material(0,Normal_material)
-			
-
-	
+		select_render_state.emit(0) # normal material
+		
+		if element:
+			if !element.Object_on_Board:
+				element.Object_on_Board = true	
+				_global_datas.check_element_to_open.emit()
+		
 func _on_move(target, speed, delta):
 	
 	check_limit(target)
@@ -74,6 +70,7 @@ func _on_rotate(direction):
 		t = create_tween()
 		t.tween_property(rotation_root,"rotation_degrees",Vector3(0.0,target_rotation,0.0),0.1)
 		t.connect("finished",done)
+		rotating = true
 	if direction == -1:
 		var target_rotation = rotation_root.rotation_degrees.y - rotation_degrees
 		rotating = true
@@ -97,16 +94,19 @@ func check_limit(raycast_result)-> bool:
 			var limit = a.get_node_or_null("Limit")	
 			if limit:
 				_global_datas.limit_zone = true
-				Render.set_surface_override_material(0,overlaping_object)
+				#set_this_material(overlaping_object)
+				select_render_state.emit(2)
 				return true
 	
 	if raycast_result.normal != Vector3(0.0,1.0,0.0):
 		_global_datas.limit_zone = true
-		Render.set_surface_override_material(0,overlaping_object)
+		#set_this_material(overlaping_object)
+		select_render_state.emit(2)
 		return true
 	
-	_global_datas.limit_zone = false	
-	Render.set_surface_override_material(0,moving_material)
+	_global_datas.limit_zone = false
+	#set_this_material(moving_material)
+	select_render_state.emit(1)
 	return false
 	
 
@@ -124,5 +124,4 @@ func get_closest_point(_target : Vector3) -> Vector3:
 			closest_point = p.position  # Update the closest point
 	
 	return closest_point  # Return the closest point found
-
 

@@ -10,10 +10,6 @@ extends Node3D
 @export var _On_Over: Node
 @export var on_over_node : Node3D
 
-@onready var render_base = $Photo/render_base
-@onready var render_scannable = $Photo/render_scannable
-
-
 
 func _ready():
 
@@ -21,12 +17,6 @@ func _ready():
 	_On_Over.On_Over.connect(On_Over)
 	
 	
-	if Photo_data.scanner_prefab:
-		render_scannable.visible = true
-		render_base.visible = false
-	else:
-		render_scannable.visible = false	
-		render_base.visible = true
 func On_Over():
 	_global_datas.show_element_info.emit(true,Photo_data.info)		
 		

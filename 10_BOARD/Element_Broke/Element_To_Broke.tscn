@@ -1,45 +1,120 @@
-[gd_scene load_steps=4 format=3 uid="uid://lf84uqttk6fq"]
+[gd_scene load_steps=10 format=3 uid="uid://lf84uqttk6fq"]
 
-[ext_resource type="Material" uid="uid://5cye33kgwfo5" path="res://10_BOARD/Shading/Board_shading_base.tres" id="1_xn42f"]
+[ext_resource type="Script" path="res://10_BOARD/Element_Broke/Broke_Me.gd" id="1_e0utq"]
+[ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/On_click_object.gd" id="2_6cjcu"]
+[ext_resource type="Script" path="res://10_BOARD/Element_Broke/View_broke.gd" id="2_8cy0b"]
+[ext_resource type="Resource" uid="uid://cyu7mo6v7aaij" path="res://15_GAME_RESSOURCE/03_BoardCam_state/Board_focus_data.tres" id="3_bc7j3"]
+[ext_resource type="PackedScene" uid="uid://ku7mh583o8k4" path="res://10_BOARD/Element_Broke/Brokable_mesh/broke_msh_01.blend" id="5_hkyx6"]
+[ext_resource type="Material" uid="uid://d3al0q8to25xk" path="res://10_BOARD/Element_Broke/Brokable_mesh/Element_To_Broke_mat.tres" id="6_rvx3v"]
+
+[sub_resource type="GDScript" id="GDScript_d4huk"]
+script/source = "extends Node3D
+
+
+@export var Broke_me : Node
+
+
+func _setup_element(_element_data : element_data):
+	
+	#print(_element_data.element_name, \" has been instantiate\")
+	_element_data.Object_on_Board = true
+
+	var _instance = _element_data.element_prefabs.instantiate()
+	_global_datas.movable_root.add_child(_instance)
+	_instance.global_position = _global_datas.board_instance_position.global_position
+	
+	Broke_me.set_element(_element_data)
+	_instance.element = _element_data
+
+
+
+"
+
+[sub_resource type="GDScript" id="GDScript_nxgeb"]
+script/source = "extends Node
+
+signal On_View
+signal On_Over(condition:bool)
+"
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bbg2g"]
+size = Vector3(0.902344, 0.641113, 0.642212)
 
-[sub_resource type="SphereMesh" id="SphereMesh_lgga1"]
+[node name="ElementToBroke" type="Node3D" node_paths=PackedStringArray("Broke_me")]
+script = SubResource("GDScript_d4huk")
+Broke_me = NodePath("Broke_me")
 
-[node name="ElementToBroke" type="Node3D"]
+[node name="View_broke" type="Node" parent="." node_paths=PackedStringArray("On_View", "root", "Collider")]
+script = ExtResource("2_8cy0b")
+focus_data = ExtResource("3_bc7j3")
+On_View = NodePath("../Area3D/On_View")
+root = NodePath("..")
+Collider = NodePath("../Area3D/CollisionShape3D")
+
+[node name="Broke_me" type="Node" parent="." node_paths=PackedStringArray("Main_root", "On_Move", "broke_root", "Particul_hit_root")]
+script = ExtResource("1_e0utq")
+focus_data = ExtResource("3_bc7j3")
+Main_root = NodePath("..")
+On_Move = NodePath("../Area3D/On_Move")
+broke_root = NodePath("../Broke_element")
+Particul_hit_root = NodePath("../Particul_hits")
 
 [node name="Area3D" type="Area3D" parent="."]
 
+[node name="On_Move" type="Node" parent="Area3D"]
+script = ExtResource("2_6cjcu")
+
+[node name="On_View" type="Node" parent="Area3D"]
+script = SubResource("GDScript_nxgeb")
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
-transform = Transform3D(0.278561, 0, 0, 0, 0.278561, 0, 0, 0, 0.278561, 0, 0.131329, 0)
+transform = Transform3D(0.278561, 0, 0, 0, 0.278561, 0, 0, 0, 0.278561, 0.0136016, 0.0813431, 0.00416549)
 shape = SubResource("BoxShape3D_bbg2g")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(-8.55628e-09, 0.195745, 8.55628e-09, 0, -8.55628e-09, 0.195745, 0.195745, 8.55628e-09, 3.74007e-16, -0.00241584, 0.0928745, 0.0144037)
-layers = 2
-mesh = SubResource("SphereMesh_lgga1")
-surface_material_override/0 = ExtResource("1_xn42f")
+[node name="Limit_zone" type="Area3D" parent="."]
+collision_layer = 4
+collision_mask = 4
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
-transform = Transform3D(-4.205e-09, 0.0961992, 4.205e-09, 0, -4.205e-09, 0.0961992, 0.0961992, 4.205e-09, 1.83806e-16, 0.0758732, 0.0928745, 0.0799455)
-layers = 2
-mesh = SubResource("SphereMesh_lgga1")
-surface_material_override/0 = ExtResource("1_xn42f")
+[node name="Limit" type="Node" parent="Limit_zone"]
 
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
-transform = Transform3D(-5.79086e-09, 0.13248, 5.79086e-09, 0, -5.79086e-09, 0.13248, 0.13248, 5.79086e-09, 2.53127e-16, 0.0758732, 0.0928745, -0.052145)
-layers = 2
-mesh = SubResource("SphereMesh_lgga1")
-surface_material_override/0 = ExtResource("1_xn42f")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Limit_zone"]
+transform = Transform3D(0.278561, 0, 0, 0, 0.278561, 0, 0, 0, 0.278561, 0.0136016, 0.0813431, 0.00416549)
+shape = SubResource("BoxShape3D_bbg2g")
 
-[node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
-transform = Transform3D(-4.16151e-09, 0.0952042, 4.16151e-09, 0, -4.16151e-09, 0.0952042, 0.0952042, 4.16151e-09, 1.81905e-16, -0.104183, 0.0928745, 0.00373323)
-layers = 2
-mesh = SubResource("SphereMesh_lgga1")
-surface_material_override/0 = ExtResource("1_xn42f")
+[node name="Broke_element" type="Node3D" parent="."]
 
-[node name="MeshInstance3D5" type="MeshInstance3D" parent="."]
-transform = Transform3D(-4.78417e-09, 0.109449, 4.78417e-09, 0, -4.78417e-09, 0.109449, 0.109449, 4.78417e-09, 2.09123e-16, 0.0266515, 0.154436, 0.0364409)
+[node name="broke_msh_01" parent="Broke_element" instance=ExtResource("5_hkyx6")]
+transform = Transform3D(-1.46497e-08, 0, -0.335146, 0, 0.335146, 0, 0.335146, 0, -1.46497e-08, 0.030895, 0, 0)
+
+[node name="Result" parent="Broke_element/broke_msh_01" index="0"]
 layers = 2
-mesh = SubResource("SphereMesh_lgga1")
-surface_material_override/0 = ExtResource("1_xn42f")
+surface_material_override/0 = ExtResource("6_rvx3v")
+
+[node name="Result_cell" parent="Broke_element/broke_msh_01" index="1"]
+visible = false
+layers = 2
+surface_material_override/0 = ExtResource("6_rvx3v")
+surface_material_override/1 = ExtResource("6_rvx3v")
+
+[node name="Result_cell_001" parent="Broke_element/broke_msh_01" index="2"]
+visible = false
+layers = 2
+surface_material_override/0 = ExtResource("6_rvx3v")
+surface_material_override/1 = ExtResource("6_rvx3v")
+
+[node name="Result_cell_002" parent="Broke_element/broke_msh_01" index="3"]
+visible = false
+layers = 2
+surface_material_override/0 = ExtResource("6_rvx3v")
+surface_material_override/1 = ExtResource("6_rvx3v")
+
+[node name="Result_cell_003" parent="Broke_element/broke_msh_01" index="4"]
+visible = false
+layers = 2
+surface_material_override/0 = ExtResource("6_rvx3v")
+surface_material_override/1 = ExtResource("6_rvx3v")
+
+[node name="Particul_hits" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.136503, 0)
+
+[editable path="Broke_element/broke_msh_01"]

@@ -135,9 +135,8 @@ var previous_cam_target : Vector3
 
 signal  show_element_info(condition : bool, information : info_data)
 
-
+signal go_to_element_to_open 
 signal check_element_to_open 
-var in_open_element_state : bool = false
 var movable_root : Node3D
 var board_instance_position : Node3D
 # quest_state signal in order

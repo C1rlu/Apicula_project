@@ -54,9 +54,7 @@ func _input(event):
 	else:
 		target = get_viewport().get_mouse_position()	
 	
-	
-	if _global_datas.in_open_element_state:
-		return
+
 	
 	if _global_datas.camera_current_state == game_state.camera_state.Board_Focus_element:
 		if event.is_action_pressed("On_View"):	

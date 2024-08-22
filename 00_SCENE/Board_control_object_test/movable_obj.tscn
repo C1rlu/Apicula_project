@@ -1,9 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://xpunnioeu7vl"]
+[gd_scene load_steps=8 format=3 uid="uid://xpunnioeu7vl"]
 
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Movable_obj.gd" id="1_l0jbp"]
-[ext_resource type="Material" uid="uid://xcmes75nexaq" path="res://00_SCENE/Board_control_object_test/Material/moving_object.tres" id="2_yhtnr"]
+[ext_resource type="Script" path="res://13_TOOLS_UI/Clock_montre/Selection_ini.gd" id="2_w0lpa"]
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/On_click_object.gd" id="3_6h2ti"]
-[ext_resource type="Material" uid="uid://hnc22lq0or5t" path="res://00_SCENE/Board_control_object_test/Material/moving_overlap_object.tres" id="3_21sgw"]
 [ext_resource type="Material" uid="uid://dqtd437bbkrae" path="res://00_SCENE/Board_control_object_test/Material/movable_ob_flat.tres" id="5_c444e"]
 
 [sub_resource type="GDScript" id="GDScript_48mwa"]
@@ -19,19 +18,19 @@ size = Vector3(0.2, 0.2, 0.2)
 [sub_resource type="BoxMesh" id="BoxMesh_v4iu2"]
 size = Vector3(0.2, 0.2, 0.2)
 
-[node name="Movable_obj" type="Node3D"]
+[node name="Movable_obj" type="Node3D" node_paths=PackedStringArray("collider", "limit_zone", "move_root", "rotation_root", "On_Move")]
 transform = Transform3D(0.499687, 0, 0, 0, 0.499687, 0, 0, 0, 0.499687, 0, 0, 0)
-
-[node name="Movable_obj" type="Node" parent="." node_paths=PackedStringArray("collider", "limit_zone", "move_root", "rotation_root", "On_Move", "Render")]
 script = ExtResource("1_l0jbp")
-collider = NodePath("../Rotation_root/Area/CollisionShape3D")
-limit_zone = NodePath("../Rotation_root/Limit_zone")
-move_root = NodePath("..")
-rotation_root = NodePath("../Rotation_root")
-On_Move = NodePath("../Rotation_root/Area/On_Move")
-Render = NodePath("../Rotation_root/MeshInstance3D")
-moving_material = ExtResource("2_yhtnr")
-overlaping_object = ExtResource("3_21sgw")
+collider = NodePath("Rotation_root/Area/CollisionShape3D")
+limit_zone = NodePath("Rotation_root/Limit_zone")
+move_root = NodePath(".")
+rotation_root = NodePath("Rotation_root")
+On_Move = NodePath("Rotation_root/Area/On_Move")
+
+[node name="Selection_ini" type="Node" parent="." node_paths=PackedStringArray("root", "Movable")]
+script = ExtResource("2_w0lpa")
+root = NodePath("..")
+Movable = NodePath("..")
 
 [node name="Rotation_root" type="Node3D" parent="."]
 
@@ -60,7 +59,7 @@ shape = SubResource("BoxShape3D_ud465")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Rotation_root"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
-layers = 3
+layers = 2
 mesh = SubResource("BoxMesh_v4iu2")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("5_c444e")
