@@ -4,6 +4,9 @@ extends Node
 @export var collider : CollisionShape3D
 @export  var limit_zone : Area3D
 
+@export var Position_zone : CollisionShape3D
+
+
 @export var move_root : Node3D
 @export var rotation_root : Node3D
 
@@ -21,13 +24,14 @@ func _ready():
 	if On_Move:
 		On_Move.On_Move.connect(_On_move)
 		On_Move._move.connect(_on_move)
-		On_Move._rotate.connect(_on_rotate)
-	
+		if rotation_root:
+			On_Move._rotate.connect(_on_rotate)
+		
 func move_is_active(condition : bool):
 
 
 	collider.disabled = condition
-
+	
 func _On_move(condition):
 	
 	
@@ -35,7 +39,7 @@ func _On_move(condition):
 		return
 	
 	collider.disabled = condition
-	
+	if Position_zone: Position_zone.disabled = condition
 	if condition:
 		_global_datas.moving_state.emit(true)
 		_global_datas.select_movable_object.emit(On_Move)

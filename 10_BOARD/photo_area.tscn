@@ -1,4 +1,4 @@
-[gd_scene load_steps=64 format=3 uid="uid://uwg2qc3svu11"]
+[gd_scene load_steps=65 format=3 uid="uid://uwg2qc3svu11"]
 
 [ext_resource type="Script" path="res://10_BOARD/Photo_element.gd" id="1_0a8jl"]
 [ext_resource type="Resource" uid="uid://dyh1qg1u652pl" path="res://15_GAME_RESSOURCE/Epave_ch_photoData.tres" id="2_8x1kk"]
@@ -627,6 +627,9 @@ nodes/fragment/connections = PackedInt32Array(3, 0, 4, 0, 5, 0, 4, 1, 4, 0, 6, 1
 render_priority = 0
 shader = SubResource("VisualShader_tl2py")
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_nnquu"]
+size = Vector3(0.0871338, 0.00541992, 0.1)
+
 [node name="Photo_element_root" type="Node3D" node_paths=PackedStringArray("_On_View", "_On_Over", "on_over_node")]
 script = ExtResource("1_0a8jl")
 Photo_data = ExtResource("2_8x1kk")
@@ -636,10 +639,10 @@ _On_View = NodePath("Click/On_View")
 _On_Over = NodePath("Click/On_Over")
 on_over_node = NodePath("All_over")
 
-[node name="Movable_object" type="Node" parent="." node_paths=PackedStringArray("collider", "limit_zone", "move_root", "rotation_root", "On_Move")]
+[node name="Movable_object" type="Node" parent="." node_paths=PackedStringArray("collider", "Position_zone", "move_root", "rotation_root", "On_Move")]
 script = ExtResource("4_4uyoa")
 collider = NodePath("../Click/CollisionShape3D")
-limit_zone = NodePath("../Limit")
+Position_zone = NodePath("../Position_zone/CollisionShape3D")
 move_root = NodePath("..")
 rotation_root = NodePath("..")
 On_Move = NodePath("../Click/On_Move")
@@ -706,3 +709,11 @@ layers = 2
 mesh = SubResource("PlaneMesh_l1221")
 skeleton = NodePath("../../..")
 surface_material_override/0 = SubResource("ShaderMaterial_gfhbg")
+
+[node name="Position_zone" type="Area3D" parent="."]
+
+[node name="Position_zone" type="Node" parent="Position_zone"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Position_zone"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00157471, 0.00124512, 0)
+shape = SubResource("BoxShape3D_nnquu")
