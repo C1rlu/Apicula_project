@@ -1,4 +1,4 @@
-[gd_scene load_steps=63 format=3 uid="uid://uwg2qc3svu11"]
+[gd_scene load_steps=64 format=3 uid="uid://uwg2qc3svu11"]
 
 [ext_resource type="Script" path="res://10_BOARD/Photo_element.gd" id="1_0a8jl"]
 [ext_resource type="Resource" uid="uid://dyh1qg1u652pl" path="res://15_GAME_RESSOURCE/Epave_ch_photoData.tres" id="2_8x1kk"]
@@ -7,6 +7,7 @@
 [ext_resource type="Resource" uid="uid://3pilop3f4m6r" path="res://15_GAME_RESSOURCE/03_BoardCam_state/ScannerM_focus_data.tres" id="4_w1sdr"]
 [ext_resource type="Texture2D" uid="uid://38btbw60olcn" path="res://12_INVENTORY/Photo/IMG/Boat.png" id="4_wljme"]
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/On_click_object.gd" id="6_46a1v"]
+[ext_resource type="Script" path="res://13_TOOLS_UI/Clock_montre/Selection_ini.gd" id="6_wkbq8"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="7_vd1wc"]
 [ext_resource type="Script" path="res://10_BOARD/On_View.tres.gd" id="8_2nycl"]
 
@@ -635,7 +636,7 @@ _On_View = NodePath("Click/On_View")
 _On_Over = NodePath("Click/On_Over")
 on_over_node = NodePath("All_over")
 
-[node name="Movable_object" type="Node" parent="." node_paths=PackedStringArray("collider", "limit_zone", "move_root", "rotation_root", "On_Move", "Render")]
+[node name="Movable_object" type="Node" parent="." node_paths=PackedStringArray("collider", "limit_zone", "move_root", "rotation_root", "On_Move")]
 script = ExtResource("4_4uyoa")
 collider = NodePath("../Click/CollisionShape3D")
 limit_zone = NodePath("../Limit")
@@ -643,7 +644,11 @@ move_root = NodePath("..")
 rotation_root = NodePath("..")
 On_Move = NodePath("../Click/On_Move")
 rotation_degrees = 15.0
-Render = NodePath("../Photo/render_base")
+
+[node name="Selection_ini" type="Node" parent="." node_paths=PackedStringArray("root", "Movable_node")]
+script = ExtResource("6_wkbq8")
+root = NodePath("..")
+Movable_node = NodePath("../Movable_object")
 
 [node name="Click" type="Area3D" parent="."]
 transform = Transform3D(0.999989, 0, 0.00467785, 0, 1, 0, -0.00467785, 0, 0.999989, -0.000246863, 0.00516227, -0.00658954)

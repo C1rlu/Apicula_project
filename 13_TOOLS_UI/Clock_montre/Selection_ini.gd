@@ -2,6 +2,7 @@ extends Node
 
 @export var root : Node3D
 @export var Movable : Node3D
+@export var Movable_node : Node
 
 var list_of_selection_data : Array[selection_data]
 
@@ -9,12 +10,17 @@ const MOVING_OBJECT : Material = preload("res://00_SCENE/Board_control_object_te
 const MOVING_OVERLAP_OBJECT : Material = preload("res://00_SCENE/Board_control_object_test/Material/overlaping_object_dither.tres")
 
 func _ready():
-	Movable.select_render_state.connect(ini_selection)
-	archive_materials()
 	
-	#for r in list_of_selection_data:
-		#print(r.render_material)
+	if Movable:
+		Movable.select_render_state.connect(ini_selection)
+	if Movable_node:
+		Movable_node.select_render_state.connect(ini_selection)
+		
+	var utility = GameUtility.new()
+	list_of_selection_data.append_array(utility.archive_materials(root))
 	
+
+
 func ini_selection(index_state : int):
 
 	if index_state == 0:
@@ -45,39 +51,4 @@ func restore_original_materials():
 					render_mesh.set_surface_override_material(i, materials[i])
 
 
-func archive_materials():
-	var all_render = get_all_render(root)	
 
-	for r in all_render:
-		var new_selection_data = selection_data.new()
-		new_selection_data.render_mesh = r
-		# Create an array to hold the materials for the current mesh instance
-		var materials : Array[Material] = []
-			
-		# Iterate through the surfaces and store the override materials
-		for i in range(r.mesh.get_surface_count()):
-			var material = r.get_surface_override_material(i)
-			if material:
-				materials.append(material)
-			else:
-				# If there's no override, you can opt to store the default material
-				materials.append(r.mesh.surface_get_material(i))
-
-		new_selection_data.render_material = materials
-
-		# Add the new_selection_data to your list_of_selection_data
-		list_of_selection_data.append(new_selection_data)
-		
-		
-		
-func get_all_render(scene)-> Array:
-	
-	var meshs: Array = []
-	for node in scene.get_children():
-		if node is MeshInstance3D:
-			meshs.append(node)
-		meshs += get_all_render(node)
-	
-
-	return meshs	
-	

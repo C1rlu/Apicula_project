@@ -58,7 +58,7 @@ func _input(event):
 	
 	if _global_datas.camera_current_state == game_state.camera_state.Board_Focus_element:
 		if event.is_action_pressed("On_View"):	
-			_global_datas.focus_this_on_board.emit(_global_datas.previous_cam_target)
+			#_global_datas.focus_this_on_board.emit(_global_datas.previous_cam_target)
 			_global_datas.camera_focus_On.emit(_global_datas.previous_cam_state)
 			_global_datas.show_element_info.emit(false,null)	
 		return
@@ -66,14 +66,14 @@ func _input(event):
 	if _global_datas.camera_current_state == game_state.camera_state.Scanner:
 		if event.is_action_pressed("On_View"):	
 			_global_datas.show_on_scanner.emit(false)
-			_global_datas.focus_this_on_board.emit(_global_datas.previous_cam_target)
+			#_global_datas.focus_this_on_board.emit(_global_datas.previous_cam_target)
 			_global_datas.camera_focus_On.emit(_global_datas.previous_cam_state)	
 			_global_datas.show_element_info.emit(false,null)
 		return
 	
 	if _global_datas.camera_current_state == game_state.camera_state.BoardZoom:
 		if event.is_action_pressed("On_View"):	
-			_global_datas.focus_this_on_board.emit(_global_datas.previous_cam_target)
+			#_global_datas.focus_this_on_board.emit(_global_datas.previous_cam_target)
 			_global_datas.camera_focus_On.emit(_global_datas.previous_cam_state)	
 			_global_datas.show_element_info.emit(false,null)
 		return

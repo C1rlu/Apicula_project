@@ -54,10 +54,10 @@ func _focus(focus_data : boardCamState_data):
 
 	if _global_datas.camera_current_state == game_state.camera_state.Main:
 		cam_state = 0
-		_global_datas.previous_cam_state = focus_data
+		_global_datas.previous_cam_state = _focus_board
 	if _global_datas.camera_current_state == game_state.camera_state.Board:
 		cam_state = 1
-		_global_datas.previous_cam_state = focus_data
+		_global_datas.previous_cam_state = _focus_board
 		
 		
 		

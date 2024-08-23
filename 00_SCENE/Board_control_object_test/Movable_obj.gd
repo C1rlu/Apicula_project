@@ -8,6 +8,7 @@ extends Node
 @export var rotation_root : Node3D
 
 @export var On_Move : Node
+
 @export var rotation_degrees : float = 45.0
 
 

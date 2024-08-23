@@ -20,7 +20,7 @@ func _ready():
 func On_Over():
 	_global_datas.show_element_info.emit(true,Photo_data.info)		
 		
-	
+
 func focus_or_scanner():
 	
 

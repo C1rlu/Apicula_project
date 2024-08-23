@@ -2150,12 +2150,18 @@ layers = 2
 surface_material_override/0 = SubResource("ShaderMaterial_kqq05")
 surface_material_override/1 = SubResource("ShaderMaterial_jka2s")
 
-[node name="Movable_object" type="Node" parent="Movable/Bell" node_paths=PackedStringArray("collider", "move_root", "rotation_root", "On_Move")]
+[node name="Movable_object" type="Node" parent="Movable/Bell" node_paths=PackedStringArray("collider", "limit_zone", "move_root", "rotation_root", "On_Move")]
 script = ExtResource("43_usyd2")
 collider = NodePath("../Area3D/Col")
+limit_zone = NodePath("../Limit_zone")
 move_root = NodePath("..")
 rotation_root = NodePath("..")
 On_Move = NodePath("../Area3D/On_Move")
+
+[node name="Selection_ini" type="Node" parent="Movable/Bell" node_paths=PackedStringArray("root", "Movable_node")]
+script = ExtResource("49_vb8xx")
+root = NodePath("..")
+Movable_node = NodePath("../Movable_object")
 
 [node name="Area3D" type="Area3D" parent="Movable/Bell"]
 transform = Transform3D(0.982238, 0, 0.187638, 0, 1, 0, -0.187638, 0, 0.982238, 0, 0, 0)
@@ -2170,6 +2176,15 @@ script = ExtResource("27_s1e6c")
 script = ExtResource("23_4ws66")
 
 [node name="Col" type="CollisionShape3D" parent="Movable/Bell/Area3D"]
+transform = Transform3D(0.367208, 0, 0, 0, 0.367208, 0, 0, 0, 0.367208, 0, 0.0858023, 0)
+shape = SubResource("BoxShape3D_a213g")
+
+[node name="Limit_zone" type="Area3D" parent="Movable/Bell"]
+transform = Transform3D(0.982238, 0, 0.187638, 0, 1, 0, -0.187638, 0, 0.982238, 0, 0, 0)
+collision_layer = 4
+collision_mask = 4
+
+[node name="Col" type="CollisionShape3D" parent="Movable/Bell/Limit_zone"]
 transform = Transform3D(0.367208, 0, 0, 0, 0.367208, 0, 0, 0, 0.367208, 0, 0.0858023, 0)
 shape = SubResource("BoxShape3D_a213g")
 
@@ -2419,7 +2434,7 @@ transform = Transform3D(0.998216, 0, -0.0597076, 0, 1, 0, 0.0597076, 0, 0.998216
 shape = SubResource("BoxShape3D_yuede")
 
 [node name="TOURNE_DISQUE" type="Node3D" parent="Movable"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.539401, -1.78814e-07, -0.275405)
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 0.515837, -1.78814e-07, -0.230023)
 
 [node name="On_View_Event" type="Node" parent="Movable/TOURNE_DISQUE" node_paths=PackedStringArray("root", "On_View", "On_Over")]
 script = ExtResource("43_i0i3o")
@@ -2429,15 +2444,21 @@ focus_data = ExtResource("46_y5tcg")
 On_View = NodePath("../Area3D/On_View")
 On_Over = NodePath("../../Apicula_root/Apicula_maquette/Area3D/On_Over")
 
-[node name="Movable_object" type="Node" parent="Movable/TOURNE_DISQUE" node_paths=PackedStringArray("collider", "move_root", "rotation_root", "On_Move")]
+[node name="Movable_object" type="Node" parent="Movable/TOURNE_DISQUE" node_paths=PackedStringArray("collider", "limit_zone", "move_root", "rotation_root", "On_Move")]
 script = ExtResource("43_usyd2")
 collider = NodePath("../Area3D/CollisionShape3D")
+limit_zone = NodePath("../Limit_Zone")
 move_root = NodePath("..")
 rotation_root = NodePath("..")
 On_Move = NodePath("../Area3D/On_Move")
 
+[node name="Selection_ini" type="Node" parent="Movable/TOURNE_DISQUE" node_paths=PackedStringArray("root", "Movable_node")]
+script = ExtResource("49_vb8xx")
+root = NodePath("..")
+Movable_node = NodePath("../Movable_object")
+
 [node name="Disque_prefab" parent="Movable/TOURNE_DISQUE" instance=ExtResource("44_0qqs5")]
-transform = Transform3D(-0.0969435, 0, -0.0555018, 0, 0.111707, 0, 0.0555018, 0, -0.0969435, 0, 0, 0)
+transform = Transform3D(-0.111707, 0, 1.11759e-08, 0, 0.111707, 0, -1.11759e-08, 0, -0.111707, 0, 0, 0)
 
 [node name="Cylinder" parent="Movable/TOURNE_DISQUE/Disque_prefab" index="0"]
 layers = 2
@@ -2465,6 +2486,7 @@ surface_material_override/0 = ExtResource("47_r4p1c")
 surface_material_override/1 = ExtResource("46_tmbd7")
 
 [node name="Area3D" type="Area3D" parent="Movable/TOURNE_DISQUE"]
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 0, 0, 0)
 
 [node name="On_Move" type="Node" parent="Movable/TOURNE_DISQUE/Area3D"]
 script = ExtResource("44_64ctv")
@@ -2473,6 +2495,17 @@ script = ExtResource("44_64ctv")
 script = SubResource("GDScript_0k00m")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Movable/TOURNE_DISQUE/Area3D"]
+transform = Transform3D(0.871195, 0, 0.490913, 0, 1, 0, -0.490913, 0, 0.871195, 0.015209, 0.134239, -0.0155258)
+shape = SubResource("BoxShape3D_64lbo")
+
+[node name="Limit_Zone" type="Area3D" parent="Movable/TOURNE_DISQUE"]
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 0, 0, 0)
+collision_layer = 4
+collision_mask = 4
+
+[node name="Limit" type="Node" parent="Movable/TOURNE_DISQUE/Limit_Zone"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Movable/TOURNE_DISQUE/Limit_Zone"]
 transform = Transform3D(0.871195, 0, 0.490913, 0, 1, 0, -0.490913, 0, 0.871195, 0.015209, 0.134239, -0.0155258)
 shape = SubResource("BoxShape3D_64lbo")
 
