@@ -9,7 +9,7 @@ var target
 var last_target 
 
 var active_on_Over
-
+@onready var utility = GameUtility.new() #to call raycast func
 func _ready():
 	
 	_global_datas.using_pad.connect(is_pad)
@@ -17,7 +17,7 @@ func _ready():
 
 
 	_global_datas.open_inventory.connect(check_if_on_focus)
-	
+
 	
 func check_if_on_focus(condition):
 	
@@ -97,22 +97,22 @@ func _input(event):
 
 func check_move(targetPos : Vector2):
 	
-	var ray_target = get_raycast_target(targetPos)
+	var ray_target = utility.get_raycast_target(targetPos,Camera)
 	#print( ray_target)
 	if !ray_target:	
 		return
 		
 	if !_selectec_object:
 		if  ray_target.collider.get_node_or_null("On_Move"): 
-	
+			
 			var _On_click =  ray_target.collider.get_node_or_null("On_Move")
 			_On_click.On_Move.emit(true)
-					
+			#_On_click._raycast_click.emit(ray_target)		
 			
 func check_view(targetPos : Vector2):
 	
 	
-	var ray_target = get_raycast_target(targetPos)
+	var ray_target = utility.get_raycast_target(targetPos,Camera)
 	#print( ray_target)
 	if !ray_target:	
 		return
@@ -129,7 +129,8 @@ func check_over(targetPos : Vector2):
 		_global_datas.show_element_info.emit(false,null)
 		active_on_Over = null
 	
-	var ray_target = get_raycast_target(targetPos)
+	
+	var ray_target = utility.get_raycast_target(targetPos,Camera)
 	#print( ray_target)
 	if !ray_target:	
 		return
@@ -143,29 +144,13 @@ func check_over(targetPos : Vector2):
 	
 
 								
-func get_raycast_target(targetPos : Vector2) -> Dictionary:
-	
-	var rayLengh = 250.0
-	var from = Camera.project_ray_origin(targetPos)
-	var to = from + Camera.project_ray_normal(targetPos) * rayLengh
-	var space = Camera.get_world_3d().direct_space_state
-	var rayQuery = PhysicsRayQueryParameters3D.new()
-	rayQuery.collision_mask = 1
-	rayQuery.from = from
-	rayQuery.to = to
-	rayQuery.collide_with_areas = true
-	rayQuery.collide_with_bodies = false
-	
-	var result = space.intersect_ray(rayQuery)
-
-	return result
 	
 func _process(delta):
 		
 
 		if _selectec_object:
 			
-			var ray_target = get_raycast_target(target)
+			var ray_target = utility.get_raycast_target(target,Camera)
 			
 			if ray_target:
 				if ray_target.collider.get_node_or_null("Position_zone"):

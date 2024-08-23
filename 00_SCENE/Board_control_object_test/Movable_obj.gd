@@ -13,10 +13,11 @@ extends Node
 @export var On_Move : Node
 
 @export var rotation_degrees : float = 45.0
-
-
 signal select_render_state(index_state : int)
+
 var rotating : bool
+var click_raycast_position : Vector3
+var move_offset : Vector3
 
 func _ready():
 	_global_datas.moving_state.connect(move_is_active)
@@ -26,14 +27,12 @@ func _ready():
 		On_Move._move.connect(_on_move)
 		if rotation_root:
 			On_Move._rotate.connect(_on_rotate)
-		
+
 func move_is_active(condition : bool):
-
-
 	collider.disabled = condition
+
 	
 func _On_move(condition):
-	
 	
 	if _global_datas.limit_zone:
 		return
@@ -42,8 +41,23 @@ func _On_move(condition):
 	if Position_zone: Position_zone.disabled = condition
 	if condition:
 		_global_datas.moving_state.emit(true)
+		
+		#here to set the offset
+		var utility = GameUtility.new()
+		var ray_target 
+		if _global_datas.player_using_pad:
+			ray_target = _global_datas.pad_center_ui.position
+		else: 
+			ray_target = get_viewport().get_mouse_position() 	
+		var raycast = utility.get_raycast_target(ray_target,_global_datas.board_camera)
+		if raycast:
+			#print("Raycast hit ", raycast.position)
+			move_offset = move_root.position - raycast.position
 		_global_datas.select_movable_object.emit(On_Move)
+		
 		select_render_state.emit(1) # moving material
+		
+		
 	else:
 		_global_datas.moving_state.emit(false)
 		_global_datas.select_movable_object.emit(null)
@@ -57,9 +71,7 @@ func _On_move(condition):
 func _on_move(target, speed, delta):
 	
 	check_limit(target)
-	#move_root.global_position = lerp(move_root.global_position,raycast_result.position,speed * delta)
-	#var grid_target = get_closest_point(target.position)
-	move_root.global_position = target.position
+	move_root.global_position = target.position + Vector3(move_offset.x,0.0,move_offset.z)
 
 func _on_rotate(direction):	
 
@@ -71,13 +83,13 @@ func _on_rotate(direction):
 		t.kill()
 		
 	if direction == 1:
-		var target_rotation = rotation_root.rotation_degrees.y + rotation_degrees
+		var target_rotation = rotation_root.rotation_degrees.y - rotation_degrees
 		t = create_tween()
 		t.tween_property(rotation_root,"rotation_degrees",Vector3(0.0,target_rotation,0.0),0.1)
 		t.connect("finished",done)
 		rotating = true
 	if direction == -1:
-		var target_rotation = rotation_root.rotation_degrees.y - rotation_degrees
+		var target_rotation = rotation_root.rotation_degrees.y + rotation_degrees
 		rotating = true
 		t = create_tween()
 		t.tween_property(rotation_root,"rotation_degrees",Vector3(0.0,target_rotation,0.0),0.1)
@@ -114,19 +126,4 @@ func check_limit(raycast_result)-> bool:
 	select_render_state.emit(1)
 	return false
 	
-
-					
-func get_closest_point(_target : Vector3) -> Vector3:
-	var closest_point : Vector3 
-	var closest_distance = INF  # Set initial distance to a large value
-
-	# Loop through all the grid points
-	for p in _global_datas.grid_points:
-		var distance = p.position.distance_squared_to(_target)  # Use squared distance to avoid unnecessary square root calculations
-		
-		if distance < closest_distance:
-			closest_distance = distance
-			closest_point = p.position  # Update the closest point
-	
-	return closest_point  # Return the closest point found
 

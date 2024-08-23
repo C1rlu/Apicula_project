@@ -31,6 +31,8 @@ var _back_call_list : Array
 
 # input type
 signal using_pad(condition : bool)
+var player_using_pad : bool = false
+var pad_center_ui : ColorRect
 var move_right : String
 var move_left : String
 var move_forward : String

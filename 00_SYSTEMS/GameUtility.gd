@@ -1,15 +1,21 @@
 extends Object
 class_name GameUtility
 
+				
+func get_closest_point(_target : Vector3, points_list : Array) -> Vector3:
+	var closest_point : Vector3 
+	var closest_distance = INF 
+	for p in points_list:
+		var distance = p.position.distance_squared_to(_target) 
+		
+		if distance < closest_distance:
+			closest_distance = distance
+			closest_point = p.position 
+	
+	return closest_point  # Return the closest point found
 
-func find_node_with_script(root: Node, script_name : String) -> Node:
 	
-	var script = root.get_script().get_path()
-	if script == script_name:
-		return root 
-	return null	
-	
-# this is working only with selection_data ressource usefull  to store mesh override materials ( event the mesh index materials ) 
+# this is working only with selection_data ressource -> usefull  to store mesh override materials ( event the mesh index materials ) 
 func archive_materials(_root)-> Array:
 	
 	var all_render = get_all_render(_root)	
@@ -18,30 +24,21 @@ func archive_materials(_root)-> Array:
 	for r in all_render:
 		var new_selection_data = selection_data.new()
 		new_selection_data.render_mesh = r
-		# Create an array to hold the materials for the current mesh instance
 		var materials : Array[Material] = []
-			
-		# Iterate through the surfaces and store the override materials
 		for i in range(r.mesh.get_surface_count()):
 			var material = r.get_surface_override_material(i)
 			if material:
 				materials.append(material)
 			else:
-				# If there's no override, you can opt to store the default material
 				materials.append(r.mesh.surface_get_material(i))
 
 		new_selection_data.render_material = materials
-		
-		
-		# Add the new_selection_data to your list_of_selection_data
 		selection_data_list.append(new_selection_data)
 	
-	return selection_data_list	
+	return selection_data_list
 
-		
-		
-		
-func get_all_render(scene)-> Array:
+#to get all MeshInstance3D in a scene tree			
+func get_all_render(scene)-> Array: 
 	
 	var meshs: Array = []
 	for node in scene.get_children():
@@ -51,4 +48,22 @@ func get_all_render(scene)-> Array:
 	
 
 	return meshs	
+
+
+
+func get_raycast_target(targetPos : Vector2, Camera : Camera3D) -> Dictionary: 
 	
+	var rayLengh = 250.0
+	var from = Camera.project_ray_origin(targetPos)
+	var to = from + Camera.project_ray_normal(targetPos) * rayLengh
+	var space = Camera.get_world_3d().direct_space_state
+	var rayQuery = PhysicsRayQueryParameters3D.new()
+	rayQuery.collision_mask = 1
+	rayQuery.from = from
+	rayQuery.to = to
+	rayQuery.collide_with_areas = true
+	rayQuery.collide_with_bodies = false
+	
+	var result = space.intersect_ray(rayQuery)
+
+	return result
