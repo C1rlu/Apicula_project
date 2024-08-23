@@ -1,4 +1,4 @@
-[gd_scene load_steps=263 format=3 uid="uid://dr73p5vs0sixe"]
+[gd_scene load_steps=215 format=3 uid="uid://dr73p5vs0sixe"]
 
 [ext_resource type="Script" path="res://10_BOARD/Movable_root.gd" id="1_2yoh7"]
 [ext_resource type="PackedScene" uid="uid://cyb6my1srlcpw" path="res://10_BOARD/Candle/Candle_set.blend" id="1_3ummb"]
@@ -26,7 +26,6 @@
 [ext_resource type="Resource" uid="uid://duqn0ehtc8aao" path="res://12_INVENTORY/Words_note/FindSeagull_orders.tres" id="19_fvuwa"]
 [ext_resource type="Resource" uid="uid://jx3jbwgl8gm0" path="res://15_GAME_RESSOURCE/02_BOARD_INFO/Board_intrigue/Chapitre_II.tres" id="19_i4sfl"]
 [ext_resource type="Resource" uid="uid://qo6th56oqlhi" path="res://15_GAME_RESSOURCE/02_BOARD_INFO/Board_intrigue/Chapitre_III.tres" id="20_bqklc"]
-[ext_resource type="PackedScene" uid="uid://dgvsf84egy43d" path="res://10_BOARD/Decor/Chavet_part.blend" id="20_d7w3e"]
 [ext_resource type="Resource" uid="uid://dsi20xus8cnkw" path="res://15_GAME_RESSOURCE/02_BOARD_INFO/Board_intrigue/Chapitre_IV.tres" id="21_eaghd"]
 [ext_resource type="PackedScene" uid="uid://bi5gcavnclfud" path="res://10_BOARD/Decor/Bell.blend" id="22_4fabq"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="23_4ws66"]
@@ -38,13 +37,13 @@
 [ext_resource type="PackedScene" uid="uid://b4hspc8dsyv14" path="res://08_SUBSCENES/Elements/Tiny_boat/scene_boat_ch_test.tscn" id="27_vmwp0"]
 [ext_resource type="Script" path="res://10_BOARD/Open_book.gd" id="27_xury7"]
 [ext_resource type="Resource" uid="uid://3pilop3f4m6r" path="res://15_GAME_RESSOURCE/03_BoardCam_state/ScannerM_focus_data.tres" id="30_1ohc7"]
+[ext_resource type="Script" path="res://10_BOARD/Scanner_light.gd" id="31_rhbgg"]
 [ext_resource type="PackedScene" uid="uid://8lvyeqde6f4" path="res://10_BOARD/Apicula_maquette/Apicula_maquette_v01.blend" id="31_xntsl"]
 [ext_resource type="PackedScene" uid="uid://b3e0cgra0jrsb" path="res://08_SUBSCENES/Oddity/Peon_oddity_v01.blend" id="34_4t7ek"]
 [ext_resource type="PackedScene" uid="uid://cug6bgsx45p6l" path="res://10_BOARD/Tube/Tube_oddity.blend" id="34_16txa"]
 [ext_resource type="Script" path="res://10_BOARD/Select_Tube.gd" id="34_dvua7"]
 [ext_resource type="Material" uid="uid://mqx4i5esml54" path="res://10_BOARD/Tube/Transparency_tube.tres" id="35_jujjk"]
 [ext_resource type="Shader" uid="uid://cd5obrgn7uute" path="res://05_SHADER/Board/Oddity_in_tube.tres" id="35_wnb4t"]
-[ext_resource type="Material" uid="uid://b5u3d7wosa00d" path="res://05_SHADER/Board/Flat_with_gradient.tres" id="35_xg8pc"]
 [ext_resource type="Shader" uid="uid://cctu1rugloxjc" path="res://05_SHADER/Board/Tube_liquide_sh.tres" id="36_p5f84"]
 [ext_resource type="Resource" uid="uid://ctxrmh1elpnm1" path="res://15_GAME_RESSOURCE/Follower_photoData.tres" id="37_jc8ce"]
 [ext_resource type="Script" path="res://10_BOARD/On_View_Event.gd" id="43_i0i3o"]
@@ -58,322 +57,9 @@
 [ext_resource type="Resource" uid="uid://dlqqpo5rncbhs" path="res://15_GAME_RESSOURCE/03_BoardCam_state/Board_Element_focus_data.tres" id="46_y5tcg"]
 [ext_resource type="Material" uid="uid://cfi5jyq3utqd4" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_mat_04.tres" id="47_r4p1c"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/Clock_montre/Selection_ini.gd" id="49_vb8xx"]
+[ext_resource type="Script" path="res://10_BOARD/See_Map.gd" id="50_5dxq8"]
+[ext_resource type="Resource" uid="uid://2c8xhsovefyj" path="res://15_GAME_RESSOURCE/03_BoardCam_state/Map_focus_data.tres" id="51_oeow0"]
 [ext_resource type="Script" path="res://10_BOARD/Bougie_allume.gd" id="53_go6nm"]
-
-[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_6pb33"]
-parameter_name = "Dark_color"
-qualifier = 2
-
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_7rud2"]
-size = Vector2(620, 200)
-expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
-grey_value = luminance;"
-
-[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_wjpdw"]
-default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
-op_type = 3
-
-[sub_resource type="VisualShaderNodeVaryingSetter" id="VisualShaderNodeVaryingSetter_rvgax"]
-varying_name = "isgray"
-
-[sub_resource type="VisualShaderNodeBooleanParameter" id="VisualShaderNodeBooleanParameter_yy0et"]
-parameter_name = "isGray"
-qualifier = 1
-
-[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_5h534"]
-parameter_name = "light_color"
-default_value = Color(0.401313, 0.399257, 0, 1)
-
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_1xjrb"]
-input_name = "attenuation"
-
-[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_dm28y"]
-default_input_values = [0, 0.0, 1, 1.0]
-operator = 2
-
-[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_hrm0h"]
-operator = 2
-
-[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_lukcx"]
-default_input_values = [0, Quaternion(0, 0, 0, 0), 1, Quaternion(0.125, 0.125, 0.125, 0.125), 2, Quaternion(0.5, 0.5, 0.5, 0.5)]
-op_type = 5
-
-[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_87tlt"]
-parameter_name = "ColorParameter"
-default_value_enabled = true
-default_value = Color(0.027451, 0.14902, 0.156863, 1)
-
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_30cnj"]
-parameter_name = "Dither_size"
-qualifier = 1
-
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_mroxa"]
-size = Vector2(620, 200)
-expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
-grey_value = luminance;"
-
-[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_uru4c"]
-default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
-op_type = 3
-
-[sub_resource type="VisualShaderNodeVaryingGetter" id="VisualShaderNodeVaryingGetter_24ycx"]
-varying_name = "isgray"
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_68a1y"]
-constant = 1.156
-
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_00pov"]
-size = Vector2(724.789, 654.559)
-expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_owwcf"]
-
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_at2m7"]
-input_name = "normal"
-
-[sub_resource type="VisualShaderNodeDotProduct" id="VisualShaderNodeDotProduct_rnv1u"]
-default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1.325, 4.3, 2.415)]
-
-[sub_resource type="VisualShaderNodeClamp" id="VisualShaderNodeClamp_bmeog"]
-
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_s3vyf"]
-input_name = "light"
-
-[sub_resource type="VisualShader" id="VisualShader_qmtsp"]
-code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx;
-
-
-// Varyings
-varying float isgray;
-
-instance uniform vec4 Dark_color : source_color;
-global uniform bool isGray;
-uniform vec4 ColorParameter : source_color = vec4(0.027451, 0.149020, 0.156863, 1.000000);
-uniform vec4 light_color : source_color;
-global uniform float Dither_size;
-
-
-
-void fragment() {
-// ColorParameter:2
-	vec4 n_out2p0 = Dark_color;
-
-
-	float n_out3p0;
-// Expression:3
-	n_out3p0 = 0.0;
-	{
-		float luminance = 0.299 * vec3(n_out2p0.xyz).x + 0.587 * vec3(n_out2p0.xyz).y + 0.114 * vec3(n_out2p0.xyz).z;
-		n_out3p0 = luminance;
-	}
-
-
-// BooleanParameter:6
-	bool n_out6p0 = isGray;
-
-
-// Mix:4
-	vec3 n_out4p0 = mix(vec3(n_out2p0.xyz), vec3(n_out3p0), vec3(n_out6p0 ? 1.0 : 0.0));
-
-
-// Output:0
-	ALBEDO = n_out4p0;
-
-
-// VaryingSetter:5
-	isgray = (n_out6p0 ? 1.0 : 0.0);
-
-
-}
-
-void light() {
-// ColorParameter:23
-	vec4 n_out23p0 = ColorParameter;
-
-
-// ColorParameter:13
-	vec4 n_out13p0 = light_color;
-
-
-// FloatConstant:3
-	float n_out3p0 = 1.156000;
-
-
-// FloatParameter:24
-	float n_out24p0 = Dither_size;
-
-
-	float n_out4p0;
-// Expression:4
-	n_out4p0 = 0.0;
-	{
-		const float DITHER_THRESHOLDS[16] ={
-				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-			};
-			
-		vec2 uv = FRAGCOORD.xy * n_out24p0;
-		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-		n_out4p0 = n_out3p0 - DITHER_THRESHOLDS[index];
-	}
-
-
-// Input:6
-	vec3 n_out6p0 = NORMAL;
-
-
-// Input:9
-	vec3 n_out9p0 = LIGHT;
-
-
-// DotProduct:7
-	float n_out7p0 = dot(n_out6p0, n_out9p0);
-
-
-// Clamp:8
-	float n_in8p1 = 0.00000;
-	float n_in8p2 = 1.00000;
-	float n_out8p0 = clamp(n_out7p0, n_in8p1, n_in8p2);
-
-
-// Input:15
-	float n_out15p0 = ATTENUATION;
-
-
-// FloatOp:16
-	float n_in16p1 = 1.00000;
-	float n_out16p0 = n_out15p0 * n_in16p1;
-
-
-// VectorOp:17
-	vec3 n_out17p0 = vec3(n_out8p0) * vec3(n_out16p0);
-
-
-// Step:5
-	float n_out5p0 = step(n_out4p0, n_out17p0.x);
-
-
-// Mix:19
-	vec4 n_out19p0 = mix(n_out23p0, n_out13p0, vec4(n_out5p0));
-
-
-	float n_out25p0;
-// Expression:25
-	n_out25p0 = 0.0;
-	{
-		float luminance = 0.299 * vec3(n_out19p0.xyz).x + 0.587 * vec3(n_out19p0.xyz).y + 0.114 * vec3(n_out19p0.xyz).z;
-		n_out25p0 = luminance;
-	}
-
-
-// VaryingGetter:27
-	float n_out27p0 = isgray;
-
-
-// Mix:26
-	vec3 n_out26p0 = mix(vec3(n_out19p0.xyz), vec3(n_out25p0), vec3(n_out27p0));
-
-
-// Output:0
-	SPECULAR_LIGHT = n_out26p0;
-
-
-}
-"
-graph_offset = Vector2(2019.13, 1121.49)
-varyings/isgray = "1,0"
-nodes/vertex/0/position = Vector2(400, 160)
-nodes/fragment/0/position = Vector2(1220, 200)
-nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_6pb33")
-nodes/fragment/2/position = Vector2(-20, 160)
-nodes/fragment/3/node = SubResource("VisualShaderNodeExpression_7rud2")
-nodes/fragment/3/position = Vector2(230.365, -328.78)
-nodes/fragment/3/size = Vector2(620, 200)
-nodes/fragment/3/input_ports = "0,4,color;"
-nodes/fragment/3/output_ports = "0,0,grey_value;"
-nodes/fragment/3/expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
-grey_value = luminance;"
-nodes/fragment/4/node = SubResource("VisualShaderNodeMix_wjpdw")
-nodes/fragment/4/position = Vector2(930.365, -48.7802)
-nodes/fragment/5/node = SubResource("VisualShaderNodeVaryingSetter_rvgax")
-nodes/fragment/5/position = Vector2(660, 180)
-nodes/fragment/6/node = SubResource("VisualShaderNodeBooleanParameter_yy0et")
-nodes/fragment/6/position = Vector2(340, -60)
-nodes/fragment/connections = PackedInt32Array(3, 0, 4, 1, 6, 0, 4, 2, 2, 0, 3, 0, 2, 0, 4, 0, 4, 0, 0, 0, 6, 0, 5, 0)
-nodes/light/0/position = Vector2(2580, 1600)
-nodes/light/3/node = SubResource("VisualShaderNodeFloatConstant_68a1y")
-nodes/light/3/position = Vector2(-460, 1980)
-nodes/light/4/node = SubResource("VisualShaderNodeExpression_00pov")
-nodes/light/4/position = Vector2(-180, 1980)
-nodes/light/4/size = Vector2(724.789, 654.559)
-nodes/light/4/input_ports = "0,0,In;1,0,Size;"
-nodes/light/4/output_ports = "0,0,Dither_Node;"
-nodes/light/4/expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/light/5/node = SubResource("VisualShaderNodeStep_owwcf")
-nodes/light/5/position = Vector2(720, 1500)
-nodes/light/6/node = SubResource("VisualShaderNodeInput_at2m7")
-nodes/light/6/position = Vector2(-1160, 1320)
-nodes/light/7/node = SubResource("VisualShaderNodeDotProduct_rnv1u")
-nodes/light/7/position = Vector2(-740, 1440)
-nodes/light/8/node = SubResource("VisualShaderNodeClamp_bmeog")
-nodes/light/8/position = Vector2(-540, 1320)
-nodes/light/9/node = SubResource("VisualShaderNodeInput_s3vyf")
-nodes/light/9/position = Vector2(-1160, 1620)
-nodes/light/13/node = SubResource("VisualShaderNodeColorParameter_5h534")
-nodes/light/13/position = Vector2(1120, 1620)
-nodes/light/15/node = SubResource("VisualShaderNodeInput_1xjrb")
-nodes/light/15/position = Vector2(-300, 1420)
-nodes/light/16/node = SubResource("VisualShaderNodeFloatOp_dm28y")
-nodes/light/16/position = Vector2(80, 1400)
-nodes/light/17/node = SubResource("VisualShaderNodeVectorOp_hrm0h")
-nodes/light/17/position = Vector2(260, 1280)
-nodes/light/19/node = SubResource("VisualShaderNodeMix_lukcx")
-nodes/light/19/position = Vector2(1560, 1360)
-nodes/light/23/node = SubResource("VisualShaderNodeColorParameter_87tlt")
-nodes/light/23/position = Vector2(1140, 1180)
-nodes/light/24/node = SubResource("VisualShaderNodeFloatParameter_30cnj")
-nodes/light/24/position = Vector2(-820, 2140)
-nodes/light/25/node = SubResource("VisualShaderNodeExpression_mroxa")
-nodes/light/25/position = Vector2(1708.55, 700.656)
-nodes/light/25/size = Vector2(620, 200)
-nodes/light/25/input_ports = "0,4,color;"
-nodes/light/25/output_ports = "0,0,grey_value;"
-nodes/light/25/expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
-grey_value = luminance;"
-nodes/light/26/node = SubResource("VisualShaderNodeMix_uru4c")
-nodes/light/26/position = Vector2(2408.55, 980.656)
-nodes/light/27/node = SubResource("VisualShaderNodeVaryingGetter_24ycx")
-nodes/light/27/position = Vector2(2119.95, 1255.81)
-nodes/light/connections = PackedInt32Array(5, 0, 19, 2, 15, 0, 16, 0, 16, 0, 17, 1, 6, 0, 7, 0, 9, 0, 7, 1, 13, 0, 19, 1, 3, 0, 4, 0, 23, 0, 19, 0, 4, 0, 5, 0, 17, 0, 5, 1, 7, 0, 8, 0, 8, 0, 17, 0, 24, 0, 4, 1, 25, 0, 26, 1, 19, 0, 25, 0, 19, 0, 26, 0, 27, 0, 26, 2, 26, 0, 0, 1)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_5i6u2"]
-render_priority = 0
-shader = SubResource("VisualShader_qmtsp")
-shader_parameter/ColorParameter = Color(0.0235294, 0.176471, 0.2, 1)
-shader_parameter/light_color = Color(0.678431, 0.529412, 0.286275, 1)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_5elco"]
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_ktulk"]
 constant = 0.826
@@ -422,6 +108,14 @@ op_type = 3
 parameter_name = "isGray"
 qualifier = 1
 
+[sub_resource type="VisualShaderNodeBooleanParameter" id="VisualShaderNodeBooleanParameter_8e17f"]
+parameter_name = "active_Dither"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeSwitch" id="VisualShaderNodeSwitch_y6asn"]
+default_input_values = [0, false, 1, Vector3(1, 1, 1), 2, Vector3(0, 0, 0)]
+op_type = 4
+
 [sub_resource type="Gradient" id="Gradient_o0krw"]
 offsets = PackedFloat32Array(0, 0.528875, 0.547112, 0.984802)
 colors = PackedColorArray(1, 1, 1, 1, 0.0102558, 0.0102558, 0.0102558, 1, 0.0243161, 0.0243161, 0.0243161, 1, 1, 1, 1, 1)
@@ -442,6 +136,7 @@ code = "shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
 
 uniform vec4 Main_color : source_color;
+global uniform bool active_Dither;
 uniform sampler2D Gradiant;
 uniform vec4 Main_color_02 : source_color;
 global uniform bool isGray;
@@ -451,6 +146,10 @@ global uniform bool isGray;
 void fragment() {
 // ColorParameter:17
 	vec4 n_out17p0 = Main_color;
+
+
+// BooleanParameter:22
+	bool n_out22p0 = active_Dither;
 
 
 // Input:13
@@ -491,12 +190,17 @@ void fragment() {
 	float n_out12p0 = step(n_out8p0.x, n_out11p0);
 
 
+	vec3 n_out23p0;
+// Switch:23
+	n_out23p0 = mix(vec3(n_out8p0.xyz), vec3(n_out12p0), float(n_out22p0));
+
+
 // ColorParameter:18
 	vec4 n_out18p0 = Main_color_02;
 
 
 // Mix:14
-	vec3 n_out14p0 = mix(vec3(n_out17p0.xyz), vec3(n_out12p0), vec3(n_out18p0.xyz));
+	vec3 n_out14p0 = mix(vec3(n_out17p0.xyz), n_out23p0, vec3(n_out18p0.xyz));
 
 
 	float n_out19p0;
@@ -522,7 +226,7 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-285.796, -340.073)
+graph_offset = Vector2(-1007.04, -268.536)
 flags/unshaded = true
 nodes/fragment/0/position = Vector2(660, 140)
 nodes/fragment/8/node = SubResource("VisualShaderNodeTexture_mohdy")
@@ -569,7 +273,11 @@ nodes/fragment/20/node = SubResource("VisualShaderNodeMix_ecgjq")
 nodes/fragment/20/position = Vector2(640, -340)
 nodes/fragment/21/node = SubResource("VisualShaderNodeBooleanParameter_43mq4")
 nodes/fragment/21/position = Vector2(60, -320)
-nodes/fragment/connections = PackedInt32Array(9, 0, 11, 1, 10, 0, 11, 0, 11, 0, 12, 1, 16, 0, 8, 2, 12, 0, 14, 1, 17, 0, 14, 0, 8, 0, 12, 0, 18, 0, 14, 2, 13, 0, 8, 0, 19, 0, 20, 1, 21, 0, 20, 2, 14, 0, 19, 0, 14, 0, 20, 0, 20, 0, 0, 0)
+nodes/fragment/22/node = SubResource("VisualShaderNodeBooleanParameter_8e17f")
+nodes/fragment/22/position = Vector2(-1100, 100)
+nodes/fragment/23/node = SubResource("VisualShaderNodeSwitch_y6asn")
+nodes/fragment/23/position = Vector2(-740, 180)
+nodes/fragment/connections = PackedInt32Array(9, 0, 11, 1, 10, 0, 11, 0, 11, 0, 12, 1, 16, 0, 8, 2, 17, 0, 14, 0, 8, 0, 12, 0, 18, 0, 14, 2, 13, 0, 8, 0, 19, 0, 20, 1, 21, 0, 20, 2, 14, 0, 19, 0, 14, 0, 20, 0, 20, 0, 0, 0, 22, 0, 23, 0, 12, 0, 23, 1, 8, 0, 23, 2, 23, 0, 14, 1)
 
 [sub_resource type="Gradient" id="Gradient_7iarl"]
 offsets = PackedFloat32Array(0, 0.544513, 1)
@@ -630,6 +338,17 @@ op_type = 3
 parameter_name = "isGray"
 qualifier = 1
 
+[sub_resource type="VisualShaderNodeBooleanParameter" id="VisualShaderNodeBooleanParameter_ofsjb"]
+parameter_name = "active_Dither"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeSwitch" id="VisualShaderNodeSwitch_6m4nl"]
+default_input_values = [0, false, 1, Vector3(1, 1, 1), 2, Vector3(0, 0, 0)]
+op_type = 4
+
+[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_0txmt"]
+function = 31
+
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_5otuq"]
 parameter_name = "ColorParameter"
 
@@ -669,6 +388,7 @@ render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_s
 
 uniform vec4 ColorParameter : source_color;
 global uniform bool isGray;
+global uniform bool active_Dither;
 global uniform float Dither_size;
 
 
@@ -693,6 +413,10 @@ void fragment() {
 
 // Mix:10
 	vec3 n_out10p0 = mix(vec3(n_out2p0.xyz), vec3(n_out9p0), vec3(n_out11p0 ? 1.0 : 0.0));
+
+
+// BooleanParameter:12
+	bool n_out12p0 = active_Dither;
 
 
 // Fresnel:3
@@ -729,14 +453,23 @@ void fragment() {
 	float n_out7p0 = step(n_out3p0, n_out4p0);
 
 
+// FloatFunc:14
+	float n_out14p0 = 1.0 - n_out3p0;
+
+
+	vec3 n_out13p0;
+// Switch:13
+	n_out13p0 = mix(vec3(n_out14p0), vec3(n_out7p0), float(n_out12p0));
+
+
 // Output:0
 	ALBEDO = n_out10p0;
-	ALPHA = n_out7p0;
+	ALPHA = n_out13p0.x;
 
 
 }
 "
-graph_offset = Vector2(248.91, -244.13)
+graph_offset = Vector2(-263.702, -59.9843)
 flags/unshaded = true
 nodes/fragment/0/position = Vector2(1660, 200)
 nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_5otuq")
@@ -775,12 +508,20 @@ nodes/fragment/10/node = SubResource("VisualShaderNodeMix_af38u")
 nodes/fragment/10/position = Vector2(1240, -100)
 nodes/fragment/11/node = SubResource("VisualShaderNodeBooleanParameter_fdt6x")
 nodes/fragment/11/position = Vector2(1155.19, 92.9967)
-nodes/fragment/connections = PackedInt32Array(5, 0, 4, 0, 6, 0, 4, 1, 3, 0, 7, 0, 4, 0, 7, 1, 7, 0, 0, 1, 9, 0, 10, 1, 2, 0, 9, 0, 2, 0, 10, 0, 10, 0, 0, 0, 11, 0, 10, 2)
+nodes/fragment/12/node = SubResource("VisualShaderNodeBooleanParameter_ofsjb")
+nodes/fragment/12/position = Vector2(537.708, 423.825)
+nodes/fragment/13/node = SubResource("VisualShaderNodeSwitch_6m4nl")
+nodes/fragment/13/position = Vector2(897.708, 503.825)
+nodes/fragment/14/node = SubResource("VisualShaderNodeFloatFunc_0txmt")
+nodes/fragment/14/position = Vector2(386.426, 578.8)
+nodes/fragment/connections = PackedInt32Array(5, 0, 4, 0, 6, 0, 4, 1, 3, 0, 7, 0, 4, 0, 7, 1, 9, 0, 10, 1, 2, 0, 9, 0, 2, 0, 10, 0, 10, 0, 0, 0, 11, 0, 10, 2, 12, 0, 13, 0, 7, 0, 13, 1, 13, 0, 0, 1, 3, 0, 14, 0, 14, 0, 13, 2)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1satu"]
 render_priority = 0
 shader = SubResource("VisualShader_n47n5")
 shader_parameter/ColorParameter = Color(0.72549, 0.615686, 0.384314, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_6pwkb"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_isdhd"]
 render_priority = 0
@@ -791,6 +532,9 @@ shader_parameter/light_color = Color(0.396078, 0.360784, 0.266667, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_qjco4"]
 size = Vector3(0.124, 0.002, 0.171)
+
+[sub_resource type="BoxMesh" id="BoxMesh_7afxs"]
+size = Vector3(0.002, 0.013, 0.171)
 
 [sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_ig5wi"]
 size = Vector2(620, 200)
@@ -1120,9 +864,6 @@ shader = SubResource("VisualShader_ir0xt")
 shader_parameter/Dark_color = Color(0.286275, 0.258824, 0.184314, 1)
 shader_parameter/Gradient = SubResource("GradientTexture2D_8y6bs")
 
-[sub_resource type="BoxMesh" id="BoxMesh_7afxs"]
-size = Vector3(0.002, 0.013, 0.171)
-
 [sub_resource type="BoxMesh" id="BoxMesh_f58ta"]
 size = Vector3(0.118, 0.027, 0.167)
 
@@ -1272,6 +1013,42 @@ signal On_View
 [sub_resource type="BoxShape3D" id="BoxShape3D_yuede"]
 size = Vector3(8.8756, 7.36426, 1.99634)
 
+[sub_resource type="GDScript" id="GDScript_l8jpj"]
+script/source = "extends Node
+
+signal On_View
+
+"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0g12l"]
+size = Vector3(1.8418, 3.47363, 1.89648)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_cov0w"]
+size = Vector3(1.49371, 0.0161209, 1.50208)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_e811w"]
+size = Vector3(1.49371, 0.0578651, 1.50208)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_x8wfj"]
+size = Vector2(1.445, 1.445)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ok24o"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("3_vh83x")
+shader_parameter/Color = Color(0.0235294, 0.129412, 0.137255, 1)
+shader_parameter/Color2 = Color(0.470588, 0.435294, 0.309804, 1)
+shader_parameter/Opacity = 1.0
+shader_parameter/Isle_color = Color(0.470588, 0.435294, 0.309804, 1)
+shader_parameter/Grid_color = Color(0.160784, 0.266667, 0.27451, 1)
+shader_parameter/Offset = Vector2(0, -1.36)
+shader_parameter/Size = Vector2(1200, 1200)
+shader_parameter/Ligne_widht = 0.015
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_n7wwh"]
+material = SubResource("ShaderMaterial_isdhd")
+size = Vector2(0.795, 0.795)
+
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_dkrue"]
 constant = 0.826
 
@@ -1319,6 +1096,14 @@ op_type = 3
 parameter_name = "isGray"
 qualifier = 1
 
+[sub_resource type="VisualShaderNodeBooleanParameter" id="VisualShaderNodeBooleanParameter_51w7j"]
+parameter_name = "active_Dither"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeSwitch" id="VisualShaderNodeSwitch_hjhm7"]
+default_input_values = [0, false, 1, Vector3(1, 1, 1), 2, Vector3(0, 0, 0)]
+op_type = 4
+
 [sub_resource type="Gradient" id="Gradient_aur43"]
 offsets = PackedFloat32Array(0, 0.528875, 0.547112, 0.984802)
 colors = PackedColorArray(1, 1, 1, 1, 0.0102558, 0.0102558, 0.0102558, 1, 0.0243161, 0.0243161, 0.0243161, 1, 1, 1, 1, 1)
@@ -1339,6 +1124,7 @@ code = "shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
 
 uniform vec4 Main_color : source_color;
+global uniform bool active_Dither;
 uniform sampler2D Gradiant;
 global uniform bool isGray;
 
@@ -1347,6 +1133,10 @@ global uniform bool isGray;
 void fragment() {
 // ColorParameter:17
 	vec4 n_out17p0 = Main_color;
+
+
+// BooleanParameter:21
+	bool n_out21p0 = active_Dither;
 
 
 // Input:13
@@ -1387,12 +1177,17 @@ void fragment() {
 	float n_out12p0 = step(n_out8p0.x, n_out11p0);
 
 
+	vec3 n_out22p0;
+// Switch:22
+	n_out22p0 = mix(vec3(n_out8p0.xyz), vec3(n_out12p0), float(n_out21p0));
+
+
 // FloatConstant:15
 	float n_out15p0 = 0.100000;
 
 
 // Mix:14
-	vec3 n_out14p0 = mix(vec3(n_out17p0.xyz), vec3(n_out12p0), vec3(n_out15p0));
+	vec3 n_out14p0 = mix(vec3(n_out17p0.xyz), n_out22p0, vec3(n_out15p0));
 
 
 	float n_out18p0;
@@ -1418,7 +1213,7 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-449.518, -267.3)
+graph_offset = Vector2(-1004.39, -250.711)
 flags/unshaded = true
 nodes/fragment/8/node = SubResource("VisualShaderNodeTexture_8l104")
 nodes/fragment/8/position = Vector2(-1500, -380)
@@ -1464,7 +1259,11 @@ nodes/fragment/19/node = SubResource("VisualShaderNodeMix_ojwy6")
 nodes/fragment/19/position = Vector2(440, -140)
 nodes/fragment/20/node = SubResource("VisualShaderNodeBooleanParameter_j6s0b")
 nodes/fragment/20/position = Vector2(-100, -80)
-nodes/fragment/connections = PackedInt32Array(9, 0, 11, 1, 10, 0, 11, 0, 11, 0, 12, 1, 15, 0, 14, 2, 16, 0, 8, 2, 12, 0, 14, 1, 17, 0, 14, 0, 13, 0, 8, 0, 8, 0, 12, 0, 18, 0, 19, 1, 20, 0, 19, 2, 14, 0, 18, 0, 14, 0, 19, 0, 19, 0, 0, 0)
+nodes/fragment/21/node = SubResource("VisualShaderNodeBooleanParameter_51w7j")
+nodes/fragment/21/position = Vector2(-1110.11, 63.6499)
+nodes/fragment/22/node = SubResource("VisualShaderNodeSwitch_hjhm7")
+nodes/fragment/22/position = Vector2(-750.107, 143.65)
+nodes/fragment/connections = PackedInt32Array(9, 0, 11, 1, 10, 0, 11, 0, 11, 0, 12, 1, 15, 0, 14, 2, 16, 0, 8, 2, 17, 0, 14, 0, 13, 0, 8, 0, 8, 0, 12, 0, 18, 0, 19, 1, 20, 0, 19, 2, 14, 0, 18, 0, 14, 0, 19, 0, 19, 0, 0, 0, 21, 0, 22, 0, 12, 0, 22, 1, 8, 0, 22, 2, 22, 0, 14, 1)
 
 [sub_resource type="Gradient" id="Gradient_nrla2"]
 offsets = PackedFloat32Array(0, 0.519856, 1)
@@ -1521,18 +1320,15 @@ size = Vector3(0.432556, 0.539551, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_bc6ip"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pf4ox"]
+render_priority = 0
+shader = ExtResource("1_k1enu")
+shader_parameter/Dark_color = Color(0, 0, 0, 1)
+shader_parameter/ColorParameter = Color(0.00784314, 0.0666667, 0.0745098, 1)
+shader_parameter/light_color = Color(0.0235294, 0.141176, 0.156863, 1)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_83ax2"]
 size = Vector3(1, 3, 1)
-
-[sub_resource type="GDScript" id="GDScript_l8jpj"]
-script/source = "extends Node
-
-signal On_View
-
-"
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_0g12l"]
-size = Vector3(1.8418, 3.47363, 1.89648)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_v3vdb"]
 size = Vector3(1, 1.3114, 1)
@@ -1625,363 +1421,20 @@ render_priority = 0
 shader = SubResource("VisualShader_v3wmk")
 shader_parameter/Dark_color = Color(0.0196078, 0.121569, 0.129412, 1)
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_x8wfj"]
-size = Vector2(1.445, 1.445)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ok24o"]
-resource_local_to_scene = true
-render_priority = 0
-shader = ExtResource("3_vh83x")
-shader_parameter/Color = Color(0.0235294, 0.129412, 0.137255, 1)
-shader_parameter/Color2 = Color(0.470588, 0.435294, 0.309804, 1)
-shader_parameter/Opacity = 1.0
-shader_parameter/Isle_color = Color(0.470588, 0.435294, 0.309804, 1)
-shader_parameter/Grid_color = Color(0.160784, 0.266667, 0.27451, 1)
-shader_parameter/Offset = Vector2(0, -1.36)
-shader_parameter/Size = Vector2(1200, 1200)
-shader_parameter/Ligne_widht = 0.015
-
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_otvwy"]
-size = Vector2(620, 200)
-expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
-grey_value = luminance;"
-
-[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_vy5wp"]
-default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
-op_type = 3
-
-[sub_resource type="VisualShaderNodeBooleanParameter" id="VisualShaderNodeBooleanParameter_dr6p7"]
-parameter_name = "isGray"
-qualifier = 1
-
-[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_8msb4"]
-parameter_name = "Dark_color"
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_wikq1"]
-constant = 0.8
-
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_c2472"]
-size = Vector2(724.789, 654.559)
-expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_ju72v"]
-parameter_name = "Dither_size"
-qualifier = 1
-
-[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_6cvwb"]
-source = 5
-
-[sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_4ipjb"]
-parameter_name = "Gradient"
-texture_filter = 1
-texture_repeat = 1
-
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_essdf"]
-
-[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_56ne6"]
-default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
-op_type = 3
-
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_lao4q"]
-input_name = "attenuation"
-
-[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_c7npq"]
-default_input_values = [0, Vector2(0, 0), 1, Vector2(0, 0)]
-op_type = 0
-operator = 2
-
-[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_ciivx"]
-default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
-op_type = 3
-
-[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_1i3cm"]
-parameter_name = "light_color"
-default_value = Color(0.401313, 0.399257, 0, 1)
-
-[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_a2l6c"]
-default_input_values = [0, 0.0, 1, 0.2]
-operator = 2
-
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_0chdb"]
-input_name = "attenuation"
-
-[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_w42v1"]
-default_input_values = [0, 0.0, 1, 1.0]
-operator = 2
-
-[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_4wahl"]
-operator = 2
-
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_tfxxw"]
-input_name = "albedo"
-
-[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_liko7"]
-default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(0.125, 0.125, 0.125), 2, Vector3(0.5, 0.5, 0.5)]
-op_type = 3
-
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_mf3a0"]
-parameter_name = "Distance_power"
-default_value_enabled = true
-default_value = 0.25
-
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_4x4us"]
-
-[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_o2fey"]
-parameter_name = "ColorParameter"
-qualifier = 2
-default_value_enabled = true
-default_value = Color(0.027451, 0.14902, 0.156863, 1)
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_o1mif"]
-constant = 1.156
-
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_5yo62"]
-size = Vector2(724.789, 654.559)
-expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_vmjrs"]
-
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_600y8"]
-input_name = "normal"
-
-[sub_resource type="VisualShaderNodeDotProduct" id="VisualShaderNodeDotProduct_hetvo"]
-default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1.325, 4.3, 2.415)]
-
-[sub_resource type="VisualShaderNodeClamp" id="VisualShaderNodeClamp_k3mua"]
-
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_212h6"]
-input_name = "light"
-
-[sub_resource type="VisualShader" id="VisualShader_ndmq4"]
-code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
-
-
-// Varyings
-varying vec3 dark_color_var;
-
-uniform vec4 Dark_color : source_color;
-uniform sampler2D Gradient : filter_nearest, repeat_enable;
-global uniform float Dither_size;
-global uniform bool isGray;
-
-
-
-void fragment() {
-// ColorParameter:2
-	vec4 n_out2p0 = Dark_color;
-
-
-	vec4 n_out6p0;
-// Texture2D:6
-	n_out6p0 = texture(Gradient, UV);
-
-
-// FloatConstant:3
-	float n_out3p0 = 0.800000;
-
-
-// FloatParameter:5
-	float n_out5p0 = Dither_size;
-
-
-	float n_out4p0;
-// Expression:4
-	n_out4p0 = 0.0;
-	{
-		const float DITHER_THRESHOLDS[16] ={
-				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-			};
-			
-		vec2 uv = FRAGCOORD.xy * n_out5p0;
-		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-		n_out4p0 = n_out3p0 - DITHER_THRESHOLDS[index];
-	}
-
-
-// Step:8
-	float n_out8p0 = step(n_out6p0.x, n_out4p0);
-
-
-// Mix:9
-	vec3 n_out9p0 = mix(vec3(n_out2p0.xyz), vec3(n_out8p0), vec3(n_out2p0.xyz));
-
-
-	float n_out12p0;
-// Expression:12
-	n_out12p0 = 0.0;
-	{
-		float luminance = 0.299 * n_out9p0.x + 0.587 * n_out9p0.y + 0.114 * n_out9p0.z;
-		n_out12p0 = luminance;
-	}
-
-
-// BooleanParameter:14
-	bool n_out14p0 = isGray;
-
-
-// Mix:13
-	vec3 n_out13p0 = mix(n_out9p0, vec3(n_out12p0), vec3(n_out14p0 ? 1.0 : 0.0));
-
-
-// Output:0
-	ALBEDO = n_out13p0;
-
-
-	dark_color_var = vec3(0.0);
-}
-"
-graph_offset = Vector2(-371.671, -349.728)
-flags/unshaded = true
-varyings/dark_color_var = "1,4"
-nodes/vertex/0/position = Vector2(400, 160)
-nodes/fragment/0/position = Vector2(1080, 80)
-nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_8msb4")
-nodes/fragment/2/position = Vector2(-740, -140)
-nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_wikq1")
-nodes/fragment/3/position = Vector2(-1020, 620)
-nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_c2472")
-nodes/fragment/4/position = Vector2(-740, 620)
-nodes/fragment/4/size = Vector2(724.789, 654.559)
-nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
-nodes/fragment/4/output_ports = "0,0,Dither_Node;"
-nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/5/node = SubResource("VisualShaderNodeFloatParameter_ju72v")
-nodes/fragment/5/position = Vector2(-1200, 780)
-nodes/fragment/6/node = SubResource("VisualShaderNodeTexture_6cvwb")
-nodes/fragment/6/position = Vector2(-460, 320)
-nodes/fragment/7/node = SubResource("VisualShaderNodeTexture2DParameter_4ipjb")
-nodes/fragment/7/position = Vector2(-1320, 140)
-nodes/fragment/8/node = SubResource("VisualShaderNodeStep_essdf")
-nodes/fragment/8/position = Vector2(-100, 360)
-nodes/fragment/9/node = SubResource("VisualShaderNodeMix_56ne6")
-nodes/fragment/9/position = Vector2(99.9524, 52.3079)
-nodes/fragment/12/node = SubResource("VisualShaderNodeExpression_otvwy")
-nodes/fragment/12/position = Vector2(470.493, -684.104)
-nodes/fragment/12/size = Vector2(620, 200)
-nodes/fragment/12/input_ports = "0,4,color;"
-nodes/fragment/12/output_ports = "0,0,grey_value;"
-nodes/fragment/12/expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
-grey_value = luminance;"
-nodes/fragment/13/node = SubResource("VisualShaderNodeMix_vy5wp")
-nodes/fragment/13/position = Vector2(1170.5, -404.104)
-nodes/fragment/14/node = SubResource("VisualShaderNodeBooleanParameter_dr6p7")
-nodes/fragment/14/position = Vector2(567.76, -318.996)
-nodes/fragment/connections = PackedInt32Array(3, 0, 4, 0, 5, 0, 4, 1, 7, 0, 6, 2, 6, 0, 8, 0, 4, 0, 8, 1, 2, 0, 9, 0, 8, 0, 9, 1, 2, 0, 9, 2, 12, 0, 13, 1, 9, 0, 12, 0, 13, 0, 0, 0, 9, 0, 13, 0, 14, 0, 13, 2)
-nodes/light/0/position = Vector2(2440, 1640)
-nodes/light/3/node = SubResource("VisualShaderNodeFloatConstant_o1mif")
-nodes/light/3/position = Vector2(-460, 1980)
-nodes/light/4/node = SubResource("VisualShaderNodeExpression_5yo62")
-nodes/light/4/position = Vector2(-180, 1980)
-nodes/light/4/size = Vector2(724.789, 654.559)
-nodes/light/4/input_ports = "0,0,In;1,0,Size;"
-nodes/light/4/output_ports = "0,0,Dither_Node;"
-nodes/light/4/expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/light/5/node = SubResource("VisualShaderNodeStep_vmjrs")
-nodes/light/5/position = Vector2(720, 1500)
-nodes/light/6/node = SubResource("VisualShaderNodeInput_600y8")
-nodes/light/6/position = Vector2(-1160, 1320)
-nodes/light/7/node = SubResource("VisualShaderNodeDotProduct_hetvo")
-nodes/light/7/position = Vector2(-740, 1440)
-nodes/light/8/node = SubResource("VisualShaderNodeClamp_k3mua")
-nodes/light/8/position = Vector2(-540, 1320)
-nodes/light/9/node = SubResource("VisualShaderNodeInput_212h6")
-nodes/light/9/position = Vector2(-1160, 1620)
-nodes/light/10/node = SubResource("VisualShaderNodeInput_lao4q")
-nodes/light/10/position = Vector2(-800, 1740)
-nodes/light/11/node = SubResource("VisualShaderNodeVectorOp_c7npq")
-nodes/light/11/position = Vector2(-240, 1600)
-nodes/light/12/node = SubResource("VisualShaderNodeMix_ciivx")
-nodes/light/12/position = Vector2(1860, 1200)
-nodes/light/13/node = SubResource("VisualShaderNodeColorParameter_1i3cm")
-nodes/light/13/position = Vector2(1120, 1620)
-nodes/light/14/node = SubResource("VisualShaderNodeFloatOp_a2l6c")
-nodes/light/14/position = Vector2(-420, 1720)
-nodes/light/15/node = SubResource("VisualShaderNodeInput_0chdb")
-nodes/light/15/position = Vector2(-300, 1420)
-nodes/light/16/node = SubResource("VisualShaderNodeFloatOp_w42v1")
-nodes/light/16/position = Vector2(80, 1400)
-nodes/light/17/node = SubResource("VisualShaderNodeVectorOp_4wahl")
-nodes/light/17/position = Vector2(260, 1280)
-nodes/light/18/node = SubResource("VisualShaderNodeInput_tfxxw")
-nodes/light/18/position = Vector2(1240, 1100)
-nodes/light/19/node = SubResource("VisualShaderNodeMix_liko7")
-nodes/light/19/position = Vector2(1560, 1360)
-nodes/light/20/node = SubResource("VisualShaderNodeFloatParameter_mf3a0")
-nodes/light/20/position = Vector2(100, 1520)
-nodes/light/21/node = SubResource("VisualShaderNodeStep_4x4us")
-nodes/light/21/position = Vector2(720, 1700)
-nodes/light/23/node = SubResource("VisualShaderNodeColorParameter_o2fey")
-nodes/light/23/position = Vector2(1140, 1180)
-nodes/light/connections = PackedInt32Array(8, 0, 11, 0, 3, 0, 4, 0, 10, 0, 14, 0, 14, 0, 11, 1, 8, 0, 17, 0, 5, 0, 19, 2, 4, 0, 5, 0, 15, 0, 16, 0, 16, 0, 17, 1, 7, 0, 8, 0, 6, 0, 7, 0, 17, 0, 5, 1, 9, 0, 7, 1, 19, 0, 12, 2, 18, 0, 12, 1, 23, 0, 19, 0, 13, 0, 19, 1, 4, 0, 21, 0, 11, 0, 21, 1, 20, 0, 16, 1)
-
-[sub_resource type="Gradient" id="Gradient_6waow"]
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_46anv"]
-gradient = SubResource("Gradient_6waow")
-fill = 1
-fill_from = Vector2(0.547009, 0.371795)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_jh8ct"]
-resource_local_to_scene = true
-render_priority = 0
-shader = SubResource("VisualShader_ndmq4")
-shader_parameter/Dark_color = Color(0.505882, 0.443137, 0.32549, 1)
-shader_parameter/Gradient = SubResource("GradientTexture2D_46anv")
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_n7wwh"]
-material = SubResource("ShaderMaterial_jh8ct")
-size = Vector2(0.795, 0.795)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_cov0w"]
-size = Vector3(1.49371, 0.0161209, 1.50208)
-
 [sub_resource type="BoxMesh" id="BoxMesh_p7wk2"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_8k1bl"]
 size = Vector3(1.04495, 2.17786, 1.04868)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ybhvf"]
+render_priority = 0
+shader = ExtResource("1_k1enu")
+shader_parameter/Dark_color = Color(0, 0, 0, 1)
+shader_parameter/ColorParameter = Color(0.00784314, 0.0745098, 0.0784314, 1)
+shader_parameter/light_color = Color(0.0392157, 0.188235, 0.207843, 1)
+
 [sub_resource type="PlaneMesh" id="PlaneMesh_i55er"]
-material = ExtResource("35_xg8pc")
+material = SubResource("ShaderMaterial_ybhvf")
 size = Vector2(1.21, 0.795)
 
 [sub_resource type="BoxMesh" id="BoxMesh_1smid"]
@@ -2004,19 +1457,6 @@ size = Vector3(1, 0.001, 1)
 
 [node name="Board_scene" type="Node3D"]
 
-[node name="LIGHT_scene" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0276438, 0.225876, -0.148653)
-layers = 2
-shadow_enabled = true
-shadow_bias = 0.0
-shadow_normal_bias = 0.793
-shadow_opacity = 0.52
-shadow_blur = 0.0
-distance_fade_begin = 42.6
-omni_range = 1.6
-omni_attenuation = 1.14868
-omni_shadow_mode = 0
-
 [node name="Movable" type="Node3D" parent="."]
 script = ExtResource("1_2yoh7")
 
@@ -2026,27 +1466,24 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.251042, 0, 0.458327)
 [node name="Board_Instance_Position" type="Node3D" parent="Movable"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00101237, 0.00835738, 0.414869)
 
-[node name="PHOTO" type="Node3D" parent="Movable"]
-transform = Transform3D(0.882135, 0, -0.470996, 0, 1, 0, 0.470996, 0, 0.882135, 0.189478, 0.00272226, 0.0787499)
-
-[node name="MrBird_Photo" parent="Movable/PHOTO" instance=ExtResource("1_mtaom")]
-transform = Transform3D(0.605643, 0, 0.795737, 0, 1, 0, -0.795737, 0, 0.605643, -0.577348, 0.00081826, 0.256736)
+[node name="MrBird_Photo" parent="Movable" instance=ExtResource("1_mtaom")]
+transform = Transform3D(0.909048, 0, 0.416692, 0, 1, 0, -0.416692, 0, 0.909048, -0.440742, 0.00354052, 0.0332971)
 Photo_data = ExtResource("14_ycmhi")
 
-[node name="Otis_Photo" parent="Movable/PHOTO" instance=ExtResource("1_mtaom")]
-transform = Transform3D(0.837521, 0, 0.546407, 0, 1, 0, -0.546407, 0, 0.837521, -0.542216, 0.00109488, 0.138382)
+[node name="Otis_Photo" parent="Movable" instance=ExtResource("1_mtaom")]
+transform = Transform3D(0.996162, 0, 0.0875356, 0, 1, 0, -0.0875356, 0, 0.996162, -0.354007, 0.00381714, -0.0545601)
 Photo_data = ExtResource("15_m1itl")
 
-[node name="Maurice_Photo" parent="Movable/PHOTO" instance=ExtResource("1_mtaom")]
-transform = Transform3D(0.770505, 0.00116027, 0.637433, -0.00136848, 0.999999, -0.000166057, -0.637433, -0.000744368, 0.770506, -0.472463, 0.000537999, 0.234522)
+[node name="Maurice_Photo" parent="Movable" instance=ExtResource("1_mtaom")]
+transform = Transform3D(0.979918, 0.00137411, 0.199397, -0.00136848, 0.999999, -0.000166057, -0.199397, -0.000110151, 0.979919, -0.337757, 0.00326026, 0.0631018)
 Photo_data = ExtResource("16_14mtd")
 
-[node name="GhostFollower_Photo" parent="Movable/PHOTO" instance=ExtResource("1_mtaom")]
-transform = Transform3D(0.829899, 0.00122835, 0.557914, -0.00136848, 0.999999, -0.000166055, -0.557914, -0.000625688, 0.8299, -0.199284, 0.00132012, 0.128091)
+[node name="GhostFollower_Photo" parent="Movable" instance=ExtResource("1_mtaom")]
+transform = Transform3D(0.994858, 0.00137827, 0.101276, -0.00136848, 0.999999, -0.000166055, -0.101276, 2.66067e-05, 0.994859, -0.0466477, 0.00404238, 0.0978815)
 Photo_data = ExtResource("18_gjhpl")
 
-[node name="Epave_Photo" parent="Movable/PHOTO" instance=ExtResource("1_mtaom")]
-transform = Transform3D(0.79225, 0.00118551, 0.610195, -0.00136848, 0.999999, -0.000166059, -0.610195, -0.00070348, 0.792251, -0.251207, 6.49614e-05, 0.235301)
+[node name="Epave_Photo" parent="Movable" instance=ExtResource("1_mtaom")]
+transform = Transform3D(0.986271, 0.00137712, 0.165127, -0.00136848, 0.999999, -0.000166059, -0.165128, -6.21938e-05, 0.986272, -0.142946, 0.00278722, 0.168)
 
 [node name="Letters" type="Node3D" parent="Movable" node_paths=PackedStringArray("all_note")]
 transform = Transform3D(1.00779, 0, 0, 0, 1.00779, 0, 0, 0, 1.00779, 0, 0, 0)
@@ -2082,55 +1519,8 @@ monitorable = false
 Note_data = ExtResource("17_3gp1t")
 intrigue_data = ExtResource("21_eaghd")
 
-[node name="Chavet_part" parent="Movable" instance=ExtResource("20_d7w3e")]
-transform = Transform3D(0.0117306, 0, 0, 0, 0.0117306, 0, 0, 0, 0.0117306, 0.427314, 0.00467773, 0.26389)
-
-[node name="parts" parent="Movable/Chavet_part" index="0"]
-transform = Transform3D(0.651676, 0, 0, 0, 0.651676, 0, 0, 0, 0.651676, 0, 0, 0)
-layers = 2
-surface_material_override/0 = SubResource("ShaderMaterial_5i6u2")
-
-[node name="Movable_obj" type="Node" parent="Movable/Chavet_part" node_paths=PackedStringArray("collider", "move_root", "rotation_root", "On_Move")]
-script = ExtResource("43_usyd2")
-collider = NodePath("../Area3D/CollisionShape3D")
-move_root = NodePath("..")
-rotation_root = NodePath("..")
-On_Move = NodePath("../Area3D/On_Move")
-
-[node name="Area3D" type="Area3D" parent="Movable/Chavet_part"]
-
-[node name="On_Move" type="Node" parent="Movable/Chavet_part/Area3D"]
-script = ExtResource("44_64ctv")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Movable/Chavet_part/Area3D"]
-transform = Transform3D(1.85936, 0, 0, 0, 1.85936, 0, 0, 0, 1.85936, 0, 0.945521, 0)
-shape = SubResource("BoxShape3D_5elco")
-
-[node name="Chavet_part2" parent="Movable" instance=ExtResource("20_d7w3e")]
-transform = Transform3D(0.0117306, 0, 0, 0, 0.0117306, 0, 0, 0, 0.0117306, 0.218318, 0.00290929, 0.164602)
-
-[node name="parts" parent="Movable/Chavet_part2" index="0"]
-transform = Transform3D(0.651676, 0, 0, 0, 0.651676, 0, 0, 0, 0.651676, 0, 0, 0)
-layers = 2
-surface_material_override/0 = SubResource("ShaderMaterial_5i6u2")
-
-[node name="Chavet_part3" parent="Movable" instance=ExtResource("20_d7w3e")]
-transform = Transform3D(0.0117306, 0, 0, 0, 0.0117306, 0, 0, 0, 0.0117306, 0.496433, 0.00290929, 0.167607)
-
-[node name="parts" parent="Movable/Chavet_part3" index="0"]
-transform = Transform3D(0.651676, 0, 0, 0, 0.651676, 0, 0, 0, 0.651676, 0, 0, 0)
-layers = 2
-surface_material_override/0 = SubResource("ShaderMaterial_5i6u2")
-
-[node name="Chavet_part4" parent="Movable" instance=ExtResource("20_d7w3e")]
-transform = Transform3D(0.0117306, 0, 0, 0, 0.0117306, 0, 0, 0, 0.0117306, 0.290416, 0.00481083, 0.164218)
-
-[node name="parts" parent="Movable/Chavet_part4" index="0"]
-transform = Transform3D(0.651676, 0, 0, 0, 0.651676, 0, 0, 0, 0.651676, 0, 0, 0)
-layers = 2
-surface_material_override/0 = SubResource("ShaderMaterial_5i6u2")
-
 [node name="Boue" type="Node3D" parent="Movable"]
+visible = false
 script = ExtResource("18_tu2nn")
 test_boue_exist = ExtResource("27_l5lxj")
 
@@ -2200,8 +1590,10 @@ focus_data = ExtResource("30_1ohc7")
 
 [node name="Scanner_light" type="OmniLight3D" parent="Movable/Scanner_reader"]
 transform = Transform3D(0.999992, 0.00411896, 0, -0.00411896, 0.999992, 0, 0, 0, 1, 0.00407649, 0.239584, 0.00464271)
+visible = false
 layers = 128
 omni_range = 0.240332
+script = ExtResource("31_rhbgg")
 
 [node name="Loader" type="Node3D" parent="Movable/Scanner_reader"]
 transform = Transform3D(1.39903, 0.00288128, 0, -0.00288128, 1.39903, 0, 0, 0, 1.39903, 0.00144204, 0.054333, 0.00117853)
@@ -2216,8 +1608,10 @@ collider = NodePath("../Area3D/CollisionShape3D")
 move_root = NodePath("..")
 On_Move = NodePath("../Area3D/On_Move")
 
-[node name="On_View_Call" type="Node" parent="Movable/Scanner_reader"]
+[node name="On_View_Call" type="Node" parent="Movable/Scanner_reader" node_paths=PackedStringArray("On_View")]
 script = ExtResource("23_5ghgr")
+focus_data = ExtResource("30_1ohc7")
+On_View = NodePath("../Area3D/On_View")
 
 [node name="Area3D" type="Area3D" parent="Movable/Scanner_reader"]
 
@@ -2233,20 +1627,27 @@ shape = SubResource("BoxShape3D_c0r5v")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Movable/Scanner_reader"]
 transform = Transform3D(1.46563, 0, 0, 0, 1.46563, 0, 0, 0, 1.46563, -9.96515e-06, 0.00714402, 9.48608e-05)
-layers = 130
+layers = 2
 mesh = SubResource("CylinderMesh_3wbgg")
 surface_material_override/0 = SubResource("ShaderMaterial_l3nap")
 
 [node name="MeshInstance3D3" type="MeshInstance3D" parent="Movable/Scanner_reader"]
 transform = Transform3D(1.36712, 0, 0, 0, 1.36712, 0, 0, 0, 1.36712, -9.96515e-06, 0.0211506, 9.48608e-05)
-layers = 130
+layers = 2
 mesh = SubResource("CylinderMesh_3wbgg")
 surface_material_override/0 = ExtResource("6_kkuc8")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="Movable/Scanner_reader"]
 transform = Transform3D(1.14099, 0, 0, 0, 1.21305, 0, 0, 0, 1.14099, 8.41208e-05, 0.0288101, -0.000800952)
-layers = 130
+layers = 2
 mesh = SubResource("CylinderMesh_3wbgg")
+surface_material_override/0 = SubResource("ShaderMaterial_1satu")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Movable/Scanner_reader"]
+transform = Transform3D(0.178602, 0, 0, 0, 0.189882, 0, 0, 0, 0.178602, 8.41208e-05, 0.122695, -0.000800952)
+visible = false
+layers = 2
+mesh = SubResource("SphereMesh_6pwkb")
 surface_material_override/0 = SubResource("ShaderMaterial_1satu")
 
 [node name="Loupe_RG" parent="Movable" instance=ExtResource("12_alpcj")]
@@ -2276,7 +1677,7 @@ script = ExtResource("24_4lsou")
 transform = Transform3D(0.956269, 0, -0.292489, 0, 1, 0, 0.292489, 0, 0.956269, -0.0162867, 0.0192151, 0.0340588)
 layers = 2
 mesh = SubResource("BoxMesh_qjco4")
-surface_material_override/0 = SubResource("ShaderMaterial_246wt")
+surface_material_override/0 = SubResource("ShaderMaterial_l3nap")
 
 [node name="MeshInstance3D4" type="MeshInstance3D" parent="Movable/Book_Close_root"]
 transform = Transform3D(0.956269, 0, -0.292489, 0, 1, 0, 0.292489, 0, 0.956269, -0.0751187, 0.0116655, 0.0161208)
@@ -2352,6 +1753,7 @@ layers = 2
 surface_material_override/0 = ExtResource("35_jujjk")
 
 [node name="liquide" parent="Movable/TUBE_oddity/Tube_oddity" index="2"]
+visible = false
 layers = 2
 surface_material_override/0 = SubResource("ShaderMaterial_th3mc")
 
@@ -2430,6 +1832,126 @@ collision_mask = 4
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Movable/Apicula_root/Apicula_maquette/Limit_zone"]
 transform = Transform3D(0.998216, 0, -0.0597076, 0, 1, 0, 0.0597076, 0, 0.998216, 0.802903, 2.04874, 0.110569)
 shape = SubResource("BoxShape3D_yuede")
+
+[node name="Lanterne" parent="Movable" instance=ExtResource("1_l5l52")]
+transform = Transform3D(0.09052, 0, 0, 0, 0.09052, 0, 0, 0, 0.09052, 0.0160542, 0.0674779, -0.420263)
+
+[node name="Lanterne" parent="Movable/Lanterne" index="0"]
+transform = Transform3D(0.691992, 0, -0.721905, 0, 1, 0, 0.721905, 0, 0.691992, 0, 0, 0)
+layers = 2
+surface_material_override/0 = SubResource("ShaderMaterial_1satu")
+surface_material_override/1 = ExtResource("6_kkuc8")
+
+[node name="LIGHT_scene" type="OmniLight3D" parent="Movable/Lanterne"]
+transform = Transform3D(11.0473, 0, 0, 0, 11.0473, 0, 0, 0, 11.0473, 0, 1.64, 0)
+layers = 2
+shadow_enabled = true
+shadow_bias = 0.0
+shadow_normal_bias = 0.793
+shadow_opacity = 0.52
+shadow_blur = 0.0
+distance_fade_begin = 42.6
+omni_range = 1.6
+omni_attenuation = 1.14868
+omni_shadow_mode = 0
+
+[node name="Movable_object" type="Node" parent="Movable/Lanterne" node_paths=PackedStringArray("collider", "limit_zone", "move_root", "rotation_root", "On_Move")]
+script = ExtResource("43_usyd2")
+collider = NodePath("../Area3D/CollisionShape3D")
+limit_zone = NodePath("../Limit_Zone")
+move_root = NodePath("..")
+rotation_root = NodePath("..")
+On_Move = NodePath("../Area3D/On_Move")
+
+[node name="Selection_ini" type="Node" parent="Movable/Lanterne" node_paths=PackedStringArray("root", "Movable_node")]
+script = ExtResource("49_vb8xx")
+root = NodePath("..")
+Movable_node = NodePath("../Movable_object")
+
+[node name="Area3D" type="Area3D" parent="Movable/Lanterne"]
+transform = Transform3D(0.691992, 0, -0.721905, 0, 1, 0, 0.721905, 0, 0.691992, 0, 0, 0)
+
+[node name="On_Move" type="Node" parent="Movable/Lanterne/Area3D"]
+script = ExtResource("44_64ctv")
+
+[node name="On_View_off" type="Node" parent="Movable/Lanterne/Area3D"]
+script = SubResource("GDScript_l8jpj")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Movable/Lanterne/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0322264, 1.73584, 0.0351563)
+shape = SubResource("BoxShape3D_0g12l")
+
+[node name="Limit_Zone" type="Area3D" parent="Movable/Lanterne"]
+transform = Transform3D(0.691992, 0, -0.721905, 0, 1, 0, 0.721905, 0, 0.691992, 0, 0, 0)
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Movable/Lanterne/Limit_Zone"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0322264, 1.73584, 0.0351563)
+shape = SubResource("BoxShape3D_0g12l")
+
+[node name="Map" type="Node3D" parent="Movable"]
+transform = Transform3D(0.303016, 0, -0.038253, 0, 0.305421, 0, 0.038253, 0, 0.303016, 0.46493, 0, 0.241232)
+
+[node name="Camera_OnMap" type="Camera3D" parent="Movable/Map"]
+transform = Transform3D(3.26121, 0.241011, -0.163177, 0, 1.83563, 2.71121, 0.291055, -2.70047, 1.82836, -0.143, 0.717, 0.833)
+cull_mask = 130
+fov = 40.0
+script = ExtResource("43_ydgdc")
+focus_data = ExtResource("51_oeow0")
+
+[node name="Movable_object" type="Node" parent="Movable/Map" node_paths=PackedStringArray("collider", "Position_zone", "move_root", "On_Move")]
+script = ExtResource("43_usyd2")
+collider = NodePath("../Rotation_root/Click_Area/CollisionShape3D")
+Position_zone = NodePath("../Rotation_root/Position_Area/CollisionShape3D")
+move_root = NodePath("..")
+On_Move = NodePath("../Rotation_root/Click_Area/On_Move_off")
+rotation_degrees = 25.0
+
+[node name="See_Map" type="Node" parent="Movable/Map" node_paths=PackedStringArray("collider", "On_View", "root")]
+script = ExtResource("50_5dxq8")
+camera_state = ExtResource("51_oeow0")
+collider = NodePath("../Rotation_root/Click_Area/CollisionShape3D")
+On_View = NodePath("../Rotation_root/Click_Area/On_View")
+root = NodePath("..")
+
+[node name="Rotation_root" type="Node3D" parent="Movable/Map"]
+transform = Transform3D(0.992546, 0, -0.121869, 0, 1, 0, 0.121869, 0, 0.992546, 0, 0, 0)
+
+[node name="Position_Area" type="Area3D" parent="Movable/Map/Rotation_root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Position_zone" type="Node" parent="Movable/Map/Rotation_root/Position_Area"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Movable/Map/Rotation_root/Position_Area"]
+transform = Transform3D(1, 0, 1.49012e-08, 0, 1, 0, -1.49012e-08, 0, 1, 0.00137317, -0.00646704, -0.00142288)
+shape = SubResource("BoxShape3D_cov0w")
+
+[node name="Click_Area" type="Area3D" parent="Movable/Map/Rotation_root"]
+transform = Transform3D(1, 0, 1.58847e-08, 0, 1, 0, -1.58847e-08, 0, 1, 0, -0.00448075, 0)
+
+[node name="On_Move_off" type="Node" parent="Movable/Map/Rotation_root/Click_Area"]
+script = ExtResource("44_64ctv")
+
+[node name="On_View" type="Node" parent="Movable/Map/Rotation_root/Click_Area"]
+script = ExtResource("27_s1e6c")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Movable/Map/Rotation_root/Click_Area"]
+transform = Transform3D(1.00001, 0, -7.45058e-07, 0, 1, 0, 7.45058e-07, 0, 1.00001, 0.00137317, 0.0144051, -0.00142282)
+shape = SubResource("BoxShape3D_e811w")
+
+[node name="MAP" type="MeshInstance3D" parent="Movable/Map/Rotation_root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.00489562, 0)
+layers = 2
+mesh = SubResource("PlaneMesh_x8wfj")
+skeleton = NodePath("../../../../..")
+surface_material_override/0 = SubResource("ShaderMaterial_ok24o")
+
+[node name="Map_border" type="MeshInstance3D" parent="Movable/Map/Rotation_root/MAP"]
+transform = Transform3D(1.87617, 0, 0, 0, 1.87617, 0, 0, 0, 1.87617, 0, -0.00448075, 0)
+layers = 2
+mesh = SubResource("PlaneMesh_n7wwh")
+skeleton = NodePath("../../../../../..")
 
 [node name="TOURNE_DISQUE" type="Node3D" parent="Movable"]
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 0.515837, -1.78814e-07, -0.230023)
@@ -2550,7 +2072,7 @@ transform = Transform3D(0.921909, 0, 0, 0, 0.921909, 0, 0, 0, 0.921909, 0, 0.292
 layers = 2
 mesh = SubResource("BoxMesh_bc6ip")
 skeleton = NodePath("../..")
-surface_material_override/0 = ExtResource("35_xg8pc")
+surface_material_override/0 = SubResource("ShaderMaterial_pf4ox")
 
 [node name="Area3D" type="Area3D" parent="Static/Board_instanceZone/Board_instanceZone2"]
 collision_layer = 4
@@ -2573,35 +2095,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("BoxShape3D_83ax2")
 
 [node name="Deco" type="Node3D" parent="Static"]
-
-[node name="Lanterne2" parent="Static/Deco" instance=ExtResource("1_l5l52")]
-transform = Transform3D(0.09052, 0, 0, 0, 0.09052, 0, 0, 0, 0.09052, 0.197448, 2.98023e-08, -0.281693)
-
-[node name="Lanterne" parent="Static/Deco/Lanterne2" index="0"]
-transform = Transform3D(0.691992, 0, -0.721905, 0, 1, 0, 0.721905, 0, 0.691992, 0.114583, 1.31694e-06, -0.454325)
-layers = 2
-surface_material_override/0 = SubResource("ShaderMaterial_1satu")
-surface_material_override/1 = ExtResource("6_kkuc8")
-
-[node name="Movable_object" type="Node" parent="Static/Deco/Lanterne2" node_paths=PackedStringArray("collider", "move_root", "rotation_root", "On_Move")]
-script = ExtResource("43_usyd2")
-collider = NodePath("../Area3D/CollisionShape3D")
-move_root = NodePath("..")
-rotation_root = NodePath("..")
-On_Move = NodePath("../Area3D/On_Move_off")
-
-[node name="Area3D" type="Area3D" parent="Static/Deco/Lanterne2"]
-transform = Transform3D(0.691992, 0, -0.721905, 0, 1, 0, 0.721905, 0, 0.691992, 0.114583, 1.31694e-06, -0.454325)
-
-[node name="On_Move_off" type="Node" parent="Static/Deco/Lanterne2/Area3D"]
-script = ExtResource("44_64ctv")
-
-[node name="On_View_off" type="Node" parent="Static/Deco/Lanterne2/Area3D"]
-script = SubResource("GDScript_l8jpj")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Static/Deco/Lanterne2/Area3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0322264, 1.73584, 0.0351563)
-shape = SubResource("BoxShape3D_0g12l")
 
 [node name="Candle_00" parent="Static/Deco" instance=ExtResource("1_3ummb")]
 transform = Transform3D(0.00320645, 0, 0.0606963, 0, 0.0607809, 0, -0.0606963, 0, 0.00320645, -0.797466, 0.120863, -0.00518165)
@@ -2716,27 +2209,6 @@ mesh = SubResource("BoxMesh_dyvqk")
 skeleton = NodePath("../../../..")
 surface_material_override/0 = SubResource("ShaderMaterial_ocpa2")
 
-[node name="MAP" type="MeshInstance3D" parent="Static/Deco"]
-transform = Transform3D(0.343265, 0, -0.0408286, 0, 0.345685, 0, 0.0408286, 0, 0.343265, 0.45144, 0.00667216, 0.194112)
-layers = 2
-mesh = SubResource("PlaneMesh_x8wfj")
-skeleton = NodePath("../../../..")
-surface_material_override/0 = SubResource("ShaderMaterial_ok24o")
-
-[node name="Map_border" type="MeshInstance3D" parent="Static/Deco/MAP"]
-transform = Transform3D(1.87617, 0, 0, 0, 1.87617, 0, 0, 0, 1.87617, 0, -0.00448075, 0)
-layers = 2
-mesh = SubResource("PlaneMesh_n7wwh")
-skeleton = NodePath("../../../../..")
-
-[node name="Area3D" type="Area3D" parent="Static/Deco/MAP"]
-
-[node name="Position_zone" type="Node" parent="Static/Deco/MAP/Area3D"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Static/Deco/MAP/Area3D"]
-transform = Transform3D(1, 0, 1.49012e-08, 0, 1, 0, -1.49012e-08, 0, 1, 0.00137317, -0.00646704, -0.00142288)
-shape = SubResource("BoxShape3D_cov0w")
-
 [node name="PhotoZone" type="MeshInstance3D" parent="Static/Deco"]
 transform = Transform3D(-0.13068, 0, 0.738866, 0, 0.00252979, 0, -0.608021, 0, -0.158803, -0.162295, 0.00267054, 0.0875484)
 layers = 2
@@ -2765,6 +2237,21 @@ layers = 2
 mesh = SubResource("BoxMesh_1smid")
 skeleton = NodePath("../../../..")
 surface_material_override/0 = ExtResource("6_kkuc8")
+
+[node name="Table_border" type="MeshInstance3D" parent="Static/Deco/Table"]
+transform = Transform3D(1.02746, 0, 0, 0, 1, 0, 0, 0, 1.05288, 0, -0.159362, 0)
+layers = 2
+mesh = SubResource("BoxMesh_1smid")
+skeleton = NodePath("../../../../..")
+surface_material_override/0 = SubResource("ShaderMaterial_isdhd")
+
+[node name="Area3D" type="Area3D" parent="Static/Deco/Table/Table_border"]
+
+[node name="Position_zone" type="Node" parent="Static/Deco/Table/Table_border/Area3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Static/Deco/Table/Table_border/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("BoxShape3D_ydct1")
 
 [node name="Area3D" type="Area3D" parent="Static/Deco/Table"]
 
@@ -2874,16 +2361,12 @@ surface_material_override/0 = ExtResource("6_kkuc8")
 
 [connection signal="On_click" from="Movable/Book_Close_root/Area3D/On_click_off" to="Movable/Book_Close_root/Area3D/On_click_off" method="_on_on_click"]
 
-[editable path="Movable/Chavet_part"]
-[editable path="Movable/Chavet_part2"]
-[editable path="Movable/Chavet_part3"]
-[editable path="Movable/Chavet_part4"]
 [editable path="Movable/Bell"]
 [editable path="Movable/PLume_pot"]
 [editable path="Movable/TUBE_oddity/Peon_oddity_v01"]
 [editable path="Movable/TUBE_oddity/Tube_oddity"]
 [editable path="Movable/Apicula_root/Apicula_maquette"]
+[editable path="Movable/Lanterne"]
 [editable path="Movable/TOURNE_DISQUE/Disque_prefab"]
-[editable path="Static/Deco/Lanterne2"]
 [editable path="Static/Deco/Candle_00"]
 [editable path="Static/Deco/Candle_01"]

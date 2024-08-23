@@ -4,7 +4,7 @@ extends Node
 var t
 var current_value : float = 0.5
 
-
+@export var active_dither_at_start : bool = false 
 func _ready():
 	_NormalColor_mainScene()
 	_global_datas._go_Subscene.connect(_Darker_mainScene)
@@ -15,7 +15,7 @@ func _ready():
 	_global_datas.go_darker_color.connect(_Darker_mainScene)
 	
 	#ACTIVE DITHER
-	RenderingServer.global_shader_parameter_set("active_Dither", true)
+	RenderingServer.global_shader_parameter_set("active_Dither", active_dither_at_start )
 	
 func _open(condition : bool):
 	

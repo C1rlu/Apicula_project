@@ -1,13 +1,16 @@
-[gd_scene load_steps=12 format=3 uid="uid://6pkqjlcwbqu1"]
+[gd_scene load_steps=15 format=3 uid="uid://6pkqjlcwbqu1"]
 
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Movable_obj.gd" id="1_bm05n"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/Clock_montre/Clock_OnBoard.gd" id="2_5ja1e"]
+[ext_resource type="Script" path="res://10_BOARD/On_View_Event.gd" id="2_ey8ew"]
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/On_click_object.gd" id="3_3mjtf"]
-[ext_resource type="Script" path="res://10_BOARD/On_Click_clock.gd" id="4_dnn4p"]
+[ext_resource type="Resource" uid="uid://2wvymfu1i442" path="res://15_GAME_RESSOURCE/01_info_data/Boat_subscene/i_should_check.tres" id="3_cesli"]
+[ext_resource type="Resource" uid="uid://cjwmwf4frvq3c" path="res://15_GAME_RESSOURCE/03_BoardCam_state/BoardZoom_focus_data.tres" id="4_e3mg3"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="5_0jje4"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/Clock_montre/Selection_ini.gd" id="5_x8hw0"]
 [ext_resource type="PackedScene" uid="uid://c50aeg7d1nugi" path="res://13_TOOLS_UI/Clock_montre/clock_3d.blend" id="6_vl4ik"]
 [ext_resource type="Material" uid="uid://6wrt67enhwi2" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_mat_01.tres" id="7_efy3a"]
+[ext_resource type="Script" path="res://10_BOARD/On_View.tres.gd" id="8_4byls"]
 [ext_resource type="Material" uid="uid://c0oms0qis0dcm" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_mat_02.tres" id="8_rdut6"]
 [ext_resource type="Material" uid="uid://bk1u0r8smgwsu" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_mat_03.tres" id="9_wygep"]
 
@@ -23,7 +26,15 @@ move_root = NodePath(".")
 rotation_root = NodePath("clock_3d")
 On_Move = NodePath("Area3D/On_Move")
 
-[node name="Clock_OnBoard" type="Node" parent="."]
+[node name="On_View_Event" type="Node" parent="." node_paths=PackedStringArray("root", "On_View", "On_Over")]
+script = ExtResource("2_ey8ew")
+root = NodePath("..")
+info = ExtResource("3_cesli")
+focus_data = ExtResource("4_e3mg3")
+On_View = NodePath("../Area3D/On_View")
+On_Over = NodePath("../Area3D/On_Over")
+
+[node name="Clock_time" type="Node" parent="."]
 script = ExtResource("2_5ja1e")
 
 [node name="Selection_ini" type="Node" parent="." node_paths=PackedStringArray("root", "Movable")]
@@ -37,8 +48,8 @@ transform = Transform3D(1, -2.36469e-11, 0, 4.09273e-11, 1, -7.27596e-12, 2.9802
 [node name="On_Move" type="Node" parent="Area3D"]
 script = ExtResource("3_3mjtf")
 
-[node name="On_click" type="Node" parent="Area3D"]
-script = ExtResource("4_dnn4p")
+[node name="On_View" type="Node" parent="Area3D"]
+script = ExtResource("8_4byls")
 
 [node name="On_Over" type="Node" parent="Area3D"]
 script = ExtResource("5_0jje4")

@@ -1,4 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=19 format=3 uid="uid://bk1u0r8smgwsu"]
+[gd_resource type="ShaderMaterial" load_steps=21 format=3 uid="uid://bk1u0r8smgwsu"]
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_klsyc"]
 constant = 0.826
@@ -47,6 +47,14 @@ op_type = 3
 parameter_name = "isGray"
 qualifier = 1
 
+[sub_resource type="VisualShaderNodeBooleanParameter" id="VisualShaderNodeBooleanParameter_q7o54"]
+parameter_name = "active_Dither"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeSwitch" id="VisualShaderNodeSwitch_2dmvo"]
+default_input_values = [0, false, 1, Vector3(1, 1, 1), 2, Vector3(0, 0, 0)]
+op_type = 4
+
 [sub_resource type="Gradient" id="Gradient_o0krw"]
 offsets = PackedFloat32Array(0, 0.528875, 0.547112, 0.984802)
 colors = PackedColorArray(1, 1, 1, 1, 0.0102558, 0.0102558, 0.0102558, 1, 0.0243161, 0.0243161, 0.0243161, 1, 1, 1, 1, 1)
@@ -67,6 +75,7 @@ code = "shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
 
 uniform vec4 Main_color : source_color;
+global uniform bool active_Dither;
 uniform sampler2D Gradiant;
 
 
@@ -74,6 +83,10 @@ uniform sampler2D Gradiant;
 void fragment() {
 // ColorParameter:17
 	vec4 n_out17p0 = Main_color;
+
+
+// BooleanParameter:21
+	bool n_out21p0 = active_Dither;
 
 
 // Input:13
@@ -114,12 +127,17 @@ void fragment() {
 	float n_out12p0 = step(n_out8p0.x, n_out11p0);
 
 
+	vec3 n_out22p0;
+// Switch:22
+	n_out22p0 = mix(vec3(n_out8p0.xyz), vec3(n_out12p0), float(n_out21p0));
+
+
 // FloatConstant:15
 	float n_out15p0 = 0.100000;
 
 
 // Mix:14
-	vec3 n_out14p0 = mix(vec3(n_out17p0.xyz), vec3(n_out12p0), vec3(n_out15p0));
+	vec3 n_out14p0 = mix(vec3(n_out17p0.xyz), n_out22p0, vec3(n_out15p0));
 
 
 // Output:0
@@ -128,6 +146,7 @@ void fragment() {
 
 }
 "
+graph_offset = Vector2(-1044.03, -251.393)
 flags/unshaded = true
 nodes/fragment/8/node = SubResource("VisualShaderNodeTexture_yw4jk")
 nodes/fragment/8/position = Vector2(-1500, -380)
@@ -173,7 +192,11 @@ nodes/fragment/19/node = SubResource("VisualShaderNodeMix_yj2rs")
 nodes/fragment/19/position = Vector2(486.812, -234.328)
 nodes/fragment/20/node = SubResource("VisualShaderNodeBooleanParameter_7ij85")
 nodes/fragment/20/position = Vector2(-93.1881, -214.328)
-nodes/fragment/connections = PackedInt32Array(9, 0, 11, 1, 10, 0, 11, 0, 11, 0, 12, 1, 15, 0, 14, 2, 16, 0, 8, 2, 12, 0, 14, 1, 17, 0, 14, 0, 13, 0, 8, 0, 8, 0, 12, 0, 18, 0, 19, 1, 20, 0, 19, 2, 14, 0, 18, 0, 14, 0, 19, 0, 14, 0, 0, 0)
+nodes/fragment/21/node = SubResource("VisualShaderNodeBooleanParameter_q7o54")
+nodes/fragment/21/position = Vector2(-1080.41, 157.009)
+nodes/fragment/22/node = SubResource("VisualShaderNodeSwitch_2dmvo")
+nodes/fragment/22/position = Vector2(-720.409, 237.009)
+nodes/fragment/connections = PackedInt32Array(9, 0, 11, 1, 10, 0, 11, 0, 11, 0, 12, 1, 15, 0, 14, 2, 16, 0, 8, 2, 17, 0, 14, 0, 13, 0, 8, 0, 8, 0, 12, 0, 18, 0, 19, 1, 20, 0, 19, 2, 14, 0, 18, 0, 14, 0, 19, 0, 14, 0, 0, 0, 21, 0, 22, 0, 8, 0, 22, 2, 12, 0, 22, 1, 22, 0, 14, 1)
 
 [sub_resource type="Gradient" id="Gradient_nrla2"]
 offsets = PackedFloat32Array(0, 0.519856, 1)

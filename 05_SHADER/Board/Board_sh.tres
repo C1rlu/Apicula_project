@@ -1,4 +1,4 @@
-[gd_resource type="VisualShader" load_steps=21 format=3 uid="uid://upo0fuo5sqgd"]
+[gd_resource type="VisualShader" load_steps=23 format=3 uid="uid://upo0fuo5sqgd"]
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_c5muk"]
 parameter_name = "Dark_color"
@@ -55,6 +55,14 @@ constant = 1.156
 parameter_name = "isGray"
 qualifier = 1
 
+[sub_resource type="VisualShaderNodeSwitch" id="VisualShaderNodeSwitch_k2ngo"]
+default_input_values = [0, false, 1, Vector3(1, 1, 1), 2, Vector3(0, 0, 0)]
+op_type = 4
+
+[sub_resource type="VisualShaderNodeBooleanParameter" id="VisualShaderNodeBooleanParameter_61xfx"]
+parameter_name = "active_Dither"
+qualifier = 1
+
 [sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_5yhv0"]
 size = Vector2(724.789, 654.559)
 expression = "const float DITHER_THRESHOLDS[16] ={
@@ -89,6 +97,7 @@ uniform vec4 Dark_color : source_color;
 uniform vec4 ColorParameter : source_color = vec4(0.027451, 0.149020, 0.156863, 1.000000);
 global uniform bool isGray;
 uniform vec4 light_color : source_color;
+global uniform bool active_Dither;
 global uniform float Dither_size;
 
 
@@ -141,6 +150,10 @@ void light() {
 
 // Mix:29
 	vec3 n_out29p0 = mix(vec3(n_out13p0.xyz), vec3(n_out28p0), vec3(n_out30p0 ? 1.0 : 0.0));
+
+
+// BooleanParameter:32
+	bool n_out32p0 = active_Dither;
 
 
 // FloatConstant:3
@@ -203,8 +216,13 @@ void light() {
 	float n_out5p0 = step(n_out4p0, n_out17p0.x);
 
 
+	vec3 n_out31p0;
+// Switch:31
+	n_out31p0 = mix(n_out17p0, vec3(n_out5p0), float(n_out32p0));
+
+
 // Mix:19
-	vec4 n_out19p0 = mix(vec4(n_out26p0, 0.0), vec4(n_out29p0, 0.0), vec4(n_out5p0));
+	vec4 n_out19p0 = mix(vec4(n_out26p0, 0.0), vec4(n_out29p0, 0.0), vec4(n_out31p0, 0.0));
 
 
 // Output:0
@@ -213,6 +231,7 @@ void light() {
 
 }
 "
+graph_offset = Vector2(237.988, 773.761)
 nodes/vertex/0/position = Vector2(400, 160)
 nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_c5muk")
 nodes/fragment/2/position = Vector2(-480, 20)
@@ -252,7 +271,7 @@ nodes/light/15/position = Vector2(-300, 1420)
 nodes/light/16/node = SubResource("VisualShaderNodeFloatOp_glgrf")
 nodes/light/16/position = Vector2(80, 1400)
 nodes/light/17/node = SubResource("VisualShaderNodeVectorOp_d8jtn")
-nodes/light/17/position = Vector2(260, 1280)
+nodes/light/17/position = Vector2(320, 1300)
 nodes/light/19/node = SubResource("VisualShaderNodeMix_5dp7o")
 nodes/light/19/position = Vector2(1560, 1360)
 nodes/light/23/node = SubResource("VisualShaderNodeColorParameter_hgpsg")
@@ -269,7 +288,7 @@ grey_value = luminance;"
 nodes/light/26/node = SubResource("VisualShaderNodeMix_6jd32")
 nodes/light/26/position = Vector2(1660, 620)
 nodes/light/28/node = SubResource("VisualShaderNodeExpression_y3xdc")
-nodes/light/28/position = Vector2(880, 940)
+nodes/light/28/position = Vector2(780, 940)
 nodes/light/28/size = Vector2(620, 200)
 nodes/light/28/input_ports = "0,4,color;"
 nodes/light/28/output_ports = "0,0,grey_value;"
@@ -279,4 +298,8 @@ nodes/light/29/node = SubResource("VisualShaderNodeMix_of7et")
 nodes/light/29/position = Vector2(1320, 760)
 nodes/light/30/node = SubResource("VisualShaderNodeBooleanParameter_ro0lc")
 nodes/light/30/position = Vector2(1054.08, 634.802)
-nodes/light/connections = PackedInt32Array(5, 0, 19, 2, 15, 0, 16, 0, 16, 0, 17, 1, 6, 0, 7, 0, 9, 0, 7, 1, 3, 0, 4, 0, 4, 0, 5, 0, 17, 0, 5, 1, 7, 0, 8, 0, 8, 0, 17, 0, 24, 0, 4, 1, 23, 0, 25, 0, 23, 0, 26, 0, 25, 0, 26, 1, 13, 0, 28, 0, 28, 0, 29, 1, 13, 0, 29, 0, 19, 0, 0, 1, 29, 0, 19, 1, 26, 0, 19, 0, 30, 0, 29, 2, 30, 0, 26, 2)
+nodes/light/31/node = SubResource("VisualShaderNodeSwitch_k2ngo")
+nodes/light/31/position = Vector2(1000, 1300)
+nodes/light/32/node = SubResource("VisualShaderNodeBooleanParameter_61xfx")
+nodes/light/32/position = Vector2(640, 1220)
+nodes/light/connections = PackedInt32Array(15, 0, 16, 0, 16, 0, 17, 1, 6, 0, 7, 0, 9, 0, 7, 1, 3, 0, 4, 0, 17, 0, 5, 1, 7, 0, 8, 0, 8, 0, 17, 0, 24, 0, 4, 1, 23, 0, 25, 0, 23, 0, 26, 0, 25, 0, 26, 1, 13, 0, 28, 0, 28, 0, 29, 1, 13, 0, 29, 0, 19, 0, 0, 1, 29, 0, 19, 1, 26, 0, 19, 0, 30, 0, 29, 2, 30, 0, 26, 2, 4, 0, 5, 0, 32, 0, 31, 0, 5, 0, 31, 1, 17, 0, 31, 2, 31, 0, 19, 2)

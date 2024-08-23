@@ -5,7 +5,7 @@ var all_boue_obj : Array
 
 func _ready():
 	#_global_datas.boue_archives.append(test_boue_exist)
-	_global_datas.open_inventory.connect(_check_exist_boue)
+	#_global_datas.open_inventory.connect(_check_exist_boue)
 	all_boue_obj = get_children()
 
 func _check_exist_boue(condition : bool):

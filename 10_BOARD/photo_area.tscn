@@ -1,4 +1,4 @@
-[gd_scene load_steps=65 format=3 uid="uid://uwg2qc3svu11"]
+[gd_scene load_steps=67 format=3 uid="uid://uwg2qc3svu11"]
 
 [ext_resource type="Script" path="res://10_BOARD/Photo_element.gd" id="1_0a8jl"]
 [ext_resource type="Resource" uid="uid://dyh1qg1u652pl" path="res://15_GAME_RESSOURCE/Epave_ch_photoData.tres" id="2_8x1kk"]
@@ -10,9 +10,6 @@
 [ext_resource type="Script" path="res://13_TOOLS_UI/Clock_montre/Selection_ini.gd" id="6_wkbq8"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="7_vd1wc"]
 [ext_resource type="Script" path="res://10_BOARD/On_View.tres.gd" id="8_2nycl"]
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_nnxyu"]
-size = Vector3(0.0849429, 0.0129531, 0.0916202)
 
 [sub_resource type="GDScript" id="GDScript_32kbr"]
 script/source = "@tool
@@ -344,6 +341,14 @@ texture = SubResource("GradientTexture2D_6a54q")
 parameter_name = "isGray"
 qualifier = 1
 
+[sub_resource type="VisualShaderNodeBooleanParameter" id="VisualShaderNodeBooleanParameter_g8sai"]
+parameter_name = "active_Dither"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeSwitch" id="VisualShaderNodeSwitch_mnow5"]
+default_input_values = [0, false, 1, Vector3(1, 1, 1), 2, Vector3(0, 0, 0)]
+op_type = 4
+
 [sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_8tisx"]
 size = Vector2(724.789, 654.559)
 expression = "const float DITHER_THRESHOLDS[16] ={
@@ -368,6 +373,7 @@ render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_s
 uniform vec4 ColorParameter : source_color = vec4(0.027451, 0.149020, 0.156863, 1.000000);
 global uniform bool isGray;
 uniform vec4 light_color : source_color;
+global uniform bool active_Dither;
 global uniform float Dither_size;
 uniform sampler2D tex_frg_21;
 
@@ -412,6 +418,10 @@ void fragment() {
 	vec3 n_out20p0 = mix(vec3(n_out9p0.xyz), vec3(n_out19p0), vec3(n_out23p0 ? 1.0 : 0.0));
 
 
+// BooleanParameter:24
+	bool n_out24p0 = active_Dither;
+
+
 // FloatConstant:2
 	float n_out2p0 = 1.000000;
 
@@ -445,8 +455,13 @@ void fragment() {
 	float n_out22p0 = step(n_out3p0, n_out21p0.x);
 
 
+	vec3 n_out25p0;
+// Switch:25
+	n_out25p0 = mix(vec3(n_out21p0.xyz), vec3(n_out22p0), float(n_out24p0));
+
+
 // Mix:13
-	vec4 n_out13p0 = mix(vec4(n_out17p0, 0.0), vec4(n_out20p0, 0.0), vec4(n_out22p0));
+	vec4 n_out13p0 = mix(vec4(n_out17p0, 0.0), vec4(n_out20p0, 0.0), vec4(n_out25p0, 0.0));
 
 
 // Output:0
@@ -455,13 +470,13 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-676.505, -535.065)
+graph_offset = Vector2(-942.308, -162.564)
 flags/unshaded = true
 nodes/vertex/0/position = Vector2(400, 160)
 nodes/fragment/2/node = SubResource("VisualShaderNodeFloatConstant_snpqm")
-nodes/fragment/2/position = Vector2(-1160, 580)
+nodes/fragment/2/position = Vector2(-1880, 620)
 nodes/fragment/3/node = SubResource("VisualShaderNodeExpression_8tisx")
-nodes/fragment/3/position = Vector2(-880, 580)
+nodes/fragment/3/position = Vector2(-1600, 620)
 nodes/fragment/3/size = Vector2(724.789, 654.559)
 nodes/fragment/3/input_ports = "0,0,In;1,0,Size;"
 nodes/fragment/3/output_ports = "0,0,Dither_Node;"
@@ -482,7 +497,7 @@ nodes/fragment/13/position = Vector2(-77.0765, -61.6854)
 nodes/fragment/14/node = SubResource("VisualShaderNodeColorParameter_nkxwk")
 nodes/fragment/14/position = Vector2(-1197.08, -661.685)
 nodes/fragment/15/node = SubResource("VisualShaderNodeFloatParameter_i727x")
-nodes/fragment/15/position = Vector2(-1520, 740)
+nodes/fragment/15/position = Vector2(-2240, 780)
 nodes/fragment/16/node = SubResource("VisualShaderNodeExpression_n3xmo")
 nodes/fragment/16/position = Vector2(-737.077, -1021.69)
 nodes/fragment/16/size = Vector2(620, 200)
@@ -502,12 +517,16 @@ grey_value = luminance;"
 nodes/fragment/20/node = SubResource("VisualShaderNodeMix_3y63r")
 nodes/fragment/20/position = Vector2(-317.077, -661.685)
 nodes/fragment/21/node = SubResource("VisualShaderNodeTexture_xe0um")
-nodes/fragment/21/position = Vector2(-820, 180)
+nodes/fragment/21/position = Vector2(-1540, 220)
 nodes/fragment/22/node = SubResource("VisualShaderNodeStep_eq5xp")
-nodes/fragment/22/position = Vector2(-220, 220)
+nodes/fragment/22/position = Vector2(-940, 260)
 nodes/fragment/23/node = SubResource("VisualShaderNodeBooleanParameter_et7t7")
 nodes/fragment/23/position = Vector2(-780, -700)
-nodes/fragment/connections = PackedInt32Array(2, 0, 3, 0, 15, 0, 3, 1, 14, 0, 16, 0, 14, 0, 17, 0, 16, 0, 17, 1, 9, 0, 19, 0, 19, 0, 20, 1, 9, 0, 20, 0, 20, 0, 13, 1, 17, 0, 13, 0, 13, 0, 0, 0, 21, 0, 22, 1, 3, 0, 22, 0, 22, 0, 13, 2, 23, 0, 17, 2, 23, 0, 20, 2)
+nodes/fragment/24/node = SubResource("VisualShaderNodeBooleanParameter_g8sai")
+nodes/fragment/24/position = Vector2(-1120, -20)
+nodes/fragment/25/node = SubResource("VisualShaderNodeSwitch_mnow5")
+nodes/fragment/25/position = Vector2(-760, 60)
+nodes/fragment/connections = PackedInt32Array(2, 0, 3, 0, 15, 0, 3, 1, 14, 0, 16, 0, 14, 0, 17, 0, 16, 0, 17, 1, 9, 0, 19, 0, 19, 0, 20, 1, 9, 0, 20, 0, 20, 0, 13, 1, 17, 0, 13, 0, 13, 0, 0, 0, 21, 0, 22, 1, 3, 0, 22, 0, 23, 0, 17, 2, 23, 0, 20, 2, 24, 0, 25, 0, 21, 0, 25, 2, 22, 0, 25, 1, 25, 0, 13, 2)
 nodes/light/0/position = Vector2(2440, 1640)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0vsb7"]
@@ -627,6 +646,9 @@ nodes/fragment/connections = PackedInt32Array(3, 0, 4, 0, 5, 0, 4, 1, 4, 0, 6, 1
 render_priority = 0
 shader = SubResource("VisualShader_tl2py")
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_nnxyu"]
+size = Vector3(0.0849429, 0.0129531, 0.0916202)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_nnquu"]
 size = Vector3(0.0871338, 0.00541992, 0.1)
 
@@ -653,22 +675,6 @@ script = ExtResource("6_wkbq8")
 root = NodePath("..")
 Movable_node = NodePath("../Movable_object")
 
-[node name="Click" type="Area3D" parent="."]
-transform = Transform3D(0.999989, 0, 0.00467785, 0, 1, 0, -0.00467785, 0, 0.999989, -0.000246863, 0.00516227, -0.00658954)
-
-[node name="On_Move" type="Node" parent="Click"]
-script = ExtResource("6_46a1v")
-
-[node name="On_View" type="Node" parent="Click"]
-script = ExtResource("8_2nycl")
-
-[node name="On_Over" type="Node" parent="Click"]
-script = ExtResource("7_vd1wc")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Click"]
-transform = Transform3D(0.999997, 0, 4.14439e-08, 0, 1, 0, -4.14439e-08, 0, 0.999997, 0.0014558, 0, 0.0114536)
-shape = SubResource("BoxShape3D_nnxyu")
-
 [node name="Photo" type="Node3D" parent="."]
 
 [node name="texture" type="Node" parent="Photo"]
@@ -688,17 +694,6 @@ mesh = SubResource("BoxMesh_8e2mh")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("ShaderMaterial_0vsb7")
 
-[node name="Limit" type="Area3D" parent="."]
-transform = Transform3D(0.999989, 0, 0.00467785, 0, 1, 0, -0.00467785, 0, 0.999989, -0.000246863, 0.00516227, -0.00658954)
-collision_layer = 4
-collision_mask = 4
-
-[node name="Limit" type="Node" parent="Limit"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Limit"]
-transform = Transform3D(0.999997, 0, 4.14439e-08, 0, 1, 0, -4.14439e-08, 0, 0.999997, 0.0014558, 0, 0.0114536)
-shape = SubResource("BoxShape3D_nnxyu")
-
 [node name="All_over" type="Node3D" parent="."]
 transform = Transform3D(0.999989, 0, 0.00467785, 0, 1, 0, -0.00467785, 0, 0.999989, -0.000246863, 0.00516227, 0.038578)
 visible = false
@@ -709,6 +704,33 @@ layers = 2
 mesh = SubResource("PlaneMesh_l1221")
 skeleton = NodePath("../../..")
 surface_material_override/0 = SubResource("ShaderMaterial_gfhbg")
+
+[node name="Click" type="Area3D" parent="."]
+transform = Transform3D(0.999989, 0, 0.00467785, 0, 1, 0, -0.00467785, 0, 0.999989, -0.000246863, 0.00516227, -0.00658954)
+
+[node name="On_Move" type="Node" parent="Click"]
+script = ExtResource("6_46a1v")
+
+[node name="On_View" type="Node" parent="Click"]
+script = ExtResource("8_2nycl")
+
+[node name="On_Over" type="Node" parent="Click"]
+script = ExtResource("7_vd1wc")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Click"]
+transform = Transform3D(0.999997, 0, 4.14439e-08, 0, 1, 0, -4.14439e-08, 0, 0.999997, 0.0014558, 0, 0.0114536)
+shape = SubResource("BoxShape3D_nnxyu")
+
+[node name="Limit" type="Area3D" parent="."]
+transform = Transform3D(0.999989, 0, 0.00467785, 0, 1, 0, -0.00467785, 0, 0.999989, -0.000246863, 0.00516227, -0.00658954)
+collision_layer = 4
+collision_mask = 4
+
+[node name="Limit" type="Node" parent="Limit"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Limit"]
+transform = Transform3D(0.999997, 0, 4.14439e-08, 0, 1, 0, -4.14439e-08, 0, 0.999997, 0.0014558, 0, 0.0114536)
+shape = SubResource("BoxShape3D_nnxyu")
 
 [node name="Position_zone" type="Area3D" parent="."]
 
