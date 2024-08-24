@@ -1,0 +1,88 @@
+[gd_scene load_steps=10 format=3 uid="uid://cyxktybx37287"]
+
+[ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Movable_obj.gd" id="1_cmio7"]
+[ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/On_click_object.gd" id="2_fnxh1"]
+[ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="3_p7u0v"]
+[ext_resource type="Shader" uid="uid://upo0fuo5sqgd" path="res://05_SHADER/Board/Board_sh.tres" id="4_eq8ya"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_25drd"]
+viewport_path = NodePath("Quest_letter/Text_quest")
+
+[sub_resource type="QuadMesh" id="QuadMesh_4umhe"]
+resource_local_to_scene = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b5eno"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("4_eq8ya")
+shader_parameter/Dark_color = Color(0.0196078, 0.121569, 0.129412, 1)
+shader_parameter/ColorParameter = Color(0.627451, 0.603922, 0.552941, 1)
+shader_parameter/light_color = Color(0.670588, 0.654902, 0.607843, 1)
+
+[sub_resource type="GDScript" id="GDScript_ikx4k"]
+script/source = "extends Node
+
+signal On_View
+
+"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2g7sv"]
+size = Vector3(0.0933472, 0.0141724, 0.0971802)
+
+[node name="Sticky_Note" type="Node3D"]
+
+[node name="Movable_obj" type="Node" parent="." node_paths=PackedStringArray("collider", "move_root", "rotation_root", "On_Move")]
+script = ExtResource("1_cmio7")
+collider = NodePath("../Move_Area/CollisionShape3D")
+move_root = NodePath("..")
+rotation_root = NodePath("..")
+On_Move = NodePath("../Move_Area/On_Move")
+rotation_degrees = 25.0
+
+[node name="Quest_letter" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00528288, 0.00296854, 0.00421034)
+
+[node name="Render_quest" type="Sprite3D" parent="Quest_letter"]
+transform = Transform3D(0.0202394, -1.84124e-09, 1.37183e-16, -1.09747e-16, -8.84694e-10, 0.0202394, -1.38093e-09, -0.0202394, -8.84694e-10, 0, 0.000399773, 0)
+layers = 2
+modulate = Color(0.333333, 0.321569, 0.286275, 1)
+texture = SubResource("ViewportTexture_25drd")
+
+[node name="white_paper" type="MeshInstance3D" parent="Quest_letter"]
+transform = Transform3D(0.081184, 0, 0, 0, -3.54867e-09, 0.081184, 0, -0.081184, -3.54866e-09, 0, 0, 0)
+layers = 2
+mesh = SubResource("QuadMesh_4umhe")
+skeleton = NodePath("")
+surface_material_override/0 = SubResource("ShaderMaterial_b5eno")
+
+[node name="Text_quest" type="SubViewport" parent="Quest_letter"]
+transparent_bg = true
+size = Vector2i(400, 400)
+
+[node name="text" type="Label" parent="Quest_letter/Text_quest"]
+custom_minimum_size = Vector2(400, 400)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 40
+text = "Information note here"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Move_Area" type="Area3D" parent="."]
+
+[node name="On_Move" type="Node" parent="Move_Area"]
+script = ExtResource("2_fnxh1")
+
+[node name="On_Over" type="Node" parent="Move_Area"]
+script = ExtResource("3_p7u0v")
+
+[node name="On_View" type="Node" parent="Move_Area"]
+script = SubResource("GDScript_ikx4k")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Move_Area"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00632935, 0.00744018, 0.00512086)
+shape = SubResource("BoxShape3D_2g7sv")

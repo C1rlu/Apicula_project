@@ -4,8 +4,8 @@ extends Node
 
 var active : bool = false
 func _ready():
-	_global_datas.open_inventory.connect(set_active)	
-
+	#_global_datas.open_inventory.connect(set_active)	
+	pass
 
 func set_active(condition : bool):
 	active = condition	
