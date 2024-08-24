@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://bwmu5iwushsl5"]
+[gd_scene load_steps=52 format=3 uid="uid://bwmu5iwushsl5"]
 
 [ext_resource type="Texture2D" uid="uid://d31xi5f7tan5w" path="res://05_SHADER/Full_screen/Dither_pattners/Blue_noise/HDR_LA_7.png" id="1_2l1ih"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/INSTANCE_NOTE.gd" id="1_fcb2u"]
@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://d0skcajnuhv37" path="res://13_TOOLS_UI/Tool_selector_ui/Selector_ui_linear.tscn" id="14_ew3o0"]
 [ext_resource type="PackedScene" uid="uid://clc3sbquuu1us" path="res://13_TOOLS_UI/Clock_montre/Clock_ui_prefab.tscn" id="14_xuvss"]
 [ext_resource type="Script" path="res://10_BOARD/Dive_infos.gd" id="16_ifpy4"]
+[ext_resource type="Script" path="res://13_TOOLS_UI/See_quest_info.gd" id="16_tntab"]
 
 [sub_resource type="GDScript" id="GDScript_ebu32"]
 script/source = "extends Node
@@ -824,6 +825,7 @@ expand_mode = 1
 stretch_mode = 4
 
 [node name="Selector_tool_ui_Linear" parent="." instance=ExtResource("14_ew3o0")]
+visible = false
 metadata/_edit_use_anchors_ = true
 
 [node name="Clock" parent="." instance=ExtResource("14_xuvss")]
@@ -837,6 +839,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Board_Element_infos" type="Control" parent="."]
+visible = false
 layout_mode = 3
 anchors_preset = 3
 anchor_left = 1.0
@@ -878,6 +881,51 @@ grow_vertical = 2
 theme_override_colors/font_color = Color(0.317647, 0.262745, 0.156863, 1)
 theme_override_font_sizes/font_size = 21
 text = "Lorem ipusm info textfffffffffffffffffffffffffffffff"
+autowrap_mode = 3
+
+[node name="Quest_responce_Panel" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -489.0
+offset_top = -323.0
+offset_right = 19.0
+offset_bottom = -27.0
+grow_horizontal = 0
+grow_vertical = 0
+rotation = 0.111355
+
+[node name="See_quest_info" type="Node" parent="Quest_responce_Panel"]
+script = ExtResource("16_tntab")
+
+[node name="ColorRect" type="ColorRect" parent="Quest_responce_Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.686275, 0.65098, 0.580392, 1)
+
+[node name="Info_text" type="Label" parent="Quest_responce_Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 19.0
+offset_top = 26.0
+offset_right = -24.0
+offset_bottom = -33.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.317647, 0.262745, 0.156863, 1)
+theme_override_font_sizes/font_size = 21
+text = "We are looking for a special object, it coulb be a clock, but it seems to be a pocket watch. This object was seens last time in 1900 before the social revolution.
+His last owner was mister Anderson, but we lost him as well. We don't need only the object we need as well at least 3 proofs"
 autowrap_mode = 3
 
 [node name="DiveZone_infos" type="Control" parent="."]

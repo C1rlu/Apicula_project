@@ -144,7 +144,7 @@ var board_instance_position : Node3D
 # quest_state signal in order
 signal active_diving
 
-
+signal open_quest_info(condition : bool, note_data : Note_Data)
 
 signal open_3d_book(condition : bool)
 var book_idle_pos : bool = true

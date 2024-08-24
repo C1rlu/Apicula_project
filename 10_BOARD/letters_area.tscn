@@ -1,7 +1,6 @@
-[gd_scene load_steps=27 format=3 uid="uid://qgyjfq88teq8"]
+[gd_scene load_steps=20 format=3 uid="uid://qgyjfq88teq8"]
 
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Movable_obj.gd" id="1_3c8dm"]
-[ext_resource type="Script" path="res://10_BOARD/00_BOOK/Show_this_page.gd" id="1_va6lq"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="2_ke4da"]
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/On_click_object.gd" id="2_rje64"]
 [ext_resource type="Shader" uid="uid://upo0fuo5sqgd" path="res://05_SHADER/Board/Board_sh.tres" id="3_ydeap"]
@@ -9,20 +8,36 @@
 [sub_resource type="GDScript" id="GDScript_ypp87"]
 script/source = "extends Area3D
 
+
 @export var Note_data : Note_Data
-@export var intrigue_data : board_intrigue_data
+@export var Camera_state : boardCamState_data
 @onready var collision_shape_3d = $CollisionShape3D
 @onready var photo = $photo
 @onready var note_text = $Render_text
 @onready var note = $Note
 
-@onready var render_responce = $Render_responce
+@export var On_View : Node
 
 signal responce_link(text : String)
 
 func _ready():
 	note._set_note(Note_data.note_text,Note_data.from)
 	Note_data.scene_node_3d = self
+	
+	
+	On_View.On_View.connect(Open_quest_responce)
+	
+	
+func Open_quest_responce():
+	
+	if Note_data:
+		_global_datas.open_quest_info.emit(true,Note_data)
+		_global_datas.camera_focus_On.emit(Camera_state)
+		_global_datas.focus_this_on_board.emit(global_position)
+	else:
+		print(\"NEED A NOTE_DATA HERE\")		
+	
+	
 func _active():
 	collision_shape_3d.disabled = false	
 
@@ -35,12 +50,8 @@ func _disable():
 
 	photo.visible = false
 	note_text.visible = false
-	render_responce.visible = false
-	
 
 
-func _on_on_click_on_click():
-	_global_datas.select_intrigue.emit(intrigue_data)
 "
 
 [sub_resource type="GDScript" id="GDScript_4uwx0"]
@@ -52,6 +63,13 @@ script/source = "extends Node
 func _set_note(_text : String, _from: String):
 	note.text = _text
 	from.text = _from
+"
+
+[sub_resource type="GDScript" id="GDScript_ikx4k"]
+script/source = "extends Node
+
+signal On_View
+
 "
 
 [sub_resource type="QuadMesh" id="QuadMesh_2j3jf"]
@@ -181,109 +199,29 @@ shader_parameter/light_color = Color(0.670588, 0.654902, 0.607843, 1)
 [sub_resource type="ViewportTexture" id="ViewportTexture_lq3n1"]
 viewport_path = NodePath("Text_render")
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_trjqt"]
-viewport_path = NodePath("Text_responce")
-
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_4dsm5"]
-size = Vector2(620, 200)
-expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
-grey_value = luminance;"
-
-[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_y3xem"]
-default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
-op_type = 3
-
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_rax8w"]
-input_name = "color"
-
-[sub_resource type="VisualShaderNodeBooleanParameter" id="VisualShaderNodeBooleanParameter_tt226"]
-parameter_name = "isGray"
-qualifier = 1
-
-[sub_resource type="VisualShader" id="VisualShader_sxcgk"]
-code = "shader_type canvas_item;
-render_mode blend_mix;
-
-global uniform bool isGray;
-
-
-
-void fragment() {
-// Input:5
-	vec4 n_out5p0 = COLOR;
-
-
-	float n_out3p0;
-// Expression:3
-	n_out3p0 = 0.0;
-	{
-		float luminance = 0.299 * vec3(n_out5p0.xyz).x + 0.587 * vec3(n_out5p0.xyz).y + 0.114 * vec3(n_out5p0.xyz).z;
-		n_out3p0 = luminance;
-	}
-
-
-// BooleanParameter:6
-	bool n_out6p0 = isGray;
-
-
-// Mix:4
-	vec3 n_out4p0 = mix(vec3(n_out5p0.xyz), vec3(n_out3p0), vec3(n_out6p0 ? 1.0 : 0.0));
-
-
-// Output:0
-	COLOR.rgb = n_out4p0;
-
-
-}
-"
-graph_offset = Vector2(-311.48, -143.497)
-mode = 1
-flags/light_only = false
-nodes/fragment/0/position = Vector2(720, 200)
-nodes/fragment/3/node = SubResource("VisualShaderNodeExpression_4dsm5")
-nodes/fragment/3/position = Vector2(-220, -260)
-nodes/fragment/3/size = Vector2(620, 200)
-nodes/fragment/3/input_ports = "0,4,color;"
-nodes/fragment/3/output_ports = "0,0,grey_value;"
-nodes/fragment/3/expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
-grey_value = luminance;"
-nodes/fragment/4/node = SubResource("VisualShaderNodeMix_y3xem")
-nodes/fragment/4/position = Vector2(560, -60)
-nodes/fragment/5/node = SubResource("VisualShaderNodeInput_rax8w")
-nodes/fragment/5/position = Vector2(-580, -20)
-nodes/fragment/6/node = SubResource("VisualShaderNodeBooleanParameter_tt226")
-nodes/fragment/6/position = Vector2(117.844, 318)
-nodes/fragment/connections = PackedInt32Array(3, 0, 4, 1, 5, 0, 3, 0, 5, 0, 4, 0, 4, 0, 0, 0, 6, 0, 4, 2)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_iy2kr"]
-shader = SubResource("VisualShader_sxcgk")
-
-[node name="Letter_area" type="Area3D"]
+[node name="Letter_area" type="Area3D" node_paths=PackedStringArray("On_View")]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0.00272226, 0)
 script = SubResource("GDScript_ypp87")
+On_View = NodePath("On_View")
 
 [node name="Movable_obj" type="Node" parent="." node_paths=PackedStringArray("collider", "move_root", "rotation_root", "On_Move")]
 script = ExtResource("1_3c8dm")
 collider = NodePath("../CollisionShape3D")
 move_root = NodePath("..")
 rotation_root = NodePath("..")
-On_Move = NodePath("../On_Move")
+On_Move = NodePath("../On_Move_off")
 
-[node name="On_Move" type="Node" parent="." node_paths=PackedStringArray("Root")]
+[node name="On_Move_off" type="Node" parent="."]
 script = ExtResource("2_rje64")
-Root = NodePath("..")
 
 [node name="Note" type="Node" parent="."]
 script = SubResource("GDScript_4uwx0")
 
-[node name="On_click" type="Node" parent="."]
-script = ExtResource("1_va6lq")
-
-[node name="On_Over" type="Node" parent="." node_paths=PackedStringArray("_on_over", "move_node")]
+[node name="On_Over" type="Node" parent="."]
 script = ExtResource("2_ke4da")
-_on_over = NodePath("../IS_SELECT")
-icon_type = 1
-move_node = NodePath("..")
+
+[node name="On_View" type="Node" parent="."]
+script = SubResource("GDScript_ikx4k")
 
 [node name="IS_SELECT" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.1107, 0, 0, 0, -3.07261e-09, 0.0535114, 0, -0.0702929, -2.33906e-09, 0, 0.000994979, 0)
@@ -309,13 +247,6 @@ layers = 2
 modulate = Color(0.333333, 0.321569, 0.286275, 1)
 texture = SubResource("ViewportTexture_lq3n1")
 
-[node name="Render_responce" type="Sprite3D" parent="."]
-transform = Transform3D(0.0136338, -0.000659889, -2.88447e-11, -2.93582e-18, -5.96652e-10, 0.0136498, -0.000659889, -0.0136338, -5.95954e-10, 0.00944054, 0.0021256, 0.0300797)
-visible = false
-layers = 2
-modulate = Color(0.929412, 0.92549, 0.909804, 1)
-texture = SubResource("ViewportTexture_trjqt")
-
 [node name="Text_render" type="SubViewport" parent="."]
 transparent_bg = true
 size = Vector2i(600, 400)
@@ -327,7 +258,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 60
+theme_override_font_sizes/font_size = 80
 text = "NOTE"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -349,31 +280,3 @@ theme_override_font_sizes/font_size = 50
 text = "FROM"
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="Text_responce" type="SubViewport" parent="."]
-transparent_bg = true
-size = Vector2i(600, 150)
-
-[node name="ColorRect" type="ColorRect" parent="Text_responce"]
-material = SubResource("ShaderMaterial_iy2kr")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.968627, 0.933333, 0.760784, 1)
-
-[node name="responce" type="Label" parent="Text_responce/ColorRect"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.419608, 0.368627, 0.12549, 1)
-theme_override_font_sizes/font_size = 50
-text = "..."
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[connection signal="On_click" from="On_click" to="." method="_on_on_click_on_click"]
