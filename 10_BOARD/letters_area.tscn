@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://qgyjfq88teq8"]
+[gd_scene load_steps=24 format=3 uid="uid://qgyjfq88teq8"]
 
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Movable_obj.gd" id="1_3c8dm"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="2_ke4da"]
@@ -17,13 +17,13 @@ script/source = "extends Area3D
 @onready var note = $Note
 
 @export var On_View : Node
+@export var Quest_letter : Node3D
 
-signal responce_link(text : String)
 
 func _ready():
 	note._set_note(Note_data.note_text,Note_data.from)
 	Note_data.scene_node_3d = self
-	
+	_global_datas.open_quest_info.connect(show_quest_letter)
 	
 	On_View.On_View.connect(Open_quest_responce)
 	
@@ -37,7 +37,10 @@ func Open_quest_responce():
 	else:
 		print(\"NEED A NOTE_DATA HERE\")		
 	
-	
+
+func show_quest_letter(condition, letter_quest):
+	Quest_letter.visible = condition	
+		
 func _active():
 	collision_shape_3d.disabled = false	
 
@@ -71,6 +74,20 @@ script/source = "extends Node
 signal On_View
 
 "
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_3jdh6"]
+viewport_path = NodePath("Quest_letter/Text_quest")
+
+[sub_resource type="QuadMesh" id="QuadMesh_4umhe"]
+resource_local_to_scene = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b5eno"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("3_ydeap")
+shader_parameter/Dark_color = Color(0.0196078, 0.121569, 0.129412, 1)
+shader_parameter/ColorParameter = Color(0.627451, 0.603922, 0.552941, 1)
+shader_parameter/light_color = Color(0.670588, 0.654902, 0.607843, 1)
 
 [sub_resource type="QuadMesh" id="QuadMesh_2j3jf"]
 
@@ -185,24 +202,32 @@ shader = SubResource("VisualShader_or8y4")
 [sub_resource type="BoxShape3D" id="BoxShape3D_bangl"]
 size = Vector3(0.704834, 0.0866016, 0.462646)
 
-[sub_resource type="QuadMesh" id="QuadMesh_4umhe"]
-resource_local_to_scene = true
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_e1a31"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("3_ydeap")
 shader_parameter/Dark_color = Color(0.0196078, 0.121569, 0.129412, 1)
-shader_parameter/ColorParameter = Color(0.627451, 0.603922, 0.552941, 1)
-shader_parameter/light_color = Color(0.670588, 0.654902, 0.607843, 1)
+shader_parameter/ColorParameter = Color(0.427451, 0.407843, 0.360784, 1)
+shader_parameter/light_color = Color(0.333333, 0.317647, 0.278431, 1)
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_lq3n1"]
 viewport_path = NodePath("Text_render")
 
-[node name="Letter_area" type="Area3D" node_paths=PackedStringArray("On_View")]
+[sub_resource type="CylinderMesh" id="CylinderMesh_2qibs"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_oms88"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("3_ydeap")
+shader_parameter/Dark_color = Color(0.0196078, 0.121569, 0.129412, 1)
+shader_parameter/ColorParameter = Color(0.443137, 0.2, 0.105882, 1)
+shader_parameter/light_color = Color(0.443137, 0.2, 0.105882, 1)
+
+[node name="Letter_area" type="Area3D" node_paths=PackedStringArray("On_View", "Quest_letter")]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0.00272226, 0)
 script = SubResource("GDScript_ypp87")
 On_View = NodePath("On_View")
+Quest_letter = NodePath("Quest_letter")
 
 [node name="Movable_obj" type="Node" parent="." node_paths=PackedStringArray("collider", "move_root", "rotation_root", "On_Move")]
 script = ExtResource("1_3c8dm")
@@ -222,6 +247,41 @@ script = ExtResource("2_ke4da")
 
 [node name="On_View" type="Node" parent="."]
 script = SubResource("GDScript_ikx4k")
+
+[node name="Quest_letter" type="Node3D" parent="."]
+transform = Transform3D(0.974169, 0, -0.225818, 0, 1, 0, 0.225818, 0, 0.974169, 0.00882291, 0.00296854, 0.0150403)
+visible = false
+
+[node name="Render_quest" type="Sprite3D" parent="Quest_letter"]
+transform = Transform3D(0.0136498, -1.24176e-09, 9.25186e-17, -7.40149e-17, -5.96652e-10, 0.0136498, -9.31323e-10, -0.0136498, -5.96652e-10, 0, 0.000399773, 0)
+layers = 2
+modulate = Color(0.333333, 0.321569, 0.286275, 1)
+texture = SubResource("ViewportTexture_3jdh6")
+
+[node name="photo2" type="MeshInstance3D" parent="Quest_letter"]
+transform = Transform3D(0.0898917, 0, 0, 0, -2.52697e-09, 0.0405362, 0, -0.0578102, -1.77189e-09, 0, 0, 0)
+layers = 2
+mesh = SubResource("QuadMesh_4umhe")
+skeleton = NodePath("")
+surface_material_override/0 = SubResource("ShaderMaterial_b5eno")
+
+[node name="Text_quest" type="SubViewport" parent="Quest_letter"]
+transparent_bg = true
+size = Vector2i(600, 400)
+
+[node name="text" type="Label" parent="Quest_letter/Text_quest"]
+custom_minimum_size = Vector2(600, 400)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 40
+text = "We are looking for a pocket watch. This object was seens last time in 1900 before the social revolution. His last owner was mister Anderson:
+need 3 proofs"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
 
 [node name="IS_SELECT" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.1107, 0, 0, 0, -3.07261e-09, 0.0535114, 0, -0.0702929, -2.33906e-09, 0, 0.000994979, 0)
@@ -244,8 +304,15 @@ surface_material_override/0 = SubResource("ShaderMaterial_e1a31")
 [node name="Render_text" type="Sprite3D" parent="."]
 transform = Transform3D(0.0136498, 0, 0, 0, -5.96652e-10, 0.0136498, 0, -0.0136498, -5.96652e-10, 0.000475392, 0.0021256, 0)
 layers = 2
-modulate = Color(0.333333, 0.321569, 0.286275, 1)
+modulate = Color(0.294118, 0.286275, 0.25098, 1)
 texture = SubResource("ViewportTexture_lq3n1")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.022523, 0, 0, 0, 0.000455902, 0, 0, 0, 0.022523, 0.02257, 0.00178259, -0.0249337)
+layers = 2
+mesh = SubResource("CylinderMesh_2qibs")
+skeleton = NodePath("../photo")
+surface_material_override/0 = SubResource("ShaderMaterial_oms88")
 
 [node name="Text_render" type="SubViewport" parent="."]
 transparent_bg = true

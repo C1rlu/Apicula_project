@@ -1,4 +1,4 @@
-[gd_scene load_steps=228 format=3 uid="uid://dr73p5vs0sixe"]
+[gd_scene load_steps=229 format=3 uid="uid://dr73p5vs0sixe"]
 
 [ext_resource type="Script" path="res://10_BOARD/Movable_root.gd" id="1_2yoh7"]
 [ext_resource type="PackedScene" uid="uid://cyb6my1srlcpw" path="res://10_BOARD/Candle/Candle_set.blend" id="1_3ummb"]
@@ -54,6 +54,7 @@
 [ext_resource type="Script" path="res://10_BOARD/See_Map.gd" id="50_5dxq8"]
 [ext_resource type="Resource" uid="uid://2c8xhsovefyj" path="res://15_GAME_RESSOURCE/03_BoardCam_state/Map_focus_data.tres" id="51_oeow0"]
 [ext_resource type="Script" path="res://10_BOARD/Bougie_allume.gd" id="53_go6nm"]
+[ext_resource type="PackedScene" uid="uid://d0ir7wge4gdsx" path="res://11_SPEAKER/00_NPC/Model/Mr_Birds.blend" id="55_a3q3g"]
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_ktulk"]
 constant = 0.826
@@ -1705,7 +1706,6 @@ Note_data = ExtResource("19_fvuwa")
 Camera_state = ExtResource("11_pvih2")
 
 [node name="Boue" type="Node3D" parent="Movable"]
-visible = false
 script = ExtResource("18_tu2nn")
 test_boue_exist = ExtResource("27_l5lxj")
 
@@ -2456,7 +2456,6 @@ skeleton = NodePath("../../../../..")
 surface_material_override/0 = SubResource("ShaderMaterial_isdhd")
 
 [node name="Area3D" type="Area3D" parent="Static/Deco/Table2/Table_border"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="Position_zone" type="Node" parent="Static/Deco/Table2/Table_border/Area3D"]
 
@@ -2562,6 +2561,31 @@ layers = 2
 mesh = SubResource("BoxMesh_v3rv8")
 skeleton = NodePath("../../../..")
 
+[node name="MrBird" type="Node3D" parent="."]
+visible = false
+
+[node name="Mr_Birds" parent="MrBird" instance=ExtResource("55_a3q3g")]
+transform = Transform3D(-0.0135336, -0.00829973, 0.0228305, -0.0115005, 0.0252092, 0.00234713, -0.0213976, -0.00829973, -0.0157015, 0.970381, 0.190842, 0.680333)
+
+[node name="body" parent="MrBird/Mr_Birds" index="0"]
+layers = 2
+
+[node name="bec" parent="MrBird/Mr_Birds" index="1"]
+layers = 2
+
+[node name="Darker" parent="MrBird/Mr_Birds" index="2"]
+layers = 2
+
+[node name="eyes" parent="MrBird/Mr_Birds" index="3"]
+layers = 2
+
+[node name="foot" parent="MrBird/Mr_Birds" index="4"]
+layers = 2
+
+[node name="boat_border" parent="MrBird/Mr_Birds" index="5"]
+visible = false
+layers = 2
+
 [connection signal="On_click" from="Movable/Book_Close_root/Area3D/On_click_off" to="Movable/Book_Close_root/Area3D/On_click_off" method="_on_on_click"]
 
 [editable path="Movable/Bell"]
@@ -2573,3 +2597,4 @@ skeleton = NodePath("../../../..")
 [editable path="Movable/TOURNE_DISQUE/Disque_prefab"]
 [editable path="Static/Deco/Candle_00"]
 [editable path="Static/Deco/Candle_01"]
+[editable path="MrBird/Mr_Birds"]
