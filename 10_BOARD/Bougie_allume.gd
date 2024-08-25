@@ -13,4 +13,4 @@ func active():
 
 	is_active =!is_active
 	Flame.visible = is_active
-	Light.visible = is_active
+	#Light.visible = is_active
