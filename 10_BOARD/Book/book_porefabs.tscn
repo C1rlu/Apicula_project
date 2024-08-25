@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://c311q6llca1sp"]
+
+[ext_resource type="Material" uid="uid://cwrbjs5et5i28" path="res://10_BOARD/00_SHADER/Gradient_surface_mat.tres" id="1_jgxpv"]
+[ext_resource type="Material" uid="uid://yjoyk6fvrm6q" path="res://10_BOARD/00_SHADER/No_light_surface_mat.tres" id="2_nw5sx"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_c540r"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_v3rv8"]
+
+[node name="Book_porefabs" type="Node3D"]
+transform = Transform3D(0.264492, 0, 0, 0, 0.0376968, 0, 0, 0, 0.168754, 0, 0, 0)
+
+[node name="Area3D" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 5.96046e-08, 0, 1, 0, 0.517062, 0)
+
+[node name="Position_zone" type="Node" parent="Area3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("BoxShape3D_c540r")
+
+[node name="render_dither" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 5.96046e-08, 0, 1, 0, 0.517062, 0)
+layers = 2
+mesh = SubResource("BoxMesh_v3rv8")
+skeleton = NodePath("../../../..")
+surface_material_override/0 = ExtResource("1_jgxpv")
+
+[node name="render_light" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.998672, 0, 0, 0, 0.998671, 0, 5.95254e-08, 0, 0.998672, 0, 0.517062, 0)
+layers = 65536
+mesh = SubResource("BoxMesh_v3rv8")
+skeleton = NodePath("../../../..")
+surface_material_override/0 = ExtResource("2_nw5sx")
