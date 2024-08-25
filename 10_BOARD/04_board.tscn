@@ -1,4 +1,4 @@
-[gd_scene load_steps=75 format=3 uid="uid://cein0q2eirkay"]
+[gd_scene load_steps=80 format=3 uid="uid://cein0q2eirkay"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_g3pi7"]
 [ext_resource type="Script" path="res://10_BOARD/Board_CamTarget.gd" id="1_janbq"]
@@ -43,6 +43,7 @@
 [ext_resource type="Resource" uid="uid://dlqqpo5rncbhs" path="res://15_GAME_RESSOURCE/03_BoardCam_state/Board_Element_focus_data.tres" id="35_wjkn0"]
 [ext_resource type="Script" path="res://10_BOARD/Camera_xray.gd" id="39_3fd2t"]
 [ext_resource type="Script" path="res://10_BOARD/Pad_target.gd" id="41_lixei"]
+[ext_resource type="Shader" uid="uid://7nanp4dqf4uc" path="res://05_SHADER/Full_screen/04_board_light.tres" id="41_prh4x"]
 
 [sub_resource type="GDScript" id="GDScript_w13ry"]
 script/source = "extends Node
@@ -144,6 +145,21 @@ func set_shader_value(value):
 "
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_gpfe8"]
+viewport_path = NodePath("3D_SCENE/SubViewport")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_gby33"]
+viewport_path = NodePath("3D_SCENE/SubViewport_light")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_rk75s"]
+viewport_path = NodePath("3D_SCENE/SubViewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ktpkr"]
+resource_local_to_scene = true
+shader = ExtResource("41_prh4x")
+shader_parameter/Albedo_viewport = SubResource("ViewportTexture_rk75s")
+shader_parameter/Albedo_light = SubResource("ViewportTexture_gby33")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_fq7l4"]
 viewport_path = NodePath("3D_SCENE/SubViewport")
 
 [sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_5dsty"]
@@ -501,7 +517,7 @@ script = SubResource("GDScript_52477")
 [node name="Cam_focus" type="Node" parent="." node_paths=PackedStringArray("all_Cam", "focus_target")]
 script = ExtResource("6_7tgl6")
 _focus_board = ExtResource("27_vvxtf")
-all_Cam = [NodePath("../3D_SCENE/SubViewport/Camera3D_Main"), NodePath("../3D_SCENE/SubViewport_scanner/Camera3D_Scanner"), NodePath("../3D_SCENE/Camera_xray")]
+all_Cam = [NodePath("../3D_SCENE/SubViewport/Camera3D_Main"), NodePath("../3D_SCENE/SubViewport_scanner/Camera3D_Scanner"), NodePath("../3D_SCENE/Camera_xray"), NodePath("../3D_SCENE/SubViewport_light/Camera3D_Main")]
 focus_target = NodePath("../3D_SCENE/CamTarget")
 
 [node name="Zoom_state" type="Node" parent="Cam_focus"]
@@ -592,6 +608,19 @@ current = true
 fov = 40.0
 far = 10.0
 
+[node name="SubViewport_light" type="SubViewport" parent="3D_SCENE"]
+transparent_bg = true
+handle_input_locally = false
+scaling_3d_scale = 0.9
+size = Vector2i(1920, 1080)
+
+[node name="Camera3D_Main" type="Camera3D" parent="3D_SCENE/SubViewport_light"]
+transform = Transform3D(0.994881, 0.0700724, -0.072816, 0, 0.720551, 0.693402, 0.101056, -0.689852, 0.716862, -0.08, 0.945, 1.035)
+cull_mask = 65536
+current = true
+fov = 40.0
+far = 10.0
+
 [node name="SubViewport_scanner" type="SubViewport" parent="3D_SCENE"]
 transparent_bg = true
 handle_input_locally = false
@@ -612,6 +641,16 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("ViewportTexture_gpfe8")
+expand_mode = 3
+
+[node name="RENDER_light" type="TextureRect" parent="3D_SCENE"]
+material = SubResource("ShaderMaterial_ktpkr")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("ViewportTexture_fq7l4")
 expand_mode = 3
 
 [node name="BACKDROP_FOCUS" type="ColorRect" parent="3D_SCENE"]
