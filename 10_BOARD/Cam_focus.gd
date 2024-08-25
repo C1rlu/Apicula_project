@@ -73,7 +73,11 @@ func _focus(focus_data : boardCamState_data):
 	#print(cam_state)	
 func _process(delta):
 
+	if !_global_datas.Player_In_Inventory:
+		return
 
+	if _global_datas.Player_InDialogue:
+		return
 
 	if cam_state == 0:
 		rotation_angle(delta)	

@@ -1,4 +1,4 @@
-[gd_scene load_steps=229 format=3 uid="uid://dr73p5vs0sixe"]
+[gd_scene load_steps=231 format=3 uid="uid://dr73p5vs0sixe"]
 
 [ext_resource type="Script" path="res://10_BOARD/Movable_root.gd" id="1_2yoh7"]
 [ext_resource type="PackedScene" uid="uid://cyb6my1srlcpw" path="res://10_BOARD/Candle/Candle_set.blend" id="1_3ummb"]
@@ -18,9 +18,11 @@
 [ext_resource type="Resource" uid="uid://dm0uus2gow50q" path="res://15_GAME_RESSOURCE/Otis_photoData.tres" id="15_m1itl"]
 [ext_resource type="Resource" uid="uid://bcid58kxecbk2" path="res://15_GAME_RESSOURCE/Maurice_photoData.tres" id="16_14mtd"]
 [ext_resource type="Resource" uid="uid://dlm0knnql1e6h" path="res://15_GAME_RESSOURCE/Ghost_Scanner_photoData.tres" id="18_gjhpl"]
+[ext_resource type="Resource" uid="uid://ppxk5i543dfn" path="res://15_GAME_RESSOURCE/00_Npc_data/Mr_Birds_data.tres" id="18_k6yfu"]
 [ext_resource type="Script" path="res://10_BOARD/Boue/Boue_check.gd" id="18_tu2nn"]
 [ext_resource type="PackedScene" uid="uid://b0j7tl0gn4vg8" path="res://10_BOARD/Boue/boue_map_prefab.tscn" id="19_bi3qi"]
 [ext_resource type="Resource" uid="uid://duqn0ehtc8aao" path="res://12_INVENTORY/Words_note/FindSeagull_orders.tres" id="19_fvuwa"]
+[ext_resource type="Script" path="res://10_BOARD/Call_birds.gd" id="19_rki13"]
 [ext_resource type="PackedScene" uid="uid://bi5gcavnclfud" path="res://10_BOARD/Decor/Bell.blend" id="22_4fabq"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="23_4ws66"]
 [ext_resource type="Script" path="res://10_BOARD/On_View_call.gd" id="23_5ghgr"]
@@ -1725,13 +1727,15 @@ layers = 2
 surface_material_override/0 = SubResource("ShaderMaterial_kqq05")
 surface_material_override/1 = SubResource("ShaderMaterial_jka2s")
 
-[node name="Movable_object" type="Node" parent="Movable/Bell" node_paths=PackedStringArray("collider", "limit_zone", "move_root", "rotation_root", "On_Move")]
+[node name="Call_birds" type="Node" parent="Movable/Bell" node_paths=PackedStringArray("On_Move")]
+script = ExtResource("19_rki13")
+Bird_NPC_data = ExtResource("18_k6yfu")
+On_Move = NodePath("../Area3D/On_Move")
+
+[node name="Movable_object" type="Node" parent="Movable/Bell" node_paths=PackedStringArray("collider", "limit_zone")]
 script = ExtResource("43_usyd2")
 collider = NodePath("../Area3D/Col")
 limit_zone = NodePath("../Limit_zone")
-move_root = NodePath("..")
-rotation_root = NodePath("..")
-On_Move = NodePath("../Area3D/On_Move_off")
 
 [node name="Selection_ini" type="Node" parent="Movable/Bell" node_paths=PackedStringArray("root", "Movable_node")]
 script = ExtResource("49_vb8xx")
@@ -1741,7 +1745,7 @@ Movable_node = NodePath("../Movable_object")
 [node name="Area3D" type="Area3D" parent="Movable/Bell"]
 transform = Transform3D(0.982238, 0, 0.187638, 0, 1, 0, -0.187638, 0, 0.982238, 0, 0, 0)
 
-[node name="On_Move_off" type="Node" parent="Movable/Bell/Area3D"]
+[node name="On_Move" type="Node" parent="Movable/Bell/Area3D"]
 script = ExtResource("44_64ctv")
 
 [node name="On_View" type="Node" parent="Movable/Bell/Area3D"]

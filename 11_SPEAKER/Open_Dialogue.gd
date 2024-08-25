@@ -33,13 +33,12 @@ func _show_dialogue_box():
 	dialogue_box.visible = true
 
 func _open_dialogue():
-		
 
 	
 	_global_datas.Player_InDialogue = true
 
 	_global_datas.go_darker_color.emit()
-	
+	_global_datas.Open_ui_dark_backdrop.emit(true)
 	dialogue.visible = true
 
 	$Random_FaceChanger/Timer.start()				
@@ -59,6 +58,8 @@ func update_name_ls():
 		dialogue_name_show.text = _global_datas.Npc_Dialogue.name[Localisation_state_index]	
 func _close_dialogue():
 	
+
+	_global_datas.Open_ui_dark_backdrop.emit(false)
 	dialogue.visible =  false
 	_global_datas.Player_InDialogue = false
 	_global_datas.go_normal_color.emit()

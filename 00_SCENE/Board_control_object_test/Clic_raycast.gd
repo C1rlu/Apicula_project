@@ -49,6 +49,9 @@ func _input(event):
 	if !_global_datas.Player_In_Inventory:
 		return
 	
+	if _global_datas.Player_InDialogue:
+		return
+	
 	if pad:
 		target = pad_target.position
 	else:

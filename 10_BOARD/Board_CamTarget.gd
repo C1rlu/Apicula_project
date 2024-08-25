@@ -50,7 +50,8 @@ func _process(delta):
 	
 	if !_global_datas.Player_In_Inventory:
 		return
-
+	if _global_datas.Player_InDialogue:
+		return
 	if on_auto_move:
 		return
 		
