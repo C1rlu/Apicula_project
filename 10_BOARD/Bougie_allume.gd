@@ -2,6 +2,7 @@ extends Node
 
 
 @export var On_View : Node
+@export var Light : Light3D
 @export var Flame : MeshInstance3D
 var is_active : bool = false
 func _ready():
@@ -9,6 +10,7 @@ func _ready():
 	
 	
 func active():
-	print("ACTIVEEE")
+
 	is_active =!is_active
 	Flame.visible = is_active
+	Light.visible = is_active
