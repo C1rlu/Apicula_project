@@ -1,4 +1,4 @@
-[gd_resource type="VisualShader" load_steps=14 format=3 uid="uid://7nanp4dqf4uc"]
+[gd_resource type="VisualShader" load_steps=17 format=3 uid="uid://7nanp4dqf4uc"]
 
 [sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_q2vc7"]
 constant = Color(0.0320853, 0.0975584, 0.09756, 1)
@@ -11,7 +11,7 @@ op_type = 3
 parameter_name = "Albedo_viewport"
 
 [sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_ngfce"]
-default_input_values = [0, 0.0, 1, 1.0, 2, 0.12]
+default_input_values = [0, 0.0, 1, 1.0, 2, 0.3]
 
 [sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_p0x2j"]
 
@@ -47,6 +47,16 @@ source = 5
 [sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_vvegw"]
 function = 31
 
+[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_cn3bc"]
+constant = Color(0.67451, 0.4, 0, 1)
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_4a136"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(1, 1, 1)]
+op_type = 3
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_dhujq"]
+constant = 0.539
+
 [sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_upeu7"]
 parameter_name = "Albedo_light"
 
@@ -81,7 +91,7 @@ void fragment() {
 
 // Mix:24
 	float n_in24p1 = 1.00000;
-	float n_in24p2 = 0.12000;
+	float n_in24p2 = 0.30000;
 	float n_out24p0 = mix(n_out7p0.x, n_in24p1, n_in24p2);
 
 
@@ -133,6 +143,7 @@ void fragment() {
 
 }
 "
+graph_offset = Vector2(-320.022, 83.1076)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(2100, 100)
@@ -175,4 +186,10 @@ nodes/fragment/29/node = SubResource("VisualShaderNodeFloatConstant_82vmf")
 nodes/fragment/29/position = Vector2(200, 1160)
 nodes/fragment/30/node = SubResource("VisualShaderNodeFloatFunc_vvegw")
 nodes/fragment/30/position = Vector2(1660, 720)
-nodes/fragment/connections = PackedInt32Array(2, 0, 3, 2, 6, 0, 7, 2, 18, 0, 19, 0, 19, 0, 0, 0, 3, 0, 19, 1, 7, 0, 24, 0, 24, 0, 19, 2, 28, 0, 26, 1, 26, 0, 25, 1, 29, 0, 26, 0, 27, 0, 25, 0, 25, 0, 30, 0, 30, 0, 0, 1)
+nodes/fragment/31/node = SubResource("VisualShaderNodeColorConstant_cn3bc")
+nodes/fragment/31/position = Vector2(259.329, 198.828)
+nodes/fragment/32/node = SubResource("VisualShaderNodeMix_4a136")
+nodes/fragment/32/position = Vector2(420, 340)
+nodes/fragment/34/node = SubResource("VisualShaderNodeFloatConstant_dhujq")
+nodes/fragment/34/position = Vector2(1308.83, 546.732)
+nodes/fragment/connections = PackedInt32Array(2, 0, 3, 2, 6, 0, 7, 2, 18, 0, 19, 0, 3, 0, 19, 1, 7, 0, 24, 0, 24, 0, 19, 2, 28, 0, 26, 1, 26, 0, 25, 1, 29, 0, 26, 0, 27, 0, 25, 0, 25, 0, 30, 0, 30, 0, 0, 1, 7, 0, 32, 2, 31, 0, 32, 1, 18, 0, 32, 0, 19, 0, 0, 0)

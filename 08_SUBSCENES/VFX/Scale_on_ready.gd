@@ -12,7 +12,7 @@ func scale():
 		t.kill()
 	
 	t = create_tween()
-	t.tween_method(value,0.25,50,5.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
+	t.tween_method(value,0.25,50,10.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
 	t.connect("finished",done)
 	
 func done():

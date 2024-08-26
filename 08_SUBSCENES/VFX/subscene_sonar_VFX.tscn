@@ -1,16 +1,26 @@
-[gd_scene load_steps=5 format=3 uid="uid://cakei8rfaiuqm"]
+[gd_scene load_steps=6 format=3 uid="uid://cakei8rfaiuqm"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/VFX/Scale_on_ready.gd" id="1_mevm0"]
 [ext_resource type="Material" uid="uid://goq7y1lqdpxa" path="res://05_SHADER/Subscene_materials/element_subscene_x_ray_VFX_LIGHT.tres" id="2_jhh1y"]
 [ext_resource type="Material" uid="uid://d2t0ju6dynwgf" path="res://05_SHADER/Subscene_materials/oddity_mirror.tres" id="3_e2wvt"]
 
+[sub_resource type="BoxMesh" id="BoxMesh_tr1sr"]
+
 [sub_resource type="SphereMesh" id="SphereMesh_m2dhk"]
 radial_segments = 32
 
 [node name="Mirror_exit_VFX" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="Scale_on_ready" type="Node" parent="."]
 script = ExtResource("1_mevm0")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.455858, 0, 0, 0, 0.455858, 0, 0, 0, 0.455858, -0.0870911, -0.33313, -0.0693081)
+visible = false
+layers = 4
+mesh = SubResource("BoxMesh_tr1sr")
+skeleton = NodePath("../Msh")
 
 [node name="Msh" type="MeshInstance3D" parent="."]
 layers = 4

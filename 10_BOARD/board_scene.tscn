@@ -1,4 +1,4 @@
-[gd_scene load_steps=294 format=3 uid="uid://dr73p5vs0sixe"]
+[gd_scene load_steps=297 format=3 uid="uid://dr73p5vs0sixe"]
 
 [ext_resource type="Script" path="res://10_BOARD/Movable_root.gd" id="1_2yoh7"]
 [ext_resource type="PackedScene" uid="uid://cyb6my1srlcpw" path="res://10_BOARD/Candle/Candle_set.blend" id="1_3ummb"]
@@ -481,13 +481,13 @@ shader_parameter/ColorParameter = Color(0.72549, 0.615686, 0.384314, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_mhg0h"]
 gradient = SubResource("Gradient_andc3")
-fill_from = Vector2(1, 0.542735)
+fill_from = Vector2(1, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_isdhd"]
 render_priority = 0
 shader = ExtResource("58_c4khy")
 shader_parameter/Color = Color(0.372549, 0.286275, 0.176471, 1)
-shader_parameter/Dither_Opacity = 1.0
+shader_parameter/Dither_Opacity = 0.405
 shader_parameter/Gradient_light = SubResource("GradientTexture2D_mhg0h")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kgpkq"]
@@ -1209,8 +1209,8 @@ shader_parameter/Gradient_light = SubResource("GradientTexture2D_urvtd")
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pf4ox"]
 render_priority = 0
 shader = ExtResource("58_c4khy")
-shader_parameter/Color = Color(0.231373, 0.184314, 0.133333, 1)
-shader_parameter/Dither_Opacity = 1.0
+shader_parameter/Color = Color(0.231373, 0.203922, 0.180392, 1)
+shader_parameter/Dither_Opacity = 0.68
 shader_parameter/Gradient_light = SubResource("GradientTexture2D_np45q")
 
 [sub_resource type="GDScript" id="GDScript_mevdj"]
@@ -2297,6 +2297,23 @@ size = Vector3(1.04495, 2.17786, 1.04868)
 [sub_resource type="PlaneMesh" id="PlaneMesh_i55er"]
 size = Vector2(1.21, 0.795)
 
+[sub_resource type="Gradient" id="Gradient_1d6go"]
+offsets = PackedFloat32Array(0.306413, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.98017, 0.98017, 0.98017, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_5kuyo"]
+gradient = SubResource("Gradient_1d6go")
+fill = 1
+fill_from = Vector2(0.5, 0.542735)
+fill_to = Vector2(1, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_05l1s"]
+render_priority = 0
+shader = ExtResource("58_c4khy")
+shader_parameter/Color = Color(0.0196078, 0.121569, 0.129412, 1)
+shader_parameter/Dither_Opacity = 0.769
+shader_parameter/Gradient_light = SubResource("GradientTexture2D_5kuyo")
+
 [sub_resource type="BoxMesh" id="BoxMesh_1smid"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6x0ye"]
@@ -2339,6 +2356,7 @@ omni_attenuation = 0.297302
 
 [node name="LIGHT_scene4" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0389901, 0.153977, 0.685778)
+visible = false
 layers = 65536
 light_indirect_energy = 0.0
 light_bake_mode = 0
@@ -2448,7 +2466,7 @@ transform = Transform3D(0.367208, 0, 0, 0, 0.367208, 0, 0, 0, 0.367208, 0, 0.085
 shape = SubResource("BoxShape3D_a213g")
 
 [node name="Scanner_reader" type="Node3D" parent="Movable"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.116538, 0.00866279, -0.124112)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.058044, 0.00866282, -0.156247)
 
 [node name="Camera_OnScanner" type="Camera3D" parent="Movable/Scanner_reader"]
 transform = Transform3D(0.996041, 0.0409091, -0.0789217, 0, 0.887815, 0.4602, 0.0888943, -0.458378, 0.884301, -0.02, 0.196, 0.239)
@@ -2937,7 +2955,7 @@ mesh = SubResource("SphereMesh_ug25n")
 surface_material_override/0 = SubResource("StandardMaterial3D_plv0m")
 
 [node name="Lanterne" parent="Movable" instance=ExtResource("1_l5l52")]
-transform = Transform3D(0.09052, 0, 0, 0, 0.09052, 0, 0, 0, 0.09052, -0.024241, 0.0605514, -0.453079)
+transform = Transform3D(0.09052, 0, 0, 0, 0.09052, 0, 0, 0, 0.09052, 0.231594, 0.00772766, -0.0572509)
 
 [node name="Lanterne" parent="Movable/Lanterne" index="0"]
 transform = Transform3D(0.691992, 0, -0.721905, 0, 1, 0, 0.721905, 0, 0.691992, 0, 0, 0)
@@ -3289,7 +3307,7 @@ transform = Transform3D(-0.00523907, 0, -1.16649, 0, 67.9976, 0, 0.785872, 0, -0
 layers = 2
 mesh = SubResource("PlaneMesh_i55er")
 skeleton = NodePath("../../../../..")
-surface_material_override/0 = ExtResource("57_24il2")
+surface_material_override/0 = SubResource("ShaderMaterial_05l1s")
 
 [node name="Table_light" type="MeshInstance3D" parent="Static/Deco"]
 transform = Transform3D(2.11247, 0, 0, 0, 0.066619, 0, 0, 0, 1.08174, 0, -0.0336317, 0)
