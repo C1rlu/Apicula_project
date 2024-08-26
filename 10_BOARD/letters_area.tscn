@@ -1,9 +1,8 @@
-[gd_scene load_steps=25 format=3 uid="uid://qgyjfq88teq8"]
+[gd_scene load_steps=28 format=3 uid="uid://qgyjfq88teq8"]
 
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Movable_obj.gd" id="1_3c8dm"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="2_ke4da"]
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/On_click_object.gd" id="2_rje64"]
-[ext_resource type="Shader" uid="uid://upo0fuo5sqgd" path="res://05_SHADER/Board/Board_sh.tres" id="3_ydeap"]
 [ext_resource type="Shader" uid="uid://8ll6evus625p" path="res://10_BOARD/00_SHADER/Gradient_surface.tres" id="5_t8aod"]
 
 [sub_resource type="GDScript" id="GDScript_ypp87"]
@@ -82,11 +81,19 @@ viewport_path = NodePath("Quest_letter/Text_quest")
 [sub_resource type="QuadMesh" id="QuadMesh_4umhe"]
 resource_local_to_scene = true
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_b5eno"]
-resource_local_to_scene = true
+[sub_resource type="Gradient" id="Gradient_hh7gt"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_cttjd"]
+gradient = SubResource("Gradient_hh7gt")
+fill_from = Vector2(1, 0)
+fill_to = Vector2(1, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bgk60"]
 render_priority = 0
-shader = ExtResource("3_ydeap")
-shader_parameter/Color = Color(0.584314, 0.584314, 0.584314, 1)
+shader = ExtResource("5_t8aod")
+shader_parameter/Color = Color(0.835294, 0.811765, 0.772549, 1)
+shader_parameter/Dither_Opacity = 0.765
+shader_parameter/Gradient_light = SubResource("GradientTexture2D_cttjd")
 
 [sub_resource type="QuadMesh" id="QuadMesh_2j3jf"]
 
@@ -204,18 +211,28 @@ size = Vector3(0.704834, 0.0866016, 0.462646)
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jubt2"]
 render_priority = 0
 shader = ExtResource("5_t8aod")
-shader_parameter/Color = Color(0.870588, 0.760784, 0.619608, 1)
+shader_parameter/Color = Color(0.639216, 0.6, 0.545098, 1)
+shader_parameter/Dither_Opacity = 0.765
+shader_parameter/Gradient_light = SubResource("GradientTexture2D_cttjd")
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_lq3n1"]
 viewport_path = NodePath("Text_render")
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_2qibs"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_oms88"]
-resource_local_to_scene = true
+[sub_resource type="Gradient" id="Gradient_2umqi"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_apshu"]
+gradient = SubResource("Gradient_2umqi")
+fill_from = Vector2(0.517094, 0)
+fill_to = Vector2(1, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hqrm5"]
 render_priority = 0
-shader = ExtResource("3_ydeap")
-shader_parameter/Color = Color(0.529412, 0.270588, 0.227451, 1)
+shader = ExtResource("5_t8aod")
+shader_parameter/Color = Color(0.690196, 0.396078, 0.247059, 1)
+shader_parameter/Dither_Opacity = 1.0
+shader_parameter/Gradient_light = SubResource("GradientTexture2D_apshu")
 
 [node name="Letter_area" type="Area3D" node_paths=PackedStringArray("On_View", "Quest_letter")]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0.00272226, 0)
@@ -250,7 +267,7 @@ visible = false
 [node name="Render_quest" type="Sprite3D" parent="Quest_letter"]
 transform = Transform3D(0.0136498, -1.24176e-09, 9.25186e-17, -7.40149e-17, -5.96652e-10, 0.0136498, -9.31323e-10, -0.0136498, -5.96652e-10, 0, 0.000399773, 0)
 layers = 2
-modulate = Color(0.333333, 0.321569, 0.286275, 1)
+modulate = Color(0.537255, 0.521569, 0.47451, 1)
 texture = SubResource("ViewportTexture_3jdh6")
 
 [node name="photo2" type="MeshInstance3D" parent="Quest_letter"]
@@ -258,7 +275,7 @@ transform = Transform3D(0.0898917, 0, 0, 0, -2.52697e-09, 0.0405362, 0, -0.05781
 layers = 2
 mesh = SubResource("QuadMesh_4umhe")
 skeleton = NodePath("")
-surface_material_override/0 = SubResource("ShaderMaterial_b5eno")
+surface_material_override/0 = SubResource("ShaderMaterial_bgk60")
 
 [node name="Text_quest" type="SubViewport" parent="Quest_letter"]
 transparent_bg = true
@@ -299,7 +316,7 @@ surface_material_override/0 = SubResource("ShaderMaterial_jubt2")
 [node name="Render_text" type="Sprite3D" parent="."]
 transform = Transform3D(0.0136498, 0, 0, 0, -5.96652e-10, 0.0136498, 0, -0.0136498, -5.96652e-10, 0.000475392, 0.0021256, 0)
 layers = 2
-modulate = Color(0.294118, 0.286275, 0.25098, 1)
+modulate = Color(0.403922, 0.388235, 0.34902, 1)
 texture = SubResource("ViewportTexture_lq3n1")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
@@ -307,7 +324,7 @@ transform = Transform3D(0.022523, 0, 0, 0, 0.000455902, 0, 0, 0, 0.022523, 0.022
 layers = 2
 mesh = SubResource("CylinderMesh_2qibs")
 skeleton = NodePath("../photo")
-surface_material_override/0 = SubResource("ShaderMaterial_oms88")
+surface_material_override/0 = SubResource("ShaderMaterial_hqrm5")
 
 [node name="Text_render" type="SubViewport" parent="."]
 transparent_bg = true

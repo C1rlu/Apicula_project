@@ -3,9 +3,12 @@ extends Node
 
 @export var manget_tool : tool_data
 @export var magnet_fx : GPUParticles3D
+@export var collector_collider : CollisionShape3D
 @onready var root = $".."
 var magneting : bool = false
 var list_of_magnetable : Array[Node]
+
+
 
 func _ready():
 	manget_tool.tool_active_signal.connect(_active)
@@ -15,7 +18,7 @@ func _active(condition : bool):
 
 	magnet_fx.emitting = condition
 	magneting = condition
-	
+	collector_collider.disabled = !condition
 		
 func _process(delta):
 	

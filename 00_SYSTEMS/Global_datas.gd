@@ -80,7 +80,7 @@ signal _show_object_legend(condtion : bool, info : info_data)
 # SUBSCENE VAR 
 
 var player_rg : RigidBody3D
-
+var attache_node: Node3D
 var selected_subscene : PackedScene
 signal player_in_diveZone(condition : bool)
 signal show_dive_zone_info(condition : bool, dive_data : BoueData)

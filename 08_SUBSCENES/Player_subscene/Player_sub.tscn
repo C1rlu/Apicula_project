@@ -1,4 +1,4 @@
-[gd_scene load_steps=137 format=3 uid="uid://g7u8o55jrnyy"]
+[gd_scene load_steps=141 format=3 uid="uid://g7u8o55jrnyy"]
 
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER/Subscene_materials/Subscene_basic_mat.tres" id="1_n1vw4"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Player_sub_behaviour.gd" id="1_o2v73"]
@@ -13,6 +13,7 @@
 [ext_resource type="Resource" uid="uid://bcj27libgpl5g" path="res://08_SUBSCENES/Tools/Check_clock.tres" id="10_fdj0j"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Active_scanner_visual_pulse.gd" id="10_ir8y2"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Subjet_effet.gd" id="10_jdgje"]
+[ext_resource type="Script" path="res://08_SUBSCENES/ELEMENT_COLECTOR.gd" id="11_olyv4"]
 [ext_resource type="Resource" uid="uid://df0swhar7lchv" path="res://08_SUBSCENES/Tools/Jet_tool.tres" id="11_rhn2f"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/CallLoader_effect.gd" id="12_5ga5g"]
 [ext_resource type="Shader" uid="uid://drchaj5fcdan0" path="res://05_SHADER/Subscene_materials/Subscene_shine_sh.tres" id="12_cij64"]
@@ -28,6 +29,8 @@
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/look_at_camera.gd" id="17_mnoui"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Check_Dialogue_Zone.gd" id="17_o0rcv"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Push.gd" id="17_qkxfn"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Attache_position.gd" id="29_5vyup"]
+[ext_resource type="PackedScene" uid="uid://t61l8uuuy0l4" path="res://08_SUBSCENES/Elements/Magnetable_test/Debris_on_player.tscn" id="30_gyvai"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_c70j3"]
 bounce = 0.8
@@ -80,7 +83,7 @@ func _start_flash():
 		
 	t = create_tween()
 	
-	t.tween_method(change_scale,1.0,0.0,2.0)
+	t.tween_method(change_scale,1.0,0.0,3.0)
 	t.connect(\"finished\",done)
 
 func change_scale(value : float):
@@ -501,10 +504,13 @@ shader_parameter/Size = 0.7
 shader_parameter/flash_opacity = 0.5
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_g1ic5"]
-radius = 0.303955
+radius = 0.290241
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_7175y"]
+radius = 0.143141
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_47iq4"]
-radius = 0.560663
+radius = 0.705497
 
 [sub_resource type="Curve" id="Curve_mwumu"]
 _data = [Vector2(0, 0.56015), 0.0, 0.0, 0, 0, Vector2(1, 0.181391), 0.0, 0.0, 0, 0]
@@ -1279,7 +1285,7 @@ one_shot = true
 
 [node name="Scanne_element" type="Node" parent="."]
 script = ExtResource("5_jhkow")
-scanner_tool = ExtResource("15_vswql")
+scanner_tool = ExtResource("12_nmehd")
 
 [node name="time_checker" type="Timer" parent="Scanne_element"]
 wait_time = 0.1
@@ -1295,16 +1301,22 @@ wait_time = 0.1
 [node name="Photo_Flash" type="Node" parent="."]
 script = SubResource("GDScript_8qwgp")
 
-[node name="Magnet_effect" type="Node" parent="." node_paths=PackedStringArray("magnet_fx")]
+[node name="Magnet_effect" type="Node" parent="." node_paths=PackedStringArray("magnet_fx", "collector_collider")]
 script = ExtResource("9_wphos")
 manget_tool = ExtResource("12_nmehd")
 magnet_fx = NodePath("../VFX_MAGNET")
+collector_collider = NodePath("../Element_grab_zone/CollisionShape3D")
 
-[node name="Subjet_effect" type="Node" parent="."]
+[node name="ELEMENT_COLECTOR" type="Node" parent="Magnet_effect" node_paths=PackedStringArray("collector_area", "attache_node")]
+script = ExtResource("11_olyv4")
+collector_area = NodePath("../../Element_grab_zone")
+attache_node = NodePath("../../Render_mesh/Attache_node")
+
+[node name="Subjet_effect ( accelerateur )" type="Node" parent="."]
 script = ExtResource("10_jdgje")
 subjet_effect = ExtResource("11_rhn2f")
 
-[node name="Loader_Call_and_reload" type="Node" parent="."]
+[node name="Loader_Call_and_reload(OXYGENE SYSTEM) off here" type="Node" parent="."]
 script = ExtResource("12_5ga5g")
 caller_tool = ExtResource("13_p6l7e")
 tool_clock = ExtResource("10_fdj0j")
@@ -1580,6 +1592,50 @@ mesh = SubResource("QuadMesh_uqek7")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("ShaderMaterial_4j2xv")
 
+[node name="Attache_node" type="Node3D" parent="Render_mesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00508107, 0.271547, -0.114027)
+script = ExtResource("29_5vyup")
+
+[node name="Debris_OnPlayer" parent="Render_mesh/Attache_node" instance=ExtResource("30_gyvai")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0624184, -0.151627, -0.130677)
+visible = false
+
+[node name="Debris_OnPlayer2" parent="Render_mesh/Attache_node" instance=ExtResource("30_gyvai")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0436907, -0.151627, -0.130677)
+visible = false
+
+[node name="Debris_OnPlayer3" parent="Render_mesh/Attache_node" instance=ExtResource("30_gyvai")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00242999, -0.0907214, -0.130677)
+visible = false
+
+[node name="Debris_OnPlayer4" parent="Render_mesh/Attache_node" instance=ExtResource("30_gyvai")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0717325, -0.0897319, -0.130677)
+visible = false
+
+[node name="Debris_OnPlayer5" parent="Render_mesh/Attache_node" instance=ExtResource("30_gyvai")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0857659, -0.044513, -0.130677)
+visible = false
+
+[node name="Debris_OnPlayer6" parent="Render_mesh/Attache_node" instance=ExtResource("30_gyvai")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0334467, -0.0103453, -0.130677)
+visible = false
+
+[node name="Debris_OnPlayer7" parent="Render_mesh/Attache_node" instance=ExtResource("30_gyvai")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0543093, -0.0373582, -0.130677)
+visible = false
+
+[node name="Debris_OnPlayer8" parent="Render_mesh/Attache_node" instance=ExtResource("30_gyvai")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0775585, 0.0362609, -0.130677)
+visible = false
+
+[node name="Debris_OnPlayer9" parent="Render_mesh/Attache_node" instance=ExtResource("30_gyvai")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0274857, 0.0362609, -0.130677)
+visible = false
+
+[node name="Debris_OnPlayer10" parent="Render_mesh/Attache_node" instance=ExtResource("30_gyvai")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.31895e-05, 0.0977868, -0.130677)
+visible = false
+
 [node name="Check_Dialogue_Zone" type="Node" parent="."]
 script = ExtResource("17_o0rcv")
 
@@ -1600,6 +1656,15 @@ rg = NodePath("../..")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ZoneCollide"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.138627, 0)
 shape = SubResource("SphereShape3D_g1ic5")
+
+[node name="Element_grab_zone" type="Area3D" parent="."]
+collision_layer = 4
+collision_mask = 4
+input_ray_pickable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Element_grab_zone"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.138627, 0)
+shape = SubResource("SphereShape3D_7175y")
 
 [node name="Magnet_zone" type="Area3D" parent="."]
 collision_layer = 4
@@ -1653,7 +1718,7 @@ process_material = SubResource("ParticleProcessMaterial_nlhn7")
 draw_pass_1 = SubResource("SphereMesh_oinhl")
 
 [node name="Vortex_creation_msh" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.137838, 0)
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0.137838, 0)
 visible = false
 layers = 4
 mesh = SubResource("SphereMesh_dmxj8")
@@ -1663,10 +1728,14 @@ surface_material_override/0 = SubResource("ShaderMaterial_m0v3u")
 [connection signal="timeout" from="Scanne_element/time_checker" to="Scanne_element" method="_on_time_checker_timeout"]
 [connection signal="timeout" from="Scanne_element/Active_scanner_visual_pulse/Timer" to="Scanne_element/Active_scanner_visual_pulse" method="_on_timer_timeout"]
 [connection signal="timeout" from="Add_Vortex/Timer_check" to="Add_Vortex" method="_on_timer_check_timeout"]
-[connection signal="area_entered" from="ZoneCollide" to="Loader_Call_and_reload" method="_on_zone_collide_area_entered"]
-[connection signal="area_exited" from="ZoneCollide" to="Loader_Call_and_reload" method="_on_zone_collide_area_exited"]
+[connection signal="area_entered" from="ZoneCollide" to="Loader_Call_and_reload(OXYGENE SYSTEM) off here" method="_on_zone_collide_area_entered"]
+[connection signal="area_exited" from="ZoneCollide" to="Loader_Call_and_reload(OXYGENE SYSTEM) off here" method="_on_zone_collide_area_exited"]
 [connection signal="area_shape_entered" from="ZoneCollide" to="Check_Dialogue_Zone" method="_area_entered"]
 [connection signal="area_shape_exited" from="ZoneCollide" to="Check_Dialogue_Zone" method="_area_exited"]
+[connection signal="area_entered" from="Element_grab_zone" to="Loader_Call_and_reload(OXYGENE SYSTEM) off here" method="_on_zone_collide_area_entered"]
+[connection signal="area_exited" from="Element_grab_zone" to="Loader_Call_and_reload(OXYGENE SYSTEM) off here" method="_on_zone_collide_area_exited"]
+[connection signal="area_shape_entered" from="Element_grab_zone" to="Check_Dialogue_Zone" method="_area_entered"]
+[connection signal="area_shape_exited" from="Element_grab_zone" to="Check_Dialogue_Zone" method="_area_exited"]
 [connection signal="area_shape_entered" from="Magnet_zone" to="Magnet_effect" method="_magnet_enter"]
 [connection signal="area_shape_exited" from="Magnet_zone" to="Magnet_effect" method="_magnet_exited"]
 

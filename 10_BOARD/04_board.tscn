@@ -1,4 +1,4 @@
-[gd_scene load_steps=80 format=3 uid="uid://cein0q2eirkay"]
+[gd_scene load_steps=78 format=3 uid="uid://cein0q2eirkay"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_g3pi7"]
 [ext_resource type="Script" path="res://10_BOARD/Board_CamTarget.gd" id="1_janbq"]
@@ -9,7 +9,6 @@
 [ext_resource type="Script" path="res://10_BOARD/Instantiate_element.gd" id="5_dn45r"]
 [ext_resource type="Script" path="res://10_BOARD/Cam_focus.gd" id="6_7tgl6"]
 [ext_resource type="Resource" uid="uid://cmp0pwiuhoh2j" path="res://15_GAME_RESSOURCE/04_Element/Clock_element.tres" id="6_h5ap1"]
-[ext_resource type="Material" uid="uid://5qv6cc3a63nt" path="res://05_SHADER/Full_screen/04_board_simple_disolved.tres" id="7_fiqjo"]
 [ext_resource type="Script" path="res://10_BOARD/Drop_Element_State.gd" id="7_io232"]
 [ext_resource type="Resource" uid="uid://cim2mu11bktke" path="res://15_GAME_RESSOURCE/04_Element/Cube_04_element.tres" id="7_sglhn"]
 [ext_resource type="Script" path="res://10_BOARD/Information_manager.gd" id="7_v3hdy"]
@@ -144,9 +143,6 @@ func set_shader_value(value):
 	fade_value = value
 "
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_gpfe8"]
-viewport_path = NodePath("3D_SCENE/SubViewport")
-
 [sub_resource type="ViewportTexture" id="ViewportTexture_gby33"]
 viewport_path = NodePath("3D_SCENE/SubViewport_light")
 
@@ -156,10 +152,11 @@ viewport_path = NodePath("3D_SCENE/SubViewport")
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ktpkr"]
 resource_local_to_scene = true
 shader = ExtResource("41_prh4x")
+shader_parameter/Opacity = 1.0
 shader_parameter/Albedo_viewport = SubResource("ViewportTexture_gdqdh")
 shader_parameter/Albedo_light = SubResource("ViewportTexture_gby33")
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_fq7l4"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_ptyk2"]
 viewport_path = NodePath("3D_SCENE/SubViewport")
 
 [sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_5dsty"]
@@ -487,7 +484,6 @@ script = ExtResource("9_tfybn")
 [node name="Element_Manager" type="Node" parent="."]
 script = ExtResource("14_johxk")
 Proto_element = Array[Resource("res://15_GAME_RESSOURCE/04_Element/Element_Data/object_data.gd")]([ExtResource("6_h5ap1"), ExtResource("7_sglhn"), ExtResource("8_sgf7i"), ExtResource("9_rs7n7"), ExtResource("10_q6p6j")])
-active_test = true
 
 [node name="Drop_Element_State" type="Node" parent="Element_Manager"]
 script = ExtResource("7_io232")
@@ -634,24 +630,13 @@ fov = 40.0
 far = 5.0
 
 [node name="RENDER" type="TextureRect" parent="3D_SCENE"]
-material = ExtResource("7_fiqjo")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = SubResource("ViewportTexture_gpfe8")
-expand_mode = 3
-
-[node name="RENDER_light" type="TextureRect" parent="3D_SCENE"]
-visible = false
 material = SubResource("ShaderMaterial_ktpkr")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = SubResource("ViewportTexture_fq7l4")
+texture = SubResource("ViewportTexture_ptyk2")
 expand_mode = 3
 
 [node name="BACKDROP_FOCUS" type="ColorRect" parent="3D_SCENE"]
@@ -677,6 +662,7 @@ texture = SubResource("ViewportTexture_qrcca")
 expand_mode = 3
 
 [node name="Pad_target" type="ColorRect" parent="3D_SCENE"]
+visible = false
 material = SubResource("ShaderMaterial_blt4p")
 anchors_preset = 8
 anchor_left = 0.5

@@ -1,10 +1,19 @@
-[gd_scene load_steps=16 format=3 uid="uid://bgl5a6kyd68tc"]
+[gd_scene load_steps=17 format=3 uid="uid://bgl5a6kyd68tc"]
 
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Movable_manager.gd" id="1_k6iyl"]
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Clic_raycast.gd" id="1_ofpfv"]
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Generate_Grid.gd" id="3_hsdy6"]
 [ext_resource type="PackedScene" uid="uid://xpunnioeu7vl" path="res://00_SCENE/Board_control_object_test/movable_obj.tscn" id="3_kwpp8"]
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Main_Cam.gd" id="4_20uu6"]
+
+[sub_resource type="Environment" id="Environment_lhmnr"]
+ssao_enabled = true
+ssao_radius = 0.17
+ssao_intensity = 0.96
+ssao_power = 9.74697
+ssao_detail = 0.0
+ssao_light_affect = 1.0
+ssao_ao_channel_affect = 1.0
 
 [sub_resource type="GDScript" id="GDScript_b676x"]
 script/source = "extends Node
@@ -133,6 +142,9 @@ size = Vector3(0.35, 0.0510588, 0.25)
 size = Vector2(8, 5)
 
 [node name="Proto_board_grid" type="Node"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_lhmnr")
 
 [node name="Controllers_inputs_Type" type="Node" parent="."]
 script = SubResource("GDScript_b676x")
@@ -304,6 +316,7 @@ skeleton = NodePath("../..")
 [node name="Grid_root" type="Node3D" parent="."]
 
 [node name="Pad_target" type="ColorRect" parent="."]
+visible = false
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5

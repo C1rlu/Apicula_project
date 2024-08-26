@@ -1,4 +1,4 @@
-[gd_scene load_steps=62 format=3 uid="uid://nigmie4bbn6"]
+[gd_scene load_steps=58 format=3 uid="uid://nigmie4bbn6"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/00_Scripts/Subscene_loader.gd" id="1_7uoo0"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="2_3srhu"]
@@ -17,14 +17,12 @@
 [ext_resource type="Resource" uid="uid://df0swhar7lchv" path="res://08_SUBSCENES/Tools/Jet_tool.tres" id="10_ielrw"]
 [ext_resource type="Script" path="res://08_SUBSCENES/IN_MIRROR_ZONE.gd" id="10_qqphy"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Tools/PhotoData_list_update.gd" id="10_w7dre"]
-[ext_resource type="Script" path="res://08_SUBSCENES/ELEMENT_COLECTOR.gd" id="14_8f2rt"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Clock_sonar_VFX.gd" id="14_xtaeu"]
 [ext_resource type="Material" uid="uid://b1iqs8p4it3ni" path="res://05_SHADER/Full_screen/Subscene_screen/Scanner_subscene_dither.tres" id="15_6os4y"]
 [ext_resource type="PackedScene" uid="uid://4r5x2mp8a1a0" path="res://04_SCENE_MAIN_MAP/00_PLAYER/Boat/Player_Boat_02.blend" id="21_42nxe"]
 [ext_resource type="Script" path="res://03_CAMERA/Active_scene_viewports.gd" id="21_jai7k"]
 [ext_resource type="Material" uid="uid://cdnmf431kgh7" path="res://05_SHADER/Subscene_materials/Subscene_basic_mat_far.tres" id="22_crc4c"]
 [ext_resource type="PackedScene" uid="uid://bo33th5yn61n1" path="res://08_SUBSCENES/00_Scene/BlackHole_zone.tscn" id="23_anlad"]
-[ext_resource type="Material" uid="uid://dnm3xbumsinu2" path="res://05_SHADER/All_Materials/Lit_light.tres" id="23_kb8hx"]
 
 [sub_resource type="GDScript" id="GDScript_btuws"]
 script/source = "extends Node
@@ -168,7 +166,7 @@ func _flash_mirror():
 	if t:
 		t.kill()
 	t = create_tween()
-	t .tween_method(_set_opacity_value,1.0,0,3.0)
+	t .tween_method(_set_opacity_value,1.0,0,6.0)
 	t.connect(\"finished\",done)
 	
 func done():
@@ -465,9 +463,6 @@ size = Vector2(10, 10)
 [sub_resource type="BoxShape3D" id="BoxShape3D_qfjre"]
 size = Vector3(2.03379, 0.029557, 10.4284)
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_nqoox"]
-radius = 0.360522
-
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_3tv5m"]
 points = PackedVector3Array(0.71875, 0.711319, 0.232015, 0.0842724, 0.86995, -3.17745, -0.470703, 0.711319, 1.73878, 0.163634, -0.08165, 0.945902, 0.0842724, -0.00228792, -2.93949, -0.629288, 0.86995, -1.67019, 0.639388, 0.86995, -1.67019, 0.401441, 0.711319, 1.81826, -0.629288, 0.314881, 1.02539, -0.312119, 0.076981, -2.54305, 0.401441, 0.15625, -2.30509, -0.153534, -0.08165, 0.945902, 0.639388, 0.314881, 0.945902, -0.70865, 0.63205, -0.956305, 0.322219, 0.15625, 1.42183, 0.71875, 0.63205, -0.797829, -0.0741724, 0.86995, -3.17745, 0.0842724, -0.08165, -2.30509, -0.70865, 0.711319, 0.311502, -0.218699, 0.39415, 1.67296, 0.322219, 0.235612, -2.78002, -0.470703, 0.235612, -2.2256, -0.0741724, -0.08165, -2.30509, 0.401441, 0.076981, 1.02539, -0.391341, 0.076981, 1.02539, 0.639388, 0.711319, 1.10438, -0.312119, 0.15625, -2.70103, 0.242857, 0.711319, 1.89775, -0.470703, 0.235612, 1.34234, -0.353427, 0.824441, -2.57532, -0.0741724, -0.00228792, -2.93949, 0.480803, 0.314881, 1.50082)
 
@@ -475,8 +470,6 @@ points = PackedVector3Array(0.71875, 0.711319, 0.232015, 0.0842724, 0.86995, -3.
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_dgpm7"]
 radius = 0.69733
-
-[sub_resource type="SphereMesh" id="SphereMesh_22l0y"]
 
 [node name="03_SUBSCENES" type="Node"]
 script = ExtResource("1_7uoo0")
@@ -509,6 +502,8 @@ script = SubResource("GDScript_71vlv")
 process_mode = 3
 script = ExtResource("5_xafm0")
 flash_tool = ExtResource("5_bb2gy")
+create_vortex = ExtResource("9_nddeb")
+go_faster = ExtResource("10_ielrw")
 
 [node name="Switch_tools_input" type="Node" parent="TOOLS"]
 script = ExtResource("3_2mtx3")
@@ -519,10 +514,6 @@ script = SubResource("GDScript_nvaxv")
 
 [node name="IN_MIRROR_ZONE" type="Node" parent="."]
 script = ExtResource("10_qqphy")
-
-[node name="ELEMENT_COLECTOR" type="Node" parent="." node_paths=PackedStringArray("collector_area")]
-script = ExtResource("14_8f2rt")
-collector_area = NodePath("../Boat_base/Area3D")
 
 [node name="MainOddity_Sonar_VFX" type="Node" parent="."]
 script = ExtResource("14_xtaeu")
@@ -627,14 +618,6 @@ shape = SubResource("BoxShape3D_qfjre")
 
 [node name="Boat_base" type="Node3D" parent="."]
 
-[node name="Area3D" type="Area3D" parent="Boat_base"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.647936, 0.328567, 0)
-collision_layer = 4
-collision_mask = 4
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Boat_base/Area3D"]
-shape = SubResource("SphereShape3D_nqoox")
-
 [node name="Player_Boat_02" parent="Boat_base" instance=ExtResource("21_42nxe")]
 transform = Transform3D(1.49637e-07, 0, 1.1411, 0, 1.1411, 0, -1.1411, 0, 1.49637e-07, -2.21762, 0.470453, 0)
 
@@ -681,18 +664,6 @@ transform = Transform3D(0.24392, 0, 0, 0, 0.0381577, 0, 0, 0, 0.24392, -0.657448
 layers = 4
 mesh = SubResource("CylinderMesh_8yrqc")
 surface_material_override/0 = ExtResource("22_crc4c")
-
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="Boat_base"]
-transform = Transform3D(-1.88827e-09, -0.0572823, 0, 0.0431985, -2.50389e-09, 0, 0, 0, 0.0431985, -0.510209, 0.5104, 0)
-layers = 4
-mesh = SubResource("CylinderMesh_8yrqc")
-surface_material_override/0 = ExtResource("22_crc4c")
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="Boat_base"]
-transform = Transform3D(0.0957522, 0, 0, 0, 0.0957522, 0, 0, 0, 0.0957522, -0.411284, 0.512943, -6.78301e-05)
-layers = 4
-mesh = SubResource("SphereMesh_22l0y")
-surface_material_override/0 = ExtResource("23_kb8hx")
 
 [node name="LoadScene" type="Node3D" parent="."]
 

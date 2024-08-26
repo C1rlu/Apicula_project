@@ -13,7 +13,7 @@ func _teleport():
 	if _global_datas.player_state == game_state.visible_state.normal:
 		_global_datas.player_state = game_state.visible_state.mirror
 		_global_datas.in_mirror_zone.emit()
-		root.queue_free()
+		#root.queue_free()
 		return
 		
 	if _global_datas.player_state == game_state.visible_state.mirror:
