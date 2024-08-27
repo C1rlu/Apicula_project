@@ -14,7 +14,7 @@ var active : bool
 var current_value : float
 
 func _ready():
-	#vortex_tool.tool_active_signal.connect(add_vortex)
+	vortex_tool.tool_active_signal.connect(add_vortex)
 	_global_datas.in_mirror_zone.connect(check_mirror)	
 	
 	

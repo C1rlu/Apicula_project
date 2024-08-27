@@ -9,7 +9,6 @@ var magneting : bool = false
 var list_of_magnetable : Array[Node]
 
 
-
 func _ready():
 	manget_tool.tool_active_signal.connect(_active)
 	
@@ -19,7 +18,8 @@ func _active(condition : bool):
 	magnet_fx.emitting = condition
 	magneting = condition
 	collector_collider.disabled = !condition
-		
+	
+
 func _process(delta):
 	
 	if !magneting:
@@ -27,6 +27,8 @@ func _process(delta):
 		
 	for m in list_of_magnetable:
 		m.attract_me(delta,root.global_position)
+	
+	
 			
 func _magnet_enter(area_rid, area, area_shape_index, local_shape_index):
 	

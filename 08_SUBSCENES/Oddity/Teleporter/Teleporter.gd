@@ -7,7 +7,6 @@ extends Node
 signal teleport_effect
 
 
-
 func _teleport():
 		
 	if _global_datas.player_state == game_state.visible_state.normal:
@@ -20,7 +19,7 @@ func _teleport():
 		_global_datas.player_state = game_state.visible_state.normal
 		_global_datas.in_mirror_zone.emit()
 		
-		#remove_teleporter()	
+		remove_teleporter()	
 		return
 		
 func remove_teleporter():
@@ -29,6 +28,7 @@ func remove_teleporter():
 	root.queue_free()
 func _on_area_3d_teleport_area_entered(area):
 	
+
 	if area:
 		var player = area.get_node_or_null("Player")
 		if player :

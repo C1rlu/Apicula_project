@@ -12,7 +12,7 @@ var t
 @onready var actual_scale = engine.scale.x 
 
 @onready var timer = $Timer
-@onready var gpu_eat_vfx = $"../../GPU_eat_vfx"
+
 @onready var mirror_element_oddity = $"../../Mirror_element_oddity"
 
 signal active_flash_mirror
@@ -40,7 +40,6 @@ func check_distance():
 		
 func Bounce_engine():
 	
-	gpu_eat_vfx.emitting = true
 	
 	if t:
 		t.kill()

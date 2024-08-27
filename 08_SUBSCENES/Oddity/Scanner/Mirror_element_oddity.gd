@@ -6,7 +6,7 @@ extends Node
 @onready var main_render_msh_mirror = $"../Main_Oddity/Render_root/Main_render_msh_mirror"
 @export var State_selected : game_state.visible_state
 @export var mirror_element_checker : Node
-@onready var gpu_normal = $"../GPU_normal"
+
 
 
 func _ready():
@@ -27,7 +27,7 @@ func show(condition):
 	
 	col_rg.call_deferred("set_disabled",!condition)
 	#col_rg.disabled = !condition 
-	gpu_normal.emitting = condition
+	#gpu_normal.emitting = condition
 
 
 			

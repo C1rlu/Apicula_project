@@ -9,10 +9,10 @@ extends Node
 
 var is_active : bool = false
 func _ready():
-	#light_tool.tool_active_signal.connect(_start_light)
-
-	_global_datas._end_ini_subscene.connect(start_loop)
-	_global_datas._backFrom_subscene.connect(stop_loop)
+	light_tool.tool_active_signal.connect(_start_light)
+#
+	#_global_datas._end_ini_subscene.connect(start_loop)
+	#_global_datas._backFrom_subscene.connect(stop_loop)
 	timer_mirror_check.timeout.connect(check_flash_zone)
 func start_loop():
 	timer_mirror_check.start()	

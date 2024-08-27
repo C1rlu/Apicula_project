@@ -5,6 +5,8 @@ extends Node
 
 func Push():
 
+
+	
 	var velocity = rg.linear_velocity
 	var _direction = velocity.normalized()
 

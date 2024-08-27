@@ -22,6 +22,6 @@ func get_rigidbody():
 			child.reparent(_global_datas.LoadScene)
 			var random_position = Vector3(randf_range(-1,1),randf_range(-1,1),randf_range(-1,1))
 		
-			child.apply_central_force(random_position * 25)
+			child.apply_central_force(random_position * 10)
 	breakable_stone.queue_free()
 	

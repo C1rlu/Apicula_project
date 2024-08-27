@@ -7,8 +7,8 @@ extends Node
 
 
 func _ready():
-	
-	_tool.tool_active_signal.connect(call_sonar)
+	pass	
+	#_tool.tool_active_signal.connect(call_sonar)
 
 func call_sonar(condition):
 	

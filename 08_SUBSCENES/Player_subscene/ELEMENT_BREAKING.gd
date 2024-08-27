@@ -16,11 +16,13 @@ func _contact(body_rid, body, body_shape_index, local_shape_index):
 	
 	if body:
 		print(body)
+		
 		check_player_speed()
 		var lootable = body.get_node_or_null("Breaking_me")
-		if lootable:
-			add_debris_vfx()
-			lootable._hit()
+		_global_datas.subscene_sonar_effect.emit(_global_datas.player_rg.position)
+		#if lootable:
+			#add_debris_vfx()
+			#lootable._hit()
 
 func check_player_speed():
 	var current_velocity = Rg.linear_velocity	
