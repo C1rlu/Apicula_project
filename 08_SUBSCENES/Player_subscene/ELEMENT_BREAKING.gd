@@ -4,6 +4,7 @@ extends Node
 @export var Rg : RigidBody3D
 @export var hit_node : Node3D
 
+@onready var debris_particule_hit = $"../../Render_mesh/Debris_particule_Hit"
 
 const DEBRIS_HIT_PARTICULE = preload("res://08_SUBSCENES/VFX/Debris_hit_particule.tscn")
 func _ready():
@@ -15,21 +16,29 @@ func _ready():
 func _contact(body_rid, body, body_shape_index, local_shape_index):
 	
 	if body:
-		print(body)
-		
-		check_player_speed()
-		var lootable = body.get_node_or_null("Breaking_me")
-		_global_datas.subscene_sonar_effect.emit(_global_datas.player_rg.position)
-		#if lootable:
-			#add_debris_vfx()
-			#lootable._hit()
+
+		var Toolable = body.get_node_or_null("Toolable")
+		if Toolable:
+			#_global_datas.GravTool_effect.emit(debris_particule_hit.global_position)
+			check_player_speed()
+			add_debris_vfx()
+			
+		var lootable = body.get_node_or_null("Breaking_me")	
+		if lootable:
+			#_global_datas.GravTool_effect.emit(debris_particule_hit.global_position)
+			check_player_speed()
+			add_debris_vfx()
+			lootable._hit()
 
 func check_player_speed():
+	
+
 	var current_velocity = Rg.linear_velocity	
 	var current_speed = current_velocity.length()
 	if current_speed > 0.7:
 		return
-	Rg.apply_central_force(current_velocity * 200)
+
+	Rg.apply_central_force(current_velocity * 400)
 		
 
 func add_debris_vfx():
@@ -40,12 +49,3 @@ func add_debris_vfx():
 	instance_vfx.emitting = true
 	
 	
-#func get_collision_point(body, body_shape_index, local_shape_index) -> Vector3:
-	#var collision_shape = shape_owner_get_shape(local_shape_index, 0)
-	#if collision_shape:
-		#var space_state = get_world().direct_space_state
-		#var result = space_state.intersect_shape(collision_shape, transform, 1, [], 1)
-		#if result:
-			#var contact_point = result.position
-			#print("Contact point: ", contact_point)
-			#return contact_point 

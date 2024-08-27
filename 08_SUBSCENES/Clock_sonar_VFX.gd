@@ -3,6 +3,7 @@ extends Node
 const SUBSCENE_SONAR_VFX = preload("res://08_SUBSCENES/VFX/subscene_sonar_VFX.tscn")
 @onready var load_scene = $"../LoadScene"
 
+@onready var timer_delay = $Timer_delay
 
 
 func _ready():
@@ -10,6 +11,11 @@ func _ready():
 
 func active_fx(position):
 	
+	
+	if !timer_delay.is_stopped():
+		return
+	
+	timer_delay.start()
 	var vfx = SUBSCENE_SONAR_VFX.instantiate()
 	load_scene.add_child(vfx)
 	vfx.position = position

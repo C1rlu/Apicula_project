@@ -13,6 +13,5 @@ func check_area(area):
 	if area:
 		var debris = area.get_node_or_null("Debris")
 		if debris:
-			debris.fade.emit()
-			#debris.push_to_player.emit()
+			debris.push_to_player.emit()
 	

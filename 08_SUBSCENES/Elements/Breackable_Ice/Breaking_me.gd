@@ -1,6 +1,7 @@
 extends Node
 
-@onready var breakable_stone = $"../.."
+@onready var root = $"../.."
+
 
 var hit_index : int 
 
@@ -15,13 +16,13 @@ func _hit():
 
 func get_rigidbody():
 	
-	var all_child = breakable_stone.get_children()
-	for child in all_child:
-		if child is RigidBody3D:
-			child.freeze = false		
-			child.reparent(_global_datas.LoadScene)
-			var random_position = Vector3(randf_range(-1,1),randf_range(-1,1),randf_range(-1,1))
-		
-			child.apply_central_force(random_position * 10)
-	breakable_stone.queue_free()
+	#var all_child = breakable_stone.get_children()
+	#for child in all_child:
+		#if child is RigidBody3D:
+			#child.freeze = false		
+			#child.reparent(_global_datas.LoadScene)
+			#var random_position = Vector3(randf_range(-1,1),randf_range(-1,1),randf_range(-1,1))
+		#
+			#child.apply_central_force(random_position * 10)
+	root.queue_free()
 	
