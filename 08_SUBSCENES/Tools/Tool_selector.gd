@@ -27,18 +27,18 @@ func _input(event):
 	
 
 	
-	#if event.is_action_pressed("open_tool_selector"):	
-		#_global_datas.open_tool_selector.emit(true)
-		#lock_active_tool = true
-	#
-	#if event.is_action_released("open_tool_selector"):
-		#_global_datas.open_tool_selector.emit(false)
-		#lock_active_tool = false
-	#
+	if event.is_action_pressed("open_tool_selector"):	
+		_global_datas.open_tool_selector.emit(true)
+		lock_active_tool = true
+	
+	if event.is_action_released("open_tool_selector"):
+		_global_datas.open_tool_selector.emit(false)
+		lock_active_tool = false
+	
 #
-	#if lock_active_tool:
-		#return	
-		#
+	if lock_active_tool:
+		return	
+		
 	if event.is_action_pressed("Active_tool"):
 		_global_datas._selected_tool.tool_active_signal.emit(true)
 	if event.is_action_released("Active_tool"):

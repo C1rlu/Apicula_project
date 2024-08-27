@@ -12,7 +12,7 @@ var actual_value : float
 
 func _ready():
 	material.set_shader_parameter("Opacity",0.0)
-	#_global_datas._go_Subscene.connect(fade_out)
+	_global_datas._go_Subscene.connect(fade_in)
 	#_global_datas.open_tool_selector.connect(_active)
 	#tool_clock.tool_active_signal.connect(tool_active)
 	
