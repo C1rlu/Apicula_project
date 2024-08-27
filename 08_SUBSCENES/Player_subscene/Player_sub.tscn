@@ -1,4 +1,4 @@
-[gd_scene load_steps=141 format=3 uid="uid://g7u8o55jrnyy"]
+[gd_scene load_steps=142 format=3 uid="uid://g7u8o55jrnyy"]
 
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER/Subscene_materials/Subscene_basic_mat.tres" id="1_n1vw4"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Player_sub_behaviour.gd" id="1_o2v73"]
@@ -13,6 +13,7 @@
 [ext_resource type="Resource" uid="uid://bcj27libgpl5g" path="res://08_SUBSCENES/Tools/Check_clock.tres" id="10_fdj0j"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Active_scanner_visual_pulse.gd" id="10_ir8y2"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Subjet_effet.gd" id="10_jdgje"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Sonnar_zone.gd" id="10_so5n0"]
 [ext_resource type="Script" path="res://08_SUBSCENES/ELEMENT_COLECTOR.gd" id="11_olyv4"]
 [ext_resource type="Resource" uid="uid://df0swhar7lchv" path="res://08_SUBSCENES/Tools/Jet_tool.tres" id="11_rhn2f"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/CallLoader_effect.gd" id="12_5ga5g"]
@@ -75,7 +76,7 @@ func _ready():
 func _start_flash():
 
 	
-	_global_datas.subscene_sonar_effect.emit(_global_datas.player_rg.position)
+	
 	light_sphere.visible = true
 
 	if t:
@@ -1278,10 +1279,11 @@ light_tool = ExtResource("6_axu5t")
 [node name="Fade_flash" type="Node" parent="Flash_inputs"]
 script = SubResource("GDScript_mbf75")
 
-[node name="Loop_lighter" type="Timer" parent="Flash_inputs"]
+[node name="check_lighter" type="Timer" parent="Flash_inputs"]
 wait_time = 0.2
 
 [node name="Delay_light_timer" type="Timer" parent="Flash_inputs"]
+wait_time = 2.0
 one_shot = true
 
 [node name="Scanne_element" type="Node" parent="."]
@@ -1301,6 +1303,14 @@ wait_time = 0.1
 
 [node name="Photo_Flash" type="Node" parent="."]
 script = SubResource("GDScript_8qwgp")
+
+[node name="Sonnar_zone" type="Node" parent="."]
+script = ExtResource("10_so5n0")
+_tool = ExtResource("6_axu5t")
+
+[node name="Timer" type="Timer" parent="Sonnar_zone"]
+wait_time = 2.0
+one_shot = true
 
 [node name="Magnet_effect" type="Node" parent="." node_paths=PackedStringArray("magnet_fx", "collector_collider")]
 script = ExtResource("9_wphos")

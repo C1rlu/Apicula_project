@@ -3,24 +3,24 @@ extends Node
 
 @export var light_tool : tool_data
 @onready var delay_light_timer = $Delay_light_timer
-@onready var timer_mirror_check = $Loop_lighter
+@onready var timer_mirror_check = $check_lighter
 
 @onready var Mirror_scanner_area = $"../Magnet_zone"
 
 var is_active : bool = false
 func _ready():
-	light_tool.tool_active_signal.connect(_start_light)
+	#light_tool.tool_active_signal.connect(_start_light)
 
-	#_global_datas._end_ini_subscene.connect(start_loop)
-	#_global_datas._backFrom_subscene.connect(stop_loop)
-
+	_global_datas._end_ini_subscene.connect(start_loop)
+	_global_datas._backFrom_subscene.connect(stop_loop)
+	timer_mirror_check.timeout.connect(check_flash_zone)
 func start_loop():
 	timer_mirror_check.start()	
 
 func stop_loop():
 	timer_mirror_check.stop()
 
-			
+
 func _start_light(condition : bool):
 
 	if condition:
@@ -31,8 +31,8 @@ func _start_light(condition : bool):
 		delay_light_timer.start()
 		_global_datas._scan_mirror_xray.emit()
 		_global_datas._photo_flash.emit()
-	
-	
+		
+
 func check_flash_zone():
 	
 	

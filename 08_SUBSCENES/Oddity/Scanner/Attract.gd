@@ -1,17 +1,13 @@
 extends Node
 
 
-@export var state_node : Node
 @export var rg : RigidBody3D
 @export var strenght : float = 200
 var target_dir : Vector3
 
 
 func attract_me(delta,position):
-	
-	#if state_node:
-		#if !state_node.State_selected == _global_datas.player_state:
-			#return
+
 		
 	target_dir = position
 	

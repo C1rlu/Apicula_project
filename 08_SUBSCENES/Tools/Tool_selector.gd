@@ -54,8 +54,8 @@ func _input(event):
 	if event.is_action_released("go_faster"):
 		go_faster.tool_active_signal.emit(false)
 
-	if event.is_action_pressed("create_vortex"):
+	if event.is_action_pressed("Flash"):
 		create_vortex.tool_active_signal.emit(true)
-	if event.is_action_released("create_vortex"):
+	if event.is_action_released("Flash"):
 		create_vortex.tool_active_signal.emit(false)
 

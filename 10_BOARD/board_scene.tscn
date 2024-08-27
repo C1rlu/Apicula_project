@@ -1,4 +1,4 @@
-[gd_scene load_steps=297 format=3 uid="uid://dr73p5vs0sixe"]
+[gd_scene load_steps=298 format=3 uid="uid://dr73p5vs0sixe"]
 
 [ext_resource type="Script" path="res://10_BOARD/Movable_root.gd" id="1_2yoh7"]
 [ext_resource type="PackedScene" uid="uid://cyb6my1srlcpw" path="res://10_BOARD/Candle/Candle_set.blend" id="1_3ummb"]
@@ -1192,24 +1192,26 @@ shadow_mesh = SubResource("ArrayMesh_5ggyy")
 material = ExtResource("6_kkuc8")
 radial_segments = 8
 
-[sub_resource type="Gradient" id="Gradient_6oc6f"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ua7ja"]
+noise_type = 2
+frequency = 0.0116
+cellular_distance_function = 1
+cellular_return_type = 0
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_urvtd"]
-gradient = SubResource("Gradient_6oc6f")
-fill_from = Vector2(1, 0)
-fill_to = Vector2(1, 1)
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_j3l64"]
+noise = SubResource("FastNoiseLite_ua7ja")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1daej"]
 render_priority = 0
 shader = ExtResource("58_c4khy")
 shader_parameter/Color = Color(0.0196078, 0.121569, 0.129412, 1)
 shader_parameter/Dither_Opacity = 1.0
-shader_parameter/Gradient_light = SubResource("GradientTexture2D_urvtd")
+shader_parameter/Gradient_light = SubResource("NoiseTexture2D_j3l64")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pf4ox"]
 render_priority = 0
 shader = ExtResource("58_c4khy")
-shader_parameter/Color = Color(0.231373, 0.203922, 0.180392, 1)
+shader_parameter/Color = Color(0.458824, 0.352941, 0.219608, 1)
 shader_parameter/Dither_Opacity = 0.68
 shader_parameter/Gradient_light = SubResource("GradientTexture2D_np45q")
 
@@ -1654,6 +1656,10 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_n8y6o")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oml1j"]
+transparency = 1
+shading_mode = 0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0g12l"]
 size = Vector3(1.8418, 3.47363, 1.89648)
@@ -2326,18 +2332,19 @@ shader_parameter/Gradient_light = SubResource("GradientTexture2D_mhg0h")
 [sub_resource type="BoxShape3D" id="BoxShape3D_ydct1"]
 size = Vector3(0.999657, 0, 1)
 
-[sub_resource type="Gradient" id="Gradient_y1ryl"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_p2150"]
+noise_type = 5
+frequency = 0.0077
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_3qcl7"]
-gradient = SubResource("Gradient_y1ryl")
-fill_to = Vector2(0, 0.880342)
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_3pmfn"]
+noise = SubResource("FastNoiseLite_p2150")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_srivu"]
 render_priority = 0
 shader = ExtResource("58_c4khy")
 shader_parameter/Color = Color(0.231373, 0.184314, 0.12549, 1)
-shader_parameter/Dither_Opacity = 1.0
-shader_parameter/Gradient_light = SubResource("GradientTexture2D_3qcl7")
+shader_parameter/Dither_Opacity = 0.735
+shader_parameter/Gradient_light = SubResource("NoiseTexture2D_3pmfn")
 
 [node name="Board_scene" type="Node3D"]
 
@@ -2960,15 +2967,17 @@ transform = Transform3D(0.09052, 0, 0, 0, 0.09052, 0, 0, 0, 0.09052, 0.231594, 0
 [node name="Lanterne" parent="Movable/Lanterne" index="0"]
 transform = Transform3D(0.691992, 0, -0.721905, 0, 1, 0, 0.721905, 0, 0.691992, 0, 0, 0)
 layers = 2
+cast_shadow = 0
 surface_material_override/0 = SubResource("ShaderMaterial_1satu")
 surface_material_override/1 = SubResource("ShaderMaterial_srx7m")
 
 [node name="Lanterne2" type="MeshInstance3D" parent="Movable/Lanterne"]
 transform = Transform3D(0.691992, 0, -0.721905, 0, 1, 0, 0.721905, 0, 0.691992, 0, 0, 0)
-visible = false
 layers = 65536
+cast_shadow = 0
 mesh = SubResource("ArrayMesh_hy81p")
 skeleton = NodePath("")
+surface_material_override/0 = SubResource("StandardMaterial3D_oml1j")
 surface_material_override/1 = ExtResource("60_gjbxd")
 
 [node name="LIGHT_scene2" type="OmniLight3D" parent="Movable/Lanterne"]
@@ -2979,9 +2988,8 @@ light_size = 0.047
 light_specular = 0.0
 light_bake_mode = 0
 light_cull_mask = 4293984256
+shadow_enabled = true
 shadow_bias = 0.0
-shadow_opacity = 0.91
-distance_fade_enabled = true
 distance_fade_shadow = 0.0
 omni_range = 0.794
 omni_attenuation = 1.23115
