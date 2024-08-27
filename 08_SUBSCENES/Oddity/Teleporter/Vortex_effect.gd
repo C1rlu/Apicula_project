@@ -22,7 +22,7 @@ func scale_effect():
 	if f:
 		f.kill()
 	f = create_tween()
-	f.tween_method(_f_value,0.25,0.02,0.5)
+	f.tween_method(_f_value,0.25,0.00,0.5)
 	
 func _value(value : float):
 
