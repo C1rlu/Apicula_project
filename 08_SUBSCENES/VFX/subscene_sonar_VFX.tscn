@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://cakei8rfaiuqm"]
+[gd_scene load_steps=8 format=3 uid="uid://cakei8rfaiuqm"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/VFX/Scale_on_ready.gd" id="1_mevm0"]
 [ext_resource type="Material" uid="uid://goq7y1lqdpxa" path="res://05_SHADER/Subscene_materials/element_subscene_x_ray_VFX_LIGHT.tres" id="2_jhh1y"]
+[ext_resource type="Script" path="res://08_SUBSCENES/VFX/Check_debris.gd" id="2_ve0ej"]
 [ext_resource type="Material" uid="uid://d2t0ju6dynwgf" path="res://05_SHADER/Subscene_materials/oddity_mirror.tres" id="3_e2wvt"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_tr1sr"]
@@ -9,11 +10,16 @@
 [sub_resource type="SphereMesh" id="SphereMesh_m2dhk"]
 radial_segments = 32
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_4r7mu"]
+
 [node name="Mirror_exit_VFX" type="Node3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="Scale_on_ready" type="Node" parent="."]
 script = ExtResource("1_mevm0")
+
+[node name="Check_debris" type="Node" parent="." node_paths=PackedStringArray("area_zone")]
+script = ExtResource("2_ve0ej")
+area_zone = NodePath("../Sonar_zone")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.455858, 0, 0, 0, 0.455858, 0, 0, 0, 0.455858, -0.0870911, -0.33313, -0.0693081)
@@ -28,8 +34,14 @@ mesh = SubResource("SphereMesh_m2dhk")
 surface_material_override/0 = ExtResource("2_jhh1y")
 
 [node name="Msh_round" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.711451, 0, 0, 0, 0.711451, 0, 0, 0, 0.711451, 0, 0, 0)
-visible = false
+transform = Transform3D(1.19325, 0, 0, 0, 1.19325, 0, 0, 0, 1.19325, 0, 0, 0)
 layers = 4
 mesh = SubResource("SphereMesh_m2dhk")
 surface_material_override/0 = ExtResource("3_e2wvt")
+
+[node name="Sonar_zone" type="Area3D" parent="."]
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Sonar_zone"]
+shape = SubResource("SphereShape3D_4r7mu")

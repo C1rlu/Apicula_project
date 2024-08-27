@@ -1,0 +1,136 @@
+[gd_resource type="VisualShader" load_steps=9 format=3 uid="uid://btl0hgwwfslhj"]
+
+[sub_resource type="VisualShaderNodeFresnel" id="VisualShaderNodeFresnel_xpoq4"]
+default_input_values = [2, false, 3, 0.48]
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_oiwcf"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_uy1hm"]
+parameter_name = "Dither_size"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_twhj1"]
+constant = 1.0
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_2unw3"]
+parameter_name = "Color"
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_30uas"]
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_dd23t"]
+default_input_values = [0, 1.0, 1, 1.0, 2, 0.0]
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_t6qk5"]
+parameter_name = "Opacity"
+hint = 1
+
+[resource]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, depth_prepass_alpha, depth_test_disabled, unshaded;
+
+uniform vec4 Color : source_color;
+uniform float Opacity : hint_range(0, 1);
+global uniform float Dither_size;
+
+
+
+void fragment() {
+// ColorParameter:6
+	vec4 n_out6p0 = Color;
+
+
+// Fresnel:2
+	float n_in2p3 = 0.48000;
+	float n_out2p0 = pow(1.0 - clamp(dot(NORMAL, VIEW), 0.0, 1.0), n_in2p3);
+
+
+// FloatParameter:9
+	float n_out9p0 = Opacity;
+
+
+// Mix:8
+	float n_in8p0 = 1.00000;
+	float n_out8p0 = mix(n_in8p0, n_out2p0, n_out9p0);
+
+
+// FloatConstant:5
+	float n_out5p0 = 1.000000;
+
+
+// FloatParameter:4
+	float n_out4p0 = Dither_size;
+
+
+	float n_out3p0;
+// Expression:3
+	n_out3p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out4p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out3p0 = n_out5p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Step:7
+	float n_out7p0 = step(n_out8p0, n_out3p0);
+
+
+// Output:0
+	ALBEDO = vec3(n_out6p0.xyz);
+	ALPHA = n_out7p0;
+
+
+}
+"
+graph_offset = Vector2(-556.968, -64.1323)
+flags/depth_prepass_alpha = true
+flags/depth_test_disabled = true
+flags/unshaded = true
+nodes/fragment/2/node = SubResource("VisualShaderNodeFresnel_xpoq4")
+nodes/fragment/2/position = Vector2(-1060, 120)
+nodes/fragment/3/node = SubResource("VisualShaderNodeExpression_oiwcf")
+nodes/fragment/3/position = Vector2(-1120, 600)
+nodes/fragment/3/size = Vector2(724.789, 654.559)
+nodes/fragment/3/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/3/output_ports = "0,0,Dither_Node;"
+nodes/fragment/3/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/4/node = SubResource("VisualShaderNodeFloatParameter_uy1hm")
+nodes/fragment/4/position = Vector2(-1580, 740)
+nodes/fragment/5/node = SubResource("VisualShaderNodeFloatConstant_twhj1")
+nodes/fragment/5/position = Vector2(-1580, 580)
+nodes/fragment/6/node = SubResource("VisualShaderNodeColorParameter_2unw3")
+nodes/fragment/6/position = Vector2(-140, -20)
+nodes/fragment/7/node = SubResource("VisualShaderNodeStep_30uas")
+nodes/fragment/7/position = Vector2(-360, 360)
+nodes/fragment/8/node = SubResource("VisualShaderNodeMix_dd23t")
+nodes/fragment/8/position = Vector2(-580, 180)
+nodes/fragment/9/node = SubResource("VisualShaderNodeFloatParameter_t6qk5")
+nodes/fragment/9/position = Vector2(-1000, 280)
+nodes/fragment/connections = PackedInt32Array(4, 0, 3, 1, 5, 0, 3, 0, 6, 0, 0, 0, 3, 0, 7, 1, 8, 0, 7, 0, 7, 0, 0, 1, 9, 0, 8, 2, 2, 0, 8, 1)
