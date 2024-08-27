@@ -1,4 +1,4 @@
-[gd_scene load_steps=142 format=3 uid="uid://g7u8o55jrnyy"]
+[gd_scene load_steps=143 format=3 uid="uid://g7u8o55jrnyy"]
 
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER/Subscene_materials/Subscene_basic_mat.tres" id="1_n1vw4"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Player_sub_behaviour.gd" id="1_o2v73"]
@@ -17,6 +17,7 @@
 [ext_resource type="Script" path="res://08_SUBSCENES/ELEMENT_COLECTOR.gd" id="11_olyv4"]
 [ext_resource type="Resource" uid="uid://df0swhar7lchv" path="res://08_SUBSCENES/Tools/Jet_tool.tres" id="11_rhn2f"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/CallLoader_effect.gd" id="12_5ga5g"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/ELEMENT_BREAKING.gd" id="12_6dq77"]
 [ext_resource type="Shader" uid="uid://drchaj5fcdan0" path="res://05_SHADER/Subscene_materials/Subscene_shine_sh.tres" id="12_cij64"]
 [ext_resource type="Resource" uid="uid://380xcgsxw62f" path="res://08_SUBSCENES/Tools/magnet_tool.tres" id="12_nmehd"]
 [ext_resource type="Resource" uid="uid://cfgfc4mex2tlo" path="res://08_SUBSCENES/Tools/Call_loader_tool.tres" id="13_p6l7e"]
@@ -1250,6 +1251,8 @@ axis_lock_angular_y = true
 axis_lock_angular_z = true
 physics_material_override = SubResource("PhysicsMaterial_c70j3")
 gravity_scale = 0.0
+max_contacts_reported = 1
+contact_monitor = true
 linear_damp = 1.0
 script = ExtResource("1_o2v73")
 orbe_tool = ExtResource("11_rhn2f")
@@ -1318,6 +1321,11 @@ manget_tool = ExtResource("12_nmehd")
 magnet_fx = NodePath("../VFX_MAGNET")
 collector_collider = NodePath("../Element_grab_zone/CollisionShape3D")
 
+[node name="ELEMENT_BREAKING" type="Node" parent="Magnet_effect" node_paths=PackedStringArray("Rg", "hit_node")]
+script = ExtResource("12_6dq77")
+Rg = NodePath("../..")
+hit_node = NodePath("../../Render_mesh/Debris_particule_Hit")
+
 [node name="ELEMENT_COLECTOR" type="Node" parent="Magnet_effect" node_paths=PackedStringArray("collector_area", "attache_node")]
 script = ExtResource("11_olyv4")
 collector_area = NodePath("../../Element_grab_zone")
@@ -1384,6 +1392,7 @@ list_of_object = [NodePath("../../Scanner")]
 
 [node name="Scanner" type="MeshInstance3D" parent="Render_mesh"]
 transform = Transform3D(-1.7049e-09, -0.038187, 0, 0.0390036, -1.66921e-09, 0, 0, 0, 0.121949, 0.0349853, 0.140869, 0.0831259)
+visible = false
 layers = 4
 mesh = SubResource("BoxMesh_8vb5i")
 skeleton = NodePath("../../Player_sub_collider")
@@ -1439,7 +1448,6 @@ surface_material_override/0 = ExtResource("1_n1vw4")
 
 [node name="Magnet" type="MeshInstance3D" parent="Render_mesh"]
 transform = Transform3D(-1.7049e-09, -0.038187, 0, 0.0390036, -1.66921e-09, 0, 0, 0, 0.121949, 0.0349853, 0.140869, 0.0650372)
-visible = false
 layers = 4
 mesh = SubResource("BoxMesh_8vb5i")
 skeleton = NodePath("../../Player_sub_collider")
@@ -1647,6 +1655,9 @@ visible = false
 [node name="Debris_OnPlayer10" parent="Render_mesh/Attache_node" instance=ExtResource("30_gyvai")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.31895e-05, 0.0977868, -0.130677)
 visible = false
+
+[node name="Debris_particule_Hit" type="Node3D" parent="Render_mesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.137641, 0.18686)
 
 [node name="Check_Dialogue_Zone" type="Node" parent="."]
 script = ExtResource("17_o0rcv")

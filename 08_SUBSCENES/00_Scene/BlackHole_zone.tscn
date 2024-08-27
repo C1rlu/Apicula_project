@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://bo33th5yn61n1"]
+[gd_scene load_steps=22 format=3 uid="uid://bo33th5yn61n1"]
 
 [ext_resource type="PackedScene" uid="uid://bqksk5rvc6q2h" path="res://08_SUBSCENES/Elements/Tiny_boat/boat_man_subscene_asset_01.tscn" id="2_s2d0c"]
 [ext_resource type="PackedScene" uid="uid://bneebc6fpaysa" path="res://08_SUBSCENES/Elements/Ice/ice_msh_01.tscn" id="4_e540o"]
@@ -10,8 +10,10 @@
 [ext_resource type="Material" uid="uid://dgl2um0yp8e3c" path="res://05_SHADER/All_Materials/Building_mat.tres" id="6_soy6p"]
 [ext_resource type="PackedScene" uid="uid://di031pbbucu1n" path="res://08_SUBSCENES/Elements/Magnetable_test/Debris_test.tscn" id="7_ag7ra"]
 [ext_resource type="Material" uid="uid://ctnqf5d3uj1g7" path="res://05_SHADER/All_Materials/dark_mask.tres" id="7_sbu5t"]
+[ext_resource type="PackedScene" uid="uid://ddac0wqbwjiqc" path="res://08_SUBSCENES/Elements/Breackable_Ice/Breakable_stone.tscn" id="8_t41ne"]
 [ext_resource type="Script" path="res://08_SUBSCENES/In_Mirror.gd" id="9_n17hi"]
 [ext_resource type="Material" uid="uid://bx8lxok1s6d6y" path="res://05_SHADER/Subscene_materials/Debris_Mat.tres" id="10_jtr16"]
+[ext_resource type="PackedScene" uid="uid://ciuyel1b0of8e" path="res://08_SUBSCENES/Oddity/Teleporter/Teleporter_prefab.tscn" id="12_io5se"]
 
 [sub_resource type="GDScript" id="GDScript_xxb7y"]
 script/source = "extends Area3D
@@ -41,7 +43,7 @@ radius = 0.352078
 [node name="Mirror_rg_body" type="Node" parent="Static"]
 
 [node name="Main_Rapatrier2" parent="Static/Mirror_rg_body" instance=ExtResource("5_qf6u0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.276407, -6.22672, 0)
+transform = Transform3D(0.705625, 0, 0, 0, 0.705625, 0, 0, 0, 0.705625, -0.276407, -6.22672, 0)
 
 [node name="NPC_Area" type="Area3D" parent="Static/Mirror_rg_body"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.49972, -2.17655, 0)
@@ -82,10 +84,10 @@ skeleton = NodePath("../..")
 surface_material_override/0 = ExtResource("7_sbu5t")
 
 [node name="RigidBody3D3" parent="Static/Mirror_rg_body" instance=ExtResource("7_ag7ra")]
-transform = Transform3D(1.00119, 0, 0, 0, 1.00119, 0, 0, 0, 1.00119, 1.27532, -9.36675, 0)
+transform = Transform3D(1.00119, 0, 0, 0, 1.00119, 0, 0, 0, 1.00119, 1.02482, -9.36675, 0)
 
 [node name="RigidBody3D4" parent="Static/Mirror_rg_body" instance=ExtResource("7_ag7ra")]
-transform = Transform3D(0.995595, 0.105695, 0, -0.105695, 0.995595, 0, 0, 0, 1.00119, 1.99429, -9.36675, 0)
+transform = Transform3D(0.995595, 0.105695, 0, -0.105695, 0.995595, 0, 0, 0, 1.00119, 2.43392, -9.40339, -0.0809494)
 
 [node name="RigidBody3D5" parent="Static/Mirror_rg_body" instance=ExtResource("7_ag7ra")]
 transform = Transform3D(0.995595, 0.105695, 0, -0.105695, 0.995595, 0, 0, 0, 1.00119, 0.531202, -9.36675, 0)
@@ -97,12 +99,58 @@ transform = Transform3D(0.995595, 0.105695, 0, -0.105695, 0.995595, 0, 0, 0, 1.0
 transform = Transform3D(0.995595, 0.105695, 0, -0.105695, 0.995595, 0, 0, 0, 1.00119, -2.77685, -9.71331, 0.0400923)
 
 [node name="RigidBody3D2" parent="Static/Mirror_rg_body" instance=ExtResource("7_ag7ra")]
-transform = Transform3D(1.00119, 0, 0, 0, 1.00119, 0, 0, 0, 1.00119, 1.29261, -2.67467, 0)
-freeze = true
+transform = Transform3D(1.00119, 0, 0, 0, 1.00119, 0, 0, 0, 1.00119, 1.29389, -2.41556, -0.0667794)
 
 [node name="RigidBody3D" parent="Static/Mirror_rg_body" instance=ExtResource("7_ag7ra")]
-transform = Transform3D(1.00119, 0, 0, 0, 1.00119, 0, 0, 0, 1.00119, 0.771893, -2.8024, 0)
+transform = Transform3D(1.00119, 0, 0, 0, 1.00119, 0, 0, 0, 1.00119, 0.773178, -2.54328, -0.0667794)
+
+[node name="BreakableStone" parent="Static/Mirror_rg_body" instance=ExtResource("8_t41ne")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.878564, -2.4296, 0)
+
+[node name="RigidBody3D8" parent="Static/Mirror_rg_body/BreakableStone" instance=ExtResource("7_ag7ra")]
+transform = Transform3D(1.00119, 0, 0, 0, 1.00119, 0, 0, 0, 1.00119, 0.0852054, -0.11368, -0.0667794)
 freeze = true
+
+[node name="RigidBody3D9" parent="Static/Mirror_rg_body/BreakableStone" instance=ExtResource("7_ag7ra")]
+transform = Transform3D(1.00119, 0, 0, 0, 1.00119, 0, 0, 0, 1.00119, -0.0149784, 0.178123, -0.0667794)
+freeze = true
+
+[node name="RigidBody3D10" parent="Static/Mirror_rg_body/BreakableStone" instance=ExtResource("7_ag7ra")]
+transform = Transform3D(1.00119, 0, 0, 0, 1.00119, 0, 0, 0, 1.00119, -0.0149784, -0.190789, -0.0667794)
+freeze = true
+
+[node name="BreakableStone3" parent="Static/Mirror_rg_body" instance=ExtResource("8_t41ne")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.645932, -2.91227, 0)
+
+[node name="RigidBody3D8" parent="Static/Mirror_rg_body/BreakableStone3" instance=ExtResource("7_ag7ra")]
+transform = Transform3D(1.00119, 0, 0, 0, 1.00119, 0, 0, 0, 1.00119, 0.0852054, -0.11368, -0.0667794)
+freeze = true
+
+[node name="RigidBody3D9" parent="Static/Mirror_rg_body/BreakableStone3" instance=ExtResource("7_ag7ra")]
+transform = Transform3D(1.00119, 0, 0, 0, 1.00119, 0, 0, 0, 1.00119, -0.0149784, 0.178123, -0.0667794)
+freeze = true
+
+[node name="RigidBody3D10" parent="Static/Mirror_rg_body/BreakableStone3" instance=ExtResource("7_ag7ra")]
+transform = Transform3D(1.00119, 0, 0, 0, 1.00119, 0, 0, 0, 1.00119, -0.0149784, -0.190789, -0.0667794)
+freeze = true
+
+[node name="BreakableStone4" parent="Static/Mirror_rg_body" instance=ExtResource("8_t41ne")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.77344, -1.63319, 1.19209e-07)
+
+[node name="RigidBody3D8" parent="Static/Mirror_rg_body/BreakableStone4" instance=ExtResource("7_ag7ra")]
+transform = Transform3D(1.00119, 0, 0, 0, 1.00119, 0, 0, 0, 1.00119, 0.0852054, -0.11368, -0.0667794)
+freeze = true
+
+[node name="RigidBody3D9" parent="Static/Mirror_rg_body/BreakableStone4" instance=ExtResource("7_ag7ra")]
+transform = Transform3D(1.00119, 0, 0, 0, 1.00119, 0, 0, 0, 1.00119, -0.0149784, 0.178123, -0.0667794)
+freeze = true
+
+[node name="RigidBody3D10" parent="Static/Mirror_rg_body/BreakableStone4" instance=ExtResource("7_ag7ra")]
+transform = Transform3D(1.00119, 0, 0, 0, 1.00119, 0, 0, 0, 1.00119, -0.0149784, -0.190789, -0.0667794)
+freeze = true
+
+[node name="BreakableStone2" parent="Static/Mirror_rg_body" instance=ExtResource("8_t41ne")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.64962, -9.50285, 0)
 
 [node name="Mirror_Static" type="Node" parent="Static"]
 
@@ -358,6 +406,9 @@ layers = 4
 mesh = SubResource("BoxMesh_50m33")
 skeleton = NodePath("../..")
 surface_material_override/0 = ExtResource("10_jtr16")
+
+[node name="TeleporterPrefab" parent="Static/Mirror_Static" instance=ExtResource("12_io5se")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.65021, -7.76377, 0)
 
 [node name="Normal_decor" type="Node" parent="Static"]
 

@@ -1,0 +1,42 @@
+[gd_scene load_steps=7 format=3 uid="uid://lh8qiwp2gfcn"]
+
+[ext_resource type="Material" uid="uid://bxf2r8qu2qvay" path="res://05_SHADER/Subscene_materials/Subscene_basic_rock.tres" id="1_gt48w"]
+[ext_resource type="Script" path="res://10_BOARD/Element_Broke/Hit_particule_effect.gd" id="2_vesfc"]
+
+[sub_resource type="Curve" id="Curve_7e5h5"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.0268573), -1.35893, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_e1nqu"]
+curve = SubResource("Curve_7e5h5")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_8fbvp"]
+emission_shape = 1
+emission_sphere_radius = 0.2
+inherit_velocity_ratio = 1.0
+direction = Vector3(0, 0, 0)
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+radial_accel_max = 2.16
+scale_min = 0.4
+scale_curve = SubResource("CurveTexture_e1nqu")
+
+[sub_resource type="SphereMesh" id="SphereMesh_i7tid"]
+radius = 0.025
+height = 0.05
+radial_segments = 6
+rings = 3
+
+[node name="Hit_particule" type="GPUParticles3D"]
+layers = 4
+material_override = ExtResource("1_gt48w")
+emitting = false
+amount = 15
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 24
+process_material = SubResource("ParticleProcessMaterial_8fbvp")
+draw_pass_1 = SubResource("SphereMesh_i7tid")
+script = ExtResource("2_vesfc")
+
+[connection signal="finished" from="." to="." method="_on_finished"]

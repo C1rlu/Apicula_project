@@ -1,0 +1,36 @@
+[gd_scene load_steps=6 format=3 uid="uid://ddac0wqbwjiqc"]
+
+[ext_resource type="Material" uid="uid://c23wi5umraqxu" path="res://05_SHADER/Subscene_materials/Subscene_rock_ice.tres" id="1_n67ey"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Elements/Breackable_Ice/Breaking_me.gd" id="3_03ww0"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_oxghi"]
+radial_segments = 8
+rings = 4
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_q4dj3"]
+bounce = 1.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_hnefk"]
+radius = 0.562682
+
+[node name="BreakableStone" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.701042, 0, 0, 0, 0.701042, 0, 0, 0, 0.701042, 0, 0, 0)
+layers = 4
+mesh = SubResource("SphereMesh_oxghi")
+surface_material_override/0 = ExtResource("1_n67ey")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(0.701042, 0, 0, 0, 0.701042, 0, 0, 0, 0.701042, 0, 0, 0)
+collision_layer = 2
+collision_mask = 2
+input_ray_pickable = false
+physics_material_override = SubResource("PhysicsMaterial_q4dj3")
+
+[node name="Breaking_me" type="Node" parent="StaticBody3D"]
+script = ExtResource("3_03ww0")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(0.871723, 0, 0, 0, 0.871723, 0, 0, 0, 0.871723, 0, 0, 0)
+shape = SubResource("SphereShape3D_hnefk")

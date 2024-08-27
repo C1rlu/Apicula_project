@@ -22,7 +22,9 @@ func on_area_enter(area):
 		if element:
 			element._collect.emit()
 			update_render_amount()
+		
 
+			
 func update_render_amount():
 	
 	var size = _global_datas.element_collected.size()
