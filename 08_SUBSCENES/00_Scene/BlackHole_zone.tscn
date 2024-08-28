@@ -1,42 +1,19 @@
-[gd_scene load_steps=33 format=3 uid="uid://bo33th5yn61n1"]
+[gd_scene load_steps=23 format=3 uid="uid://bo33th5yn61n1"]
 
 [ext_resource type="PackedScene" uid="uid://bqksk5rvc6q2h" path="res://08_SUBSCENES/Elements/Tiny_boat/boat_man_subscene_asset_01.tscn" id="2_s2d0c"]
 [ext_resource type="PackedScene" uid="uid://bneebc6fpaysa" path="res://08_SUBSCENES/Elements/Ice/ice_msh_01.tscn" id="4_e540o"]
-[ext_resource type="Resource" uid="uid://c6jw6ja2xggvh" path="res://15_GAME_RESSOURCE/00_Npc_data/Otis_Coast_guard_data.tres" id="4_fda7n"]
-[ext_resource type="Script" path="res://00_SCENE/Npc_zone.gd" id="4_yaajt"]
 [ext_resource type="PackedScene" uid="uid://chipng023vh22" path="res://08_SUBSCENES/Elements/Ice/ice_msh_01_far.tscn" id="5_ipvrn"]
 [ext_resource type="PackedScene" uid="uid://50ubp7klhsex" path="res://08_SUBSCENES/Oddity/Scanner/Main_oddity.tscn" id="5_qf6u0"]
-[ext_resource type="Material" uid="uid://dkpo8pe6k46g6" path="res://05_SHADER/All_Materials/Light_mat.tres" id="5_u5afq"]
-[ext_resource type="Material" uid="uid://dgl2um0yp8e3c" path="res://05_SHADER/All_Materials/Building_mat.tres" id="6_soy6p"]
 [ext_resource type="PackedScene" uid="uid://di031pbbucu1n" path="res://08_SUBSCENES/Elements/Magnetable_test/Debris_test.tscn" id="7_ag7ra"]
-[ext_resource type="Material" uid="uid://ctnqf5d3uj1g7" path="res://05_SHADER/All_Materials/dark_mask.tres" id="7_sbu5t"]
 [ext_resource type="PackedScene" uid="uid://ddac0wqbwjiqc" path="res://08_SUBSCENES/Elements/Breackable_Ice/Breakable_stone.tscn" id="8_t41ne"]
 [ext_resource type="Script" path="res://08_SUBSCENES/In_Mirror.gd" id="9_n17hi"]
+[ext_resource type="PackedScene" uid="uid://ciuyel1b0of8e" path="res://08_SUBSCENES/Oddity/Teleporter/Teleporter_prefab.tscn" id="9_nkgxm"]
 [ext_resource type="Material" uid="uid://bx8lxok1s6d6y" path="res://05_SHADER/Subscene_materials/Debris_Mat.tres" id="10_jtr16"]
 [ext_resource type="PackedScene" uid="uid://myfv2ohb6atf" path="res://08_SUBSCENES/Elements/Breackable_Ice/Block_test/block_breack_01.blend" id="14_8mn2o"]
 [ext_resource type="PackedScene" uid="uid://ouwxff764mkf" path="res://08_SUBSCENES/Elements/Breackable_Ice/Block_test/block_breack_02.blend" id="14_72fhf"]
 [ext_resource type="Material" uid="uid://cdnmf431kgh7" path="res://05_SHADER/Subscene_materials/Subscene_basic_mat_far.tres" id="15_4v6q0"]
 [ext_resource type="Material" uid="uid://bxf2r8qu2qvay" path="res://05_SHADER/Subscene_materials/Subscene_basic_rock.tres" id="15_shq2w"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Elements/Breackable_Ice/Breaking_me.gd" id="16_gfl76"]
-
-[sub_resource type="GDScript" id="GDScript_xxb7y"]
-script/source = "extends Area3D
-
-@export var Npc_data : Npc_datas
-
-
-"
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_2kspa"]
-radius = 0.352078
-
-[sub_resource type="PrismMesh" id="PrismMesh_r3syi"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_026ew"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_p70rs"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_jjq23"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_50m33"]
 
@@ -69,44 +46,6 @@ data = PackedVector3Array(-1.4164, 0, 0, -0.8779, 0.8305, -0.2997, -0.9092, 0.77
 
 [node name="Main_Rapatrier2" parent="Static/Mirror_rg_body" instance=ExtResource("5_qf6u0")]
 transform = Transform3D(0.705625, 0, 0, 0, 0.705625, 0, 0, 0, 0.705625, -0.276407, -6.22672, 0)
-
-[node name="NPC_Area" type="Area3D" parent="Static/Mirror_rg_body"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.49972, -2.17655, 0)
-collision_layer = 4
-collision_mask = 4
-input_ray_pickable = false
-script = SubResource("GDScript_xxb7y")
-Npc_data = ExtResource("4_fda7n")
-
-[node name="Npc_zone" type="Node" parent="Static/Mirror_rg_body/NPC_Area"]
-script = ExtResource("4_yaajt")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Static/Mirror_rg_body/NPC_Area"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.422843, 0, 0.0136065)
-shape = SubResource("SphereShape3D_2kspa")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Static/Mirror_rg_body/NPC_Area/CollisionShape3D"]
-transform = Transform3D(-5.76091e-10, 0.127663, 1.29577e-09, 0, 1.52236e-09, -0.108661, -0.0131794, -5.58032e-09, -5.66399e-17, -0.163318, 0.169142, 0.0421472)
-layers = 4
-mesh = SubResource("PrismMesh_r3syi")
-surface_material_override/0 = ExtResource("5_u5afq")
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="Static/Mirror_rg_body/NPC_Area/CollisionShape3D"]
-transform = Transform3D(-5.76091e-10, 0.0143792, 4.42475e-09, 0, 1.7147e-10, -0.371052, -0.0131794, -6.28535e-10, -1.93412e-16, -0.219283, 0.0534687, 0.0421472)
-layers = 4
-mesh = SubResource("BoxMesh_026ew")
-surface_material_override/0 = ExtResource("5_u5afq")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Static/Mirror_rg_body/NPC_Area"]
-transform = Transform3D(0.803273, 0, 0.156978, 0, 0.068, 0, -0.803273, 0, 0.156978, -0.178382, -0.155468, -0.2644)
-mesh = SubResource("BoxMesh_p70rs")
-surface_material_override/0 = ExtResource("6_soy6p")
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="Static/Mirror_rg_body/NPC_Area/MeshInstance3D"]
-layers = 4
-mesh = SubResource("BoxMesh_jjq23")
-skeleton = NodePath("../..")
-surface_material_override/0 = ExtResource("7_sbu5t")
 
 [node name="RigidBody3D3" parent="Static/Mirror_rg_body" instance=ExtResource("7_ag7ra")]
 transform = Transform3D(1.00119, 0, 0, 0, 1.00119, 0, 0, 0, 1.00119, 1.02482, -9.36675, 0)
@@ -157,6 +96,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.42082, -3.60634, -0.137519)
 transform = Transform3D(1.8076, 0, 0, 0, 1.8076, 0, 0, 0, 1.8076, 3.3948, -1.97461, -0.00133824)
 
 [node name="Mirror_Static" type="Node" parent="Static"]
+
+[node name="TeleporterPrefab" parent="Static/Mirror_Static" instance=ExtResource("9_nkgxm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0209859, -7.97098, 0)
 
 [node name="BoatMan_subscene_asset_01" parent="Static/Mirror_Static" instance=ExtResource("2_s2d0c")]
 transform = Transform3D(-0.184431, 0.0347539, -0.0125068, 0.0258751, 0.167019, 0.0825473, 0.0263578, 0.0792196, -0.168548, -1.03479, -9.60056, 0)
@@ -495,6 +437,7 @@ transform = Transform3D(-0.0721818, 0.592102, 0.136782, -0.594098, -0.0397805, -
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.33771, -3.00478, 0.0255616)
 
 [node name="msh_rock_all_cell" parent="Static/Normal_decor/block_breack_02" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.271858, -1.27073, 0.296674)
 layers = 4
 surface_material_override/0 = ExtResource("15_shq2w")
 
@@ -502,13 +445,14 @@ surface_material_override/0 = ExtResource("15_shq2w")
 collision_layer = 2
 collision_mask = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Static/Normal_decor/block_breack_02/msh_rock_all_cell/StaticBody3D"]
-shape = SubResource("ConcavePolygonShape3D_ewfgw")
-
 [node name="Breaking_me" type="Node" parent="Static/Normal_decor/block_breack_02/msh_rock_all_cell/StaticBody3D"]
 script = ExtResource("16_gfl76")
 
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Static/Normal_decor/block_breack_02/msh_rock_all_cell/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_ewfgw")
+
 [node name="msh_rock_all_cell_001" parent="Static/Normal_decor/block_breack_02" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.334047, 0.536369, -0.252499)
 layers = 4
 surface_material_override/0 = ExtResource("15_shq2w")
 
@@ -523,6 +467,7 @@ shape = SubResource("ConcavePolygonShape3D_b2myj")
 script = ExtResource("16_gfl76")
 
 [node name="msh_rock_all_cell_002" parent="Static/Normal_decor/block_breack_02" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.332535, -0.476362, 0.179543)
 layers = 4
 surface_material_override/0 = ExtResource("15_shq2w")
 
@@ -537,6 +482,7 @@ shape = SubResource("ConcavePolygonShape3D_cbki7")
 script = ExtResource("16_gfl76")
 
 [node name="msh_rock_all_cell_003" parent="Static/Normal_decor/block_breack_02" index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0360549, 0.505668, 0.251767)
 layers = 4
 surface_material_override/0 = ExtResource("15_shq2w")
 
@@ -551,6 +497,7 @@ shape = SubResource("ConcavePolygonShape3D_7sek7")
 script = ExtResource("16_gfl76")
 
 [node name="msh_rock_all_cell_006" parent="Static/Normal_decor/block_breack_02" index="4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.741921, 0.0145373, -0.124977)
 layers = 4
 surface_material_override/0 = ExtResource("15_shq2w")
 
@@ -565,6 +512,7 @@ shape = SubResource("ConcavePolygonShape3D_4nv6c")
 script = ExtResource("16_gfl76")
 
 [node name="msh_rock_all_cell_007" parent="Static/Normal_decor/block_breack_02" index="5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.682617, 0.42135, -0.164884)
 layers = 4
 surface_material_override/0 = ExtResource("15_shq2w")
 
@@ -579,23 +527,15 @@ shape = SubResource("ConcavePolygonShape3D_m58nx")
 script = ExtResource("16_gfl76")
 
 [node name="msh_rock_all" parent="Static/Normal_decor/block_breack_02" index="6"]
+visible = false
 layers = 4
 surface_material_override/0 = ExtResource("15_shq2w")
-
-[node name="StaticBody3D" type="StaticBody3D" parent="Static/Normal_decor/block_breack_02/msh_rock_all" index="0"]
-collision_layer = 2
-collision_mask = 2
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Static/Normal_decor/block_breack_02/msh_rock_all/StaticBody3D"]
-shape = SubResource("ConcavePolygonShape3D_k5d0o")
-
-[node name="Breaking_me" type="Node" parent="Static/Normal_decor/block_breack_02/msh_rock_all/StaticBody3D"]
-script = ExtResource("16_gfl76")
 
 [node name="block_breack_06" parent="Static/Normal_decor" instance=ExtResource("14_72fhf")]
 transform = Transform3D(-0.382716, -0.923866, 0, 0.923866, -0.382716, 0, 0, 0, 1, -1.13003, -5.92813, 0.029989)
 
 [node name="msh_rock_all_cell" parent="Static/Normal_decor/block_breack_06" index="0"]
+transform = Transform3D(1, 2.98023e-08, 0, -2.98023e-08, 1, 0, 0, 0, 1, -0.271859, -1.27073, 0.296674)
 layers = 4
 surface_material_override/0 = ExtResource("15_shq2w")
 
@@ -610,6 +550,7 @@ shape = SubResource("ConcavePolygonShape3D_ewfgw")
 script = ExtResource("16_gfl76")
 
 [node name="msh_rock_all_cell_001" parent="Static/Normal_decor/block_breack_06" index="1"]
+transform = Transform3D(1, 2.98023e-08, 0, -2.98023e-08, 1, 0, 0, 0, 1, -0.334048, 0.536369, -0.252499)
 layers = 4
 surface_material_override/0 = ExtResource("15_shq2w")
 
@@ -624,6 +565,7 @@ shape = SubResource("ConcavePolygonShape3D_b2myj")
 script = ExtResource("16_gfl76")
 
 [node name="msh_rock_all_cell_002" parent="Static/Normal_decor/block_breack_06" index="2"]
+transform = Transform3D(1, 2.98023e-08, 0, -2.98023e-08, 1, 0, 0, 0, 1, 0.332534, -0.476362, 0.179543)
 layers = 4
 surface_material_override/0 = ExtResource("15_shq2w")
 
@@ -638,6 +580,7 @@ shape = SubResource("ConcavePolygonShape3D_cbki7")
 script = ExtResource("16_gfl76")
 
 [node name="msh_rock_all_cell_003" parent="Static/Normal_decor/block_breack_06" index="3"]
+transform = Transform3D(1, 2.98023e-08, 0, -2.98023e-08, 1, 0, 0, 0, 1, -0.0360551, 0.505668, 0.251767)
 layers = 4
 surface_material_override/0 = ExtResource("15_shq2w")
 
@@ -652,6 +595,7 @@ shape = SubResource("ConcavePolygonShape3D_7sek7")
 script = ExtResource("16_gfl76")
 
 [node name="msh_rock_all_cell_006" parent="Static/Normal_decor/block_breack_06" index="4"]
+transform = Transform3D(1, 2.98023e-08, 0, -2.98023e-08, 1, 0, 0, 0, 1, -0.741921, 0.0145373, -0.124977)
 layers = 4
 surface_material_override/0 = ExtResource("15_shq2w")
 
@@ -666,6 +610,7 @@ shape = SubResource("ConcavePolygonShape3D_4nv6c")
 script = ExtResource("16_gfl76")
 
 [node name="msh_rock_all_cell_007" parent="Static/Normal_decor/block_breack_06" index="5"]
+transform = Transform3D(1, 2.98023e-08, 0, -2.98023e-08, 1, 0, 0, 0, 1, 0.682617, 0.42135, -0.164884)
 layers = 4
 surface_material_override/0 = ExtResource("15_shq2w")
 
@@ -680,6 +625,7 @@ shape = SubResource("ConcavePolygonShape3D_m58nx")
 script = ExtResource("16_gfl76")
 
 [node name="msh_rock_all" parent="Static/Normal_decor/block_breack_06" index="6"]
+transform = Transform3D(1, 2.98023e-08, 0, -2.98023e-08, 1, 0, 0, 0, 1, 0, 0, 0)
 layers = 4
 surface_material_override/0 = ExtResource("15_shq2w")
 
@@ -697,6 +643,7 @@ script = ExtResource("16_gfl76")
 transform = Transform3D(-0.082443, 0.996596, 0, -0.996596, -0.082443, 0, 0, 0, 1, -2.56816, -2.14539, 0.0255616)
 
 [node name="msh_rock_all_cell" parent="Static/Normal_decor/block_breack_03" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.271858, -1.27073, 0.296674)
 layers = 4
 surface_material_override/0 = ExtResource("15_shq2w")
 
@@ -711,6 +658,7 @@ shape = SubResource("ConcavePolygonShape3D_ewfgw")
 script = ExtResource("16_gfl76")
 
 [node name="msh_rock_all_cell_001" parent="Static/Normal_decor/block_breack_03" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.334048, 0.536369, -0.252499)
 layers = 4
 surface_material_override/0 = ExtResource("15_shq2w")
 
@@ -725,6 +673,7 @@ shape = SubResource("ConcavePolygonShape3D_b2myj")
 script = ExtResource("16_gfl76")
 
 [node name="msh_rock_all_cell_002" parent="Static/Normal_decor/block_breack_03" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.332535, -0.476362, 0.179543)
 layers = 4
 surface_material_override/0 = ExtResource("15_shq2w")
 
@@ -739,6 +688,7 @@ shape = SubResource("ConcavePolygonShape3D_cbki7")
 script = ExtResource("16_gfl76")
 
 [node name="msh_rock_all_cell_003" parent="Static/Normal_decor/block_breack_03" index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0360548, 0.505668, 0.251767)
 layers = 4
 surface_material_override/0 = ExtResource("15_shq2w")
 
@@ -753,6 +703,7 @@ shape = SubResource("ConcavePolygonShape3D_7sek7")
 script = ExtResource("16_gfl76")
 
 [node name="msh_rock_all_cell_006" parent="Static/Normal_decor/block_breack_03" index="4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.741921, 0.0145371, -0.124977)
 layers = 4
 surface_material_override/0 = ExtResource("15_shq2w")
 
@@ -767,6 +718,7 @@ shape = SubResource("ConcavePolygonShape3D_4nv6c")
 script = ExtResource("16_gfl76")
 
 [node name="msh_rock_all_cell_007" parent="Static/Normal_decor/block_breack_03" index="5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.682618, 0.42135, -0.164884)
 layers = 4
 surface_material_override/0 = ExtResource("15_shq2w")
 
@@ -1042,9 +994,6 @@ transform = Transform3D(-0.430526, 0.434579, 0.0171076, -0.415705, -0.404114, -0
 
 [node name="Ice_msh_14" parent="Static/Normal_decor" instance=ExtResource("5_ipvrn")]
 transform = Transform3D(0.816386, 0.279855, -0.0404084, -0.23767, 0.746054, 0.365176, 0.153181, -0.33395, 0.781953, -0.57117, -9.23777, -3.58519)
-
-[connection signal="area_entered" from="Static/Mirror_rg_body/NPC_Area" to="Static/Mirror_rg_body/NPC_Area" method="_on_area_entered"]
-[connection signal="area_exited" from="Static/Mirror_rg_body/NPC_Area" to="Static/Mirror_rg_body/NPC_Area" method="_on_area_exited"]
 
 [editable path="Static/Normal_decor/block_breack_02"]
 [editable path="Static/Normal_decor/block_breack_06"]

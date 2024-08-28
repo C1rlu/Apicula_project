@@ -2,13 +2,13 @@ extends Node
 
 
 
-@export var _tool : tool_data
+#@export var _tool : tool_data
 @onready var timer = $Timer
 
 
 func _ready():
-
-	_tool.tool_active_signal.connect(call_sonar)
+	pass
+	#_tool.tool_active_signal.connect(call_sonar)
 
 func call_sonar(condition):
 	

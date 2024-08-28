@@ -1,0 +1,101 @@
+[gd_scene load_steps=8 format=3 uid="uid://qx8bn830e4ga"]
+
+[ext_resource type="Script" path="res://08_SUBSCENES/Elements/Breackable_Ice/Block_test/explosed_rock_vfx.gd" id="1_i8k0l"]
+[ext_resource type="Material" uid="uid://bxf2r8qu2qvay" path="res://05_SHADER/Subscene_materials/Subscene_basic_rock.tres" id="1_k7xpn"]
+[ext_resource type="ArrayMesh" uid="uid://2pygkeg6n3di" path="res://08_SUBSCENES/Elements/Breackable_Ice/Block_test/VFX_explosed_block.obj" id="2_kq52s"]
+[ext_resource type="ArrayMesh" uid="uid://bk5r18gc2n56p" path="res://08_SUBSCENES/Elements/Breackable_Ice/Block_test/VFX_explosed_block_02.obj" id="3_3f7bt"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_3s8lx"]
+emission_shape = 1
+emission_sphere_radius = 0.4
+direction = Vector3(0, 0, 0)
+spread = 180.0
+initial_velocity_min = 1.0
+initial_velocity_max = 2.0
+gravity = Vector3(0, 0, 0)
+radial_accel_max = 0.5
+damping_max = 1.0
+scale_min = 0.5
+scale_max = 0.9
+turbulence_noise_speed = Vector3(0, 0.38, 0)
+turbulence_noise_speed_random = 0.08
+turbulence_influence_min = 0.017
+turbulence_influence_max = 0.042
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_t0c40"]
+emission_shape = 1
+emission_sphere_radius = 0.4
+direction = Vector3(0, 0, 0)
+spread = 180.0
+initial_velocity_min = 1.0
+initial_velocity_max = 2.0
+gravity = Vector3(0, 0, 0)
+radial_accel_max = 0.5
+damping_max = 1.0
+scale_min = 0.1
+scale_max = 0.5
+turbulence_noise_speed = Vector3(0, 0.38, 0)
+turbulence_noise_speed_random = 0.08
+turbulence_influence_min = 0.017
+turbulence_influence_max = 0.042
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_palto"]
+emission_shape = 1
+emission_sphere_radius = 0.1
+angle_min = -720.0
+angle_max = 720.0
+direction = Vector3(0, 0, 0)
+spread = 180.0
+initial_velocity_min = 0.7
+initial_velocity_max = 1.0
+gravity = Vector3(0, 0, 0)
+damping_max = 1.0
+scale_min = 0.1
+scale_max = 0.5
+turbulence_noise_speed = Vector3(0, 0.38, 0)
+turbulence_noise_speed_random = 0.08
+turbulence_influence_min = 0.017
+turbulence_influence_max = 0.042
+
+[node name="Explosed_Rock_VFX" type="Node3D" node_paths=PackedStringArray("all_VFX")]
+script = ExtResource("1_i8k0l")
+all_VFX = [NodePath("GPUParticles3D"), NodePath("GPUParticles3D2"), NodePath("GPUParticles3D3")]
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+layers = 4
+material_override = ExtResource("1_k7xpn")
+gi_mode = 0
+emitting = false
+amount = 3
+one_shot = true
+speed_scale = 0.7
+explosiveness = 1.0
+randomness = 1.0
+process_material = SubResource("ParticleProcessMaterial_3s8lx")
+draw_pass_1 = ExtResource("2_kq52s")
+
+[node name="GPUParticles3D2" type="GPUParticles3D" parent="."]
+layers = 4
+material_override = ExtResource("1_k7xpn")
+gi_mode = 0
+emitting = false
+amount = 3
+one_shot = true
+speed_scale = 0.7
+explosiveness = 1.0
+randomness = 1.0
+process_material = SubResource("ParticleProcessMaterial_t0c40")
+draw_pass_1 = ExtResource("3_3f7bt")
+
+[node name="GPUParticles3D3" type="GPUParticles3D" parent="."]
+layers = 4
+material_override = ExtResource("1_k7xpn")
+gi_mode = 0
+emitting = false
+amount = 10
+one_shot = true
+speed_scale = 0.7
+explosiveness = 1.0
+randomness = 1.0
+process_material = SubResource("ParticleProcessMaterial_palto")
+draw_pass_1 = ExtResource("3_3f7bt")

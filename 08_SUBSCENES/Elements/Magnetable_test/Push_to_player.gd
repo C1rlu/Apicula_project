@@ -7,15 +7,15 @@ extends Node
 
 
 func _ready():
-	Debris.push_to_player.connect(push_to_player)
+	#Debris.push_to_player.connect(push_to_player)
 	
-	
+	pass
 	
 	
 func push_to_player():
-	
+	print("PUSH ACTIVE")
 	var distance = _global_datas.subbscene_playerPosition.distance_to(_collect.position)
-	print(distance)
+	#print(distance)
 	if distance > 1.0:
 		return
 	var direction = (_global_datas.subbscene_playerPosition - _collect.position).normalized()

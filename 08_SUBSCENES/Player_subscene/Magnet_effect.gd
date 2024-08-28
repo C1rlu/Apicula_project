@@ -3,7 +3,7 @@ extends Node
 
 @export var manget_tool : tool_data
 @export var magnet_fx : GPUParticles3D
-@export var collector_collider : CollisionShape3D
+@export var Magnet_Area : Area3D
 @onready var root = $".."
 var magneting : bool = false
 var list_of_magnetable : Array[Node]
@@ -12,12 +12,13 @@ var list_of_magnetable : Array[Node]
 func _ready():
 	manget_tool.tool_active_signal.connect(_active)
 	
-	
+	Magnet_Area.area_entered.connect(_magnet_enter)
+	Magnet_Area.area_exited.connect( _magnet_exited)
 func _active(condition : bool):
 
 	magnet_fx.emitting = condition
 	magneting = condition
-	collector_collider.disabled = !condition
+	
 	
 
 func _process(delta):
@@ -30,7 +31,7 @@ func _process(delta):
 	
 	
 			
-func _magnet_enter(area_rid, area, area_shape_index, local_shape_index):
+func _magnet_enter(area):
 	
 	if area:
 		var magnetable = area.get_node_or_null("Attract_me")
@@ -39,7 +40,7 @@ func _magnet_enter(area_rid, area, area_shape_index, local_shape_index):
 			list_of_magnetable.append(magnetable)
 			
 	
-func _magnet_exited(area_rid, area, area_shape_index, local_shape_index):
+func _magnet_exited(area):
 	
 	if area:
 		var magnetable = area.get_node_or_null("Attract_me")

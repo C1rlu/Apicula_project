@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=3 uid="uid://nigmie4bbn6"]
+[gd_scene load_steps=61 format=3 uid="uid://nigmie4bbn6"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/00_Scripts/Subscene_loader.gd" id="1_7uoo0"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="2_3srhu"]
@@ -17,12 +17,13 @@
 [ext_resource type="Resource" uid="uid://df0swhar7lchv" path="res://08_SUBSCENES/Tools/Jet_tool.tres" id="10_ielrw"]
 [ext_resource type="Script" path="res://08_SUBSCENES/IN_MIRROR_ZONE.gd" id="10_qqphy"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Tools/PhotoData_list_update.gd" id="10_w7dre"]
+[ext_resource type="Script" path="res://08_SUBSCENES/ELEMENT_COLECTOR.gd" id="14_s22ig"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Clock_sonar_VFX.gd" id="14_xtaeu"]
 [ext_resource type="Material" uid="uid://b1iqs8p4it3ni" path="res://05_SHADER/Full_screen/Subscene_screen/Scanner_subscene_dither.tres" id="15_6os4y"]
-[ext_resource type="Script" path="res://08_SUBSCENES/GravTool_effect.gd" id="15_p4dgd"]
 [ext_resource type="PackedScene" uid="uid://4r5x2mp8a1a0" path="res://04_SCENE_MAIN_MAP/00_PLAYER/Boat/Player_Boat_02.blend" id="21_42nxe"]
 [ext_resource type="Script" path="res://03_CAMERA/Active_scene_viewports.gd" id="21_jai7k"]
 [ext_resource type="Material" uid="uid://cdnmf431kgh7" path="res://05_SHADER/Subscene_materials/Subscene_basic_mat_far.tres" id="22_crc4c"]
+[ext_resource type="Material" uid="uid://dnm3xbumsinu2" path="res://05_SHADER/All_Materials/Lit_light.tres" id="24_7wv3c"]
 
 [sub_resource type="GDScript" id="GDScript_btuws"]
 script/source = "extends Node
@@ -471,6 +472,11 @@ points = PackedVector3Array(0.71875, 0.711319, 0.232015, 0.0842724, 0.86995, -3.
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_dgpm7"]
 radius = 0.69733
 
+[sub_resource type="SphereMesh" id="SphereMesh_nfm4d"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_bw2ml"]
+radius = 0.315261
+
 [node name="03_SUBSCENES" type="Node"]
 script = ExtResource("1_7uoo0")
 metadata/_edit_vertical_guides_ = [960.0]
@@ -515,17 +521,14 @@ script = SubResource("GDScript_nvaxv")
 [node name="IN_MIRROR_ZONE" type="Node" parent="."]
 script = ExtResource("10_qqphy")
 
+[node name="ELEMENT_COLECTOR" type="Node" parent="." node_paths=PackedStringArray("collector_area")]
+script = ExtResource("14_s22ig")
+collector_area = NodePath("../Boat_base/Boat_area")
+
 [node name="MainOddity_Sonar_VFX" type="Node" parent="."]
 script = ExtResource("14_xtaeu")
 
 [node name="Timer_delay" type="Timer" parent="MainOddity_Sonar_VFX"]
-wait_time = 0.25
-one_shot = true
-
-[node name="GravTool_effect" type="Node" parent="."]
-script = ExtResource("15_p4dgd")
-
-[node name="Timer_delay" type="Timer" parent="GravTool_effect"]
 wait_time = 0.25
 one_shot = true
 
@@ -628,11 +631,9 @@ input_ray_pickable = false
 shape = SubResource("BoxShape3D_qfjre")
 
 [node name="Boat_base" type="Node3D" parent="."]
-visible = false
 
 [node name="Player_Boat_02" parent="Boat_base" instance=ExtResource("21_42nxe")]
 transform = Transform3D(1.49637e-07, 0, 1.1411, 0, 1.1411, 0, -1.1411, 0, 1.49637e-07, -2.21762, 0.470453, 0)
-visible = false
 
 [node name="Msh_boat_top" parent="Boat_base/Player_Boat_02" index="0"]
 layers = 4
@@ -657,7 +658,6 @@ collision_mask = 2
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Boat_base/Player_Boat_02/StaticBody3D"]
 transform = Transform3D(1, 0, -1.42109e-14, 0, 1, 0, 1.42109e-14, 0, 1, 0, 0, 0)
 shape = SubResource("ConvexPolygonShape3D_3tv5m")
-disabled = true
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Boat_base"]
 transform = Transform3D(0.21589, 0, 0, 0, 0.286276, 0, 0, 0, 0.21589, -0.65947, 0.68835, 0)
@@ -672,13 +672,34 @@ collision_mask = 2
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Boat_base/MeshInstance3D/StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.238388, 0)
 shape = SubResource("CylinderShape3D_dgpm7")
-disabled = true
 
 [node name="MeshInstance3D4" type="MeshInstance3D" parent="Boat_base"]
 transform = Transform3D(0.24392, 0, 0, 0, 0.0381577, 0, 0, 0, 0.24392, -0.657448, 0.379743, 0.0110414)
 layers = 4
 mesh = SubResource("CylinderMesh_8yrqc")
 surface_material_override/0 = ExtResource("22_crc4c")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Boat_base"]
+transform = Transform3D(-1.01927e-09, -0.0817799, 0, 0.0233182, -3.57471e-09, 0, 0, 0, 0.0233182, -0.512, 0.47, 0)
+layers = 4
+mesh = SubResource("CylinderMesh_8yrqc")
+surface_material_override/0 = ExtResource("22_crc4c")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Boat_base"]
+transform = Transform3D(0.0740985, 0, 0, 0, 0.0740985, 0, 0, 0, 0.0740985, -0.418, 0.47, 0)
+layers = 4
+mesh = SubResource("SphereMesh_nfm4d")
+surface_material_override/0 = ExtResource("24_7wv3c")
+
+[node name="Boat_area" type="Area3D" parent="Boat_base"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.657179, 0.314829, 0.00089781)
+collision_layer = 4
+collision_mask = 4
+
+[node name="Loading_oxygene" type="Node" parent="Boat_base/Boat_area"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Boat_base/Boat_area"]
+shape = SubResource("SphereShape3D_bw2ml")
 
 [node name="LoadScene" type="Node3D" parent="."]
 

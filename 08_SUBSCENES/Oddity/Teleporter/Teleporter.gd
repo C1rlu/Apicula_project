@@ -19,7 +19,7 @@ func _teleport():
 		_global_datas.player_state = game_state.visible_state.normal
 		_global_datas.in_mirror_zone.emit()
 		
-		remove_teleporter()	
+		#remove_teleporter()	
 		return
 		
 func remove_teleporter():

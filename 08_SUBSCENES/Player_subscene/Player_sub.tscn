@@ -1,4 +1,4 @@
-[gd_scene load_steps=143 format=3 uid="uid://g7u8o55jrnyy"]
+[gd_scene load_steps=141 format=3 uid="uid://g7u8o55jrnyy"]
 
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER/Subscene_materials/Subscene_basic_mat.tres" id="1_n1vw4"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Player_sub_behaviour.gd" id="1_o2v73"]
@@ -10,14 +10,13 @@
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/active_tool_scene.gd" id="8_8bfcd"]
 [ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER/Subscene_materials/Subscene_shine_elements_mat.tres" id="8_wvhjt"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Magnet_effect.gd" id="9_wphos"]
-[ext_resource type="Resource" uid="uid://bcj27libgpl5g" path="res://08_SUBSCENES/Tools/Check_clock.tres" id="10_fdj0j"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Active_scanner_visual_pulse.gd" id="10_ir8y2"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Subjet_effet.gd" id="10_jdgje"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Sonnar_zone.gd" id="10_so5n0"]
-[ext_resource type="Script" path="res://08_SUBSCENES/ELEMENT_COLECTOR.gd" id="11_olyv4"]
 [ext_resource type="Resource" uid="uid://df0swhar7lchv" path="res://08_SUBSCENES/Tools/Jet_tool.tres" id="11_rhn2f"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/CallLoader_effect.gd" id="12_5ga5g"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/ELEMENT_BREAKING.gd" id="12_6dq77"]
+[ext_resource type="Resource" uid="uid://ccwdekfv0jvky" path="res://08_SUBSCENES/Tools/Take_Oxygene.tres" id="12_81nw5"]
 [ext_resource type="Shader" uid="uid://drchaj5fcdan0" path="res://05_SHADER/Subscene_materials/Subscene_shine_sh.tres" id="12_cij64"]
 [ext_resource type="Resource" uid="uid://380xcgsxw62f" path="res://08_SUBSCENES/Tools/magnet_tool.tres" id="12_nmehd"]
 [ext_resource type="Resource" uid="uid://cfgfc4mex2tlo" path="res://08_SUBSCENES/Tools/Call_loader_tool.tres" id="13_p6l7e"]
@@ -507,9 +506,6 @@ shader_parameter/flash_opacity = 0.5
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_g1ic5"]
 radius = 0.290241
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_7175y"]
-radius = 0.19606
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_47iq4"]
 radius = 0.705497
@@ -1309,36 +1305,30 @@ script = SubResource("GDScript_8qwgp")
 
 [node name="Sonnar_zone" type="Node" parent="."]
 script = ExtResource("10_so5n0")
-_tool = ExtResource("6_axu5t")
 
 [node name="Timer" type="Timer" parent="Sonnar_zone"]
 wait_time = 2.0
 one_shot = true
 
-[node name="Magnet_effect" type="Node" parent="." node_paths=PackedStringArray("magnet_fx", "collector_collider")]
+[node name="Reload_Oxygene" type="Node" parent="." node_paths=PackedStringArray("Oygene_area")]
+script = ExtResource("12_5ga5g")
+tool_clock = ExtResource("12_81nw5")
+Oygene_area = NodePath("../ZoneCollide")
+
+[node name="ELEMENT_BREAKING" type="Node" parent="." node_paths=PackedStringArray("Rg", "hit_node")]
+script = ExtResource("12_6dq77")
+Rg = NodePath("..")
+hit_node = NodePath("../Render_mesh/Debris_particule_Hit")
+
+[node name="Magnet_effect" type="Node" parent="." node_paths=PackedStringArray("magnet_fx", "Magnet_Area")]
 script = ExtResource("9_wphos")
 manget_tool = ExtResource("12_nmehd")
 magnet_fx = NodePath("../VFX_MAGNET")
-collector_collider = NodePath("../Element_grab_zone/CollisionShape3D")
-
-[node name="ELEMENT_BREAKING" type="Node" parent="Magnet_effect" node_paths=PackedStringArray("Rg", "hit_node")]
-script = ExtResource("12_6dq77")
-Rg = NodePath("../..")
-hit_node = NodePath("../../Render_mesh/Debris_particule_Hit")
-
-[node name="ELEMENT_COLECTOR" type="Node" parent="Magnet_effect" node_paths=PackedStringArray("collector_area", "attache_node")]
-script = ExtResource("11_olyv4")
-collector_area = NodePath("../../Element_grab_zone")
-attache_node = NodePath("../../Render_mesh/Attache_node")
+Magnet_Area = NodePath("../Magnet_zone")
 
 [node name="Subjet_effect ( accelerateur )" type="Node" parent="."]
 script = ExtResource("10_jdgje")
 subjet_effect = ExtResource("11_rhn2f")
-
-[node name="Loader_Call_and_reload(OXYGENE SYSTEM) off here" type="Node" parent="."]
-script = ExtResource("12_5ga5g")
-caller_tool = ExtResource("13_p6l7e")
-tool_clock = ExtResource("10_fdj0j")
 
 [node name="Add_Vortex" type="Node" parent="."]
 script = ExtResource("15_lot3r")
@@ -1356,6 +1346,9 @@ BackPath = ExtResource("16_o1pdp")
 [node name="Timer" type="Timer" parent="Callback_spanwer"]
 wait_time = 0.2
 one_shot = true
+
+[node name="Check_Dialogue_Zone" type="Node" parent="."]
+script = ExtResource("17_o0rcv")
 
 [node name="Render_mesh" type="Node3D" parent="."]
 
@@ -1659,9 +1652,6 @@ visible = false
 [node name="Debris_particule_Hit" type="Node3D" parent="Render_mesh"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0349993, 0.137641, 0.18686)
 
-[node name="Check_Dialogue_Zone" type="Node" parent="."]
-script = ExtResource("17_o0rcv")
-
 [node name="ZoneCollide" type="Area3D" parent="."]
 collision_layer = 4
 collision_mask = 4
@@ -1679,15 +1669,6 @@ rg = NodePath("../..")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ZoneCollide"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.138627, 0)
 shape = SubResource("SphereShape3D_g1ic5")
-
-[node name="Element_grab_zone" type="Area3D" parent="."]
-collision_layer = 4
-collision_mask = 4
-input_ray_pickable = false
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Element_grab_zone"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.138627, 0.0412055)
-shape = SubResource("SphereShape3D_7175y")
 
 [node name="Magnet_zone" type="Area3D" parent="."]
 collision_layer = 4
@@ -1751,16 +1732,8 @@ surface_material_override/0 = SubResource("ShaderMaterial_m0v3u")
 [connection signal="timeout" from="Scanne_element/time_checker" to="Scanne_element" method="_on_time_checker_timeout"]
 [connection signal="timeout" from="Scanne_element/Active_scanner_visual_pulse/Timer" to="Scanne_element/Active_scanner_visual_pulse" method="_on_timer_timeout"]
 [connection signal="timeout" from="Add_Vortex/Timer_check" to="Add_Vortex" method="_on_timer_check_timeout"]
-[connection signal="area_entered" from="ZoneCollide" to="Loader_Call_and_reload(OXYGENE SYSTEM) off here" method="_on_zone_collide_area_entered"]
-[connection signal="area_exited" from="ZoneCollide" to="Loader_Call_and_reload(OXYGENE SYSTEM) off here" method="_on_zone_collide_area_exited"]
 [connection signal="area_shape_entered" from="ZoneCollide" to="Check_Dialogue_Zone" method="_area_entered"]
 [connection signal="area_shape_exited" from="ZoneCollide" to="Check_Dialogue_Zone" method="_area_exited"]
-[connection signal="area_entered" from="Element_grab_zone" to="Loader_Call_and_reload(OXYGENE SYSTEM) off here" method="_on_zone_collide_area_entered"]
-[connection signal="area_exited" from="Element_grab_zone" to="Loader_Call_and_reload(OXYGENE SYSTEM) off here" method="_on_zone_collide_area_exited"]
-[connection signal="area_shape_entered" from="Element_grab_zone" to="Check_Dialogue_Zone" method="_area_entered"]
-[connection signal="area_shape_exited" from="Element_grab_zone" to="Check_Dialogue_Zone" method="_area_exited"]
-[connection signal="area_shape_entered" from="Magnet_zone" to="Magnet_effect" method="_magnet_enter"]
-[connection signal="area_shape_exited" from="Magnet_zone" to="Magnet_effect" method="_magnet_exited"]
 
 [editable path="Render_mesh/Cosmo_Mod_02"]
 [editable path="Render_mesh/Cosmo_Mod_xray"]
