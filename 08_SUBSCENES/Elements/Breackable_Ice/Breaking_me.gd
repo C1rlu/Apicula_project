@@ -12,7 +12,7 @@ func _hit():
 	
 	hit_index += 1
 	
-	if hit_index >= 3:
+	if hit_index >= 1:
 		explose_rock()
 		
 

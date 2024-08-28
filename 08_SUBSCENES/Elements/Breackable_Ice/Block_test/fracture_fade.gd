@@ -9,18 +9,20 @@ func _ready():
 	
 func create_fracture():
 	visible = true
-	print("push")
 	
-	var rotation_target = Vector3(90,90,90)
+	var random_x = randf_range(-60,60)
+	var random_y = randf_range(-60,60)
+	var random_z = randf_range(-360,360)
+	var rotation_target = Vector3(random_x,random_y,random_z)
 	var move
 	move = create_tween()
-	move.tween_property(self,"rotation_degrees",rotation_target,10)
-func _fade_me():
+	move.tween_property(self,"rotation_degrees",rotation_target,5)
 	
-		var t
-		t = create_tween()
-		t.tween_method(_value,1.0,0.0,1.0)	
-		t.connect("finished", done)
+	var t
+	t = create_tween()
+	t.tween_method(_value,1.0,0.0,5)	
+	t.connect("finished", done)
+
 		
 func done():
 	queue_free()
