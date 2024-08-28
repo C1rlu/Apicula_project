@@ -1,7 +1,8 @@
-[gd_scene load_steps=60 format=3 uid="uid://faa237mj1qba"]
+[gd_scene load_steps=61 format=3 uid="uid://faa237mj1qba"]
 
 [ext_resource type="Material" uid="uid://bxf2r8qu2qvay" path="res://05_SHADER/Subscene_materials/Subscene_basic_rock.tres" id="1_5syvr"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Elements/Breackable_Ice/Breaking_me.gd" id="2_r0euh"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Elements/Breackable_Ice/Block_test/fracture_fade.gd" id="3_tppwj"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j8osk"]
 resource_name = "Material.001"
@@ -931,8 +932,9 @@ surface_material_override/0 = ExtResource("1_5syvr")
 collision_layer = 2
 collision_mask = 2
 
-[node name="Breaking_me" type="Node" parent="block_breack_03/msh_rock_02/StaticBody3D"]
+[node name="Breaking_me" type="Node" parent="block_breack_03/msh_rock_02/StaticBody3D" node_paths=PackedStringArray("fracture_mesh")]
 script = ExtResource("2_r0euh")
+fracture_mesh = [NodePath("../../../msh_rock_02_cell"), NodePath("../../../msh_rock_02_cell_001"), NodePath("../../../msh_rock_02_cell_002")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="block_breack_03/msh_rock_02/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_gdo60")
@@ -975,6 +977,7 @@ layers = 4
 mesh = SubResource("ArrayMesh_xdye8")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("1_5syvr")
+script = ExtResource("3_tppwj")
 
 [node name="msh_rock_02_cell_001" type="MeshInstance3D" parent="block_breack_03"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.480626, 0.0880044, 0.073024)
@@ -983,6 +986,7 @@ layers = 4
 mesh = SubResource("ArrayMesh_gsgyr")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("1_5syvr")
+script = ExtResource("3_tppwj")
 
 [node name="msh_rock_02_cell_002" type="MeshInstance3D" parent="block_breack_03"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.424875, 0.706276, -0.0935988)
@@ -991,6 +995,7 @@ layers = 4
 mesh = SubResource("ArrayMesh_ysqkh")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("1_5syvr")
+script = ExtResource("3_tppwj")
 
 [node name="msh_rock_03_cell" type="MeshInstance3D" parent="block_breack_03"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.135875, 0.522082, -0.178696)

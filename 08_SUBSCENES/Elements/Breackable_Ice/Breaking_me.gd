@@ -1,9 +1,12 @@
 extends Node
 
+
+@export var fracture_mesh : Array[MeshInstance3D]
 @onready var root = $"../.."
 
 const EXPLOSED_ROCK_VFX = preload("res://08_SUBSCENES/Elements/Breackable_Ice/Block_test/explosed_rock_vfx.tscn")
 var hit_index : int 
+
 
 func _hit():
 	
@@ -26,9 +29,14 @@ func explose_rock():
 			var random_position = Vector3(randf_range(-1,1),randf_range(-1,1),randf_range(-1,1))
 		
 			child.apply_central_force(random_position * 10)
+			
+	if fracture_mesh:
+		for f in fracture_mesh:
+			f.create_fracture()
+			
 	root.queue_free()
 	
-
+	
 func instance_vfx():
 	
 	var vfx = EXPLOSED_ROCK_VFX.instantiate()

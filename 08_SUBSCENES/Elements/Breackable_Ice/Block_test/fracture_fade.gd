@@ -1,7 +1,20 @@
-extends RigidBody3D
+extends MeshInstance3D
 
-@export var mesh : MeshInstance3D
-@onready var material : Material = mesh.get_surface_override_material(0)
+
+var material : Material 
+func _ready():
+
+	material = self.get_surface_override_material(0)
+	
+	
+func create_fracture():
+	visible = true
+	print("push")
+	
+	var rotation_target = Vector3(90,90,90)
+	var move
+	move = create_tween()
+	move.tween_property(self,"rotation_degrees",rotation_target,10)
 func _fade_me():
 	
 		var t
