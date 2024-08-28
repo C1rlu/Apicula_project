@@ -32,7 +32,7 @@ func _open(condition : bool):
 func _Darker_mainScene():
 	
 	
-	KeepInFocus.set_shader_parameter("stayGlobal",false)
+	#KeepInFocus.set_shader_parameter("stayGlobal",false)
 
 	
 	if t:
@@ -44,7 +44,7 @@ func _Darker_mainScene():
 	
 func _NormalColor_mainScene():
 	
-	KeepInFocus.set_shader_parameter("stayGlobal",false)
+	#KeepInFocus.set_shader_parameter("stayGlobal",false)
 	if t:
 		t.kill()
 	t = create_tween()
