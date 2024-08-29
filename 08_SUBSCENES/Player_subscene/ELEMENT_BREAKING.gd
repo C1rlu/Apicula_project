@@ -16,7 +16,7 @@ func _ready():
 func _contact(body_rid, body, body_shape_index, local_shape_index):
 	
 	if body:
-	
+		
 		var lootable = body.get_node_or_null("Breaking_me")	
 		if lootable:
 			
@@ -28,22 +28,25 @@ func _contact(body_rid, body, body_shape_index, local_shape_index):
 				
 			hit_index += 1
 			
-
+			
 		
-			check_player_speed()
+			check_player_speed(body.global_position)
 			add_debris_vfx()
 			lootable._hit()
 			return	
 			
-func check_player_speed():
+func check_player_speed(body_position : Vector3):
 	
 
 	var current_velocity = Rg.linear_velocity	
 	var current_speed = current_velocity.length()
-	if current_speed > 0.7:
-		return
+	
+	var dir = ( body_position - _global_datas.subbscene_playerPosition ).normalized() 
+	#print(dir)
+	if current_speed < 0.7:
 
-	Rg.apply_central_force(current_velocity * 400)
+		Rg.apply_central_force(-dir * 200)
+
 		
 
 func add_debris_vfx():
