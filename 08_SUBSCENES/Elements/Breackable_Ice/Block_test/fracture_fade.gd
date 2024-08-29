@@ -20,25 +20,26 @@ func create_fracture():
 	var rotation_target = Vector3(random_x,random_y,random_z)
 	var _rotate
 	_rotate = create_tween()
-	_rotate.tween_property(self,"rotation_degrees",rotation_target,5)
+	_rotate.tween_property(self,"rotation_degrees",rotation_target,5).set_ease(Tween.EASE_OUT)
 	
-	##var r_x = randf_range(-1,1)
-	##var r_y = randf_range(-1,1)
-	##var r_z = randf_range(-1,1)
-	##var position_target = Vector3(r_x,r_y,r_z)
-	#
-	#var move
-	#move = create_tween()
-	#move.tween_property(self,"position",position_target,5)
-	#
+	#var r_x = randf_range(-1,1)
+	#var r_y = randf_range(-1,1)
+	#var r_z = randf_range(-1,1)
+	var dir = (global_position - _global_datas.subbscene_playerPosition).normalized()
+	var position_target = dir * 1 # Vector3(r_x,r_y,r_z) + 
+	
+	var move
+	move = create_tween()
+	move.tween_property(self,"position",position_target,5)
+	
 	#var s
 	#s = create_tween()
-	#s.tween_property(self,"scale",Vector3(0.5,0.5,0.5),2)
+	#s.tween_property(self,"scale",Vector3(0.8,0.8,0.8),2)
 
 	
 	var t
 	t = create_tween()
-	t.tween_method(_value,2.0,0.0,4)	
+	t.tween_method(_value,1.0,0.0,4)	
 	t.connect("finished", done)
 	
 

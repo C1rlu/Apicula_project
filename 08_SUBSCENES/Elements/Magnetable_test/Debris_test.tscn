@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://di031pbbucu1n"]
+[gd_scene load_steps=12 format=3 uid="uid://di031pbbucu1n"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/Elements/Magnetable_test/Debris_element.gd" id="1_1yc76"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Elements/Magnetable_test/Element.gd" id="2_grvie"]
@@ -7,29 +7,12 @@
 [ext_resource type="Script" path="res://08_SUBSCENES/Elements/Magnetable_test/Debris_fadeOnScanner.gd" id="3_jbkwt"]
 [ext_resource type="Material" uid="uid://bx8lxok1s6d6y" path="res://05_SHADER/Subscene_materials/Debris_Mat.tres" id="3_u4ip7"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Elements/Magnetable_test/Push_to_player.gd" id="4_drw16"]
-[ext_resource type="Shader" uid="uid://btl0hgwwfslhj" path="res://08_SUBSCENES/Elements/Magnetable_test/00_SHADER/Debris_scanner_sh.tres" id="5_bcnfn"]
-[ext_resource type="Shader" uid="uid://be88gec6clk8u" path="res://05_SHADER/Subscene_materials/Subscene_sh.tres" id="6_g3kev"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Elements/Magnetable_test/Debris.gd" id="7_37srk"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_pux22"]
 radius = 0.0486438
 
 [sub_resource type="SphereMesh" id="SphereMesh_d743k"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0wseq"]
-resource_local_to_scene = true
-render_priority = 0
-shader = ExtResource("5_bcnfn")
-shader_parameter/Color = Color(0.788235, 0.588235, 0.345098, 1)
-shader_parameter/Opacity = 0.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_x3g8p"]
-resource_local_to_scene = true
-render_priority = 0
-next_pass = SubResource("ShaderMaterial_0wseq")
-shader = ExtResource("6_g3kev")
-shader_parameter/Distance_power = 0.25
-shader_parameter/Distance_light = 0.25
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_4726r"]
 radius = 0.0348926
@@ -40,7 +23,7 @@ collision_layer = 2
 collision_mask = 2
 input_ray_pickable = false
 axis_lock_linear_z = true
-gravity_scale = 0.05
+gravity_scale = 0.01
 linear_damp = 1.0
 angular_damp = 2.0
 script = ExtResource("1_1yc76")
@@ -64,7 +47,7 @@ shape = SubResource("SphereShape3D_pux22")
 transform = Transform3D(0.130903, 0, 0, 0, 0.130903, 0, 0, 0, 0.130903, 0.00250667, 0.00116825, 0.00824188)
 layers = 4
 mesh = SubResource("SphereMesh_d743k")
-surface_material_override/0 = SubResource("ShaderMaterial_x3g8p")
+surface_material_override/0 = ExtResource("3_u4ip7")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.0643325, 0, 0, 0, 0.0643325, 0, 0, 0, 0.0643325, 0.0463373, 0.0535235, 0.00824188)

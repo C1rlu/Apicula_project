@@ -1,8 +1,11 @@
-[gd_scene load_steps=61 format=3 uid="uid://faa237mj1qba"]
+[gd_scene load_steps=64 format=3 uid="uid://faa237mj1qba"]
 
 [ext_resource type="Material" uid="uid://bxf2r8qu2qvay" path="res://05_SHADER/Subscene_materials/Subscene_basic_rock.tres" id="1_5syvr"]
+[ext_resource type="Material" uid="uid://1syiuebjacgh" path="res://05_SHADER/Subscene_materials/Subscene_basic_rock_breackable.tres" id="1_k5aow"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Elements/Breackable_Ice/Breaking_me.gd" id="2_r0euh"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Elements/Breackable_Ice/Block_test/fracture_fade.gd" id="3_tppwj"]
+[ext_resource type="PackedScene" uid="uid://cwtlyjbcep3uc" path="res://08_SUBSCENES/Elements/Breackable_Ice/Block_test/block_breack_03_back_01.blend" id="5_cknsj"]
+[ext_resource type="Material" uid="uid://cdnmf431kgh7" path="res://05_SHADER/Subscene_materials/Subscene_basic_mat_far.tres" id="6_26f2v"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j8osk"]
 resource_name = "Material.001"
@@ -847,8 +850,9 @@ surface_material_override/0 = ExtResource("1_5syvr")
 collision_layer = 2
 collision_mask = 2
 
-[node name="Breaking_me" type="Node" parent="block_breack_03/msh_rock_01/StaticBody3D"]
+[node name="Breaking_me" type="Node" parent="block_breack_03/msh_rock_01/StaticBody3D" node_paths=PackedStringArray("fracture_mesh")]
 script = ExtResource("2_r0euh")
+fracture_mesh = [NodePath("../../../msh_rock_01_cell"), NodePath("../../../msh_rock_01_cell_001"), NodePath("../../../msh_rock_01_cell_002")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="block_breack_03/msh_rock_01/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_yaxyt")
@@ -867,8 +871,9 @@ collision_mask = 2
 [node name="CollisionShape3D" type="CollisionShape3D" parent="block_breack_03/msh_rock_03/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_kiq1l")
 
-[node name="Breaking_me" type="Node" parent="block_breack_03/msh_rock_03/StaticBody3D"]
+[node name="Breaking_me" type="Node" parent="block_breack_03/msh_rock_03/StaticBody3D" node_paths=PackedStringArray("fracture_mesh")]
 script = ExtResource("2_r0euh")
+fracture_mesh = [NodePath("../../../msh_rock_03_cell"), NodePath("../../../msh_rock_03_cell_001"), NodePath("../../../msh_rock_03_cell_002")]
 
 [node name="msh_rock_04" type="MeshInstance3D" parent="block_breack_03"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.332535, -0.476362, 0.179543)
@@ -884,8 +889,9 @@ collision_mask = 2
 [node name="CollisionShape3D" type="CollisionShape3D" parent="block_breack_03/msh_rock_04/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_qys1k")
 
-[node name="Breaking_me" type="Node" parent="block_breack_03/msh_rock_04/StaticBody3D"]
+[node name="Breaking_me" type="Node" parent="block_breack_03/msh_rock_04/StaticBody3D" node_paths=PackedStringArray("fracture_mesh")]
 script = ExtResource("2_r0euh")
+fracture_mesh = [NodePath("../../../msh_rock_04_cell"), NodePath("../../../msh_rock_04_cell_001"), NodePath("../../../msh_rock_04_cell_002")]
 
 [node name="msh_rock_05" type="MeshInstance3D" parent="block_breack_03"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0360549, 0.505668, 0.251767)
@@ -901,8 +907,9 @@ collision_mask = 2
 [node name="CollisionShape3D" type="CollisionShape3D" parent="block_breack_03/msh_rock_05/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_5w8ae")
 
-[node name="Breaking_me" type="Node" parent="block_breack_03/msh_rock_05/StaticBody3D"]
+[node name="Breaking_me" type="Node" parent="block_breack_03/msh_rock_05/StaticBody3D" node_paths=PackedStringArray("fracture_mesh")]
 script = ExtResource("2_r0euh")
+fracture_mesh = [NodePath("../../../msh_rock_05_cell"), NodePath("../../../msh_rock_05_cell_001"), NodePath("../../../msh_rock_05_cell_002")]
 
 [node name="msh_rock_06" type="MeshInstance3D" parent="block_breack_03"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.741921, 0.0145373, -0.124977)
@@ -918,8 +925,9 @@ collision_mask = 2
 [node name="CollisionShape3D" type="CollisionShape3D" parent="block_breack_03/msh_rock_06/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_463gw")
 
-[node name="Breaking_me" type="Node" parent="block_breack_03/msh_rock_06/StaticBody3D"]
+[node name="Breaking_me" type="Node" parent="block_breack_03/msh_rock_06/StaticBody3D" node_paths=PackedStringArray("fracture_mesh")]
 script = ExtResource("2_r0euh")
+fracture_mesh = [NodePath("../../../msh_rock_06_cell"), NodePath("../../../msh_rock_06_cell_001"), NodePath("../../../msh_rock_06_cell_002")]
 
 [node name="msh_rock_02" type="MeshInstance3D" parent="block_breack_03"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.682617, 0.42135, -0.164884)
@@ -952,7 +960,8 @@ visible = false
 layers = 4
 mesh = SubResource("ArrayMesh_cglng")
 skeleton = NodePath("")
-surface_material_override/0 = ExtResource("1_5syvr")
+surface_material_override/0 = ExtResource("1_k5aow")
+script = ExtResource("3_tppwj")
 
 [node name="msh_rock_01_cell_001" type="MeshInstance3D" parent="block_breack_03"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.764007, -1.17413, 0.0601557)
@@ -960,7 +969,8 @@ visible = false
 layers = 4
 mesh = SubResource("ArrayMesh_eryqk")
 skeleton = NodePath("")
-surface_material_override/0 = ExtResource("1_5syvr")
+surface_material_override/0 = ExtResource("1_k5aow")
+script = ExtResource("3_tppwj")
 
 [node name="msh_rock_01_cell_002" type="MeshInstance3D" parent="block_breack_03"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.266784, -1.0339, 0.24542)
@@ -968,32 +978,36 @@ visible = false
 layers = 4
 mesh = SubResource("ArrayMesh_r6sr4")
 skeleton = NodePath("")
-surface_material_override/0 = ExtResource("1_5syvr")
+surface_material_override/0 = ExtResource("1_k5aow")
+script = ExtResource("3_tppwj")
 
 [node name="msh_rock_02_cell" type="MeshInstance3D" parent="block_breack_03"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.870691, 0.392698, 0.127348)
+visible = false
 layers = 4
 cast_shadow = 0
 mesh = SubResource("ArrayMesh_xdye8")
 skeleton = NodePath("")
-surface_material_override/0 = ExtResource("1_5syvr")
+surface_material_override/0 = ExtResource("1_k5aow")
 script = ExtResource("3_tppwj")
 
 [node name="msh_rock_02_cell_001" type="MeshInstance3D" parent="block_breack_03"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.480626, 0.0880044, 0.073024)
+visible = false
 layers = 4
 mesh = SubResource("ArrayMesh_gsgyr")
 skeleton = NodePath("")
-surface_material_override/0 = ExtResource("1_5syvr")
+surface_material_override/0 = ExtResource("1_k5aow")
 script = ExtResource("3_tppwj")
 
 [node name="msh_rock_02_cell_002" type="MeshInstance3D" parent="block_breack_03"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.424875, 0.706276, -0.0935988)
+visible = false
 layers = 4
 cast_shadow = 0
 mesh = SubResource("ArrayMesh_ysqkh")
 skeleton = NodePath("")
-surface_material_override/0 = ExtResource("1_5syvr")
+surface_material_override/0 = ExtResource("1_k5aow")
 script = ExtResource("3_tppwj")
 
 [node name="msh_rock_03_cell" type="MeshInstance3D" parent="block_breack_03"]
@@ -1002,7 +1016,8 @@ visible = false
 layers = 4
 mesh = SubResource("ArrayMesh_umodc")
 skeleton = NodePath("")
-surface_material_override/0 = ExtResource("1_5syvr")
+surface_material_override/0 = ExtResource("1_k5aow")
+script = ExtResource("3_tppwj")
 
 [node name="msh_rock_03_cell_001" type="MeshInstance3D" parent="block_breack_03"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0187835, 1.03833, -0.27777)
@@ -1010,7 +1025,8 @@ visible = false
 layers = 4
 mesh = SubResource("ArrayMesh_2ub82")
 skeleton = NodePath("")
-surface_material_override/0 = ExtResource("1_5syvr")
+surface_material_override/0 = ExtResource("1_k5aow")
+script = ExtResource("3_tppwj")
 
 [node name="msh_rock_03_cell_002" type="MeshInstance3D" parent="block_breack_03"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.705346, 0.490277, 0.0349605)
@@ -1018,7 +1034,8 @@ visible = false
 layers = 4
 mesh = SubResource("ArrayMesh_4ir5b")
 skeleton = NodePath("")
-surface_material_override/0 = ExtResource("1_5syvr")
+surface_material_override/0 = ExtResource("1_k5aow")
+script = ExtResource("3_tppwj")
 
 [node name="msh_rock_04_cell" type="MeshInstance3D" parent="block_breack_03"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0364136, -0.49803, 0.541908)
@@ -1026,7 +1043,8 @@ visible = false
 layers = 4
 mesh = SubResource("ArrayMesh_sy30n")
 skeleton = NodePath("")
-surface_material_override/0 = ExtResource("1_5syvr")
+surface_material_override/0 = ExtResource("1_k5aow")
+script = ExtResource("3_tppwj")
 
 [node name="msh_rock_04_cell_001" type="MeshInstance3D" parent="block_breack_03"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.498309, -0.241996, 0.137358)
@@ -1034,7 +1052,8 @@ visible = false
 layers = 4
 mesh = SubResource("ArrayMesh_ama4g")
 skeleton = NodePath("")
-surface_material_override/0 = ExtResource("1_5syvr")
+surface_material_override/0 = ExtResource("1_k5aow")
+script = ExtResource("3_tppwj")
 
 [node name="msh_rock_04_cell_002" type="MeshInstance3D" parent="block_breack_03"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.729878, -0.674506, 0.214769)
@@ -1042,7 +1061,8 @@ visible = false
 layers = 4
 mesh = SubResource("ArrayMesh_wikpd")
 skeleton = NodePath("")
-surface_material_override/0 = ExtResource("1_5syvr")
+surface_material_override/0 = ExtResource("1_k5aow")
+script = ExtResource("3_tppwj")
 
 [node name="msh_rock_05_cell" type="MeshInstance3D" parent="block_breack_03"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0449075, 0.40516, 0.308789)
@@ -1050,7 +1070,8 @@ visible = false
 layers = 4
 mesh = SubResource("ArrayMesh_526on")
 skeleton = NodePath("")
-surface_material_override/0 = ExtResource("1_5syvr")
+surface_material_override/0 = ExtResource("1_k5aow")
+script = ExtResource("3_tppwj")
 
 [node name="msh_rock_05_cell_001" type="MeshInstance3D" parent="block_breack_03"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.236074, 0.730715, 0.30994)
@@ -1058,7 +1079,8 @@ visible = false
 layers = 4
 mesh = SubResource("ArrayMesh_l75d0")
 skeleton = NodePath("")
-surface_material_override/0 = ExtResource("1_5syvr")
+surface_material_override/0 = ExtResource("1_k5aow")
+script = ExtResource("3_tppwj")
 
 [node name="msh_rock_05_cell_002" type="MeshInstance3D" parent="block_breack_03"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.140041, 1.16004, -0.0920198)
@@ -1066,7 +1088,8 @@ visible = false
 layers = 4
 mesh = SubResource("ArrayMesh_vo8mo")
 skeleton = NodePath("")
-surface_material_override/0 = ExtResource("1_5syvr")
+surface_material_override/0 = ExtResource("1_k5aow")
+script = ExtResource("3_tppwj")
 
 [node name="msh_rock_06_cell" type="MeshInstance3D" parent="block_breack_03"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.07713, -0.372425, -0.0766419)
@@ -1074,7 +1097,8 @@ visible = false
 layers = 4
 mesh = SubResource("ArrayMesh_wdusa")
 skeleton = NodePath("")
-surface_material_override/0 = ExtResource("1_5syvr")
+surface_material_override/0 = ExtResource("1_k5aow")
+script = ExtResource("3_tppwj")
 
 [node name="msh_rock_06_cell_001" type="MeshInstance3D" parent="block_breack_03"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.550968, -0.128429, 0.20019)
@@ -1082,7 +1106,8 @@ visible = false
 layers = 4
 mesh = SubResource("ArrayMesh_5p8yu")
 skeleton = NodePath("")
-surface_material_override/0 = ExtResource("1_5syvr")
+surface_material_override/0 = ExtResource("1_k5aow")
+script = ExtResource("3_tppwj")
 
 [node name="msh_rock_06_cell_002" type="MeshInstance3D" parent="block_breack_03"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.728037, -0.697176, 0.302243)
@@ -1090,4 +1115,37 @@ visible = false
 layers = 4
 mesh = SubResource("ArrayMesh_ur53n")
 skeleton = NodePath("")
-surface_material_override/0 = ExtResource("1_5syvr")
+surface_material_override/0 = ExtResource("1_k5aow")
+script = ExtResource("3_tppwj")
+
+[node name="block_breack_03_back_01" parent="." instance=ExtResource("5_cknsj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.83171)
+
+[node name="msh_rock_all" parent="block_breack_03_back_01" index="0"]
+visible = false
+
+[node name="msh_rock_all_cell_003" parent="block_breack_03_back_01" index="1"]
+layers = 4
+surface_material_override/0 = ExtResource("6_26f2v")
+
+[node name="msh_rock_all_cell_004" parent="block_breack_03_back_01" index="2"]
+layers = 4
+surface_material_override/0 = ExtResource("6_26f2v")
+
+[node name="msh_rock_all_cell_005" parent="block_breack_03_back_01" index="3"]
+layers = 4
+surface_material_override/0 = ExtResource("6_26f2v")
+
+[node name="msh_rock_all_cell_006" parent="block_breack_03_back_01" index="4"]
+layers = 4
+surface_material_override/0 = ExtResource("6_26f2v")
+
+[node name="msh_rock_all_cell_009" parent="block_breack_03_back_01" index="5"]
+layers = 4
+surface_material_override/0 = ExtResource("6_26f2v")
+
+[node name="msh_rock_all_cell_010" parent="block_breack_03_back_01" index="6"]
+layers = 4
+surface_material_override/0 = ExtResource("6_26f2v")
+
+[editable path="block_breack_03_back_01"]

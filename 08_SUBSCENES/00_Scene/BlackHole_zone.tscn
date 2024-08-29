@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://bo33th5yn61n1"]
+[gd_scene load_steps=9 format=3 uid="uid://bo33th5yn61n1"]
 
 [ext_resource type="PackedScene" uid="uid://bqksk5rvc6q2h" path="res://08_SUBSCENES/Elements/Tiny_boat/boat_man_subscene_asset_01.tscn" id="2_s2d0c"]
 [ext_resource type="PackedScene" uid="uid://bneebc6fpaysa" path="res://08_SUBSCENES/Elements/Ice/ice_msh_01.tscn" id="4_e540o"]
@@ -7,11 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://di031pbbucu1n" path="res://08_SUBSCENES/Elements/Magnetable_test/Debris_test.tscn" id="7_ag7ra"]
 [ext_resource type="PackedScene" uid="uid://faa237mj1qba" path="res://08_SUBSCENES/Elements/Breackable_Ice/Block_test/Breack_mass_test.tscn" id="8_rhjgm"]
 [ext_resource type="PackedScene" uid="uid://ddac0wqbwjiqc" path="res://08_SUBSCENES/Elements/Breackable_Ice/Breakable_stone.tscn" id="8_t41ne"]
-[ext_resource type="Script" path="res://08_SUBSCENES/In_Mirror.gd" id="9_n17hi"]
 [ext_resource type="PackedScene" uid="uid://ciuyel1b0of8e" path="res://08_SUBSCENES/Oddity/Teleporter/Teleporter_prefab.tscn" id="9_nkgxm"]
-[ext_resource type="Material" uid="uid://bx8lxok1s6d6y" path="res://05_SHADER/Subscene_materials/Debris_Mat.tres" id="10_jtr16"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_50m33"]
 
 [node name="BalckHole_zone" type="Node3D"]
 
@@ -72,266 +68,19 @@ transform = Transform3D(1.8076, 0, 0, 0, 1.8076, 0, 0, 0, 1.8076, 3.3948, -1.974
 
 [node name="Mirror_Static" type="Node" parent="Static"]
 
+[node name="BreackMassTest" parent="Static/Mirror_Static" instance=ExtResource("8_rhjgm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.13504, -3.23561, 0)
+
+[node name="BreackMassTest2" parent="Static/Mirror_Static" instance=ExtResource("8_rhjgm")]
+transform = Transform3D(-0.972205, 0.232894, -0.0240548, -0.233776, -0.971256, 0.0448417, -0.0129201, 0.0492187, 0.998704, 0.450363, -3.90993, 0)
+
 [node name="TeleporterPrefab" parent="Static/Mirror_Static" instance=ExtResource("9_nkgxm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0209859, -7.97098, 0)
 
 [node name="BoatMan_subscene_asset_01" parent="Static/Mirror_Static" instance=ExtResource("2_s2d0c")]
 transform = Transform3D(-0.184431, 0.0347539, -0.0125068, 0.0258751, 0.167019, 0.0825473, 0.0263578, 0.0792196, -0.168548, -1.03479, -9.60056, 0)
 
-[node name="Building" type="Node3D" parent="Static/Mirror_Static"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.99164, -9.1725, 0.48885)
-visible = false
-
-[node name="In_Mirror" type="Node" parent="Static/Mirror_Static/Building" node_paths=PackedStringArray("all_render", "all_render_x_ray")]
-script = ExtResource("9_n17hi")
-all_render = NodePath("../Normal")
-all_render_x_ray = NodePath("../Mirror")
-State_selected = 1
-
-[node name="Mirror" type="Node3D" parent="Static/Mirror_Static/Building"]
-visible = false
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Static/Mirror_Static/Building/Mirror"]
-transform = Transform3D(0.270468, 0, 0, 0, 0.993765, 0, 0, 0, 0.181325, 0, 0, 0)
-layers = 4096
-mesh = SubResource("BoxMesh_50m33")
-skeleton = NodePath("../..")
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="Static/Mirror_Static/Building/Mirror"]
-transform = Transform3D(0.270468, 0, 0, 0, 0.993765, 0, 0, 0, 0.181325, 0.681745, 0, 0)
-layers = 4096
-mesh = SubResource("BoxMesh_50m33")
-skeleton = NodePath("../..")
-
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="Static/Mirror_Static/Building/Mirror"]
-transform = Transform3D(-1.18225e-08, 0.993765, 0, -0.270468, -4.34389e-08, 0, 0, 0, 0.181325, 0.348316, 0.598506, 0)
-layers = 4096
-mesh = SubResource("BoxMesh_50m33")
-skeleton = NodePath("../..")
-
-[node name="MeshInstance3D4" type="MeshInstance3D" parent="Static/Mirror_Static/Building/Mirror"]
-transform = Transform3D(-1.18225e-08, 0.993765, 0, -0.270468, -4.34389e-08, 0, 0, 0, 0.181325, 0.348316, -0.401494, 0)
-layers = 4096
-mesh = SubResource("BoxMesh_50m33")
-skeleton = NodePath("../..")
-
-[node name="MeshInstance3D5" type="MeshInstance3D" parent="Static/Mirror_Static/Building/Mirror"]
-transform = Transform3D(0.270468, 0, 0, 0, 0.993765, 0, 0, 0, 0.181325, -0.970929, 0, 0)
-layers = 4096
-mesh = SubResource("BoxMesh_50m33")
-skeleton = NodePath("../..")
-
-[node name="MeshInstance3D6" type="MeshInstance3D" parent="Static/Mirror_Static/Building/Mirror"]
-transform = Transform3D(0.270468, 0, 0, 0, 0.993765, 0, 0, 0, 0.181325, -0.289184, 0, 0)
-layers = 4096
-mesh = SubResource("BoxMesh_50m33")
-skeleton = NodePath("../..")
-
-[node name="MeshInstance3D7" type="MeshInstance3D" parent="Static/Mirror_Static/Building/Mirror"]
-transform = Transform3D(-1.18225e-08, 0.993765, 0, -0.270468, -4.34389e-08, 0, 0, 0, 0.181325, -0.622612, 0.598506, 0)
-layers = 4096
-mesh = SubResource("BoxMesh_50m33")
-skeleton = NodePath("../..")
-
-[node name="MeshInstance3D8" type="MeshInstance3D" parent="Static/Mirror_Static/Building/Mirror"]
-transform = Transform3D(-1.18225e-08, 0.993765, 0, -0.270468, -4.34389e-08, 0, 0, 0, 0.181325, -0.622612, -0.401494, 0)
-layers = 4096
-mesh = SubResource("BoxMesh_50m33")
-skeleton = NodePath("../..")
-
-[node name="MeshInstance3D9" type="MeshInstance3D" parent="Static/Mirror_Static/Building/Mirror"]
-transform = Transform3D(0.270468, 0, 0, 0, 0.993765, 0, 0, 0, 0.181325, -1.94108, 0, 0)
-layers = 4096
-mesh = SubResource("BoxMesh_50m33")
-skeleton = NodePath("../..")
-
-[node name="MeshInstance3D10" type="MeshInstance3D" parent="Static/Mirror_Static/Building/Mirror"]
-transform = Transform3D(0.270468, 0, 0, 0, 0.993765, 0, 0, 0, 0.181325, -1.25934, 0, 0)
-layers = 4096
-mesh = SubResource("BoxMesh_50m33")
-skeleton = NodePath("../..")
-
-[node name="MeshInstance3D11" type="MeshInstance3D" parent="Static/Mirror_Static/Building/Mirror"]
-transform = Transform3D(-1.18225e-08, 0.993765, 0, -0.270468, -4.34389e-08, 0, 0, 0, 0.181325, -1.59277, 0.598506, 0)
-layers = 4096
-mesh = SubResource("BoxMesh_50m33")
-skeleton = NodePath("../..")
-
-[node name="MeshInstance3D13" type="MeshInstance3D" parent="Static/Mirror_Static/Building/Mirror"]
-transform = Transform3D(-1.18225e-08, 0.993765, 0, -0.270468, -4.34389e-08, 0, 0, 0, 0.952409, 0.348316, 0.850008, -0.159717)
-layers = 4096
-mesh = SubResource("BoxMesh_50m33")
-skeleton = NodePath("../..")
-
-[node name="MeshInstance3D14" type="MeshInstance3D" parent="Static/Mirror_Static/Building/Mirror"]
-transform = Transform3D(-1.18225e-08, 0.993765, 0, -0.270468, -4.34389e-08, 0, 0, 0, 0.952409, -0.622612, 0.850008, -0.159717)
-layers = 4096
-mesh = SubResource("BoxMesh_50m33")
-skeleton = NodePath("../..")
-
-[node name="MeshInstance3D15" type="MeshInstance3D" parent="Static/Mirror_Static/Building/Mirror"]
-transform = Transform3D(-1.18225e-08, 0.993765, 0, -0.270468, -4.34389e-08, 0, 0, 0, 0.952409, -1.59277, 0.850008, -0.159717)
-layers = 4096
-mesh = SubResource("BoxMesh_50m33")
-skeleton = NodePath("../..")
-
-[node name="MeshInstance3D16" type="MeshInstance3D" parent="Static/Mirror_Static/Building/Mirror"]
-transform = Transform3D(-4.07452e-08, 0.993765, 0, -0.932142, -4.34389e-08, 0, 0, 0, 0.24325, 0.348316, 1.41612, -0.159717)
-layers = 4096
-mesh = SubResource("BoxMesh_50m33")
-skeleton = NodePath("../..")
-
-[node name="MeshInstance3D17" type="MeshInstance3D" parent="Static/Mirror_Static/Building/Mirror"]
-transform = Transform3D(-4.07452e-08, 0.993765, 0, -0.932142, -4.34389e-08, 0, 0, 0, 0.24325, -0.622612, 1.41612, -0.159717)
-layers = 4096
-mesh = SubResource("BoxMesh_50m33")
-skeleton = NodePath("../..")
-
-[node name="MeshInstance3D18" type="MeshInstance3D" parent="Static/Mirror_Static/Building/Mirror"]
-transform = Transform3D(-4.07452e-08, 0.993765, 0, -0.932142, -4.34389e-08, 0, 0, 0, 0.24325, -1.59277, 1.41612, -0.159717)
-layers = 4096
-mesh = SubResource("BoxMesh_50m33")
-skeleton = NodePath("../..")
-
-[node name="MeshInstance3D12" type="MeshInstance3D" parent="Static/Mirror_Static/Building/Mirror"]
-transform = Transform3D(-1.18225e-08, 0.993765, 0, -0.270468, -4.34389e-08, 0, 0, 0, 0.181325, -1.59277, -0.401494, 0)
-layers = 4096
-mesh = SubResource("BoxMesh_50m33")
-skeleton = NodePath("../..")
-
-[node name="Normal" type="Node3D" parent="Static/Mirror_Static/Building"]
-visible = false
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Static/Mirror_Static/Building/Normal"]
-transform = Transform3D(0.270468, 0, 0, 0, 0.993765, 0, 0, 0, 0.181325, 0, 0, 0)
-layers = 4
-mesh = SubResource("BoxMesh_50m33")
-skeleton = NodePath("../..")
-surface_material_override/0 = ExtResource("10_jtr16")
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="Static/Mirror_Static/Building/Normal"]
-transform = Transform3D(0.270468, 0, 0, 0, 0.993765, 0, 0, 0, 0.181325, 0.681745, 0, 0)
-layers = 4
-mesh = SubResource("BoxMesh_50m33")
-skeleton = NodePath("../..")
-surface_material_override/0 = ExtResource("10_jtr16")
-
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="Static/Mirror_Static/Building/Normal"]
-transform = Transform3D(-1.18225e-08, 0.993765, 0, -0.270468, -4.34389e-08, 0, 0, 0, 0.181325, 0.348316, 0.598506, 0)
-layers = 4
-mesh = SubResource("BoxMesh_50m33")
-skeleton = NodePath("../..")
-surface_material_override/0 = ExtResource("10_jtr16")
-
-[node name="MeshInstance3D4" type="MeshInstance3D" parent="Static/Mirror_Static/Building/Normal"]
-transform = Transform3D(-1.18225e-08, 0.993765, 0, -0.270468, -4.34389e-08, 0, 0, 0, 0.181325, 0.348316, -0.401494, 0)
-layers = 4
-mesh = SubResource("BoxMesh_50m33")
-skeleton = NodePath("../..")
-surface_material_override/0 = ExtResource("10_jtr16")
-
-[node name="MeshInstance3D5" type="MeshInstance3D" parent="Static/Mirror_Static/Building/Normal"]
-transform = Transform3D(0.270468, 0, 0, 0, 0.993765, 0, 0, 0, 0.181325, -0.970929, 0, 0)
-layers = 4
-mesh = SubResource("BoxMesh_50m33")
-skeleton = NodePath("../..")
-surface_material_override/0 = ExtResource("10_jtr16")
-
-[node name="MeshInstance3D6" type="MeshInstance3D" parent="Static/Mirror_Static/Building/Normal"]
-transform = Transform3D(0.270468, 0, 0, 0, 0.993765, 0, 0, 0, 0.181325, -0.289184, 0, 0)
-layers = 4
-mesh = SubResource("BoxMesh_50m33")
-skeleton = NodePath("../..")
-surface_material_override/0 = ExtResource("10_jtr16")
-
-[node name="MeshInstance3D7" type="MeshInstance3D" parent="Static/Mirror_Static/Building/Normal"]
-transform = Transform3D(-1.18225e-08, 0.993765, 0, -0.270468, -4.34389e-08, 0, 0, 0, 0.181325, -0.622612, 0.598506, 0)
-layers = 4
-mesh = SubResource("BoxMesh_50m33")
-skeleton = NodePath("../..")
-surface_material_override/0 = ExtResource("10_jtr16")
-
-[node name="MeshInstance3D8" type="MeshInstance3D" parent="Static/Mirror_Static/Building/Normal"]
-transform = Transform3D(-1.18225e-08, 0.993765, 0, -0.270468, -4.34389e-08, 0, 0, 0, 0.181325, -0.622612, -0.401494, 0)
-layers = 4
-mesh = SubResource("BoxMesh_50m33")
-skeleton = NodePath("../..")
-surface_material_override/0 = ExtResource("10_jtr16")
-
-[node name="MeshInstance3D9" type="MeshInstance3D" parent="Static/Mirror_Static/Building/Normal"]
-transform = Transform3D(0.270468, 0, 0, 0, 0.993765, 0, 0, 0, 0.181325, -1.94108, 0, 0)
-layers = 4
-mesh = SubResource("BoxMesh_50m33")
-skeleton = NodePath("../..")
-surface_material_override/0 = ExtResource("10_jtr16")
-
-[node name="MeshInstance3D10" type="MeshInstance3D" parent="Static/Mirror_Static/Building/Normal"]
-transform = Transform3D(0.270468, 0, 0, 0, 0.993765, 0, 0, 0, 0.181325, -1.25934, 0, 0)
-layers = 4
-mesh = SubResource("BoxMesh_50m33")
-skeleton = NodePath("../..")
-surface_material_override/0 = ExtResource("10_jtr16")
-
-[node name="MeshInstance3D11" type="MeshInstance3D" parent="Static/Mirror_Static/Building/Normal"]
-transform = Transform3D(-1.18225e-08, 0.993765, 0, -0.270468, -4.34389e-08, 0, 0, 0, 0.181325, -1.59277, 0.598506, 0)
-layers = 4
-mesh = SubResource("BoxMesh_50m33")
-skeleton = NodePath("../..")
-surface_material_override/0 = ExtResource("10_jtr16")
-
-[node name="MeshInstance3D13" type="MeshInstance3D" parent="Static/Mirror_Static/Building/Normal"]
-transform = Transform3D(-1.18225e-08, 0.993765, 0, -0.270468, -4.34389e-08, 0, 0, 0, 0.952409, 0.348316, 0.850008, -0.159717)
-layers = 4
-mesh = SubResource("BoxMesh_50m33")
-skeleton = NodePath("../..")
-surface_material_override/0 = ExtResource("10_jtr16")
-
-[node name="MeshInstance3D14" type="MeshInstance3D" parent="Static/Mirror_Static/Building/Normal"]
-transform = Transform3D(-1.18225e-08, 0.993765, 0, -0.270468, -4.34389e-08, 0, 0, 0, 0.952409, -0.622612, 0.850008, -0.159717)
-layers = 4
-mesh = SubResource("BoxMesh_50m33")
-skeleton = NodePath("../..")
-surface_material_override/0 = ExtResource("10_jtr16")
-
-[node name="MeshInstance3D15" type="MeshInstance3D" parent="Static/Mirror_Static/Building/Normal"]
-transform = Transform3D(-1.18225e-08, 0.993765, 0, -0.270468, -4.34389e-08, 0, 0, 0, 0.952409, -1.59277, 0.850008, -0.159717)
-layers = 4
-mesh = SubResource("BoxMesh_50m33")
-skeleton = NodePath("../..")
-surface_material_override/0 = ExtResource("10_jtr16")
-
-[node name="MeshInstance3D16" type="MeshInstance3D" parent="Static/Mirror_Static/Building/Normal"]
-transform = Transform3D(-4.07452e-08, 0.993765, 0, -0.932142, -4.34389e-08, 0, 0, 0, 0.24325, 0.348316, 1.41612, -0.159717)
-layers = 4
-mesh = SubResource("BoxMesh_50m33")
-skeleton = NodePath("../..")
-surface_material_override/0 = ExtResource("10_jtr16")
-
-[node name="MeshInstance3D17" type="MeshInstance3D" parent="Static/Mirror_Static/Building/Normal"]
-transform = Transform3D(-4.07452e-08, 0.993765, 0, -0.932142, -4.34389e-08, 0, 0, 0, 0.24325, -0.622612, 1.41612, -0.159717)
-layers = 4
-mesh = SubResource("BoxMesh_50m33")
-skeleton = NodePath("../..")
-surface_material_override/0 = ExtResource("10_jtr16")
-
-[node name="MeshInstance3D18" type="MeshInstance3D" parent="Static/Mirror_Static/Building/Normal"]
-transform = Transform3D(-4.07452e-08, 0.993765, 0, -0.932142, -4.34389e-08, 0, 0, 0, 0.24325, -1.59277, 1.41612, -0.159717)
-layers = 4
-mesh = SubResource("BoxMesh_50m33")
-skeleton = NodePath("../..")
-surface_material_override/0 = ExtResource("10_jtr16")
-
-[node name="MeshInstance3D12" type="MeshInstance3D" parent="Static/Mirror_Static/Building/Normal"]
-transform = Transform3D(-1.18225e-08, 0.993765, 0, -0.270468, -4.34389e-08, 0, 0, 0, 0.181325, -1.59277, -0.401494, 0)
-layers = 4
-mesh = SubResource("BoxMesh_50m33")
-skeleton = NodePath("../..")
-surface_material_override/0 = ExtResource("10_jtr16")
-
 [node name="Normal_decor" type="Node" parent="Static"]
-
-[node name="BreackMassTest" parent="Static/Normal_decor" instance=ExtResource("8_rhjgm")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.13504, -3.23561, 0)
 
 [node name="Ice_msh_01" parent="Static/Normal_decor" instance=ExtResource("4_e540o")]
 transform = Transform3D(2.07535, -0.0582957, 0, 0.273225, 0.4428, 0, 0, 0, 1.57743, -0.756213, -11.2646, 0)
@@ -347,9 +96,6 @@ transform = Transform3D(-0.0531854, -0.540823, 0, 0.653891, -0.0439887, 0, 0, 0,
 
 [node name="Ice_msh_27" parent="Static/Normal_decor" instance=ExtResource("4_e540o")]
 transform = Transform3D(-0.0531854, -0.540823, 0, 0.653891, -0.0439887, 0, 0, 0, 0.526945, 10.4182, -6.46634, 0.393685)
-
-[node name="Ice_msh_29" parent="Static/Normal_decor" instance=ExtResource("4_e540o")]
-transform = Transform3D(-0.0531854, -0.540823, 0, 0.653891, -0.0439887, 0, 0, 0, 0.526945, 1.73279, -3.95204, 0.393685)
 
 [node name="Ice_msh_28" parent="Static/Normal_decor" instance=ExtResource("4_e540o")]
 transform = Transform3D(-0.182917, 0.145751, 0, -0.176222, -0.151288, 0, 0, 0, 0.20401, -2.13408, -7.88031, 0.280767)
