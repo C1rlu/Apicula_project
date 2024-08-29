@@ -1,4 +1,4 @@
-[gd_scene load_steps=62 format=3 uid="uid://nigmie4bbn6"]
+[gd_scene load_steps=64 format=3 uid="uid://nigmie4bbn6"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/00_Scripts/Subscene_loader.gd" id="1_7uoo0"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="2_3srhu"]
@@ -20,6 +20,7 @@
 [ext_resource type="Script" path="res://08_SUBSCENES/ELEMENT_COLECTOR.gd" id="14_s22ig"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Clock_sonar_VFX.gd" id="14_xtaeu"]
 [ext_resource type="Material" uid="uid://b1iqs8p4it3ni" path="res://05_SHADER/Full_screen/Subscene_screen/Scanner_subscene_dither.tres" id="15_6os4y"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Boat_Magnet.gd" id="15_6x0um"]
 [ext_resource type="PackedScene" uid="uid://4r5x2mp8a1a0" path="res://04_SCENE_MAIN_MAP/00_PLAYER/Boat/Player_Boat_02.blend" id="21_42nxe"]
 [ext_resource type="Script" path="res://03_CAMERA/Active_scene_viewports.gd" id="21_jai7k"]
 [ext_resource type="Material" uid="uid://cdnmf431kgh7" path="res://05_SHADER/Subscene_materials/Subscene_basic_mat_far.tres" id="22_crc4c"]
@@ -478,6 +479,9 @@ radius = 0.69733
 [sub_resource type="SphereShape3D" id="SphereShape3D_bw2ml"]
 radius = 0.315261
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_v28mn"]
+radius = 1.19619
+
 [node name="03_SUBSCENES" type="Node"]
 script = ExtResource("1_7uoo0")
 metadata/_edit_vertical_guides_ = [960.0]
@@ -525,6 +529,10 @@ script = ExtResource("10_qqphy")
 [node name="ELEMENT_COLECTOR" type="Node" parent="." node_paths=PackedStringArray("collector_area")]
 script = ExtResource("14_s22ig")
 collector_area = NodePath("../Boat_base/Boat_area")
+
+[node name="Boat_Magnet" type="Node" parent="ELEMENT_COLECTOR" node_paths=PackedStringArray("area_magnet")]
+script = ExtResource("15_6x0um")
+area_magnet = NodePath("../../Boat_base/Boat_magnet")
 
 [node name="MainOddity_Sonar_VFX" type="Node" parent="."]
 script = ExtResource("14_xtaeu")
@@ -609,8 +617,6 @@ expand_mode = 3
 
 [node name="Player_Sub" parent="." instance=ExtResource("2_ri8q1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.334, 0)
-collision_layer = 6
-collision_mask = 6
 mass = 5.0
 angular_damp = 2.5
 hight_speed = 10.0
@@ -701,6 +707,14 @@ collision_mask = 4
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Boat_base/Boat_area"]
 shape = SubResource("SphereShape3D_bw2ml")
+
+[node name="Boat_magnet" type="Area3D" parent="Boat_base"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.657179, 0.314829, 0.00089781)
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Boat_base/Boat_magnet"]
+shape = SubResource("SphereShape3D_v28mn")
 
 [node name="LoadScene" type="Node3D" parent="."]
 

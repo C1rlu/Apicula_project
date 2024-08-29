@@ -6,6 +6,9 @@ extends Node
 var target_dir : Vector3
 
 
+
+
+
 func attract_me(delta,position):
 
 		
