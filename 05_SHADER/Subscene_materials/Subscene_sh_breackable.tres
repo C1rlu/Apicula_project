@@ -294,35 +294,9 @@ void fragment() {
 	float n_out8p0 = Opacity;
 
 
-// FloatConstant:7
-	float n_out7p0 = 0.400000;
-
-
-	float n_out9p0;
-// Expression:9
-	n_out9p0 = 0.0;
-	{
-		const float DITHER_THRESHOLDS[16] ={
-				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-			};
-			
-		vec2 uv = FRAGCOORD.xy * n_out7p0;
-		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-		n_out9p0 = n_out8p0 - DITHER_THRESHOLDS[index];
-	}
-
-
-// Step:10
-	float n_in10p0 = 0.00000;
-	float n_out10p0 = step(n_in10p0, n_out9p0);
-
-
 // Output:0
 	ALBEDO = n_out4p0;
-	ALPHA = n_out10p0;
+	ALPHA = n_out8p0;
 
 
 // VaryingSetter:5
@@ -458,7 +432,7 @@ void light() {
 
 }
 "
-graph_offset = Vector2(-643.426, 88.2595)
+graph_offset = Vector2(-313.039, -126.092)
 modes/depth_draw = 1
 flags/shadows_disabled = true
 flags/debug_shadow_splits = true
@@ -526,7 +500,7 @@ int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
 nodes/fragment/10/node = SubResource("VisualShaderNodeStep_5l287")
 nodes/fragment/10/position = Vector2(520, 220)
-nodes/fragment/connections = PackedInt32Array(3, 0, 4, 1, 6, 0, 4, 2, 6, 0, 5, 0, 2, 0, 3, 0, 2, 0, 4, 0, 4, 0, 0, 0, 8, 0, 9, 0, 7, 0, 9, 1, 9, 0, 10, 1, 10, 0, 0, 1)
+nodes/fragment/connections = PackedInt32Array(3, 0, 4, 1, 6, 0, 4, 2, 6, 0, 5, 0, 2, 0, 3, 0, 2, 0, 4, 0, 4, 0, 0, 0, 8, 0, 9, 0, 7, 0, 9, 1, 9, 0, 10, 1, 8, 0, 0, 1)
 nodes/light/0/position = Vector2(1240, 580)
 nodes/light/3/node = SubResource("VisualShaderNodeFloatConstant_33rwj")
 nodes/light/3/position = Vector2(-2160, 840)

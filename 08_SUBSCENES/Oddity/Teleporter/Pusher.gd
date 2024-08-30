@@ -6,13 +6,13 @@ extends Node
 func check_push_element():
 	
 	var all_area = area.get_overlapping_areas()
-	
+	print("check_pussher")
 	if all_area:
 		for areas in all_area:
 			
 			var Pusher = areas.get_node_or_null("Push")
 			if Pusher:
-				Pusher.Push()	
+				Pusher.Push(area.global_position)	
 
 
 

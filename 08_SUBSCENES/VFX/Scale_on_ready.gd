@@ -36,4 +36,4 @@ func value(size : float):
 func fade_value(_value : float):
 	mesh_material.set_shader_parameter("Opacity",_value)
 	mesh_round_material.set_shader_parameter("Opacity",_value)
-	print(_value)
+	#print(_value)

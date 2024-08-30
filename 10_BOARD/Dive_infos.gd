@@ -6,10 +6,10 @@ extends Node
 var current_info : info_data
 var ls_index : int = 0
 func _ready():
-	
-	_global_datas.show_dive_zone_info.connect(show_info)
-	_global_datas._go_Subscene.connect(close)
-	show_info(false,null)
+	pass
+	#_global_datas.show_dive_zone_info.connect(show_info)
+	#_global_datas._go_Subscene.connect(close)
+	#show_info(false,null)
 
 func close():
 	show_info(false,null)		

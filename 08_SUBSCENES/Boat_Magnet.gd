@@ -15,7 +15,7 @@ func _process(delta):
 	
 	if !magneting:
 		return
-		
+	
 	for m in list_of_magnetable:
 		m.attract_me(delta,area_magnet.global_position)
 	
@@ -38,5 +38,5 @@ func _magnet_exited(area):
 		if magnetable:
 			list_of_magnetable.erase(magnetable)
 		
-		if list_of_magnetable.size() < 0:
+		if list_of_magnetable.size() == 0:
 			magneting = false
