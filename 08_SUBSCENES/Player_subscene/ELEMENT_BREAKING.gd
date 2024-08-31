@@ -7,6 +7,8 @@ extends Node
 const DEBRIS_HIT_PARTICULE = preload("res://08_SUBSCENES/VFX/Debris_hit_particule.tscn")
 
 var hit_index : int = 0
+@onready var timer = $Timer
+
 func _ready():
 	
 	if Rg:
@@ -20,6 +22,9 @@ func _contact(body_rid, body, body_shape_index, local_shape_index):
 		var lootable = body.get_node_or_null("Breaking_me")	
 		if lootable:
 			
+			if !timer.is_stopped():
+				return
+			
 			if hit_index >= 3:
 				hit_index = 0	
 			
@@ -29,7 +34,7 @@ func _contact(body_rid, body, body_shape_index, local_shape_index):
 			hit_index += 1
 			
 			
-		
+			timer.start()
 			check_player_speed(body.global_position)
 			add_debris_vfx()
 			lootable._hit()

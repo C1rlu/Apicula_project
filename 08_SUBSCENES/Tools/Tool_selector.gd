@@ -31,9 +31,9 @@ func _input(event):
 		_global_datas.open_tool_selector.emit(true)
 		lock_active_tool = true
 	
-	if event.is_action_released("open_tool_selector"):
-		_global_datas.open_tool_selector.emit(false)
-		lock_active_tool = false
+	#if event.is_action_released("open_tool_selector"):
+		#_global_datas.open_tool_selector.emit(false)
+		#lock_active_tool = false
 	
 #
 	if lock_active_tool:
@@ -44,18 +44,18 @@ func _input(event):
 	if event.is_action_released("Active_tool"):
 		_global_datas._selected_tool.tool_active_signal.emit(false)
 		
-
-	if event.is_action_pressed("Flash"):
-		flash_tool.tool_active_signal.emit(true)
-		
-	
-	if event.is_action_pressed("go_faster"):
-		go_faster.tool_active_signal.emit(true)
-	if event.is_action_released("go_faster"):
-		go_faster.tool_active_signal.emit(false)
-
-	if event.is_action_pressed("Flash"):
-		create_vortex.tool_active_signal.emit(true)
-	if event.is_action_released("Flash"):
-		create_vortex.tool_active_signal.emit(false)
+#
+	#if event.is_action_pressed("Flash"):
+		#flash_tool.tool_active_signal.emit(true)
+		#
+	#
+	#if event.is_action_pressed("go_faster"):
+		#go_faster.tool_active_signal.emit(true)
+	#if event.is_action_released("go_faster"):
+		#go_faster.tool_active_signal.emit(false)
+#
+	#if event.is_action_pressed("Flash"):
+		#create_vortex.tool_active_signal.emit(true)
+	#if event.is_action_released("Flash"):
+		#create_vortex.tool_active_signal.emit(false)
 
