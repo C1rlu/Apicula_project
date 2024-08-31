@@ -6,20 +6,42 @@ extends Node
 
 signal teleport_effect
 
+@export var Vortex : Node
+@onready var timer = $Timer
 
+var hit_index : int 
+func _ready():
+	Vortex._hit.connect(hit)
+	timer.timeout.connect(reset_hit)
+	
+func reset_hit():
+	hit_index = 0	
+
+		
+func hit():
+	
+	hit_index += 1
+	timer.start()
+	if hit_index >= 3:
+		_teleport()		
+		hit_index = 0
+	
 func _teleport():
+		
+		
+		
 		
 	if _global_datas.player_state == game_state.visible_state.normal:
 		_global_datas.player_state = game_state.visible_state.mirror
 		_global_datas.in_mirror_zone.emit()
-		#root.queue_free()
+
 		return
 		
 	if _global_datas.player_state == game_state.visible_state.mirror:
 		_global_datas.player_state = game_state.visible_state.normal
 		_global_datas.in_mirror_zone.emit()
 		
-		#remove_teleporter()	
+	
 		return
 		
 func remove_teleporter():

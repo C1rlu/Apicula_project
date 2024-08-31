@@ -9,6 +9,7 @@ const DEBRIS_HIT_PARTICULE = preload("res://08_SUBSCENES/VFX/Debris_hit_particul
 var hit_index : int = 0
 @onready var timer = $Timer
 
+var vortex_index : int = 0
 func _ready():
 	
 	if Rg:
@@ -19,15 +20,30 @@ func _contact(body_rid, body, body_shape_index, local_shape_index):
 	
 	if body:
 		
+		if !timer.is_stopped():
+				return
+				
 		var lootable = body.get_node_or_null("Breaking_me")	
+		var vortex = body.get_node_or_null("Vortex")
+		
+		
+		if vortex:
+			
+			vortex._hit.emit()
+			
+			timer.start()
+			check_player_speed(body.global_position)
+			add_debris_vfx()
+			_global_datas.vertex_hit_effect.emit()
+			return		
+			
 		if lootable:
 			
-			if !timer.is_stopped():
-				return
+			
 			
 			if hit_index >= 3:
 				hit_index = 0	
-			
+				
 			if hit_index == 0:
 				_global_datas.subscene_sonar_effect.emit(_global_datas.player_rg.position)	
 				

@@ -97,6 +97,7 @@ signal subscene_sonar_effect(position : Vector3)
 var LoadScene : Node3D
 #teleporter vertex variable
 signal in_mirror_zone
+signal vertex_hit_effect
 signal update_selector
 var backcall_path : Array[Node3D] 
 var player_state : game_state.visible_state = game_state.visible_state.normal

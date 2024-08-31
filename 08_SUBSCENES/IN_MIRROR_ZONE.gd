@@ -4,7 +4,7 @@ extends Node
 var f
 func _ready():
 	_global_datas.in_mirror_zone.connect(mirror_zone)	
-	
+	_global_datas.vertex_hit_effect.connect(fade_decor)
 	
 
 func mirror_zone():
