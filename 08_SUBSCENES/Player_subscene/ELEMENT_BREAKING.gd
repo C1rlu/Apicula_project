@@ -24,12 +24,31 @@ func _contact(body_rid, body, body_shape_index, local_shape_index):
 				return
 				
 		var lootable = body.get_node_or_null("Breaking_me")	
-		var vortex = body.get_node_or_null("Vortex")
+		var vortex = body.get_node_or_null("Breaking_Vortex")
 		
+		var Scannable = body.get_node_or_null("Scannable")
+		var Ghost_light = body.get_node_or_null("Ghost_light")
+		if Ghost_light:
+			
+			timer.start()
+			check_player_speed(body.global_position)
+			_global_datas._scan_mirror_xray.emit()
+			_global_datas._photo_flash.emit()
+			return		
+			
+		
+	
+		if Scannable:
+			
+				Scannable._hit()
+				timer.start()
+				check_player_speed(body.global_position)
+				_global_datas.subscene_sonar_effect.emit(_global_datas.player_rg.position)	
+				return		
 		
 		if vortex:
 			
-			vortex._hit.emit()
+			vortex._hit()
 			
 			timer.start()
 			check_player_speed(body.global_position)
