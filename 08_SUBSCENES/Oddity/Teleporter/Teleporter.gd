@@ -4,6 +4,7 @@ extends Node
 @onready var root = $".."
 signal teleport_effect
 
+@onready var mirror_sphere = $"../Mirror_sphere_msh/mirror_sphere"
 
 func _teleport():
 		
@@ -19,7 +20,7 @@ func _teleport():
 	if _global_datas.player_state == game_state.visible_state.mirror:
 		_global_datas.player_state = game_state.visible_state.normal
 		_global_datas.in_mirror_zone.emit()
-	
+		
 		Vortex_visible_sate.show_normal()
 		return
 	

@@ -27,9 +27,9 @@ func show_fracture():
 	visible = true
 	
 	var random_x = randf_range(-6,6)
-	var random_y = randf_range(-6,6)
-	var random_z = randf_range(-6,6)
-	var rotation_target = Vector3(random_x,random_y,random_z)	
+	#var random_y = randf_range(-6,6)
+	#var random_z = randf_range(-6,6)
+	var rotation_target = Vector3(random_x,0.0,0.0)	
 	
 	rotation_degrees += rotation_target	
 		
@@ -43,7 +43,7 @@ func create_fracture():
 	var rotation_target = Vector3(random_x,random_y,random_z)
 	var _rotate
 	_rotate = create_tween()
-	_rotate.tween_property(self,"rotation_degrees",rotation_target,5).set_ease(Tween.EASE_OUT)
+	_rotate.tween_property(self,"rotation_degrees",rotation_target,2).set_ease(Tween.EASE_OUT)
 	
 
 	var dir = (root.global_position - global_position).normalized()
@@ -51,7 +51,7 @@ func create_fracture():
 
 	var move
 	move = create_tween()
-	move.tween_property(self,"position",position_target,5).set_ease(Tween.EASE_OUT)
+	move.tween_property(self,"position",position_target,2).set_ease(Tween.EASE_OUT)
 	move.connect("finished", done)
 	#var s
 	#s = create_tween()

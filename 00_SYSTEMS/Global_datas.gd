@@ -89,6 +89,7 @@ signal _go_Subscene
 var subbscene_playerPosition : Vector3
 signal _scan_mirror_xray
 signal _photo_flash
+signal _give_photo(photo_data : PhotoData)
 var _selected_tool : tool_data 
 signal set_tool_ui(tool : tool_data)
 signal open_tool_selector(condition : bool)

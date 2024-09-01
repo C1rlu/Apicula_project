@@ -1,0 +1,268 @@
+[gd_scene load_steps=31 format=3 uid="uid://ctsoankn58iba"]
+
+[ext_resource type="Script" path="res://10_BOARD/Set_focus_data.gd" id="1_tde3p"]
+[ext_resource type="Resource" uid="uid://3pilop3f4m6r" path="res://15_GAME_RESSOURCE/03_BoardCam_state/ScannerM_focus_data.tres" id="2_44u3f"]
+[ext_resource type="Script" path="res://10_BOARD/Scanner_light.gd" id="3_cyvwh"]
+[ext_resource type="Script" path="res://10_BOARD/set_scanner_root.gd" id="4_0xcsu"]
+[ext_resource type="PackedScene" uid="uid://b4hspc8dsyv14" path="res://08_SUBSCENES/Elements/Tiny_boat/scene_boat_ch_test.tscn" id="5_1mnx3"]
+[ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Movable_obj.gd" id="6_5bhio"]
+[ext_resource type="Script" path="res://10_BOARD/On_View_call.gd" id="7_j0x22"]
+[ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/On_click_object.gd" id="8_5jitu"]
+[ext_resource type="Material" uid="uid://cwrbjs5et5i28" path="res://10_BOARD/00_SHADER/Gradient_surface_mat.tres" id="9_v86ws"]
+[ext_resource type="Material" uid="uid://yjoyk6fvrm6q" path="res://10_BOARD/00_SHADER/No_light_surface_mat.tres" id="10_snwg2"]
+
+[sub_resource type="GDScript" id="GDScript_lrtc7"]
+script/source = "extends Node
+
+signal On_View
+
+"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_c0r5v"]
+size = Vector3(0.169104, 0.063208, 0.162207)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_3wbgg"]
+top_radius = 0.06
+bottom_radius = 0.06
+height = 0.02
+radial_segments = 8
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_ossgg"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
+op_type = 3
+
+[sub_resource type="VisualShaderNodeBooleanParameter" id="VisualShaderNodeBooleanParameter_3icay"]
+parameter_name = "isGray"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeBooleanParameter" id="VisualShaderNodeBooleanParameter_nuyay"]
+parameter_name = "active_Dither"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeSwitch" id="VisualShaderNodeSwitch_f12wo"]
+default_input_values = [0, false, 1, Vector3(1, 1, 1), 2, Vector3(0, 0, 0)]
+op_type = 4
+
+[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_l71kj"]
+function = 31
+
+[sub_resource type="Gradient" id="Gradient_v42xd"]
+offsets = PackedFloat32Array(0, 0.44918, 0.662295)
+colors = PackedColorArray(0, 0, 0, 1, 0.5, 0.5, 0.5, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_frhb6"]
+gradient = SubResource("Gradient_v42xd")
+fill = 1
+fill_from = Vector2(0.24359, 0.773504)
+fill_to = Vector2(0.594017, 0.538462)
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_kn8e5"]
+texture = SubResource("GradientTexture2D_frhb6")
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_pgibe"]
+input_name = "uv"
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_8knf2"]
+parameter_name = "ColorParameter"
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_2jj7d"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_s2f2y"]
+constant = 1.0
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_druuv"]
+parameter_name = "Dither_size"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_cdyc1"]
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_vgnn6"]
+size = Vector2(620, 200)
+expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
+grey_value = luminance;"
+
+[sub_resource type="VisualShader" id="VisualShader_eglbu"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+
+uniform vec4 ColorParameter : source_color;
+global uniform bool isGray;
+
+
+
+void fragment() {
+// ColorParameter:2
+	vec4 n_out2p0 = ColorParameter;
+
+
+	float n_out9p0;
+// Expression:9
+	n_out9p0 = 0.0;
+	{
+		float luminance = 0.299 * vec3(n_out2p0.xyz).x + 0.587 * vec3(n_out2p0.xyz).y + 0.114 * vec3(n_out2p0.xyz).z;
+		n_out9p0 = luminance;
+	}
+
+
+// BooleanParameter:11
+	bool n_out11p0 = isGray;
+
+
+// Mix:10
+	vec3 n_out10p0 = mix(vec3(n_out2p0.xyz), vec3(n_out9p0), vec3(n_out11p0 ? 1.0 : 0.0));
+
+
+// Output:0
+	ALBEDO = n_out10p0;
+
+
+}
+"
+graph_offset = Vector2(-782.146, 32.4998)
+flags/unshaded = true
+nodes/fragment/0/position = Vector2(1660, 200)
+nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_8knf2")
+nodes/fragment/2/position = Vector2(-40, -100)
+nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_2jj7d")
+nodes/fragment/4/position = Vector2(-680, 700)
+nodes/fragment/4/size = Vector2(724.789, 654.559)
+nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/4/output_ports = "0,0,Dither_Node;"
+nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/5/node = SubResource("VisualShaderNodeFloatConstant_s2f2y")
+nodes/fragment/5/position = Vector2(-1060, 440)
+nodes/fragment/6/node = SubResource("VisualShaderNodeFloatParameter_druuv")
+nodes/fragment/6/position = Vector2(-1280, 680)
+nodes/fragment/7/node = SubResource("VisualShaderNodeStep_cdyc1")
+nodes/fragment/7/position = Vector2(280, 220)
+nodes/fragment/9/node = SubResource("VisualShaderNodeExpression_vgnn6")
+nodes/fragment/9/position = Vector2(320, -420)
+nodes/fragment/9/size = Vector2(620, 200)
+nodes/fragment/9/input_ports = "0,4,color;"
+nodes/fragment/9/output_ports = "0,0,grey_value;"
+nodes/fragment/9/expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
+grey_value = luminance;"
+nodes/fragment/10/node = SubResource("VisualShaderNodeMix_ossgg")
+nodes/fragment/10/position = Vector2(1240, -100)
+nodes/fragment/11/node = SubResource("VisualShaderNodeBooleanParameter_3icay")
+nodes/fragment/11/position = Vector2(900, 20)
+nodes/fragment/12/node = SubResource("VisualShaderNodeBooleanParameter_nuyay")
+nodes/fragment/12/position = Vector2(640, 240)
+nodes/fragment/13/node = SubResource("VisualShaderNodeSwitch_f12wo")
+nodes/fragment/13/position = Vector2(897.708, 503.825)
+nodes/fragment/14/node = SubResource("VisualShaderNodeFloatFunc_l71kj")
+nodes/fragment/14/position = Vector2(386.426, 578.8)
+nodes/fragment/15/node = SubResource("VisualShaderNodeTexture_kn8e5")
+nodes/fragment/15/position = Vector2(-540, 180)
+nodes/fragment/17/node = SubResource("VisualShaderNodeInput_pgibe")
+nodes/fragment/17/position = Vector2(-1160, 140)
+nodes/fragment/connections = PackedInt32Array(5, 0, 4, 0, 6, 0, 4, 1, 4, 0, 7, 1, 9, 0, 10, 1, 2, 0, 9, 0, 2, 0, 10, 0, 10, 0, 0, 0, 11, 0, 10, 2, 12, 0, 13, 0, 7, 0, 13, 1, 15, 0, 7, 0, 17, 0, 15, 0, 15, 0, 14, 0, 14, 0, 13, 2)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_drmg4"]
+render_priority = 0
+shader = SubResource("VisualShader_eglbu")
+shader_parameter/ColorParameter = Color(0.72549, 0.615686, 0.384314, 1)
+
+[node name="Scanner_reader" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.058044, 0.00866282, -0.156247)
+
+[node name="Camera_OnScanner" type="Camera3D" parent="."]
+transform = Transform3D(0.996041, 0.0409091, -0.0789217, 0, 0.887815, 0.4602, 0.0888943, -0.458378, 0.884301, -0.02, 0.196, 0.239)
+cull_mask = 130
+fov = 40.0
+script = ExtResource("1_tde3p")
+focus_data = ExtResource("2_44u3f")
+
+[node name="Scanner_light" type="OmniLight3D" parent="."]
+transform = Transform3D(0.999992, 0.00411896, 0, -0.00411896, 0.999992, 0, 0, 0, 1, 0.00407649, 0.239584, 0.00464271)
+visible = false
+layers = 128
+omni_range = 0.240332
+script = ExtResource("3_cyvwh")
+
+[node name="Loader" type="Node3D" parent="."]
+transform = Transform3D(1.44005, 0.00296576, 0, -0.00296576, 1.44005, 0, 0, 0, 1.44005, 0.00144204, 0.054333, 0.00117853)
+script = ExtResource("4_0xcsu")
+
+[node name="Scene_boat_ch_test" parent="Loader" instance=ExtResource("5_1mnx3")]
+transform = Transform3D(-0.0128949, 1.63709e-11, -0.00345518, 1.63709e-11, 0.0133497, 2.27374e-12, 0.00345518, 4.33681e-19, -0.0128949, -0.000469681, 0.0107834, 0.000326812)
+visible = false
+
+[node name="Movable_object" type="Node" parent="." node_paths=PackedStringArray("collider", "move_root", "On_Move")]
+script = ExtResource("6_5bhio")
+collider = NodePath("")
+move_root = NodePath("")
+On_Move = NodePath("")
+
+[node name="On_View_Call" type="Node" parent="." node_paths=PackedStringArray("On_View")]
+script = ExtResource("7_j0x22")
+focus_data = ExtResource("2_44u3f")
+On_View = NodePath("")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="On_View" type="Node" parent="Area3D"]
+script = SubResource("GDScript_lrtc7")
+
+[node name="On_Move" type="Node" parent="Area3D"]
+script = ExtResource("8_5jitu")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00346069, 0.0374634, -4.88311e-05)
+shape = SubResource("BoxShape3D_c0r5v")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.99734, 0, 0, 0, 1.99734, 0, 0, 0, 1.99734, -2.70307e-05, -0.00723522, 0.000257351)
+layers = 2
+mesh = SubResource("CylinderMesh_3wbgg")
+surface_material_override/0 = ExtResource("9_v86ws")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.86309, 0, 0, 0, 1.86309, 0, 0, 0, 1.86309, -2.70307e-05, 0.0118527, 0.000257351)
+layers = 2
+mesh = SubResource("CylinderMesh_3wbgg")
+surface_material_override/0 = ExtResource("9_v86ws")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.55492, 0, 0, 0, 0.217745, 0, 0, 0, 1.55492, 0.000101186, 0.032266, -0.000963442)
+layers = 2
+mesh = SubResource("CylinderMesh_3wbgg")
+surface_material_override/0 = SubResource("ShaderMaterial_drmg4")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.99734, 0, 0, 0, 1.99734, 0, 0, 0, 1.99734, -2.70316e-05, -0.00723522, 0.000257351)
+layers = 65536
+mesh = SubResource("CylinderMesh_3wbgg")
+surface_material_override/0 = ExtResource("10_snwg2")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.86309, 0, 0, 0, 1.86309, 0, 0, 0, 1.86309, -2.70316e-05, 0.0118527, 0.000257351)
+layers = 65536
+mesh = SubResource("CylinderMesh_3wbgg")
+surface_material_override/0 = ExtResource("10_snwg2")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.55492, 0, 0, 0, 0.217745, 0, 0, 0, 1.55492, 0.000101187, 0.032266, -0.000963442)
+layers = 65536
+mesh = SubResource("CylinderMesh_3wbgg")
+surface_material_override/0 = ExtResource("10_snwg2")

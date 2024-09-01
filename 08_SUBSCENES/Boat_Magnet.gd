@@ -7,9 +7,9 @@ var magneting : bool = false
 var list_of_magnetable : Array[Node]
 
 func _ready():
-	area_magnet.area_entered.connect(_magnet_enter)
-	area_magnet.area_exited.connect(_magnet_exited)
-	
+	#area_magnet.area_entered.connect(_magnet_enter)
+	#area_magnet.area_exited.connect(_magnet_exited)
+	pass#
 		
 func _process(delta):
 	

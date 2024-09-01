@@ -23,26 +23,19 @@ script/source = "extends Node
 
 
 @onready var front_element = $\"../Front_element\"
+const PHOTO_UI_PREFAB = preload(\"res://12_INVENTORY/Photo/Photo_ui_prefab.tscn\")
 
 
-func _check_npc_photo():
+
+func _ready():
+	_global_datas._give_photo.connect(_take_photo)
 	
-	if _global_datas.Npc_Dialogue != null:
-		var photodata = _global_datas.Npc_Dialogue.photo_data
-		
-		if check_photo_exist(photodata):
-			return
-			
-		_global_datas._photo_flash.emit()	
-			
-		_global_datas.selected_photoData = photodata
-		_global_datas.ui_photo_flash.emit()
-		_global_datas.show_on_scanner.emit(true)
+func _take_photo(photo_data : PhotoData):
 	
-		
-		_global_datas.photo_archives.append(photodata)
-		_global_datas._show_object_legend.emit(true,photodata.legend)
-	
+	var photo_instance = PHOTO_UI_PREFAB.instantiate()
+	photo_instance._set_photo(photo_data.image)
+	front_element.add_child(photo_instance)
+
 
 func check_photo_exist(photo_Data):
 	

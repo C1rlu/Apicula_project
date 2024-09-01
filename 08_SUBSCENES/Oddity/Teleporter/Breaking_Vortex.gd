@@ -6,14 +6,10 @@ extends Node
 @onready var root = $"../.."
 @onready var render = $"../.."
 
-
-const EXPLOSED_ROCK_VFX = preload("res://08_SUBSCENES/Elements/Breackable_Ice/Block_test/explosed_rock_vfx.tscn")
 var hit_index : int 
 
 @onready var timer = $Timer
-
-
-
+const fracture_dark_material : Material = preload("res://08_SUBSCENES/Oddity/Teleporter/Teleporter_prefab_mat.tres")
 func _ready():
 	timer.timeout.connect(reset_hits)
 
@@ -26,6 +22,8 @@ func _hit():
 	hit_index += 1
 	timer.start()
 	render.visible = false
+
+	
 	if fracture_mesh:
 		for f in fracture_mesh:
 			f.show_fracture()
@@ -40,21 +38,18 @@ func _hit():
 		
 		
 		
-		
 func explose_rock():
-	
-	instance_vfx()
-	
 	
 	if fracture_mesh:
 		for f in fracture_mesh:
 			f.create_fracture()
+	_fade()
 			
-	#root.queue_free()
+func _fade():
+	var fade
+	fade = create_tween()
 	
+	fade.tween_method(value,1.0,0.0,1)
 	
-func instance_vfx():
-	
-	var vfx = EXPLOSED_ROCK_VFX.instantiate()
-	_global_datas.LoadScene.add_child(vfx)
-	vfx.global_position = root.global_position
+func value(_value : float):
+	fracture_dark_material.set_shader_parameter("Opacity",_value)	
