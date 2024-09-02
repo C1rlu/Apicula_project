@@ -1,4 +1,4 @@
-[gd_scene load_steps=99 format=3 uid="uid://g7u8o55jrnyy"]
+[gd_scene load_steps=94 format=3 uid="uid://g7u8o55jrnyy"]
 
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER/Subscene_materials/Subscene_basic_mat.tres" id="1_n1vw4"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Player_sub_behaviour.gd" id="1_o2v73"]
@@ -6,20 +6,15 @@
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Active_ZoneCollide.gd" id="3_k136c"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Flash_inputs.gd" id="3_p6pm7"]
 [ext_resource type="ArrayMesh" uid="uid://cm4cl6n84qj86" path="res://04_SCENE_MAIN_MAP/00_PLAYER/Boat/Boat_smoke/smoke_msh.obj" id="4_6vpi7"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Tools/Scanne_element.gd" id="5_jhkow"]
 [ext_resource type="Resource" uid="uid://d11cl4f25dgwg" path="res://08_SUBSCENES/Tools/Main_tool/Flash_light.tres" id="5_obmh6"]
 [ext_resource type="Resource" uid="uid://380xcgsxw62f" path="res://08_SUBSCENES/Tools/Main_tool/magnet_tool.tres" id="7_un21c"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/active_tool_scene.gd" id="8_8bfcd"]
 [ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER/Subscene_materials/Subscene_shine_elements_mat.tres" id="8_wvhjt"]
 [ext_resource type="Resource" uid="uid://vv3dws7dmhtd" path="res://08_SUBSCENES/Tools/Main_tool/Scanner.tres" id="9_cp5em"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Magnet_effect.gd" id="9_wphos"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Active_scanner_visual_pulse.gd" id="10_ir8y2"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Subjet_effet.gd" id="10_jdgje"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Sonnar_zone.gd" id="10_so5n0"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/CallLoader_effect.gd" id="12_5ga5g"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/ELEMENT_BREAKING.gd" id="12_6dq77"]
 [ext_resource type="Shader" uid="uid://drchaj5fcdan0" path="res://05_SHADER/Subscene_materials/Subscene_shine_sh.tres" id="12_cij64"]
-[ext_resource type="Resource" uid="uid://ccwdekfv0jvky" path="res://08_SUBSCENES/Tools/Main_tool/Take_Oxygene.tres" id="12_wjcug"]
 [ext_resource type="PackedScene" uid="uid://bktiy5sdjc87f" path="res://08_SUBSCENES/Player_subscene/Cosmo_Mod_01.blend" id="14_tdqlw"]
 [ext_resource type="Material" uid="uid://cdnmf431kgh7" path="res://05_SHADER/Subscene_materials/Subscene_basic_mat_far.tres" id="15_evn0r"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/look_at_camera.gd" id="17_mnoui"]
@@ -798,35 +793,8 @@ wait_time = 0.2
 wait_time = 2.0
 one_shot = true
 
-[node name="Scanne_element" type="Node" parent="."]
-script = ExtResource("5_jhkow")
-scanner_tool = ExtResource("7_un21c")
-
-[node name="time_checker" type="Timer" parent="Scanne_element"]
-wait_time = 0.1
-one_shot = true
-
-[node name="Active_scanner_visual_pulse" type="Node" parent="Scanne_element"]
-script = ExtResource("10_ir8y2")
-scanner_tool_data = ExtResource("9_cp5em")
-
-[node name="Timer" type="Timer" parent="Scanne_element/Active_scanner_visual_pulse"]
-wait_time = 0.1
-
 [node name="Photo_Flash" type="Node" parent="."]
 script = SubResource("GDScript_8qwgp")
-
-[node name="Sonnar_zone" type="Node" parent="."]
-script = ExtResource("10_so5n0")
-
-[node name="Timer" type="Timer" parent="Sonnar_zone"]
-wait_time = 2.0
-one_shot = true
-
-[node name="Reload_Oxygene" type="Node" parent="." node_paths=PackedStringArray("Oygene_area")]
-script = ExtResource("12_5ga5g")
-tool_clock = ExtResource("12_wjcug")
-Oygene_area = NodePath("../ZoneCollide")
 
 [node name="ELEMENT_BREAKING" type="Node" parent="." node_paths=PackedStringArray("Rg", "hit_node")]
 script = ExtResource("12_6dq77")
@@ -1214,8 +1182,6 @@ process_material = SubResource("ParticleProcessMaterial_snyp2")
 draw_pass_1 = ExtResource("4_6vpi7")
 
 [connection signal="timeout" from="Ini_subscene/Timer" to="Ini_subscene" method="_on_timer_timeout"]
-[connection signal="timeout" from="Scanne_element/time_checker" to="Scanne_element" method="_on_time_checker_timeout"]
-[connection signal="timeout" from="Scanne_element/Active_scanner_visual_pulse/Timer" to="Scanne_element/Active_scanner_visual_pulse" method="_on_timer_timeout"]
 [connection signal="area_shape_entered" from="ZoneCollide" to="Check_Dialogue_Zone" method="_area_entered"]
 [connection signal="area_shape_exited" from="ZoneCollide" to="Check_Dialogue_Zone" method="_area_exited"]
 
