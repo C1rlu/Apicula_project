@@ -8,7 +8,7 @@ var ls_index : int = 0
 func _ready():
 	
 	_global_datas._change_language_state.connect(update_ls)
-	#_global_datas.show_element_info.connect(show_info)
+	_global_datas.show_element_info.connect(show_info)
 	_global_datas.open_inventory.connect(close)
 	show_info(false,null)
 

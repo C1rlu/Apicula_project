@@ -24,17 +24,9 @@ func On_Over():
 func focus_or_scanner():
 	
 
-	if !Photo_data.scanner_prefab:
-		var focus_target = photo_element_root.global_position
-		_global_datas.focus_this_on_board.emit(focus_target)
-		_global_datas.camera_focus_On.emit(camera_state)
-	else:
-		_global_datas.selected_photoData = Photo_data
-		_global_datas.focus_this_on_board.emit(_global_datas.scanner_root.global_position)
-		_global_datas.camera_focus_On.emit(camera_state_focus)
-		_global_datas.show_on_scanner.emit(true)	
-		
-	
+	var focus_target = photo_element_root.global_position
+	_global_datas.focus_this_on_board.emit(focus_target)
+	_global_datas.camera_focus_On.emit(camera_state)
 
 	_global_datas.show_element_info.emit(true,Photo_data.info)		
 

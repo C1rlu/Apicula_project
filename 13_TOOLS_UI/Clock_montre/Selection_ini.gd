@@ -36,7 +36,10 @@ func set_all_material(material : Material):
 	
 	for selection in list_of_selection_data:
 		var render_mesh = selection.render_mesh
+		
 		if render_mesh.mesh:
+			render_mesh.set_layer_mask_value(17,true)
+			#render_mesh.set_layer_mask_value(2,false)
 			for i in range(render_mesh.mesh.get_surface_count()):
 				render_mesh.set_surface_override_material(i, material)
 
@@ -44,7 +47,8 @@ func restore_original_materials():
 	for selection in list_of_selection_data:
 		var render_mesh = selection.render_mesh
 		var materials = selection.render_material
-		
+		render_mesh.set_layer_mask_value(17,false)
+		#render_mesh.set_layer_mask_value(2,true)
 		if render_mesh.mesh and materials.size() > 0:
 			for i in range(render_mesh.mesh.get_surface_count()):
 				if i < materials.size():
