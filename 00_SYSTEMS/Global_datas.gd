@@ -103,7 +103,9 @@ signal update_selector
 var backcall_path : Array[Node3D] 
 var player_state : game_state.visible_state = game_state.visible_state.normal
 
+# Shop variable
 
+signal _open_shop(condition : bool)
 
 # Fusion element 
 # Main Oddity & elements related ------------------------------------
