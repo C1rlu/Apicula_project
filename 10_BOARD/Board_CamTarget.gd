@@ -76,8 +76,9 @@ func _process(delta):
 func move(delta):
 	
 	if Input.is_action_pressed(_global_datas.move_right):
+		
 		var _magnitude = Input.get_action_strength(_global_datas.move_right)
-		target_position.x += _magnitude * current_speed * delta
+		target_position.x +=  _magnitude * current_speed * delta
 	if Input.is_action_pressed(_global_datas.move_left):
 		var _magnitude = Input.get_action_strength(_global_datas.move_left)
 		target_position.x -= _magnitude * current_speed * delta	

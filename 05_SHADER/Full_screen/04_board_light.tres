@@ -58,35 +58,15 @@ code = "shader_type canvas_item;
 render_mode blend_mix;
 
 uniform sampler2D Albedo_viewport;
-uniform sampler2D Albedo_light;
 uniform float Opacity : hint_range(0, 1) = 0.5;
 global uniform float Dither_size;
 
 
 
 void fragment() {
-// ColorConstant:18
-	vec4 n_out18p0 = vec4(0.032085, 0.097558, 0.097560, 1.000000);
-
-
 	vec4 n_out3p0;
 // Texture2D:3
 	n_out3p0 = texture(Albedo_viewport, UV);
-
-
-	vec4 n_out7p0;
-// Texture2D:7
-	n_out7p0 = texture(Albedo_light, UV);
-
-
-// Mix:24
-	float n_in24p1 = 1.00000;
-	float n_in24p2 = 0.30000;
-	float n_out24p0 = mix(n_out7p0.x, n_in24p1, n_in24p2);
-
-
-// Mix:19
-	vec3 n_out19p0 = mix(vec3(n_out18p0.xyz), vec3(n_out3p0.xyz), vec3(n_out24p0));
 
 
 // FloatParameter:27
@@ -127,13 +107,13 @@ void fragment() {
 
 
 // Output:0
-	COLOR.rgb = n_out19p0;
+	COLOR.rgb = vec3(n_out3p0.xyz);
 	COLOR.a = n_out30p0;
 
 
 }
 "
-graph_offset = Vector2(-447.592, -105.064)
+graph_offset = Vector2(-109.495, -177.052)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(2100, 100)
@@ -169,11 +149,11 @@ vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
 nodes/fragment/27/node = SubResource("VisualShaderNodeFloatParameter_f3t0f")
-nodes/fragment/27/position = Vector2(820, 840)
+nodes/fragment/27/position = Vector2(720, 760)
 nodes/fragment/28/node = SubResource("VisualShaderNodeFloatParameter_nnmhj")
 nodes/fragment/28/position = Vector2(-1020, 1400)
 nodes/fragment/29/node = SubResource("VisualShaderNodeFloatConstant_82vmf")
 nodes/fragment/29/position = Vector2(-900, 1240)
 nodes/fragment/30/node = SubResource("VisualShaderNodeFloatFunc_vvegw")
 nodes/fragment/30/position = Vector2(1660, 720)
-nodes/fragment/connections = PackedInt32Array(2, 0, 3, 2, 6, 0, 7, 2, 18, 0, 19, 0, 7, 0, 24, 0, 28, 0, 26, 1, 26, 0, 25, 1, 29, 0, 26, 0, 27, 0, 25, 0, 25, 0, 30, 0, 3, 0, 19, 1, 30, 0, 0, 1, 19, 0, 0, 0, 24, 0, 19, 2)
+nodes/fragment/connections = PackedInt32Array(2, 0, 3, 2, 6, 0, 7, 2, 18, 0, 19, 0, 7, 0, 24, 0, 28, 0, 26, 1, 26, 0, 25, 1, 29, 0, 26, 0, 27, 0, 25, 0, 25, 0, 30, 0, 3, 0, 19, 1, 30, 0, 0, 1, 24, 0, 19, 2, 3, 0, 0, 0)
