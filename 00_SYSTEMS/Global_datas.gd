@@ -116,8 +116,6 @@ var _photo_data_scene_list : Array[Node]
 
 
 #board scene
-
-var book_data : book_page_data
 signal show_page(content : PackedScene)
 signal open_inventory(condition : bool)
 signal mouse_raycast
@@ -162,8 +160,6 @@ signal show_on_scanner_backdrop(condition : bool)
 signal flash_scanner
 signal show_ui_scanner_dots(condition : bool)
 signal select_intrigue(intrigue : board_intrigue_data)
-var selected_book : book_page_data
-var legend_page_index : int
 
 
 
