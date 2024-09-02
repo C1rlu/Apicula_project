@@ -5,4 +5,3 @@ class_name PhotoData
 @export var legend: String ="SetALegend"
 @export var name : String = "SetaName"
 
-
