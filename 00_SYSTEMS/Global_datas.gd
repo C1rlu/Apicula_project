@@ -172,7 +172,9 @@ var clock_timer : float
 signal active_photo_button(condition : bool)
 signal active_scanner_button(condition : bool)
 
-
+var current_money : int = 0
+signal update_money_amount(value : int)
+signal update_element_amount(value : int)
 #-----------------------------
 # dialogue datas
 var Npc_Dialogue : Npc_datas
