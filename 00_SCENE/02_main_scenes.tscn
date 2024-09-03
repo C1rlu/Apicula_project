@@ -1,4 +1,4 @@
-[gd_scene load_steps=88 format=3 uid="uid://cnmptm7i0xxmj"]
+[gd_scene load_steps=85 format=3 uid="uid://cnmptm7i0xxmj"]
 
 [ext_resource type="Script" path="res://00_SCENE/Active_Decor_Scene.gd" id="1_ounvv"]
 [ext_resource type="PackedScene" uid="uid://vpdvl0v7dubd" path="res://04_SCENE_MAIN_MAP/00_PLAYER/Player_boat.tscn" id="1_qltht"]
@@ -6,15 +6,12 @@
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_xd8sb"]
 [ext_resource type="Script" path="res://03_CAMERA/CameraFollow.gd" id="2_7lb1x"]
 [ext_resource type="Script" path="res://04_SCENE_MAIN_MAP/00_PLAYER/Sonar/Button_active_sonar.gd" id="3_0rdsq"]
-[ext_resource type="Material" uid="uid://cfd7rt53ee7jp" path="res://05_SHADER/Full_screen/Foam_dither_viewport.tres" id="3_qcxor"]
+[ext_resource type="Script" path="res://00_SCENE/MainScene/Grid_Fade.gd" id="3_7fuin"]
 [ext_resource type="Shader" uid="uid://bduoqim3kfbs6" path="res://04_SCENE_MAIN_MAP/00_PLAYER/Sonar/Sonar_sh.tres" id="3_todel"]
-[ext_resource type="Material" uid="uid://ua1gnqwbe2bj" path="res://05_SHADER/Full_screen/Sonar_dither_viewport.tres" id="4_qh7in"]
 [ext_resource type="Script" path="res://03_CAMERA/Active_scene_viewports.gd" id="4_tulh2"]
 [ext_resource type="Script" path="res://00_SCENE/MainScene/Teleport_boat_at_position.gd" id="4_xkpot"]
 [ext_resource type="Shader" uid="uid://bxavm32wwtse2" path="res://05_SHADER/Clouds_sh.tres" id="5_83wu6"]
-[ext_resource type="Material" uid="uid://chlrh834uha8l" path="res://05_SHADER/Full_screen/Grid_dither_viewport.tres" id="5_jwi16"]
 [ext_resource type="PackedScene" uid="uid://crxoyweriianl" path="res://04_SCENE_MAIN_MAP/Grid/grid_map.tscn" id="6_8jesf"]
-[ext_resource type="Script" path="res://00_SCENE/Location_state_check.gd" id="6_g645d"]
 [ext_resource type="Material" uid="uid://ctnqf5d3uj1g7" path="res://05_SHADER/All_Materials/dark_mask.tres" id="6_vcmny"]
 [ext_resource type="Material" uid="uid://b64juw612xqpu" path="res://05_SHADER/Sea_sh/Sea_mat.tres" id="7_4y8ld"]
 [ext_resource type="Script" path="res://00_SCENE/Active_divingZone.gd" id="7_f3xb7"]
@@ -197,71 +194,34 @@ func _ready():
 
 "
 
+[sub_resource type="ViewportTexture" id="ViewportTexture_e1gkt"]
+viewport_path = NodePath("01_GAME_UI/MAIN_SCENE_UI/Viewports/FOAM_Viewport")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_p10qd"]
+viewport_path = NodePath("01_GAME_UI/MAIN_SCENE_UI/Viewports/GRID_Viewport")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_oj43o"]
+viewport_path = NodePath("01_GAME_UI/MAIN_SCENE_UI/Viewports/MAIN_Viewport")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_cx3um"]
+viewport_path = NodePath("01_GAME_UI/MAIN_SCENE_UI/Viewports/SKY_Viewport")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_td1dm"]
+viewport_path = NodePath("01_GAME_UI/MAIN_SCENE_UI/Viewports/SONAR_Viewport")
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_3mjm8"]
+resource_local_to_scene = true
 shader = ExtResource("8_oftpq")
+shader_parameter/Grid_opacity = 0.0
 shader_parameter/Opacity = 1.0
+shader_parameter/Main = SubResource("ViewportTexture_oj43o")
+shader_parameter/Foam = SubResource("ViewportTexture_e1gkt")
+shader_parameter/Sonar = SubResource("ViewportTexture_td1dm")
+shader_parameter/Grid = SubResource("ViewportTexture_p10qd")
+shader_parameter/Sky = SubResource("ViewportTexture_cx3um")
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_4iosc"]
 viewport_path = NodePath("01_GAME_UI/MAIN_SCENE_UI/Viewports/MAIN_Viewport")
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_y37a4"]
-viewport_path = NodePath("01_GAME_UI/MAIN_SCENE_UI/Viewports/FOAM_Viewport")
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_vtvr5"]
-viewport_path = NodePath("01_GAME_UI/MAIN_SCENE_UI/Viewports/SONAR_Viewport")
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_tsb8l"]
-viewport_path = NodePath("01_GAME_UI/MAIN_SCENE_UI/Viewports/GRID_Viewport")
-
-[sub_resource type="GDScript" id="GDScript_08g8g"]
-script/source = "extends TextureRect
-@onready var sonar_grid = $\".\"
-@onready var opacity : Material = sonar_grid.get_material()
-
-
-var t
-
-func _ready():
-	_global_datas._boat_inside_zone.connect(_show)
-	#_global_datas._active_sonar.connect(_show)	
-	opacity.set_shader_parameter(\"Opacity\",0.0)
-	#_global_datas._active_world_grid.connect(_ckeck_condition)
-		
-func _ckeck_condition(condition : bool):
-	if condition:
-		_show(condition)
-	else:
-		_hide()	
-	
-	
-func _show(value_null):
-
-
-	if t:
-		t.kill()
-	t = create_tween()
-	
-	t .tween_method(change_value,0.0,0.25,0.25).set_trans(Tween.TRANS_SINE)	
-	await create_tween().tween_interval(0.5).finished
-	_hide()
-
-func _hide():
-	
-	if t:
-		t.kill()
-	t = create_tween()
-	
-	var actual_value = opacity.get_shader_parameter(\"Opacity\")
-	t .tween_method(change_value,actual_value,0.0,5.0).set_trans(Tween.TRANS_SINE)	
-	
-
-
-func change_value(value : float):
-	opacity.set_shader_parameter(\"Opacity\",value)
-"
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_dm76q"]
-viewport_path = NodePath("01_GAME_UI/MAIN_SCENE_UI/Viewports/SKY_Viewport")
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ituqr"]
 bounce = 500.0
@@ -553,6 +513,10 @@ viewports = [NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/MAIN_Viewport"), No
 [node name="Push_to_subscene" type="Node" parent="."]
 script = SubResource("GDScript_xsqte")
 
+[node name="Grid_Fade" type="Node" parent="." node_paths=PackedStringArray("Main_render")]
+script = ExtResource("3_7fuin")
+Main_render = NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/MAIN")
+
 [node name="Sonar_behaviour" type="Node" parent="."]
 script = SubResource("GDScript_0xo40")
 
@@ -568,17 +532,9 @@ script = ExtResource("4_xkpot")
 [node name="Active_divingZone" type="Node" parent="."]
 script = ExtResource("7_f3xb7")
 
-[node name="Location_check" type="Node" parent="."]
-script = ExtResource("6_g645d")
-locations_list = Array[Resource("res://15_GAME_RESSOURCE/00_Main_Location/Location_data.gd")]([ExtResource("22_axesb")])
-
-[node name="Timer" type="Timer" parent="Location_check"]
-wait_time = 1.5
-one_shot = true
-
 [node name="01_GAME_UI" type="Node" parent="." node_paths=PackedStringArray("all_renders")]
 script = SubResource("GDScript_8cfdp")
-all_renders = [NodePath("MAIN_SCENE_UI/Viewports/MAIN"), NodePath("MAIN_SCENE_UI/Viewports/FOAM"), NodePath("MAIN_SCENE_UI/Viewports/SONAR"), NodePath("MAIN_SCENE_UI/Viewports/GRID"), NodePath("MAIN_SCENE_UI/Viewports/SKY")]
+all_renders = [NodePath("MAIN_SCENE_UI/Viewports/MAIN"), NodePath(""), NodePath(""), NodePath(""), NodePath("")]
 
 [node name="MAIN_SCENE_UI" type="Control" parent="01_GAME_UI"]
 layout_mode = 3
@@ -664,50 +620,6 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 texture = SubResource("ViewportTexture_4iosc")
-expand_mode = 3
-
-[node name="FOAM" type="TextureRect" parent="01_GAME_UI/MAIN_SCENE_UI/Viewports"]
-material = ExtResource("3_qcxor")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = SubResource("ViewportTexture_y37a4")
-expand_mode = 3
-
-[node name="SONAR" type="TextureRect" parent="01_GAME_UI/MAIN_SCENE_UI/Viewports"]
-material = ExtResource("4_qh7in")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = SubResource("ViewportTexture_vtvr5")
-expand_mode = 3
-
-[node name="GRID" type="TextureRect" parent="01_GAME_UI/MAIN_SCENE_UI/Viewports"]
-material = ExtResource("5_jwi16")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = SubResource("ViewportTexture_tsb8l")
-expand_mode = 3
-script = SubResource("GDScript_08g8g")
-
-[node name="SKY" type="TextureRect" parent="01_GAME_UI/MAIN_SCENE_UI/Viewports"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = SubResource("ViewportTexture_dm76q")
 expand_mode = 3
 
 [node name="--DECOR--" type="Node3D" parent="."]
@@ -1220,7 +1132,6 @@ layers = 2048
 mesh = SubResource("BoxMesh_wmrfd")
 skeleton = NodePath("")
 
-[connection signal="timeout" from="Location_check/Timer" to="Location_check" method="_on_timer_timeout"]
 [connection signal="area_entered" from="--DECOR--/Player_Boat/Enter_dialogue_zone" to="--DECOR--/Player_Boat/Check_zone_ui" method="_on_enter_dialogue_zone_area_entered"]
 [connection signal="area_exited" from="--DECOR--/Player_Boat/Enter_dialogue_zone" to="--DECOR--/Player_Boat/Check_zone_ui" method="_on_enter_dialogue_zone_area_exited"]
 [connection signal="area_entered" from="--DECOR--/NPC_TRIGGER_ZONE/Maurice_NPC_Area" to="--DECOR--/NPC_TRIGGER_ZONE/Maurice_NPC_Area" method="_on_area_entered"]
