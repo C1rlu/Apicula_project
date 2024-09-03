@@ -1,10 +1,12 @@
-[gd_scene load_steps=96 format=3 uid="uid://g7u8o55jrnyy"]
+[gd_scene load_steps=98 format=3 uid="uid://g7u8o55jrnyy"]
 
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER/Subscene_materials/Subscene_basic_mat.tres" id="1_n1vw4"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Player_sub_behaviour.gd" id="1_o2v73"]
 [ext_resource type="Resource" uid="uid://df0swhar7lchv" path="res://08_SUBSCENES/Tools/Main_tool/Jet_tool.tres" id="2_0pvbg"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Depth_calculator.gd" id="3_80ai3"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Active_ZoneCollide.gd" id="3_k136c"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Flash_inputs.gd" id="3_p6pm7"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Kill_player.gd" id="4_0f3c2"]
 [ext_resource type="ArrayMesh" uid="uid://cm4cl6n84qj86" path="res://04_SCENE_MAIN_MAP/00_PLAYER/Boat/Boat_smoke/smoke_msh.obj" id="4_6vpi7"]
 [ext_resource type="Resource" uid="uid://d11cl4f25dgwg" path="res://08_SUBSCENES/Tools/Main_tool/Flash_light.tres" id="5_obmh6"]
 [ext_resource type="Resource" uid="uid://380xcgsxw62f" path="res://08_SUBSCENES/Tools/Main_tool/magnet_tool.tres" id="7_un21c"]
@@ -767,6 +769,13 @@ maxSpeed = 12.0
 startPos = Vector3(0, 1, 0)
 
 [node name="Player_rg" type="Node" parent="."]
+
+[node name="Depth_calculator" type="Node" parent="." node_paths=PackedStringArray("Player_rg")]
+script = ExtResource("3_80ai3")
+Player_rg = NodePath("..")
+
+[node name="Kill_player" type="Node" parent="Depth_calculator"]
+script = ExtResource("4_0f3c2")
 
 [node name="Active_ZoneCollide" type="Node" parent="."]
 script = ExtResource("3_k136c")
