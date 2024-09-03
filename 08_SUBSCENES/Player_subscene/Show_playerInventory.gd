@@ -5,8 +5,8 @@ var current_amount : int = 0
 
 
 func _ready():
-	
-	_global_datas.add_collect_element.connect(update_amount)
+	pass
+	#_global_datas.add_collect_element.connect(update_amount)
 	
 func update_amount(off):
 	

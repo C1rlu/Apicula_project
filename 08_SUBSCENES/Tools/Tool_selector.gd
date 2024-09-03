@@ -1,7 +1,6 @@
 extends Node
 
 @export var flash_tool : tool_data
-@export var create_vortex : tool_data
 @export var go_faster : tool_data
 var lock_active_tool : bool = false
 
@@ -55,7 +54,7 @@ func _input(event):
 		#go_faster.tool_active_signal.emit(false)
 #
 	#if event.is_action_pressed("Flash"):
-		#create_vortex.tool_active_signal.emit(true)
+		#flash_tool.tool_active_signal.emit(true)
 	#if event.is_action_released("Flash"):
-		#create_vortex.tool_active_signal.emit(false)
+		#flash_tool.tool_active_signal.emit(false)
 

@@ -1,6 +1,5 @@
 extends Node
 
-@export var information : info_data
 
 @export var min_distance_to_see : float  = 2.5
 @export var speed : float
@@ -12,11 +11,12 @@ var real_speed : float
 @onready var mirror_element_oddity = $"../Mirror_element_oddity"
 
 func _ready():
-	pass
-	#_global_datas._photo_flash.connect(_check_if_player_is_close)
+
+	_global_datas._photo_flash.connect(_check_if_player_is_close)
 	
 func _check_if_player_is_close():
 	
+
 	if mirror_element_oddity.State_selected != _global_datas.player_state:
 		return
 		
@@ -32,8 +32,8 @@ func _check_if_player_is_close():
 		real_speed = speed * (distance_to_player / 8.0)
 	follow_target = true	
 	target = _global_datas.subbscene_playerPosition
-	
-	_global_datas.information_added.emit(information)
+	print("CHECK LIGHT")
+
 		
 	
 func _process(delta):

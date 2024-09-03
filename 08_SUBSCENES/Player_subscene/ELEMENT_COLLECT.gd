@@ -3,9 +3,10 @@ extends Node
 @export var collector_area : Area3D
 
 func _ready():
-	_global_datas.add_collect_element.connect(_add_element)
+	pass
+	#_global_datas.add_collect_element.connect(_add_element)
 	
-	collector_area.area_entered.connect(on_area_enter)
+	#collector_area.area_entered.connect(on_area_enter)
 	
 	
 func _add_element(element : element_data):

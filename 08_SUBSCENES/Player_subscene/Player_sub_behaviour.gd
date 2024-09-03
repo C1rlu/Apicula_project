@@ -103,9 +103,10 @@ func _physics_process(_delta):
 	var current_velocity = linear_velocity
 	var current_speed = current_velocity.length()
 			
+
 	if current_speed > maxSpeed:
 		current_velocity = current_velocity.normalized() * maxSpeed
-		linear_velocity = current_velocity
+		linear_velocity = current_velocity 
 	
 	
 func player_dir(_delta, angle,angle_x):

@@ -1,8 +1,9 @@
-[gd_scene load_steps=98 format=3 uid="uid://g7u8o55jrnyy"]
+[gd_scene load_steps=99 format=3 uid="uid://g7u8o55jrnyy"]
 
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER/Subscene_materials/Subscene_basic_mat.tres" id="1_n1vw4"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Player_sub_behaviour.gd" id="1_o2v73"]
 [ext_resource type="Resource" uid="uid://df0swhar7lchv" path="res://08_SUBSCENES/Tools/Main_tool/Jet_tool.tres" id="2_0pvbg"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Update_Weight.gd" id="3_5ifxx"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Depth_calculator.gd" id="3_80ai3"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Active_ZoneCollide.gd" id="3_k136c"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Flash_inputs.gd" id="3_p6pm7"]
@@ -68,8 +69,8 @@ var t
 
 
 func _ready():
-	pass
-	#_global_datas._photo_flash.connect(_start_flash)
+
+	_global_datas._photo_flash.connect(_start_flash)
 
 func _start_flash():
 
@@ -103,9 +104,9 @@ script/source = "extends Node
 var t
 
 func _ready():
-	pass
-	#_global_datas._photo_flash.connect(_take_photo)
-	#omny_range = omni_light_3d.omni_range
+
+	_global_datas._photo_flash.connect(_take_photo)
+	omny_range = omni_light_3d.omni_range
 	
 func _take_photo():
 
@@ -757,6 +758,7 @@ axis_lock_linear_z = true
 axis_lock_angular_x = true
 axis_lock_angular_y = true
 axis_lock_angular_z = true
+mass = 5.0
 physics_material_override = SubResource("PhysicsMaterial_c70j3")
 gravity_scale = 0.0
 max_contacts_reported = 1
@@ -769,6 +771,10 @@ maxSpeed = 12.0
 startPos = Vector3(0, 1, 0)
 
 [node name="Player_rg" type="Node" parent="."]
+
+[node name="Update_Weight" type="Node" parent="." node_paths=PackedStringArray("Rg")]
+script = ExtResource("3_5ifxx")
+Rg = NodePath("..")
 
 [node name="Depth_calculator" type="Node" parent="." node_paths=PackedStringArray("Player_rg")]
 script = ExtResource("3_80ai3")

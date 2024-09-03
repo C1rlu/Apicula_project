@@ -7,6 +7,6 @@ func _ready():
 	
 func kill_player():
 	print("Player has been killed")
-	_global_datas._go_Mainscene.emit()
-	_global_datas._backFrom_subscene.emit()	
-	
+	#_global_datas._go_Mainscene.emit()
+	#_global_datas._backFrom_subscene.emit()	
+	#
