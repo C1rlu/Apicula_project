@@ -5,6 +5,7 @@ extends Node
 var player_max_amount : int = 5
 var _current_player_depth : float = 0.0
 signal _update_player_weight(amount : int)
+var list_of_magnetable : Array
 signal _update_depth_ui
 
 signal _kill_player

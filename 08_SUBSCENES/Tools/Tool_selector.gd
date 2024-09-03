@@ -1,6 +1,7 @@
 extends Node
 
 @export var flash_tool : tool_data
+@export var magnet_remove_tool : tool_data
 @export var go_faster : tool_data
 var lock_active_tool : bool = false
 
@@ -43,7 +44,11 @@ func _input(event):
 	if event.is_action_released("Active_tool"):
 		_global_datas._selected_tool.tool_active_signal.emit(false)
 		
-#
+	if event.is_action_pressed("Remove_magnet"):
+		magnet_remove_tool.tool_active_signal.emit(true)
+
+	
+	
 	#if event.is_action_pressed("Flash"):
 		#flash_tool.tool_active_signal.emit(true)
 		#

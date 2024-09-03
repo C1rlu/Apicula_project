@@ -1,4 +1,4 @@
 extends Node
 
-signal fade
+signal fade(color : Color)
 signal freeze_body(condition : bool)

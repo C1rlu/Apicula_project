@@ -2,51 +2,67 @@
 extends Node
 
 @export var manget_tool : tool_data
+@export var manget_remove_tool : tool_data
 @export var magnet_fx : GPUParticles3D
 @export var Magnet_Area : Area3D
-@onready var collider = $"../Magnet_zone/CollisionShape3D"
 
-@onready var root = $".."
-var magneting : bool = false
-var list_of_magnetable : Array[Node]
-
+@onready var timer_on = $Timer_on
 
 func _ready():
-	manget_tool.tool_active_signal.connect(_active)
-	
-	Magnet_Area.area_entered.connect(_magnet_enter)
-	Magnet_Area.area_exited.connect( _magnet_exited)
-func _active(condition : bool):
+	manget_tool.tool_active_signal.connect(active_check)
+	manget_remove_tool.tool_active_signal.connect(active_off)
+	timer_on.timeout.connect(check_for_debris)
 
-	magnet_fx.emitting = condition
-	magneting = condition
-	collider.disabled = !condition
-	#if !condition:
-		#list_of_magnetable.clear()
-		#_subscene_datas._element_in_magnet.clear()
+func active_check(condition : bool):
 	
-func _process(delta):
-	
-	if !magneting:
-		return	
-			
-	for m in list_of_magnetable:
-		m.attract_me(delta,root.global_position)
-			
-func _magnet_enter(area):
-	
-	if area:
-		var magnetable = area.get_node_or_null("Attract_me")
-
-		if magnetable:
-			list_of_magnetable.append(magnetable)
-			_subscene_datas._update_player_weight.emit(list_of_magnetable.size())
+	if condition:
+		check_for_debris()
+		timer_on.start()
+	else:
+		timer_on.stop()	
 		
-func _magnet_exited(area):
+	magnet_fx.emitting = condition
+
+func active_off(condition : bool):
 	
-	if area:
+	if condition:
+		_remove_debris()
+
+			
+func check_for_debris():
+	
+	var all_areas = Magnet_Area.get_overlapping_areas()
+
+	for area in all_areas:
 		var magnetable = area.get_node_or_null("Attract_me")
 		if magnetable:
-			list_of_magnetable.erase(magnetable)
-			_subscene_datas._update_player_weight.emit(list_of_magnetable.size())
+			if !check_if_on_list(magnetable):						
+				magnetable._attract(true)
+				_subscene_datas.list_of_magnetable.append(magnetable)
+				break
+				
+	_subscene_datas._update_player_weight.emit(_subscene_datas.list_of_magnetable.size())
+	#print(_subscene_datas.list_of_magnetable.size())
+				
+	#var Utility = GameUtility.new()				
+	#var closest_element = Utility.get_closest_element(Magnet_Area.position,all_close_element)	
+	
+			
+func _remove_debris():
+	
+	if _subscene_datas.list_of_magnetable.size() == 0:
+		return
+	var last_one = _subscene_datas.list_of_magnetable[_subscene_datas.list_of_magnetable.size()-1]
+	last_one._attract(false)
+	_subscene_datas.list_of_magnetable.erase(last_one)	
+	#print(_subscene_datas.list_of_magnetable.size())
+	_subscene_datas._update_player_weight.emit(_subscene_datas.list_of_magnetable.size())
+	
+func check_if_on_list(element)-> bool:
+	
+	for e in _subscene_datas.list_of_magnetable:
+		if e == element:
+			return true
+	return false		
+	
 	

@@ -1,6 +1,6 @@
 extends Node
 
-
+@export var sonar_color_element : Color
 @export var area_zone : Area3D
 
 
@@ -13,6 +13,6 @@ func check_area(area):
 	if area:
 		var debris = area.get_node_or_null("Debris")
 		if debris:
-			debris.fade.emit()
+			debris.fade.emit(sonar_color_element)
 			#debris.push_to_player.emit()
 	
