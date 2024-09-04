@@ -3,9 +3,9 @@ extends Node
 
 
 func _ready():
-	npc_light.visible = false
-	_global_datas._show_dialogue_box.connect(_light_on)
-	
+	#npc_light.visible = false
+	#_global_datas._show_dialogue_box.connect(_light_on)
+	pass
 
 			
 				

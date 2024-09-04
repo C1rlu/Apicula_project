@@ -48,7 +48,9 @@ func _physics_process(_delta):
 	if _global_datas.Player_InDialogue:
 		return	
 	
-		
+	if _global_datas._photo_checking:
+		return
+			
 	var translation = get_global_transform().origin
 	_global_datas.player_position = translation
 	

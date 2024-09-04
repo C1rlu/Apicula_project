@@ -144,7 +144,6 @@ func _stop():
 script/source = "extends Node
 
 
-
 func _input(event):
 
 	if _global_datas.Player_In_Inventory:
@@ -157,8 +156,11 @@ func _input(event):
 		if !_global_datas.Player_InDialogue_zone:
 			return
 		
-		_global_datas._open_dialogue.emit()	
-		print(\"OPEN DIALOGUE\")
+		if _global_datas._photo_checking:
+			return
+		_global_datas._check_dialogue_photo.emit()
+
+		
 "
 
 [sub_resource type="GDScript" id="GDScript_8cfdp"]

@@ -55,6 +55,8 @@ signal go_darker_color
 # dialogue signals
 signal in_dialogue_zone(condition : bool)
 signal hide_open_dialogue
+signal _check_dialogue_photo
+var _photo_checking : bool 
 signal  _open_dialogue
 signal  _close_dialogue
 signal _type_text(count : int)
@@ -67,7 +69,7 @@ signal _give_letter( index : int)
 
 
 # for save game
-#var photo_archives : Array[PhotoData] 
+var photo_archives : Array[PhotoData] 
 var boue_archives : Array[BoueData]
 var tools_list : Array[tool_data]
 var element_collected : Array[element_data]
@@ -152,14 +154,7 @@ var book_idle_pos : bool = true
 #update description on board
 signal focus_this_on_board(target : Vector3)
 signal Open_ui_dark_backdrop(condition : bool)
-signal show_on_scanner(condition : bool)
-var scanner_root : Node3D
-signal show_on_scanner_backdrop(condition : bool)
-signal flash_scanner
-signal show_ui_scanner_dots(condition : bool)
 signal select_intrigue(intrigue : board_intrigue_data)
-
-
 
 var selected_photoData : PhotoData
 
@@ -183,7 +178,7 @@ func _ready():
 	_back_call_list.clear()
 	_selected_tool = null
 	_photo_data_scene_list.clear()
-
+	_photo_checking = false
 
 # TEST BOARD NEWS PROTO SCENE
 signal select_movable_object(object)

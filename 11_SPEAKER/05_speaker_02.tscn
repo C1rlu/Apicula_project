@@ -61,8 +61,8 @@ var actual_value : float
 var t
 
 func _ready():
-	_global_datas.Open_ui_dark_backdrop.connect(check_condition)
-	
+	#_global_datas.Open_ui_dark_backdrop.connect(check_condition)
+	pass
 
 
 func check_condition(condition : bool):
@@ -223,26 +223,17 @@ script/source = "extends Node
 @onready var timer = $Timer
 
 @export var active_npc_entrance : bool = false
-
+@onready var render_speacker = $\"../Npc_convas/CH_RENDER/Render_speacker\"
 
 func _ready():
 	if !active_npc_entrance:
 		return
 	_global_datas._open_dialogue.connect(_start)
-	_global_datas._show_dialogue_box.connect(active_npc_incolor)
-	
-	
-func active_npc_incolor():
-	_material.set_shader_parameter(\"Is_in_archive\",true)	
-	
+
 func _start():
-	
 	timer.start()
 	_material.set_shader_parameter(\"Opacity\",2.0)
 	_global_datas._hide_dialogue_box.emit()
-	
-	_material.set_shader_parameter(\"Is_in_archive\",false)	
-	
 	
 func _process(delta):
 	
@@ -254,13 +245,12 @@ func _process(delta):
 	var lerp_time_circle = lerp(1.0,0.0,(timer.time_left / timer.wait_time ))
 	_material_circle.set_shader_parameter(\"Opacity\",lerp_time_circle)
 	
-
-			
+	
 func _on_timer_timeout():
 	
 	if _global_datas.Npc_Dialogue != null:
 		_global_datas._start_dialogue_box.emit()
-		_global_datas._show_dialogue_box.emit()	
+		_global_datas._show_dialogue_box.emit()		
 "
 
 [sub_resource type="VisualShader" id="VisualShader_6uu1l"]
@@ -470,7 +460,7 @@ shader_parameter/Opacity = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7ie5m"]
 shader = ExtResource("9_8gj0l")
-shader_parameter/Is_in_archive = true
+shader_parameter/Photo_exist = true
 shader_parameter/Opacity = 1.0
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_ah4ff"]
@@ -604,23 +594,14 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -710.0
+offset_top = -180.0
+offset_right = 710.0
+offset_bottom = 180.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("ViewportTexture_ah4ff")
-
-[node name="End_typing_button" type="TextureButton" parent="00_NPC_CREATOR/Npc_convas"]
-layout_direction = 1
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-disabled = true
-action_mode = 0
-ignore_texture_size = true
-stretch_mode = 0
-script = ExtResource("10_o8x3k")
+expand_mode = 1
 
 [node name="Dialogue_box" type="Control" parent="00_NPC_CREATOR/Npc_convas"]
 layout_mode = 1
@@ -726,6 +707,20 @@ offset_bottom = 231.5
 grow_vertical = 0
 mouse_filter = 2
 theme_override_constants/separation = 10
+
+[node name="End_typing_button" type="TextureButton" parent="00_NPC_CREATOR/Npc_convas"]
+layout_direction = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+disabled = true
+action_mode = 0
+ignore_texture_size = true
+stretch_mode = 0
+script = ExtResource("10_o8x3k")
 
 [node name="Models" type="Node" parent="00_NPC_CREATOR"]
 
