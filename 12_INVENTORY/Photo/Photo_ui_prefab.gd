@@ -23,7 +23,7 @@ func move():
 	Engine.time_scale = 0.1	
 	speed = 0.05
 	
-		
+	take_photo.disabled = true	
 	var resolution : Vector2 = get_viewport_rect().size
 		
 	var start_position = Vector2(resolution.x / 2.0, resolution.y)
@@ -50,7 +50,7 @@ func move():
 	
 func grab_button():
 	take_it_button.grab_focus()
-		
+	take_photo.disabled = false
 func out_movement():
 	
 	Engine.time_scale = 1.0

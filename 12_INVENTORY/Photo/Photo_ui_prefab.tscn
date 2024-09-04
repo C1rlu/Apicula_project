@@ -1,7 +1,13 @@
-[gd_scene load_steps=8 format=3 uid="uid://d3oc7jql104xb"]
+[gd_scene load_steps=11 format=3 uid="uid://d3oc7jql104xb"]
 
 [ext_resource type="Script" path="res://12_INVENTORY/Photo/Photo_ui_prefab.gd" id="1_4cnwf"]
 [ext_resource type="Texture2D" uid="uid://dvlnqtm1lcg0r" path="res://12_INVENTORY/Photo/IMG/Birds_photo.png" id="1_ccu51"]
+[ext_resource type="Shader" uid="uid://bhctfh42jxjgh" path="res://12_INVENTORY/Photo/Photo_ui_prefab_fadeIn.tres" id="2_ulgny"]
+[ext_resource type="Script" path="res://12_INVENTORY/Photo/Photo_render_fade.gd" id="4_wkuo2"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hrjbm"]
+shader = ExtResource("2_ulgny")
+shader_parameter/Opacity = 0.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jx2df"]
 
@@ -40,6 +46,7 @@ grow_vertical = 2
 color = Color(0.792157, 0.65098, 0.482353, 1)
 
 [node name="Photo_render" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_hrjbm")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -53,6 +60,7 @@ offset_bottom = 3.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("1_ccu51")
+script = ExtResource("4_wkuo2")
 
 [node name="Take_Photo" type="Button" parent="."]
 layout_mode = 0
