@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=3 uid="uid://cein0q2eirkay"]
+[gd_scene load_steps=58 format=3 uid="uid://cein0q2eirkay"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_g3pi7"]
 [ext_resource type="Script" path="res://10_BOARD/Board_CamTarget.gd" id="1_janbq"]
@@ -11,7 +11,6 @@
 [ext_resource type="Resource" uid="uid://cmp0pwiuhoh2j" path="res://15_GAME_RESSOURCE/04_Element/Clock_element.tres" id="6_h5ap1"]
 [ext_resource type="Script" path="res://10_BOARD/Drop_Element_State.gd" id="7_io232"]
 [ext_resource type="Resource" uid="uid://cim2mu11bktke" path="res://15_GAME_RESSOURCE/04_Element/Cube_04_element.tres" id="7_sglhn"]
-[ext_resource type="Script" path="res://10_BOARD/Information_manager.gd" id="7_v3hdy"]
 [ext_resource type="Resource" uid="uid://drbtl8kjyf8n1" path="res://15_GAME_RESSOURCE/04_Element/Cube_05_element.tres" id="8_sgf7i"]
 [ext_resource type="Script" path="res://10_BOARD/Set_focus_data.gd" id="9_2ajy3"]
 [ext_resource type="Script" path="res://10_BOARD/Zoom_state.gd" id="9_8at4f"]
@@ -75,9 +74,11 @@ func _back_call():
 [sub_resource type="GDScript" id="GDScript_1a2yk"]
 script/source = "extends Node
 
+@onready var timer = $Timer
 
-
-
+func _ready():
+	#_global_datas._backFrom_subscene.connect(_open_backfrom_subscene)
+	timer.timeout.connect(open_inventory)
 func _input(event):
 	
 
@@ -94,6 +95,23 @@ func _input(event):
 		_global_datas.Player_In_Inventory = ! _global_datas.Player_In_Inventory
 		_global_datas.open_inventory.emit(_global_datas.Player_In_Inventory)	
 		
+
+func _open_backfrom_subscene():
+	
+
+	if check_if_element():
+		timer.start()
+		print(\"OPEN BOARD YOU NEED TO PLACE ELEMENT\")
+func open_inventory():
+	_global_datas.open_inventory.emit(true)
+	_global_datas.Player_In_Inventory = true
+
+func check_if_element()-> bool :
+	 
+	for e in _global_datas.element_collected:
+		if !e.Object_on_Board:
+			return true	
+	return false
 "
 
 [sub_resource type="GDScript" id="GDScript_52477"]
@@ -244,7 +262,14 @@ shader = SubResource("VisualShader_elssd")
 
 [sub_resource type="SphereMesh" id="SphereMesh_ycnm1"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ifca2"]
+shading_mode = 0
+
 [sub_resource type="PrismMesh" id="PrismMesh_2j3nk"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yjabd"]
+shading_mode = 0
+albedo_color = Color(1, 0.219608, 0.219608, 1)
 
 [node name="04_BOARD" type="Node"]
 script = SubResource("GDScript_w13ry")
@@ -263,10 +288,10 @@ script = SubResource("GDScript_1a2yk")
 script = ExtResource("1_g3pi7")
 viewports = [NodePath("../../3D_SCENE/SubViewport")]
 
-[node name="Information_manager" type="Node" parent="."]
-script = ExtResource("7_v3hdy")
+[node name="Timer" type="Timer" parent="Open_Inventory"]
+one_shot = true
 
-[node name="Board_info_reader_class" type="Node" parent="Information_manager"]
+[node name="Board_info_reader_class_CAN BE USEFULL" type="Node" parent="."]
 script = ExtResource("9_tfybn")
 
 [node name="Element_Manager" type="Node" parent="."]
@@ -428,9 +453,11 @@ transform = Transform3D(0.0354637, 0, 0, 0, 0.0354637, 0, 0, 0, 0.0354637, 0, 0,
 visible = false
 layers = 2
 mesh = SubResource("SphereMesh_ycnm1")
+surface_material_override/0 = SubResource("StandardMaterial3D_ifca2")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="3D_SCENE/CamTarget"]
 transform = Transform3D(0.0176783, 0, 0, 0, -7.72744e-10, 0.0176783, 0, -0.0176783, -7.72744e-10, 0, 0.017216, 0)
 visible = false
 layers = 2
 mesh = SubResource("PrismMesh_2j3nk")
+surface_material_override/0 = SubResource("StandardMaterial3D_yjabd")

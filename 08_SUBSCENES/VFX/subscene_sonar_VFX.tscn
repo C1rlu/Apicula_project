@@ -1,5 +1,6 @@
-[gd_scene load_steps=59 format=3 uid="uid://cakei8rfaiuqm"]
+[gd_scene load_steps=60 format=3 uid="uid://cakei8rfaiuqm"]
 
+[ext_resource type="Script" path="res://08_SUBSCENES/VFX/subscene_sonar_VFX.gd" id="1_ga3l1"]
 [ext_resource type="Script" path="res://08_SUBSCENES/VFX/Scale_on_ready.gd" id="1_mevm0"]
 [ext_resource type="Script" path="res://08_SUBSCENES/VFX/Check_debris.gd" id="2_ve0ej"]
 
@@ -38,7 +39,7 @@ hint = 1
 default_value_enabled = true
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_oru1n"]
-parameter_name = "ColorParameter"
+parameter_name = "Color"
 
 [sub_resource type="VisualShaderNodeFresnel" id="VisualShaderNodeFresnel_sbl0h"]
 default_input_values = [2, true, 3, 0.15]
@@ -116,7 +117,7 @@ render_mode blend_mix, depth_draw_opaque, cull_front, diffuse_lambert, specular_
 
 uniform float Speed : hint_range(0, 1) = 0.5;
 uniform sampler2D tex_vtx_8;
-uniform vec4 ColorParameter : source_color;
+uniform vec4 Color : source_color;
 global uniform bool isGray;
 uniform float FloatParameter = 0.15000000596046;
 uniform sampler2D depth_tex_frg_17 : hint_depth_texture;
@@ -183,7 +184,7 @@ void vertex() {
 
 void fragment() {
 // ColorParameter:3
-	vec4 n_out3p0 = ColorParameter;
+	vec4 n_out3p0 = Color;
 
 
 	float n_out14p0;
@@ -263,7 +264,7 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-1111.65, 126.26)
+graph_offset = Vector2(-505.659, 1.30541)
 modes/cull = 1
 flags/unshaded = true
 flags/shadows_disabled = true
@@ -345,7 +346,7 @@ resource_local_to_scene = true
 render_priority = 0
 shader = SubResource("VisualShader_d14en")
 shader_parameter/Speed = 0.5
-shader_parameter/ColorParameter = Color(0.262745, 0.631373, 0.466667, 1)
+shader_parameter/Color = Color(0.262745, 0.631373, 0.466667, 1)
 shader_parameter/FloatParameter = 15.57
 shader_parameter/Opacity = 1.0
 
@@ -360,7 +361,7 @@ default_value_enabled = true
 function = 31
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_ybqvq"]
-parameter_name = "ColorParameter2"
+parameter_name = "Color"
 
 [sub_resource type="VisualShaderNodeFresnel" id="VisualShaderNodeFresnel_kjq8w"]
 default_input_values = [2, true, 3, 13.52]
@@ -438,7 +439,7 @@ render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_s
 
 uniform float Speed : hint_range(0, 1) = 0.5;
 uniform sampler2D tex_vtx_3;
-uniform vec4 ColorParameter2 : source_color;
+uniform vec4 Color : source_color;
 uniform float Opacity : hint_range(0, 1) = 0;
 global uniform float Dither_size;
 
@@ -495,7 +496,7 @@ void vertex() {
 
 void fragment() {
 // ColorParameter:2
-	vec4 n_out2p0 = ColorParameter2;
+	vec4 n_out2p0 = Color;
 
 
 // FloatConstant:7
@@ -557,7 +558,7 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-1447.6, -72.1694)
+graph_offset = Vector2(-778.528, -254.088)
 flags/unshaded = true
 flags/shadows_disabled = true
 flags/ambient_light_disabled = true
@@ -624,12 +625,13 @@ nodes/light/0/position = Vector2(840, 240)
 render_priority = 1
 shader = SubResource("VisualShader_38dly")
 shader_parameter/Speed = 1.0
-shader_parameter/ColorParameter2 = Color(0.262745, 0.631373, 0.466667, 1)
+shader_parameter/Color = Color(0.262745, 0.631373, 0.466667, 1)
 shader_parameter/Opacity = 1.0
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_4r7mu"]
 
-[node name="Mirror_exit_VFX" type="Node3D"]
+[node name="Sonar_VFX" type="Node3D"]
+script = ExtResource("1_ga3l1")
 
 [node name="Scale_on_ready" type="Node" parent="." node_paths=PackedStringArray("mesh", "mesh_round")]
 script = ExtResource("1_mevm0")

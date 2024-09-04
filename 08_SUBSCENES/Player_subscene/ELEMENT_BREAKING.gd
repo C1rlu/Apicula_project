@@ -1,8 +1,11 @@
 extends Node
 
+@export var _sonar_blue_color : Color
+@export var _sonar_yellow_color : Color
 
 @export var Rg : RigidBody3D
 @export var hit_node : Node3D
+
 
 const DEBRIS_HIT_PARTICULE = preload("res://08_SUBSCENES/VFX/Debris_hit_particule.tscn")
 
@@ -10,12 +13,14 @@ var hit_index : int = 0
 @onready var timer = $Timer
 
 var vortex_index : int = 0
+
+
 func _ready():
 	
 	if Rg:
 		Rg.body_shape_entered.connect(_contact)
 		
-		
+
 func _contact(body_rid, body, body_shape_index, local_shape_index):
 	
 	if body:
@@ -43,7 +48,8 @@ func _contact(body_rid, body, body_shape_index, local_shape_index):
 				Scannable._hit()
 				timer.start()
 				check_player_speed(body.global_position)
-				_global_datas.subscene_sonar_effect.emit(_global_datas.player_rg.position)	
+
+				_global_datas.subscene_sonar_effect.emit(_global_datas.player_rg.position,_sonar_yellow_color)	
 				return		
 		
 		if vortex:
@@ -64,7 +70,7 @@ func _contact(body_rid, body, body_shape_index, local_shape_index):
 				hit_index = 0	
 				
 			if hit_index == 0:
-				_global_datas.subscene_sonar_effect.emit(_global_datas.player_rg.position)	
+				_global_datas.subscene_sonar_effect.emit(_global_datas.player_rg.position,_sonar_blue_color)	
 				
 			hit_index += 1
 			

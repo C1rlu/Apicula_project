@@ -4,6 +4,7 @@ extends Node
 @export var rg : RigidBody3D
 @export var strenght : float = 200
 @export var Fade_OnScanner : Node
+
 var target_dir : Vector3
 
 
@@ -32,7 +33,11 @@ func _attract(condition: bool):
 	
 	if condition:
 		Fade_OnScanner._fade_out(color_attracted)
-	
+		rg._collect_element(true)
+		
+	else:
+		rg._collect_element(false)
+		
 func _process(delta):
 	
 	if attract:

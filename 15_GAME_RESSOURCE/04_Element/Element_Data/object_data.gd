@@ -6,4 +6,5 @@ class_name element_data
 @export var Object_broke : bool = false
 @export var element_prefabs : PackedScene
 @export var element_size : int = 0
+var element_collected : bool = false #for subscene
 var Render_msh : MeshInstance3D

@@ -94,7 +94,7 @@ var _selected_tool : tool_data
 signal set_tool_ui(tool : tool_data)
 signal open_tool_selector(condition : bool)
 var selector_is_open: bool = false
-signal subscene_sonar_effect(position : Vector3)
+signal subscene_sonar_effect(position : Vector3, color : Color)
 var LoadScene : Node3D
 #teleporter vertex variable
 signal in_mirror_zone
@@ -102,7 +102,6 @@ signal vertex_hit_effect
 signal update_selector
 var backcall_path : Array[Node3D] 
 var player_state : game_state.visible_state = game_state.visible_state.normal
-
 # Shop variable
 
 signal _open_shop(condition : bool)
@@ -124,10 +123,7 @@ signal mouse_raycast
 var board_camera : Camera3D
 var Cursor_mode : Node
 signal close_all_over_ui
-signal add_collect_element(element : element_data)
 
-signal information_added(information : info_data)
-signal ui_noted_taked
 signal map_fade(condition : bool) # true is in : false is out
 
 
@@ -174,7 +170,7 @@ signal active_scanner_button(condition : bool)
 
 var current_money : int = 0
 signal update_money_amount(value : int)
-signal update_element_amount(value : int)
+signal update_element_amount
 #-----------------------------
 # dialogue datas
 var Npc_Dialogue : Npc_datas

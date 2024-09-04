@@ -49,8 +49,10 @@ func broke_me(condition):
 	
 	if broken_element.size() == 1:
 		element.Object_broke = true
+		_global_datas.update_element_amount.emit()
 		Main_root.queue_free()			
-	
+		
+		
 	_global_datas.camera_focus_On.emit(focus_data)
 	_global_datas.focus_this_on_board.emit(Main_root.global_position)
 	
@@ -58,7 +60,7 @@ func broke_me(condition):
 	broken_element[random_hit].queue_free()
 	broken_element.erase(broken_element[random_hit])
 	
-
+	
 	set_particule()
 
 func set_particule():

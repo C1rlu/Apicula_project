@@ -73,30 +73,37 @@ func _process(delta):
 		#current_speed = speed /2		
 		return
 		
+
 func move(delta):
-	
+	var direction = Vector3.ZERO
+
 	if Input.is_action_pressed(_global_datas.move_right):
-		
 		var _magnitude = Input.get_action_strength(_global_datas.move_right)
-		target_position.x +=  _magnitude * current_speed * delta
+		direction += global_transform.basis.x * _magnitude  # Move right
 	if Input.is_action_pressed(_global_datas.move_left):
 		var _magnitude = Input.get_action_strength(_global_datas.move_left)
-		target_position.x -= _magnitude * current_speed * delta	
+		direction -= global_transform.basis.x * _magnitude  # Move left
 	if Input.is_action_pressed(_global_datas.move_forward):
 		var _magnitude = Input.get_action_strength(_global_datas.move_forward)
-		target_position.z -= _magnitude * current_speed * delta	
+		direction -= global_transform.basis.z * _magnitude  # Move forward
 	if Input.is_action_pressed(_global_datas.move_backward):
 		var _magnitude = Input.get_action_strength(_global_datas.move_backward)
-		target_position.z += _magnitude * current_speed * delta
-	
-	var lerp_value = (border_ratio - 22.0) / (42.0 - 22.0)	
-	var oneminus = lerp(1.0,0.0,lerp_value)
-	
+		direction += global_transform.basis.z * _magnitude  # Move backward
+
+	# Apply movement
+	direction = direction.normalized() * current_speed * delta
+	target_position += direction
+
+	# Clamping the position within boundaries
+	var lerp_value = (border_ratio - 22.0) / (42.0 - 22.0)
+	var oneminus = lerp(1.0, 0.0, lerp_value)
 	target_position.x = clamp(target_position.x, oneminus * min_x, oneminus * max_x)
 	target_position.z = clamp(target_position.z, oneminus * min_z, oneminus * max_z)
 
+	# Update the global position
+	global_transform.origin = target_position
 
-	global_position = target_position
+
 
 func _focus_this(_position):
 	

@@ -9,16 +9,25 @@ extends RigidBody3D
 
 @export var Debris : Node
 func _ready():
-	Element._collect.connect(collect_element)
 	
+	if _element_data.element_collected:
+		print(_element_data.element_name, " was collected so removed from scene")
+		queue_free()
+		
+	
+	Element._collect.connect(_collect_element)
 	Debris.freeze_body.connect(freeze_body)
 	
-func collect_element():
+func _collect_element(condition : bool):
 	
-	_global_datas.add_collect_element.emit(_element_data)
-	queue_free()
-
-
+	if condition:
+		
+		_subscene_datas._add_collect_element.emit(_element_data)
+	else:
+		_subscene_datas._remove_collect_element.emit(_element_data)
+		
+	_element_data.element_collected = condition
+	
 func freeze_body(condition : bool):
 	
 	#print("debris was freezed", condition)

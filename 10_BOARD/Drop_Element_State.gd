@@ -8,6 +8,7 @@ func _ready():
 	_global_datas.check_element_to_open.connect(check_next_element)
 	_global_datas.open_inventory.connect(check_at_open)
 	
+
 			
 func check_next_element():
 	
