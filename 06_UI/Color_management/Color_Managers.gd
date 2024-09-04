@@ -9,15 +9,15 @@ func _ready():
 	_NormalColor_mainScene()
 	_global_datas._go_Subscene.connect(_Darker_mainScene)
 	_global_datas._backFrom_subscene.connect(_NormalColor_mainScene)
-	_global_datas._active_progress_subscene.connect(_open)
+	#_global_datas._active_progress_subscene.connect(_open)
 	
 	_global_datas.go_normal_color.connect(_NormalColor_mainScene)
 	_global_datas.go_darker_color.connect(_Darker_mainScene)
-	
+	_global_datas.show_dive_zone_info.connect(_open)
 	#ACTIVE DITHER
 	RenderingServer.global_shader_parameter_set("active_Dither", active_dither_at_start )
 	
-func _open(condition : bool):
+func _open(condition : bool, value):
 	
 	if condition:
 		
