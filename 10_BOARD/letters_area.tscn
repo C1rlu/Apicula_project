@@ -1,6 +1,6 @@
 [gd_scene load_steps=29 format=3 uid="uid://qgyjfq88teq8"]
 
-[ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Movable_obj.gd" id="1_3c8dm"]
+[ext_resource type="Resource" uid="uid://61umivwjjcjs" path="res://12_INVENTORY/Words_note/Birds_goLighthouse_note.tres" id="1_syumr"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="2_ke4da"]
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/On_click_object.gd" id="2_rje64"]
 [ext_resource type="Material" uid="uid://yjoyk6fvrm6q" path="res://10_BOARD/00_BOOK/00_SHADER/No_light_surface_mat.tres" id="5_kvfps"]
@@ -11,49 +11,30 @@ script/source = "extends Area3D
 
 
 @export var Note_data : Note_Data
-@export var Camera_state : boardCamState_data
-@onready var collision_shape_3d = $CollisionShape3D
-@onready var photo = $photo
 @onready var note_text = $Render_text
 @onready var note = $Note
 
+@export var On_Move : Node
 @export var On_View : Node
-@export var Quest_letter : Node3D
+
 
 
 func _ready():
 	note._set_note(Note_data.note_text,Note_data.from)
 	Note_data.scene_node_3d = self
-	_global_datas.open_quest_info.connect(show_quest_letter)
 	
-	On_View.On_View.connect(Open_quest_responce)
+	_global_datas._select_quest_on_board.connect(_update_selected_quest)
+	On_Move.On_Move.connect(Open_quest_responce)
 	
+func _update_selected_quest(_Note_data : Note_Data):
+	print(\"selected quest\", _Note_data.note_text)
+	note._set_note(_Note_data.note_text,_Note_data.from)
 	
-func Open_quest_responce():
+func Open_quest_responce(condition : bool):
+	if condition:
+		print(\"OPEN QUEST\")
+		_global_datas._open_quest_on_board.emit(true)
 	
-	if Note_data:
-		_global_datas.open_quest_info.emit(true,Note_data)
-		_global_datas.camera_focus_On.emit(Camera_state)
-		_global_datas.focus_this_on_board.emit(global_position)
-	else:
-		print(\"NEED A NOTE_DATA HERE\")		
-	
-
-func show_quest_letter(condition, letter_quest):
-	Quest_letter.visible = condition	
-		
-func _active():
-	collision_shape_3d.disabled = false	
-
-	photo.visible = true
-	note_text.visible = true
-
-func _disable():
-	
-	collision_shape_3d.disabled = true
-
-	photo.visible = false
-	note_text.visible = false
 
 
 "
@@ -235,25 +216,18 @@ shader_parameter/Color = Color(0.690196, 0.396078, 0.247059, 1)
 shader_parameter/Dither_Opacity = 1.0
 shader_parameter/Gradient_light = SubResource("GradientTexture2D_apshu")
 
-[node name="Letter_area" type="Area3D" node_paths=PackedStringArray("On_View", "Quest_letter")]
+[node name="Letter_area" type="Area3D" node_paths=PackedStringArray("On_Move", "On_View")]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0.00272226, 0)
 script = SubResource("GDScript_ypp87")
+Note_data = ExtResource("1_syumr")
+On_Move = NodePath("On_Move")
 On_View = NodePath("On_View")
-Quest_letter = NodePath("Quest_letter")
-
-[node name="Movable_obj_off" type="Node" parent="." node_paths=PackedStringArray("collider", "move_root", "rotation_root", "On_Move")]
-script = ExtResource("1_3c8dm")
-collider = NodePath("../CollisionShape3D")
-move_root = NodePath("..")
-rotation_root = NodePath("..")
-On_Move = NodePath("../On_Move_off")
-rotation_degrees = 25.0
-
-[node name="On_Move_off" type="Node" parent="."]
-script = ExtResource("2_rje64")
 
 [node name="Note" type="Node" parent="."]
 script = SubResource("GDScript_4uwx0")
+
+[node name="On_Move" type="Node" parent="."]
+script = ExtResource("2_rje64")
 
 [node name="On_Over" type="Node" parent="."]
 script = ExtResource("2_ke4da")
@@ -262,7 +236,7 @@ script = ExtResource("2_ke4da")
 script = SubResource("GDScript_ikx4k")
 
 [node name="Quest_letter" type="Node3D" parent="."]
-transform = Transform3D(0.992874, 0, -0.119166, 0, 1, 0, 0.119166, 0, 0.992874, 0.00528288, 0.00296854, 0.00421034)
+transform = Transform3D(0.992874, 0, -0.119166, 0, 1, 0, 0.119166, 0, 0.992874, 0.00695114, 0.00296854, 0.00943157)
 visible = false
 
 [node name="Render_quest" type="Sprite3D" parent="Quest_letter"]
@@ -279,7 +253,7 @@ skeleton = NodePath("")
 surface_material_override/0 = SubResource("ShaderMaterial_bgk60")
 
 [node name="photo_light" type="MeshInstance3D" parent="Quest_letter"]
-transform = Transform3D(0.0898917, 0, 0, 0, -2.52697e-09, 0.0405362, 0, -0.0578102, -1.77189e-09, 0, 0, 0)
+transform = Transform3D(0.0898917, -9.31323e-10, 0, 0, -2.52697e-09, 0.0405362, -1.86265e-09, -0.0578102, -1.77189e-09, 0, 0, 0)
 layers = 65536
 mesh = SubResource("QuadMesh_4umhe")
 skeleton = NodePath("")
@@ -297,8 +271,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 40
-text = "Find a pocket watch. Last owner : mister Anderson in 1900, need the object and on proof that identifies it. Put the elements near the letter and ring the bell
-"
+text = "Please, place what his asked on this board and ring the bell
+Mr Bird"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2

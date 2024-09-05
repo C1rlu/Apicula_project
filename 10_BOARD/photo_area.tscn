@@ -1,4 +1,4 @@
-[gd_scene load_steps=67 format=3 uid="uid://uwg2qc3svu11"]
+[gd_scene load_steps=71 format=3 uid="uid://uwg2qc3svu11"]
 
 [ext_resource type="Script" path="res://10_BOARD/Photo_element.gd" id="1_0a8jl"]
 [ext_resource type="Resource" uid="uid://dyh1qg1u652pl" path="res://15_GAME_RESSOURCE/Epave_ch_photoData.tres" id="2_8x1kk"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://13_TOOLS_UI/Clock_montre/Selection_ini.gd" id="6_wkbq8"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="7_vd1wc"]
 [ext_resource type="Script" path="res://10_BOARD/On_View.tres.gd" id="8_2nycl"]
+[ext_resource type="Shader" uid="uid://ceec4w3amlx7t" path="res://10_BOARD/photo_area_legend_sh.tres" id="11_h5w6g"]
 
 [sub_resource type="GDScript" id="GDScript_32kbr"]
 script/source = "@tool
@@ -652,6 +653,17 @@ size = Vector3(0.0849429, 0.0129531, 0.0916202)
 [sub_resource type="BoxShape3D" id="BoxShape3D_nnquu"]
 size = Vector3(0.0871338, 0.00541992, 0.1)
 
+[sub_resource type="PlaneMesh" id="PlaneMesh_1d5hp"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_erm4f"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y3l0l"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("11_h5w6g")
+shader_parameter/Texture2DParameter = SubResource("ViewportTexture_erm4f")
+
 [node name="Photo_element_root" type="Node3D" node_paths=PackedStringArray("_On_View", "_On_Over", "on_over_node")]
 script = ExtResource("1_0a8jl")
 Photo_data = ExtResource("2_8x1kk")
@@ -676,6 +688,7 @@ root = NodePath("..")
 Movable_node = NodePath("../Movable_object")
 
 [node name="Photo" type="Node3D" parent="."]
+transform = Transform3D(1.30166, 0, 0, 0, 1.30166, 0, 0, 0, 1.30166, 1.89189e-07, -3.95626e-06, -6.48852e-06)
 
 [node name="texture" type="Node" parent="Photo"]
 script = SubResource("GDScript_32kbr")
@@ -695,7 +708,7 @@ skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("ShaderMaterial_0vsb7")
 
 [node name="All_over" type="Node3D" parent="."]
-transform = Transform3D(0.999989, 0, 0.00467785, 0, 1, 0, -0.00467785, 0, 0.999989, -0.000246863, 0.00516227, 0.038578)
+transform = Transform3D(1.30165, 0, 0.00608897, 0, 1.30166, 0, -0.00608897, 0, 1.30165, -0.000246989, 0.00516491, 0.0386208)
 visible = false
 
 [node name="On_Over_full" type="MeshInstance3D" parent="All_over"]
@@ -706,7 +719,7 @@ skeleton = NodePath("../../..")
 surface_material_override/0 = SubResource("ShaderMaterial_gfhbg")
 
 [node name="Click" type="Area3D" parent="."]
-transform = Transform3D(0.999989, 0, 0.00467785, 0, 1, 0, -0.00467785, 0, 0.999989, -0.000246863, 0.00516227, -0.00658954)
+transform = Transform3D(1.30165, 0, 0.00608897, 0, 1.30166, 0, -0.00608897, 0, 1.30165, -0.000246989, 0.00516491, -0.00660445)
 
 [node name="On_Move" type="Node" parent="Click"]
 script = ExtResource("6_46a1v")
@@ -722,7 +735,7 @@ transform = Transform3D(0.999997, 0, 4.14439e-08, 0, 1, 0, -4.14439e-08, 0, 0.99
 shape = SubResource("BoxShape3D_nnxyu")
 
 [node name="Limit" type="Area3D" parent="."]
-transform = Transform3D(0.999989, 0, 0.00467785, 0, 1, 0, -0.00467785, 0, 0.999989, -0.000246863, 0.00516227, -0.00658954)
+transform = Transform3D(1.30165, 0, 0.00608897, 0, 1.30166, 0, -0.00608897, 0, 1.30165, -0.000246989, 0.00516491, -0.00660445)
 collision_layer = 4
 collision_mask = 4
 
@@ -733,9 +746,40 @@ transform = Transform3D(0.999997, 0, 4.14439e-08, 0, 1, 0, -4.14439e-08, 0, 0.99
 shape = SubResource("BoxShape3D_nnxyu")
 
 [node name="Position_zone" type="Area3D" parent="."]
+transform = Transform3D(1.30166, 0, 0, 0, 1.30166, 0, 0, 0, 1.30166, 1.89189e-07, -3.95626e-06, -6.48852e-06)
 
 [node name="Position_zone" type="Node" parent="Position_zone"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Position_zone"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00157471, 0.00124512, 0)
 shape = SubResource("BoxShape3D_nnquu")
+disabled = true
+
+[node name="SubViewport" type="SubViewport" parent="."]
+disable_3d = true
+transparent_bg = true
+size = Vector2i(250, 60)
+
+[node name="ColorRect" type="ColorRect" parent="SubViewport"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.721569, 0.580392, 0.407843, 1)
+
+[node name="Label" type="Label" parent="SubViewport"]
+offset_left = 40.0
+offset_top = 8.19
+offset_right = 183.0
+offset_bottom = 50.19
+theme_override_colors/font_color = Color(0.0352941, 0.0862745, 0.0862745, 1)
+theme_override_font_sizes/font_size = 30
+text = "MY NAME"
+
+[node name="Legend_render" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.0445454, 0, 0.000585701, 0, 0.044645, 0, -0.00298135, 0, 0.00875117, 0.00948963, 0.00351958, 0.0482717)
+visible = false
+layers = 2
+mesh = SubResource("PlaneMesh_1d5hp")
+surface_material_override/0 = SubResource("ShaderMaterial_y3l0l")

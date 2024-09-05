@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://b4ju0ntcydix8"]
+[gd_scene load_steps=12 format=3 uid="uid://b4ju0ntcydix8"]
 
 [ext_resource type="Shader" uid="uid://ce21gfa0ldjj7" path="res://13_TOOLS_UI/2D_MAP/2d_map_sh.tres" id="1_bcm85"]
 [ext_resource type="Shader" uid="uid://cg5mgo48srf08" path="res://13_TOOLS_UI/2D_MAP/2d_map_border.tres" id="1_kvg0y"]
@@ -7,6 +7,7 @@
 [ext_resource type="Resource" uid="uid://cgd8sb0q0d67c" path="res://08_SUBSCENES/Tools/Main_tool/Menu/Open_Map.tres" id="2_ofx7r"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/2D_MAP/Control_map.gd" id="3_8kfsc"]
 [ext_resource type="Texture2D" uid="uid://j82ecsafafol" path="res://10_BOARD/Map/Map_board_isle_01.png" id="3_cvvbd"]
+[ext_resource type="PackedScene" uid="uid://cqbutqb21mt2l" path="res://13_TOOLS_UI/2D_MAP/Legend/Legend_prefab.tscn" id="8_x8w18"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_r6rtr"]
 shader = ExtResource("1_kvg0y")
@@ -18,7 +19,7 @@ shader_parameter/Flat_color = Color(0.0156863, 0.109804, 0.117647, 1)
 shader_parameter/Opacity = 1.0
 shader_parameter/Mask_color = Color(0.223529, 0.211765, 0.145098, 1)
 shader_parameter/Line_color = Color(0.596078, 0.466667, 0.298039, 1)
-shader_parameter/Grid_color = Color(0.137255, 0.231373, 0.239216, 1)
+shader_parameter/Grid_color = Color(0.196078, 0.317647, 0.32549, 1)
 shader_parameter/Offset = Vector2(0, 0)
 shader_parameter/Size = Vector2(1000, 1000)
 shader_parameter/Ligne_widht = 0.025
@@ -26,7 +27,7 @@ shader_parameter/Isle_mask = ExtResource("3_cvvbd")
 shader_parameter/Line = ExtResource("1_q1x4e")
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_tkf7a"]
-viewport_path = NodePath("SubViewport")
+viewport_path = NodePath("SubViewportContainer/SubViewport")
 
 [node name="2D_Map" type="Control"]
 layout_mode = 3
@@ -41,20 +42,27 @@ mouse_filter = 2
 
 [node name="Player_Map_behaviour" type="Node" parent="." node_paths=PackedStringArray("Map_node")]
 script = ExtResource("1_to0fs")
-Map_node = NodePath("../SubViewport/root")
+Map_node = NodePath("..")
 Map_button_tool = ExtResource("2_ofx7r")
 
 [node name="Control_map" type="Node" parent="."]
 script = ExtResource("3_8kfsc")
 
-[node name="SubViewport" type="SubViewport" parent="."]
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+layout_mode = 0
+offset_left = -640.0
+offset_top = -360.0
+offset_right = -600.0
+offset_bottom = -320.0
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
 disable_3d = true
 transparent_bg = true
 handle_input_locally = false
 size = Vector2i(1280, 720)
 render_target_update_mode = 4
 
-[node name="root" type="Control" parent="SubViewport"]
+[node name="root" type="Control" parent="SubViewportContainer/SubViewport"]
 layout_mode = 3
 anchors_preset = 8
 anchor_left = 0.5
@@ -65,7 +73,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Border" type="ColorRect" parent="SubViewport/root"]
+[node name="Border" type="ColorRect" parent="SubViewportContainer/SubViewport/root"]
 material = SubResource("ShaderMaterial_r6rtr")
 layout_mode = 1
 anchors_preset = 8
@@ -82,7 +90,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.45098, 0.364706, 0.25098, 1)
 
-[node name="Map" type="TextureRect" parent="SubViewport/root"]
+[node name="Map" type="TextureRect" parent="SubViewportContainer/SubViewport/root"]
 material = SubResource("ShaderMaterial_0u5bg")
 layout_mode = 1
 anchors_preset = 8
@@ -100,7 +108,95 @@ mouse_filter = 2
 texture = ExtResource("3_cvvbd")
 expand_mode = 1
 
-[node name="Camera2D" type="Camera2D" parent="SubViewport"]
+[node name="Legends" type="Control" parent="SubViewportContainer/SubViewport/root"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+
+[node name="LegendPrefab" parent="SubViewportContainer/SubViewport/root/Legends" instance=ExtResource("8_x8w18")]
+layout_mode = 0
+offset_left = -94.0
+offset_top = 201.0
+offset_right = 26.0
+offset_bottom = 240.0
+scale = Vector2(0.342, 0.342)
+focus_mode = 1
+
+[node name="LegendPrefab2" parent="SubViewportContainer/SubViewport/root/Legends" instance=ExtResource("8_x8w18")]
+layout_mode = 0
+offset_left = -189.0
+offset_top = -158.0
+offset_right = -69.0
+offset_bottom = -119.0
+scale = Vector2(0.342, 0.342)
+focus_mode = 1
+
+[node name="LegendPrefab3" parent="SubViewportContainer/SubViewport/root/Legends" instance=ExtResource("8_x8w18")]
+layout_mode = 0
+offset_left = 140.0
+offset_top = -89.0
+offset_right = 260.0
+offset_bottom = -50.0
+scale = Vector2(0.342, 0.342)
+focus_mode = 1
+
+[node name="LegendPrefab4" parent="SubViewportContainer/SubViewport/root/Legends" instance=ExtResource("8_x8w18")]
+layout_mode = 0
+offset_left = 153.0
+offset_top = 52.0
+offset_right = 273.0
+offset_bottom = 91.0
+scale = Vector2(0.342, 0.342)
+focus_mode = 1
+
+[node name="LegendPrefab5" parent="SubViewportContainer/SubViewport/root/Legends" instance=ExtResource("8_x8w18")]
+layout_mode = 0
+offset_left = -179.0
+offset_top = -3.0
+offset_right = -59.0
+offset_bottom = 36.0
+scale = Vector2(0.342, 0.342)
+focus_mode = 1
+
+[node name="LegendPrefab6" parent="SubViewportContainer/SubViewport/root/Legends" instance=ExtResource("8_x8w18")]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 173.0
+offset_right = 144.0
+offset_bottom = 212.0
+scale = Vector2(0.342, 0.342)
+focus_mode = 1
+
+[node name="LegendPrefab7" parent="SubViewportContainer/SubViewport/root/Legends" instance=ExtResource("8_x8w18")]
+layout_mode = 0
+offset_left = 151.0
+offset_top = 256.0
+offset_right = 271.0
+offset_bottom = 295.0
+scale = Vector2(0.342, 0.342)
+focus_mode = 1
+
+[node name="LegendPrefab8" parent="SubViewportContainer/SubViewport/root/Legends" instance=ExtResource("8_x8w18")]
+layout_mode = 0
+offset_left = -267.0
+offset_top = 134.0
+offset_right = -147.0
+offset_bottom = 173.0
+scale = Vector2(0.342, 0.342)
+focus_mode = 1
+
+[node name="LegendPrefab9" parent="SubViewportContainer/SubViewport/root/Legends" instance=ExtResource("8_x8w18")]
+layout_mode = 0
+offset_left = -19.0
+offset_top = -169.0
+offset_right = 101.0
+offset_bottom = -130.0
+scale = Vector2(0.342, 0.342)
+focus_mode = 1
+
+[node name="Camera2D" type="Camera2D" parent="SubViewportContainer/SubViewport"]
 position = Vector2(640, 360)
 editor_draw_limits = true
 editor_draw_drag_margin = true

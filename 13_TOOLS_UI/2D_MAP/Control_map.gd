@@ -1,6 +1,6 @@
 extends Node
 
-@onready var Camera : Camera2D  = $"../SubViewport/Camera2D"
+@onready var Camera : Camera2D  = $"../SubViewportContainer/SubViewport/Camera2D"
 
 var speed : float = 200
 var _is_active : bool  = false
@@ -9,11 +9,16 @@ var positionTarget : Vector2
 var unZoom_position : Vector2
 
 func _ready():
-	_global_datas._open_player_map.connect(func(condition): _is_active = condition)
+	_global_datas._open_player_map.connect(_active)
 	zoomTarget = Camera.zoom
 	positionTarget = Camera.position
 	unZoom_position	= Camera.position	
 	
+func _active(condition : bool):
+	_is_active = condition
+	
+	Camera.zoom = zoomTarget
+	Camera.position = positionTarget
 
 func _process(delta):
 	

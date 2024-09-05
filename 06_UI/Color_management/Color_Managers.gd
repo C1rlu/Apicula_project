@@ -14,6 +14,7 @@ func _ready():
 	_global_datas.go_normal_color.connect(_NormalColor_mainScene)
 	_global_datas.go_darker_color.connect(_Darker_mainScene)
 	_global_datas.show_dive_zone_info.connect(_open)
+	
 	#ACTIVE DITHER
 	RenderingServer.global_shader_parameter_set("active_Dither", active_dither_at_start )
 	

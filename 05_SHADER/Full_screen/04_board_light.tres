@@ -1,4 +1,4 @@
-[gd_resource type="VisualShader" load_steps=14 format=3 uid="uid://7nanp4dqf4uc"]
+[gd_resource type="VisualShader" load_steps=17 format=3 uid="uid://7nanp4dqf4uc"]
 
 [sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_q2vc7"]
 constant = Color(0.0320853, 0.0975584, 0.09756, 1)
@@ -47,6 +47,19 @@ source = 5
 [sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_vvegw"]
 function = 31
 
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_ygjhg"]
+size = Vector2(620, 200)
+expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
+grey_value = luminance;"
+
+[sub_resource type="VisualShaderNodeBooleanParameter" id="VisualShaderNodeBooleanParameter_v5dbr"]
+parameter_name = "isGray"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeSwitch" id="VisualShaderNodeSwitch_fqrtl"]
+default_input_values = [0, false, 1, Vector3(1, 1, 1), 2, Vector3(0, 0, 0)]
+op_type = 4
+
 [sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_upeu7"]
 parameter_name = "Albedo_light"
 
@@ -57,6 +70,7 @@ source = 5
 code = "shader_type canvas_item;
 render_mode blend_mix;
 
+global uniform bool isGray;
 uniform sampler2D Albedo_viewport;
 uniform sampler2D Albedo_light;
 uniform float Opacity : hint_range(0, 1) = 0.5;
@@ -65,6 +79,10 @@ global uniform float Dither_size;
 
 
 void fragment() {
+// BooleanParameter:32
+	bool n_out32p0 = isGray;
+
+
 // ColorConstant:18
 	vec4 n_out18p0 = vec4(0.032085, 0.097558, 0.097560, 1.000000);
 
@@ -87,6 +105,20 @@ void fragment() {
 
 // Mix:19
 	vec3 n_out19p0 = mix(vec3(n_out18p0.xyz), vec3(n_out3p0.xyz), vec3(n_out24p0));
+
+
+	float n_out31p0;
+// Expression:31
+	n_out31p0 = 0.0;
+	{
+		float luminance = 0.299 * n_out19p0.x + 0.587 * n_out19p0.y + 0.114 * n_out19p0.z;
+		n_out31p0 = luminance;
+	}
+
+
+	vec3 n_out33p0;
+// Switch:33
+	n_out33p0 = mix(n_out19p0, vec3(n_out31p0), float(n_out32p0));
 
 
 // FloatParameter:27
@@ -127,12 +159,13 @@ void fragment() {
 
 
 // Output:0
-	COLOR.rgb = n_out19p0;
+	COLOR.rgb = n_out33p0;
 	COLOR.a = n_out30p0;
 
 
 }
 "
+graph_offset = Vector2(444.368, -258.226)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(2100, 100)
@@ -175,4 +208,15 @@ nodes/fragment/29/node = SubResource("VisualShaderNodeFloatConstant_82vmf")
 nodes/fragment/29/position = Vector2(-900, 1240)
 nodes/fragment/30/node = SubResource("VisualShaderNodeFloatFunc_vvegw")
 nodes/fragment/30/position = Vector2(1660, 720)
-nodes/fragment/connections = PackedInt32Array(2, 0, 3, 2, 6, 0, 7, 2, 18, 0, 19, 0, 7, 0, 24, 0, 28, 0, 26, 1, 26, 0, 25, 1, 29, 0, 26, 0, 27, 0, 25, 0, 25, 0, 30, 0, 3, 0, 19, 1, 30, 0, 0, 1, 24, 0, 19, 2, 19, 0, 0, 0)
+nodes/fragment/31/node = SubResource("VisualShaderNodeExpression_ygjhg")
+nodes/fragment/31/position = Vector2(1358.8, -381.321)
+nodes/fragment/31/size = Vector2(620, 200)
+nodes/fragment/31/input_ports = "0,4,color;"
+nodes/fragment/31/output_ports = "0,0,grey_value;"
+nodes/fragment/31/expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
+grey_value = luminance;"
+nodes/fragment/32/node = SubResource("VisualShaderNodeBooleanParameter_v5dbr")
+nodes/fragment/32/position = Vector2(1320, -120)
+nodes/fragment/33/node = SubResource("VisualShaderNodeSwitch_fqrtl")
+nodes/fragment/33/position = Vector2(1689.69, -20.8136)
+nodes/fragment/connections = PackedInt32Array(2, 0, 3, 2, 6, 0, 7, 2, 18, 0, 19, 0, 7, 0, 24, 0, 28, 0, 26, 1, 26, 0, 25, 1, 29, 0, 26, 0, 27, 0, 25, 0, 25, 0, 30, 0, 3, 0, 19, 1, 30, 0, 0, 1, 24, 0, 19, 2, 19, 0, 31, 0, 32, 0, 33, 0, 31, 0, 33, 1, 19, 0, 33, 2, 33, 0, 0, 0)

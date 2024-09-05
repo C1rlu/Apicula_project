@@ -42,7 +42,7 @@ func broke_me(condition):
 		set_particule()
 		unbroken_element.visible = false
 		
-		_global_datas.camera_focus_On.emit(focus_data)
+		#_global_datas.camera_focus_On.emit(focus_data)
 		_global_datas.focus_this_on_board.emit(Main_root.global_position)
 		return 
 		
@@ -52,7 +52,7 @@ func broke_me(condition):
 		Main_root.queue_free()			
 		
 		
-	_global_datas.camera_focus_On.emit(focus_data)
+	#_global_datas.camera_focus_On.emit(focus_data)
 	_global_datas.focus_this_on_board.emit(Main_root.global_position)
 	
 	var random_hit = randi_range(0,broken_element.size()-1)

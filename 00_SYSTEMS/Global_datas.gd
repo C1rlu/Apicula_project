@@ -76,7 +76,7 @@ var element_collected : Array[element_data]
 
 #UI VAR 
 signal set_resolution(resolution : Vector2i)
-signal _show_object_legend(condtion : bool, info : info_data)
+signal _show_object_legend(condtion : bool, legend : String)
 
 
 # SUBSCENE VAR 
@@ -145,7 +145,8 @@ var board_instance_position : Node3D
 # quest_state signal in order
 signal active_diving
 
-signal open_quest_info(condition : bool, note_data : Note_Data)
+signal _open_quest_on_board(condition : bool)
+signal _select_quest_on_board(note_data : Note_Data)
 
 signal open_3d_book(condition : bool)
 var book_idle_pos : bool = true

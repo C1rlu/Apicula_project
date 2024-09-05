@@ -5,6 +5,7 @@ extends Node
 
 func _ready():
 	_global_datas._open_player_map.connect(_open_map)
+	
 	Map_node.visible = false
 	
 	Map_button_tool.tool_active_signal.connect(_open_map)

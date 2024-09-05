@@ -51,7 +51,9 @@ func _input(event):
 	
 	if _global_datas.Player_InDialogue:
 		return
-	
+		
+	if _global_datas.Player_InMenu:
+		return
 	if pad:
 		target = pad_target.position
 	else:
@@ -73,7 +75,7 @@ func _input(event):
 	
 			_global_datas.camera_focus_On.emit(_global_datas.previous_cam_state)	
 			_global_datas.show_element_info.emit(false,null)
-			_global_datas.open_quest_info.emit(false,null)
+
 		return
 		
 		
@@ -89,7 +91,7 @@ func _input(event):
 		check_view(target)
 	
 	# On Over check
-	#check_over(target)	
+	check_over(target)	
 		
 
 
