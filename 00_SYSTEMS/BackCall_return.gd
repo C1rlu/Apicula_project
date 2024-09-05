@@ -13,8 +13,8 @@ func _input(event):
 	if top_call == 0:
 		return
 	
-	if _global_datas.Player_In_Inventory:
-		return
+	#if _global_datas.Player_In_Inventory:
+		#return
 	if event.is_action_pressed("Back_call"):
 
 		connect_back_call()

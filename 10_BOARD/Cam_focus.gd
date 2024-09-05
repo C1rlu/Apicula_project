@@ -63,8 +63,10 @@ func _focus(focus_data : boardCamState_data):
 		
 	if _global_datas.camera_current_state == game_state.camera_state.BoardZoom:
 		cam_state = 2
+	
 	if _global_datas.camera_current_state == game_state.camera_state.Board_Focus_element:
 		cam_state = 3
+	
 	if _global_datas.camera_current_state == game_state.camera_state.Scanner:
 		cam_state = 4	
 		

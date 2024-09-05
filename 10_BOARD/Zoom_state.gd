@@ -25,16 +25,10 @@ func zoom_in():
 		_global_datas.camera_focus_On.emit(board_state)	
 		return
 		
-	#if _global_datas.camera_current_state == game_state.camera_state.Board:
-		#_global_datas.camera_focus_On.emit(board_zoom_state)	
-		#return	
+
 func zoom_out():
 	
 	if _global_datas.camera_current_state == game_state.camera_state.Board:
 		_global_datas.camera_focus_On.emit(main_state)	
 		return	
 		
-	#if _global_datas.camera_current_state == game_state.camera_state.BoardZoom:
-		#_global_datas.camera_focus_On.emit(board_state)
-		#_global_datas.open_3d_book.emit(false)	
-		#return

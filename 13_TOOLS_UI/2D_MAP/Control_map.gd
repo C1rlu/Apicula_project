@@ -2,7 +2,7 @@ extends Node
 
 @onready var Camera : Camera2D  = $"../SubViewport/Camera2D"
 
-var speed : float = 250
+var speed : float = 200
 var _is_active : bool  = false
 var zoomTarget : Vector2
 var positionTarget : Vector2
@@ -13,6 +13,8 @@ func _ready():
 	zoomTarget = Camera.zoom
 	positionTarget = Camera.position
 	unZoom_position	= Camera.position	
+	
+
 func _process(delta):
 	
 	if _is_active:
@@ -23,13 +25,19 @@ func _process(delta):
 func _zoom(delta):
 	
 	if Input.is_action_just_pressed("Board_zoom_in"):
-		zoomTarget = Vector2(3,3)
-	
+		zoom_in()
 	if Input.is_action_just_pressed("Board_zoom_out"):
-		zoomTarget = Vector2(1,1)
-		positionTarget = unZoom_position
-	Camera.zoom = lerp(Camera.zoom,zoomTarget,10 * delta)	
+		zoom_out()
+		
+	Camera.zoom = lerp(Camera.zoom,zoomTarget,5 * delta)	
 	
+func zoom_in():
+	zoomTarget = Vector2(3,3)
+	#_global_datas._add_back_call.emit(zoom_out)	
+func zoom_out():
+	zoomTarget = Vector2(1,1)
+	positionTarget = unZoom_position		
+		
 func _pan(delta):
 	
 	if zoomTarget == Vector2(3,3):
