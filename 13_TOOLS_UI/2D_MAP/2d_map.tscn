@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://b4ju0ntcydix8"]
+[gd_scene load_steps=11 format=3 uid="uid://b4ju0ntcydix8"]
 
 [ext_resource type="Shader" uid="uid://ce21gfa0ldjj7" path="res://13_TOOLS_UI/2D_MAP/2d_map_sh.tres" id="1_bcm85"]
 [ext_resource type="Shader" uid="uid://cg5mgo48srf08" path="res://13_TOOLS_UI/2D_MAP/2d_map_border.tres" id="1_kvg0y"]
 [ext_resource type="Texture2D" uid="uid://v5bi85b50j4g" path="res://10_BOARD/Map/Map_board_01.png" id="1_q1x4e"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/2D_MAP/Player_Map_behaviour.gd" id="1_to0fs"]
 [ext_resource type="Resource" uid="uid://cgd8sb0q0d67c" path="res://08_SUBSCENES/Tools/Main_tool/Menu/Open_Map.tres" id="2_ofx7r"]
+[ext_resource type="Script" path="res://13_TOOLS_UI/2D_MAP/Control_map.gd" id="3_8kfsc"]
 [ext_resource type="Texture2D" uid="uid://j82ecsafafol" path="res://10_BOARD/Map/Map_board_isle_01.png" id="3_cvvbd"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_r6rtr"]
@@ -24,39 +25,11 @@ shader_parameter/Ligne_widht = 0.025
 shader_parameter/Isle_mask = ExtResource("3_cvvbd")
 shader_parameter/Line = ExtResource("1_q1x4e")
 
+[sub_resource type="ViewportTexture" id="ViewportTexture_tkf7a"]
+viewport_path = NodePath("SubViewport")
+
 [node name="2D_Map" type="Control"]
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="Player_Map_behaviour" type="Node" parent="." node_paths=PackedStringArray("Map_node")]
-script = ExtResource("1_to0fs")
-Map_node = NodePath("../root")
-Map_button_tool = ExtResource("2_ofx7r")
-
-[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
-disable_3d = true
-transparent_bg = true
-handle_input_locally = false
-size = Vector2i(1280, 720)
-render_target_update_mode = 4
-
-[node name="root" type="Control" parent="."]
-visible = false
-layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -66,7 +39,33 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Border" type="ColorRect" parent="root"]
+[node name="Player_Map_behaviour" type="Node" parent="." node_paths=PackedStringArray("Map_node")]
+script = ExtResource("1_to0fs")
+Map_node = NodePath("../SubViewport/root")
+Map_button_tool = ExtResource("2_ofx7r")
+
+[node name="Control_map" type="Node" parent="."]
+script = ExtResource("3_8kfsc")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+disable_3d = true
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(1280, 720)
+render_target_update_mode = 4
+
+[node name="root" type="Control" parent="SubViewport"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Border" type="ColorRect" parent="SubViewport/root"]
 material = SubResource("ShaderMaterial_r6rtr")
 layout_mode = 1
 anchors_preset = 8
@@ -83,7 +82,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.45098, 0.364706, 0.25098, 1)
 
-[node name="Map" type="TextureRect" parent="root"]
+[node name="Map" type="TextureRect" parent="SubViewport/root"]
 material = SubResource("ShaderMaterial_0u5bg")
 layout_mode = 1
 anchors_preset = 8
@@ -100,3 +99,18 @@ grow_vertical = 2
 mouse_filter = 2
 texture = ExtResource("3_cvvbd")
 expand_mode = 1
+
+[node name="Camera2D" type="Camera2D" parent="SubViewport"]
+position = Vector2(640, 360)
+editor_draw_limits = true
+editor_draw_drag_margin = true
+
+[node name="Render_map" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("ViewportTexture_tkf7a")

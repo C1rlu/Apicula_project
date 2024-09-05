@@ -1,0 +1,71 @@
+[gd_scene load_steps=6 format=3 uid="uid://cbgkay5155yn3"]
+
+[ext_resource type="Script" path="res://13_TOOLS_UI/Top_bar/Update_bar.gd" id="1_ce4xl"]
+[ext_resource type="Texture2D" uid="uid://ce6hjdadjbbdt" path="res://13_TOOLS_UI/Coins/Coins_img.png" id="2_p8qhy"]
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_lew65"]
+parameter_name = "ColorParameter"
+
+[sub_resource type="VisualShader" id="VisualShader_3wvg7"]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+uniform vec4 ColorParameter : source_color;
+
+
+
+void fragment() {
+// ColorParameter:2
+	vec4 n_out2p0 = ColorParameter;
+
+
+// Output:0
+	COLOR.rgb = vec3(n_out2p0.xyz);
+
+
+}
+"
+graph_offset = Vector2(-231.3, 0.609085)
+mode = 1
+flags/light_only = false
+nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_lew65")
+nodes/fragment/2/position = Vector2(137.17, 121.67)
+nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_28wdy"]
+shader = SubResource("VisualShader_3wvg7")
+shader_parameter/ColorParameter = Color(0.721569, 0.580392, 0.407843, 1)
+
+[node name="Money_bar" type="Control"]
+layout_mode = 3
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -212.0
+offset_bottom = 61.0
+grow_horizontal = 0
+
+[node name="Update_bar" type="Node" parent="." node_paths=PackedStringArray("Money_text")]
+script = ExtResource("1_ce4xl")
+Money_text = NodePath("../TextureRect/NB")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_28wdy")
+layout_mode = 0
+offset_left = 85.0
+offset_top = 12.0
+offset_right = 196.0
+offset_bottom = 123.0
+texture = ExtResource("2_p8qhy")
+expand_mode = 1
+
+[node name="NB" type="Label" parent="TextureRect"]
+layout_mode = 0
+offset_left = -85.0
+offset_top = 47.0
+offset_right = 2.0
+offset_bottom = 85.0
+theme_override_colors/font_color = Color(0.721569, 0.580392, 0.407843, 1)
+theme_override_font_sizes/font_size = 24
+text = "10"
+horizontal_alignment = 2

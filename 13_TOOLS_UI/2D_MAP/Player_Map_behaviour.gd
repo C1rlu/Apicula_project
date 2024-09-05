@@ -8,9 +8,11 @@ func _ready():
 	Map_node.visible = false
 	
 	Map_button_tool.tool_active_signal.connect(_open_map)
+	
+	
+	
 func _open_map(condition : bool):
 	Map_node.visible = condition	
-	print(" Open map", condition)
 
 	if condition:
 		_global_datas._add_back_call.emit(back_call)

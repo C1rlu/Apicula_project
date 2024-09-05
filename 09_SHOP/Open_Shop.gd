@@ -18,5 +18,5 @@ func _open_shop(condition : bool):
 		_global_datas._add_back_call.emit(back_call)
 		
 func back_call():
-	_open_shop(false)	
+	_global_datas._open_shop.emit(false)
 	

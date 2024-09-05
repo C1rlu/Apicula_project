@@ -49,7 +49,6 @@ func broke_me(condition):
 	
 	if broken_element.size() == 1:
 		element.Object_broke = true
-		_global_datas.update_element_amount.emit()
 		Main_root.queue_free()			
 		
 		

@@ -117,6 +117,7 @@ var scanner_element_list : Array #for scanner light list on oddity
 # SUBSCENE ORBE previously teleporter
 var _photo_data_scene_list : Array[Node]
 
+signal _show_mainScene_ui(condition : bool)
 
 #board scene
 signal show_page(content : PackedScene)
@@ -165,7 +166,7 @@ signal active_scanner_button(condition : bool)
 
 var current_money : int = 0
 signal update_money_amount(value : int)
-signal update_element_amount
+#signal update_element_amount
 #-----------------------------
 # dialogue datas
 var Npc_Dialogue : Npc_datas

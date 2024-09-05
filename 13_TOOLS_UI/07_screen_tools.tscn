@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://bwmu5iwushsl5"]
+[gd_scene load_steps=48 format=3 uid="uid://bwmu5iwushsl5"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/Fade_flash_effect.gd" id="1_1dj2k"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/INSTANCE_NOTE.gd" id="1_fcb2u"]
@@ -10,12 +10,13 @@
 [ext_resource type="Resource" uid="uid://nb378vtwr23i" path="res://12_INVENTORY/Words_note/Find_The_Apicula_note.tres" id="4_whlox"]
 [ext_resource type="Texture2D" uid="uid://4bq2l5jjm4r2" path="res://00_SYSTEMS/KeyOrPad/Pad_inputs.png" id="5_jufic"]
 [ext_resource type="Script" path="res://10_BOARD/Element_infos.gd" id="6_5m4ql"]
+[ext_resource type="Script" path="res://13_TOOLS_UI/Main_scene_UI.gd" id="14_isnv0"]
+[ext_resource type="PackedScene" uid="uid://cbgkay5155yn3" path="res://13_TOOLS_UI/Top_bar/Money_bar.tscn" id="15_jqiih"]
 [ext_resource type="Shader" uid="uid://owtikj2jm5h5" path="res://13_TOOLS_UI/PhotoFlash_effect.tres" id="15_kco3d"]
 [ext_resource type="PackedScene" uid="uid://cdmxq026pdbp7" path="res://09_SHOP/Shop_Ui_scene.tscn" id="16_bicox"]
 [ext_resource type="Script" path="res://10_BOARD/Dive_infos.gd" id="16_ifpy4"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/Loadin_progress.gd" id="16_jt5le"]
 [ext_resource type="PackedScene" uid="uid://b4ju0ntcydix8" path="res://13_TOOLS_UI/2D_MAP/2d_map.tscn" id="17_c8quy"]
-[ext_resource type="PackedScene" uid="uid://cbgkay5155yn3" path="res://13_TOOLS_UI/Top_bar/top_bar.tscn" id="17_y6q8u"]
 [ext_resource type="PackedScene" uid="uid://dykmxu1syt7" path="res://13_TOOLS_UI/Depth_bar/subscene_depth_bar.tscn" id="18_fdcig"]
 [ext_resource type="Shader" uid="uid://cg5mgo48srf08" path="res://13_TOOLS_UI/2D_MAP/2d_map_border.tres" id="19_ibvij"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/2D_MAP/OpenMap_Button.gd" id="20_nuvlm"]
@@ -238,8 +239,9 @@ shader_parameter/Opacity = 1.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ky6j7"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mjdur"]
-bg_color = Color(0.819608, 0.572549, 0.333333, 1)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wk6dg"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kcdtd"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xrr31"]
 
@@ -256,17 +258,48 @@ shader_parameter/Ligne_widht = 0.025
 shader_parameter/Isle_mask = ExtResource("22_txmj8")
 shader_parameter/Line = ExtResource("23_ym7p0")
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vmdt4"]
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_3ydwq"]
+parameter_name = "Color"
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_73ytv"]
-bg_color = Color(0.819608, 0.572549, 0.333333, 1)
+[sub_resource type="VisualShader" id="VisualShader_ia5sc"]
+code = "shader_type canvas_item;
+render_mode blend_mix;
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7umv8"]
-bg_color = Color(0.819608, 0.572549, 0.333333, 1)
+uniform vec4 Color : source_color;
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_m8ri2"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_10vry"]
+
+void fragment() {
+// ColorParameter:2
+	vec4 n_out2p0 = Color;
+
+
+// Output:0
+	COLOR.rgb = vec3(n_out2p0.xyz);
+
+
+}
+"
+graph_offset = Vector2(-345.282, -30.6422)
+mode = 1
+flags/light_only = false
+nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_3ydwq")
+nodes/fragment/2/position = Vector2(113.954, 54.6709)
+nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qd58x"]
+shader = SubResource("VisualShader_ia5sc")
+shader_parameter/Color = Color(0.721569, 0.580392, 0.407843, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5miex"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7gqfb"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lel6s"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_r6eft"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rkkrs"]
 
 [node name="07_SCREEN_UI" type="Node"]
 
@@ -521,20 +554,39 @@ theme_override_font_sizes/font_size = 21
 text = "Lorem ipusm info textfffffffffffffffffffffffffffffff"
 autowrap_mode = 3
 
-[node name="DiveZone_infos" type="Control" parent="."]
+[node name="Shop" parent="." instance=ExtResource("16_bicox")]
+
+[node name="Subscene_depth_bar" parent="." instance=ExtResource("18_fdcig")]
+offset_left = -446.0
+offset_top = -312.0
+offset_right = -406.0
+offset_bottom = -272.0
+
+[node name="Main_Scene_U" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Main_scene_UI" type="Node" parent="Main_Scene_U"]
+script = ExtResource("14_isnv0")
+
+[node name="DiveZone_infos" type="Control" parent="Main_Scene_U"]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 328.0
 offset_bottom = 264.0
 
-[node name="DiveZone_info_update" type="Node" parent="DiveZone_infos" node_paths=PackedStringArray("info_text")]
+[node name="DiveZone_info_update" type="Node" parent="Main_Scene_U/DiveZone_infos" node_paths=PackedStringArray("info_text")]
 script = ExtResource("16_ifpy4")
 info_text = NodePath("../Info_text")
 
-[node name="Loadin_progress" type="Node" parent="DiveZone_infos"]
+[node name="Loadin_progress" type="Node" parent="Main_Scene_U/DiveZone_infos"]
 script = ExtResource("16_jt5le")
 
-[node name="Info_text3" type="Label" parent="DiveZone_infos"]
+[node name="Info_text3" type="Label" parent="Main_Scene_U/DiveZone_infos"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -550,7 +602,7 @@ theme_override_font_sizes/font_size = 21
 text = "YOU NEED TO BY A PERMIS TO DIVE HERE"
 autowrap_mode = 3
 
-[node name="Info_text" type="Label" parent="DiveZone_infos"]
+[node name="Info_text" type="Label" parent="Main_Scene_U/DiveZone_infos"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = -0.745
@@ -568,7 +620,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="ProgressBar" type="ProgressBar" parent="DiveZone_infos"]
+[node name="ProgressBar" type="ProgressBar" parent="Main_Scene_U/DiveZone_infos"]
 layout_mode = 0
 offset_left = 581.0
 offset_top = 606.0
@@ -579,38 +631,43 @@ theme_override_styles/background = SubResource("StyleBoxFlat_bq8b5")
 theme_override_styles/fill = SubResource("StyleBoxFlat_tu22k")
 show_percentage = false
 
-[node name="Shop" parent="." instance=ExtResource("16_bicox")]
-visible = false
+[node name="Money_bar" parent="Main_Scene_U" instance=ExtResource("15_jqiih")]
+anchors_preset = 0
+anchor_left = 0.0
+anchor_right = 0.0
+offset_left = 1064.0
+offset_top = 1.0
+offset_right = 1276.0
+offset_bottom = 62.0
+grow_horizontal = 1
 
-[node name="Top_bar" parent="." instance=ExtResource("17_y6q8u")]
-offset_left = -143.0
-offset_top = 331.0
-offset_right = 69.0
-offset_bottom = 392.0
-scale = Vector2(0.663135, 0.663135)
-
-[node name="Subscene_depth_bar" parent="." instance=ExtResource("18_fdcig")]
-
-[node name="2D_Map" parent="." instance=ExtResource("17_c8quy")]
-
-[node name="Map_button" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 566.0
-offset_top = 287.0
-offset_right = 566.0
-offset_bottom = 287.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="Map_button" type="Control" parent="Main_Scene_U"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -78.0001
+offset_top = -100.0
+offset_right = -78.0001
+offset_bottom = -100.0
+grow_horizontal = 0
+grow_vertical = 0
 rotation = 0.310967
 scale = Vector2(0.4259, 0.4259)
 mouse_filter = 2
 
-[node name="Border" type="ColorRect" parent="Map_button"]
+[node name="On_Over" type="ColorRect" parent="Main_Scene_U/Map_button"]
+visible = false
+layout_mode = 0
+offset_left = -351.814
+offset_top = -357.984
+offset_right = 346.186
+offset_bottom = 342.016
+color = Color(0.721569, 0.580392, 0.407843, 1)
+
+[node name="Border" type="ColorRect" parent="Main_Scene_U/Map_button"]
 material = SubResource("ShaderMaterial_x2pey")
 layout_mode = 1
 anchors_preset = 8
@@ -626,7 +683,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.45098, 0.364706, 0.25098, 1)
 
-[node name="Button" type="Button" parent="Map_button/Border" node_paths=PackedStringArray("button_control")]
+[node name="Button" type="Button" parent="Main_Scene_U/Map_button/Border" node_paths=PackedStringArray("button_control")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -634,14 +691,14 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_ky6j7")
-theme_override_styles/hover = SubResource("StyleBoxFlat_mjdur")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_mjdur")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_wk6dg")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_kcdtd")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_ky6j7")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_xrr31")
 script = ExtResource("20_nuvlm")
 button_control = NodePath("../..")
 
-[node name="Map" type="TextureRect" parent="Map_button"]
+[node name="Map" type="TextureRect" parent="Main_Scene_U/Map_button"]
 material = SubResource("ShaderMaterial_pgyq2")
 layout_mode = 1
 anchors_preset = 8
@@ -659,36 +716,50 @@ mouse_filter = 2
 texture = ExtResource("22_txmj8")
 expand_mode = 1
 
-[node name="Board_Button" type="Control" parent="."]
-layout_mode = 3
+[node name="Board_Button" type="Control" parent="Main_Scene_U"]
+layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 209.0
+offset_top = 22.0
+offset_right = 209.0
+offset_bottom = 22.0
 grow_horizontal = 0
 grow_vertical = 0
-scale = Vector2(0.4259, 0.4259)
+scale = Vector2(0.662741, 0.623473)
 mouse_filter = 2
 
-[node name="Button" type="Button" parent="Board_Button" node_paths=PackedStringArray("root")]
-layout_mode = 0
-offset_left = -1073.0
-offset_top = -232.0
-offset_right = -446.0
-offset_bottom = 40.0
-theme_override_styles/normal = SubResource("StyleBoxEmpty_vmdt4")
-theme_override_styles/hover = SubResource("StyleBoxFlat_73ytv")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_7umv8")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_m8ri2")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_10vry")
-script = ExtResource("25_0a5ix")
-root = NodePath("..")
+[node name="BoardMapButtonImg_Over" type="Sprite2D" parent="Main_Scene_U/Board_Button"]
+visible = false
+material = SubResource("ShaderMaterial_qd58x")
+position = Vector2(-718.479, -65.7431)
+scale = Vector2(1.55003, 1.50417)
+texture = ExtResource("24_nqwp3")
 
-[node name="BoardMapButtonImg" type="Sprite2D" parent="Board_Button"]
+[node name="BoardMapButtonImg" type="Sprite2D" parent="Main_Scene_U/Board_Button"]
 position = Vector2(-716.131, -54.0033)
 scale = Vector2(1.47322, 1.47322)
 texture = ExtResource("24_nqwp3")
+
+[node name="Button" type="Button" parent="Main_Scene_U/Board_Button" node_paths=PackedStringArray("root")]
+layout_mode = 0
+offset_left = -1092.0
+offset_top = -223.0
+offset_right = -413.0
+offset_bottom = 19.0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_5miex")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_7gqfb")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_lel6s")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_r6eft")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_rkkrs")
+script = ExtResource("25_0a5ix")
+root = NodePath("..")
+
+[node name="2D_Map" parent="Main_Scene_U" instance=ExtResource("17_c8quy")]
+layout_mode = 1
 
 [node name="Front_element" type="Control" parent="."]
 layout_mode = 3
