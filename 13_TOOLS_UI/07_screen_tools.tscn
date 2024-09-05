@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://bwmu5iwushsl5"]
+[gd_scene load_steps=43 format=3 uid="uid://bwmu5iwushsl5"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/Fade_flash_effect.gd" id="1_1dj2k"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/INSTANCE_NOTE.gd" id="1_fcb2u"]
@@ -17,6 +17,13 @@
 [ext_resource type="PackedScene" uid="uid://b4ju0ntcydix8" path="res://13_TOOLS_UI/2D_MAP/2d_map.tscn" id="17_c8quy"]
 [ext_resource type="PackedScene" uid="uid://cbgkay5155yn3" path="res://13_TOOLS_UI/Top_bar/top_bar.tscn" id="17_y6q8u"]
 [ext_resource type="PackedScene" uid="uid://dykmxu1syt7" path="res://13_TOOLS_UI/Depth_bar/subscene_depth_bar.tscn" id="18_fdcig"]
+[ext_resource type="Shader" uid="uid://cg5mgo48srf08" path="res://13_TOOLS_UI/2D_MAP/2d_map_border.tres" id="19_ibvij"]
+[ext_resource type="Script" path="res://13_TOOLS_UI/2D_MAP/OpenMap_Button.gd" id="20_nuvlm"]
+[ext_resource type="Shader" uid="uid://ce21gfa0ldjj7" path="res://13_TOOLS_UI/2D_MAP/2d_map_sh.tres" id="21_7l3vk"]
+[ext_resource type="Texture2D" uid="uid://j82ecsafafol" path="res://10_BOARD/Map/Map_board_isle_01.png" id="22_txmj8"]
+[ext_resource type="Texture2D" uid="uid://v5bi85b50j4g" path="res://10_BOARD/Map/Map_board_01.png" id="23_ym7p0"]
+[ext_resource type="Texture2D" uid="uid://cxsr67dkxwr14" path="res://13_TOOLS_UI/Board_button/Board_map_button_img.png" id="24_nqwp3"]
+[ext_resource type="Script" path="res://13_TOOLS_UI/Button_board.gd" id="25_0a5ix"]
 
 [sub_resource type="GDScript" id="GDScript_ebu32"]
 script/source = "extends Node
@@ -225,6 +232,42 @@ bg_color = Color(0.360784, 0.341176, 0.262745, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tu22k"]
 bg_color = Color(0.811765, 0.65098, 0.423529, 1)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_x2pey"]
+shader = ExtResource("19_ibvij")
+shader_parameter/Opacity = 1.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ky6j7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mjdur"]
+bg_color = Color(0.819608, 0.572549, 0.333333, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xrr31"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pgyq2"]
+shader = ExtResource("21_7l3vk")
+shader_parameter/Flat_color = Color(0.0156863, 0.109804, 0.117647, 1)
+shader_parameter/Opacity = 1.0
+shader_parameter/Mask_color = Color(0.223529, 0.211765, 0.145098, 1)
+shader_parameter/Line_color = Color(0.596078, 0.466667, 0.298039, 1)
+shader_parameter/Grid_color = Color(0.137255, 0.231373, 0.239216, 1)
+shader_parameter/Offset = Vector2(0, 0)
+shader_parameter/Size = Vector2(1000, 1000)
+shader_parameter/Ligne_widht = 0.025
+shader_parameter/Isle_mask = ExtResource("22_txmj8")
+shader_parameter/Line = ExtResource("23_ym7p0")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vmdt4"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_73ytv"]
+bg_color = Color(0.819608, 0.572549, 0.333333, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7umv8"]
+bg_color = Color(0.819608, 0.572549, 0.333333, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_m8ri2"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_10vry"]
+
 [node name="07_SCREEN_UI" type="Node"]
 
 [node name="INSTANCE_PICTURES" type="Node" parent="."]
@@ -367,16 +410,6 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.721569, 0.580392, 0.407843, 1)
 
-[node name="Front_element" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-metadata/_edit_use_anchors_ = true
-
 [node name="Description_Text" type="Label" parent="."]
 visible = false
 anchors_preset = 7
@@ -490,17 +523,9 @@ autowrap_mode = 3
 
 [node name="DiveZone_infos" type="Control" parent="."]
 layout_mode = 3
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -458.0
-offset_top = -118.0
-offset_right = -130.0
-offset_bottom = 146.0
-grow_horizontal = 0
-grow_vertical = 2
+anchors_preset = 0
+offset_right = 328.0
+offset_bottom = 264.0
 
 [node name="DiveZone_info_update" type="Node" parent="DiveZone_infos" node_paths=PackedStringArray("info_text")]
 script = ExtResource("16_ifpy4")
@@ -514,10 +539,10 @@ layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -294.0
-offset_top = -64.0
-offset_right = -354.0
-offset_bottom = -265.0
+offset_left = 321.0
+offset_top = 200.0
+offset_right = 261.0
+offset_bottom = -1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.811765, 0.65098, 0.423529, 1)
@@ -530,10 +555,10 @@ layout_mode = 1
 anchors_preset = -1
 anchor_left = -0.745
 anchor_bottom = 0.114
-offset_left = -183.64
-offset_top = -129.0
-offset_right = 54.0
-offset_bottom = -90.096
+offset_left = 431.36
+offset_top = 135.0
+offset_right = 669.0
+offset_bottom = 173.904
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.811765, 0.65098, 0.423529, 1)
@@ -545,10 +570,10 @@ autowrap_mode = 3
 
 [node name="ProgressBar" type="ProgressBar" parent="DiveZone_infos"]
 layout_mode = 0
-offset_left = -245.0
-offset_top = 380.0
-offset_right = -92.0
-offset_bottom = 389.0
+offset_left = 581.0
+offset_top = 606.0
+offset_right = 734.0
+offset_bottom = 615.0
 theme_override_colors/font_color = Color(0.929412, 0.827451, 0.686275, 1)
 theme_override_styles/background = SubResource("StyleBoxFlat_bq8b5")
 theme_override_styles/fill = SubResource("StyleBoxFlat_tu22k")
@@ -558,9 +583,121 @@ show_percentage = false
 visible = false
 
 [node name="Top_bar" parent="." instance=ExtResource("17_y6q8u")]
+offset_left = -143.0
+offset_top = 331.0
+offset_right = 69.0
+offset_bottom = 392.0
+scale = Vector2(0.663135, 0.663135)
 
 [node name="Subscene_depth_bar" parent="." instance=ExtResource("18_fdcig")]
 
 [node name="2D_Map" parent="." instance=ExtResource("17_c8quy")]
+
+[node name="Map_button" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 566.0
+offset_top = 287.0
+offset_right = 566.0
+offset_bottom = 287.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 0.310967
+scale = Vector2(0.4259, 0.4259)
+mouse_filter = 2
+
+[node name="Border" type="ColorRect" parent="Map_button"]
+material = SubResource("ShaderMaterial_x2pey")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -334.0
+offset_top = -334.0
+offset_right = 333.0
+offset_bottom = 332.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.45098, 0.364706, 0.25098, 1)
+
+[node name="Button" type="Button" parent="Map_button/Border" node_paths=PackedStringArray("button_control")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ky6j7")
+theme_override_styles/hover = SubResource("StyleBoxFlat_mjdur")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_mjdur")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_ky6j7")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_xrr31")
+script = ExtResource("20_nuvlm")
+button_control = NodePath("../..")
+
+[node name="Map" type="TextureRect" parent="Map_button"]
+material = SubResource("ShaderMaterial_pgyq2")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -323.5
+offset_top = -323.5
+offset_right = 323.5
+offset_bottom = 323.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("22_txmj8")
+expand_mode = 1
+
+[node name="Board_Button" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.4259, 0.4259)
+mouse_filter = 2
+
+[node name="Button" type="Button" parent="Board_Button" node_paths=PackedStringArray("root")]
+layout_mode = 0
+offset_left = -1073.0
+offset_top = -232.0
+offset_right = -446.0
+offset_bottom = 40.0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_vmdt4")
+theme_override_styles/hover = SubResource("StyleBoxFlat_73ytv")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_7umv8")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_m8ri2")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_10vry")
+script = ExtResource("25_0a5ix")
+root = NodePath("..")
+
+[node name="BoardMapButtonImg" type="Sprite2D" parent="Board_Button"]
+position = Vector2(-716.131, -54.0033)
+scale = Vector2(1.47322, 1.47322)
+texture = ExtResource("24_nqwp3")
+
+[node name="Front_element" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+metadata/_edit_use_anchors_ = true
 
 [connection signal="timeout" from="Description/Update_description/Timer" to="Description/Update_description" method="_on_timer_timeout"]
