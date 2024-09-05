@@ -1,0 +1,96 @@
+[gd_scene load_steps=8 format=3 uid="uid://b4ju0ntcydix8"]
+
+[ext_resource type="Shader" uid="uid://ce21gfa0ldjj7" path="res://13_TOOLS_UI/2D_MAP/2d_map_sh.tres" id="1_bcm85"]
+[ext_resource type="Shader" uid="uid://cg5mgo48srf08" path="res://13_TOOLS_UI/2D_MAP/2d_map_border.tres" id="1_kvg0y"]
+[ext_resource type="Texture2D" uid="uid://v5bi85b50j4g" path="res://10_BOARD/Map/Map_board_01.png" id="1_q1x4e"]
+[ext_resource type="Script" path="res://13_TOOLS_UI/2D_MAP/Player_Map_behaviour.gd" id="1_to0fs"]
+[ext_resource type="Texture2D" uid="uid://j82ecsafafol" path="res://10_BOARD/Map/Map_board_isle_01.png" id="3_cvvbd"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_r6rtr"]
+shader = ExtResource("1_kvg0y")
+shader_parameter/Opacity = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0u5bg"]
+shader = ExtResource("1_bcm85")
+shader_parameter/Flat_color = Color(0.0156863, 0.109804, 0.117647, 1)
+shader_parameter/Opacity = 1.0
+shader_parameter/Mask_color = Color(0.223529, 0.211765, 0.145098, 1)
+shader_parameter/Line_color = Color(0.596078, 0.466667, 0.298039, 1)
+shader_parameter/Grid_color = Color(0.137255, 0.231373, 0.239216, 1)
+shader_parameter/Offset = Vector2(0, 0)
+shader_parameter/Size = Vector2(1000, 1000)
+shader_parameter/Ligne_widht = 0.025
+shader_parameter/Isle_mask = ExtResource("3_cvvbd")
+shader_parameter/Line = ExtResource("1_q1x4e")
+
+[node name="2D_Map" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Player_Map_behaviour" type="Node" parent="." node_paths=PackedStringArray("Map_node")]
+script = ExtResource("1_to0fs")
+Map_node = NodePath("..")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+disable_3d = true
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(1280, 720)
+render_target_update_mode = 4
+
+[node name="root" type="Control" parent="SubViewportContainer/SubViewport"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Border" type="ColorRect" parent="SubViewportContainer/SubViewport/root"]
+material = SubResource("ShaderMaterial_r6rtr")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -334.0
+offset_top = -334.0
+offset_right = 333.0
+offset_bottom = 332.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.45098, 0.364706, 0.25098, 1)
+
+[node name="Map" type="TextureRect" parent="SubViewportContainer/SubViewport/root"]
+material = SubResource("ShaderMaterial_0u5bg")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -323.5
+offset_top = -323.5
+offset_right = 323.5
+offset_bottom = 323.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_cvvbd")
+expand_mode = 1

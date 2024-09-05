@@ -125,7 +125,7 @@ signal mouse_raycast
 var board_camera : Camera3D
 var Cursor_mode : Node
 signal close_all_over_ui
-
+signal _open_player_map(condition : bool)
 signal map_fade(condition : bool) # true is in : false is out
 
 
