@@ -1,34 +1,57 @@
-[gd_scene load_steps=29 format=3 uid="uid://qgyjfq88teq8"]
+[gd_scene load_steps=31 format=3 uid="uid://qgyjfq88teq8"]
 
+[ext_resource type="Resource" uid="uid://cjwmwf4frvq3c" path="res://15_GAME_RESSOURCE/03_BoardCam_state/BoardZoom_focus_data.tres" id="1_55n7s"]
 [ext_resource type="Resource" uid="uid://61umivwjjcjs" path="res://12_INVENTORY/Words_note/Birds_goLighthouse_note.tres" id="1_syumr"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="2_ke4da"]
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/On_click_object.gd" id="2_rje64"]
+[ext_resource type="Resource" uid="uid://cnpcuaqr4o443" path="res://15_GAME_RESSOURCE/01_info_data/Ghost_sphere_info/follow.tres" id="2_tu4uh"]
 [ext_resource type="Material" uid="uid://yjoyk6fvrm6q" path="res://10_BOARD/00_BOOK/00_SHADER/No_light_surface_mat.tres" id="5_kvfps"]
 [ext_resource type="Shader" uid="uid://8ll6evus625p" path="res://10_BOARD/00_BOOK/00_SHADER/Gradient_surface.tres" id="5_t8aod"]
 
 [sub_resource type="GDScript" id="GDScript_ypp87"]
 script/source = "extends Area3D
 
-
+@export var Camera_focus : boardCamState_data
 @export var Note_data : Note_Data
+@export var info : info_data
 @onready var note_text = $Render_text
 @onready var note = $Note
 
+@onready var quest_info = $Quest_letter/Text_quest/text
+
+@onready var root = $\".\"
+
+
 @export var On_Move : Node
 @export var On_View : Node
-
+@export var On_Over : Node
 
 
 func _ready():
 	note._set_note(Note_data.note_text,Note_data.from)
-	Note_data.scene_node_3d = self
+
 	
 	_global_datas._select_quest_on_board.connect(_update_selected_quest)
 	On_Move.On_Move.connect(Open_quest_responce)
+	On_Over.On_Over.connect(_show_quest_info)
+	#On_View.On_View.connect(_focus_on_board)
+	_update_selected_quest(Note_data)
+	
+func _focus_on_board():
+	var focus_target = root.global_position
+	_global_datas.focus_this_on_board.emit(focus_target)
+	_global_datas.camera_focus_On.emit(Camera_focus)
+	_global_datas.show_element_info.emit(true,info)			
+	
+		
+func _show_quest_info():
+	_global_datas.show_element_info.emit(true,info)
 	
 func _update_selected_quest(_Note_data : Note_Data):
 	print(\"selected quest\", _Note_data.note_text)
 	note._set_note(_Note_data.note_text,_Note_data.from)
+	quest_info.text = _Note_data.quest_orders
+	
 	
 func Open_quest_responce(condition : bool):
 	if condition:
@@ -188,7 +211,7 @@ render_priority = 0
 shader = SubResource("VisualShader_or8y4")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bangl"]
-size = Vector3(0.704834, 0.0866016, 0.462646)
+size = Vector3(0.842651, 0.0866016, 0.622497)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jubt2"]
 render_priority = 0
@@ -216,12 +239,15 @@ shader_parameter/Color = Color(0.690196, 0.396078, 0.247059, 1)
 shader_parameter/Dither_Opacity = 1.0
 shader_parameter/Gradient_light = SubResource("GradientTexture2D_apshu")
 
-[node name="Letter_area" type="Area3D" node_paths=PackedStringArray("On_Move", "On_View")]
+[node name="Letter_area" type="Area3D" node_paths=PackedStringArray("On_Move", "On_View", "On_Over")]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0.00272226, 0)
 script = SubResource("GDScript_ypp87")
+Camera_focus = ExtResource("1_55n7s")
 Note_data = ExtResource("1_syumr")
+info = ExtResource("2_tu4uh")
 On_Move = NodePath("On_Move")
 On_View = NodePath("On_View")
+On_Over = NodePath("On_Over")
 
 [node name="Note" type="Node" parent="."]
 script = SubResource("GDScript_4uwx0")
@@ -236,24 +262,23 @@ script = ExtResource("2_ke4da")
 script = SubResource("GDScript_ikx4k")
 
 [node name="Quest_letter" type="Node3D" parent="."]
-transform = Transform3D(0.992874, 0, -0.119166, 0, 1, 0, 0.119166, 0, 0.992874, 0.00695114, 0.00296854, 0.00943157)
-visible = false
+transform = Transform3D(0.992874, 0, -0.119166, 0, 1, 0, 0.119166, 0, 0.992874, 0.0088055, 0.00296854, 0.0138789)
 
 [node name="Render_quest" type="Sprite3D" parent="Quest_letter"]
-transform = Transform3D(0.0136498, -1.24176e-09, 9.25186e-17, -7.40149e-17, -5.96652e-10, 0.0136498, -9.31323e-10, -0.0136498, -5.96652e-10, 0, 0.000399773, 0)
+transform = Transform3D(0.0125883, -1.5134e-09, 6.245e-17, -6.82591e-17, -5.50253e-10, 0.0125883, -1.28057e-09, -0.0125883, -5.50253e-10, 0, 0.000399773, 0)
 layers = 2
 modulate = Color(0.537255, 0.521569, 0.47451, 1)
 texture = SubResource("ViewportTexture_3jdh6")
 
 [node name="photo2" type="MeshInstance3D" parent="Quest_letter"]
-transform = Transform3D(0.0898917, 0, 0, 0, -2.52697e-09, 0.0405362, 0, -0.0578102, -1.77189e-09, 0, 0, 0)
+transform = Transform3D(0.0979325, -3.25963e-09, -5.55112e-17, 0, -2.75301e-09, 0.0441622, -1.86265e-09, -0.0629813, -1.93039e-09, 0, 0, 0)
 layers = 2
 mesh = SubResource("QuadMesh_4umhe")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("ShaderMaterial_bgk60")
 
 [node name="photo_light" type="MeshInstance3D" parent="Quest_letter"]
-transform = Transform3D(0.0898917, -9.31323e-10, 0, 0, -2.52697e-09, 0.0405362, -1.86265e-09, -0.0578102, -1.77189e-09, 0, 0, 0)
+transform = Transform3D(0.0979325, -3.25963e-09, -4.16334e-17, 0, -2.75301e-09, 0.0441622, -1.86265e-09, -0.0629813, -1.93039e-09, 0, 0, 0)
 layers = 65536
 mesh = SubResource("QuadMesh_4umhe")
 skeleton = NodePath("")
@@ -270,9 +295,11 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 40
+theme_override_colors/font_color = Color(0.192157, 0.192157, 0.192157, 1)
+theme_override_font_sizes/font_size = 50
 text = "Please, place what his asked on this board and ring the bell
-Mr Bird"
+Mr Bird:
+need a plume and a photo of myself"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
@@ -285,7 +312,7 @@ mesh = SubResource("QuadMesh_2j3jf")
 surface_material_override/0 = SubResource("ShaderMaterial_0o376")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(0.131916, 0, 0, 0, 0.131916, 0, 0, 0, 0.131916, -0.000177134, 0.00536683, 0.000563608)
+transform = Transform3D(0.131916, 0, 0, 0, 0.131916, 0, 0, 0, 0.131916, 0.00168277, 0.00536683, 0.00729871)
 shape = SubResource("BoxShape3D_bangl")
 
 [node name="photo" type="MeshInstance3D" parent="."]

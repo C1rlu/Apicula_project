@@ -62,7 +62,7 @@ func _input(event):
 
 	
 	if _global_datas.camera_current_state == game_state.camera_state.Board_Focus_element:
-		if event.is_action_pressed("focus_click"):	
+		if event.is_action_pressed("on_view"):	
 
 			_global_datas.camera_focus_On.emit(_global_datas.previous_cam_state)
 			_global_datas.show_element_info.emit(false,null)
@@ -71,7 +71,7 @@ func _input(event):
 	
 
 	if _global_datas.camera_current_state == game_state.camera_state.BoardZoom:
-		if event.is_action_pressed("focus_click"):	
+		if event.is_action_pressed("on_view"):	
 	
 			_global_datas.camera_focus_On.emit(_global_datas.previous_cam_state)	
 			_global_datas.show_element_info.emit(false,null)
@@ -80,14 +80,14 @@ func _input(event):
 		
 		
 	#action click below 	
-	if event.is_action_pressed("select_click"):
+	if event.is_action_pressed("on_move"):
 		if _selectec_object:
 			_selectec_object.On_Move.emit(false)
 			
 		else:
 			check_move(target)
 			
-	if event.is_action_pressed("focus_click"):	
+	if event.is_action_pressed("on_view"):	
 		check_view(target)
 	
 	# On Over check
@@ -98,7 +98,7 @@ func _input(event):
 func check_move(targetPos : Vector2):
 	
 	var ray_target = utility.get_raycast_target(targetPos,Camera)
-	#print( ray_target)
+
 	if !ray_target:	
 		return
 		
@@ -107,7 +107,7 @@ func check_move(targetPos : Vector2):
 			
 			var _On_click =  ray_target.collider.get_node_or_null("On_Move")
 			_On_click.On_Move.emit(true)
-			#_On_click._raycast_click.emit(ray_target)		
+
 			
 func check_view(targetPos : Vector2):
 	
@@ -127,8 +127,9 @@ func check_over(targetPos : Vector2):
 	
 	if active_on_Over:
 		_global_datas.show_element_info.emit(false,null)
+		
 		active_on_Over = null
-	
+		
 	
 	var ray_target = utility.get_raycast_target(targetPos,Camera)
 	#print( ray_target)

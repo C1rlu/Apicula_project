@@ -38,7 +38,7 @@ func add_back_call_and_check(back_call):
 	
 	for c in _global_datas._back_call_list:	
 		if c == back_call:
-			#print("back call exist", c)
+			print("back call exist", c)
 			return
 			
 	_global_datas._back_call_list.append(back_call)		

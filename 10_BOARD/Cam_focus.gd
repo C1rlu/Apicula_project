@@ -58,20 +58,24 @@ func _focus(focus_data : boardCamState_data):
 	if _global_datas.camera_current_state == game_state.camera_state.Board:
 		cam_state = 1
 		_global_datas.previous_cam_state = _focus_board
-		
+	
 		
 		
 	if _global_datas.camera_current_state == game_state.camera_state.BoardZoom:
 		cam_state = 2
-	
+		_global_datas._add_back_call.emit(_add_back_call)
 	if _global_datas.camera_current_state == game_state.camera_state.Board_Focus_element:
 		cam_state = 3
-	
+		_global_datas._add_back_call.emit(_add_back_call)
 	if _global_datas.camera_current_state == game_state.camera_state.Scanner:
 		cam_state = 4	
 		
 	_global_datas.close_all_over_ui.emit()	
+
+func _add_back_call():
+	_global_datas.camera_focus_On.emit(_focus_board)	
 	
+		
 	#print(cam_state)	
 func _process(delta):
 
