@@ -146,6 +146,7 @@ var board_instance_position : Node3D
 signal active_diving
 
 signal _open_quest_on_board(condition : bool)
+signal _show_selected_quest(condition : bool , quest_data : Note_Data)
 signal _select_quest_on_board(note_data : Note_Data)
 
 signal open_3d_book(condition : bool)

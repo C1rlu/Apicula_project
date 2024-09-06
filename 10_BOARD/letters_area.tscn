@@ -28,14 +28,14 @@ script/source = "extends Area3D
 
 
 func _ready():
-	note._set_note(Note_data.note_text,Note_data.from)
+	#note._set_note(Note_data.note_text,Note_data.from)
 
 	
 	_global_datas._select_quest_on_board.connect(_update_selected_quest)
 	On_Move.On_Move.connect(Open_quest_responce)
 	On_Over.On_Over.connect(_show_quest_info)
 	#On_View.On_View.connect(_focus_on_board)
-	_update_selected_quest(Note_data)
+	#_update_selected_quest(Note_data)
 	
 func _focus_on_board():
 	var focus_target = root.global_position
@@ -263,6 +263,7 @@ script = SubResource("GDScript_ikx4k")
 
 [node name="Quest_letter" type="Node3D" parent="."]
 transform = Transform3D(0.992874, 0, -0.119166, 0, 1, 0, 0.119166, 0, 0.992874, 0.0088055, 0.00296854, 0.0138789)
+visible = false
 
 [node name="Render_quest" type="Sprite3D" parent="Quest_letter"]
 transform = Transform3D(0.0125883, -1.5134e-09, 6.245e-17, -6.82591e-17, -5.50253e-10, 0.0125883, -1.28057e-09, -0.0125883, -5.50253e-10, 0, 0.000399773, 0)
@@ -331,6 +332,7 @@ surface_material_override/0 = ExtResource("5_kvfps")
 
 [node name="Render_text" type="Sprite3D" parent="."]
 transform = Transform3D(0.0136498, 0, 0, 0, -5.96652e-10, 0.0136498, 0, -0.0136498, -5.96652e-10, 0.000475392, 0.0021256, 0)
+visible = false
 layers = 2
 modulate = Color(0.403922, 0.388235, 0.34902, 1)
 texture = SubResource("ViewportTexture_lq3n1")
@@ -354,12 +356,13 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 80
-text = "NOTE"
+text = "QUEST"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
 [node name="from" type="Label" parent="Text_render/text"]
+visible = false
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0

@@ -1,6 +1,7 @@
 extends Resource
 class_name Note_Data
 
+@export var Photo_data : PhotoData
 @export var note_text : String
 @export var from : String
 @export var quest_orders : String

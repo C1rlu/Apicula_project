@@ -7,7 +7,7 @@ func _ready():
 	_global_datas._open_quest_on_board.connect(_open)
 	_open(false)
 	
-		
+
 	
 func _open(condition : bool):
 	quest_selector.visible = condition	

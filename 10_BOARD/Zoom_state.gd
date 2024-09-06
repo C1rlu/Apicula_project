@@ -10,7 +10,8 @@ func _input(event):
 	if !_global_datas.Player_In_Inventory:
 		return
 	
-
+	if _global_datas.Player_InMenu:
+		return
 			
 	if event.is_action_pressed("Board_zoom_in"):
 		zoom_in()
