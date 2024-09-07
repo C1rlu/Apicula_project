@@ -1,51 +1,100 @@
-[gd_scene load_steps=9 format=3 uid="uid://cqmsm5j5c5ur2"]
+[gd_scene load_steps=7 format=3 uid="uid://cqmsm5j5c5ur2"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/Quest_Selection/Quest_Button.gd" id="1_oqfn8"]
 [ext_resource type="Resource" uid="uid://61umivwjjcjs" path="res://12_INVENTORY/Words_note/Birds_goLighthouse_note.tres" id="2_25yu0"]
+[ext_resource type="Script" path="res://13_TOOLS_UI/Quest_Selection/Select_object.gd" id="3_g8rp3"]
 [ext_resource type="Shader" uid="uid://bhctfh42jxjgh" path="res://12_INVENTORY/Photo/Photo_ui_prefab_fadeIn.tres" id="3_irx3n"]
 [ext_resource type="Texture2D" uid="uid://dvlnqtm1lcg0r" path="res://12_INVENTORY/Photo/IMG/Birds_photo.png" id="4_6rexa"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kifc2"]
-bg_color = Color(0.831373, 0.717647, 0.588235, 1)
-border_color = Color(0.0117647, 0.113725, 0.129412, 1)
-border_blend = true
-shadow_color = Color(0, 0, 0, 0.211765)
-shadow_size = 20
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1ejfy"]
-bg_color = Color(0.909804, 0.835294, 0.752941, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qna0w"]
-bg_color = Color(0.909804, 0.835294, 0.752941, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hrjbm"]
 shader = ExtResource("3_irx3n")
 shader_parameter/Opacity = 1.0
 
-[node name="Quest_Button" type="Button"]
-custom_minimum_size = Vector2(220, 150)
-offset_right = 250.0
-offset_bottom = 150.0
-focus_mode = 1
-theme_override_colors/font_color = Color(0.0235294, 0.176471, 0.2, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_kifc2")
-theme_override_styles/hover = SubResource("StyleBoxFlat_1ejfy")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_qna0w")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_kifc2")
-theme_override_styles/focus = SubResource("StyleBoxFlat_kifc2")
-text = "SELECT THIS QUEST"
+[node name="Quest_letter" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 500.0
+offset_bottom = 350.0
 script = ExtResource("1_oqfn8")
 quest_data = ExtResource("2_25yu0")
 
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.917647, 0.831373, 0.733333, 1)
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 27.0
+offset_top = 54.0
+offset_right = 371.0
+offset_bottom = 89.0
+theme_override_colors/font_color = Color(0.176471, 0.356863, 0.313726, 1)
+theme_override_font_sizes/font_size = 25
+text = "Lorem ipsum darum its"
+
+[node name="Label3" type="Label" parent="."]
+layout_mode = 0
+offset_left = 27.0
+offset_top = 189.0
+offset_right = 495.0
+offset_bottom = 262.0
+theme_override_colors/font_color = Color(0.176471, 0.356863, 0.313726, 1)
+theme_override_font_sizes/font_size = 25
+text = "Lorem ipsum darum it sdddd dorilmd ddadd dkapdk ldad "
+autowrap_mode = 1
+
+[node name="Label2" type="Label" parent="."]
+layout_mode = 0
+offset_left = 27.0
+offset_top = 99.0
+offset_right = 136.0
+offset_bottom = 134.0
+theme_override_colors/font_color = Color(0.176471, 0.356863, 0.313726, 1)
+theme_override_font_sizes/font_size = 25
+text = "direct up
+"
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 159.0
+offset_top = 97.0
+offset_right = 302.0
+offset_bottom = 140.0
+theme_override_font_sizes/font_size = 25
+text = "..."
+script = ExtResource("3_g8rp3")
+
+[node name="Button2" type="Button" parent="."]
+layout_mode = 0
+offset_left = 283.0
+offset_top = 227.0
+offset_right = 440.0
+offset_bottom = 270.0
+theme_override_font_sizes/font_size = 25
+text = "..."
+script = ExtResource("3_g8rp3")
+
 [node name="PhotoUi_Prefab" type="Control" parent="."]
 process_mode = 3
-layout_mode = 3
-anchors_preset = 0
-offset_left = 199.864
-offset_top = -61.6397
-offset_right = 199.864
-offset_bottom = -61.6397
-scale = Vector2(0.206779, 0.206779)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 156.0
+offset_top = -299.0
+offset_right = 156.0
+offset_bottom = -299.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 0.0647043
+scale = Vector2(0.4, 0.4)
 
 [node name="Photo_Border" type="ColorRect" parent="PhotoUi_Prefab"]
 layout_mode = 1
@@ -68,7 +117,3 @@ offset_bottom = 256.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("4_6rexa")
-
-[node name="Timer" type="Timer" parent="."]
-wait_time = 0.1
-one_shot = true
