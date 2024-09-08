@@ -503,19 +503,29 @@ viewport_path = NodePath("Viewport")
 
 [node name="BoardFocusView" type="Node3D"]
 
+[node name="Open_FocusView" type="Node" parent="." node_paths=PackedStringArray("Render", "Backdrop", "Loader")]
+script = ExtResource("1_ttndn")
+Render = NodePath("../Render")
+Backdrop = NodePath("../Backdrop")
+Loader = NodePath("../Viewport/_loader")
+
 [node name="set_Resolution" type="Node" parent="." node_paths=PackedStringArray("viewports")]
 script = ExtResource("1_3ana1")
 viewports = [NodePath("../Viewport")]
-
-[node name="Open_FocusView" type="Node" parent="." node_paths=PackedStringArray("Render")]
-script = ExtResource("1_ttndn")
-Render = NodePath("../Render")
 
 [node name="Control_view" type="Node" parent="." node_paths=PackedStringArray("Camera", "_loader", "Render")]
 script = ExtResource("2_hd46p")
 Camera = NodePath("../Viewport/CAM")
 _loader = NodePath("../Viewport/_loader")
 Render = NodePath("../Render")
+
+[node name="Backdrop" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0117647, 0.0941176, 0.105882, 0.803922)
 
 [node name="Viewport" type="SubViewport" parent="."]
 own_world_3d = true
@@ -524,7 +534,7 @@ size = Vector2i(1280, 720)
 
 [node name="CAM" type="Camera3D" parent="Viewport"]
 transform = Transform3D(1, 0, 0, 0, 0.936672, 0.350207, 0, -0.350207, 0.936672, 0, 0.3, 0.495)
-cull_mask = 128
+cull_mask = 2
 
 [node name="Light" type="OmniLight3D" parent="Viewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.436291, 0)

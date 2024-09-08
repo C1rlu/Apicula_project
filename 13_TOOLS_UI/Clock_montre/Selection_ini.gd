@@ -19,8 +19,6 @@ func _ready():
 	var utility = GameUtility.new()
 	list_of_selection_data.append_array(utility.archive_materials(root))
 	
-
-
 func ini_selection(index_state : int):
 
 	if index_state == 0:

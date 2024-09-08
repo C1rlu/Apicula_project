@@ -144,7 +144,7 @@ var movable_root : Node3D
 var board_instance_position : Node3D
 
 
-signal _open_boad_Focus(condition : bool) 
+signal _open_boad_Focus(condition : bool , board_element : element_data) 
 
 # quest_state signal in order
 signal active_diving

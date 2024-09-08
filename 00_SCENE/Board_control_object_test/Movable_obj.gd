@@ -11,8 +11,11 @@ extends Node
 @export var rotation_root : Node3D
 
 @export var On_Move : Node
-
 @export var rotation_degrees : float = 45.0
+
+@export var element_setter : Node
+
+
 signal select_render_state(index_state : int)
 
 var rotating : bool
@@ -28,6 +31,14 @@ func _ready():
 		if rotation_root:
 			On_Move._rotate.connect(_on_rotate)
 
+	if element_setter:
+		element_setter.element = element 
+
+func set_element(_element : element_data):
+	element = _element
+	if element_setter:
+		element_setter.element = _element 
+			
 func move_is_active(condition : bool):
 	collider.disabled = condition
 

@@ -8,10 +8,10 @@ func _select_element_state(condition : bool):
 	
 	if condition:
 		_global_datas._open_quest_on_board.emit(false)
-		RenderingServer.global_shader_parameter_set("isGray", true)
+		#RenderingServer.global_shader_parameter_set("isGray", true)
 		_global_datas._add_back_call.emit(_call_back)
 	else:
-		RenderingServer.global_shader_parameter_set("isGray", false)	
+		#RenderingServer.global_shader_parameter_set("isGray", false)	
 		_global_datas._open_quest_on_board.emit(true)
 		
 func _call_back():
