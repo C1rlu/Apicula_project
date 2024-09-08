@@ -142,6 +142,10 @@ signal go_to_element_to_open
 signal check_element_to_open 
 var movable_root : Node3D
 var board_instance_position : Node3D
+
+
+signal _open_boad_Focus(condition : bool) 
+
 # quest_state signal in order
 signal active_diving
 
