@@ -1,4 +1,4 @@
-[gd_scene load_steps=249 format=3 uid="uid://dr73p5vs0sixe"]
+[gd_scene load_steps=260 format=3 uid="uid://dr73p5vs0sixe"]
 
 [ext_resource type="Script" path="res://10_BOARD/Movable_root.gd" id="1_2yoh7"]
 [ext_resource type="PackedScene" uid="uid://cyb6my1srlcpw" path="res://10_BOARD/Candle/Candle_set.blend" id="1_3ummb"]
@@ -1312,6 +1312,154 @@ shader_parameter/Ligne_widht = 0.015
 material = SubResource("ShaderMaterial_isdhd")
 size = Vector2(0.795, 0.795)
 
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_1qx35"]
+
+[sub_resource type="VisualShaderNodeBooleanParameter" id="VisualShaderNodeBooleanParameter_8n5cm"]
+parameter_name = "on_over"
+default_value_enabled = true
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_sa5mh"]
+parameter_name = "Over_color"
+
+[sub_resource type="VisualShaderNodeFresnel" id="VisualShaderNodeFresnel_wdq13"]
+default_input_values = [2, false, 3, 2.24]
+
+[sub_resource type="VisualShaderNodeSwitch" id="VisualShaderNodeSwitch_r3wge"]
+default_input_values = [0, false, 1, true, 2, false]
+op_type = 6
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_d5fgp"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_vdmr3"]
+parameter_name = "Dither_size"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_xuv4f"]
+constant = 1.0
+
+[sub_resource type="VisualShader" id="VisualShader_wufte"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded, shadows_disabled, ambient_light_disabled, fog_disabled;
+
+uniform vec4 Over_color : source_color;
+uniform bool on_over = false;
+global uniform float Dither_size;
+
+
+
+void fragment() {
+// ColorParameter:3
+	vec4 n_out3p0 = Over_color;
+
+
+// BooleanParameter:2
+	bool n_out2p0 = on_over;
+
+
+// FloatConstant:9
+	float n_out9p0 = 1.000000;
+
+
+// FloatParameter:8
+	float n_out8p0 = Dither_size;
+
+
+	float n_out6p0;
+// Expression:6
+	n_out6p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out8p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out6p0 = n_out9p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Fresnel:4
+	float n_in4p3 = 2.24000;
+	float n_out4p0 = pow(1.0 - clamp(dot(NORMAL, VIEW), 0.0, 1.0), n_in4p3);
+
+
+// Step:10
+	float n_out10p0 = step(n_out6p0, n_out4p0);
+
+
+	bool n_out5p0;
+// Switch:5
+	bool n_in5p2 = false;
+	if (n_out2p0) {
+		n_out5p0 = n_out10p0 > 0.0 ? true : false;
+	} else {
+		n_out5p0 = n_in5p2;
+	}
+
+
+// Output:0
+	ALBEDO = vec3(n_out3p0.xyz);
+	ALPHA = (n_out5p0 ? 1.0 : 0.0);
+
+
+}
+"
+graph_offset = Vector2(-732.54, -84.8429)
+flags/unshaded = true
+flags/shadows_disabled = true
+flags/ambient_light_disabled = true
+flags/fog_disabled = true
+nodes/fragment/2/node = SubResource("VisualShaderNodeBooleanParameter_8n5cm")
+nodes/fragment/2/position = Vector2(-660, 240)
+nodes/fragment/3/node = SubResource("VisualShaderNodeColorParameter_sa5mh")
+nodes/fragment/3/position = Vector2(-140, 80)
+nodes/fragment/4/node = SubResource("VisualShaderNodeFresnel_wdq13")
+nodes/fragment/4/position = Vector2(-980, 440)
+nodes/fragment/5/node = SubResource("VisualShaderNodeSwitch_r3wge")
+nodes/fragment/5/position = Vector2(-160, 260)
+nodes/fragment/6/node = SubResource("VisualShaderNodeExpression_d5fgp")
+nodes/fragment/6/position = Vector2(-640, 880)
+nodes/fragment/6/size = Vector2(724.789, 654.559)
+nodes/fragment/6/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/6/output_ports = "0,0,Dither_Node;"
+nodes/fragment/6/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/8/node = SubResource("VisualShaderNodeFloatParameter_vdmr3")
+nodes/fragment/8/position = Vector2(-1360, 1040)
+nodes/fragment/9/node = SubResource("VisualShaderNodeFloatConstant_xuv4f")
+nodes/fragment/9/position = Vector2(-1000, 780)
+nodes/fragment/10/node = SubResource("VisualShaderNodeStep_1qx35")
+nodes/fragment/10/position = Vector2(-280, 620)
+nodes/fragment/connections = PackedInt32Array(3, 0, 0, 0, 2, 0, 5, 0, 8, 0, 6, 1, 9, 0, 6, 0, 4, 0, 10, 1, 6, 0, 10, 0, 10, 0, 5, 1, 5, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8itrj"]
+render_priority = 0
+shader = SubResource("VisualShader_wufte")
+shader_parameter/Over_color = Color(0.960784, 0.819608, 0.541176, 1)
+shader_parameter/on_over = false
+
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_mjiyu"]
 constant = 0.826
 
@@ -1538,10 +1686,18 @@ fill_from = Vector2(0.478632, 0.478632)
 fill_to = Vector2(0, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_c4ore"]
+resource_local_to_scene = true
 render_priority = 0
+next_pass = SubResource("ShaderMaterial_8itrj")
 shader = SubResource("VisualShader_25ofm")
 shader_parameter/Main_color = Color(0.427451, 0.376471, 0.282353, 1)
 shader_parameter/Gradiant = SubResource("GradientTexture2D_gjpgw")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dh3be"]
+render_priority = 0
+shader = SubResource("VisualShader_wufte")
+shader_parameter/Over_color = Color(0.960784, 0.819608, 0.541176, 1)
+shader_parameter/on_over = false
 
 [sub_resource type="Gradient" id="Gradient_aunq8"]
 offsets = PackedFloat32Array(0.32304, 1)
@@ -1555,6 +1711,7 @@ fill_to = Vector2(0, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_m4xxt"]
 render_priority = 0
+next_pass = SubResource("ShaderMaterial_dh3be")
 shader = ExtResource("26_bw6mp")
 shader_parameter/Color = Color(0.317647, 0.25098, 0.160784, 1)
 shader_parameter/Dither_Opacity = 1.0
@@ -2078,28 +2235,29 @@ surface_material_override/1 = SubResource("ShaderMaterial_jka2s")
 [node name="Call_birds" type="Node" parent="Movable/Bell" node_paths=PackedStringArray("On_Move")]
 script = ExtResource("19_rki13")
 Bird_NPC_data = ExtResource("18_k6yfu")
-On_Move = NodePath("../Area3D/On_Move")
+On_Move = NodePath("../Area3D/On_Move_o")
 
 [node name="Movable_object" type="Node" parent="Movable/Bell" node_paths=PackedStringArray("collider", "limit_zone")]
 script = ExtResource("43_usyd2")
 collider = NodePath("../Area3D/Col")
 limit_zone = NodePath("../Limit_zone")
 
-[node name="Selection_ini" type="Node" parent="Movable/Bell" node_paths=PackedStringArray("root", "Movable_node")]
+[node name="Selection_ini" type="Node" parent="Movable/Bell" node_paths=PackedStringArray("root", "Movable_node", "On_Over")]
 script = ExtResource("49_vb8xx")
 root = NodePath("..")
 Movable_node = NodePath("../Movable_object")
+On_Over = NodePath("../Area3D/On_Over_o")
 
 [node name="Area3D" type="Area3D" parent="Movable/Bell"]
 transform = Transform3D(0.982238, 0, 0.187638, 0, 1, 0, -0.187638, 0, 0.982238, 0, 0, 0)
 
-[node name="On_Move" type="Node" parent="Movable/Bell/Area3D"]
+[node name="On_Move_o" type="Node" parent="Movable/Bell/Area3D"]
 script = ExtResource("44_64ctv")
 
-[node name="On_View" type="Node" parent="Movable/Bell/Area3D"]
+[node name="On_View_o" type="Node" parent="Movable/Bell/Area3D"]
 script = ExtResource("27_s1e6c")
 
-[node name="On_Over" type="Node" parent="Movable/Bell/Area3D"]
+[node name="On_Over_o" type="Node" parent="Movable/Bell/Area3D"]
 script = ExtResource("23_4ws66")
 
 [node name="Col" type="CollisionShape3D" parent="Movable/Bell/Area3D"]
@@ -2555,12 +2713,13 @@ skeleton = NodePath("../../../../../..")
 [node name="TOURNE_DISQUE" type="Node3D" parent="Movable"]
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 0.383862, -1.78814e-07, -0.235223)
 
-[node name="On_View_Event" type="Node" parent="Movable/TOURNE_DISQUE" node_paths=PackedStringArray("root", "On_View")]
+[node name="On_View_Event" type="Node" parent="Movable/TOURNE_DISQUE" node_paths=PackedStringArray("root", "On_View", "On_Over")]
 script = ExtResource("43_i0i3o")
 root = NodePath("..")
 info = ExtResource("45_tllkl")
 focus_data = ExtResource("46_y5tcg")
 On_View = NodePath("../Area3D/On_View")
+On_Over = NodePath("../Area3D/On_Over")
 
 [node name="Movable_object" type="Node" parent="Movable/TOURNE_DISQUE" node_paths=PackedStringArray("collider", "limit_zone", "move_root", "rotation_root", "On_Move")]
 script = ExtResource("43_usyd2")
@@ -2570,10 +2729,11 @@ move_root = NodePath("..")
 rotation_root = NodePath("..")
 On_Move = NodePath("../Area3D/On_Move")
 
-[node name="Selection_ini" type="Node" parent="Movable/TOURNE_DISQUE" node_paths=PackedStringArray("root", "Movable_node")]
+[node name="Selection_ini" type="Node" parent="Movable/TOURNE_DISQUE" node_paths=PackedStringArray("root", "Movable_node", "On_Over")]
 script = ExtResource("49_vb8xx")
 root = NodePath("..")
 Movable_node = NodePath("../Movable_object")
+On_Over = NodePath("../Area3D/On_Over")
 
 [node name="Disque_prefab" parent="Movable/TOURNE_DISQUE" instance=ExtResource("44_0qqs5")]
 transform = Transform3D(-0.111707, 0, 7.45058e-09, 0, 0.111707, 0, -7.45058e-09, 0, -0.111707, 0, 0, 0)
@@ -2653,6 +2813,9 @@ script = ExtResource("44_64ctv")
 
 [node name="On_View" type="Node" parent="Movable/TOURNE_DISQUE/Area3D"]
 script = SubResource("GDScript_0k00m")
+
+[node name="On_Over" type="Node" parent="Movable/TOURNE_DISQUE/Area3D"]
+script = ExtResource("23_4ws66")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Movable/TOURNE_DISQUE/Area3D"]
 transform = Transform3D(0.871195, 0, 0.490913, 0, 1, 0, -0.490913, 0, 0.871195, 0.015209, 0.134239, -0.0155258)
@@ -2924,9 +3087,9 @@ surface_material_override/0 = ExtResource("28_s7irk")
 [node name="Zone_info" type="Node" parent="Static/Deco/Table_border/Area3D" node_paths=PackedStringArray("On_Over")]
 script = ExtResource("44_1277k")
 info = ExtResource("45_tllkl")
-On_Over = NodePath("../On_Over")
+On_Over = NodePath("../On_Over_off")
 
-[node name="On_Over" type="Node" parent="Static/Deco/Table_border/Area3D"]
+[node name="On_Over_off" type="Node" parent="Static/Deco/Table_border/Area3D"]
 script = ExtResource("23_4ws66")
 
 [node name="Position_zone" type="Node" parent="Static/Deco/Table_border/Area3D"]

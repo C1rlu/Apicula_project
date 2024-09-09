@@ -1,4 +1,4 @@
-[gd_scene load_steps=71 format=3 uid="uid://uwg2qc3svu11"]
+[gd_scene load_steps=72 format=3 uid="uid://uwg2qc3svu11"]
 
 [ext_resource type="Script" path="res://10_BOARD/Photo_element.gd" id="1_0a8jl"]
 [ext_resource type="Resource" uid="uid://dyh1qg1u652pl" path="res://15_GAME_RESSOURCE/Epave_ch_photoData.tres" id="2_8x1kk"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://13_TOOLS_UI/Clock_montre/Selection_ini.gd" id="6_wkbq8"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="7_vd1wc"]
 [ext_resource type="Script" path="res://10_BOARD/On_View.tres.gd" id="8_2nycl"]
+[ext_resource type="Material" uid="uid://b08craofxipcu" path="res://00_SCENE/Board_control_object_test/Material/OnOver_object.tres" id="8_27eg6"]
 [ext_resource type="Shader" uid="uid://ceec4w3amlx7t" path="res://10_BOARD/photo_area_legend_sh.tres" id="11_h5w6g"]
 
 [sub_resource type="GDScript" id="GDScript_32kbr"]
@@ -213,7 +214,7 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(121, -73)
+graph_offset = Vector2(-310.83, -203.1)
 flags/unshaded = true
 nodes/fragment/0/position = Vector2(1000, 180)
 nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_ray7x")
@@ -531,6 +532,7 @@ nodes/light/0/position = Vector2(2440, 1640)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0vsb7"]
 render_priority = 0
+next_pass = ExtResource("8_27eg6")
 shader = SubResource("VisualShader_drhdi")
 shader_parameter/ColorParameter = Color(0.639216, 0.521569, 0.384314, 1)
 shader_parameter/light_color = Color(0.337255, 0.309804, 0.219608, 1)
@@ -663,13 +665,12 @@ render_priority = 0
 shader = ExtResource("11_h5w6g")
 shader_parameter/Texture2DParameter = SubResource("ViewportTexture_erm4f")
 
-[node name="Photo_element_root" type="Node3D" node_paths=PackedStringArray("_On_View", "_On_Over", "on_over_node")]
+[node name="Photo_element_root" type="Node3D" node_paths=PackedStringArray("_On_View", "on_over_node")]
 script = ExtResource("1_0a8jl")
 Photo_data = ExtResource("2_8x1kk")
 camera_state = ExtResource("3_tu215")
 camera_state_focus = ExtResource("4_w1sdr")
 _On_View = NodePath("Click/On_View")
-_On_Over = NodePath("Click/On_Over")
 on_over_node = NodePath("All_over")
 
 [node name="Movable_object" type="Node" parent="." node_paths=PackedStringArray("collider", "Position_zone", "move_root", "rotation_root", "On_Move")]
@@ -681,10 +682,11 @@ rotation_root = NodePath("..")
 On_Move = NodePath("../Click/On_Move")
 rotation_degrees = 15.0
 
-[node name="Selection_ini" type="Node" parent="." node_paths=PackedStringArray("root", "Movable_node")]
+[node name="Selection_ini" type="Node" parent="." node_paths=PackedStringArray("root", "Movable_node", "On_Over")]
 script = ExtResource("6_wkbq8")
 root = NodePath("..")
 Movable_node = NodePath("../Movable_object")
+On_Over = NodePath("../Click/On_Over")
 
 [node name="Photo" type="Node3D" parent="."]
 transform = Transform3D(1.30166, 0, 0, 0, 1.30166, 0, 0, 0, 1.30166, 1.89189e-07, -3.95626e-06, -6.48852e-06)

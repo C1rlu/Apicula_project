@@ -151,7 +151,8 @@ signal active_diving
 
 signal _open_quest_on_board(condition : bool)
 signal _in_select_element_state(condition : bool)
-
+var _in_selection_state : bool 
+var _selected_button : Button
 signal open_3d_book(condition : bool)
 var book_idle_pos : bool = true
 
@@ -185,7 +186,9 @@ func _ready():
 	_selected_tool = null
 	_photo_data_scene_list.clear()
 	_photo_checking = false
-
+	_in_selection_state = false
+	_selected_button = null
+	
 # TEST BOARD NEWS PROTO SCENE
 signal select_movable_object(object)
 signal moving_state(condition : bool)

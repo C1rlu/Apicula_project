@@ -1,6 +1,6 @@
 [gd_scene load_steps=31 format=3 uid="uid://qgyjfq88teq8"]
 
-[ext_resource type="Resource" uid="uid://cjwmwf4frvq3c" path="res://15_GAME_RESSOURCE/03_BoardCam_state/BoardZoom_focus_data.tres" id="1_55n7s"]
+[ext_resource type="Resource" uid="uid://ce1txchg547jd" path="res://15_GAME_RESSOURCE/04_Element/Letter_quest_element.tres" id="1_jq0el"]
 [ext_resource type="Resource" uid="uid://61umivwjjcjs" path="res://12_INVENTORY/Words_note/Birds_goLighthouse_note.tres" id="1_syumr"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="2_ke4da"]
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/On_click_object.gd" id="2_rje64"]
@@ -11,7 +11,7 @@
 [sub_resource type="GDScript" id="GDScript_ypp87"]
 script/source = "extends Area3D
 
-@export var Camera_focus : boardCamState_data
+@export var element : element_data
 @export var Note_data : Note_Data
 @export var info : info_data
 @onready var note_text = $Render_text
@@ -20,40 +20,22 @@ script/source = "extends Area3D
 @onready var quest_info = $Quest_letter/Text_quest/text
 
 @onready var root = $\".\"
-
-
 @export var On_Move : Node
-@export var On_View : Node
 @export var On_Over : Node
 
 
 func _ready():
-	#note._set_note(Note_data.note_text,Note_data.from)
-	#_global_datas._select_quest_on_board.connect(_update_selected_quest)
+
 	On_Move.On_Move.connect(Open_quest_responce)
 	On_Over.On_Over.connect(_show_quest_info)
-	#On_View.On_View.connect(_focus_on_board)
-	#_update_selected_quest(Note_data)
-	
-func _focus_on_board():
-	var focus_target = root.global_position
-	_global_datas.focus_this_on_board.emit(focus_target)
-	_global_datas.camera_focus_On.emit(Camera_focus)
-	_global_datas.show_element_info.emit(true,info)			
+
 	
 		
-func _show_quest_info():
-	_global_datas.show_element_info.emit(true,info)
-	
-func _update_selected_quest(_Note_data : Note_Data):
-	print(\"selected quest\", _Note_data.note_text)
-	note._set_note(_Note_data.note_text,_Note_data.from)
-	quest_info.text = _Note_data.quest_orders
-	
-	
+func _show_quest_info(condition):
+	#_global_datas.show_element_info.emit(condition,element.element_name)
+	_global_datas._show_object_legend.emit(condition,element.element_name)
 func Open_quest_responce(condition : bool):
 	if condition:
-		print(\"OPEN QUEST\")
 		_global_datas._open_quest_on_board.emit(true)
 	
 
@@ -237,14 +219,13 @@ shader_parameter/Color = Color(0.690196, 0.396078, 0.247059, 1)
 shader_parameter/Dither_Opacity = 1.0
 shader_parameter/Gradient_light = SubResource("GradientTexture2D_apshu")
 
-[node name="Letter_area" type="Area3D" node_paths=PackedStringArray("On_Move", "On_View", "On_Over")]
+[node name="Letter_area" type="Area3D" node_paths=PackedStringArray("On_Move", "On_Over")]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0.00272226, 0)
 script = SubResource("GDScript_ypp87")
-Camera_focus = ExtResource("1_55n7s")
+element = ExtResource("1_jq0el")
 Note_data = ExtResource("1_syumr")
 info = ExtResource("2_tu4uh")
 On_Move = NodePath("On_Move")
-On_View = NodePath("On_View")
 On_Over = NodePath("On_Over")
 
 [node name="Note" type="Node" parent="."]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=3 uid="uid://bwmu5iwushsl5"]
+[gd_scene load_steps=65 format=3 uid="uid://bwmu5iwushsl5"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/Fade_flash_effect.gd" id="1_1dj2k"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/INSTANCE_NOTE.gd" id="1_fcb2u"]
@@ -27,6 +27,7 @@
 [ext_resource type="Texture2D" uid="uid://v5bi85b50j4g" path="res://10_BOARD/Map/Map_board_01.png" id="23_ym7p0"]
 [ext_resource type="Texture2D" uid="uid://cxsr67dkxwr14" path="res://13_TOOLS_UI/Board_button/Board_map_button_img.png" id="24_nqwp3"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/Button_board.gd" id="25_0a5ix"]
+[ext_resource type="Script" path="res://10_BOARD/Select_element_state.gd" id="28_ld21h"]
 
 [sub_resource type="GDScript" id="GDScript_ebu32"]
 script/source = "extends Node
@@ -120,7 +121,7 @@ var ls_index : int = 0
 @onready var timer = $Timer
 
 var info : info_data
-
+var _previous_legend : String
 func _ready():
 
 	_global_datas._show_object_legend.connect(_update_text)
@@ -142,9 +143,16 @@ func _update_text(condition : bool, _legend: String):
 		description_text.visible = false
 		return
 	
+	
+	
 	description_text.visible = condition
 	description_text.text = _legend
+	
 	var text_count = _legend.length()
+	
+	if _previous_legend == _legend:
+		return
+	_previous_legend = _legend
 	
 	type_text(text_count)
 
@@ -313,6 +321,119 @@ shader_parameter/Color = Color(0.721569, 0.580392, 0.407843, 1)
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_r6eft"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rkkrs"]
+
+[sub_resource type="Gradient" id="Gradient_vd270"]
+offsets = PackedFloat32Array(0.968825, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.737193, 0.737193, 0.737193, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_1yq5p"]
+gradient = SubResource("Gradient_vd270")
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_mjpyr"]
+texture = SubResource("GradientTexture2D_1yq5p")
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_bykls"]
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_k2qub"]
+parameter_name = "Dither_size"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_xaypd"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_hgnjk"]
+constant = 1.0
+
+[sub_resource type="VisualShader" id="VisualShader_4qowj"]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+uniform sampler2D tex_frg_2;
+global uniform float Dither_size;
+
+
+
+void fragment() {
+// Texture2D:2
+	vec4 n_out2p0 = texture(tex_frg_2, UV);
+
+
+// FloatConstant:6
+	float n_out6p0 = 1.000000;
+
+
+// FloatParameter:4
+	float n_out4p0 = Dither_size;
+
+
+	float n_out5p0;
+// Expression:5
+	n_out5p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out4p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out5p0 = n_out6p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Step:3
+	float n_out3p0 = step(n_out2p0.x, n_out5p0);
+
+
+// Output:0
+	COLOR.a = n_out3p0;
+
+
+}
+"
+mode = 1
+flags/light_only = false
+nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_mjpyr")
+nodes/fragment/2/position = Vector2(-340, 180)
+nodes/fragment/3/node = SubResource("VisualShaderNodeStep_bykls")
+nodes/fragment/3/position = Vector2(120, 100)
+nodes/fragment/4/node = SubResource("VisualShaderNodeFloatParameter_k2qub")
+nodes/fragment/4/position = Vector2(-1320, 820)
+nodes/fragment/5/node = SubResource("VisualShaderNodeExpression_xaypd")
+nodes/fragment/5/position = Vector2(-600, 660)
+nodes/fragment/5/size = Vector2(724.789, 654.559)
+nodes/fragment/5/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/5/output_ports = "0,0,Dither_Node;"
+nodes/fragment/5/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/6/node = SubResource("VisualShaderNodeFloatConstant_hgnjk")
+nodes/fragment/6/position = Vector2(-960, 560)
+nodes/fragment/connections = PackedInt32Array(4, 0, 5, 1, 6, 0, 5, 0, 2, 0, 3, 0, 5, 0, 3, 1, 3, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t6bfg"]
+shader = SubResource("VisualShader_4qowj")
 
 [node name="07_SCREEN_UI" type="Node"]
 
@@ -815,5 +936,19 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 metadata/_edit_use_anchors_ = true
+
+[node name="Select_element_state" type="Node" parent="."]
+script = ExtResource("28_ld21h")
+
+[node name="On_Select_Mode_border" type="ColorRect" parent="Select_element_state"]
+visible = false
+material = SubResource("ShaderMaterial_t6bfg")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.721569, 0.580392, 0.407843, 1)
 
 [connection signal="timeout" from="Description/Update_description/Timer" to="Description/Update_description" method="_on_timer_timeout"]

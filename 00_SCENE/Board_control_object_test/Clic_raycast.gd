@@ -127,12 +127,12 @@ func check_over(targetPos : Vector2):
 	
 	if active_on_Over:
 		_global_datas.show_element_info.emit(false,null)
-		
+		active_on_Over.On_Over.emit(false)
 		active_on_Over = null
 		
 	
 	var ray_target = utility.get_raycast_target(targetPos,Camera)
-	#print( ray_target)
+	
 	if !ray_target:	
 		return
 		
@@ -140,7 +140,7 @@ func check_over(targetPos : Vector2):
 		if  ray_target.collider.get_node_or_null("On_Over"): 
 	
 			var _On_Over =  ray_target.collider.get_node_or_null("On_Over")
-			_On_Over.On_Over.emit()
+			_On_Over.On_Over.emit(true)
 			active_on_Over = _On_Over
 	
 

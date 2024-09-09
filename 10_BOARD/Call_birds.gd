@@ -9,7 +9,8 @@ func _ready():
 	
 	
 func call_bird(condition):
-	_global_datas.Npc_Dialogue = Bird_NPC_data
-	_global_datas._check_dialogue_photo.emit()
+	print("SENDING LETTERS")
+	#_global_datas.Npc_Dialogue = Bird_NPC_data
+	#_global_datas._check_dialogue_photo.emit()
 	#_global_datas._open_dialogue.emit()
-	print("BIRS COMING")
+	

@@ -28,6 +28,8 @@ func _ready():
 	if On_Move:
 		On_Move.On_Move.connect(_On_move)
 		On_Move._move.connect(_on_move)
+		
+		On_Move.On_Move.connect(select_this_element)
 		if rotation_root:
 			On_Move._rotate.connect(_on_rotate)
 
@@ -42,8 +44,17 @@ func set_element(_element : element_data):
 func move_is_active(condition : bool):
 	collider.disabled = condition
 
-	
+func select_this_element(condition):
+	if _global_datas._in_selection_state:
+		if element:
+			_global_datas._selected_button.text = element.element_name
+			print(element.element_name, "_ was selected")	
+		_global_datas._in_select_element_state.emit(false)
+		
 func _On_move(condition):
+	
+	if _global_datas._in_selection_state:
+		return
 	
 	if _global_datas.limit_zone:
 		return
@@ -86,6 +97,8 @@ func _on_move(target, speed, delta):
 
 func _on_rotate(direction):	
 
+	if _global_datas._in_selection_state:
+		return
 	if rotating:
 		return
 		

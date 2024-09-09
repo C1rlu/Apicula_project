@@ -14,6 +14,7 @@ func _ready():
 	
 	if On_Over:
 		On_Over.On_Over.connect(_on_over)
+		
 func _focus():
 	
 
@@ -23,6 +24,7 @@ func _focus():
 	_global_datas.camera_focus_On.emit(focus_data)
 	_global_datas.show_element_info.emit(true,info)
 	
-func _on_over():
-	_global_datas.show_element_info.emit(true,info)
-	
+func _on_over(condition : bool):
+	#_global_datas.show_element_info.emit(true,info)
+	if element:
+		_global_datas._show_object_legend.emit(condition,element.element_name)
