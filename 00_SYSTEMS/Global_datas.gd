@@ -148,7 +148,7 @@ signal _open_boad_Focus(condition : bool , board_element : element_data)
 
 # quest_state signal in order
 signal active_diving
-
+var _on_button_ui : bool = false
 signal _open_quest_on_board(condition : bool)
 signal _in_select_element_state(condition : bool)
 var _in_selection_state : bool 

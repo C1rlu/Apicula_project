@@ -8,6 +8,8 @@ func _ready():
 	
 func _select_element_state(condition : bool):
 	
+	_global_datas._in_selection_state = condition
+	
 	if condition:
 		_global_datas._open_quest_on_board.emit(false)
 		#RenderingServer.global_shader_parameter_set("isGray", true)
@@ -18,7 +20,7 @@ func _select_element_state(condition : bool):
 		_global_datas._open_quest_on_board.emit(true)
 		on_select_mode_border.visible = false
 		
-	_global_datas._in_selection_state = condition
+	
 func _call_back():
 	_global_datas._in_select_element_state.emit(false)
 	
