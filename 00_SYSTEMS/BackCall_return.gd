@@ -12,8 +12,12 @@ func _ready():
 
 func _input(event):
 	
-
-
+	#var disable = true
+	#if disable:
+		#return
+	
+	if _global_datas.Player_InSubScene:
+		return
 	if event.is_action_pressed("Back_call"):
 		
 		var top_call = _global_datas._back_call_list.size()

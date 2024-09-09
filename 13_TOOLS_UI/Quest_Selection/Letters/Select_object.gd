@@ -6,15 +6,17 @@ func _ready():
 	mouse_entered.connect(on_mouse)
 	mouse_exited.connect(on_mouse_exit)
 	
-	#_global_datas._open_quest_on_board.connect(_enable)
+	_global_datas._open_letter_quest.connect(_enable)
 
 func _in_select_state():
 	_global_datas._in_select_element_state.emit(true)
 	_global_datas._selected_button = self
 
+		
 func _enable(condition):
 	if condition:
 		disabled = true
+
 		var utility : GameUtility = GameUtility.new()
 		var n_timer = utility.create_timer(0.1,done,self)
 		n_timer.start()

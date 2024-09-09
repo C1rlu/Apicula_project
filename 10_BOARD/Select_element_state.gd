@@ -12,13 +12,17 @@ func _select_element_state(condition : bool):
 	
 	
 	if condition:
-		_global_datas._open_quest_on_board.emit(false)
+		_global_datas._open_letter_quest.emit(false)
 		#RenderingServer.global_shader_parameter_set("isGray", true)
 		on_select_mode_border.visible = true
 		_global_datas._add_back_call.emit(_call_back)
+				
+		if !_global_datas.Player_In_Inventory:
+			_global_datas.open_inventory.emit(true)
+			_global_datas.Player_In_Inventory = true
 	else:
 		#RenderingServer.global_shader_parameter_set("isGray", false)	
-		_global_datas._open_quest_on_board.emit(true)
+		_global_datas._open_letter_quest.emit(true)
 		on_select_mode_border.visible = false
 		
 	

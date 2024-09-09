@@ -1,0 +1,100 @@
+[gd_scene load_steps=12 format=3 uid="uid://btx621628coaq"]
+
+[ext_resource type="Script" path="res://13_TOOLS_UI/Quest_Selection/Preview_letters/Select_letter.gd" id="1_jd1ba"]
+[ext_resource type="Texture2D" uid="uid://cpnkof28l8bd6" path="res://13_TOOLS_UI/Board_button/Letters_buttons_02.png" id="1_tgu7q"]
+[ext_resource type="Shader" uid="uid://bhctfh42jxjgh" path="res://12_INVENTORY/Photo/Photo_ui_prefab_fadeIn.tres" id="2_i8qyl"]
+[ext_resource type="Texture2D" uid="uid://dkqa1xnttnmoq" path="res://12_INVENTORY/Photo/IMG/Maurice_photo.png" id="3_uqbr4"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_v8td2"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sdyu0"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jmebq"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_86xoy"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pgt7r"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ikmom"]
+shader = ExtResource("2_i8qyl")
+shader_parameter/Opacity = 1.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gmut4"]
+bg_color = Color(0.827451, 0.776471, 0.67451, 1)
+shadow_color = Color(0, 0, 0, 0.360784)
+shadow_size = 15
+
+[node name="PreviewLetter" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="LettersButtons02" type="Sprite2D" parent="."]
+position = Vector2(200, 132)
+scale = Vector2(0.781986, 0.781986)
+texture = ExtResource("1_tgu7q")
+
+[node name="Select_letter" type="Button" parent="."]
+layout_mode = 0
+offset_right = 412.0
+offset_bottom = 259.0
+theme_override_colors/font_color = Color(0.0588235, 0.290196, 0.32549, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxEmpty_v8td2")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_sdyu0")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_jmebq")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_86xoy")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_pgt7r")
+script = ExtResource("1_jd1ba")
+
+[node name="PhotoUi_Prefab" type="Control" parent="Select_letter"]
+process_mode = 3
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 90.0
+offset_top = -218.5
+offset_right = 90.0
+offset_bottom = -218.5
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 0.0244308
+scale = Vector2(0.301335, 0.301335)
+
+[node name="Photo_Border" type="ColorRect" parent="Select_letter/PhotoUi_Prefab"]
+layout_mode = 1
+offset_right = 582.0
+offset_bottom = 594.0
+color = Color(0.792157, 0.65098, 0.482353, 1)
+
+[node name="Photo_render" type="TextureRect" parent="Select_letter/PhotoUi_Prefab/Photo_Border"]
+material = SubResource("ShaderMaterial_ikmom")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -256.0
+offset_top = -256.0
+offset_right = 256.0
+offset_bottom = 256.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_uqbr4")
+
+[node name="Label" type="Label" parent="Select_letter/PhotoUi_Prefab"]
+layout_mode = 0
+offset_left = -420.0
+offset_top = 877.0
+offset_right = 112.0
+offset_bottom = 1067.0
+rotation = 0.0477667
+theme_override_colors/font_color = Color(0.0705882, 0.329412, 0.368627, 1)
+theme_override_font_sizes/font_size = 115
+theme_override_styles/normal = SubResource("StyleBoxFlat_gmut4")
+text = "Request "
+horizontal_alignment = 1
+vertical_alignment = 1

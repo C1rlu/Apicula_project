@@ -150,6 +150,7 @@ signal _open_boad_Focus(condition : bool , board_element : element_data)
 signal active_diving
 var _on_button_ui : bool = false
 signal _open_quest_on_board(condition : bool)
+signal _open_letter_quest(condition : bool)
 signal _in_select_element_state(condition : bool)
 var _in_selection_state : bool 
 var _selected_button : Button
