@@ -47,10 +47,10 @@ func move_is_active(condition : bool):
 func select_this_element(condition):
 	if _global_datas._in_selection_state:
 		if element:
-			_global_datas._selected_button.text = element.element_name
-			print(element.element_name, "_ was selected")	
+			_global_datas._selected_button._set_responce(element.element_name)
+			
 		_global_datas._in_select_element_state.emit(false)
-		
+
 func _On_move(condition):
 	
 	if _global_datas._in_selection_state:

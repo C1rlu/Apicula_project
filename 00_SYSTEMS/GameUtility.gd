@@ -79,3 +79,15 @@ func get_raycast_target(targetPos : Vector2, Camera : Camera3D) -> Dictionary:
 	var result = space.intersect_ray(rayQuery)
 
 	return result
+	
+	
+func create_timer(time_in_seconds: float, time_out : Callable,parent : Node) -> Timer:
+	var timer = Timer.new()
+	timer.wait_time = time_in_seconds
+	timer.one_shot = true  
+	timer.connect("timeout", time_out)
+	timer.connect("timeout",func():timer.queue_free()) #TO REMOVE TIMER AT THE END OF USED
+	parent.add_child(timer)
+	return timer
+
+

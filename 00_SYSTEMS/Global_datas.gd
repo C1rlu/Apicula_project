@@ -25,10 +25,10 @@ signal show_3D_SpeackerScene(condition : bool)
 
 
 #backcalls
-signal _back_call
+signal _active_back_call
 signal _add_back_call(back_call)
 var _back_call_list : Array 
-
+signal _clear_back_call
 # input type
 signal using_pad(condition : bool)
 var player_using_pad : bool = false
@@ -156,6 +156,8 @@ var _selected_button : Button
 signal open_3d_book(condition : bool)
 var book_idle_pos : bool = true
 
+# sending bird 
+signal sending_bird
 
 
 #update description on board
@@ -188,7 +190,7 @@ func _ready():
 	_photo_checking = false
 	_in_selection_state = false
 	_selected_button = null
-	
+	_on_button_ui  = false
 # TEST BOARD NEWS PROTO SCENE
 signal select_movable_object(object)
 signal moving_state(condition : bool)

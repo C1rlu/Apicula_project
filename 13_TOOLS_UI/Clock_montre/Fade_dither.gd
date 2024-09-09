@@ -6,37 +6,17 @@ extends Node
 @export var fade_timing_out : float = 0.5
 @onready var material : Material = texture_img.get_material()
 
-var t
+
 var actual_value : float
 
 
 func _ready():
-	pass
-	#material.set_shader_parameter("Opacity",0.0)
-	#_global_datas._go_Subscene.connect(fade_in)
-	#_global_datas.open_tool_selector.connect(_active)
-	#tool_clock.tool_active_signal.connect(tool_active)
-	
-func _active(condition : bool):
+	material.set_shader_parameter("Opacity",0.0)
 	
 
-	material.set_shader_parameter("Opacity",condition)	
-		
-func tool_active(condition : bool):
-	
-	if condition:
-		fade_in()
-	else:
-		fade_out()
-		
-		
 func fade_in():
 	
-	var tree  = get_tree()
-	if tree == null:
-		return
-	
-	
+	var t 
 	if t:
 		t.kill()
 	t = create_tween()
@@ -44,10 +24,7 @@ func fade_in():
 	
 func fade_out():
 
-	var tree  = get_tree()
-	if tree == null:
-		return
-		
+	var t 
 	if t:
 		t.kill()
 	t = create_tween()

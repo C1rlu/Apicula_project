@@ -1,141 +1,42 @@
 [gd_scene load_steps=16 format=3 uid="uid://clc3sbquuu1us"]
 
-[ext_resource type="Resource" uid="uid://ccwdekfv0jvky" path="res://08_SUBSCENES/Tools/Main_tool/Take_Oxygene.tres" id="1_3rh1d"]
 [ext_resource type="PackedScene" uid="uid://b04qmdjf73spd" path="res://13_TOOLS_UI/Clock_montre/clock_3d_ui_prefab.tscn" id="1_71jwj"]
 [ext_resource type="Resource" uid="uid://bcj27libgpl5g" path="res://08_SUBSCENES/Tools/Main_tool/Check_clock.tres" id="1_e231r"]
+[ext_resource type="Resource" uid="uid://ppxk5i543dfn" path="res://15_GAME_RESSOURCE/00_Npc_data/Mr_Birds_data.tres" id="1_t0k1n"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/Clock_montre/Fade_dither.gd" id="1_v6xwk"]
 
 [sub_resource type="GDScript" id="GDScript_uwuod"]
 script/source = "extends Node
 
-@export var oxy_tool : tool_data
-
+@export var bird_dialogue : Npc_datas
 @onready var render = $\"../Render\"
 @onready var clock_root = $\"../SubViewport/clock_3d_prefab/clock_3d2/root_equille\"
 @onready var fade_dither = $\"../Fade_dither\"
 
-var t 
 
 func _ready():
-	pass
-	#_global_datas._active_progress_subscene.connect(load_clock)
-#
-	#
-	#_global_datas._go_Subscene.connect(_start_clock)
-	#_global_datas._backFrom_subscene.connect(_stop)
-	#oxy_tool.tool_active_signal.connect(reload_timer)
-
-func reload_timer(condition):
+	_global_datas.sending_bird.connect(_start_clock)
 	
-	if condition:
-		
-		var angle_reste = 360.0 + clock_root.rotation_degrees.y
-		var angle = 360.0 - angle_reste
-		
-		var time_ratio = 4.0 / 360
-		var timer_need = time_ratio * angle
-		if t:
-			t.kill()
-		t = create_tween()
-		t.tween_method(_value,angle,0.0,timer_need)	
-		
-	else:
-		_start_clock()	
-			
-func selector(condition : bool):
-	
-	if condition:
-		show()	
-	else:
-		hide()	
-		
-func show():
 
-	fade_dither.fade_in()
-
-func hide():
-
-	fade_dither.fade_out()	
-
-func load_clock(condition : bool):
-	
-	
-	if condition:
-		
-		if t:
-			t.kill()
-		t = create_tween()
-		t.tween_method(_value,360,0.0,1)
-		t.connect(\"finished\",go_subscene)
-		show()
-		
-	else:
-		if t:
-			t.kill()
-		clock_root.rotation_degrees.y = 0.0
-		hide()	
-		
-func go_subscene():
-	_global_datas._active_progress_subscene.emit(false)
-	_global_datas._go_Subscene.emit()
-	#hide()	
 func _start_clock():
-	
-	var tree = get_tree()
-	if tree == null:
-		return
-	
-	var time_need = 60.0 - (_global_datas.clock_timer / 6)
-	#print(time_need)
+	_global_datas.Player_InMenu = true
+	fade_dither.fade_in()
+	var time_need = 3.0
+	var t
 	if t:
 		t.kill()
 		
 	t = create_tween()
-	t.tween_method(_value,_global_datas.clock_timer,360.0,time_need)
+	t.tween_method(_value,0.0,360.0,time_need)
 	t.connect(\"finished\",done)
 
-
-		
-func pause():
-	
-	var player_state = _global_datas.player_state
-	 
-	if player_state == game_state.visible_state.normal:
-		_start_clock()
-
-	if player_state == game_state.visible_state.mirror:
-		if t:
-			t.kill()
-	
-
 func done():
-	
-	
-	_stop()
-	
-	#_global_datas._backFrom_subscene.emit()
-	#_global_datas._go_Mainscene.emit()
-	#_global_datas.show_on_scanner.emit(false)
-	#tool_backPack.tool_active_signal.emit(true)
-
-	
-func _stop():
-	
-	if t:
-		t.kill()	
-	_global_datas.clock_timer = 0.0
-
-	hide()	
-							
+	fade_dither.fade_out()
+	_global_datas.Npc_Dialogue = bird_dialogue
+	_global_datas._open_dialogue.emit()
+				
 func _value(value : float):
 	
-
-	
-
-	clock_root.rotation_degrees.y = -value
-	_global_datas.clock_timer = value
-	
-func _load_value(value : float):
 	clock_root.rotation_degrees.y = -value
 
 "
@@ -265,7 +166,7 @@ nodes/fragment/connections = PackedInt32Array(37, 0, 35, 1, 72, 0, 37, 1, 39, 0,
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_08e44"]
 shader = SubResource("VisualShader_5dayk")
-shader_parameter/Opacity = 1.0
+shader_parameter/Opacity = 0.0
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_xhme6"]
 viewport_path = NodePath("SubViewport")
@@ -279,7 +180,7 @@ mouse_filter = 2
 [node name="Time" type="Node" parent="."]
 process_mode = 1
 script = SubResource("GDScript_uwuod")
-oxy_tool = ExtResource("1_3rh1d")
+bird_dialogue = ExtResource("1_t0k1n")
 
 [node name="Fade_dither" type="Node" parent="." node_paths=PackedStringArray("texture_img")]
 process_mode = 3
@@ -297,10 +198,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -50.0
-offset_top = -56.0
-offset_right = 50.0
-offset_bottom = 44.0
+offset_left = -100.0
+offset_top = -111.0
+offset_right = 100.0
+offset_bottom = 89.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2

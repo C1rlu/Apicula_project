@@ -11,8 +11,8 @@ func _open():
 
 func on_mouse():
 	_global_datas._on_button_ui = true
-	print(_global_datas._on_button_ui)
+
 	
 func on_mouse_exit():
 	_global_datas._on_button_ui = false
-	print(_global_datas._on_button_ui)	
+
