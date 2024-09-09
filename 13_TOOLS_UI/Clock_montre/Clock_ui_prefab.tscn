@@ -19,6 +19,7 @@ func _ready():
 	
 
 func _start_clock():
+	_global_datas.bird_is_waiting = true
 	_global_datas.Player_InMenu = true
 	fade_dither.fade_in()
 	var time_need = 3.0
@@ -31,6 +32,7 @@ func _start_clock():
 	t.connect(\"finished\",done)
 
 func done():
+	_global_datas.bird_is_waiting = false
 	fade_dither.fade_out()
 	_global_datas.Npc_Dialogue = bird_dialogue
 	_global_datas._open_dialogue.emit()

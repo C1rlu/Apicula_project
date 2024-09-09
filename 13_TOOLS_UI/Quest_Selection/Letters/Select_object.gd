@@ -20,6 +20,7 @@ func _enable(condition):
 		var utility : GameUtility = GameUtility.new()
 		var n_timer = utility.create_timer(0.1,done,self)
 		n_timer.start()
+		
 func done():
 	disabled = false
 

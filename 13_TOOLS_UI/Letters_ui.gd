@@ -3,7 +3,8 @@ extends Node
 @onready var letters_ui = $".."
 
 func _ready():
-	_global_datas.open_inventory.connect(_active)
+	pass
+	#_global_datas.open_inventory.connect(_active)
 	
 	#_global_datas._open_quest_on_board.connect(_check)
 	#_global_datas._in_select_element_state.connect(_check)

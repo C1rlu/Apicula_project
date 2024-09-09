@@ -159,7 +159,7 @@ var book_idle_pos : bool = true
 
 # sending bird 
 signal sending_bird
-
+var bird_is_waiting : bool = false
 
 #update description on board
 signal focus_this_on_board(target : Vector3)
@@ -192,6 +192,7 @@ func _ready():
 	_in_selection_state = false
 	_selected_button = null
 	_on_button_ui  = false
+	bird_is_waiting = false
 # TEST BOARD NEWS PROTO SCENE
 signal select_movable_object(object)
 signal moving_state(condition : bool)

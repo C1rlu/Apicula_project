@@ -47,7 +47,7 @@ func open_inventory(condition : bool):
 		_global_datas.current_scene_state = game_state.scene_state._Main
 		_global_datas._open_quest_on_board.emit(false)
 		_global_datas._open_letter_quest.emit(false)
-		
+		_global_datas._clear_back_call.emit()
 	else:
 		_global_datas._add_back_call.emit(_back_call)
 		_global_datas.current_scene_state = game_state.scene_state._Boardscene
@@ -92,7 +92,7 @@ func _open_backfrom_subscene():
 func open_inventory():
 	_global_datas.open_inventory.emit(true)
 	_global_datas.Player_In_Inventory = true
-
+	
 func check_if_element()-> bool :
 	 
 	for e in _global_datas.element_collected:
@@ -287,7 +287,6 @@ script = ExtResource("9_tfybn")
 [node name="Element_Manager" type="Node" parent="."]
 script = ExtResource("14_johxk")
 Proto_element = Array[Resource("res://15_GAME_RESSOURCE/04_Element/Element_Data/object_data.gd")]([ExtResource("6_h5ap1"), ExtResource("7_sglhn"), ExtResource("8_sgf7i"), ExtResource("9_rs7n7"), ExtResource("10_q6p6j")])
-active_test = true
 
 [node name="Drop_Element_State" type="Node" parent="Element_Manager"]
 script = ExtResource("7_io232")
