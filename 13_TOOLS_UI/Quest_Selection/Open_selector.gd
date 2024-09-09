@@ -6,7 +6,7 @@ extends Node
 func _ready():
 	_global_datas._open_quest_on_board.connect(_open)
 	
-	#_open(false)
+	_open(false)
 	
 
 	
