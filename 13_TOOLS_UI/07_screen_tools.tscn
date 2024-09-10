@@ -1,4 +1,4 @@
-[gd_scene load_steps=60 format=3 uid="uid://bwmu5iwushsl5"]
+[gd_scene load_steps=53 format=3 uid="uid://bwmu5iwushsl5"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/Fade_flash_effect.gd" id="1_1dj2k"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/INSTANCE_NOTE.gd" id="1_fcb2u"]
@@ -18,6 +18,7 @@
 [ext_resource type="Script" path="res://13_TOOLS_UI/Loadin_progress.gd" id="16_jt5le"]
 [ext_resource type="PackedScene" uid="uid://b4ju0ntcydix8" path="res://13_TOOLS_UI/2D_MAP/2d_map.tscn" id="17_c8quy"]
 [ext_resource type="PackedScene" uid="uid://dykmxu1syt7" path="res://13_TOOLS_UI/Depth_bar/subscene_depth_bar.tscn" id="18_fdcig"]
+[ext_resource type="Texture2D" uid="uid://b1trci2kdjddg" path="res://13_TOOLS_UI/Board_button/Map_button_img.png" id="18_rhmoe"]
 [ext_resource type="Shader" uid="uid://cg5mgo48srf08" path="res://13_TOOLS_UI/2D_MAP/2d_map_border.tres" id="19_ibvij"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/2D_MAP/OpenMap_Button.gd" id="20_nuvlm"]
 [ext_resource type="Shader" uid="uid://ce21gfa0ldjj7" path="res://13_TOOLS_UI/2D_MAP/2d_map_sh.tres" id="21_7l3vk"]
@@ -27,6 +28,7 @@
 [ext_resource type="Script" path="res://13_TOOLS_UI/Button_board.gd" id="25_0a5ix"]
 [ext_resource type="PackedScene" uid="uid://djm8lc25p4u3m" path="res://13_TOOLS_UI/Quest_Selection/Quest_selector.tscn" id="26_41fx1"]
 [ext_resource type="Script" path="res://10_BOARD/Select_element_state.gd" id="28_ld21h"]
+[ext_resource type="PackedScene" uid="uid://cqmsm5j5c5ur2" path="res://13_TOOLS_UI/Quest_Selection/Letters/quest_button.tscn" id="28_lw8ft"]
 [ext_resource type="PackedScene" uid="uid://clc3sbquuu1us" path="res://13_TOOLS_UI/Clock_montre/Clock_ui_prefab.tscn" id="31_4ftpd"]
 
 [sub_resource type="GDScript" id="GDScript_ebu32"]
@@ -239,31 +241,6 @@ bg_color = Color(0.360784, 0.341176, 0.262745, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tu22k"]
 bg_color = Color(0.811765, 0.65098, 0.423529, 1)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_x2pey"]
-shader = ExtResource("19_ibvij")
-shader_parameter/Opacity = 1.0
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ky6j7"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wk6dg"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kcdtd"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xrr31"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_pgyq2"]
-shader = ExtResource("21_7l3vk")
-shader_parameter/Flat_color = Color(0.0156863, 0.109804, 0.117647, 1)
-shader_parameter/Opacity = 1.0
-shader_parameter/Mask_color = Color(0.223529, 0.211765, 0.145098, 1)
-shader_parameter/Line_color = Color(0.596078, 0.466667, 0.298039, 1)
-shader_parameter/Grid_color = Color(0.137255, 0.231373, 0.239216, 1)
-shader_parameter/Offset = Vector2(0, 0)
-shader_parameter/Size = Vector2(1000, 1000)
-shader_parameter/Ligne_widht = 0.025
-shader_parameter/Isle_mask = ExtResource("22_txmj8")
-shader_parameter/Line = ExtResource("23_ym7p0")
-
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_3ydwq"]
 parameter_name = "Color"
 
@@ -297,15 +274,22 @@ nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0)
 shader = SubResource("VisualShader_ia5sc")
 shader_parameter/Color = Color(0.721569, 0.580392, 0.407843, 1)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5miex"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_x2pey"]
+shader = ExtResource("19_ibvij")
+shader_parameter/Opacity = 1.0
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7gqfb"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lel6s"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_r6eft"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rkkrs"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pgyq2"]
+shader = ExtResource("21_7l3vk")
+shader_parameter/Flat_color = Color(0.0156863, 0.109804, 0.117647, 1)
+shader_parameter/Opacity = 1.0
+shader_parameter/Mask_color = Color(0.223529, 0.211765, 0.145098, 1)
+shader_parameter/Line_color = Color(0.596078, 0.466667, 0.298039, 1)
+shader_parameter/Grid_color = Color(0.137255, 0.231373, 0.239216, 1)
+shader_parameter/Offset = Vector2(0, 0)
+shader_parameter/Size = Vector2(1000, 1000)
+shader_parameter/Ligne_widht = 0.025
+shader_parameter/Isle_mask = ExtResource("22_txmj8")
+shader_parameter/Line = ExtResource("23_ym7p0")
 
 [sub_resource type="Gradient" id="Gradient_vd270"]
 offsets = PackedFloat32Array(0.968825, 1)
@@ -699,7 +683,7 @@ grow_vertical = 2
 
 [node name="Main_scene_UI" type="Node" parent="Main_Scene_U" node_paths=PackedStringArray("buttons")]
 script = ExtResource("14_isnv0")
-buttons = [NodePath("../Map_button/Border/Button"), NodePath("../Board_Button/Button")]
+buttons = [NodePath("../Map_button/Button"), NodePath("../Board_Button/Button")]
 
 [node name="DiveZone_infos" type="Control" parent="Main_Scene_U"]
 layout_mode = 3
@@ -772,15 +756,25 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -5.0
-offset_top = 2.00006
-offset_right = -5.0
-offset_bottom = 2.00006
+offset_left = -49.0
+offset_top = -612.0
+offset_right = -49.0
+offset_bottom = -612.0
 grow_horizontal = 0
 grow_vertical = 0
-rotation = 0.310967
-scale = Vector2(0.404031, 0.404031)
 mouse_filter = 2
+
+[node name="Button" type="Button" parent="Main_Scene_U/Map_button"]
+layout_mode = 0
+offset_right = 50.0
+offset_bottom = 50.0
+script = ExtResource("20_nuvlm")
+
+[node name="MapButtonImg" type="Sprite2D" parent="Main_Scene_U/Map_button/Button"]
+material = SubResource("ShaderMaterial_qd58x")
+position = Vector2(23.9999, 25)
+scale = Vector2(0.178361, 0.178361)
+texture = ExtResource("18_rhmoe")
 
 [node name="On_Over" type="ColorRect" parent="Main_Scene_U/Map_button"]
 visible = false
@@ -792,6 +786,7 @@ offset_bottom = 342.016
 color = Color(0.721569, 0.580392, 0.407843, 1)
 
 [node name="Border" type="ColorRect" parent="Main_Scene_U/Map_button"]
+visible = false
 material = SubResource("ShaderMaterial_x2pey")
 layout_mode = 1
 anchors_preset = 8
@@ -807,22 +802,8 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.45098, 0.364706, 0.25098, 1)
 
-[node name="Button" type="Button" parent="Main_Scene_U/Map_button/Border" node_paths=PackedStringArray("button_control")]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/normal = SubResource("StyleBoxEmpty_ky6j7")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_wk6dg")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_kcdtd")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_ky6j7")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_xrr31")
-script = ExtResource("20_nuvlm")
-button_control = NodePath("../..")
-
 [node name="Map" type="TextureRect" parent="Main_Scene_U/Map_button"]
+visible = false
 material = SubResource("ShaderMaterial_pgyq2")
 layout_mode = 1
 anchors_preset = 8
@@ -841,62 +822,52 @@ texture = ExtResource("22_txmj8")
 expand_mode = 1
 
 [node name="Board_Button" type="Control" parent="Main_Scene_U"]
-visible = false
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 225.0
-offset_top = 114.0
-offset_right = 225.0
-offset_bottom = 114.0
+offset_left = -51.0
+offset_top = -541.0
+offset_right = -51.0
+offset_bottom = -541.0
 grow_horizontal = 0
 grow_vertical = 0
-scale = Vector2(0.651073, 0.612498)
 mouse_filter = 2
 
-[node name="BoardMapButtonImg_Over" type="Sprite2D" parent="Main_Scene_U/Board_Button"]
-visible = false
-material = SubResource("ShaderMaterial_qd58x")
-position = Vector2(-718.479, -65.7431)
-scale = Vector2(1.55003, 1.50417)
-texture = ExtResource("24_nqwp3")
-
-[node name="BoardMapButtonImg" type="Sprite2D" parent="Main_Scene_U/Board_Button"]
-position = Vector2(-716.131, -54.0033)
-scale = Vector2(1.47322, 1.47322)
-texture = ExtResource("24_nqwp3")
-
-[node name="Button" type="Button" parent="Main_Scene_U/Board_Button" node_paths=PackedStringArray("root")]
+[node name="Button" type="Button" parent="Main_Scene_U/Board_Button"]
 layout_mode = 0
-offset_left = -1092.0
-offset_top = -223.0
-offset_right = -413.0
-offset_bottom = 19.0
-theme_override_styles/normal = SubResource("StyleBoxEmpty_5miex")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_7gqfb")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_lel6s")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_r6eft")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_rkkrs")
-disabled = true
+offset_left = 2.0
+offset_top = -2.0
+offset_right = 52.0
+offset_bottom = 48.0
 script = ExtResource("25_0a5ix")
-root = NodePath("..")
+
+[node name="BoardMapButtonImg" type="Sprite2D" parent="Main_Scene_U/Board_Button/Button"]
+material = SubResource("ShaderMaterial_qd58x")
+position = Vector2(25, 26)
+scale = Vector2(0.159741, 0.159741)
+texture = ExtResource("24_nqwp3")
 
 [node name="2D_Map" parent="." instance=ExtResource("17_c8quy")]
+visible = false
 
 [node name="Money_bar" parent="." instance=ExtResource("15_jqiih")]
 anchors_preset = 0
 anchor_left = 0.0
 anchor_right = 0.0
-offset_left = 1064.0
-offset_top = 1.0
-offset_right = 1276.0
-offset_bottom = 62.0
+offset_left = 1066.0
+offset_top = 2.0
+offset_right = 1278.0
+offset_bottom = 63.0
 grow_horizontal = 1
 
 [node name="QuestSelector" parent="." instance=ExtResource("26_41fx1")]
+visible = false
+
+[node name="Quest_letter" parent="." instance=ExtResource("28_lw8ft")]
+visible = false
 
 [node name="Clock" parent="." instance=ExtResource("31_4ftpd")]
 anchors_preset = 5
