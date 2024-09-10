@@ -25,4 +25,3 @@ enum camera_state {
 	Scanner
 }
 
-

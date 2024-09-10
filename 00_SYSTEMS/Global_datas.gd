@@ -144,8 +144,6 @@ var movable_root : Node3D
 var board_instance_position : Node3D
 
 
-
-
 # quest_state signal in order
 signal active_diving
 var _on_button_ui : bool = false
@@ -182,6 +180,8 @@ signal update_money_amount(value : int)
 #-----------------------------
 # dialogue datas
 var Npc_Dialogue : Npc_datas
+
+
 
 #-------------------- GAME STATE ------------------
 
