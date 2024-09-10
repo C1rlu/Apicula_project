@@ -14,7 +14,7 @@ func _reset(condition,element):
 	
 	if condition:
 		_loader.rotation_degrees = Vector3.ZERO	
-		Camera.fov = 75.0
+		Camera.fov = 60.0
 		
 func _input(event):
 	

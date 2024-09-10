@@ -144,7 +144,7 @@ var movable_root : Node3D
 var board_instance_position : Node3D
 
 
-signal _open_boad_Focus(condition : bool , board_element : element_data) 
+
 
 # quest_state signal in order
 signal active_diving
@@ -160,6 +160,9 @@ var book_idle_pos : bool = true
 # sending bird 
 signal sending_bird
 var bird_is_waiting : bool = false
+
+signal _open_boad_Focus(condition : bool)
+signal _open_board_focus_2D(condition: bool, element: element_data)
 
 #update description on board
 signal focus_this_on_board(target : Vector3)

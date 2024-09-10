@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=3 uid="uid://cein0q2eirkay"]
+[gd_scene load_steps=49 format=3 uid="uid://cein0q2eirkay"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_g3pi7"]
 [ext_resource type="Script" path="res://10_BOARD/Board_CamTarget.gd" id="1_janbq"]
@@ -24,6 +24,8 @@
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Movable_manager.gd" id="24_tox7b"]
 [ext_resource type="Resource" uid="uid://cyu7mo6v7aaij" path="res://15_GAME_RESSOURCE/03_BoardCam_state/Board_focus_data.tres" id="27_vvxtf"]
 [ext_resource type="Resource" uid="uid://cjwmwf4frvq3c" path="res://15_GAME_RESSOURCE/03_BoardCam_state/BoardZoom_focus_data.tres" id="28_njdgu"]
+[ext_resource type="PackedScene" uid="uid://h2wepwtms1pe" path="res://10_BOARD/02_BOARD_FOCUS_OBJECT/BOARD_FOCUS_OBJECT.tscn" id="29_7uqnr"]
+[ext_resource type="PackedScene" uid="uid://b7h3el7v78av0" path="res://10_BOARD/02_BOARD_FOCUS_OBJECT/2D/board_focus_2d.tscn" id="30_sslvj"]
 [ext_resource type="Resource" uid="uid://dlqqpo5rncbhs" path="res://15_GAME_RESSOURCE/03_BoardCam_state/Board_Element_focus_data.tres" id="35_wjkn0"]
 [ext_resource type="Script" path="res://10_BOARD/Camera_xray.gd" id="39_3fd2t"]
 [ext_resource type="Script" path="res://10_BOARD/Pad_target.gd" id="41_lixei"]
@@ -49,10 +51,10 @@ func open_inventory(condition : bool):
 		_global_datas._open_letter_quest.emit(false)
 		_global_datas._clear_back_call.emit()
 	else:
-		_global_datas._add_back_call.emit(_back_call)
+		_global_datas._add_back_call.emit(back_call)
 		_global_datas.current_scene_state = game_state.scene_state._Boardscene
 		
-func _back_call():
+func back_call():
 	_global_datas.Player_In_Inventory = false
 	_global_datas.open_inventory.emit(false)
 	_global_datas._clear_back_call.emit()
@@ -441,3 +443,9 @@ visible = false
 layers = 2
 mesh = SubResource("PrismMesh_2j3nk")
 surface_material_override/0 = SubResource("StandardMaterial3D_yjabd")
+
+[node name="BoardFocus_3D" parent="." instance=ExtResource("29_7uqnr")]
+visible = false
+
+[node name="BoardFocus_2D" parent="." instance=ExtResource("30_sslvj")]
+visible = false

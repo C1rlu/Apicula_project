@@ -20,9 +20,23 @@ func _ready():
 	
 	var utility = GameUtility.new()
 	list_of_selection_data.append_array(utility.archive_materials(root))
-	
+
 	set_OverPass()
 	
+	_global_datas._open_boad_Focus.connect(_stop_onOver)
+	
+	
+func _stop_onOver(condition,element):
+	if condition:
+		
+		
+		var utility = GameUtility.new()
+		var n_timer = utility.create_timer(0.01,close,self)
+		n_timer.start()
+
+func close():
+	set_on_over(false)	
+		
 func ini_selection(index_state : int):
 
 	if index_state == 0:

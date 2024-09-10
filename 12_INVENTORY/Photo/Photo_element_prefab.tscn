@@ -1,0 +1,43 @@
+[gd_scene load_steps=5 format=3 uid="uid://c5bpklb8b6y6l"]
+
+[ext_resource type="Script" path="res://12_INVENTORY/Photo/Photo_element_prefab.gd" id="1_2hak6"]
+[ext_resource type="Shader" uid="uid://bhctfh42jxjgh" path="res://12_INVENTORY/Photo/Photo_ui_prefab_fadeIn.tres" id="2_2kkqm"]
+[ext_resource type="Texture2D" uid="uid://dvlnqtm1lcg0r" path="res://12_INVENTORY/Photo/IMG/Birds_photo.png" id="3_c60an"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hrjbm"]
+shader = ExtResource("2_2kkqm")
+shader_parameter/Opacity = 1.0
+
+[node name="PhotoUi_Prefab" type="Control"]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 0
+scale = Vector2(0.7, 0.7)
+
+[node name="Photo" type="Node" parent="." node_paths=PackedStringArray("Photo_Border")]
+script = ExtResource("1_2hak6")
+Photo_Border = NodePath("../Photo_Border/Photo_render")
+
+[node name="Photo_Border" type="ColorRect" parent="."]
+layout_mode = 1
+offset_left = -291.429
+offset_top = -312.857
+offset_right = 290.571
+offset_bottom = 281.143
+color = Color(0.792157, 0.65098, 0.482353, 1)
+
+[node name="Photo_render" type="TextureRect" parent="Photo_Border"]
+material = SubResource("ShaderMaterial_hrjbm")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -256.0
+offset_top = -256.0
+offset_right = 256.0
+offset_bottom = 256.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_c60an")

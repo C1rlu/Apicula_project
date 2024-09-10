@@ -23,7 +23,7 @@ func _input(event):
 	if event.is_action_pressed("Back_call"):
 		
 		var top_call = _global_datas._back_call_list.size()
-		print(top_call)
+		#print(top_call)
 		if top_call == 0:
 			return
 		connect_back_call()

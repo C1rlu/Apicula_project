@@ -6,6 +6,10 @@ class_name element_data
 @export var Object_broke : bool = false
 @export var element_prefabs : PackedScene
 
+# if 2D element
+@export var element_prefabs_2D : PackedScene
+@export var photoData : PhotoData
+
 @export var focus_start_position : Vector3 = Vector3.ZERO
 @export var focus_start_rotation_degrees = Vector3.ZERO
 @export var focus_start_scale : float = 1.0

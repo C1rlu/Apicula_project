@@ -44,8 +44,8 @@ func is_pad(condition : bool):
 
 	
 func _input(event):
-	
-	
+
+
 	if _global_datas._on_button_ui:
 		return
 		
