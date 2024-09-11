@@ -1,8 +1,9 @@
-[gd_scene load_steps=69 format=3 uid="uid://uwg2qc3svu11"]
+[gd_scene load_steps=70 format=3 uid="uid://uwg2qc3svu11"]
 
 [ext_resource type="Script" path="res://10_BOARD/Photo_element.gd" id="1_0a8jl"]
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Movable_obj.gd" id="4_4uyoa"]
 [ext_resource type="Texture2D" uid="uid://38btbw60olcn" path="res://12_INVENTORY/Photo/IMG/Boat.png" id="4_wljme"]
+[ext_resource type="Script" path="res://10_BOARD/Element.gd" id="6_6piwc"]
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/On_click_object.gd" id="6_46a1v"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/Clock_montre/Selection_ini.gd" id="6_wkbq8"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="7_vd1wc"]
@@ -662,12 +663,13 @@ render_priority = 0
 shader = ExtResource("11_h5w6g")
 shader_parameter/Texture2DParameter = SubResource("ViewportTexture_erm4f")
 
-[node name="Photo_element_root" type="Node3D" node_paths=PackedStringArray("_On_View", "on_over_node")]
+[node name="Photo_element_root" type="Node3D" node_paths=PackedStringArray("_On_View", "on_over_node", "element_setter")]
 script = ExtResource("1_0a8jl")
 _On_View = NodePath("Click/On_View")
 on_over_node = NodePath("All_over")
+element_setter = NodePath("Click/Element")
 
-[node name="Movable_object" type="Node" parent="." node_paths=PackedStringArray("collider", "Position_zone", "move_root", "rotation_root", "On_Move")]
+[node name="Movable_object" type="Node" parent="." node_paths=PackedStringArray("collider", "Position_zone", "move_root", "rotation_root", "On_Move", "element_setter")]
 script = ExtResource("4_4uyoa")
 collider = NodePath("../Click/CollisionShape3D")
 Position_zone = NodePath("../Position_zone/CollisionShape3D")
@@ -675,6 +677,7 @@ move_root = NodePath("..")
 rotation_root = NodePath("..")
 On_Move = NodePath("../Click/On_Move")
 rotation_degrees = 15.0
+element_setter = NodePath("../Click/Element")
 
 [node name="Selection_ini" type="Node" parent="." node_paths=PackedStringArray("root", "Movable_node", "On_Over")]
 script = ExtResource("6_wkbq8")
@@ -715,6 +718,9 @@ surface_material_override/0 = SubResource("ShaderMaterial_gfhbg")
 
 [node name="Click" type="Area3D" parent="."]
 transform = Transform3D(1.30165, 0, 0.00608897, 0, 1.30166, 0, -0.00608897, 0, 1.30165, -0.000246989, 0.00516491, -0.00660445)
+
+[node name="Element" type="Node" parent="Click"]
+script = ExtResource("6_6piwc")
 
 [node name="On_Move" type="Node" parent="Click"]
 script = ExtResource("6_46a1v")

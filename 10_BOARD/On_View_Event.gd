@@ -1,8 +1,6 @@
 extends Node
 
 @export var root : Node3D
-
-@export var focus_data : boardCamState_data
 @export var On_View : Node
 @export var On_Over : Node
 

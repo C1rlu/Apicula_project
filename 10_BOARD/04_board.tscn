@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=3 uid="uid://cein0q2eirkay"]
+[gd_scene load_steps=50 format=3 uid="uid://cein0q2eirkay"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_g3pi7"]
 [ext_resource type="Script" path="res://10_BOARD/Board_CamTarget.gd" id="1_janbq"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://10_BOARD/Input_switch.gd" id="2_00g5f"]
 [ext_resource type="PackedScene" uid="uid://dr73p5vs0sixe" path="res://10_BOARD/board_scene.tscn" id="2_6c571"]
 [ext_resource type="Script" path="res://10_BOARD/Sending_bird_responce.gd" id="4_4v7vd"]
+[ext_resource type="Script" path="res://10_BOARD/Check_Object.gd" id="4_bxaq1"]
 [ext_resource type="Script" path="res://10_BOARD/Instantiate_element.gd" id="5_dn45r"]
 [ext_resource type="Script" path="res://10_BOARD/Cam_focus.gd" id="6_7tgl6"]
 [ext_resource type="Resource" uid="uid://cmp0pwiuhoh2j" path="res://15_GAME_RESSOURCE/04_Element/Clock_element.tres" id="6_h5ap1"]
@@ -280,7 +281,12 @@ viewports = [NodePath("../../3D_SCENE/SubViewport")]
 [node name="Timer" type="Timer" parent="Open_Inventory"]
 one_shot = true
 
-[node name="Sending_bird_responce" type="Node" parent="."]
+[node name="SendingManager" type="Node" parent="."]
+
+[node name="Check_Object" type="Node" parent="SendingManager"]
+script = ExtResource("4_bxaq1")
+
+[node name="Sending_bird_responce" type="Node" parent="SendingManager"]
 script = ExtResource("4_4v7vd")
 
 [node name="Board_info_reader_class_CAN BE USEFULL" type="Node" parent="."]
@@ -428,7 +434,7 @@ script = ExtResource("1_janbq")
 min_x = -1.0
 max_x = 1.0
 min_z = -0.8
-max_z = 0.4
+max_z = 0.5
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="3D_SCENE/CamTarget"]
 transform = Transform3D(0.0354637, 0, 0, 0, 0.0354637, 0, 0, 0, 0.0354637, 0, 0, 0)

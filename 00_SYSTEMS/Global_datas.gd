@@ -156,6 +156,13 @@ signal open_3d_book(condition : bool)
 var book_idle_pos : bool = true
 
 # sending bird 
+
+
+var _check_objectZone_Area : Area3D 
+var _check_objectZone_col : CollisionShape3D 
+signal _check_object
+
+
 signal sending_bird
 var bird_is_waiting : bool = false
 
@@ -196,6 +203,10 @@ func _ready():
 	_selected_button = null
 	_on_button_ui  = false
 	bird_is_waiting = false
+	_check_objectZone_Area = null
+	_check_objectZone_col = null
+	
+	
 # TEST BOARD NEWS PROTO SCENE
 signal select_movable_object(object)
 signal moving_state(condition : bool)

@@ -9,4 +9,6 @@ func _ready():
 func _sending_brird():
 	_global_datas.open_inventory.emit(false)
 	_global_datas.Player_In_Inventory = false
+	_global_datas._open_player_map.emit(false)
+	
 	print("SENDIN BIRD ")

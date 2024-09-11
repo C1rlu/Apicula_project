@@ -1,8 +1,7 @@
-[gd_scene load_steps=69 format=3 uid="uid://6p66iuyklraf"]
+[gd_scene load_steps=68 format=3 uid="uid://6p66iuyklraf"]
 
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Movable_obj.gd" id="1_e0t4p"]
 [ext_resource type="Script" path="res://10_BOARD/On_View_Event.gd" id="2_67sc3"]
-[ext_resource type="Resource" uid="uid://dlqqpo5rncbhs" path="res://15_GAME_RESSOURCE/03_BoardCam_state/Board_Element_focus_data.tres" id="3_0tteo"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/Clock_montre/Selection_ini.gd" id="4_u11kp"]
 [ext_resource type="PackedScene" uid="uid://dh8xiu7ntj52y" path="res://10_BOARD/TourneDisque/Disque_prefab.blend" id="5_ju5hb"]
 [ext_resource type="Shader" uid="uid://8ll6evus625p" path="res://10_BOARD/00_BOOK/00_SHADER/Gradient_surface.tres" id="6_lv3xx"]
@@ -669,7 +668,6 @@ signal On_View
 size = Vector3(0.348923, 0.252609, 0.317188)
 
 [node name="TOURNE_DISQUE" type="Node3D" node_paths=PackedStringArray("collider", "limit_zone", "Position_zone", "move_root", "rotation_root", "On_Move", "element_setter")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("1_e0t4p")
 collider = NodePath("Rotation_root/Area3D/CollisionShape3D")
 limit_zone = NodePath("Rotation_root/Limit_Zone")
@@ -677,14 +675,7 @@ Position_zone = NodePath("Rotation_root/Area3D/CollisionShape3D")
 move_root = NodePath(".")
 rotation_root = NodePath("Rotation_root")
 On_Move = NodePath("Rotation_root/Area3D/On_Move")
-element_setter = NodePath("On_View_Event")
-
-[node name="On_View_Event" type="Node" parent="." node_paths=PackedStringArray("root", "On_View", "On_Over")]
-script = ExtResource("2_67sc3")
-root = NodePath("..")
-focus_data = ExtResource("3_0tteo")
-On_View = NodePath("../Rotation_root/Area3D/On_View")
-On_Over = NodePath("../Rotation_root/Area3D/On_Over")
+element_setter = NodePath("Rotation_root/Area3D/Element")
 
 [node name="Selection_ini" type="Node" parent="." node_paths=PackedStringArray("root", "Movable", "On_Over")]
 script = ExtResource("4_u11kp")
@@ -767,6 +758,12 @@ surface_material_override/1 = ExtResource("9_02dv1")
 
 [node name="Area3D" type="Area3D" parent="Rotation_root"]
 transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 0, 0, 0)
+
+[node name="Element" type="Node" parent="Rotation_root/Area3D" node_paths=PackedStringArray("root", "On_View", "On_Over")]
+script = ExtResource("2_67sc3")
+root = NodePath("../../..")
+On_View = NodePath("../On_View")
+On_Over = NodePath("../On_Over")
 
 [node name="On_Move" type="Node" parent="Rotation_root/Area3D"]
 script = ExtResource("10_jok3o")

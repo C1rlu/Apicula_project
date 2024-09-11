@@ -1,4 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://cqbutqb21mt2l"]
+[gd_scene load_steps=7 format=3 uid="uid://cqbutqb21mt2l"]
+
+[ext_resource type="Shader" uid="uid://bhctfh42jxjgh" path="res://12_INVENTORY/Photo/Photo_ui_prefab_fadeIn.tres" id="1_45l43"]
+[ext_resource type="Script" path="res://13_TOOLS_UI/2D_MAP/Legend/Ship_to.gd" id="1_a52q3"]
+[ext_resource type="Texture2D" uid="uid://dkqa1xnttnmoq" path="res://12_INVENTORY/Photo/IMG/Maurice_photo.png" id="2_gh638"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_41pi7"]
 content_margin_left = 20.0
@@ -7,6 +11,10 @@ bg_color = Color(0.721569, 0.580392, 0.407843, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ytj8r"]
 bg_color = Color(0.85098, 0.721569, 0.568627, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b7lu8"]
+shader = ExtResource("1_45l43")
+shader_parameter/Opacity = 1.0
 
 [node name="Legend_button" type="Button"]
 layout_direction = 1
@@ -21,3 +29,31 @@ theme_override_styles/disabled = SubResource("StyleBoxFlat_41pi7")
 theme_override_styles/focus = SubResource("StyleBoxFlat_41pi7")
 text = "null
 "
+
+[node name="Ship_to" type="Node" parent="." node_paths=PackedStringArray("_button")]
+script = ExtResource("1_a52q3")
+_button = NodePath("..")
+
+[node name="Photo_Border" type="ColorRect" parent="."]
+offset_left = -37.0
+offset_top = -124.0
+offset_right = 534.369
+offset_bottom = 469.756
+scale = Vector2(0.226008, 0.226008)
+color = Color(0.792157, 0.65098, 0.482353, 1)
+
+[node name="Photo_render" type="TextureRect" parent="Photo_Border"]
+material = SubResource("ShaderMaterial_b7lu8")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -256.0
+offset_top = -256.0
+offset_right = 256.0
+offset_bottom = 256.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_gh638")

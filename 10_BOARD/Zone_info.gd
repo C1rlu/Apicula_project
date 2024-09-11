@@ -4,9 +4,9 @@ extends Node
 @export var On_Over : Node
 
 func _ready():
-	On_Over.On_Over.connect(_show_info)		
+	On_Over.On_Over.connect(_on_over)		
 		
-
-func _show_info():
 	
-	_global_datas.show_element_info.emit(true,info)
+func _on_over(condition : bool):
+	if info:
+		_global_datas._show_object_legend.emit(condition,info.info_node_name)
