@@ -1,13 +1,15 @@
-[gd_scene load_steps=54 format=3 uid="uid://h2wepwtms1pe"]
+[gd_scene load_steps=62 format=3 uid="uid://h2wepwtms1pe"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_3ana1"]
 [ext_resource type="Script" path="res://10_BOARD/02_BOARD_FOCUS_OBJECT/Open_FocusView.gd" id="1_ttndn"]
 [ext_resource type="Script" path="res://10_BOARD/02_BOARD_FOCUS_OBJECT/Control_view.gd" id="2_hd46p"]
 [ext_resource type="PackedScene" uid="uid://dh8xiu7ntj52y" path="res://10_BOARD/TourneDisque/Disque_prefab.blend" id="3_m8rxg"]
 [ext_resource type="Shader" uid="uid://8ll6evus625p" path="res://10_BOARD/00_BOOK/00_SHADER/Gradient_surface.tres" id="4_au500"]
+[ext_resource type="Script" path="res://10_BOARD/02_BOARD_FOCUS_OBJECT/Follow_cam.gd" id="4_v2om8"]
 [ext_resource type="Material" uid="uid://cfi5jyq3utqd4" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_mat_04.tres" id="5_e7r2q"]
 [ext_resource type="Material" uid="uid://c0oms0qis0dcm" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_mat_02.tres" id="6_kwhg3"]
 [ext_resource type="Material" uid="uid://yjoyk6fvrm6q" path="res://10_BOARD/00_BOOK/00_SHADER/No_light_surface_mat.tres" id="7_06ulq"]
+[ext_resource type="Script" path="res://10_BOARD/02_BOARD_FOCUS_OBJECT/Cam_target.gd" id="9_or37v"]
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_dkrue"]
 constant = 0.826
@@ -498,6 +500,26 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_6o2q1")
 
+[sub_resource type="SphereMesh" id="SphereMesh_837u0"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_1h8cf"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_d1j34"]
+noise_type = 5
+frequency = 0.0077
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_3pmfn"]
+noise = SubResource("FastNoiseLite_d1j34")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_clq8s"]
+render_priority = 0
+shader = ExtResource("4_au500")
+shader_parameter/Color = Color(0.231373, 0.184314, 0.12549, 1)
+shader_parameter/Dither_Opacity = 0.735
+shader_parameter/Gradient_light = SubResource("NoiseTexture2D_3pmfn")
+
+[sub_resource type="BoxMesh" id="BoxMesh_3ioph"]
+
 [sub_resource type="ViewportTexture" id="ViewportTexture_fuojs"]
 viewport_path = NodePath("Viewport")
 
@@ -519,14 +541,19 @@ Camera = NodePath("../Viewport/CAM")
 _loader = NodePath("../Viewport/_loader")
 Render = NodePath("../Render")
 
+[node name="Follow_cam" type="Node" parent="." node_paths=PackedStringArray("_Camera", "_target", "Render")]
+script = ExtResource("4_v2om8")
+_Camera = NodePath("../Viewport/CAM")
+_target = NodePath("../Viewport/Cam_target")
+Render = NodePath("../Render")
+
 [node name="Backdrop" type="ColorRect" parent="."]
-visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.0196078, 0.129412, 0.145098, 0.701961)
+color = Color(0.0196078, 0.129412, 0.145098, 0.894118)
 
 [node name="Viewport" type="SubViewport" parent="."]
 own_world_3d = true
@@ -619,8 +646,32 @@ skeleton = NodePath("")
 surface_material_override/0 = ExtResource("7_06ulq")
 surface_material_override/1 = ExtResource("7_06ulq")
 
-[node name="Render" type="TextureRect" parent="."]
+[node name="Cam_target" type="Node3D" parent="Viewport"]
+script = ExtResource("9_or37v")
+speed = 0.5
+x_limit = Vector2(-0.15, 0.15)
+y_limit = Vector2(-0.15, 0.15)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Viewport/Cam_target"]
+transform = Transform3D(0.175, 0, 0, 0, 0.175, 0, 0, 0, 0.175, 0, 0, 0)
 visible = false
+layers = 2
+mesh = SubResource("SphereMesh_837u0")
+
+[node name="Table_border" type="MeshInstance3D" parent="Viewport"]
+transform = Transform3D(-1.99761e-08, 0, 0.571, 0, 0.042, 0, -0.457, 0, -2.49592e-08, 0, -0.016, 0)
+layers = 2
+mesh = SubResource("BoxMesh_1h8cf")
+skeleton = NodePath("../../../..")
+surface_material_override/0 = SubResource("ShaderMaterial_clq8s")
+
+[node name="Table_border2_light" type="MeshInstance3D" parent="Viewport/Table_border"]
+layers = 65536
+mesh = SubResource("BoxMesh_3ioph")
+skeleton = NodePath("../../../../..")
+surface_material_override/0 = ExtResource("7_06ulq")
+
+[node name="Render" type="TextureRect" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

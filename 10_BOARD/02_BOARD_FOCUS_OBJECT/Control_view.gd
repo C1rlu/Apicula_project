@@ -6,9 +6,9 @@ extends Node
 @export var rotation_degrees : float = 45
 
 var is_rotation : bool
+
 func _ready():
 	_global_datas._open_boad_Focus.connect(_reset)
-	
 
 func _reset(condition,element):
 	
@@ -21,16 +21,16 @@ func _input(event):
 	if !Render.visible:
 		return
 	
-	if Input.is_action_pressed("move_right"):
+	if Input.is_action_pressed("next_right"):
 		#var _magnitude = Input.get_action_strength("move_right")
 		_on_rotate(-1)
-	if Input.is_action_pressed("move_left"):
+	if Input.is_action_pressed("next_left"):
 		#var _magnitude = Input.get_action_strength("move_left")
 		_on_rotate(1)
-	if Input.is_action_pressed("move_forward"):
+	if Input.is_action_pressed("Board_zoom_in"):
 		#var _magnitude = Input.get_action_strength(_global_datas.move_forward)
 		_zoom_in()
-	if Input.is_action_pressed("move_backward"):
+	if Input.is_action_pressed("Board_zoom_out"):
 		_zoom_out()
 		#var _magnitude = Input.get_action_strength(_global_datas.move_backward)
 		
