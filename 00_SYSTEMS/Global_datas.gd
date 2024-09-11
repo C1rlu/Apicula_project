@@ -152,6 +152,9 @@ signal _open_letter_quest(condition : bool)
 signal _in_select_element_state(condition : bool)
 var _in_selection_state : bool 
 var _selected_button : Button
+signal _back_letter
+
+
 signal open_3d_book(condition : bool)
 var book_idle_pos : bool = true
 
@@ -183,6 +186,7 @@ signal active_scanner_button(condition : bool)
 
 var current_money : int = 0
 signal update_money_amount(value : int)
+
 #signal update_element_amount
 #-----------------------------
 # dialogue datas

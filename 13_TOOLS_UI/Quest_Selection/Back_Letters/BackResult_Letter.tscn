@@ -1,8 +1,11 @@
-[gd_scene load_steps=15 format=3 uid="uid://cjgga2j23u4wl"]
+[gd_scene load_steps=19 format=3 uid="uid://biiqjbqawkiqt"]
 
-[ext_resource type="Script" path="res://12_INVENTORY/Letter/Move_note.gd" id="1_ksak5"]
-[ext_resource type="Shader" uid="uid://bbxdwa2b412rx" path="res://12_INVENTORY/Letter/Start_note_OnOver_sh.tres" id="2_lymtg"]
-[ext_resource type="Shader" uid="uid://c38pab15ywxmh" path="res://12_INVENTORY/Letter/Start_note_sh.tres" id="3_0anhr"]
+[ext_resource type="Script" path="res://13_TOOLS_UI/Quest_Selection/Back_Letters/BackResult_Letter.gd" id="1_3dpy5"]
+[ext_resource type="Texture2D" uid="uid://cpnkof28l8bd6" path="res://13_TOOLS_UI/Board_button/Letters_buttons_02.png" id="2_rxyxa"]
+[ext_resource type="Shader" uid="uid://bbxdwa2b412rx" path="res://12_INVENTORY/Letter/Start_note_OnOver_sh.tres" id="2_w6i6c"]
+[ext_resource type="Shader" uid="uid://c38pab15ywxmh" path="res://12_INVENTORY/Letter/Start_note_sh.tres" id="3_oe0rj"]
+[ext_resource type="Shader" uid="uid://bhctfh42jxjgh" path="res://12_INVENTORY/Photo/Photo_ui_prefab_fadeIn.tres" id="4_w136v"]
+[ext_resource type="Texture2D" uid="uid://dkqa1xnttnmoq" path="res://12_INVENTORY/Photo/IMG/Maurice_photo.png" id="5_i8yi7"]
 
 [sub_resource type="GDScript" id="GDScript_w53jh"]
 script/source = "extends Node
@@ -57,10 +60,10 @@ func move():
 	
 func done():
 	control.queue_free()	
-	_global_datas._show_dialogue_box.emit()
-
-
-
+	
+	_global_datas.update_money_amount.emit(10)
+	_global_datas.open_inventory.emit(false)
+	
 func _on_take_it_button_mouse_entered():
 	if lock:
 		return
@@ -73,8 +76,12 @@ func _on_take_it_button_mouse_exited():
 	on_over.visible = false
 "
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ww0ys"]
+shader = ExtResource("4_w136v")
+shader_parameter/Opacity = 1.0
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lj5fv"]
-shader = ExtResource("2_lymtg")
+shader = ExtResource("2_w6i6c")
 
 [sub_resource type="Gradient" id="Gradient_xeln1"]
 
@@ -82,7 +89,7 @@ shader = ExtResource("2_lymtg")
 gradient = SubResource("Gradient_xeln1")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_viuge"]
-shader = ExtResource("3_0anhr")
+shader = ExtResource("3_oe0rj")
 shader_parameter/Gradient = SubResource("GradientTexture2D_qyyf2")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_puuhu"]
@@ -98,13 +105,58 @@ shader_parameter/Gradient = SubResource("GradientTexture2D_qyyf2")
 [node name="Start_note" type="Control"]
 layout_mode = 3
 anchors_preset = 0
-script = ExtResource("1_ksak5")
+script = ExtResource("1_3dpy5")
 
 [node name="Update_words" type="Node" parent="."]
 script = SubResource("GDScript_w53jh")
 
 [node name="Take_object" type="Node" parent="."]
 script = SubResource("GDScript_np607")
+
+[node name="LettersButtons02" type="Sprite2D" parent="."]
+position = Vector2(38, -48)
+rotation = 0.0762841
+scale = Vector2(0.767829, 0.767829)
+texture = ExtResource("2_rxyxa")
+
+[node name="PhotoUi_Prefab" type="Control" parent="."]
+process_mode = 3
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -244.0
+offset_top = -310.0
+offset_right = -244.0
+offset_bottom = -310.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 0.0744901
+scale = Vector2(0.4, 0.4)
+
+[node name="Photo_Border" type="ColorRect" parent="PhotoUi_Prefab"]
+layout_mode = 1
+offset_right = 582.0
+offset_bottom = 594.0
+color = Color(0.792157, 0.65098, 0.482353, 1)
+
+[node name="Photo_render" type="TextureRect" parent="PhotoUi_Prefab/Photo_Border"]
+material = SubResource("ShaderMaterial_ww0ys")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -256.0
+offset_top = -256.0
+offset_right = 256.0
+offset_bottom = 256.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_i8yi7")
 
 [node name="On_Over" type="ColorRect" parent="."]
 visible = false
@@ -123,6 +175,23 @@ grow_horizontal = 2
 grow_vertical = 2
 rotation = -1.5708
 color = Color(0.886275, 0.764706, 0.580392, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_viuge")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -182.0
+offset_top = 111.0
+offset_right = 68.0
+offset_bottom = 511.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -1.5708
+color = Color(0.368627, 0.341176, 0.294118, 0.431373)
 
 [node name="ColorRect" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_viuge")
@@ -143,13 +212,14 @@ color = Color(0.807843, 0.780392, 0.733333, 1)
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 0
-offset_left = -199.0
-offset_top = -133.0
-offset_right = 198.0
-offset_bottom = 118.0
+offset_left = -195.0
+offset_top = -129.0
+offset_right = 206.0
+offset_bottom = 121.0
 theme_override_colors/font_color = Color(0.301961, 0.278431, 0.235294, 1)
 theme_override_font_sizes/font_size = 26
-text = "Thanks you solved the question"
+text = "Thanks, you solved the question,
+here the money"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
@@ -162,7 +232,7 @@ offset_right = 201.0
 offset_bottom = 113.0
 theme_override_colors/font_color = Color(0.301961, 0.278431, 0.235294, 1)
 theme_override_font_sizes/font_size = 26
-text = "Maurive"
+text = "Maurice"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3

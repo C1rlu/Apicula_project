@@ -18,7 +18,16 @@ func _open(condition : bool, board_element : element_data):
 	Render.visible = condition
 	Backdrop.visible = condition	
 	_global_datas.Player_InMenu = condition
+	
+	
+	var utility = GameUtility.new()
+	var n_timer = utility.create_timer(0.01,_hide_info,self)
+	n_timer.start()
+	
+func _hide_info():
+	_global_datas._show_object_legend.emit(false,"null")		
 
+	
 	
 			
 		
