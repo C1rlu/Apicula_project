@@ -9,7 +9,6 @@
 [ext_resource type="Material" uid="uid://bxikm4g1nkywk" path="res://06_UI/Disolved_simple_texture.tres" id="4_opffw"]
 [ext_resource type="Resource" uid="uid://nb378vtwr23i" path="res://12_INVENTORY/Words_note/Find_The_Apicula_note.tres" id="4_whlox"]
 [ext_resource type="Texture2D" uid="uid://4bq2l5jjm4r2" path="res://00_SYSTEMS/KeyOrPad/Pad_inputs.png" id="5_jufic"]
-[ext_resource type="Script" path="res://10_BOARD/Element_infos.gd" id="6_5m4ql"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/BACK_LETTERS.gd" id="7_uck14"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/Main_scene_UI.gd" id="14_isnv0"]
 [ext_resource type="PackedScene" uid="uid://cbgkay5155yn3" path="res://13_TOOLS_UI/Top_bar/Money_bar.tscn" id="15_jqiih"]
@@ -27,7 +26,7 @@
 [ext_resource type="Texture2D" uid="uid://v5bi85b50j4g" path="res://10_BOARD/Map/Map_board_01.png" id="23_ym7p0"]
 [ext_resource type="Texture2D" uid="uid://cxsr67dkxwr14" path="res://13_TOOLS_UI/Board_button/Board_map_button_img.png" id="24_nqwp3"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/Button_board.gd" id="25_0a5ix"]
-[ext_resource type="PackedScene" uid="uid://djm8lc25p4u3m" path="res://13_TOOLS_UI/Quest_Selection/Quest_selector.tscn" id="26_41fx1"]
+[ext_resource type="Texture2D" uid="uid://cpnkof28l8bd6" path="res://13_TOOLS_UI/Board_button/Letters_buttons_02.png" id="25_mdoi3"]
 [ext_resource type="Script" path="res://10_BOARD/Select_element_state.gd" id="28_ld21h"]
 [ext_resource type="PackedScene" uid="uid://cqmsm5j5c5ur2" path="res://13_TOOLS_UI/Quest_Selection/Letters/quest_button.tscn" id="28_lw8ft"]
 [ext_resource type="PackedScene" uid="uid://clc3sbquuu1us" path="res://13_TOOLS_UI/Clock_montre/Clock_ui_prefab.tscn" id="31_4ftpd"]
@@ -292,6 +291,21 @@ shader_parameter/Size = Vector2(1000, 1000)
 shader_parameter/Ligne_widht = 0.025
 shader_parameter/Isle_mask = ExtResource("22_txmj8")
 shader_parameter/Line = ExtResource("23_ym7p0")
+
+[sub_resource type="GDScript" id="GDScript_kdx4e"]
+script/source = "extends Button
+
+
+
+func _ready():
+	pressed.connect(_open_rumors)
+	
+	
+func _open_rumors():
+	_global_datas._open_letter_quest.emit(true)	
+	
+	
+"
 
 [sub_resource type="Gradient" id="Gradient_vd270"]
 offsets = PackedFloat32Array(0.968825, 1)
@@ -619,51 +633,6 @@ texture = ExtResource("4_c4v0f")
 expand_mode = 1
 stretch_mode = 4
 
-[node name="Board_Element_infos" type="Control" parent="."]
-visible = false
-layout_mode = 3
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -444.0
-offset_top = -195.0
-offset_right = -180.0
-offset_bottom = 135.0
-grow_horizontal = 0
-grow_vertical = 0
-rotation = 0.091541
-
-[node name="Element_info_update" type="Node" parent="Board_Element_infos" node_paths=PackedStringArray("info_text")]
-script = ExtResource("6_5m4ql")
-info_text = NodePath("../Info_text")
-
-[node name="ColorRect" type="ColorRect" parent="Board_Element_infos"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.545098, 0.509804, 0.439216, 1)
-
-[node name="Info_text" type="Label" parent="Board_Element_infos"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 19.0
-offset_top = 26.0
-offset_right = -24.0
-offset_bottom = -151.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.317647, 0.262745, 0.156863, 1)
-theme_override_font_sizes/font_size = 21
-text = "Lorem ipusm info textfffffffffffffffffffffffffffffff"
-autowrap_mode = 3
-
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
@@ -761,10 +730,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -49.0
-offset_top = -612.0
-offset_right = -49.0
-offset_bottom = -612.0
+offset_left = -68.0
+offset_top = -473.0
+offset_right = -68.0
+offset_bottom = -473.0
 grow_horizontal = 0
 grow_vertical = 0
 mouse_filter = 2
@@ -833,10 +802,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -51.0
-offset_top = -541.0
-offset_right = -51.0
-offset_bottom = -541.0
+offset_left = -72.0
+offset_top = -538.0
+offset_right = -72.0
+offset_bottom = -538.0
 grow_horizontal = 0
 grow_vertical = 0
 mouse_filter = 2
@@ -855,6 +824,34 @@ position = Vector2(25, 26)
 scale = Vector2(0.159741, 0.159741)
 texture = ExtResource("24_nqwp3")
 
+[node name="Rumors_Button2" type="Control" parent="Main_Scene_U"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -73.0
+offset_top = -605.0
+offset_right = -73.0
+offset_bottom = -605.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="Button" type="Button" parent="Main_Scene_U/Rumors_Button2"]
+layout_mode = 0
+offset_left = 2.0
+offset_top = -2.0
+offset_right = 52.0
+offset_bottom = 48.0
+script = SubResource("GDScript_kdx4e")
+
+[node name="BoardMapButtonImg" type="Sprite2D" parent="Main_Scene_U/Rumors_Button2/Button"]
+position = Vector2(25, 26)
+scale = Vector2(0.0695552, 0.0695552)
+texture = ExtResource("25_mdoi3")
+
 [node name="TimebarUi" parent="Main_Scene_U" instance=ExtResource("31_uhtuk")]
 layout_mode = 1
 
@@ -870,9 +867,6 @@ offset_top = 2.0
 offset_right = 1278.0
 offset_bottom = 63.0
 grow_horizontal = 1
-
-[node name="QuestSelector" parent="." instance=ExtResource("26_41fx1")]
-visible = false
 
 [node name="Quest_letter" parent="." instance=ExtResource("28_lw8ft")]
 visible = false

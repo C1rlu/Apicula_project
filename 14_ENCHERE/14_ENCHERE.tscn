@@ -1,16 +1,19 @@
-[gd_scene load_steps=70 format=3 uid="uid://h2wepwtms1pe"]
+[gd_scene load_steps=86 format=3 uid="uid://dby25i8ytjwvj"]
 
-[ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_3ana1"]
-[ext_resource type="Script" path="res://10_BOARD/02_BOARD_FOCUS_OBJECT/Open_FocusView.gd" id="1_ttndn"]
-[ext_resource type="Script" path="res://10_BOARD/02_BOARD_FOCUS_OBJECT/Control_view.gd" id="2_hd46p"]
-[ext_resource type="PackedScene" uid="uid://dh8xiu7ntj52y" path="res://10_BOARD/TourneDisque/Disque_prefab.blend" id="3_m8rxg"]
-[ext_resource type="Shader" uid="uid://8ll6evus625p" path="res://10_BOARD/00_BOOK/00_SHADER/Gradient_surface.tres" id="4_au500"]
-[ext_resource type="Script" path="res://10_BOARD/02_BOARD_FOCUS_OBJECT/Follow_cam.gd" id="4_v2om8"]
-[ext_resource type="Material" uid="uid://cfi5jyq3utqd4" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_mat_04.tres" id="5_e7r2q"]
-[ext_resource type="PackedScene" uid="uid://b3i04ha2iqr4l" path="res://10_BOARD/Loupe/loupe_rg.tscn" id="5_oh31e"]
-[ext_resource type="Material" uid="uid://c0oms0qis0dcm" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_mat_02.tres" id="6_kwhg3"]
-[ext_resource type="Material" uid="uid://yjoyk6fvrm6q" path="res://10_BOARD/00_BOOK/00_SHADER/No_light_surface_mat.tres" id="7_06ulq"]
-[ext_resource type="Script" path="res://10_BOARD/02_BOARD_FOCUS_OBJECT/Cam_target.gd" id="9_or37v"]
+[ext_resource type="Script" path="res://14_ENCHERE/Enchere_Manager.gd" id="1_1q3ra"]
+[ext_resource type="Script" path="res://14_ENCHERE/Open_enchere.gd" id="1_c6313"]
+[ext_resource type="PackedScene" uid="uid://btx621628coaq" path="res://13_TOOLS_UI/Quest_Selection/Preview_letters/preview_letter.tscn" id="1_wx4tu"]
+[ext_resource type="Resource" uid="uid://duegr31kxop3r" path="res://15_GAME_RESSOURCE/04_Element/Disque_element.tres" id="2_cu8gy"]
+[ext_resource type="Resource" uid="uid://cdtu37wcayr7j" path="res://15_GAME_RESSOURCE/04_Element/Apicula_board_element.tres" id="3_aiust"]
+[ext_resource type="Script" path="res://14_ENCHERE/Open_Object.gd" id="3_wdqxy"]
+[ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="4_t141o"]
+[ext_resource type="Resource" uid="uid://cmp0pwiuhoh2j" path="res://15_GAME_RESSOURCE/04_Element/Clock_element.tres" id="4_ytmjq"]
+[ext_resource type="Script" path="res://10_BOARD/02_BOARD_FOCUS_OBJECT/Control_view.gd" id="5_exdsv"]
+[ext_resource type="PackedScene" uid="uid://dh8xiu7ntj52y" path="res://10_BOARD/TourneDisque/Disque_prefab.blend" id="7_qd6ij"]
+[ext_resource type="Shader" uid="uid://8ll6evus625p" path="res://10_BOARD/00_BOOK/00_SHADER/Gradient_surface.tres" id="8_85db1"]
+[ext_resource type="Shader" uid="uid://db5bcfw5o30ce" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_01.tres" id="9_l8pdg"]
+[ext_resource type="Material" uid="uid://c0oms0qis0dcm" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_mat_02.tres" id="10_lg776"]
+[ext_resource type="Material" uid="uid://yjoyk6fvrm6q" path="res://10_BOARD/00_BOOK/00_SHADER/No_light_surface_mat.tres" id="11_rexqn"]
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_dkrue"]
 constant = 0.826
@@ -255,14 +258,180 @@ fill_to = Vector2(0, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rpv2b"]
 render_priority = 0
-shader = ExtResource("4_au500")
+shader = ExtResource("8_85db1")
 shader_parameter/Color = Color(0.317647, 0.25098, 0.160784, 1)
 shader_parameter/Dither_Opacity = 1.0
 shader_parameter/Gradient_light = SubResource("GradientTexture2D_kpg5t")
 
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_dhq8t"]
+
+[sub_resource type="VisualShaderNodeBooleanParameter" id="VisualShaderNodeBooleanParameter_j2onx"]
+parameter_name = "on_over"
+default_value_enabled = true
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_x185c"]
+parameter_name = "Over_color"
+
+[sub_resource type="VisualShaderNodeFresnel" id="VisualShaderNodeFresnel_bg2ef"]
+default_input_values = [2, false, 3, 2.24]
+
+[sub_resource type="VisualShaderNodeSwitch" id="VisualShaderNodeSwitch_4ud3s"]
+default_input_values = [0, false, 1, true, 2, false]
+op_type = 6
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_sjies"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_0e3f7"]
+parameter_name = "Dither_size"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_knske"]
+constant = 1.0
+
+[sub_resource type="VisualShader" id="VisualShader_nqe4c"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded, shadows_disabled, ambient_light_disabled, fog_disabled;
+
+uniform vec4 Over_color : source_color;
+uniform bool on_over = false;
+global uniform float Dither_size;
+
+
+
+void fragment() {
+// ColorParameter:3
+	vec4 n_out3p0 = Over_color;
+
+
+// BooleanParameter:2
+	bool n_out2p0 = on_over;
+
+
+// FloatConstant:9
+	float n_out9p0 = 1.000000;
+
+
+// FloatParameter:8
+	float n_out8p0 = Dither_size;
+
+
+	float n_out6p0;
+// Expression:6
+	n_out6p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out8p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out6p0 = n_out9p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Fresnel:4
+	float n_in4p3 = 2.24000;
+	float n_out4p0 = pow(1.0 - clamp(dot(NORMAL, VIEW), 0.0, 1.0), n_in4p3);
+
+
+// Step:10
+	float n_out10p0 = step(n_out6p0, n_out4p0);
+
+
+	bool n_out5p0;
+// Switch:5
+	bool n_in5p2 = false;
+	if (n_out2p0) {
+		n_out5p0 = n_out10p0 > 0.0 ? true : false;
+	} else {
+		n_out5p0 = n_in5p2;
+	}
+
+
+// Output:0
+	ALBEDO = vec3(n_out3p0.xyz);
+	ALPHA = (n_out5p0 ? 1.0 : 0.0);
+
+
+}
+"
+graph_offset = Vector2(-637.423, -75.254)
+flags/unshaded = true
+flags/shadows_disabled = true
+flags/ambient_light_disabled = true
+flags/fog_disabled = true
+nodes/fragment/2/node = SubResource("VisualShaderNodeBooleanParameter_j2onx")
+nodes/fragment/2/position = Vector2(-660, 240)
+nodes/fragment/3/node = SubResource("VisualShaderNodeColorParameter_x185c")
+nodes/fragment/3/position = Vector2(-140, 80)
+nodes/fragment/4/node = SubResource("VisualShaderNodeFresnel_bg2ef")
+nodes/fragment/4/position = Vector2(-980, 440)
+nodes/fragment/5/node = SubResource("VisualShaderNodeSwitch_4ud3s")
+nodes/fragment/5/position = Vector2(-160, 260)
+nodes/fragment/6/node = SubResource("VisualShaderNodeExpression_sjies")
+nodes/fragment/6/position = Vector2(-640, 880)
+nodes/fragment/6/size = Vector2(724.789, 654.559)
+nodes/fragment/6/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/6/output_ports = "0,0,Dither_Node;"
+nodes/fragment/6/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/8/node = SubResource("VisualShaderNodeFloatParameter_0e3f7")
+nodes/fragment/8/position = Vector2(-1360, 1040)
+nodes/fragment/9/node = SubResource("VisualShaderNodeFloatConstant_knske")
+nodes/fragment/9/position = Vector2(-1000, 780)
+nodes/fragment/10/node = SubResource("VisualShaderNodeStep_dhq8t")
+nodes/fragment/10/position = Vector2(-280, 620)
+nodes/fragment/connections = PackedInt32Array(3, 0, 0, 0, 2, 0, 5, 0, 8, 0, 6, 1, 9, 0, 6, 0, 4, 0, 10, 1, 6, 0, 10, 0, 10, 0, 5, 1, 5, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y2cba"]
+render_priority = 0
+shader = SubResource("VisualShader_nqe4c")
+shader_parameter/Over_color = Color(0.960784, 0.819608, 0.541176, 1)
+shader_parameter/on_over = false
+
+[sub_resource type="Gradient" id="Gradient_324uw"]
+offsets = PackedFloat32Array(0, 0.615556, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_bbkqx"]
+gradient = SubResource("Gradient_324uw")
+fill_from = Vector2(0.551282, 1)
+fill_to = Vector2(0.555556, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1xtg3"]
+resource_local_to_scene = true
+render_priority = 0
+next_pass = SubResource("ShaderMaterial_y2cba")
+shader = ExtResource("9_l8pdg")
+shader_parameter/Main_color = Color(0.0588235, 0.141176, 0.145098, 1)
+shader_parameter/Main_color_02 = Color(0.444546, 0.342102, 0.216623, 1)
+shader_parameter/Gradiant = SubResource("GradientTexture2D_bbkqx")
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7878w"]
 render_priority = 0
-shader = ExtResource("4_au500")
+shader = ExtResource("8_85db1")
 shader_parameter/Color = Color(0.317647, 0.25098, 0.160784, 1)
 shader_parameter/Dither_Opacity = 1.0
 shader_parameter/Gradient_light = SubResource("GradientTexture2D_kpg5t")
@@ -501,243 +670,264 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_6o2q1")
 
-[sub_resource type="BoxMesh" id="BoxMesh_mtomw"]
+[sub_resource type="BoxMesh" id="BoxMesh_jf6tl"]
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_6pl6a"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_c14jf"]
 noise_type = 5
 frequency = 0.0117
 cellular_distance_function = 2
 cellular_return_type = 0
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_5nh8l"]
-noise = SubResource("FastNoiseLite_6pl6a")
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_j3l64"]
+noise = SubResource("FastNoiseLite_c14jf")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4olam"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cy3d5"]
 render_priority = 0
-shader = ExtResource("4_au500")
+shader = ExtResource("8_85db1")
 shader_parameter/Color = Color(0.0196078, 0.121569, 0.129412, 1)
 shader_parameter/Dither_Opacity = 0.716
-shader_parameter/Gradient_light = SubResource("NoiseTexture2D_5nh8l")
+shader_parameter/Gradient_light = SubResource("NoiseTexture2D_j3l64")
 
-[sub_resource type="BoxMesh" id="BoxMesh_1h8cf"]
+[sub_resource type="BoxMesh" id="BoxMesh_trw3j"]
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_d1j34"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_rmk3e"]
 noise_type = 5
 frequency = 0.0077
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_nmwtv"]
-noise = SubResource("FastNoiseLite_d1j34")
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_3pmfn"]
+noise = SubResource("FastNoiseLite_rmk3e")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_clq8s"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8gbmj"]
 render_priority = 0
-shader = ExtResource("4_au500")
+shader = ExtResource("8_85db1")
 shader_parameter/Color = Color(0.231373, 0.184314, 0.12549, 1)
 shader_parameter/Dither_Opacity = 0.735
-shader_parameter/Gradient_light = SubResource("NoiseTexture2D_nmwtv")
+shader_parameter/Gradient_light = SubResource("NoiseTexture2D_3pmfn")
 
-[sub_resource type="BoxMesh" id="BoxMesh_3ioph"]
+[sub_resource type="BoxMesh" id="BoxMesh_ohfur"]
 
-[sub_resource type="Gradient" id="Gradient_rne1h"]
+[sub_resource type="Gradient" id="Gradient_by4g0"]
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_lswfe"]
-gradient = SubResource("Gradient_rne1h")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_mhg0h"]
+gradient = SubResource("Gradient_by4g0")
 fill_from = Vector2(1, 1)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_5acoq"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_k4yn1"]
 render_priority = 0
-shader = ExtResource("4_au500")
+shader = ExtResource("8_85db1")
 shader_parameter/Color = Color(0.188235, 0.164706, 0.129412, 1)
 shader_parameter/Dither_Opacity = 1.0
-shader_parameter/Gradient_light = SubResource("GradientTexture2D_lswfe")
+shader_parameter/Gradient_light = SubResource("GradientTexture2D_mhg0h")
 
-[sub_resource type="SphereMesh" id="SphereMesh_837u0"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_1b01t"]
+viewport_path = NodePath("BoardFocus_3D/Viewport")
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_fuojs"]
-viewport_path = NodePath("Viewport")
+[sub_resource type="GDScript" id="GDScript_yvo0y"]
+script/source = "extends Button
 
-[node name="BoardFocusView" type="Node3D"]
 
-[node name="Open_FocusView" type="Node" parent="." node_paths=PackedStringArray("Render", "Backdrop", "Loader")]
-script = ExtResource("1_ttndn")
+
+func _ready():
+	pressed.connect(_is_press)
+	
+	
+func _is_press():
+	_global_datas._next_enchere_element.emit()
+"
+
+[node name="14_Enchere" type="Node"]
+
+[node name="Enchere_Manager" type="Node" parent="."]
+script = ExtResource("1_1q3ra")
+Selected_element = Array[Resource("res://15_GAME_RESSOURCE/04_Element/Element_Data/object_data.gd")]([ExtResource("2_cu8gy"), ExtResource("3_aiust"), ExtResource("4_ytmjq")])
+
+[node name="Open_enchere" type="Node" parent="." node_paths=PackedStringArray("Offer_ui")]
+script = ExtResource("1_c6313")
+Offer_ui = NodePath("../Offer_ui")
+
+[node name="BoardFocus_3D" type="Node3D" parent="."]
+
+[node name="Open_Object" type="Node" parent="BoardFocus_3D" node_paths=PackedStringArray("Render", "Backdrop", "Loader")]
+script = ExtResource("3_wdqxy")
 Render = NodePath("../Render")
 Backdrop = NodePath("../Backdrop")
 Loader = NodePath("../Viewport/Rotation_root/_loader")
 
-[node name="set_Resolution" type="Node" parent="." node_paths=PackedStringArray("viewports")]
-script = ExtResource("1_3ana1")
+[node name="set_Resolution" type="Node" parent="BoardFocus_3D" node_paths=PackedStringArray("viewports")]
+script = ExtResource("4_t141o")
 viewports = [NodePath("../Viewport")]
 
-[node name="Control_view" type="Node" parent="." node_paths=PackedStringArray("Camera", "Render", "_Rotation_root")]
-script = ExtResource("2_hd46p")
+[node name="Control_view" type="Node" parent="BoardFocus_3D" node_paths=PackedStringArray("Camera", "Render", "_Rotation_root")]
+script = ExtResource("5_exdsv")
 Camera = NodePath("../Viewport/CAM")
 Render = NodePath("../Render")
 _Rotation_root = NodePath("../Viewport/Rotation_root")
 
-[node name="Follow_cam" type="Node" parent="." node_paths=PackedStringArray("_Camera", "_target", "Render")]
-script = ExtResource("4_v2om8")
-_Camera = NodePath("../Viewport/CAM")
-_target = NodePath("../Viewport/Rotation_root/Cam_target")
-Render = NodePath("../Render")
-
-[node name="Backdrop" type="ColorRect" parent="."]
+[node name="Backdrop" type="ColorRect" parent="BoardFocus_3D"]
 visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.0196078, 0.129412, 0.145098, 0.894118)
+color = Color(0.0196078, 0.129412, 0.145098, 1)
 
-[node name="Viewport" type="SubViewport" parent="."]
+[node name="Viewport" type="SubViewport" parent="BoardFocus_3D"]
 own_world_3d = true
 transparent_bg = true
 size = Vector2i(1280, 720)
 
-[node name="CAM" type="Camera3D" parent="Viewport"]
-transform = Transform3D(1, 0, 0, 0, 0.936672, 0.350207, 0, -0.350207, 0.936672, 0, 0.387, 0.736)
+[node name="CAM" type="Camera3D" parent="BoardFocus_3D/Viewport"]
+transform = Transform3D(1, 0, 0, 0, 0.936672, 0.350207, 0, -0.350207, 0.936672, 0, 0.555, 0.817)
 cull_mask = 2
 fov = 45.0
 
-[node name="Light" type="OmniLight3D" parent="Viewport"]
+[node name="Light" type="OmniLight3D" parent="BoardFocus_3D/Viewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.436291, 0)
 layers = 128
 
-[node name="Rotation_root" type="Node3D" parent="Viewport"]
+[node name="Rotation_root" type="Node3D" parent="BoardFocus_3D/Viewport"]
 
-[node name="_loader" type="Node3D" parent="Viewport/Rotation_root"]
+[node name="_loader" type="Node3D" parent="BoardFocus_3D/Viewport/Rotation_root"]
 
-[node name="Disque_prefab" parent="Viewport/Rotation_root/_loader" instance=ExtResource("3_m8rxg")]
-transform = Transform3D(-0.111707, 0, 7.45058e-09, 0, 0.111707, 0, -7.45058e-09, 0, -0.111707, 0, 0, 0)
+[node name="Disque_prefab" parent="BoardFocus_3D/Viewport/Rotation_root/_loader" instance=ExtResource("7_qd6ij")]
+transform = Transform3D(-0.0789888, 0, -0.0789888, 0, 0.111707, 0, 0.0789888, 0, -0.0789888, 0, 0, 0)
 
-[node name="Cylinder" parent="Viewport/Rotation_root/_loader/Disque_prefab" index="0"]
+[node name="Cylinder" parent="BoardFocus_3D/Viewport/Rotation_root/_loader/Disque_prefab" index="0"]
 layers = 2
 surface_material_override/0 = SubResource("ShaderMaterial_6xg4j")
 
-[node name="01" parent="Viewport/Rotation_root/_loader/Disque_prefab" index="1"]
+[node name="01" parent="BoardFocus_3D/Viewport/Rotation_root/_loader/Disque_prefab" index="1"]
 layers = 2
 surface_material_override/0 = SubResource("ShaderMaterial_rpv2b")
 
-[node name="Cylinder_001" parent="Viewport/Rotation_root/_loader/Disque_prefab" index="2"]
+[node name="Cylinder_001" parent="BoardFocus_3D/Viewport/Rotation_root/_loader/Disque_prefab" index="2"]
 layers = 2
-surface_material_override/0 = ExtResource("5_e7r2q")
+surface_material_override/0 = SubResource("ShaderMaterial_1xtg3")
 
-[node name="Cube_001" parent="Viewport/Rotation_root/_loader/Disque_prefab" index="3"]
+[node name="Cube_001" parent="BoardFocus_3D/Viewport/Rotation_root/_loader/Disque_prefab" index="3"]
 layers = 2
-surface_material_override/0 = ExtResource("5_e7r2q")
+surface_material_override/0 = SubResource("ShaderMaterial_1xtg3")
 
-[node name="Cube_002" parent="Viewport/Rotation_root/_loader/Disque_prefab" index="4"]
+[node name="Cube_002" parent="BoardFocus_3D/Viewport/Rotation_root/_loader/Disque_prefab" index="4"]
 layers = 2
 surface_material_override/0 = SubResource("ShaderMaterial_7878w")
 
-[node name="Cylinder_002" parent="Viewport/Rotation_root/_loader/Disque_prefab" index="5"]
+[node name="Cylinder_002" parent="BoardFocus_3D/Viewport/Rotation_root/_loader/Disque_prefab" index="5"]
 layers = 2
-surface_material_override/0 = ExtResource("5_e7r2q")
-surface_material_override/1 = ExtResource("6_kwhg3")
+surface_material_override/0 = SubResource("ShaderMaterial_1xtg3")
+surface_material_override/1 = ExtResource("10_lg776")
 
-[node name="Cylinder2" type="MeshInstance3D" parent="Viewport/Rotation_root/_loader/Disque_prefab"]
+[node name="Cylinder2" type="MeshInstance3D" parent="BoardFocus_3D/Viewport/Rotation_root/_loader/Disque_prefab"]
 transform = Transform3D(0.834231, 0, 2.98023e-08, 0, 0.834231, 0, -2.98023e-08, 0, 0.834231, 0, 0.52225, 0)
 visible = false
 layers = 65536
 mesh = SubResource("ArrayMesh_xi1o4")
 skeleton = NodePath("")
-surface_material_override/0 = ExtResource("7_06ulq")
+surface_material_override/0 = ExtResource("11_rexqn")
 
-[node name="02" type="MeshInstance3D" parent="Viewport/Rotation_root/_loader/Disque_prefab"]
+[node name="02" type="MeshInstance3D" parent="BoardFocus_3D/Viewport/Rotation_root/_loader/Disque_prefab"]
 visible = false
 layers = 65536
 mesh = SubResource("ArrayMesh_625ar")
 skeleton = NodePath("")
-surface_material_override/0 = ExtResource("7_06ulq")
+surface_material_override/0 = ExtResource("11_rexqn")
 
-[node name="Cylinder_003" type="MeshInstance3D" parent="Viewport/Rotation_root/_loader/Disque_prefab"]
+[node name="Cylinder_003" type="MeshInstance3D" parent="BoardFocus_3D/Viewport/Rotation_root/_loader/Disque_prefab"]
 transform = Transform3D(0.0375111, 0, 1.86265e-09, 0, 0.0375111, 0, -1.86265e-09, 0, 0.0375111, 0, 0.609346, 0)
 visible = false
 layers = 65536
 mesh = SubResource("ArrayMesh_jykmc")
 skeleton = NodePath("")
-surface_material_override/0 = ExtResource("7_06ulq")
+surface_material_override/0 = ExtResource("11_rexqn")
 
-[node name="Cube_003" type="MeshInstance3D" parent="Viewport/Rotation_root/_loader/Disque_prefab"]
+[node name="Cube_003" type="MeshInstance3D" parent="BoardFocus_3D/Viewport/Rotation_root/_loader/Disque_prefab"]
 transform = Transform3D(0.162327, 0, 0, 0, 0.162327, 0, 0, 0, 0.162327, -0.983698, 0.641439, 0.685494)
 visible = false
 layers = 65536
 mesh = SubResource("ArrayMesh_oby7j")
 skeleton = NodePath("")
-surface_material_override/0 = ExtResource("7_06ulq")
+surface_material_override/0 = ExtResource("11_rexqn")
 
-[node name="Cube_004" type="MeshInstance3D" parent="Viewport/Rotation_root/_loader/Disque_prefab"]
+[node name="Cube_004" type="MeshInstance3D" parent="BoardFocus_3D/Viewport/Rotation_root/_loader/Disque_prefab"]
 transform = Transform3D(0.576888, -0.816823, 0, 0.816823, 0.576888, 0, 0, 0, 1, -1.31457, 0.594496, 0)
 visible = false
 layers = 65536
 mesh = SubResource("ArrayMesh_mo0t7")
 skeleton = NodePath("")
-surface_material_override/0 = ExtResource("7_06ulq")
+surface_material_override/0 = ExtResource("11_rexqn")
 
-[node name="Cylinder_004" type="MeshInstance3D" parent="Viewport/Rotation_root/_loader/Disque_prefab"]
+[node name="Cylinder_004" type="MeshInstance3D" parent="BoardFocus_3D/Viewport/Rotation_root/_loader/Disque_prefab"]
 transform = Transform3D(0, 0.0324096, 0, -0.0324096, 0, 0, 0, 0, 0.0324096, 1.0388, 0.46536, 0)
 visible = false
 layers = 65536
 mesh = SubResource("ArrayMesh_0616t")
 skeleton = NodePath("")
-surface_material_override/0 = ExtResource("7_06ulq")
-surface_material_override/1 = ExtResource("7_06ulq")
+surface_material_override/0 = ExtResource("11_rexqn")
+surface_material_override/1 = ExtResource("11_rexqn")
 
-[node name="Table" type="MeshInstance3D" parent="Viewport/Rotation_root"]
+[node name="Table" type="MeshInstance3D" parent="BoardFocus_3D/Viewport/Rotation_root"]
 transform = Transform3D(0.487459, 0, 0, 0, 0.0622295, 0, 0, 0, 0.403098, 0, -0.0261125, -0.000731155)
 layers = 2
-mesh = SubResource("BoxMesh_mtomw")
-skeleton = NodePath("../../../../..")
-surface_material_override/0 = SubResource("ShaderMaterial_4olam")
+mesh = SubResource("BoxMesh_jf6tl")
+skeleton = NodePath("../../../..")
+surface_material_override/0 = SubResource("ShaderMaterial_cy3d5")
 
-[node name="Table_border2" type="MeshInstance3D" parent="Viewport/Rotation_root/Table"]
-transform = Transform3D(-4.09801e-08, 0, 1.17138, 0, 0.674921, 0, -1.13372, 0, -6.19185e-08, 0, 0.162504, 0.00181384)
+[node name="Table_border2" type="MeshInstance3D" parent="BoardFocus_3D/Viewport/Rotation_root/Table"]
+transform = Transform3D(-4.09801e-08, 0, 1.17138, 0, 0.674921, 0, -1.13372, 0, -6.19185e-08, 0, 0.128852, 0.00181384)
 layers = 2
-mesh = SubResource("BoxMesh_1h8cf")
-skeleton = NodePath("../../../../../..")
-surface_material_override/0 = SubResource("ShaderMaterial_clq8s")
+mesh = SubResource("BoxMesh_trw3j")
+surface_material_override/0 = SubResource("ShaderMaterial_8gbmj")
 
-[node name="Table_border2_light" type="MeshInstance3D" parent="Viewport/Rotation_root/Table/Table_border2"]
-layers = 65536
-mesh = SubResource("BoxMesh_3ioph")
-skeleton = NodePath("../../../../../../..")
-surface_material_override/0 = ExtResource("7_06ulq")
-
-[node name="Table_border" type="MeshInstance3D" parent="Viewport/Rotation_root/Table"]
+[node name="Table_border" type="MeshInstance3D" parent="BoardFocus_3D/Viewport/Rotation_root/Table"]
 transform = Transform3D(1.02746, 0, 0, 0, 1, 0, 0, 0, 1.05288, 0, -0.159362, 0)
 layers = 2
-mesh = SubResource("BoxMesh_mtomw")
-skeleton = NodePath("../../../../../..")
-surface_material_override/0 = SubResource("ShaderMaterial_5acoq")
+mesh = SubResource("BoxMesh_ohfur")
+surface_material_override/0 = SubResource("ShaderMaterial_k4yn1")
 
-[node name="Table_border_light" type="MeshInstance3D" parent="Viewport/Rotation_root/Table"]
-transform = Transform3D(1.02746, 0, 0, 0, 1, 0, 0, 0, 1.05288, 0, -0.159362, 0)
-layers = 65536
-mesh = SubResource("BoxMesh_mtomw")
-skeleton = NodePath("../../../../../..")
-surface_material_override/0 = ExtResource("7_06ulq")
-
-[node name="Loupe_RG" parent="Viewport/Rotation_root" instance=ExtResource("5_oh31e")]
-transform = Transform3D(-0.207065, 0.00692808, -0.355569, -0.000439184, 0.411442, 0.00827252, 0.355637, 0.00454185, -0.207016, -0.17965, 0.00365776, 0.152929)
-
-[node name="Cam_target" type="Node3D" parent="Viewport/Rotation_root"]
-script = ExtResource("9_or37v")
-speed = 0.5
-x_limit = Vector2(-0.15, 0.15)
-y_limit = Vector2(-0.15, 0.15)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Viewport/Rotation_root/Cam_target"]
-transform = Transform3D(0.175, 0, 0, 0, 0.175, 0, 0, 0, 0.175, 0, 0, 0)
-visible = false
-layers = 2
-mesh = SubResource("SphereMesh_837u0")
-
-[node name="Render" type="TextureRect" parent="."]
+[node name="Render" type="TextureRect" parent="BoardFocus_3D"]
 visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = SubResource("ViewportTexture_fuojs")
+texture = SubResource("ViewportTexture_1b01t")
 
-[editable path="Viewport/Rotation_root/_loader/Disque_prefab"]
+[node name="Offer_ui" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PhotoUi_Prefab" parent="Offer_ui" instance=ExtResource("1_wx4tu")]
+offset_left = 206.0
+offset_top = 123.0
+offset_right = 767.0
+offset_bottom = 475.0
+
+[node name="PhotoUi_Prefab3" parent="Offer_ui" instance=ExtResource("1_wx4tu")]
+offset_left = 931.0
+offset_top = 123.0
+offset_right = 1492.0
+offset_bottom = 475.0
+
+[node name="PhotoUi_Prefab2" parent="Offer_ui" instance=ExtResource("1_wx4tu")]
+offset_left = 558.0
+offset_top = 126.0
+offset_right = 1119.0
+offset_bottom = 478.0
+
+[node name="Button" type="Button" parent="Offer_ui"]
+layout_mode = 0
+offset_left = 1060.0
+offset_top = 616.0
+offset_right = 1235.0
+offset_bottom = 694.0
+text = "NEXT"
+script = SubResource("GDScript_yvo0y")
+
+[editable path="BoardFocus_3D/Viewport/Rotation_root/_loader/Disque_prefab"]

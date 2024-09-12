@@ -67,7 +67,7 @@ script/source = "extends Node
 @onready var timer = $Timer
 
 func _ready():
-	#_global_datas._backFrom_subscene.connect(_open_backfrom_subscene)
+	_global_datas._backFrom_subscene.connect(_open_backfrom_subscene)
 	timer.timeout.connect(open_inventory)
 func _input(event):
 	
@@ -91,8 +91,10 @@ func _open_backfrom_subscene():
 
 	if check_if_element():
 		timer.start()
+		_global_datas.Player_InMenu = true
 		print(\"OPEN BOARD YOU NEED TO PLACE ELEMENT\")
 func open_inventory():
+	_global_datas.Player_InMenu = false
 	_global_datas.open_inventory.emit(true)
 	_global_datas.Player_In_Inventory = true
 	

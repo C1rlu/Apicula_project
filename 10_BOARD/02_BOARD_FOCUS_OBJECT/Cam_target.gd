@@ -28,6 +28,10 @@ func _process(delta):
 	if !_active:
 		return
 	
+	
+	var disable = true
+	if disable:
+		return
 	move(delta)	
 	
 	
