@@ -5,6 +5,7 @@ extends Node
 
 func _process(delta):
 	
+	
 	if _global_datas.Player_InSubScene:
 		update_depth_value()
 		

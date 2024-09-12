@@ -6,8 +6,8 @@ extends Node
 
 func _ready():
 	_subscene_datas._update_depth_ui.connect(update_bar)
-	_global_datas._end_ini_subscene.connect(show)
-	_global_datas._backFrom_subscene.connect(hide)
+	#_global_datas._end_ini_subscene.connect(show)
+	#_global_datas._backFrom_subscene.connect(hide)
 	
 	progress_bar.value_changed.connect(check_depth_bar)
 	progress_bar.visible = false

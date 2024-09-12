@@ -8,9 +8,10 @@ var Player_InSubScene : bool = false
 var Player_InMenu : bool
 var Player_InDialogue : bool
 var Player_InDialogue_zone : bool
-
 var current_scene_state : game_state.scene_state = game_state.scene_state._Main
- 
+var subscene_zone_index : String
+
+
 # menu signals
 signal _start_ini_subscene
 signal _end_ini_subscene
@@ -48,6 +49,7 @@ signal _active_world_grid(condition : bool)
 signal _teleport_boat_at_pos(position : Vector3)
 signal _boat_inside_zone(condition : bool)
 
+
 #color signal 
 signal go_normal_color
 signal go_darker_color
@@ -83,7 +85,7 @@ signal _show_object_legend(condtion : bool, legend : String)
 
 var player_rg : RigidBody3D
 var attache_node: Node3D
-var selected_subscene : PackedScene
+
 signal player_in_diveZone(condition : bool)
 signal show_dive_zone_info(condition : bool, dive_data : BoueData)
 signal _load_subscene(condition : bool)

@@ -58,15 +58,15 @@ func check_zone():
 
 		
 
-		var dive_zone = a.get_node_or_null("Dive_zone")
-		if dive_zone:
-	
-			var dive_data = dive_zone.get_dive_data()
-			_global_datas.selected_subscene = dive_data.zone_packed_scene
-
-			_global_datas.show_dive_zone_info.emit(true,dive_data)
-			_global_datas._boat_inside_zone.emit(true)
-			_global_datas.player_in_diveZone.emit(true)
+		#var dive_zone = a.get_node_or_null("Dive_zone")
+		#if dive_zone:
+	#
+			#var dive_data = dive_zone.get_dive_data()
+			#_global_datas.show_dive_zone_info.emit(true,dive_data)
+			#_global_datas._boat_inside_zone.emit(true)
+			#_global_datas.player_in_diveZone.emit(true)
+			
+			
 func _on_enter_dialogue_zone_area_entered(area):
 	
 	
@@ -81,15 +81,14 @@ func _on_enter_dialogue_zone_area_entered(area):
 		
 
 		
-		var dive_zone = area.get_node_or_null("Dive_zone")
-		if dive_zone:
-
-			var dive_data = dive_zone.get_dive_data()
-			_global_datas._boat_inside_zone.emit(true)
-			_global_datas.selected_subscene = dive_data.zone_packed_scene
-			_global_datas.show_dive_zone_info.emit(true,dive_data)
-			_global_datas.player_in_diveZone.emit(true)
-			
+		#var dive_zone = area.get_node_or_null("Dive_zone")
+		#if dive_zone:
+#
+			#var dive_data = dive_zone.get_dive_data()
+			#_global_datas._boat_inside_zone.emit(true)
+			#_global_datas.show_dive_zone_info.emit(true,dive_data)
+			#_global_datas.player_in_diveZone.emit(true)
+			#
 func _on_enter_dialogue_zone_area_exited(area):
 	
 
@@ -99,9 +98,8 @@ func _on_enter_dialogue_zone_area_exited(area):
 			_global_datas.in_dialogue_zone.emit(false)
 			#_global_datas._show_object_legend.emit(false,null)
 			
-		var dive_zone = area.get_node_or_null("Dive_zone")
-		if dive_zone:
-			_global_datas.player_in_diveZone.emit(false)
-			_global_datas.selected_subscene = null
-			_global_datas.show_dive_zone_info.emit(false,null)
-			_global_datas._active_progress_subscene.emit(false)
+		#var dive_zone = area.get_node_or_null("Dive_zone")
+		#if dive_zone:
+			#_global_datas.player_in_diveZone.emit(false)
+			#_global_datas.show_dive_zone_info.emit(false,null)
+			#_global_datas._active_progress_subscene.emit(false)

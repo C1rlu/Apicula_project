@@ -9,7 +9,8 @@ var cell_prefabs = preload("res://04_SCENE_MAIN_MAP/Grid/cells_grid_library.tscn
 
 func _ready():
 	_create_grid()
-	#_global_datas._go_Subscene.connect(_check_sceneIndex)
+	_global_datas._active_sonar.connect(get_number)
+	_global_datas._load_subscene.connect(_check_sceneIndex)
 
 func _create_grid():
 	var used_cells = get_used_cells()
@@ -48,10 +49,16 @@ func find_nearest_cell_to_player():
 		if distance < nearest_distance:
 			nearest_distance = distance
 			nearest_cell = cell_data
-			_global_datas.cell_name = nearest_cell.cell_name
+			_global_datas.subscene_zone_index = nearest_cell.cell_name
 			
-			
-func _check_sceneIndex():
+	print(_global_datas.subscene_zone_index)
+
+
+func get_number(_null):
+	find_nearest_cell_to_player()	
+	_global_datas._show_object_legend.emit(true,_global_datas.subscene_zone_index)			
+	
+func _check_sceneIndex(_null):
 	find_nearest_cell_to_player()
 	
 
