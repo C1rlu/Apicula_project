@@ -60,8 +60,7 @@ func check_zone():
 
 		var dive_zone = a.get_node_or_null("Dive_zone")
 		if dive_zone:
-			
-			dive_zone._contact.emit(true)
+	
 			var dive_data = dive_zone.get_dive_data()
 			_global_datas.selected_subscene = dive_data.zone_packed_scene
 
@@ -84,8 +83,7 @@ func _on_enter_dialogue_zone_area_entered(area):
 		
 		var dive_zone = area.get_node_or_null("Dive_zone")
 		if dive_zone:
-	
-			dive_zone._contact.emit(true)
+
 			var dive_data = dive_zone.get_dive_data()
 			_global_datas._boat_inside_zone.emit(true)
 			_global_datas.selected_subscene = dive_data.zone_packed_scene
@@ -104,7 +102,6 @@ func _on_enter_dialogue_zone_area_exited(area):
 		var dive_zone = area.get_node_or_null("Dive_zone")
 		if dive_zone:
 			_global_datas.player_in_diveZone.emit(false)
-			dive_zone._contact.emit(false)
 			_global_datas.selected_subscene = null
 			_global_datas.show_dive_zone_info.emit(false,null)
 			_global_datas._active_progress_subscene.emit(false)

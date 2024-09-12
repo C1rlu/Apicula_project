@@ -1,6 +1,6 @@
 extends Node
 
-@onready var progress_bar = $"../ProgressBar"
+@export var progress_bar : TextureProgressBar
 
 var t 
 func _ready():

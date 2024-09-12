@@ -1,4 +1,4 @@
-[gd_scene load_steps=85 format=3 uid="uid://cnmptm7i0xxmj"]
+[gd_scene load_steps=83 format=3 uid="uid://cnmptm7i0xxmj"]
 
 [ext_resource type="Script" path="res://00_SCENE/Active_Decor_Scene.gd" id="1_ounvv"]
 [ext_resource type="PackedScene" uid="uid://vpdvl0v7dubd" path="res://04_SCENE_MAIN_MAP/00_PLAYER/Player_boat.tscn" id="1_qltht"]
@@ -14,20 +14,17 @@
 [ext_resource type="PackedScene" uid="uid://crxoyweriianl" path="res://04_SCENE_MAIN_MAP/Grid/grid_map.tscn" id="6_8jesf"]
 [ext_resource type="Material" uid="uid://ctnqf5d3uj1g7" path="res://05_SHADER/All_Materials/dark_mask.tres" id="6_vcmny"]
 [ext_resource type="Material" uid="uid://b64juw612xqpu" path="res://05_SHADER/Sea_sh/Sea_mat.tres" id="7_4y8ld"]
-[ext_resource type="Script" path="res://00_SCENE/Active_divingZone.gd" id="7_f3xb7"]
 [ext_resource type="Shader" uid="uid://b8pie7pbqwtks" path="res://05_SHADER/Full_screen/Main_fullscreen.tres" id="8_oftpq"]
 [ext_resource type="PackedScene" uid="uid://dla1534gcagbl" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Pine/pine_prefabs.tscn" id="10_c6r5x"]
 [ext_resource type="PackedScene" uid="uid://cjp6vd8eetmyf" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Iceberg/ice_berg_03.tscn" id="10_h0nl5"]
 [ext_resource type="PackedScene" uid="uid://cegdqm3et2y35" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Iceberg/ice_berg_02.tscn" id="11_086vv"]
 [ext_resource type="PackedScene" uid="uid://d3h77dy71bcme" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Iceberg/ice_berg_01.tscn" id="12_638yx"]
-[ext_resource type="PackedScene" uid="uid://biiofg53lwx38" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Mountain/Mountain_03.tscn" id="14_fqdgl"]
+[ext_resource type="Script" path="res://00_SCENE/Sonar_zone_active.gd" id="12_gjulh"]
 [ext_resource type="PackedScene" uid="uid://bjfuwgxyiffs4" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Mountain/Mountain_01.tscn" id="15_bqwbg"]
 [ext_resource type="PackedScene" uid="uid://fcjcvy77lg0o" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Lighthouse/lighthouse_prefabs.tscn" id="16_u78ww"]
 [ext_resource type="Script" path="res://04_SCENE_MAIN_MAP/00_PLAYER/Check_zone.gd" id="17_unqeu"]
 [ext_resource type="Material" uid="uid://dgl2um0yp8e3c" path="res://05_SHADER/All_Materials/Building_mat.tres" id="20_24d3w"]
 [ext_resource type="PackedScene" uid="uid://cp1aidnp626l4" path="res://04_SCENE_MAIN_MAP/Birds/Birds_prefabs.tscn" id="21_py3bv"]
-[ext_resource type="Script" path="res://00_SCENE/Location_state.gd" id="21_v3ftk"]
-[ext_resource type="Resource" uid="uid://5vga3uadhx5n" path="res://15_GAME_RESSOURCE/00_Main_Location/First_island.tres" id="22_axesb"]
 [ext_resource type="PackedScene" uid="uid://bw5vovfbghh6f" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Mountain/Moutain_set/mountain_set_02_prefab.tscn" id="23_e4he1"]
 [ext_resource type="Material" uid="uid://dkpo8pe6k46g6" path="res://05_SHADER/All_Materials/Light_mat.tres" id="23_o3pq1"]
 [ext_resource type="PackedScene" uid="uid://dti7l20thp2rk" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Subscene_elements/epave_zone.tscn" id="23_txlwt"]
@@ -379,6 +376,8 @@ shader_parameter/Sonar_color = Color(1, 1, 1, 1)
 [sub_resource type="SphereMesh" id="SphereMesh_56jr0"]
 material = SubResource("ShaderMaterial_kcje2")
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_r7xqt"]
+
 [sub_resource type="GDScript" id="GDScript_i66w8"]
 script/source = "extends Node
 "
@@ -533,9 +532,6 @@ script = SubResource("GDScript_55qk3")
 [node name="Teleport_boat_at_position" type="Node" parent="."]
 script = ExtResource("4_xkpot")
 
-[node name="Active_divingZone" type="Node" parent="."]
-script = ExtResource("7_f3xb7")
-
 [node name="01_GAME_UI" type="Node" parent="." node_paths=PackedStringArray("all_renders")]
 script = SubResource("GDScript_8cfdp")
 all_renders = [NodePath("MAIN_SCENE_UI/Viewports/MAIN"), null, null, null, null]
@@ -653,8 +649,6 @@ omni_range = 7.0
 omni_attenuation = 0.258817
 
 [node name="Enter_dialogue_zone" type="Area3D" parent="--DECOR--/Player_Boat"]
-collision_layer = 3
-collision_mask = 3
 input_ray_pickable = false
 
 [node name="Col" type="CollisionShape3D" parent="--DECOR--/Player_Boat/Enter_dialogue_zone"]
@@ -665,7 +659,6 @@ transform = Transform3D(-4.37114e-09, 0, -0.1, 0, 0.1, 0, 0.1, 0, -4.37114e-09, 
 
 [node name="01" type="Node3D" parent="--DECOR--/Sonar"]
 transform = Transform3D(5.52237, 0, 0, 0, 5.52237, 0, 0, 0, 5.52237, 0.049623, -0.743807, -0.269134)
-visible = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="--DECOR--/Sonar/01"]
 layers = 8
@@ -679,7 +672,17 @@ skeleton = NodePath("../..")
 
 [node name="02" type="Node3D" parent="--DECOR--/Sonar"]
 transform = Transform3D(3.89763, 0.0211405, -0.0748208, -0.0200288, 3.89793, 0.0579978, 0.075126, -0.0576019, 3.89726, 0.049623, -0.743807, -0.269134)
-visible = false
+
+[node name="Sonar_zone" type="Area3D" parent="--DECOR--/Sonar/02" node_paths=PackedStringArray("col")]
+transform = Transform3D(1, 0, 0, 0, 1, -4.72937e-10, -7.45058e-09, -1.74623e-10, 1, 0, 0, 0)
+script = ExtResource("12_gjulh")
+col = NodePath("CollisionShape3D")
+
+[node name="Sonar" type="Node" parent="--DECOR--/Sonar/02/Sonar_zone"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="--DECOR--/Sonar/02/Sonar_zone"]
+transform = Transform3D(1.67343, 0, 7.45058e-09, 8.3819e-09, 1.67343, 3.34694e-10, 3.72529e-09, 4.59841e-09, 1.67343, 0, 0, 0)
+shape = SubResource("SphereShape3D_r7xqt")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="--DECOR--/Sonar/02"]
 layers = 8
@@ -786,20 +789,6 @@ layers = 1
 [node name="IceBerg_08" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("12_638yx")]
 transform = Transform3D(-0.334611, 0, 0.0349742, 0, 0.336434, 0, -0.0349742, 0, -0.334611, 0.135678, -0.414282, 3.39587)
 layers = 1
-
-[node name="Location_test" type="Node3D" parent="--DECOR--/WORLD_ELEMENTS"]
-transform = Transform3D(-0.0418233, 0, 0.999125, 0, 1, 0, -0.999125, 0, -0.0418233, -2.88266, -0.215266, -6.54418)
-script = ExtResource("21_v3ftk")
-location = ExtResource("22_axesb")
-
-[node name="IceBerg_06" parent="--DECOR--/WORLD_ELEMENTS/Location_test" instance=ExtResource("10_h0nl5")]
-transform = Transform3D(-0.115363, 0, -0.433111, 0, 0.448212, 0, 0.433111, 0, -0.115363, -1.5108, -0.264711, 2.26163)
-
-[node name="Mountain_set_02_Prefab2" parent="--DECOR--/WORLD_ELEMENTS/Location_test" instance=ExtResource("23_e4he1")]
-transform = Transform3D(0.329637, 0, -0.557163, 0, 0.647372, 0, 0.557163, 0, 0.329637, -2.65367, -0.00183177, 0.133411)
-
-[node name="IceBerg_03" parent="--DECOR--/WORLD_ELEMENTS/Location_test" instance=ExtResource("14_fqdgl")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="IceBerg_01" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("15_bqwbg")]
 transform = Transform3D(-0.529492, 0, 2.98023e-08, 0, 0.529492, 0, -2.98023e-08, 0, -0.529492, 5.51049, -0.219669, -3.51967)
@@ -1097,21 +1086,15 @@ disabled = true
 
 [node name="EPAVE_ZONE" parent="--DECOR--/DIVING_ZONE" instance=ExtResource("23_txlwt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.39698, -0.174761, 0.77574)
-collision_layer = 2
-collision_mask = 2
-boue_data = ExtResource("37_q8flv")
+Dive_area = ExtResource("37_q8flv")
 
 [node name="EPAVE_ZONE3" parent="--DECOR--/DIVING_ZONE" instance=ExtResource("23_txlwt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.57933, -0.174761, 4.35923)
-collision_layer = 2
-collision_mask = 2
-boue_data = ExtResource("38_slan6")
+Dive_area = ExtResource("38_slan6")
 
 [node name="EPAVE_ZONE2" parent="--DECOR--/DIVING_ZONE" instance=ExtResource("23_txlwt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6219, -0.192537, -2.46462)
-collision_layer = 2
-collision_mask = 2
-boue_data = ExtResource("39_xd5qo")
+Dive_area = ExtResource("39_xd5qo")
 
 [node name="Clouds" type="MeshInstance3D" parent="--DECOR--"]
 transform = Transform3D(57.2458, 0, 0, 0, 57.2458, 0, 0, 0, 57.2458, 0, 6.93092, 0)

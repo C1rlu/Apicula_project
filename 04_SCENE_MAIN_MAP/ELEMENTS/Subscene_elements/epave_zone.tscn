@@ -1,165 +1,28 @@
-[gd_scene load_steps=28 format=3 uid="uid://dti7l20thp2rk"]
+[gd_scene load_steps=18 format=3 uid="uid://dti7l20thp2rk"]
 
 [ext_resource type="Shader" uid="uid://jjqliete2f27" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Subscene_elements/Subscene_element_sh.tres" id="1_4eijp"]
-[ext_resource type="PackedScene" uid="uid://bxyofd07elshh" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Boue/boue_msh_01_prefab.tscn" id="1_68viu"]
 [ext_resource type="Script" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Subscene_elements/Dive_zone.gd" id="1_mmyx7"]
 
 [sub_resource type="GDScript" id="GDScript_kppkw"]
 script/source = "extends Area3D
 
-@export var boue_data : BoueData
+@export var Dive_area : BoueData
 @onready var root = $\".\"
-
-@export var activable : Array[Node3D]
+@export var Fade_out : Node
 
 func _ready():
-	boue_data.world_position = root.global_position
-	
-
-func active():
-	
-	for e in activable:
-		e.visible = true
-		
-	
-	$\".\".monitorable = true
-	
-func disable():
-
-	$\".\".monitorable = false
-	
-	for e in activable:
-		e.visible = false
+	area_entered.connect(_check)
 
 
-
-func _on_dive_zone__contact(condition):
+func _check(area):
 	
-	if condition:
-		if !boue_data.is_discover:
-			_global_datas.boue_archives.append(boue_data)
-			boue_data.is_discover = true
-		
-			
+	if area:
+		var sonar_area = area.get_node_or_null(\"Sonar\")
+		if sonar_area:
+			Fade_out._show()
+
+
 "
-
-[sub_resource type="TorusMesh" id="TorusMesh_8ej3g"]
-inner_radius = 0.452
-outer_radius = 0.55
-rings = 32
-ring_segments = 16
-
-[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_pqmp5"]
-parameter_name = "Light_color_ui"
-qualifier = 1
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_fvynh"]
-constant = 0.4
-
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_uqm2b"]
-size = Vector2(724.789, 654.559)
-expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_8vuby"]
-default_input_values = [0, 0.3, 1, 0.0]
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_7hl6b"]
-constant = 0.9
-
-[sub_resource type="VisualShader" id="VisualShader_40hih"]
-code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
-
-global uniform vec4 Light_color_ui : source_color;
-
-
-
-void fragment() {
-// ColorParameter:2
-	vec4 n_out2p0 = Light_color_ui;
-
-
-// FloatConstant:7
-	float n_out7p0 = 0.900000;
-
-
-// FloatConstant:3
-	float n_out3p0 = 0.400000;
-
-
-	float n_out4p0;
-// Expression:4
-	n_out4p0 = 0.0;
-	{
-		const float DITHER_THRESHOLDS[16] ={
-				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-			};
-			
-		vec2 uv = FRAGCOORD.xy * n_out3p0;
-		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-		n_out4p0 = n_out7p0 - DITHER_THRESHOLDS[index];
-	}
-
-
-// Step:6
-	float n_out6p0 = step(n_out2p0.x, n_out4p0);
-
-
-// Output:0
-	ALBEDO = vec3(n_out2p0.xyz);
-	ALPHA = n_out6p0;
-
-
-}
-"
-graph_offset = Vector2(-2362.65, 490.918)
-flags/unshaded = true
-nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_pqmp5")
-nodes/fragment/2/position = Vector2(-760, -40)
-nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_fvynh")
-nodes/fragment/3/position = Vector2(-1380, 520)
-nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_uqm2b")
-nodes/fragment/4/position = Vector2(-1200, 380)
-nodes/fragment/4/size = Vector2(724.789, 654.559)
-nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
-nodes/fragment/4/output_ports = "0,0,Dither_Node;"
-nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/6/node = SubResource("VisualShaderNodeStep_8vuby")
-nodes/fragment/6/position = Vector2(-351.825, 215.819)
-nodes/fragment/7/node = SubResource("VisualShaderNodeFloatConstant_7hl6b")
-nodes/fragment/7/position = Vector2(-1440, 360)
-nodes/fragment/connections = PackedInt32Array(3, 0, 4, 1, 4, 0, 6, 1, 6, 0, 0, 1, 7, 0, 4, 0, 2, 0, 0, 0, 2, 0, 6, 0)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ahafp"]
-render_priority = 0
-shader = SubResource("VisualShader_40hih")
-
-[sub_resource type="TorusMesh" id="TorusMesh_e6koh"]
-inner_radius = 0.501
-outer_radius = 0.55
-rings = 32
-ring_segments = 16
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_7qqy6"]
 radius = 0.67208
@@ -172,10 +35,7 @@ script/source = "extends Node
 
 var t
 var d
-var stop_after : bool = false
 var actual_value : float
-var is_active : bool = false
-
 
 func _show():
 	
@@ -206,11 +66,6 @@ func _hide():
 func change_value(value : float):
 	material.set_shader_parameter(\"Distance\",value)
 	actual_value = value
-	
-func _on_epave_zone_see_int(condition):
-	
-	if condition:	
-		_show()	
 	
 
 
@@ -381,32 +236,16 @@ shadow_mesh = SubResource("ArrayMesh_yh6yu")
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("1_4eijp")
+shader_parameter/Sonar_color = Color(0.25098, 0.607843, 0.447059, 1)
 shader_parameter/Distance = 0.0
 
-[node name="EPAVE_ZONE" type="Area3D" node_paths=PackedStringArray("activable")]
+[node name="EPAVE_ZONE" type="Area3D" node_paths=PackedStringArray("Fade_out")]
 input_ray_pickable = false
 script = SubResource("GDScript_kppkw")
-activable = [NodePath("Boue_msh_01"), NodePath("Epave_visuals")]
+Fade_out = NodePath("Epave_visuals/Fade_out")
 
 [node name="Dive_zone" type="Node" parent="."]
 script = ExtResource("1_mmyx7")
-
-[node name="Boue_msh_01" parent="." instance=ExtResource("1_68viu")]
-transform = Transform3D(0.0575288, 0, -0.0887662, 0, 0.105778, 0, 0.0887662, 0, 0.0575288, 0, -0.027, 0)
-
-[node name="On_Over" type="MeshInstance3D" parent="Boue_msh_01"]
-transform = Transform3D(4.67111, 0, 7.20747, 0, 0.806101, 0, -7.20747, 0, 4.67111, 0.0122547, 0.410116, -0.0189056)
-visible = false
-mesh = SubResource("TorusMesh_8ej3g")
-skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("ShaderMaterial_ahafp")
-
-[node name="On_Over_shader" type="MeshInstance3D" parent="Boue_msh_01"]
-transform = Transform3D(10.8891, 0, 16.8018, 0, 1.87915, 0, -16.8018, 0, 10.8891, 0.0122547, 0.410116, -0.0189056)
-visible = false
-mesh = SubResource("TorusMesh_e6koh")
-skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("ShaderMaterial_ahafp")
 
 [node name="collider" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_7qqy6")
@@ -421,7 +260,3 @@ transform = Transform3D(0.0832566, -0.00600461, -0.12878, 0.00257089, 0.153347, 
 mesh = SubResource("ArrayMesh_qimfy")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("ShaderMaterial_yfs1e")
-
-[connection signal="_contact" from="Dive_zone" to="." method="_on_dive_zone__contact"]
-[connection signal="_contact" from="Dive_zone" to="Boue_msh_01" method="_contact"]
-[connection signal="_contact" from="Dive_zone" to="Epave_visuals/Fade_out" method="_on_epave_zone_see_int"]

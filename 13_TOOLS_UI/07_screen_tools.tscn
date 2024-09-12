@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=3 uid="uid://bwmu5iwushsl5"]
+[gd_scene load_steps=54 format=3 uid="uid://bwmu5iwushsl5"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/Fade_flash_effect.gd" id="1_1dj2k"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/INSTANCE_NOTE.gd" id="1_fcb2u"]
@@ -17,6 +17,7 @@
 [ext_resource type="Script" path="res://10_BOARD/Dive_infos.gd" id="16_ifpy4"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/Loadin_progress.gd" id="16_jt5le"]
 [ext_resource type="PackedScene" uid="uid://b4ju0ntcydix8" path="res://13_TOOLS_UI/2D_MAP/2d_map.tscn" id="17_c8quy"]
+[ext_resource type="Texture2D" uid="uid://dafg2qvpi6wmk" path="res://06_UI/Loader_circle/Loader_circle.png" id="17_d51lu"]
 [ext_resource type="PackedScene" uid="uid://dykmxu1syt7" path="res://13_TOOLS_UI/Depth_bar/subscene_depth_bar.tscn" id="18_fdcig"]
 [ext_resource type="Texture2D" uid="uid://b1trci2kdjddg" path="res://13_TOOLS_UI/Board_button/Map_button_img.png" id="18_rhmoe"]
 [ext_resource type="Shader" uid="uid://cg5mgo48srf08" path="res://13_TOOLS_UI/2D_MAP/2d_map_border.tres" id="19_ibvij"]
@@ -235,12 +236,6 @@ func set_shader_value_key(value):
 	
 	material_key.set_shader_parameter(\"Opacity\",value)
 "
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bq8b5"]
-bg_color = Color(0.360784, 0.341176, 0.262745, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tu22k"]
-bg_color = Color(0.811765, 0.65098, 0.423529, 1)
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_3ydwq"]
 parameter_name = "Color"
@@ -665,63 +660,25 @@ anchors_preset = 0
 offset_right = 328.0
 offset_bottom = 264.0
 
-[node name="DiveZone_info_update" type="Node" parent="Main_Scene_U/DiveZone_infos" node_paths=PackedStringArray("info_text")]
+[node name="DiveZone_info_update" type="Node" parent="Main_Scene_U/DiveZone_infos"]
 script = ExtResource("16_ifpy4")
-info_text = NodePath("../Info_text")
 
-[node name="Loadin_progress" type="Node" parent="Main_Scene_U/DiveZone_infos"]
+[node name="Loadin_progress" type="Node" parent="Main_Scene_U/DiveZone_infos" node_paths=PackedStringArray("progress_bar")]
 script = ExtResource("16_jt5le")
+progress_bar = NodePath("../ProgressBar")
 
-[node name="Info_text3" type="Label" parent="Main_Scene_U/DiveZone_infos"]
-visible = false
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 321.0
-offset_top = 200.0
-offset_right = 261.0
-offset_bottom = -1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.811765, 0.65098, 0.423529, 1)
-theme_override_font_sizes/font_size = 21
-text = "YOU NEED TO BY A PERMIS TO DIVE HERE"
-autowrap_mode = 3
-
-[node name="Info_text" type="Label" parent="Main_Scene_U/DiveZone_infos"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = -0.745
-anchor_bottom = 0.114
-offset_left = 491.36
-offset_top = 185.0
-offset_right = 524.0
-offset_bottom = 223.904
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.811765, 0.65098, 0.423529, 1)
-theme_override_font_sizes/font_size = 40
-text = "Zone name"
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 3
-
-[node name="ProgressBar" type="ProgressBar" parent="Main_Scene_U/DiveZone_infos"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 574.0
-offset_top = 546.0
-offset_right = 438.0
-offset_bottom = 303.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.929412, 0.827451, 0.686275, 1)
-theme_override_styles/background = SubResource("StyleBoxFlat_bq8b5")
-theme_override_styles/fill = SubResource("StyleBoxFlat_tu22k")
-show_percentage = false
+[node name="ProgressBar" type="TextureProgressBar" parent="Main_Scene_U/DiveZone_infos"]
+layout_mode = 0
+offset_left = 736.0
+offset_top = 283.0
+offset_right = 1248.0
+offset_bottom = 795.0
+scale = Vector2(0.0717443, 0.0717443)
+fill_mode = 4
+texture_under = ExtResource("17_d51lu")
+texture_progress = ExtResource("17_d51lu")
+tint_under = Color(0.152941, 0.337255, 0.301961, 1)
+tint_progress = Color(0.721569, 0.580392, 0.407843, 1)
 
 [node name="Map_button" type="Control" parent="Main_Scene_U"]
 layout_mode = 1
