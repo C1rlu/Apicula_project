@@ -187,6 +187,13 @@ signal active_scanner_button(condition : bool)
 var current_money : int = 0
 signal update_money_amount(value : int)
 
+
+# Time bar state
+
+signal _up_time_state
+var _time_state : game_state.time_state 
+
+
 #signal update_element_amount
 #-----------------------------
 # dialogue datas
@@ -209,7 +216,7 @@ func _ready():
 	bird_is_waiting = false
 	_check_objectZone_Area = null
 	_check_objectZone_col = null
-	
+	_time_state = game_state.time_state.start
 	
 # TEST BOARD NEWS PROTO SCENE
 signal select_movable_object(object)

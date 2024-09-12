@@ -8,6 +8,4 @@ func _ready():
 	
 	
 func _ship_to():
-	pass
-	#_global_datas.sending_bird.emit()	
-	
+	_global_datas.sending_bird.emit()

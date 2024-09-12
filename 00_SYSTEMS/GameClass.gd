@@ -25,3 +25,14 @@ enum camera_state {
 	Scanner
 }
 
+
+enum time_state {
+	
+	start,
+	morning,
+	midday,
+	afternoon,
+	evening,
+	night
+
+}

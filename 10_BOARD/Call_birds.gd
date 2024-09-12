@@ -14,11 +14,11 @@ func _show_quest_info(condition):
 func call_bird(condition):
 	#print("SENDING LETTERS")
 	
-	#_global_datas._check_object.emit()
-	_global_datas.open_inventory.emit(false)
-	_global_datas.Player_In_Inventory = false
-	_global_datas.Npc_Dialogue = Bird_NPC_data
-	_global_datas._check_dialogue_photo.emit()
+	_global_datas._check_object.emit()
+	#_global_datas.open_inventory.emit(false)
+	#_global_datas.Player_In_Inventory = false
+	#_global_datas.Npc_Dialogue = Bird_NPC_data
+	#_global_datas._check_dialogue_photo.emit()
 	#_global_datas._open_dialogue.emit()
 	
 func _send_bird():
