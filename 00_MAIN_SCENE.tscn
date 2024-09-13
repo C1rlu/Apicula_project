@@ -1,7 +1,6 @@
-[gd_scene load_steps=21 format=3 uid="uid://cb8k68mtsigvd"]
+[gd_scene load_steps=19 format=3 uid="uid://cb8k68mtsigvd"]
 
 [ext_resource type="Resource" uid="uid://cooqi0giysm3w" path="res://15_GAME_RESSOURCE/MrBirs_photoData.tres" id="1_ls1ba"]
-[ext_resource type="PackedScene" uid="uid://bo33th5yn61n1" path="res://08_SUBSCENES/00_Scene/E4.tscn" id="2_0u6vh"]
 [ext_resource type="Script" path="res://00_SYSTEMS/Global_datas.gd" id="3_qrxv3"]
 [ext_resource type="Script" path="res://00_SYSTEMS/Subscene_datas.gd" id="4_jt81n"]
 [ext_resource type="Script" path="res://06_UI/Color_management/Color_Managers.gd" id="4_n4sfn"]
@@ -16,18 +15,16 @@
 [ext_resource type="PackedScene" uid="uid://bbp1ccoa6te1g" path="res://11_SPEAKER/05_speaker_02.tscn" id="14_yb42j"]
 [ext_resource type="PackedScene" uid="uid://bwmu5iwushsl5" path="res://13_TOOLS_UI/07_screen_tools.tscn" id="15_nfmr8"]
 [ext_resource type="PackedScene" uid="uid://bemddl0bqqfwo" path="res://100_GAME_MENU/08_game_menu.tscn" id="16_5y5wa"]
-[ext_resource type="PackedScene" uid="uid://dby25i8ytjwvj" path="res://14_ENCHERE/14_ENCHERE.tscn" id="16_ggg4j"]
 
 [sub_resource type="GDScript" id="GDScript_c11gh"]
 script/source = "extends Node
 
 @export var photo_data : PhotoData
-@export var scene_test : PackedScene
 
 func _input(event):
 	
 	if event.is_action_pressed(\"debug_1\"):
-		_global_datas.selected_subscene = scene_test
+		_global_datas.subscene_zone_index = \"E4\"
 		_global_datas._load_subscene.emit(true)
 		_global_datas._go_Subscene.emit()
 	
@@ -42,8 +39,8 @@ func _input(event):
 		
 	if event.is_action_pressed(\"debug_4\"):
 		#_global_datas.update_money_amount.emit(1)
-		#_global_datas._up_time_state.emit()
-		_global_datas._open_enchere.emit(true)
+		_global_datas._up_time_state.emit()
+	
 "
 
 [sub_resource type="GDScript" id="GDScript_7v3dw"]
@@ -80,7 +77,6 @@ metadata/_edit_horizontal_guides_ = [-31.0]
 [node name="DEBUG_Dev_shortcut" type="Node" parent="."]
 script = SubResource("GDScript_c11gh")
 photo_data = ExtResource("1_ls1ba")
-scene_test = ExtResource("2_0u6vh")
 
 [node name="01_GAME_MANAGERS" type="Node" parent="."]
 
@@ -135,8 +131,6 @@ metadata/_edit_horizontal_guides_ = [542.0]
 [node name="05_SPEAKER" parent="." instance=ExtResource("14_yb42j")]
 
 [node name="07_SCREEN_TOOLS_UI" parent="." instance=ExtResource("15_nfmr8")]
-
-[node name="14_Enchere" parent="." instance=ExtResource("16_ggg4j")]
 
 [node name="08_GAME_MENU" parent="." instance=ExtResource("16_5y5wa")]
 

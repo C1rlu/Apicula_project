@@ -10,8 +10,7 @@ func _ready():
 	
 	Map_button_tool.tool_active_signal.connect(_open_map)
 	
-	
-	
+
 func _open_map(condition : bool):
 	Map_node.visible = condition	
 	_global_datas.Player_InMenu = condition

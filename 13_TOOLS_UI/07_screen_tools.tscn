@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://bwmu5iwushsl5"]
+[gd_scene load_steps=55 format=3 uid="uid://bwmu5iwushsl5"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/Fade_flash_effect.gd" id="1_1dj2k"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/INSTANCE_NOTE.gd" id="1_fcb2u"]
@@ -30,6 +30,7 @@
 [ext_resource type="Texture2D" uid="uid://cpnkof28l8bd6" path="res://13_TOOLS_UI/Board_button/Letters_buttons_02.png" id="25_mdoi3"]
 [ext_resource type="Script" path="res://10_BOARD/Select_element_state.gd" id="28_ld21h"]
 [ext_resource type="PackedScene" uid="uid://cqmsm5j5c5ur2" path="res://13_TOOLS_UI/Quest_Selection/Letters/quest_button.tscn" id="28_lw8ft"]
+[ext_resource type="PackedScene" uid="uid://djm8lc25p4u3m" path="res://13_TOOLS_UI/Quest_Selection/Quest_selector.tscn" id="30_6k6xu"]
 [ext_resource type="PackedScene" uid="uid://clc3sbquuu1us" path="res://13_TOOLS_UI/Clock_montre/Clock_ui_prefab.tscn" id="31_4ftpd"]
 [ext_resource type="PackedScene" uid="uid://h0dc0tsioi8y" path="res://13_TOOLS_UI/Time_bar/Timebar_ui.tscn" id="31_uhtuk"]
 
@@ -297,7 +298,7 @@ func _ready():
 	
 	
 func _open_rumors():
-	_global_datas._open_letter_quest.emit(true)	
+	_global_datas._open_quest_on_board.emit(true)	
 	
 	
 "
@@ -779,7 +780,7 @@ position = Vector2(25, 26)
 scale = Vector2(0.159741, 0.159741)
 texture = ExtResource("24_nqwp3")
 
-[node name="Rumors_Button2" type="Control" parent="Main_Scene_U"]
+[node name="Order_button" type="Control" parent="Main_Scene_U"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -794,7 +795,7 @@ grow_horizontal = 0
 grow_vertical = 0
 mouse_filter = 2
 
-[node name="Button" type="Button" parent="Main_Scene_U/Rumors_Button2"]
+[node name="Button" type="Button" parent="Main_Scene_U/Order_button"]
 layout_mode = 0
 offset_left = 2.0
 offset_top = -2.0
@@ -802,7 +803,7 @@ offset_right = 52.0
 offset_bottom = 48.0
 script = SubResource("GDScript_kdx4e")
 
-[node name="BoardMapButtonImg" type="Sprite2D" parent="Main_Scene_U/Rumors_Button2/Button"]
+[node name="BoardMapButtonImg" type="Sprite2D" parent="Main_Scene_U/Order_button/Button"]
 position = Vector2(25, 26)
 scale = Vector2(0.0695552, 0.0695552)
 texture = ExtResource("25_mdoi3")
@@ -822,6 +823,9 @@ offset_top = 2.0
 offset_right = 1278.0
 offset_bottom = 63.0
 grow_horizontal = 1
+
+[node name="QuestSelector" parent="." instance=ExtResource("30_6k6xu")]
+visible = false
 
 [node name="Quest_letter" parent="." instance=ExtResource("28_lw8ft")]
 visible = false

@@ -51,7 +51,7 @@ func find_nearest_cell_to_player():
 			nearest_cell = cell_data
 			_global_datas.subscene_zone_index = nearest_cell.cell_name
 			
-	print(_global_datas.subscene_zone_index)
+	#print(_global_datas.subscene_zone_index)
 
 
 func get_number(_null):

@@ -196,11 +196,6 @@ signal _up_time_state
 var _time_state : game_state.time_state 
 
 
-# enchere
-
-signal _open_enchere(condition : bool)
-signal _next_enchere_element(element : element_data)
-signal _open_object(condition : bool, element : element_data)
 
 #signal update_element_amount
 #-----------------------------
