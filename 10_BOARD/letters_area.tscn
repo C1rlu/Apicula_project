@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://qgyjfq88teq8"]
+[gd_scene load_steps=32 format=3 uid="uid://qgyjfq88teq8"]
 
 [ext_resource type="Resource" uid="uid://ce1txchg547jd" path="res://15_GAME_RESSOURCE/04_Element/Letter_quest_element.tres" id="1_jq0el"]
 [ext_resource type="Resource" uid="uid://61umivwjjcjs" path="res://12_INVENTORY/Words_note/Birds_goLighthouse_note.tres" id="1_syumr"]
@@ -40,6 +40,17 @@ func Open_quest_responce(condition : bool):
 		#_global_datas._open_letter_quest.emit(true)
 
 
+"
+
+[sub_resource type="GDScript" id="GDScript_v52rt"]
+script/source = "extends Node
+
+
+@export var _active : MeshInstance3D
+
+
+func _ready():
+	_active.visible = true
 "
 
 [sub_resource type="GDScript" id="GDScript_4uwx0"]
@@ -228,6 +239,10 @@ info = ExtResource("2_tu4uh")
 On_Move = NodePath("On_Move")
 On_Over = NodePath("On_Over")
 
+[node name="Active" type="Node" parent="." node_paths=PackedStringArray("_active")]
+script = SubResource("GDScript_v52rt")
+_active = NodePath("../photo_light")
+
 [node name="Note" type="Node" parent="."]
 script = SubResource("GDScript_4uwx0")
 
@@ -304,6 +319,7 @@ surface_material_override/0 = SubResource("ShaderMaterial_jubt2")
 
 [node name="photo_light" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.0928963, 0, 0, 0, -2.61143e-09, 0.0418911, 0, -0.0597425, -1.83112e-09, 0.000475392, 0.00130028, 0)
+visible = false
 layers = 65536
 mesh = SubResource("QuadMesh_4umhe")
 skeleton = NodePath("")

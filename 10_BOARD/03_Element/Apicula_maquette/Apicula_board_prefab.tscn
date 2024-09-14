@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://cfs26bteyyjw2"]
+[gd_scene load_steps=38 format=3 uid="uid://cfs26bteyyjw2"]
 
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Movable_obj.gd" id="1_caukr"]
 [ext_resource type="Shader" uid="uid://8ll6evus625p" path="res://10_BOARD/00_BOOK/00_SHADER/Gradient_surface.tres" id="2_1jkpi"]
@@ -8,6 +8,17 @@
 [ext_resource type="Script" path="res://13_TOOLS_UI/Clock_montre/Selection_ini.gd" id="8_4cr5x"]
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/On_click_object.gd" id="9_o4mr1"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="10_6ku44"]
+
+[sub_resource type="GDScript" id="GDScript_n5qfv"]
+script/source = "extends Node
+
+
+@export var _active : MeshInstance3D
+
+
+func _ready():
+	_active.visible = true
+"
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4884j"]
 
@@ -277,6 +288,10 @@ element_setter = NodePath("Apicula_maquette/Area3D/Element")
 
 [node name="Apicula_maquette" type="Node3D" parent="."]
 
+[node name="Active" type="Node" parent="Apicula_maquette" node_paths=PackedStringArray("_active")]
+script = SubResource("GDScript_n5qfv")
+_active = NodePath("../fregate_all_msh2")
+
 [node name="fregate_all_msh" type="MeshInstance3D" parent="Apicula_maquette"]
 transform = Transform3D(0.0314273, 0, -8.3819e-09, 0, 0.0314273, 0, 8.3819e-09, 0, 0.0314273, -0.0129983, 0.0835726, 0.0056017)
 layers = 2
@@ -286,6 +301,7 @@ surface_material_override/0 = SubResource("ShaderMaterial_847qi")
 
 [node name="fregate_all_msh2" type="MeshInstance3D" parent="Apicula_maquette"]
 transform = Transform3D(0.0314273, 0, -8.3819e-09, 0, 0.0314273, 0, 8.3819e-09, 0, 0.0314273, -0.0129983, 0.0835726, 0.0056017)
+visible = false
 layers = 65536
 mesh = SubResource("ArrayMesh_pagl8")
 skeleton = NodePath("")
@@ -335,6 +351,7 @@ surface_material_override/0 = ExtResource("3_kodhd")
 
 [node name="Area3D" type="Area3D" parent="Apicula_maquette"]
 transform = Transform3D(0.0375899, 0, 0.000885201, 0, 0.0376003, 0, -0.000885201, 0, 0.0375899, -0.000760213, 0.0795341, 0.00198969)
+visible = false
 
 [node name="Element" type="Node" parent="Apicula_maquette/Area3D" node_paths=PackedStringArray("root", "On_View", "On_Over")]
 script = ExtResource("5_tl7cv")
@@ -363,6 +380,7 @@ shape = SubResource("BoxShape3D_yuede")
 
 [node name="Limit_zone" type="Area3D" parent="Apicula_maquette"]
 transform = Transform3D(0.0375899, 0, 0.000885201, 0, 0.0376003, 0, -0.000885201, 0, 0.0375899, -0.000760213, 0.0795341, 0.00198969)
+visible = false
 collision_layer = 4
 collision_mask = 4
 
