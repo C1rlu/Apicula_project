@@ -5,7 +5,7 @@
 [ext_resource type="Script" path="res://10_BOARD/02_BOARD_FOCUS_OBJECT/Control_view.gd" id="2_hd46p"]
 [ext_resource type="PackedScene" uid="uid://dh8xiu7ntj52y" path="res://10_BOARD/TourneDisque/Disque_prefab.blend" id="3_m8rxg"]
 [ext_resource type="Shader" uid="uid://8ll6evus625p" path="res://10_BOARD/00_BOOK/00_SHADER/Gradient_surface.tres" id="4_au500"]
-[ext_resource type="Script" path="res://10_BOARD/02_BOARD_FOCUS_OBJECT/Follow_cam.gd" id="4_v2om8"]
+[ext_resource type="Script" path="res://10_BOARD/02_BOARD_FOCUS_OBJECT/Move_lateral.gd" id="5_4oykj"]
 [ext_resource type="Material" uid="uid://cfi5jyq3utqd4" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_mat_04.tres" id="5_e7r2q"]
 [ext_resource type="PackedScene" uid="uid://b3i04ha2iqr4l" path="res://10_BOARD/Loupe/loupe_rg.tscn" id="5_oh31e"]
 [ext_resource type="Material" uid="uid://c0oms0qis0dcm" path="res://13_TOOLS_UI/Clock_montre/Clock_prefab_mat_02.tres" id="6_kwhg3"]
@@ -1033,17 +1033,19 @@ Loader = NodePath("../Viewport/Rotation_root/_loader")
 script = ExtResource("1_3ana1")
 viewports = [NodePath("../Viewport")]
 
-[node name="Control_view" type="Node" parent="." node_paths=PackedStringArray("Camera", "Render", "_Rotation_root")]
+[node name="Zoom_and_rotate" type="Node" parent="." node_paths=PackedStringArray("Camera", "Render", "_Rotation_root")]
 script = ExtResource("2_hd46p")
 Camera = NodePath("../Viewport/CAM")
 Render = NodePath("../Render")
 _Rotation_root = NodePath("../Viewport/Rotation_root")
 
-[node name="Follow_cam" type="Node" parent="." node_paths=PackedStringArray("_Camera", "_target", "Render")]
-script = ExtResource("4_v2om8")
-_Camera = NodePath("../Viewport/CAM")
-_target = NodePath("../Viewport/Rotation_root/Cam_target")
+[node name="Move_lateral" type="Node" parent="." node_paths=PackedStringArray("Render", "_all_cam_array")]
+script = ExtResource("5_4oykj")
 Render = NodePath("../Render")
+clamp_cam_x = Vector2(-0.07, 0.125)
+clamp_cam_z = Vector2(-0.085, 0.025)
+_all_cam_array = [NodePath("../Viewport/CAM")]
+_speed = 0.27
 
 [node name="Backdrop" type="ColorRect" parent="."]
 visible = false
@@ -1060,7 +1062,7 @@ transparent_bg = true
 size = Vector2i(1280, 720)
 
 [node name="CAM" type="Camera3D" parent="Viewport"]
-transform = Transform3D(1, 0, 0, 0, 0.936672, 0.350207, 0, -0.350207, 0.936672, 0, 0.387, 0.736)
+transform = Transform3D(1, 0, 0, 0, 0.936672, 0.350207, 0, -0.350207, 0.936672, 0, 0.375, 0.602)
 cull_mask = 2
 fov = 45.0
 
@@ -1183,7 +1185,6 @@ surface_material_override/1 = ExtResource("7_06ulq")
 transform = Transform3D(0.574163, 0, 0, 0, 0.0732982, 0, 0, 0, 0.474797, 0, -0.0364454, 0.00341993)
 layers = 2
 mesh = SubResource("BoxMesh_mtomw")
-skeleton = NodePath("../../../../..")
 surface_material_override/0 = SubResource("ShaderMaterial_4olam")
 
 [node name="Active" type="Node" parent="Viewport/Rotation_root/Table" node_paths=PackedStringArray("_active")]
@@ -1198,21 +1199,18 @@ _active = NodePath("../Table_border_light")
 transform = Transform3D(-4.09801e-08, 0, 1.17138, 0, 0.674922, 0, -1.13372, 0, -6.19185e-08, 0, 0.14382, 0.00181384)
 layers = 2
 mesh = SubResource("BoxMesh_1h8cf")
-skeleton = NodePath("../../../../../..")
 surface_material_override/0 = SubResource("ShaderMaterial_clq8s")
 
 [node name="Table_border2_light" type="MeshInstance3D" parent="Viewport/Rotation_root/Table/Table_border2"]
 visible = false
 layers = 65536
 mesh = SubResource("BoxMesh_3ioph")
-skeleton = NodePath("../../../../../../..")
 surface_material_override/0 = ExtResource("7_06ulq")
 
 [node name="Table_border" type="MeshInstance3D" parent="Viewport/Rotation_root/Table"]
 transform = Transform3D(1.02746, 0, 0, 0, 1, 0, 0, 0, 1.05288, 0, -0.159362, 0)
 layers = 2
 mesh = SubResource("BoxMesh_mtomw")
-skeleton = NodePath("../../../../../..")
 surface_material_override/0 = SubResource("ShaderMaterial_5acoq")
 
 [node name="Table_border_light" type="MeshInstance3D" parent="Viewport/Rotation_root/Table"]
@@ -1220,7 +1218,6 @@ transform = Transform3D(1.02746, 0, 0, 0, 1, 0, 0, 0, 1.05288, 0, -0.159362, 0)
 visible = false
 layers = 65536
 mesh = SubResource("BoxMesh_mtomw")
-skeleton = NodePath("../../../../../..")
 surface_material_override/0 = ExtResource("7_06ulq")
 
 [node name="Loupe_RG" parent="Viewport/Rotation_root" instance=ExtResource("5_oh31e")]

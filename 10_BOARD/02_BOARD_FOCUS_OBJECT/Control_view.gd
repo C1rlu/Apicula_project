@@ -21,14 +21,14 @@ func _input(event):
 		return
 	
 	if Input.is_action_pressed("move_right"):
-		#var _magnitude = Input.get_action_strength("move_right")
+		var _magnitude = Input.get_action_strength("move_right")
 		_on_rotate(-1)
 	if Input.is_action_pressed("move_left"):
-		#var _magnitude = Input.get_action_strength("move_left")
+		var _magnitude = Input.get_action_strength("move_left")
 		_on_rotate(1)
-	if Input.is_action_pressed("move_forward"):
+	if Input.is_action_pressed("Board_zoom_in"):
 		_zoom_in()
-	if Input.is_action_just_released("move_forward"):
+	if Input.is_action_pressed("Board_zoom_out"):
 		_zoom_out()
 
 		

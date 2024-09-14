@@ -15,8 +15,8 @@ func _ready():
 		Movable.select_render_state.connect(ini_selection)
 	if Movable_node:
 		Movable_node.select_render_state.connect(ini_selection)
-	if On_Over:
-		On_Over.On_Over.connect(set_on_over)
+	#if On_Over:
+		#On_Over.On_Over.connect(set_on_over)
 	
 	var utility = GameUtility.new()
 	list_of_selection_data.append_array(utility.archive_materials(root))

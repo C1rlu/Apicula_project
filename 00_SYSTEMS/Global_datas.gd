@@ -171,8 +171,7 @@ signal _check_object
 signal sending_bird
 var bird_is_waiting : bool = false
 
-signal _open_boad_Focus(condition : bool)
-signal _open_board_focus_2D(condition: bool, element: element_data)
+signal _open_boad_Focus(condition : bool,element : element_data)
 
 #update description on board
 signal focus_this_on_board(target : Vector3)

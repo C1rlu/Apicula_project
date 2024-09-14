@@ -26,7 +26,6 @@
 [ext_resource type="Resource" uid="uid://cyu7mo6v7aaij" path="res://15_GAME_RESSOURCE/03_BoardCam_state/Board_focus_data.tres" id="27_vvxtf"]
 [ext_resource type="Resource" uid="uid://cjwmwf4frvq3c" path="res://15_GAME_RESSOURCE/03_BoardCam_state/BoardZoom_focus_data.tres" id="28_njdgu"]
 [ext_resource type="PackedScene" uid="uid://h2wepwtms1pe" path="res://10_BOARD/02_BOARD_FOCUS_OBJECT/BOARD_FOCUS_OBJECT.tscn" id="29_7uqnr"]
-[ext_resource type="PackedScene" uid="uid://b7h3el7v78av0" path="res://10_BOARD/02_BOARD_FOCUS_OBJECT/2D/board_focus_2d.tscn" id="30_sslvj"]
 [ext_resource type="Resource" uid="uid://dlqqpo5rncbhs" path="res://15_GAME_RESSOURCE/03_BoardCam_state/Board_Element_focus_data.tres" id="35_wjkn0"]
 [ext_resource type="Script" path="res://10_BOARD/Camera_xray.gd" id="39_3fd2t"]
 [ext_resource type="Script" path="res://10_BOARD/Pad_target.gd" id="41_lixei"]
@@ -150,6 +149,9 @@ func set_shader_value(value):
 	fade_value = value
 "
 
+[sub_resource type="ViewportTexture" id="ViewportTexture_xijcx"]
+viewport_path = NodePath("3D_SCENE/SubViewport_light")
+
 [sub_resource type="ViewportTexture" id="ViewportTexture_gdqdh"]
 viewport_path = NodePath("3D_SCENE/SubViewport")
 
@@ -158,6 +160,7 @@ resource_local_to_scene = true
 shader = ExtResource("41_prh4x")
 shader_parameter/Opacity = 1.0
 shader_parameter/Albedo_viewport = SubResource("ViewportTexture_gdqdh")
+shader_parameter/Albedo_light = SubResource("ViewportTexture_xijcx")
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_56tra"]
 viewport_path = NodePath("3D_SCENE/SubViewport")
@@ -454,7 +457,4 @@ mesh = SubResource("PrismMesh_2j3nk")
 surface_material_override/0 = SubResource("StandardMaterial3D_yjabd")
 
 [node name="BoardFocus_3D" parent="." instance=ExtResource("29_7uqnr")]
-visible = false
-
-[node name="BoardFocus_2D" parent="." instance=ExtResource("30_sslvj")]
 visible = false

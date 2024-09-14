@@ -6,13 +6,13 @@ extends Node
 
 func _ready():
 	_global_datas._open_boad_Focus.connect(_open)
-	_global_datas._open_boad_Focus.emit(false, null)
+	#_global_datas._open_boad_Focus.emit(false, null)
 	
 func _open(condition : bool, board_element : element_data):
 	
 	
 	if condition:
-		_global_datas._add_back_call.emit(_back_call)
+		_global_datas._add_back_call.emit(back_call)
 		clear_and_instantiate(board_element)
 	
 	Render.visible = condition
@@ -49,5 +49,5 @@ func clear_and_instantiate(board_element : element_data):
 			Loader.add_child(instantiate)
 	
 			
-func _back_call():
+func back_call():
 	_global_datas._open_boad_Focus.emit(false, null)	
