@@ -195,8 +195,10 @@ signal update_money_amount(value : int)
 signal _up_time_state
 var _time_state : game_state.time_state 
 
+# scanner 
 
-
+signal show_on_scanner(condition : bool)
+var in_scanner_mode : bool = false
 #signal update_element_amount
 #-----------------------------
 # dialogue datas

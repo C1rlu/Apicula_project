@@ -1,0 +1,37 @@
+[gd_scene load_steps=6 format=3 uid="uid://dc2vcr5v43nkp"]
+
+[ext_resource type="Texture2D" uid="uid://38btbw60olcn" path="res://12_INVENTORY/Photo/IMG/Boat.png" id="1_3ihp4"]
+[ext_resource type="Script" path="res://14_ON_SCANNER_PHOTO/Photo_scanner_update.tres.gd" id="1_3iqsd"]
+[ext_resource type="Shader" uid="uid://upo0fuo5sqgd" path="res://05_SHADER_TEST/Board/Board_sh.tres" id="2_tah1q"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4jhqi"]
+render_priority = 0
+shader = ExtResource("2_tah1q")
+shader_parameter/Dark_color = Color(0.423529, 0.380392, 0, 1)
+shader_parameter/ColorParameter = Color(0.431373, 0.4, 0.309804, 1)
+shader_parameter/light_color = Color(0.580392, 0.545098, 0.439216, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_pbc5b"]
+material = SubResource("ShaderMaterial_4jhqi")
+
+[node name="Photo_scanner_prefab" type="Node3D"]
+transform = Transform3D(-0.913212, 0, 0.407486, 0, 1, 0, -0.407486, 0, -0.913212, 0, 0.0267844, 0)
+
+[node name="_update_texture" type="Node" parent="."]
+script = ExtResource("1_3iqsd")
+
+[node name="Photo" type="Node3D" parent="."]
+transform = Transform3D(1.65817, 0, 0, 0, 0.829085, -1.43602, 0, 1.43602, 0.829085, 0, 0, 0)
+
+[node name="photo_render" type="Sprite3D" parent="Photo"]
+transform = Transform3D(0.0116926, 0, 0, 0, 8.27593e-10, 0.0116926, 0, -0.0116926, 8.27593e-10, 0.000372954, 0.0040003, 0)
+layers = 128
+texture = ExtResource("1_3ihp4")
+region_enabled = true
+region_rect = Rect2(0, 0, 512, 512)
+
+[node name="render_base" type="MeshInstance3D" parent="Photo"]
+transform = Transform3D(0.0682586, 0, 0, 0, 0.00230959, 0, 0, 0, 0.0682586, 0, 0.00272226, 0)
+layers = 128
+mesh = SubResource("BoxMesh_pbc5b")
+skeleton = NodePath("../..")
