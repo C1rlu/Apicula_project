@@ -6,7 +6,8 @@ extends Node
 @export var Flame : MeshInstance3D
 var is_active : bool = false
 func _ready():
-	On_View.On_View.connect(active)
+	pass
+	#On_View.On_View.connect(active)
 	
 	
 func active():

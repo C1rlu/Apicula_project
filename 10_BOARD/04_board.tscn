@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=3 uid="uid://cein0q2eirkay"]
+[gd_scene load_steps=55 format=3 uid="uid://cein0q2eirkay"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_g3pi7"]
 [ext_resource type="Script" path="res://10_BOARD/Board_CamTarget.gd" id="1_janbq"]
@@ -59,6 +59,25 @@ func back_call():
 	_global_datas.open_inventory.emit(false)
 	_global_datas._clear_back_call.emit()
 "
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_602nr"]
+noise_type = 2
+frequency = 0.4774
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_akunh"]
+width = 1280
+height = 720
+seamless = true
+noise = SubResource("FastNoiseLite_602nr")
+
+[sub_resource type="Environment" id="Environment_4cpg6"]
+glow_enabled = true
+glow_intensity = 1.0
+glow_strength = 0.51
+glow_bloom = 1.0
+glow_blend_mode = 1
+glow_map_strength = 1.0
+glow_map = SubResource("NoiseTexture2D_akunh")
 
 [sub_resource type="GDScript" id="GDScript_1a2yk"]
 script/source = "extends Node
@@ -266,11 +285,42 @@ shading_mode = 0
 shading_mode = 0
 albedo_color = Color(1, 0.219608, 0.219608, 1)
 
+[sub_resource type="Shader" id="Shader_rr2ce"]
+code = "shader_type canvas_item;
+
+uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, filter_linear_mipmap;
+uniform float sharpen_strength : hint_range(0.0, 5.0) = 1.0;
+
+void fragment() {
+    vec2 texture_size = vec2(textureSize(SCREEN_TEXTURE, 0));  // Get the texture size as a vec2
+    vec2 texel_size = 1.0 / texture_size;  // Divide float by vec2 to get correct texel size
+    
+    // Sample neighboring pixels
+    vec4 color_center = texture(SCREEN_TEXTURE, SCREEN_UV);
+    vec4 color_top = texture(SCREEN_TEXTURE, SCREEN_UV + vec2(0.0, texel_size.y));
+    vec4 color_bottom = texture(SCREEN_TEXTURE, SCREEN_UV - vec2(0.0, texel_size.y));
+    vec4 color_left = texture(SCREEN_TEXTURE, SCREEN_UV - vec2(texel_size.x, 0.0));
+    vec4 color_right = texture(SCREEN_TEXTURE, SCREEN_UV + vec2(texel_size.x, 0.0));
+    
+    // Sharpen convolution kernel
+    vec4 sharpened_color = color_center * (1.0 + 4.0 * sharpen_strength);
+    sharpened_color -= (color_top + color_bottom + color_left + color_right) * sharpen_strength;
+
+    COLOR = sharpened_color;
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qungl"]
+shader = SubResource("Shader_rr2ce")
+shader_parameter/sharpen_strength = 0.0
+
 [node name="04_BOARD" type="Node"]
 script = SubResource("GDScript_w13ry")
 Board_tool = ExtResource("1_qgjbu")
 debug_board = false
 metadata/_edit_horizontal_guides_ = [-58.0]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_4cpg6")
 
 [node name="Active_3D_scene" type="Node" parent="." node_paths=PackedStringArray("viewports")]
 script = ExtResource("1_n6a4y")
@@ -392,7 +442,6 @@ far = 10.0
 
 [node name="SubViewport_light" type="SubViewport" parent="3D_SCENE"]
 transparent_bg = true
-scaling_3d_scale = 0.7
 canvas_item_default_texture_filter = 0
 size = Vector2i(1920, 1080)
 
@@ -458,3 +507,11 @@ surface_material_override/0 = SubResource("StandardMaterial3D_yjabd")
 
 [node name="BoardFocus_3D" parent="." instance=ExtResource("29_7uqnr")]
 visible = false
+
+[node name="SHARP_POST_PROCESS" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_qungl")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

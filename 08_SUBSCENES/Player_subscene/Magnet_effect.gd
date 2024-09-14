@@ -21,7 +21,7 @@ func active_check(condition : bool):
 	else:
 		timer_on.stop()	
 		
-	magnet_fx.emitting = condition
+	#magnet_fx.emitting = condition
 
 func active_off(condition : bool):
 	
