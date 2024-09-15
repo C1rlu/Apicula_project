@@ -1,4 +1,4 @@
-[gd_scene load_steps=100 format=3 uid="uid://g7u8o55jrnyy"]
+[gd_scene load_steps=98 format=3 uid="uid://g7u8o55jrnyy"]
 
 [ext_resource type="Material" uid="uid://cf6ce8cjrx4es" path="res://05_SHADER/Subscene_materials/Subscene_basic_mat.tres" id="1_n1vw4"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Player_sub_behaviour.gd" id="1_o2v73"]
@@ -11,9 +11,7 @@
 [ext_resource type="ArrayMesh" uid="uid://cm4cl6n84qj86" path="res://04_SCENE_MAIN_MAP/00_PLAYER/Boat/Boat_smoke/smoke_msh.obj" id="4_6vpi7"]
 [ext_resource type="Resource" uid="uid://d11cl4f25dgwg" path="res://08_SUBSCENES/Tools/Main_tool/Flash_light.tres" id="5_obmh6"]
 [ext_resource type="Resource" uid="uid://380xcgsxw62f" path="res://08_SUBSCENES/Tools/Main_tool/magnet_tool.tres" id="7_un21c"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/ELEMENT_COLLECT.gd" id="7_xp2rd"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/active_tool_scene.gd" id="8_8bfcd"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Show_playerInventory.gd" id="8_e1lfi"]
 [ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER/Subscene_materials/Subscene_shine_elements_mat.tres" id="8_wvhjt"]
 [ext_resource type="Resource" uid="uid://vv3dws7dmhtd" path="res://08_SUBSCENES/Tools/Main_tool/Scanner.tres" id="9_cp5em"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Magnet_effect.gd" id="9_wphos"]
@@ -825,19 +823,12 @@ hit_node = NodePath("../Render_mesh/Debris_particule_Hit")
 wait_time = 0.5
 one_shot = true
 
-[node name="ELEMENT_COLLECT" type="Node" parent="." node_paths=PackedStringArray("collector_area")]
-script = ExtResource("7_xp2rd")
-collector_area = NodePath("../ZoneCollide")
-
-[node name="Show_playerInventory" type="Node" parent="ELEMENT_COLLECT" node_paths=PackedStringArray("all_debris_on_player")]
-script = ExtResource("8_e1lfi")
-all_debris_on_player = [NodePath("../../Render_mesh/Attache_node/Debris_OnPlayer"), NodePath("../../Render_mesh/Attache_node/Debris_OnPlayer2"), NodePath("../../Render_mesh/Attache_node/Debris_OnPlayer3"), NodePath("../../Render_mesh/Attache_node/Debris_OnPlayer4"), NodePath("../../Render_mesh/Attache_node/Debris_OnPlayer5"), NodePath("../../Render_mesh/Attache_node/Debris_OnPlayer6"), NodePath("../../Render_mesh/Attache_node/Debris_OnPlayer7"), NodePath("../../Render_mesh/Attache_node/Debris_OnPlayer8"), NodePath("../../Render_mesh/Attache_node/Debris_OnPlayer9"), NodePath("../../Render_mesh/Attache_node/Debris_OnPlayer10")]
-
-[node name="Magnet_effect" type="Node" parent="." node_paths=PackedStringArray("magnet_fx", "Magnet_Area")]
+[node name="Magnet_effect" type="Node" parent="." node_paths=PackedStringArray("magnet_fx", "collector_collider", "Magnet_Area")]
 script = ExtResource("9_wphos")
 manget_tool = ExtResource("7_un21c")
 manget_remove_tool = ExtResource("14_t3rck")
 magnet_fx = NodePath("../VFX_MAGNET_")
+collector_collider = NodePath("../Magnet_zone/CollisionShape3D")
 Magnet_Area = NodePath("../Magnet_zone")
 
 [node name="Timer_on" type="Timer" parent="Magnet_effect"]
@@ -1178,6 +1169,7 @@ collision_mask = 4
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Magnet_zone"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.135905, 0)
 shape = SubResource("SphereShape3D_47iq4")
+disabled = true
 
 [node name="Light" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.348655, 0.114098)

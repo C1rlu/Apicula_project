@@ -6,7 +6,7 @@ var current_amount : int = 0
 
 func _ready():
 	pass
-	#_global_datas.add_collect_element.connect(update_amount)
+	#_subscene_datas._add_collect_element.connect(update_amount)
 	
 func update_amount(off):
 	

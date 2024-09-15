@@ -44,14 +44,13 @@ func _input(event):
 	if event.is_action_released("Active_tool"):
 		_global_datas._selected_tool.tool_active_signal.emit(false)
 		
-	if event.is_action_pressed("Remove_magnet"):
-		magnet_remove_tool.tool_active_signal.emit(true)
+	#if event.is_action_pressed("Remove_magnet"):
+		#magnet_remove_tool.tool_active_signal.emit(true)
 
 	
-	
-	#if event.is_action_pressed("Flash"):
-		#flash_tool.tool_active_signal.emit(true)
-		#
+	if event.is_action_pressed("Flash"):
+		flash_tool.tool_active_signal.emit(true)
+		
 	#
 	#if event.is_action_pressed("go_faster"):
 		#go_faster.tool_active_signal.emit(true)
