@@ -1,34 +1,38 @@
 extends Node
 
-@onready var progress_bar : ProgressBar = $"../ProgressBar"
+@export var progress_bar_text : TextureProgressBar
 
-
-
+var time
 func _ready():
-	_subscene_datas._update_depth_ui.connect(update_bar)
-	#_global_datas._end_ini_subscene.connect(show)
-	#_global_datas._backFrom_subscene.connect(hide)
+
+	_global_datas._end_ini_subscene.connect(show)
+	_global_datas._backFrom_subscene.connect(hide)
 	
-	progress_bar.value_changed.connect(check_depth_bar)
-	progress_bar.visible = false
+	progress_bar_text.visible = false
 
 
 func show():
-	progress_bar.visible = true
+	progress_bar_text.visible = true
 	
+	if time:
+		time.kill()
+	time = create_tween()
+	
+	time.tween_method(_time,100.0,0.0,60)
+	time.connect("finished",done)	
 func hide():
-	progress_bar.visible = false
+	progress_bar_text.visible = false
 	
-		
-func update_bar():
+	if time:
+		time.kill()	
+
+
+func done():
+	_global_datas._go_Mainscene.emit()
+	_global_datas._backFrom_subscene.emit()	
 	
-	progress_bar.value = _subscene_datas._current_player_depth
+func _time(_value : float):
 	
-	
-func check_depth_bar(value : float):
-	
-	var pourcentage = ( value / progress_bar.max_value ) * 100
-	if pourcentage >= 100:
-		_subscene_datas._kill_player.emit()
+	progress_bar_text.value = _value
 
 

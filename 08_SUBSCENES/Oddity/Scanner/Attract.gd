@@ -23,8 +23,9 @@ func _attract(delta,_position):
 	
 	var direction = (target_dir  - rg.global_position).normalized()	
 	rg.apply_central_force(direction * strenght * delta)
-		
-	Fade_OnScanner._fade_out(color_attracted)
+	
+	if Fade_OnScanner:	
+		Fade_OnScanner._fade_out(color_attracted)
 
 		
 func remove_from_list():

@@ -48,8 +48,8 @@ func _input(event):
 		#magnet_remove_tool.tool_active_signal.emit(true)
 
 	
-	if event.is_action_pressed("Flash"):
-		flash_tool.tool_active_signal.emit(true)
+	#if event.is_action_pressed("Flash"):
+		#flash_tool.tool_active_signal.emit(true)
 		
 	#
 	#if event.is_action_pressed("go_faster"):
