@@ -5,3 +5,4 @@ func get_npc():
 
 	return root.Npc_data
 
+

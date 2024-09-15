@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=3 uid="uid://bwmu5iwushsl5"]
+[gd_scene load_steps=54 format=3 uid="uid://bwmu5iwushsl5"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/Fade_flash_effect.gd" id="1_1dj2k"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/INSTANCE_NOTE.gd" id="1_fcb2u"]
@@ -87,29 +87,6 @@ func active_buton(condition):
 
 	
 
-
-"
-
-[sub_resource type="GDScript" id="GDScript_kbgwn"]
-script/source = "extends Node
-@onready var button = $Button
-
-func _ready():
-	#_global_datas.player_in_diveZone.connect(active_buton)
-	#_global_datas._go_Subscene.connect(disable)
-
-	pass
-func disable():
-	button.visible = false	
-		
-func active_buton(condition):
-
-
-	button.visible = condition
-
-
-
-	
 
 "
 
@@ -492,55 +469,6 @@ text = "..."
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Button_active_Dive" type="Node" parent="."]
-script = SubResource("GDScript_kbgwn")
-
-[node name="Button" type="Control" parent="Button_active_Dive"]
-visible = false
-layout_mode = 3
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 25.0001
-offset_top = -43.0
-offset_right = 25.0001
-offset_bottom = -43.0
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(0.276, 0.276)
-mouse_filter = 2
-
-[node name="ColorRect2" type="ColorRect" parent="Button_active_Dive/Button"]
-layout_mode = 0
-offset_left = -59.4483
-offset_top = 14.862
-offset_right = 90.5537
-offset_bottom = 89.367
-rotation = 1.17948
-scale = Vector2(0.577567, 0.231991)
-color = Color(0.811765, 0.654902, 0.501961, 1)
-
-[node name="ColorRect3" type="ColorRect" parent="Button_active_Dive/Button"]
-layout_mode = 0
-offset_left = 6.36911
-offset_top = 23.3546
-offset_right = 156.371
-offset_bottom = 97.8596
-rotation = 1.942
-scale = Vector2(0.577567, 0.231991)
-color = Color(0.811765, 0.654902, 0.501961, 1)
-
-[node name="ColorRect" type="ColorRect" parent="Button_active_Dive/Button"]
-layout_mode = 0
-offset_left = -17.0
-offset_top = -36.0
-offset_right = 80.0
-offset_bottom = -5.0
-rotation = 1.57079
-color = Color(0.811765, 0.654902, 0.501961, 1)
-
 [node name="Description" type="Node2D" parent="."]
 position = Vector2(989, 752)
 
@@ -629,12 +557,6 @@ texture = ExtResource("4_c4v0f")
 expand_mode = 1
 stretch_mode = 4
 
-[node name="Control" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
 [node name="Shop" parent="." instance=ExtResource("16_bicox")]
 
 [node name="Subscene_oxy_bar" parent="." instance=ExtResource("18_fdcig")]
@@ -684,6 +606,7 @@ texture_progress = ExtResource("17_d51lu")
 tint_progress = Color(0.721569, 0.580392, 0.407843, 1)
 
 [node name="Map_button" type="Control" parent="Main_Scene_U"]
+visible = false
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -756,6 +679,7 @@ texture = ExtResource("22_txmj8")
 expand_mode = 1
 
 [node name="Board_Button" type="Control" parent="Main_Scene_U"]
+visible = false
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -785,6 +709,7 @@ scale = Vector2(0.159741, 0.159741)
 texture = ExtResource("24_nqwp3")
 
 [node name="Order_button" type="Control" parent="Main_Scene_U"]
+visible = false
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -814,19 +739,24 @@ texture = ExtResource("25_mdoi3")
 
 [node name="TimebarUi" parent="Main_Scene_U" instance=ExtResource("31_uhtuk")]
 layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 74.0
+offset_top = 29.0
+offset_right = 74.0
+offset_bottom = 29.0
+grow_horizontal = 2
+
+[node name="Money_bar" parent="Main_Scene_U" instance=ExtResource("15_jqiih")]
+layout_mode = 1
+offset_left = -222.0
+offset_top = 3.0
+offset_right = -10.0
+offset_bottom = 64.0
 
 [node name="2D_Map" parent="." instance=ExtResource("17_c8quy")]
 visible = false
-
-[node name="Money_bar" parent="." instance=ExtResource("15_jqiih")]
-anchors_preset = 0
-anchor_left = 0.0
-anchor_right = 0.0
-offset_left = 1066.0
-offset_top = 2.0
-offset_right = 1278.0
-offset_bottom = 63.0
-grow_horizontal = 1
 
 [node name="QuestSelector" parent="." instance=ExtResource("30_6k6xu")]
 visible = false

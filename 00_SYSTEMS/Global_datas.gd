@@ -48,7 +48,7 @@ signal _active_go_subscene_button(condition : bool)
 signal _active_world_grid(condition : bool)
 signal _teleport_boat_at_pos(position : Vector3)
 signal _boat_inside_zone(condition : bool)
-
+signal _disable_bird_meet_for_today(condition : bool)
 
 #color signal 
 signal go_normal_color
@@ -220,7 +220,7 @@ func _ready():
 	bird_is_waiting = false
 	_check_objectZone_Area = null
 	_check_objectZone_col = null
-	_time_state = game_state.time_state.start
+	_time_state = game_state.time_state.morning
 	
 # TEST BOARD NEWS PROTO SCENE
 signal select_movable_object(object)

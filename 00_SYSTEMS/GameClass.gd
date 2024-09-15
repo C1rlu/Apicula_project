@@ -28,7 +28,6 @@ enum camera_state {
 
 enum time_state {
 	
-	start,
 	morning,
 	midday,
 	afternoon,
