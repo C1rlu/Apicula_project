@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://djffqqvhx1is"]
+[gd_scene load_steps=37 format=3 uid="uid://djffqqvhx1is"]
 
 [ext_resource type="Texture2D" uid="uid://n0xc42s1sg48" path="res://10_BOARD/Candle/Candle_set/Candle_gradient.png" id="1_dmgmt"]
 [ext_resource type="Material" uid="uid://yjoyk6fvrm6q" path="res://10_BOARD/00_BOOK/00_SHADER/No_light_surface_mat.tres" id="2_u3tfa"]
@@ -329,6 +329,10 @@ shader = SubResource("VisualShader_ya08m")
 shader_parameter/ColorParameter = Color(0.912322, 0.74399, 0.433118, 1)
 shader_parameter/Fresnel_value = 4.795
 
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_k787n"]
+height = 0.0962286
+radius = 0.0400508
+
 [node name="CandlePrefab03" type="Node3D"]
 
 [node name="Active" type="Node" parent="." node_paths=PackedStringArray("_active")]
@@ -375,7 +379,7 @@ Flame = NodePath("../Flame")
 [node name="Movable_object" type="Node" parent="." node_paths=PackedStringArray("collider", "limit_zone", "Position_zone", "move_root", "rotation_root", "On_Move")]
 script = ExtResource("6_xilk2")
 collider = NodePath("../Area3D/CollisionShape3D")
-limit_zone = NodePath("../Limit_zone")
+limit_zone = NodePath("")
 Position_zone = NodePath("../Area3D/CollisionShape3D")
 move_root = NodePath("..")
 rotation_root = NodePath("..")
@@ -403,21 +407,21 @@ script = ExtResource("9_y8xbq")
 transform = Transform3D(0.0414096, 0, 1.54263e-10, 0, 0.0414096, 0, -1.54263e-10, 0, 0.0414096, 0, 0, 0)
 shape = SubResource("ConvexPolygonShape3D_7wmnv")
 
+[node name="Flame" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.0354224, 0, 0, 0, 0.0354224, 0, 0, 0, 0.0354224, 0, 0.140167, 0)
+layers = 65538
+mesh = SubResource("SphereMesh_bo7e3")
+surface_material_override/0 = SubResource("ShaderMaterial_7mvtv")
+
 [node name="Limit_zone" type="Area3D" parent="."]
-transform = Transform3D(0.0375899, 0, 0.000885201, 0, 0.0376003, 0, -0.000885201, 0, 0.0375899, 0, 0, 0)
+transform = Transform3D(0.0375899, 0, 0.000885201, 0, 0.0376003, 0, -0.000885201, 0, 0.0375899, -0.000760213, 0.0795341, 0.00198969)
 collision_layer = 4
 collision_mask = 4
 
 [node name="Limit" type="Node" parent="Limit_zone"]
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="Limit_zone"]
-transform = Transform3D(1.101, 0, -0.0259274, 0, 1.10131, 0, 0.0259274, 0, 1.101, 0, 0, 0)
-shape = SubResource("ConvexPolygonShape3D_7wmnv")
-
-[node name="Flame" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.0354224, 0, 0, 0, 0.0354224, 0, 0, 0, 0.0354224, 0, 0.140167, 0)
-layers = 65538
-mesh = SubResource("SphereMesh_bo7e3")
-surface_material_override/0 = SubResource("ShaderMaterial_7mvtv")
+transform = Transform3D(34.7275, 0, 5.96046e-08, 0, 34.7275, 0, -5.96046e-08, 0, 34.7275, -0.0321628, -0.441878, -0.0548687)
+shape = SubResource("CylinderShape3D_k787n")
 
 [editable path="Candle_03"]

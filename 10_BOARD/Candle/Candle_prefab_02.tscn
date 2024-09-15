@@ -110,8 +110,9 @@ signal On_View
 
 "
 
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_6cgyk"]
-points = PackedVector3Array(0.00497574, 0.392402, 0.0980604, 0.0245598, 0.398805, 0.0783654, 0.074713, 0.0126664, 0.0634085, 0.056583, 0.364591, -0.0775426, -0.0958756, 0.360631, 0.012361, -0.0718825, 0.0113944, 0.0702361, 0.0623762, 0.0114712, -0.0767986, 0.0956342, 0.377996, -0.0129432, -0.0142086, 0.367987, -0.0951096, -0.0220924, -0.00342935, -0.109355, -0.0083964, 0.435529, 0.00036368, -0.0718228, 0.362966, -0.0703802, -0.0957172, 0.0151566, -0.012743, 0.0702787, 0.392317, 0.0718649, 0.0113009, 0.0104406, 0.096315, -0.0718825, 0.382323, 0.0702361, 0.0932143, 0.0138896, 0.0187804, -0.0083964, 0.0171522, -0.116229, 0.0930907, 0.0141533, -0.0190786, 0.0746251, 0.355685, -0.0636205, -0.0142452, 0.0128818, 0.0950944, -0.0925274, 0.372029, -0.0129634, 0.0932143, 0.373963, 0.0187804, -0.0958756, 0.0148188, 0.012361, 0.0171528, 0.365894, -0.093889, -0.0718228, 0.0115682, -0.0703802, 0.00529958, 0.435529, 0.00036368, 0.0615163, 0.0142234, 0.0754975, -0.0142452, 0.381114, 0.0950944, 0.0746251, 0.0129007, -0.0636205, -0.0957172, 0.360388, -0.012743, -0.0083964, 0.435529, 0.0140704)
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_x2sir"]
+height = 0.153706
+radius = 0.0400508
 
 [sub_resource type="SphereMesh" id="SphereMesh_uush8"]
 
@@ -373,9 +374,9 @@ Flame = NodePath("../Flame")
 
 [node name="Movable_object" type="Node" parent="." node_paths=PackedStringArray("collider", "limit_zone", "Position_zone", "move_root", "rotation_root", "On_Move")]
 script = ExtResource("6_1ebxr")
-collider = NodePath("../Area3D/CollisionShape3D")
+collider = NodePath("../Area3D/CollisionShape3D2")
 limit_zone = NodePath("../Limit_zone")
-Position_zone = NodePath("../Area3D/CollisionShape3D")
+Position_zone = NodePath("../Area3D/CollisionShape3D2")
 move_root = NodePath("..")
 rotation_root = NodePath("..")
 On_Move = NodePath("../Area3D/On_Move")
@@ -398,25 +399,25 @@ script = SubResource("GDScript_g7fel")
 [node name="On_Over" type="Node" parent="Area3D"]
 script = ExtResource("9_24fkq")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
-transform = Transform3D(0.401, 0, 1.49384e-09, 0, 0.401, 0, -1.49384e-09, 0, 0.401, 0, 0, 0)
-shape = SubResource("ConvexPolygonShape3D_6cgyk")
-
-[node name="Limit_zone" type="Area3D" parent="."]
-transform = Transform3D(0.999723, 0, 0.0235424, 0, 1, 0, -0.0235424, 0, 0.999723, 0, 0, 0)
-collision_layer = 4
-collision_mask = 4
-
-[node name="Limit" type="Node" parent="Limit_zone"]
-
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="Limit_zone"]
-transform = Transform3D(0.400889, 0, -0.00944049, 0, 0.401, 0, 0.00944049, 0, 0.400889, 0, 0, 0)
-shape = SubResource("ConvexPolygonShape3D_6cgyk")
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 5.58794e-09, 0, 1, 0, -5.58794e-09, 0, 1, 5.58794e-08, 0.0766267, -3.19189e-16)
+shape = SubResource("CylinderShape3D_x2sir")
 
 [node name="Flame" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.0344967, 0, 0, 0, 0.0344967, 0, 0, 0, 0.0344967, 0, 0.18182, 0)
 layers = 65538
 mesh = SubResource("SphereMesh_uush8")
 surface_material_override/0 = SubResource("ShaderMaterial_p744k")
+
+[node name="Limit_zone" type="Area3D" parent="."]
+transform = Transform3D(0.0375899, 0, 0.000885201, 0, 0.0376003, 0, -0.000885201, 0, 0.0375899, -0.000760213, 0.0795341, 0.00198969)
+collision_layer = 4
+collision_mask = 4
+
+[node name="Limit" type="Node" parent="Limit_zone"]
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Limit_zone"]
+transform = Transform3D(26.4472, 0, 2.38419e-07, 0, 26.4472, 0, -2.38419e-07, 0, 26.4472, 5.58794e-08, -0.0710049, 0)
+shape = SubResource("CylinderShape3D_x2sir")
 
 [editable path="Candle_02"]
