@@ -9,10 +9,12 @@
 [sub_resource type="GDScript" id="GDScript_8yxvc"]
 script/source = "extends Node
 
-@export var _active : MeshInstance3D
+@export var _active : Array[MeshInstance3D]
 
 func _ready():
-	_active.visible = true
+	
+	for e in _active:
+		e.visible = true
 "
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h7i6m"]
@@ -62,18 +64,19 @@ data = PackedVector3Array(-2.4975, 2.7815, -0.3724, -2.5241, 2.8227, -0.3498, -2
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bdb7w"]
 render_priority = 1
 shader = ExtResource("5_ki868")
-shader_parameter/Color = Color(0.447059, 0.690196, 0.686275, 1)
-shader_parameter/Dither_strenght = 0.52
+shader_parameter/Color = Color(0.623529, 0.835294, 0.831373, 1)
+shader_parameter/Dither_strenght = 0.37
 shader_parameter/Gradient_base = ExtResource("3_t88to")
 
 [node name="Iceberg_set_01" type="Node3D"]
 
 [node name="Active" type="Node" parent="." node_paths=PackedStringArray("_active")]
 script = SubResource("GDScript_8yxvc")
-_active = NodePath("../IceBerg_03_Light")
+_active = [NodePath("../IceBerg_03_mask"), NodePath("../IceBerg_03_Light")]
 
 [node name="IceBerg_03_mask" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0136042, -0.0133419, -0.00663853)
+visible = false
 layers = 1032
 mesh = SubResource("ArrayMesh_7nll0")
 skeleton = NodePath("")
@@ -81,6 +84,7 @@ surface_material_override/0 = ExtResource("2_k7vpw")
 
 [node name="IceBerg_03_Light" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0136042, -0.0133419, -0.00663853)
+visible = false
 layers = 32768
 mesh = SubResource("ArrayMesh_7nll0")
 skeleton = NodePath("")

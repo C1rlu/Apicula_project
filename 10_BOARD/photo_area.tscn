@@ -1,8 +1,9 @@
-[gd_scene load_steps=70 format=3 uid="uid://uwg2qc3svu11"]
+[gd_scene load_steps=71 format=3 uid="uid://uwg2qc3svu11"]
 
 [ext_resource type="Script" path="res://10_BOARD/Photo_element.gd" id="1_0a8jl"]
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Movable_obj.gd" id="4_4uyoa"]
 [ext_resource type="Texture2D" uid="uid://38btbw60olcn" path="res://12_INVENTORY/Photo/IMG/Boat.png" id="4_wljme"]
+[ext_resource type="Material" uid="uid://yjoyk6fvrm6q" path="res://10_BOARD/00_BOOK/00_SHADER/No_light_surface_mat.tres" id="5_b668c"]
 [ext_resource type="Script" path="res://10_BOARD/Element.gd" id="6_6piwc"]
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/On_click_object.gd" id="6_46a1v"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/Clock_montre/Selection_ini.gd" id="6_wkbq8"]
@@ -10,6 +11,17 @@
 [ext_resource type="Script" path="res://10_BOARD/On_View.tres.gd" id="8_2nycl"]
 [ext_resource type="Material" uid="uid://b08craofxipcu" path="res://00_SCENE/Board_control_object_test/Material/OnOver_object.tres" id="8_27eg6"]
 [ext_resource type="Shader" uid="uid://ceec4w3amlx7t" path="res://10_BOARD/photo_area_legend_sh.tres" id="11_h5w6g"]
+
+[sub_resource type="GDScript" id="GDScript_84x1f"]
+script/source = "extends Node
+
+
+@export var _active : MeshInstance3D
+
+
+func _ready():
+	_active.visible = true
+"
 
 [sub_resource type="GDScript" id="GDScript_32kbr"]
 script/source = "@tool
@@ -647,10 +659,7 @@ render_priority = 0
 shader = SubResource("VisualShader_tl2py")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_nnxyu"]
-size = Vector3(0.0849429, 0.0129531, 0.0916202)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_nnquu"]
-size = Vector3(0.0871338, 0.00541992, 0.1)
+size = Vector3(0.0849429, 0.00940624, 0.0916202)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_1d5hp"]
 
@@ -669,10 +678,11 @@ _On_View = NodePath("Click/On_View")
 on_over_node = NodePath("All_over")
 element_setter = NodePath("Click/Element")
 
-[node name="Movable_object" type="Node" parent="." node_paths=PackedStringArray("collider", "Position_zone", "move_root", "rotation_root", "On_Move", "element_setter")]
+[node name="Movable_object" type="Node" parent="." node_paths=PackedStringArray("collider", "limit_zone", "Position_zone", "move_root", "rotation_root", "On_Move", "element_setter")]
 script = ExtResource("4_4uyoa")
 collider = NodePath("../Click/CollisionShape3D")
-Position_zone = NodePath("../Position_zone/CollisionShape3D")
+limit_zone = NodePath("../Limit")
+Position_zone = NodePath("")
 move_root = NodePath("..")
 rotation_root = NodePath("..")
 On_Move = NodePath("../Click/On_Move")
@@ -684,6 +694,10 @@ script = ExtResource("6_wkbq8")
 root = NodePath("..")
 Movable_node = NodePath("../Movable_object")
 On_Over = NodePath("../Click/On_Over")
+
+[node name="Active" type="Node" parent="." node_paths=PackedStringArray("_active")]
+script = SubResource("GDScript_84x1f")
+_active = NodePath("../Photo/light")
 
 [node name="Photo" type="Node3D" parent="."]
 transform = Transform3D(1.30166, 0, 0, 0, 1.30166, 0, 0, 0, 1.30166, 1.89189e-07, -3.95626e-06, -6.48852e-06)
@@ -697,6 +711,14 @@ layers = 2
 mesh = SubResource("QuadMesh_1i4du")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("ShaderMaterial_trilb")
+
+[node name="light" type="MeshInstance3D" parent="Photo"]
+transform = Transform3D(0.08478, 0, 0, 0, 0.00135893, 0, 0, 0, 0.0810078, 0, 0.00166521, 0.00384115)
+visible = false
+layers = 65536
+mesh = SubResource("BoxMesh_8e2mh")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("5_b668c")
 
 [node name="render_base" type="MeshInstance3D" parent="Photo"]
 transform = Transform3D(0.08478, 0, 0, 0, 0.00135893, 0, 0, 0, 0.0810078, 0, 0.00166521, 0.00384115)
@@ -732,7 +754,7 @@ script = ExtResource("8_2nycl")
 script = ExtResource("7_vd1wc")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Click"]
-transform = Transform3D(0.999997, 0, 4.14439e-08, 0, 1, 0, -4.14439e-08, 0, 0.999997, 0.0014558, 0, 0.0114536)
+transform = Transform3D(0.999997, 0, 4.23752e-08, 0, 1, 0, -4.23752e-08, 0, 0.999997, 0.0014558, 0.00177343, 0.0114536)
 shape = SubResource("BoxShape3D_nnxyu")
 
 [node name="Limit" type="Area3D" parent="."]
@@ -743,18 +765,8 @@ collision_mask = 4
 [node name="Limit" type="Node" parent="Limit"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Limit"]
-transform = Transform3D(0.999997, 0, 4.14439e-08, 0, 1, 0, -4.14439e-08, 0, 0.999997, 0.0014558, 0, 0.0114536)
+transform = Transform3D(0.999997, 0, 4.23752e-08, 0, 1, 0, -4.23752e-08, 0, 0.999997, 0.0014558, 0.00182901, 0.0114536)
 shape = SubResource("BoxShape3D_nnxyu")
-
-[node name="Position_zone" type="Area3D" parent="."]
-transform = Transform3D(1.30166, 0, 0, 0, 1.30166, 0, 0, 0, 1.30166, 1.89189e-07, -3.95626e-06, -6.48852e-06)
-
-[node name="Position_zone" type="Node" parent="Position_zone"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Position_zone"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00157471, 0.00124512, 0)
-shape = SubResource("BoxShape3D_nnquu")
-disabled = true
 
 [node name="SubViewport" type="SubViewport" parent="."]
 disable_3d = true
