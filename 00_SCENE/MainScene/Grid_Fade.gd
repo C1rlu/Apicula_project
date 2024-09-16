@@ -6,7 +6,7 @@ var fade
 func _ready():
 	main_mat = Main_render.get_material()	
 
-	_global_datas._active_sonar.connect(fade_grid)
+	#_global_datas._active_sonar.connect(fade_grid)
 
 
 func fade_grid(_null):
