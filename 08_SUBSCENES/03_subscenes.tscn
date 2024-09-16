@@ -21,10 +21,10 @@
 [ext_resource type="Script" path="res://08_SUBSCENES/Clock_sonar_VFX.gd" id="14_xtaeu"]
 [ext_resource type="Material" uid="uid://b1iqs8p4it3ni" path="res://05_SHADER/Full_screen/Subscene_screen/Scanner_subscene_dither.tres" id="15_6os4y"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/ELEMENT_COLLECT.gd" id="16_4hiyp"]
-[ext_resource type="PackedScene" uid="uid://4r5x2mp8a1a0" path="res://04_SCENE_MAIN_MAP/00_PLAYER/Boat/Player_Boat_02.blend" id="21_42nxe"]
 [ext_resource type="Script" path="res://03_CAMERA/Active_scene_viewports.gd" id="21_jai7k"]
 [ext_resource type="Material" uid="uid://cdnmf431kgh7" path="res://05_SHADER/Subscene_materials/Subscene_basic_mat_far.tres" id="22_crc4c"]
 [ext_resource type="Material" uid="uid://bxf2r8qu2qvay" path="res://05_SHADER/Subscene_materials/Subscene_basic_rock.tres" id="23_5ld2y"]
+[ext_resource type="PackedScene" uid="uid://dfonf8dcbrwpw" path="res://04_SCENE_MAIN_MAP/00_PLAYER/Boat/Player_Boat_render.blend" id="23_bdju6"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Boat_col.gd" id="25_jbuu3"]
 [ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER/Subscene_materials/Subscene_shine_elements_mat.tres" id="27_nfh36"]
 
@@ -633,33 +633,28 @@ shape = SubResource("BoxShape3D_qfjre")
 [node name="Boat_base" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.306108, 0, 0)
 
-[node name="Player_Boat_02" parent="Boat_base" instance=ExtResource("21_42nxe")]
-transform = Transform3D(1.49637e-07, 0, 1.1411, 0, 1.1411, 0, -1.1411, 0, 1.49637e-07, -2.21762, 0.470453, 0)
+[node name="Player_Boat_render" parent="Boat_base" instance=ExtResource("23_bdju6")]
+transform = Transform3D(-4.98791e-08, 0, 1.1411, 0, 1.1411, 0, -1.1411, 0, -4.98791e-08, -2.21762, 0.470453, 0)
 
-[node name="Msh_boat_top" parent="Boat_base/Player_Boat_02" index="0"]
+[node name="Msh_boat_water" parent="Boat_base/Player_Boat_render" index="0"]
+visible = false
+
+[node name="Msh_boat__base" parent="Boat_base/Player_Boat_render" index="1"]
 layers = 4
 surface_material_override/0 = ExtResource("23_5ld2y")
 
-[node name="Msh_boat_water" parent="Boat_base/Player_Boat_02" index="1"]
-layers = 4
-surface_material_override/0 = ExtResource("23_5ld2y")
+[node name="Msh_boat_mask" parent="Boat_base/Player_Boat_render" index="2"]
+visible = false
 
-[node name="Msh_boat__base" parent="Boat_base/Player_Boat_02" index="2"]
-layers = 4
-surface_material_override/0 = ExtResource("23_5ld2y")
-
-[node name="Msh_boat_mask" parent="Boat_base/Player_Boat_02" index="3"]
-layers = 4
-surface_material_override/0 = ExtResource("23_5ld2y")
-
-[node name="StaticBody3D" type="StaticBody3D" parent="Boat_base/Player_Boat_02"]
+[node name="StaticBody3D" type="StaticBody3D" parent="Boat_base/Player_Boat_render"]
+transform = Transform3D(1, 0, -1.74845e-07, 0, 1, 0, 1.74845e-07, 0, 1, 0, 0, 0)
 collision_layer = 2
 collision_mask = 2
 
-[node name="Boat_col" type="Node" parent="Boat_base/Player_Boat_02/StaticBody3D"]
+[node name="Boat_col" type="Node" parent="Boat_base/Player_Boat_render/StaticBody3D"]
 script = ExtResource("25_jbuu3")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Boat_base/Player_Boat_02/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Boat_base/Player_Boat_render/StaticBody3D"]
 transform = Transform3D(1, 0, -1.42109e-14, 0, 1, 0, 1.42109e-14, 0, 1, 0, 0, 0)
 shape = SubResource("ConvexPolygonShape3D_3tv5m")
 disabled = true
@@ -737,4 +732,4 @@ theme_override_font_sizes/font_size = 20
 [connection signal="timeout" from="FADE_OUT/Timer" to="FADE_OUT" method="_on_timer_timeout"]
 [connection signal="area_shape_entered" from="Surface_trigger" to="GO_SURFACE" method="_on_surface_trigger_area_shape_entered"]
 
-[editable path="Boat_base/Player_Boat_02"]
+[editable path="Boat_base/Player_Boat_render"]

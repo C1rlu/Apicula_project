@@ -16,7 +16,6 @@
 [ext_resource type="Material" uid="uid://b64juw612xqpu" path="res://05_SHADER/Sea_sh/Sea_mat.tres" id="7_4y8ld"]
 [ext_resource type="Shader" uid="uid://b8pie7pbqwtks" path="res://05_SHADER/Full_screen/Main_fullscreen.tres" id="8_oftpq"]
 [ext_resource type="PackedScene" uid="uid://dla1534gcagbl" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Pine/pine_prefabs.tscn" id="10_c6r5x"]
-[ext_resource type="PackedScene" uid="uid://cjp6vd8eetmyf" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Iceberg/ice_berg_03.tscn" id="10_h0nl5"]
 [ext_resource type="PackedScene" uid="uid://cegdqm3et2y35" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Iceberg/ice_berg_02.tscn" id="11_086vv"]
 [ext_resource type="PackedScene" uid="uid://d3h77dy71bcme" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Iceberg/ice_berg_01.tscn" id="12_638yx"]
 [ext_resource type="Script" path="res://00_SCENE/Sonar_zone_active.gd" id="12_gjulh"]
@@ -33,6 +32,7 @@
 [ext_resource type="Resource" uid="uid://xuxu60afj84h" path="res://15_GAME_RESSOURCE/00_Npc_data/Maurice_dialogue_data.tres" id="30_ivc7k"]
 [ext_resource type="Script" path="res://00_SCENE/Npc_zone.gd" id="30_ki3ay"]
 [ext_resource type="Resource" uid="uid://c6jw6ja2xggvh" path="res://15_GAME_RESSOURCE/00_Npc_data/Otis_Coast_guard_data.tres" id="32_pt30g"]
+[ext_resource type="PackedScene" uid="uid://dh5kdswdhdfq6" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Island_set/Island_set_01/Island_set_01_prefab.tscn" id="37_b1buk"]
 [ext_resource type="Resource" uid="uid://bqtier24l2d58" path="res://15_GAME_RESSOURCE/00_Boue_Zones/Boue_appicula.tres" id="37_q8flv"]
 [ext_resource type="Resource" uid="uid://bgbdnk7mpw4vb" path="res://15_GAME_RESSOURCE/00_Boue_Zones/TheOddity_zone.tres" id="38_slan6"]
 [ext_resource type="Resource" uid="uid://dyrjwnrw6plmp" path="res://15_GAME_RESSOURCE/00_Boue_Zones/Boue_DarkHole.tres" id="39_xd5qo"]
@@ -206,7 +206,7 @@ func _ready():
 [sub_resource type="ViewportTexture" id="ViewportTexture_e1gkt"]
 viewport_path = NodePath("01_GAME_UI/MAIN_SCENE_UI/Viewports/FOAM_Viewport")
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_p10qd"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_25bkd"]
 viewport_path = NodePath("01_GAME_UI/MAIN_SCENE_UI/Viewports/GRID_Viewport")
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_oj43o"]
@@ -227,7 +227,7 @@ shader_parameter/Opacity = 1.0
 shader_parameter/Main = SubResource("ViewportTexture_oj43o")
 shader_parameter/Foam = SubResource("ViewportTexture_e1gkt")
 shader_parameter/Sonar = SubResource("ViewportTexture_td1dm")
-shader_parameter/Grid = SubResource("ViewportTexture_p10qd")
+shader_parameter/Grid = SubResource("ViewportTexture_25bkd")
 shader_parameter/Sky = SubResource("ViewportTexture_cx3um")
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_4iosc"]
@@ -477,7 +477,6 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-536.76, 79.9011)
 nodes/fragment/0/position = Vector2(600, 220)
 nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_kdi3x")
 nodes/fragment/2/position = Vector2(-600, 300)
@@ -618,7 +617,7 @@ size = Vector2i(1920, 1080)
 
 [node name="CAM_STATE_GRID" type="Camera3D" parent="01_GAME_UI/MAIN_SCENE_UI/Viewports/GRID_Viewport"]
 transform = Transform3D(1, 0, 0, 0, 0.73373, 0.679441, 0, -0.679441, 0.73373, 0, 27.344, 29.059)
-cull_mask = 65
+cull_mask = 72
 current = true
 fov = 10.0
 
@@ -731,7 +730,7 @@ skeleton = NodePath("../..")
 [node name="GRID_MAP" type="Node3D" parent="--DECOR--"]
 
 [node name="GridMap" parent="--DECOR--/GRID_MAP" instance=ExtResource("6_8jesf")]
-transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, 0, -0.224, 0)
+transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, 0, 0.125, 0)
 visible = false
 cell_size = Vector3(6, 1, 6)
 cell_scale = 3.0
@@ -808,11 +807,8 @@ transform = Transform3D(-0.601958, 0, -0.117467, 0, 0.613312, 0, 0.117467, 0, -0
 [node name="IceBerg_09" parent="--DECOR--/WORLD_ELEMENTS/Node3D" instance=ExtResource("15_bqwbg")]
 transform = Transform3D(-4.85638, 0, 4.85638, 0, 6.86796, 0, -4.85638, 0, -4.85638, 9.52378, -7.44586, 5.37502)
 
-[node name="IceBerg_07" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("10_h0nl5")]
-transform = Transform3D(0.717731, 0, -0.0726512, 0, 0.721399, 0, 0.0726512, 0, 0.717731, -8.37715, -0.656455, -5.633)
-
 [node name="IceBerg_05" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("11_086vv")]
-transform = Transform3D(-0.451264, 0, -0.0157661, 0, 0.45154, 0, 0.0157661, 0, -0.451264, 4.03894, -0.477896, -1.90279)
+transform = Transform3D(-0.451264, 0, -0.0157661, 0, 0.45154, 0, 0.0157661, 0, -0.451264, 4.039, 0, -1.903)
 
 [node name="IceBerg_04" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("12_638yx")]
 transform = Transform3D(-0.398389, 0, -0.10485, 0, 0.411956, 0, 0.10485, 0, -0.398389, 6.93768, -0.461466, -1.98758)
@@ -827,15 +823,6 @@ transform = Transform3D(-0.529492, 0, 2.98023e-08, 0, 0.529492, 0, -2.98023e-08,
 
 [node name="IceBerg_10" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("15_bqwbg")]
 transform = Transform3D(-0.273803, 0, 2.84997e-08, 0, 0.386791, 0, -1.54109e-08, 0, -0.506349, 3.20761, -0.22111, -3.19881)
-
-[node name="IceBerg_11" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("15_bqwbg")]
-transform = Transform3D(-0.137043, 0, -0.51145, 0, 0.529492, 0, 0.51145, 0, -0.137043, -6.63411, -0.228083, 0.421727)
-
-[node name="IceBerg_12" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("15_bqwbg")]
-transform = Transform3D(-0.300319, 0, -1.1208, 0, 1.16034, 0, 1.1208, 0, -0.300319, -9.47565, -0.207551, -0.339665)
-
-[node name="Mountain_set_02_Prefab" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("23_e4he1")]
-transform = Transform3D(0.647372, 0, 0, 0, 0.647372, 0, 0, 0, 0.647372, -6.97561, -0.209662, 2.41715)
 
 [node name="Mountain_set_02_Prefab3" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("23_e4he1")]
 transform = Transform3D(0.147306, 0, 1.06567, 0, 1.07581, 0, -1.06567, 0, 0.147306, 0.280873, -0.221378, 5.58614)
@@ -1130,16 +1117,19 @@ skeleton = NodePath("")
 surface_material_override/0 = SubResource("ShaderMaterial_qtam4")
 
 [node name="Sea_collider" type="MeshInstance3D" parent="--DECOR--/SEA"]
-transform = Transform3D(4.4285, 0, 0, 0, 0.44285, 0, 0, 0, 4.4285, 0.739399, -0.40696, 1.21398)
+transform = Transform3D(4.4285, 0, 0, 0, 0.44285, 0, 0, 0, 4.4285, 0.739, -0.76, 1.214)
 layers = 8
 mesh = SubResource("BoxMesh_hogrq")
 skeleton = NodePath("../Sea_foam")
 
 [node name="Sea_foam" type="MeshInstance3D" parent="--DECOR--/SEA"]
-transform = Transform3D(4.4285, 0, 0, 0, 0.44285, 0, 0, 0, 4.4285, 0.739399, -0.215206, 1.21398)
+transform = Transform3D(4.4285, 0, 0, 0, 0.44285, 0, 0, 0, 4.4285, 0.739, 0, 1.214)
 layers = 2048
 mesh = SubResource("BoxMesh_wmrfd")
 skeleton = NodePath("")
+
+[node name="Island_Set01_Prefab" parent="." instance=ExtResource("37_b1buk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.63198, 0, -1.17179)
 
 [connection signal="area_entered" from="--DECOR--/Player_Boat/Enter_dialogue_zone" to="--DECOR--/Player_Boat/Check_zone_ui" method="_on_enter_dialogue_zone_area_entered"]
 [connection signal="area_exited" from="--DECOR--/Player_Boat/Enter_dialogue_zone" to="--DECOR--/Player_Boat/Check_zone_ui" method="_on_enter_dialogue_zone_area_exited"]

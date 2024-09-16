@@ -1,22 +1,42 @@
-[gd_scene load_steps=4 format=3 uid="uid://dox35loyf43ee"]
+[gd_scene load_steps=5 format=3 uid="uid://dox35loyf43ee"]
 
 [ext_resource type="PackedScene" uid="uid://dhreon2clvrlx" path="res://04_SCENE_MAIN_MAP/Grid/cells_msh.blend" id="1_lrrco"]
 
-[sub_resource type="VisualShader" id="VisualShader_pensp"]
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_5icak"]
+parameter_name = "ColorParameter"
+
+[sub_resource type="VisualShader" id="VisualShader_6emqm"]
 code = "shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
 
+uniform vec4 ColorParameter : source_color;
 
 
+
+void fragment() {
+// ColorParameter:2
+	vec4 n_out2p0 = ColorParameter;
+
+
+// Output:0
+	ALBEDO = vec3(n_out2p0.xyz);
+
+
+}
 "
+graph_offset = Vector2(-138.092, 48.5749)
 flags/unshaded = true
+nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_5icak")
+nodes/fragment/2/position = Vector2(40, 120)
+nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_h0q3v"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qkboe"]
 render_priority = 0
-shader = SubResource("VisualShader_pensp")
+shader = SubResource("VisualShader_6emqm")
+shader_parameter/ColorParameter = Color(1, 1, 1, 1)
 
 [node name="cells_msh" instance=ExtResource("1_lrrco")]
 
 [node name="cells_msh" parent="." index="0"]
 layers = 64
-surface_material_override/0 = SubResource("ShaderMaterial_h0q3v")
+surface_material_override/0 = SubResource("ShaderMaterial_qkboe")

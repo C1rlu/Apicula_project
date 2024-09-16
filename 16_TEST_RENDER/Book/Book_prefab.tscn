@@ -1,20 +1,10 @@
 [gd_scene load_steps=13 format=3 uid="uid://c18stvbutb83o"]
 
+[ext_resource type="Script" path="res://00_SYSTEMS/Active_mask_at_ready.tres.gd" id="1_7jbiv"]
 [ext_resource type="PackedScene" uid="uid://bu65fju8oonp1" path="res://16_TEST_RENDER/Book/Book_01.blend" id="1_kojkf"]
 [ext_resource type="Material" uid="uid://yjoyk6fvrm6q" path="res://10_BOARD/00_BOOK/00_SHADER/No_light_surface_mat.tres" id="1_w4ik7"]
 [ext_resource type="Shader" uid="uid://bii47ft606xyy" path="res://16_TEST_RENDER/Element_base_sh.tres" id="2_vwc7p"]
 [ext_resource type="Texture2D" uid="uid://bf1vkenq7yets" path="res://16_TEST_RENDER/Book/Base_Gradient.png" id="3_prwks"]
-
-[sub_resource type="GDScript" id="GDScript_7gcxj"]
-script/source = "extends Node
-
-
-@export var _active : MeshInstance3D
-
-
-func _ready():
-	_active.visible = true
-"
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0fwwh"]
 resource_name = "01"
@@ -102,8 +92,8 @@ points = PackedVector3Array(-0.384013, -0.0001, -0.502951, 0.413706, 0.158404, 0
 [node name="BookPrefab" type="Node3D"]
 
 [node name="Active" type="Node" parent="." node_paths=PackedStringArray("_active")]
-script = SubResource("GDScript_7gcxj")
-_active = NodePath("../Book_light")
+script = ExtResource("1_7jbiv")
+_active = [NodePath("../Book_light")]
 
 [node name="Book_light" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.197562, 0, 0, 0, 0.197562, 0, 0, 0, 0.197562, 0, 0, 0)

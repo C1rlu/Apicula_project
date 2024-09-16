@@ -16,7 +16,7 @@ func fade_grid(_null):
 		fade.kill()
 		
 	fade = create_tween()
-	fade.tween_method(_value,0.25,0.0,4.0)
+	fade.tween_method(_value,0.3,0.0,4.0)
 	fade.connect("finished",done)
 
 func _value(value : float):
