@@ -3,8 +3,8 @@ extends Node
 @export var sun_root : Control
 @export var _text : Label
 func _ready():
-	_global_datas._up_time_state.connect(_up_time)
-	_global_datas._backFrom_subscene.connect(_up_time)
+	#_global_datas._up_time_state.connect(_up_time)
+	#_global_datas._backFrom_subscene.connect(_up_time)
 	_reset_time()
 	update_sun_angle()
 	

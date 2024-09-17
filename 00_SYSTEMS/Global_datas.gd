@@ -28,6 +28,7 @@ signal show_3D_SpeackerScene(condition : bool)
 #backcalls
 signal _active_back_call
 signal _add_back_call(back_call)
+signal _execute_back_call
 var _back_call_list : Array 
 signal _clear_back_call
 # input type
@@ -162,7 +163,6 @@ var book_idle_pos : bool = true
 
 # sending bird 
 
-
 var _check_objectZone_Area : Area3D 
 var _check_objectZone_col : CollisionShape3D 
 signal _check_object
@@ -172,6 +172,7 @@ signal sending_bird
 var bird_is_waiting : bool = false
 
 signal _open_boad_Focus(condition : bool,element : element_data)
+
 
 #update description on board
 signal focus_this_on_board(target : Vector3)
@@ -187,7 +188,8 @@ signal active_scanner_button(condition : bool)
 
 var current_money : int = 0
 signal update_money_amount(value : int)
-
+signal _show_zone_info(condition : bool)
+signal _open_zone_attributions(condition : bool)
 
 # Time bar state
 

@@ -1,4 +1,4 @@
-[gd_resource type="VisualShader" load_steps=15 format=3 uid="uid://cu2uipuy138c6"]
+[gd_resource type="VisualShader" load_steps=17 format=3 uid="uid://cu2uipuy138c6"]
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_rj57i"]
 parameter_name = "Color"
@@ -10,6 +10,12 @@ default_value = 0.5
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_vdwda"]
 parameter_name = "ColorParameter"
+
+[sub_resource type="VisualShaderNodeBooleanParameter" id="VisualShaderNodeBooleanParameter_ysgri"]
+parameter_name = "active_Dither"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeSwitch" id="VisualShaderNodeSwitch_4n30r"]
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_xb3su"]
 constant = 1.0
@@ -71,6 +77,7 @@ varying float black_white;
 
 uniform vec4 ColorParameter : source_color;
 uniform vec4 Color : source_color;
+global uniform bool active_Dither;
 global uniform float Dither_size;
 uniform sampler2D Gradient_base : filter_nearest;
 uniform float Dither_strenght = 0.5;
@@ -84,6 +91,10 @@ void fragment() {
 
 // ColorParameter:10
 	vec4 n_out10p0 = Color;
+
+
+// BooleanParameter:13
+	bool n_out13p0 = active_Dither;
 
 
 // FloatConstant:2
@@ -120,8 +131,13 @@ void fragment() {
 	float n_out6p0 = step(n_out9p0, n_out5p0.x);
 
 
+	float n_out14p0;
+// Switch:14
+	n_out14p0 = mix(n_out5p0.x, n_out6p0, float(n_out13p0));
+
+
 // Mix:7
-	vec3 n_out7p0 = mix(vec3(n_out12p0.xyz), vec3(n_out10p0.xyz), vec3(n_out6p0));
+	vec3 n_out7p0 = mix(vec3(n_out12p0.xyz), vec3(n_out10p0.xyz), vec3(n_out14p0));
 
 
 // FloatParameter:11
@@ -145,6 +161,7 @@ flags/ambient_light_disabled = true
 flags/fog_disabled = true
 varyings/black_white = "1,0"
 nodes/vertex/0/position = Vector2(400, 160)
+nodes/fragment/0/position = Vector2(720, -60)
 nodes/fragment/2/node = SubResource("VisualShaderNodeFloatConstant_xb3su")
 nodes/fragment/2/position = Vector2(-1280, 100)
 nodes/fragment/3/node = SubResource("VisualShaderNodeFloatParameter_4tqx8")
@@ -154,7 +171,7 @@ nodes/fragment/4/position = Vector2(-1973.62, -146.014)
 nodes/fragment/5/node = SubResource("VisualShaderNodeTexture_l816t")
 nodes/fragment/5/position = Vector2(-1473.62, -106.014)
 nodes/fragment/6/node = SubResource("VisualShaderNodeStep_klfo3")
-nodes/fragment/6/position = Vector2(-553.618, -386.014)
+nodes/fragment/6/position = Vector2(-920, -280)
 nodes/fragment/7/node = SubResource("VisualShaderNodeMix_32kb6")
 nodes/fragment/7/position = Vector2(-293.618, -606.014)
 nodes/fragment/8/node = SubResource("VisualShaderNodeMix_7kbsc")
@@ -175,12 +192,16 @@ vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
 nodes/fragment/10/node = SubResource("VisualShaderNodeColorParameter_rj57i")
-nodes/fragment/10/position = Vector2(-793.618, -686.014)
+nodes/fragment/10/position = Vector2(-700, -680)
 nodes/fragment/11/node = SubResource("VisualShaderNodeFloatParameter_gjvnp")
-nodes/fragment/11/position = Vector2(-273.618, -166.014)
+nodes/fragment/11/position = Vector2(-380, -200)
 nodes/fragment/12/node = SubResource("VisualShaderNodeColorParameter_vdwda")
-nodes/fragment/12/position = Vector2(-896.274, -862.567)
-nodes/fragment/connections = PackedInt32Array(2, 0, 9, 0, 9, 0, 6, 0, 6, 0, 7, 2, 3, 0, 9, 1, 4, 0, 5, 2, 10, 0, 7, 1, 5, 0, 6, 1, 7, 0, 8, 0, 10, 0, 8, 1, 11, 0, 8, 2, 8, 0, 0, 0, 12, 0, 7, 0)
+nodes/fragment/12/position = Vector2(-580, -880)
+nodes/fragment/13/node = SubResource("VisualShaderNodeBooleanParameter_ysgri")
+nodes/fragment/13/position = Vector2(-1200, -500)
+nodes/fragment/14/node = SubResource("VisualShaderNodeSwitch_4n30r")
+nodes/fragment/14/position = Vector2(-820, -500)
+nodes/fragment/connections = PackedInt32Array(2, 0, 9, 0, 9, 0, 6, 0, 3, 0, 9, 1, 4, 0, 5, 2, 10, 0, 7, 1, 5, 0, 6, 1, 7, 0, 8, 0, 10, 0, 8, 1, 11, 0, 8, 2, 12, 0, 7, 0, 8, 0, 0, 0, 13, 0, 14, 0, 6, 0, 14, 1, 5, 0, 14, 2, 14, 0, 7, 2)
 nodes/light/0/position = Vector2(3440, 1960)
 nodes/light/43/node = SubResource("VisualShaderNodeFloatParameter_ckjku")
 nodes/light/43/position = Vector2(0, 5260)

@@ -19,7 +19,8 @@ func _check(area):
 	if area:
 		var sonar_area = area.get_node_or_null(\"Sonar\")
 		if sonar_area:
-			Fade_out._show()
+			pass
+			#Fade_out._show()
 
 
 "
@@ -36,6 +37,9 @@ script/source = "extends Node
 var t
 var d
 var actual_value : float
+
+func _ready():
+	_show()
 
 func _show():
 	
@@ -61,7 +65,7 @@ func _hide():
 	
 	d .tween_method(change_value,0.5,0.0,3.0)
 	await create_tween().tween_interval(3.0).finished
-	
+	_show()
 
 func change_value(value : float):
 	material.set_shader_parameter(\"Distance\",value)
@@ -257,6 +261,7 @@ script = SubResource("GDScript_pgyt6")
 
 [node name="mesh" type="MeshInstance3D" parent="Epave_visuals"]
 transform = Transform3D(0.0832566, -0.00600461, -0.12878, 0.00257089, 0.153347, -0.00548801, 0.128895, 0.000819961, 0.083292, -0.183906, -2.36492, -1.06753)
+layers = 1025
 mesh = SubResource("ArrayMesh_qimfy")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("ShaderMaterial_yfs1e")

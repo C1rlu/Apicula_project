@@ -7,6 +7,7 @@ func _ready():
 
 	_global_datas._add_back_call.connect(add_back_call_and_check)
 	_global_datas._clear_back_call.connect(clear)
+	_global_datas._execute_back_call.connect(_execute_back_call)
 	# need to clear back call if///
 	
 
@@ -26,10 +27,16 @@ func _input(event):
 		#print(top_call)
 		if top_call == 0:
 			return
-		connect_back_call()
-		_global_datas._active_back_call.emit()	
-		remove_emited_call()
-		
+		_global_datas._execute_back_call.emit()
+
+
+func _execute_back_call():
+	
+	connect_back_call()
+	_global_datas._active_back_call.emit()	
+	remove_emited_call()	
+	
+			
 func connect_back_call():
 	
 	var top_call = _global_datas._back_call_list.size()
