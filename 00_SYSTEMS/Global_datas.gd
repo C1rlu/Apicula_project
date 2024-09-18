@@ -187,6 +187,7 @@ signal active_scanner_button(condition : bool)
 var current_money : int = 0
 signal update_money_amount(value : int)
 signal _show_zone_info(condition : bool)
+signal _update_info_zone
 signal _open_zone_attributions(condition : bool)
 
 # Time bar state

@@ -11,7 +11,7 @@ func _ready():
 	_create_grid()
 	_global_datas._active_sonar.connect(get_number)
 	_global_datas._load_subscene.connect(_check_sceneIndex)
-
+	_global_datas._update_info_zone.connect(find_nearest_cell_to_player)
 	
 func _create_grid():
 	var used_cells = get_used_cells()
