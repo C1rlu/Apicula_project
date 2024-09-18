@@ -1,7 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://bg5086w5cu7aw"]
+[gd_scene load_steps=11 format=3 uid="uid://bg5086w5cu7aw"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/Zone_info/Show_zone_info.gd" id="1_v730l"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/Zone_info/Dive_in_zone.gd" id="2_k5xwh"]
+[ext_resource type="Script" path="res://13_TOOLS_UI/Zone_info/Update_zone_info.gd" id="2_kpn8h"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/Zone_info/Zone_Button.gd" id="3_coi05"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kuhcr"]
@@ -24,18 +25,22 @@ bg_color = Color(0.407843, 0.345098, 0.247059, 1)
 
 [node name="Zone_info" type="Control"]
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
 grow_horizontal = 2
-grow_vertical = 2
 mouse_filter = 2
 
 [node name="Show_zone_info" type="Node" parent="." node_paths=PackedStringArray("info_root")]
 script = ExtResource("1_v730l")
 info_root = NodePath("..")
 
+[node name="Update_zone_info" type="Node" parent="." node_paths=PackedStringArray("zone_text")]
+script = ExtResource("2_kpn8h")
+zone_text = NodePath("../Description_Text")
+
 [node name="Dive_in_zone" type="Button" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -58,6 +63,7 @@ text = "DIVE"
 script = ExtResource("2_k5xwh")
 
 [node name="Zone_Button" type="Button" parent="."]
+visible = false
 layout_mode = 0
 offset_left = 539.0
 offset_top = 85.0
@@ -72,3 +78,39 @@ theme_override_styles/disabled = SubResource("StyleBoxFlat_y0jso")
 theme_override_styles/focus = SubResource("StyleBoxFlat_utqi1")
 text = "ZONE ?"
 script = ExtResource("3_coi05")
+
+[node name="Description_Text" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 157.0
+offset_top = 239.0
+offset_right = 757.0
+offset_bottom = 339.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.721569, 0.580392, 0.407843, 1)
+theme_override_colors/font_outline_color = Color(0.0235294, 0.117647, 0.12549, 1)
+theme_override_constants/outline_size = 60
+theme_override_font_sizes/font_size = 30
+text = "Lorem ipsum "
+vertical_alignment = 1
+autowrap_mode = 1
+
+[node name="Zone_info" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 168.0
+offset_top = 273.0
+offset_right = 356.0
+offset_bottom = 551.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.721569, 0.580392, 0.407843, 1)
+theme_override_colors/font_outline_color = Color(0.0235294, 0.117647, 0.12549, 1)
+theme_override_constants/outline_size = 60
+theme_override_font_sizes/font_size = 20
+text = "the hole zone, here people say there is a boat and a \"monster\""
+vertical_alignment = 1
+autowrap_mode = 2

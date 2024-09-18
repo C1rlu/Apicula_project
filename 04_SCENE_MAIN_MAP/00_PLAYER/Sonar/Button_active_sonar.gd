@@ -1,11 +1,16 @@
 extends Node
 
 
-var disable = true 
+var disable = false 
+
+
+func _ready():
+	pass
+	#_global_datas._show_zone_info.connect(_lock)
 func _input(event):
 	
-	#if disable:
-		#return
+	if disable:
+		return
 	
 	if _global_datas.Player_In_Inventory:
 		return	
@@ -21,3 +26,8 @@ func _input(event):
 		var boat_position = _global_datas.player_position
 		_global_datas._active_sonar.emit(boat_position)		
 		_global_datas._show_zone_info.emit(true)
+		
+
+
+func _lock(condition):
+	disable = condition	

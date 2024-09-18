@@ -12,7 +12,7 @@ func _ready():
 	
 func _show(condition: bool):
 	info_root.visible = condition	
-	_global_datas.Player_InMenu = condition
+	#_global_datas.Player_InMenu = condition
 	
 	if condition:
 		_global_datas._add_back_call.emit(add_back_call)			

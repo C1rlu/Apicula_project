@@ -12,6 +12,7 @@ func _ready():
 	_global_datas._active_sonar.connect(get_number)
 	_global_datas._load_subscene.connect(_check_sceneIndex)
 
+	
 func _create_grid():
 	var used_cells = get_used_cells()
 	var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
