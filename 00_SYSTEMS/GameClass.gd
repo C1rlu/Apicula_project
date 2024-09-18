@@ -26,12 +26,3 @@ enum camera_state {
 }
 
 
-enum time_state {
-	
-	morning,
-	midday,
-	afternoon,
-	evening,
-	night
-
-}

@@ -1,12 +1,15 @@
-[gd_scene load_steps=75 format=3 uid="uid://cnmptm7i0xxmj"]
+[gd_scene load_steps=78 format=3 uid="uid://cnmptm7i0xxmj"]
 
+[ext_resource type="Script" path="res://00_SCENE/ZONE_datas.gd" id="1_gm0dt"]
 [ext_resource type="Script" path="res://00_SCENE/Active_Decor_Scene.gd" id="1_ounvv"]
 [ext_resource type="PackedScene" uid="uid://vpdvl0v7dubd" path="res://04_SCENE_MAIN_MAP/00_PLAYER/Player_boat.tscn" id="1_qltht"]
 [ext_resource type="Resource" uid="uid://ppxk5i543dfn" path="res://15_GAME_RESSOURCE/00_Npc_data/Mr_Birds_data.tres" id="1_trgwt"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_xd8sb"]
 [ext_resource type="Script" path="res://03_CAMERA/CameraFollow.gd" id="2_7lb1x"]
+[ext_resource type="Resource" uid="uid://cdef15ggl03fh" path="res://15_GAME_RESSOURCE/00_Zone_data/Apicula_zone.tres" id="2_xqcjl"]
 [ext_resource type="Script" path="res://04_SCENE_MAIN_MAP/00_PLAYER/Sonar/Button_active_sonar.gd" id="3_0rdsq"]
 [ext_resource type="Script" path="res://00_SCENE/MainScene/Grid_Fade.gd" id="3_7fuin"]
+[ext_resource type="Resource" uid="uid://d2ivg06mjrg4v" path="res://15_GAME_RESSOURCE/00_Zone_data/Hole_zone.tres" id="3_mqlau"]
 [ext_resource type="Shader" uid="uid://bduoqim3kfbs6" path="res://04_SCENE_MAIN_MAP/00_PLAYER/Sonar/Sonar_sh.tres" id="3_todel"]
 [ext_resource type="Script" path="res://03_CAMERA/Active_scene_viewports.gd" id="4_tulh2"]
 [ext_resource type="Script" path="res://00_SCENE/MainScene/Teleport_boat_at_position.gd" id="4_xkpot"]
@@ -15,6 +18,7 @@
 [ext_resource type="Material" uid="uid://b64juw612xqpu" path="res://05_SHADER/Sea_sh/Sea_mat.tres" id="7_4y8ld"]
 [ext_resource type="Shader" uid="uid://b8pie7pbqwtks" path="res://05_SHADER/Full_screen/Main_fullscreen.tres" id="8_oftpq"]
 [ext_resource type="Shader" path="res://05_SHADER/Full_screen/Pixel_art/test_pixel.gdshader" id="8_t6l40"]
+[ext_resource type="Script" path="res://00_SCENE/Day_state.gd" id="9_vbyff"]
 [ext_resource type="PackedScene" uid="uid://dla1534gcagbl" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Pine/pine_prefabs.tscn" id="10_c6r5x"]
 [ext_resource type="PackedScene" uid="uid://cegdqm3et2y35" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Iceberg/ice_berg_02.tscn" id="11_086vv"]
 [ext_resource type="Script" path="res://00_SCENE/Sonar_zone_active.gd" id="12_gjulh"]
@@ -30,7 +34,6 @@
 [ext_resource type="Resource" uid="uid://c6jw6ja2xggvh" path="res://15_GAME_RESSOURCE/00_Npc_data/Otis_Coast_guard_data.tres" id="32_pt30g"]
 [ext_resource type="Material" uid="uid://yjoyk6fvrm6q" path="res://10_BOARD/00_BOOK/00_SHADER/No_light_surface_mat.tres" id="33_um15u"]
 [ext_resource type="PackedScene" uid="uid://dh5kdswdhdfq6" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Island_set/Island_set_01/Island_set_01_prefab.tscn" id="37_b1buk"]
-[ext_resource type="Resource" uid="uid://dyrjwnrw6plmp" path="res://15_GAME_RESSOURCE/00_Boue_Zones/Boue_DarkHole.tres" id="39_xd5qo"]
 
 [sub_resource type="GDScript" id="GDScript_ueh7h"]
 script/source = "extends Node
@@ -68,8 +71,7 @@ func _input(event: InputEvent) -> void:
 		return
 		
 		
-	if _global_datas._time_state == game_state.time_state.night:
-			_global_datas._show_object_legend.emit(true,\"The night is coming\")
+	if _global_datas._time_state == 0:
 			return	
 
 	if event.is_action_released(\"Push_to_subscene\"):
@@ -227,6 +229,7 @@ resource_local_to_scene = true
 shader = ExtResource("8_oftpq")
 shader_parameter/Grid_Color = Color(0.254902, 0.513726, 0.552941, 1)
 shader_parameter/Grid_opacity = 0.15
+shader_parameter/Night = 0.0
 shader_parameter/Opacity = 1.0
 shader_parameter/Main = SubResource("ViewportTexture_oj43o")
 shader_parameter/Foam = SubResource("ViewportTexture_e1gkt")
@@ -500,6 +503,10 @@ size = Vector3(30, 0, 30)
 script = SubResource("GDScript_ueh7h")
 prologue_position = Vector3(-21, -3.995, 7)
 
+[node name="ZONE_datas" type="Node" parent="."]
+script = ExtResource("1_gm0dt")
+zones_datas = Array[Resource("res://15_GAME_RESSOURCE/00_Zone_data/zone_data.gd")]([ExtResource("2_xqcjl"), ExtResource("3_mqlau")])
+
 [node name="Active_Decor_Scene" type="Node" parent="." node_paths=PackedStringArray("viewports")]
 script = ExtResource("1_ounvv")
 viewports = [NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/MAIN_Viewport"), NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/FOAM_Viewport"), NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/SONAR_Viewport"), NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/GRID_Viewport"), NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/MAIN_LIGHT_Viewport")]
@@ -526,6 +533,9 @@ script = SubResource("GDScript_55qk3")
 
 [node name="Teleport_boat_at_position" type="Node" parent="."]
 script = ExtResource("4_xkpot")
+
+[node name="Night&Day_state" type="Node" parent="."]
+script = ExtResource("9_vbyff")
 
 [node name="01_GAME_UI" type="Node" parent="." node_paths=PackedStringArray("all_renders")]
 script = SubResource("GDScript_8cfdp")
@@ -575,7 +585,7 @@ surface_material_override/0 = SubResource("ShaderMaterial_xjml8")
 
 [node name="MAIN_LIGHT_Viewport" type="SubViewport" parent="01_GAME_UI/MAIN_SCENE_UI/Viewports"]
 transparent_bg = true
-mesh_lod_threshold = 0.0
+scaling_3d_scale = 0.5
 canvas_item_default_texture_filter = 0
 size = Vector2i(1920, 1080)
 
@@ -644,11 +654,11 @@ bird_data = ExtResource("1_trgwt")
 [node name="Main_light" type="OmniLight3D" parent="--DECOR--/Player_Boat"]
 transform = Transform3D(1, 0, 0, 2.11758e-22, 0.342545, 0.939501, 0, -0.939501, 0.342545, 0.130404, 3.19906, -0.0379682)
 layers = 32768
-light_energy = 7.676
+light_energy = 8.0
 light_indirect_energy = 0.0
 light_volumetric_fog_energy = 0.0
 light_specular = 0.0
-omni_range = 7.746
+omni_range = 7.0
 
 [node name="Enter_dialogue_zone" type="Area3D" parent="--DECOR--/Player_Boat"]
 input_ray_pickable = false
@@ -888,16 +898,13 @@ shape = SubResource("SphereShape3D_jvty4")
 
 [node name="EPAVE_ZONE2" parent="--DECOR--/EPAVE" instance=ExtResource("23_txlwt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.50703, -0.192537, -3.34928)
-Dive_area = ExtResource("39_xd5qo")
 
 [node name="EPAVE_ZONE3" parent="--DECOR--/EPAVE" node_paths=PackedStringArray("Fade_out") instance=ExtResource("23_txlwt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.7167, -0.192537, -10.7104)
-Dive_area = ExtResource("39_xd5qo")
 Fade_out = NodePath("../EPAVE_ZONE2/Epave_visuals/Fade_out")
 
 [node name="EPAVE_ZONE4" parent="--DECOR--/EPAVE" node_paths=PackedStringArray("Fade_out") instance=ExtResource("23_txlwt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.8349, -0.192537, 19.7457)
-Dive_area = ExtResource("39_xd5qo")
 Fade_out = NodePath("../EPAVE_ZONE2/Epave_visuals/Fade_out")
 
 [node name="SEA" type="Node3D" parent="--DECOR--"]

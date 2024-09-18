@@ -73,7 +73,6 @@ signal _give_letter( index : int)
 
 # for save game
 var photo_archives : Array[PhotoData] 
-var boue_archives : Array[BoueData]
 var tools_list : Array[tool_data]
 var element_collected : Array[element_data]
 
@@ -88,7 +87,6 @@ var player_rg : RigidBody3D
 var attache_node: Node3D
 
 signal player_in_diveZone(condition : bool)
-signal show_dive_zone_info(condition : bool, dive_data : BoueData)
 signal _load_subscene(condition : bool)
 signal _go_Subscene
 var subbscene_playerPosition : Vector3
@@ -177,7 +175,7 @@ signal _open_boad_Focus(condition : bool,element : element_data)
 #update description on board
 signal focus_this_on_board(target : Vector3)
 signal Open_ui_dark_backdrop(condition : bool)
-signal select_intrigue(intrigue : board_intrigue_data)
+
 
 var selected_photoData : PhotoData
 
@@ -194,8 +192,10 @@ signal _open_zone_attributions(condition : bool)
 # Time bar state
 
 signal _up_time_state
-var _time_state : game_state.time_state 
+var _time_state : int = 3
 
+signal _set_night
+signal _set_day
 # scanner 
 
 signal show_on_scanner(condition : bool)
@@ -222,7 +222,7 @@ func _ready():
 	bird_is_waiting = false
 	_check_objectZone_Area = null
 	_check_objectZone_col = null
-	_time_state = game_state.time_state.morning
+	_time_state = 3
 	
 # TEST BOARD NEWS PROTO SCENE
 signal select_movable_object(object)

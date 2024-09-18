@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=3 uid="uid://bwmu5iwushsl5"]
+[gd_scene load_steps=55 format=3 uid="uid://bwmu5iwushsl5"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/Fade_flash_effect.gd" id="1_1dj2k"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/INSTANCE_NOTE.gd" id="1_fcb2u"]
@@ -14,7 +14,6 @@
 [ext_resource type="PackedScene" uid="uid://cbgkay5155yn3" path="res://13_TOOLS_UI/Top_bar/Money_bar.tscn" id="15_jqiih"]
 [ext_resource type="Shader" uid="uid://owtikj2jm5h5" path="res://13_TOOLS_UI/PhotoFlash_effect.tres" id="15_kco3d"]
 [ext_resource type="PackedScene" uid="uid://cdmxq026pdbp7" path="res://09_SHOP/Shop_Ui_scene.tscn" id="16_bicox"]
-[ext_resource type="Script" path="res://10_BOARD/Dive_infos.gd" id="16_ifpy4"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/Loadin_progress.gd" id="16_jt5le"]
 [ext_resource type="PackedScene" uid="uid://b4ju0ntcydix8" path="res://13_TOOLS_UI/2D_MAP/2d_map.tscn" id="17_c8quy"]
 [ext_resource type="Texture2D" uid="uid://dafg2qvpi6wmk" path="res://06_UI/Loader_circle/Loader_circle.png" id="17_d51lu"]
@@ -109,18 +108,18 @@ var _previous_legend : String
 func _ready():
 
 	_global_datas._show_object_legend.connect(_update_text)
-	_global_datas._change_language_state.connect(change_ls)
-
-	
-func change_ls(ls):
-	ls_index = ls
-	
-	if info == null:
-		return
-	var info_reader = board_info_reader.new()
-	var text_info = info_reader.node_by_name(info,ls_index)
-	description_text.text = text_info
-	
+	#_global_datas._change_language_state.connect(change_ls)
+#
+	#
+#func change_ls(ls):
+	#ls_index = ls
+	#
+	#if info == null:
+		#return
+	#var info_reader = board_info_reader.new()
+	#var text_info = info_reader.node_by_name(info,ls_index)
+	#description_text.text = text_info
+	#
 func _update_text(condition : bool, _legend: String):
 	
 	if !condition:
@@ -583,14 +582,34 @@ grow_vertical = 2
 script = ExtResource("14_isnv0")
 buttons = [NodePath("../Map_button/Button"), NodePath("../Board_Button/Button")]
 
+[node name="Date" type="Label" parent="Main_Scene_U"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 513.0
+offset_top = -721.0
+offset_right = 625.0
+offset_bottom = -621.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.721569, 0.580392, 0.407843, 1)
+theme_override_colors/font_outline_color = Color(0.0235294, 0.117647, 0.12549, 1)
+theme_override_constants/outline_size = 60
+theme_override_font_sizes/font_size = 21
+text = "Day 36
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 1
+
 [node name="DiveZone_infos" type="Control" parent="Main_Scene_U"]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 328.0
 offset_bottom = 264.0
-
-[node name="DiveZone_info_update" type="Node" parent="Main_Scene_U/DiveZone_infos"]
-script = ExtResource("16_ifpy4")
 
 [node name="Loadin_progress" type="Node" parent="Main_Scene_U/DiveZone_infos" node_paths=PackedStringArray("progress_bar")]
 script = ExtResource("16_jt5le")
@@ -744,18 +763,16 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = 74.0
-offset_top = 29.0
-offset_right = 74.0
-offset_bottom = 29.0
+offset_top = 48.0
+offset_bottom = 48.0
 grow_horizontal = 2
 
 [node name="Money_bar" parent="Main_Scene_U" instance=ExtResource("15_jqiih")]
 layout_mode = 1
 offset_left = -222.0
-offset_top = 3.0
+offset_top = 58.0
 offset_right = -10.0
-offset_bottom = 64.0
+offset_bottom = 119.0
 
 [node name="2D_Map" parent="." instance=ExtResource("17_c8quy")]
 visible = false
