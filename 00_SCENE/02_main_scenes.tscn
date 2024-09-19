@@ -1,4 +1,4 @@
-[gd_scene load_steps=81 format=3 uid="uid://cnmptm7i0xxmj"]
+[gd_scene load_steps=84 format=3 uid="uid://cnmptm7i0xxmj"]
 
 [ext_resource type="Script" path="res://00_SCENE/ZONE_datas.gd" id="1_gm0dt"]
 [ext_resource type="Script" path="res://00_SCENE/Active_Decor_Scene.gd" id="1_ounvv"]
@@ -18,6 +18,7 @@
 [ext_resource type="Material" uid="uid://b64juw612xqpu" path="res://05_SHADER/Sea_sh/Sea_mat.tres" id="7_4y8ld"]
 [ext_resource type="Shader" uid="uid://b8pie7pbqwtks" path="res://05_SHADER/Full_screen/Main_fullscreen.tres" id="8_oftpq"]
 [ext_resource type="Shader" path="res://05_SHADER/Full_screen/Pixel_art/test_pixel.gdshader" id="8_t6l40"]
+[ext_resource type="Script" path="res://00_SCENE/In_Zone_State.gd" id="9_6b1oy"]
 [ext_resource type="Script" path="res://00_SCENE/Day_state.gd" id="9_vbyff"]
 [ext_resource type="PackedScene" uid="uid://dla1534gcagbl" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Pine/pine_prefabs.tscn" id="10_c6r5x"]
 [ext_resource type="PackedScene" uid="uid://cegdqm3et2y35" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Iceberg/ice_berg_02.tscn" id="11_086vv"]
@@ -59,11 +60,14 @@ script/source = "extends Node
 
 func _input(event: InputEvent) -> void:
 	
-	var _disable = true
-	if _disable:
-		return
+	#var _disable = true
+	#if _disable:
+		#return
 	if _global_datas.Player_InMenu:
+		_global_datas._active_progress_subscene.emit(false)
+		_global_datas._load_subscene.emit(false)
 		return
+		
 	if _global_datas.Player_InDialogue:
 		return
 	
@@ -74,19 +78,26 @@ func _input(event: InputEvent) -> void:
 		
 	if _global_datas._time_state == 0:
 			return	
-
-	if event.is_action_released(\"Push_to_subscene\"):
-		
 	
+	
+	if event.is_action_released(\"Push_to_subscene\"):
+
 		_global_datas._active_progress_subscene.emit(false)
 		_global_datas._load_subscene.emit(false)
 
 	if event.is_action_pressed(\"Push_to_subscene\"):
 	
+		if _global_datas.zoneData == null:
+			return
+			
+			
 		if _global_datas.Player_In_Inventory:
-			return		
-		_global_datas._active_progress_subscene.emit(true)
-		_global_datas._load_subscene.emit(true)
+			return
+		_global_datas.zoneData.zone_progressBar.value += 33	
+		
+		if _global_datas.zoneData.Boue_active:
+			_global_datas._active_progress_subscene.emit(true)
+			_global_datas._load_subscene.emit(true)
 
 "
 
@@ -506,6 +517,9 @@ _data = {
 point_count = 6
 up_vector_enabled = false
 
+[sub_resource type="ViewportTexture" id="ViewportTexture_pckgt"]
+viewport_path = NodePath("SubViewport")
+
 [sub_resource type="Curve3D" id="Curve3D_kjcnf"]
 resource_local_to_scene = true
 bake_interval = 0.01
@@ -515,6 +529,9 @@ _data = {
 }
 point_count = 6
 up_vector_enabled = false
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_lsdho"]
+viewport_path = NodePath("SubViewport")
 
 [node name="02_MAIN_SCENES" type="Node"]
 
@@ -554,6 +571,9 @@ script = SubResource("GDScript_55qk3")
 
 [node name="Teleport_boat_at_position" type="Node" parent="."]
 script = ExtResource("4_xkpot")
+
+[node name="In_Zone_State" type="Node" parent="."]
+script = ExtResource("9_6b1oy")
 
 [node name="Night&Day_state" type="Node" parent="."]
 script = ExtResource("9_vbyff")
@@ -979,6 +999,9 @@ polygon = PackedVector2Array(-0.255678, -6.36623, 1.02256, -3.33042, 0.290235, -
 [node name="BouePrefab" parent="--DECOR--/DIVE_ZONES/Path_zone" index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.15518, 0, -3.86664)
 
+[node name="Render" parent="--DECOR--/DIVE_ZONES/Path_zone" index="3"]
+texture = SubResource("ViewportTexture_pckgt")
+
 [node name="Path_zone2" parent="--DECOR--/DIVE_ZONES" instance=ExtResource("36_wcr5m")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.45029, -4.76837e-07, 8.18964)
 zone_datas = ExtResource("2_xqcjl")
@@ -991,6 +1014,9 @@ polygon = PackedVector2Array(-1.74561, -5.65497, 1.17283, -4.06467, 1.11792, -1.
 
 [node name="BouePrefab" parent="--DECOR--/DIVE_ZONES/Path_zone2" index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.11292, 0, -2.04953)
+
+[node name="Render" parent="--DECOR--/DIVE_ZONES/Path_zone2" index="3"]
+texture = SubResource("ViewportTexture_lsdho")
 
 [connection signal="area_entered" from="--DECOR--/Player_Boat/Enter_dialogue_zone" to="--DECOR--/Player_Boat/Check_zone_ui" method="_on_enter_dialogue_zone_area_entered"]
 [connection signal="area_exited" from="--DECOR--/Player_Boat/Enter_dialogue_zone" to="--DECOR--/Player_Boat/Check_zone_ui" method="_on_enter_dialogue_zone_area_exited"]

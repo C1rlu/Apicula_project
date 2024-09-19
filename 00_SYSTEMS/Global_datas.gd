@@ -48,7 +48,6 @@ signal _active_progress_subscene(condition : bool)
 signal _active_go_subscene_button(condition : bool)
 signal _active_world_grid(condition : bool)
 signal _teleport_boat_at_pos(position : Vector3)
-signal _boat_inside_zone(condition : bool)
 signal _disable_bird_meet_for_today(condition : bool)
 
 #color signal 
@@ -86,8 +85,10 @@ signal _show_object_legend(condtion : bool, legend : String)
 var player_rg : RigidBody3D
 var attache_node: Node3D
 
-signal player_in_diveZone(condition : bool)
+signal player_in_diveZone_ui(condition : bool)
+signal _active_this_zone(condition : bool,zone :ZoneData)
 var zoneData : ZoneData
+
 signal _load_subscene(condition : bool)
 signal _go_Subscene
 var subbscene_playerPosition : Vector3

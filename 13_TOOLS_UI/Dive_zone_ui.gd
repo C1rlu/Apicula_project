@@ -5,7 +5,8 @@ extends Node
 
 
 func _ready():
-	_global_datas.player_in_diveZone.connect(_enable)
+
+	#_global_datas.player_in_diveZone_ui.connect(_enable)
 	_global_datas._go_Subscene.connect(func(): _enable(false))
 	
 func _enable(condition : bool):

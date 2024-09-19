@@ -16,8 +16,14 @@ func _ready():
 	_global_datas._backFrom_subscene.connect(check_zone)
 	_global_datas._go_Subscene.connect(close)
 
-	
+	#_global_datas._show_zone_info.connect(check_closeZoneUi)
 
+
+func check_closeZoneUi(condition):
+	
+	if !condition:
+		check_zone()
+	
 func close():
 	_global_datas.in_dialogue_zone.emit(false)	
 
@@ -28,7 +34,7 @@ func close_for_menu(condition):
 	
 	if condition:
 		_global_datas.in_dialogue_zone.emit(false)
-		#_global_datas._show_object_legend.emit(false,null)		
+	
 	else:
 		
 		if _global_datas.Player_In_Inventory:
@@ -57,17 +63,12 @@ func check_zone():
 				return
 			_global_datas.in_dialogue_zone.emit(true)
 			
-			#var actual_zone_name = _global_datas.Npc_Dialogue.zone_info_name
-			#_global_datas._show_object_legend.emit(true,actual_zone_name)
-
 		var dive_zone = a.get_node_or_null("Zone")
 		if dive_zone:
 			var dive_data = dive_zone.get_dive_data()
 			_global_datas.zoneData = dive_data
-			_global_datas._boat_inside_zone.emit(true)
-			_global_datas.player_in_diveZone.emit(true)
-			
-			
+			_global_datas._show_zone_info.emit(true)
+
 			
 func _on_enter_dialogue_zone_area_entered(area):
 	
@@ -82,16 +83,15 @@ func _on_enter_dialogue_zone_area_entered(area):
 				return
 			_global_datas.in_dialogue_zone.emit(true)
 			
-			#var actual_zone_name = _global_datas.Npc_Dialogue.zone_info_name
-			#_global_datas._show_object_legend.emit(true,actual_zone_name)
-			
+
 		var dive_zone = area.get_node_or_null("Zone")
 		if dive_zone:
 			var dive_data = dive_zone.get_dive_data()
 			_global_datas.zoneData = dive_data
-			print(_global_datas.zoneData)
-			_global_datas._boat_inside_zone.emit(true)
-			_global_datas.player_in_diveZone.emit(true)
+			_global_datas._active_this_zone.emit(true,_global_datas.zoneData)
+			_global_datas._show_zone_info.emit(true)
+		
+
 			
 func _on_enter_dialogue_zone_area_exited(area):
 	
@@ -100,11 +100,10 @@ func _on_enter_dialogue_zone_area_exited(area):
 		var npc_zone = area.get_node_or_null("Npc_zone")
 		if npc_zone:
 			_global_datas.in_dialogue_zone.emit(false)
-			#_global_datas._show_object_legend.emit(false,null)
-			
+
 		var dive_zone = area.get_node_or_null("Zone")
 		if dive_zone:
-			
-			_global_datas._boat_inside_zone.emit(false)
-			_global_datas.player_in_diveZone.emit(false)
-			
+			_global_datas._active_this_zone.emit(false,_global_datas.zoneData)
+			_global_datas._show_zone_info.emit(false)
+			_global_datas.zoneData = null
+	

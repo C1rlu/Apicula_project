@@ -16,19 +16,16 @@ func _ready():
 func _set_ls(ls_state : int):
 	
 	current_ls = ls_state
-	_take_info(_global_datas.subscene_zone_index.to_lower())
+	_take_info(_global_datas.zoneData.zone_node_dialogue.to_lower())
 		
 	
 func _update(_null):
 	
-	if zone_title_text.text != _global_datas.subscene_zone_index:		 
-		zone_title_text.text = _global_datas.subscene_zone_index
-		_take_info(_global_datas.subscene_zone_index.to_lower())
-func _update_only():
-	
-	if zone_title_text.text != _global_datas.subscene_zone_index:		 
-		zone_title_text.text = _global_datas.subscene_zone_index
-		_take_info(_global_datas.subscene_zone_index.to_lower())
+	if zone_title_text.text != _global_datas.zoneData.zone_node_dialogue:		 
+		zone_title_text.text = _global_datas.zoneData.zone_node_dialogue
+		_take_info(_global_datas.zoneData.zone_node_dialogue.to_lower())
+		
+
 func _take_info(zone_index : String):
 
 	var _path = str(ZONE_INFO_DIALOGUE)	
