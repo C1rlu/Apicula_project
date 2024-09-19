@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=3 uid="uid://bwmu5iwushsl5"]
+[gd_scene load_steps=56 format=3 uid="uid://bwmu5iwushsl5"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/Fade_flash_effect.gd" id="1_1dj2k"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/INSTANCE_NOTE.gd" id="1_fcb2u"]
@@ -10,6 +10,8 @@
 [ext_resource type="Resource" uid="uid://nb378vtwr23i" path="res://12_INVENTORY/Words_note/Find_The_Apicula_note.tres" id="4_whlox"]
 [ext_resource type="Texture2D" uid="uid://4bq2l5jjm4r2" path="res://00_SYSTEMS/KeyOrPad/Pad_inputs.png" id="5_jufic"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/BACK_LETTERS.gd" id="7_uck14"]
+[ext_resource type="Script" path="res://13_TOOLS_UI/Dive_zone_ui.gd" id="8_8xh8d"]
+[ext_resource type="Texture2D" uid="uid://dnj8c1w4o2yck" path="res://13_TOOLS_UI/in_zoneImg.png" id="8_oqlu7"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/Main_scene_UI.gd" id="14_isnv0"]
 [ext_resource type="PackedScene" uid="uid://cbgkay5155yn3" path="res://13_TOOLS_UI/Top_bar/Money_bar.tscn" id="15_jqiih"]
 [ext_resource type="Shader" uid="uid://owtikj2jm5h5" path="res://13_TOOLS_UI/PhotoFlash_effect.tres" id="15_kco3d"]
@@ -33,7 +35,6 @@
 [ext_resource type="PackedScene" uid="uid://clc3sbquuu1us" path="res://13_TOOLS_UI/Clock_montre/Clock_ui_prefab.tscn" id="31_4ftpd"]
 [ext_resource type="PackedScene" uid="uid://h0dc0tsioi8y" path="res://13_TOOLS_UI/Time_bar/Timebar_ui.tscn" id="31_uhtuk"]
 [ext_resource type="PackedScene" uid="uid://bg5086w5cu7aw" path="res://13_TOOLS_UI/Zone_info/zone_info.tscn" id="33_x70y2"]
-[ext_resource type="PackedScene" uid="uid://bx7po1x8tko1b" path="res://13_TOOLS_UI/Zone_info/Zone_attribution/zone_attribution.tscn" id="34_n27gf"]
 
 [sub_resource type="GDScript" id="GDScript_ebu32"]
 script/source = "extends Node
@@ -259,10 +260,6 @@ shader_parameter/Flat_color = Color(0.0156863, 0.109804, 0.117647, 1)
 shader_parameter/Opacity = 1.0
 shader_parameter/Mask_color = Color(0.223529, 0.211765, 0.145098, 1)
 shader_parameter/Line_color = Color(0.596078, 0.466667, 0.298039, 1)
-shader_parameter/Grid_color = Color(0.137255, 0.231373, 0.239216, 1)
-shader_parameter/Offset = Vector2(0, 0)
-shader_parameter/Size = Vector2(1000, 1000)
-shader_parameter/Ligne_widht = 0.025
 shader_parameter/Isle_mask = ExtResource("22_txmj8")
 shader_parameter/Line = ExtResource("23_ym7p0")
 
@@ -411,6 +408,35 @@ script = ExtResource("7_uck14")
 
 [node name="Button_active_Dialogue" type="Node" parent="."]
 script = SubResource("GDScript_40xas")
+
+[node name="Dive_zone" type="Control" parent="Button_active_Dialogue"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -122.0
+offset_right = 20.0
+offset_bottom = -82.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dive_zone_ui" type="Node" parent="Button_active_Dialogue/Dive_zone" node_paths=PackedStringArray("Dive_img")]
+script = ExtResource("8_8xh8d")
+Dive_img = NodePath("../Dive_zoneLogo")
+
+[node name="Dive_zoneLogo" type="TextureRect" parent="Button_active_Dialogue/Dive_zone"]
+visible = false
+self_modulate = Color(0.74902, 0.576471, 0.384314, 1)
+layout_mode = 1
+offset_left = 19.0
+offset_top = 42.0
+offset_right = 61.0
+offset_bottom = 84.0
+texture = ExtResource("8_oqlu7")
+expand_mode = 1
 
 [node name="Button" type="Control" parent="Button_active_Dialogue"]
 visible = false
@@ -791,6 +817,8 @@ offset_top = 156.0
 offset_bottom = 156.0
 grow_horizontal = 2
 
+[node name="Zone_info" parent="." instance=ExtResource("33_x70y2")]
+
 [node name="Front_element" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 15
@@ -800,10 +828,6 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 metadata/_edit_use_anchors_ = true
-
-[node name="Zone_info" parent="." instance=ExtResource("33_x70y2")]
-
-[node name="Zone_attribution" parent="." instance=ExtResource("34_n27gf")]
 
 [node name="Select_element_state" type="Node" parent="."]
 script = ExtResource("28_ld21h")

@@ -1,7 +1,7 @@
 extends Node
 
 
-var disable = false 
+var disable = true
 
 
 func _ready():
@@ -25,7 +25,7 @@ func _input(event):
 		
 		var boat_position = _global_datas.player_position
 		_global_datas._active_sonar.emit(boat_position)		
-		_global_datas._show_zone_info.emit(true)
+		
 		
 
 

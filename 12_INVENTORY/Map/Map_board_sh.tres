@@ -164,10 +164,6 @@ global uniform float Dither_size;
 uniform sampler2D tex_frg_23;
 uniform vec4 Isle_color : source_color = vec4(0.575368, 0.573518, 0.000000, 1.000000);
 uniform sampler2D tex_frg_29;
-uniform vec4 Grid_color : source_color = vec4(0.470642, 0.389814, 0.097199, 1.000000);
-uniform vec2 Offset = vec2(0.000000, 0.000000);
-uniform vec2 Size = vec2(1000.000000, 1000.000000);
-uniform float Ligne_widht = 0.02500000037253;
 global uniform bool isGray;
 
 
@@ -245,76 +241,11 @@ void fragment() {
 	vec3 n_out32p0 = mix(n_out25p0, vec3(n_out31p0.xyz), vec3(n_out33p0));
 
 
-// ColorParameter:21
-	vec4 n_out21p0 = Grid_color;
-
-
-// FloatConstant:18
-	float n_out18p0 = 1.300000;
-
-
-	float n_out19p0;
-// Expression:19
-	n_out19p0 = 0.0;
-	{
-		const float DITHER_THRESHOLDS[16] ={
-				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-			};
-			
-		vec2 uv = FRAGCOORD.xy * n_out27p0;
-		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-		n_out19p0 = n_out18p0 - DITHER_THRESHOLDS[index];
-	}
-
-
-// Vector2Parameter:13
-	vec2 n_out13p0 = Offset;
-
-
-// Input:12
-	vec2 n_out12p0 = UV;
-
-
-// Vector2Parameter:14
-	vec2 n_out14p0 = Size;
-
-
-// FloatConstant:15
-	float n_out15p0 = 200.000000;
-
-
-// FloatParameter:16
-	float n_out16p0 = Ligne_widht;
-
-
-	float n_out11p0;
-// Expression:11
-	n_out11p0 = 0.0;
-	{
-		vec2 uv = (n_out13p0 / n_out14p0) + n_out12p0;
-		vec2 r = mod(n_out14p0 * uv, vec2(n_out15p0));
-		vec2 lines = smoothstep(1.0 - n_out16p0, 1, r / vec2(n_out15p0));
-		float alpha = dot(lines, vec2(1.0, 1.0));
-		n_out11p0 = alpha;
-	}
-
-
-// Step:20
-	float n_out20p0 = step(n_out19p0, n_out11p0);
-
-
-// Mix:24
-	vec3 n_out24p0 = mix(n_out32p0, vec3(n_out21p0.xyz), vec3(n_out20p0));
-
-
 	float n_out38p0;
 // Expression:38
 	n_out38p0 = 0.0;
 	{
-		float luminance = 0.299 * n_out24p0.x + 0.587 * n_out24p0.y + 0.114 * n_out24p0.z;
+		float luminance = 0.299 * n_out32p0.x + 0.587 * n_out32p0.y + 0.114 * n_out32p0.z;
 		n_out38p0 = luminance;
 	}
 
@@ -324,7 +255,7 @@ void fragment() {
 
 
 // Mix:39
-	vec3 n_out39p0 = mix(n_out24p0, vec3(n_out38p0), vec3(n_out41p0 ? 1.0 : 0.0));
+	vec3 n_out39p0 = mix(n_out32p0, vec3(n_out38p0), vec3(n_out41p0 ? 1.0 : 0.0));
 
 
 // Output:0
@@ -436,5 +367,5 @@ nodes/fragment/44/node = SubResource("VisualShaderNodeTexture_fxc5h")
 nodes/fragment/44/position = Vector2(180, 440)
 nodes/fragment/45/node = SubResource("VisualShaderNodeStep_4w4pw")
 nodes/fragment/45/position = Vector2(-3660, 160)
-nodes/fragment/connections = PackedInt32Array(12, 0, 11, 1, 15, 0, 11, 3, 13, 0, 11, 0, 14, 0, 11, 2, 16, 0, 11, 4, 18, 0, 19, 0, 11, 0, 20, 1, 19, 0, 20, 0, 27, 0, 8, 1, 27, 0, 19, 1, 9, 0, 25, 1, 28, 0, 8, 0, 23, 0, 10, 1, 25, 0, 32, 0, 32, 0, 24, 0, 31, 0, 32, 1, 29, 0, 33, 1, 33, 0, 32, 2, 21, 0, 24, 1, 38, 0, 39, 1, 24, 0, 38, 0, 39, 0, 0, 0, 24, 0, 39, 0, 41, 0, 39, 2, 20, 0, 24, 2, 8, 0, 10, 0, 42, 0, 43, 0, 10, 0, 43, 1, 23, 0, 43, 2, 43, 0, 25, 2, 5, 0, 25, 0)
+nodes/fragment/connections = PackedInt32Array(12, 0, 11, 1, 15, 0, 11, 3, 13, 0, 11, 0, 14, 0, 11, 2, 16, 0, 11, 4, 18, 0, 19, 0, 11, 0, 20, 1, 19, 0, 20, 0, 27, 0, 8, 1, 27, 0, 19, 1, 9, 0, 25, 1, 28, 0, 8, 0, 23, 0, 10, 1, 25, 0, 32, 0, 32, 0, 24, 0, 31, 0, 32, 1, 29, 0, 33, 1, 33, 0, 32, 2, 21, 0, 24, 1, 38, 0, 39, 1, 39, 0, 0, 0, 41, 0, 39, 2, 20, 0, 24, 2, 8, 0, 10, 0, 42, 0, 43, 0, 10, 0, 43, 1, 23, 0, 43, 2, 43, 0, 25, 2, 5, 0, 25, 0, 32, 0, 38, 0, 32, 0, 39, 0)
 nodes/light/0/position = Vector2(2920, 40)

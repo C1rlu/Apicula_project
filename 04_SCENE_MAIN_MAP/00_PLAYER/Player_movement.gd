@@ -46,7 +46,7 @@ func _physics_process(_delta):
 		
 	var translation = get_global_transform().origin
 	_global_datas.player_position = translation
-	_global_datas._update_info_zone.emit()
+
 	if _global_datas.Player_InMenu:
 		return
 		

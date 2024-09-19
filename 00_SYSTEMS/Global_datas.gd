@@ -87,6 +87,7 @@ var player_rg : RigidBody3D
 var attache_node: Node3D
 
 signal player_in_diveZone(condition : bool)
+var zoneData : ZoneData
 signal _load_subscene(condition : bool)
 signal _go_Subscene
 var subbscene_playerPosition : Vector3

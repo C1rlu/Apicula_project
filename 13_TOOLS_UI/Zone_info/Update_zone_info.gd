@@ -9,8 +9,7 @@ var current_ls : int
 
 
 func _ready():
-	_global_datas._active_sonar.connect(_update)
-	_global_datas._update_info_zone.connect(_update_only)
+	_global_datas._show_zone_info.connect(_update)
 	_global_datas._change_language_state.connect(_set_ls)
 
 

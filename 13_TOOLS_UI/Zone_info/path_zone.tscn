@@ -1,0 +1,57 @@
+[gd_scene load_steps=7 format=3 uid="uid://tykoadjnvbu3"]
+
+[ext_resource type="Script" path="res://13_TOOLS_UI/Zone_info/Update_Col.gd" id="1_jsbqs"]
+[ext_resource type="Script" path="res://13_TOOLS_UI/Zone_info/Zone_info.gd" id="1_v5adu"]
+[ext_resource type="PackedScene" uid="uid://d3hvny81yiko4" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Boue/Boue_prefab.tscn" id="2_8keq4"]
+[ext_resource type="Script" path="res://13_TOOLS_UI/Zone_info/Zone.gd" id="3_d3fkr"]
+
+[sub_resource type="Curve3D" id="Curve3D_q0qx2"]
+resource_local_to_scene = true
+bake_interval = 0.01
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -4.67827, 4.76837e-07, -5.02476, 0, 0, 0, 0, 0, 0, 1.17283, 4.76837e-07, -4.06467, 0, 0, 0, 0, 0, 0, 1.7294, 4.76837e-07, 0.874803, 0, 0, 0, 0, 0, 0, -4.54495, 0.0837407, 0.471007, 0, 0, 0, 0, 0, 0, -5.6927, 4.76837e-07, -3.17705, 0, 0, 0, 0, 0, 0, -4.60581, 4.76837e-07, -4.9523),
+"tilts": PackedFloat32Array(0, 0, 0.903682, 0, 0, 0)
+}
+point_count = 6
+up_vector_enabled = false
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dai81"]
+shading_mode = 0
+
+[node name="Path_prefab" type="Node3D"]
+script = ExtResource("1_v5adu")
+
+[node name="Path_zone" type="Path3D" parent="."]
+curve = SubResource("Curve3D_q0qx2")
+
+[node name="Update_Col" type="Node" parent="Path_zone" node_paths=PackedStringArray("path", "col")]
+script = ExtResource("1_jsbqs")
+path = NodePath("..")
+col = NodePath("../Area3D/CollisionPolygon3D")
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="Path_zone"]
+layers = 64
+material_override = SubResource("StandardMaterial3D_dai81")
+polygon = PackedVector2Array(0, 0, 0.005, 0.001, 0.001, 0.001, 0.091, 0)
+mode = 2
+path_node = NodePath("..")
+path_interval_type = 0
+path_interval = 0.01
+path_simplify_angle = 1.0
+path_rotation = 1
+path_local = true
+path_continuous_u = false
+path_u_distance = 1.0
+path_joined = false
+
+[node name="Area3D" type="Area3D" parent="Path_zone"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+
+[node name="Zone" type="Node" parent="Path_zone/Area3D"]
+script = ExtResource("3_d3fkr")
+
+[node name="CollisionPolygon3D" type="CollisionPolygon3D" parent="Path_zone/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
+polygon = PackedVector2Array(-4.67827, -5.02476, 1.17283, -4.06467, 1.7294, 0.874803, -4.54495, 0.471007, -5.6927, -3.17705, -4.60581, -4.9523)
+
+[node name="BouePrefab" parent="." instance=ExtResource("2_8keq4")]

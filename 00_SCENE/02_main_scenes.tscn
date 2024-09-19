@@ -1,4 +1,4 @@
-[gd_scene load_steps=78 format=3 uid="uid://cnmptm7i0xxmj"]
+[gd_scene load_steps=81 format=3 uid="uid://cnmptm7i0xxmj"]
 
 [ext_resource type="Script" path="res://00_SCENE/ZONE_datas.gd" id="1_gm0dt"]
 [ext_resource type="Script" path="res://00_SCENE/Active_Decor_Scene.gd" id="1_ounvv"]
@@ -9,7 +9,7 @@
 [ext_resource type="Resource" uid="uid://cdef15ggl03fh" path="res://15_GAME_RESSOURCE/00_Zone_data/Apicula_zone.tres" id="2_xqcjl"]
 [ext_resource type="Script" path="res://04_SCENE_MAIN_MAP/00_PLAYER/Sonar/Button_active_sonar.gd" id="3_0rdsq"]
 [ext_resource type="Script" path="res://00_SCENE/MainScene/Grid_Fade.gd" id="3_7fuin"]
-[ext_resource type="Resource" uid="uid://d2ivg06mjrg4v" path="res://15_GAME_RESSOURCE/00_Zone_data/Hole_zone.tres" id="3_mqlau"]
+[ext_resource type="Resource" uid="uid://d2ivg06mjrg4v" path="res://15_GAME_RESSOURCE/00_Zone_data/Vortex_zone.tres" id="3_mqlau"]
 [ext_resource type="Shader" uid="uid://bduoqim3kfbs6" path="res://04_SCENE_MAIN_MAP/00_PLAYER/Sonar/Sonar_sh.tres" id="3_todel"]
 [ext_resource type="Script" path="res://03_CAMERA/Active_scene_viewports.gd" id="4_tulh2"]
 [ext_resource type="Script" path="res://00_SCENE/MainScene/Teleport_boat_at_position.gd" id="4_xkpot"]
@@ -33,6 +33,7 @@
 [ext_resource type="Script" path="res://00_SCENE/Npc_zone.gd" id="30_ki3ay"]
 [ext_resource type="Resource" uid="uid://c6jw6ja2xggvh" path="res://15_GAME_RESSOURCE/00_Npc_data/Otis_Coast_guard_data.tres" id="32_pt30g"]
 [ext_resource type="Material" uid="uid://yjoyk6fvrm6q" path="res://10_BOARD/00_BOOK/00_SHADER/No_light_surface_mat.tres" id="33_um15u"]
+[ext_resource type="PackedScene" uid="uid://tykoadjnvbu3" path="res://13_TOOLS_UI/Zone_info/path_zone.tscn" id="36_wcr5m"]
 [ext_resource type="PackedScene" uid="uid://dh5kdswdhdfq6" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Island_set/Island_set_01/Island_set_01_prefab.tscn" id="37_b1buk"]
 
 [sub_resource type="GDScript" id="GDScript_ueh7h"]
@@ -58,9 +59,9 @@ script/source = "extends Node
 
 func _input(event: InputEvent) -> void:
 	
-	#var _disable = true
-	#if _disable:
-		#return
+	var _disable = true
+	if _disable:
+		return
 	if _global_datas.Player_InMenu:
 		return
 	if _global_datas.Player_InDialogue:
@@ -495,6 +496,26 @@ size = Vector3(30, 0, 30)
 [sub_resource type="BoxMesh" id="BoxMesh_wmrfd"]
 size = Vector3(30, 0, 30)
 
+[sub_resource type="Curve3D" id="Curve3D_0gj57"]
+resource_local_to_scene = true
+bake_interval = 0.01
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -0.255678, 4.76837e-07, -6.36623, 0, 0, 0, 0, 0, 0, 1.02256, 4.76837e-07, -3.33042, 0, 0, 0, 0, 0, 0, 0.290235, 4.76837e-07, -0.640798, 0, 0, 0, 0, 0, 0, -3.46458, 0.0837407, -1.16008, 0, 0, 0, 0, 0, 0, -3.91729, 4.76837e-07, -5.14125, 0, 0, 0, 0, 0, 0, -0.268994, 4.76837e-07, -6.37955),
+"tilts": PackedFloat32Array(0, 0, 0.903682, 0, 0, 0)
+}
+point_count = 6
+up_vector_enabled = false
+
+[sub_resource type="Curve3D" id="Curve3D_kjcnf"]
+resource_local_to_scene = true
+bake_interval = 0.01
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -1.74561, 4.76837e-07, -5.65497, 0, 0, 0, 0, 0, 0, 1.17283, 4.76837e-07, -4.06467, 0, 0, 0, 0, 0, 0, 1.11792, 4.76837e-07, -1.10516, 0, 0, 0, 0, 0, 0, -3.18281, 0.0837407, -0.43941, 0, 0, 0, 0, 0, 0, -3.83525, 4.76837e-07, -2.66301, 0, 0, 0, 0, 0, 0, -1.74561, 4.76837e-07, -5.6816),
+"tilts": PackedFloat32Array(0, 0, 0.903682, 0, 0, 0)
+}
+point_count = 6
+up_vector_enabled = false
+
 [node name="02_MAIN_SCENES" type="Node"]
 
 [node name="GAME_STATE" type="Node" parent="."]
@@ -897,7 +918,7 @@ shape = SubResource("SphereShape3D_jvty4")
 [node name="EPAVE" type="Node3D" parent="--DECOR--"]
 
 [node name="EPAVE_ZONE2" parent="--DECOR--/EPAVE" instance=ExtResource("23_txlwt")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.50703, -0.192537, -3.34928)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.38118, -0.192537, -7.68672)
 
 [node name="EPAVE_ZONE3" parent="--DECOR--/EPAVE" node_paths=PackedStringArray("Fade_out") instance=ExtResource("23_txlwt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.7167, -0.192537, -10.7104)
@@ -943,5 +964,36 @@ mesh = SubResource("BoxMesh_wmrfd")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("33_um15u")
 
+[node name="DIVE_ZONES" type="Node3D" parent="--DECOR--"]
+
+[node name="Path_zone" parent="--DECOR--/DIVE_ZONES" instance=ExtResource("36_wcr5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.74792, -4.76837e-07, -2.92697)
+zone_datas = ExtResource("3_mqlau")
+
+[node name="Path_zone" parent="--DECOR--/DIVE_ZONES/Path_zone" index="0"]
+curve = SubResource("Curve3D_0gj57")
+
+[node name="CollisionPolygon3D" parent="--DECOR--/DIVE_ZONES/Path_zone/Path_zone/Area3D" index="1"]
+polygon = PackedVector2Array(-0.255678, -6.36623, 1.02256, -3.33042, 0.290235, -0.640798, -3.46458, -1.16008, -3.91729, -5.14125, -0.268994, -6.37955)
+
+[node name="BouePrefab" parent="--DECOR--/DIVE_ZONES/Path_zone" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.15518, 0, -3.86664)
+
+[node name="Path_zone2" parent="--DECOR--/DIVE_ZONES" instance=ExtResource("36_wcr5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.45029, -4.76837e-07, 8.18964)
+zone_datas = ExtResource("2_xqcjl")
+
+[node name="Path_zone" parent="--DECOR--/DIVE_ZONES/Path_zone2" index="0"]
+curve = SubResource("Curve3D_kjcnf")
+
+[node name="CollisionPolygon3D" parent="--DECOR--/DIVE_ZONES/Path_zone2/Path_zone/Area3D" index="1"]
+polygon = PackedVector2Array(-1.74561, -5.65497, 1.17283, -4.06467, 1.11792, -1.10516, -3.18281, -0.43941, -3.83525, -2.66301, -1.74561, -5.6816)
+
+[node name="BouePrefab" parent="--DECOR--/DIVE_ZONES/Path_zone2" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.11292, 0, -2.04953)
+
 [connection signal="area_entered" from="--DECOR--/Player_Boat/Enter_dialogue_zone" to="--DECOR--/Player_Boat/Check_zone_ui" method="_on_enter_dialogue_zone_area_entered"]
 [connection signal="area_exited" from="--DECOR--/Player_Boat/Enter_dialogue_zone" to="--DECOR--/Player_Boat/Check_zone_ui" method="_on_enter_dialogue_zone_area_exited"]
+
+[editable path="--DECOR--/DIVE_ZONES/Path_zone"]
+[editable path="--DECOR--/DIVE_ZONES/Path_zone2"]

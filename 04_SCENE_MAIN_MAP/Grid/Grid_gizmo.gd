@@ -8,10 +8,11 @@ var cell_prefabs = preload("res://04_SCENE_MAIN_MAP/Grid/cells_grid_library.tscn
 
 
 func _ready():
-	_create_grid()
-	_global_datas._active_sonar.connect(get_number)
-	_global_datas._load_subscene.connect(_check_sceneIndex)
-	_global_datas._update_info_zone.connect(find_nearest_cell_to_player)
+	pass
+	#_create_grid()
+	#_global_datas._active_sonar.connect(get_number)
+	#_global_datas._load_subscene.connect(_check_sceneIndex)
+	#_global_datas._update_info_zone.connect(find_nearest_cell_to_player)
 	
 func _create_grid():
 	var used_cells = get_used_cells()
