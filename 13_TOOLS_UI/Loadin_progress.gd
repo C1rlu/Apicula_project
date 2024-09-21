@@ -1,6 +1,5 @@
 extends Node
 
-@export var progress_bar : TextureProgressBar
 
 var t 
 func _ready():
@@ -20,7 +19,7 @@ func _load(condition : bool):
 	else:
 		if t:
 			t.kill()
-		progress_bar.value = 0.0
+		_global_datas.subscene_progress_bar.value = 0.0
 		
 func go_subscene():
 	_global_datas._active_progress_subscene.emit(false)
@@ -29,4 +28,5 @@ func go_subscene():
 		
 func _value(value : float):
 	
-	progress_bar.value = value
+	_global_datas.subscene_progress_bar.value = value
+

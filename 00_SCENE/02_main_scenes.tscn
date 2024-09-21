@@ -1,4 +1,4 @@
-[gd_scene load_steps=87 format=3 uid="uid://cnmptm7i0xxmj"]
+[gd_scene load_steps=88 format=3 uid="uid://cnmptm7i0xxmj"]
 
 [ext_resource type="Script" path="res://00_SCENE/ZONE_datas.gd" id="1_gm0dt"]
 [ext_resource type="Script" path="res://00_SCENE/Active_Decor_Scene.gd" id="1_ounvv"]
@@ -26,6 +26,7 @@
 [ext_resource type="PackedScene" uid="uid://cegdqm3et2y35" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Iceberg/ice_berg_02.tscn" id="11_086vv"]
 [ext_resource type="PackedScene" uid="uid://cgscjv6bjfmtq" path="res://13_TOOLS_UI/Coins/coins_visual.tscn" id="12_aefsl"]
 [ext_resource type="Script" path="res://00_SCENE/Sonar_zone_active.gd" id="12_gjulh"]
+[ext_resource type="Script" path="res://13_TOOLS_UI/Loadin_progress.gd" id="12_hkpaj"]
 [ext_resource type="PackedScene" uid="uid://fcjcvy77lg0o" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Lighthouse/lighthouse_prefabs.tscn" id="16_u78ww"]
 [ext_resource type="Script" path="res://04_SCENE_MAIN_MAP/00_PLAYER/Check_zone.gd" id="17_unqeu"]
 [ext_resource type="PackedScene" uid="uid://exqao35losp1" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Rampe/Rampe_prefab.tscn" id="18_vvmth"]
@@ -94,12 +95,9 @@ func _input(event: InputEvent) -> void:
 	
 		if _global_datas.zoneData == null:
 			return
-			
-			
 		if _global_datas.Player_In_Inventory:
 			return
-		
-		
+			
 		if _global_datas.zoneData.Boue_active:
 			_global_datas._active_progress_subscene.emit(true)
 			_global_datas._load_subscene.emit(true)
@@ -246,7 +244,7 @@ viewport_path = NodePath("01_GAME_UI/MAIN_SCENE_UI/Viewports/UI")
 resource_local_to_scene = true
 shader = ExtResource("8_oftpq")
 shader_parameter/Grid_Color = Color(0.254902, 0.513726, 0.552941, 1)
-shader_parameter/Grid_opacity = 0.15
+shader_parameter/Grid_opacity = 0.2
 shader_parameter/Opacity = 1.0
 shader_parameter/Main = SubResource("ViewportTexture_oj43o")
 shader_parameter/Foam = SubResource("ViewportTexture_e1gkt")
@@ -551,6 +549,9 @@ viewports = [NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/MAIN_Viewport"), No
 
 [node name="Push_to_subscene" type="Node" parent="."]
 script = SubResource("GDScript_xsqte")
+
+[node name="loading_subscene_progress_bar" type="Node" parent="Push_to_subscene"]
+script = ExtResource("12_hkpaj")
 
 [node name="Grid_Fade" type="Node" parent="." node_paths=PackedStringArray("Main_render")]
 script = ExtResource("3_7fuin")

@@ -18,10 +18,11 @@ func _active(condition : bool, zone : ZoneData):
 			zone.epave_if_exist.Fade_out._active(condition)
 	
 		_show_cost.emit(false,Vector3.ZERO,3)
-		
+		_global_datas.subscene_progress_bar_sprite.visible = condition	
 	else:
-		var target_pos =  _global_datas.zoneData.center_zone_node.global_position + + Vector3(0.0,1.0,0.0)
 		
+	
+		var target_pos =  _global_datas.zoneData.center_zone_node.global_position + + Vector3(0.0,1.0,0.0)
 		var cost = _global_datas.zoneData.purchass_state[_global_datas.zoneData.purchass_index_state].cost
 		_show_cost.emit(condition,target_pos,cost)			
 	_global_datas._load_subscene.emit(condition)
@@ -37,12 +38,12 @@ func _active_options(condition : bool):
 		_global_datas._in_boue_options = false
 		return  	
 		
-	_global_datas._in_boue_options = condition
+	
 	if _global_datas.zoneData:
 		var target_pos =  _global_datas.zoneData.Boue_node_3D.global_position + Vector3(0.0,2.25,0.0)
 		var cost = _global_datas.zoneData.purchass_state[_global_datas.zoneData.purchass_index_state].cost
 		_show_cost.emit(condition,target_pos,cost)
 		
 	_global_datas._active_progress_subscene.emit(false)
-
-
+	_global_datas.subscene_progress_bar_sprite.visible = !condition
+	_global_datas._in_boue_options = condition
