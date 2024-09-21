@@ -49,6 +49,7 @@ signal _active_go_subscene_button(condition : bool)
 signal _active_world_grid(condition : bool)
 signal _teleport_boat_at_pos(position : Vector3)
 signal _disable_bird_meet_for_today(condition : bool)
+signal _check_boat_zone
 
 #color signal 
 signal go_normal_color
@@ -85,8 +86,11 @@ signal _show_object_legend(condtion : bool, legend : String)
 var player_rg : RigidBody3D
 var attache_node: Node3D
 
-signal player_in_diveZone_ui(condition : bool)
+
+
 signal _active_this_zone(condition : bool,zone :ZoneData)
+signal _show_boue_options(condition : bool)
+var _in_boue_options : bool 
 var zoneData : ZoneData
 
 signal _load_subscene(condition : bool)
@@ -226,6 +230,7 @@ func _ready():
 	_check_objectZone_Area = null
 	_check_objectZone_col = null
 	_time_state = 3
+	_in_boue_options = false
 	
 # TEST BOARD NEWS PROTO SCENE
 signal select_movable_object(object)

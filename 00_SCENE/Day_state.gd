@@ -9,7 +9,7 @@ func _ready():
 
 func _night():
 	
-	main_light.omni_range = 5.0
+	main_light.omni_range = 6.0
 	main_mat.set_shader_parameter("Night",0.3)
 func _day():
 	

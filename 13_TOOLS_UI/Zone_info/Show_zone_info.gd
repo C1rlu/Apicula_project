@@ -11,4 +11,4 @@ func _ready():
 	
 func _show(condition: bool):
 	info_root.visible = condition	
-	
+

@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://d3hvny81yiko4"]
+[gd_scene load_steps=21 format=3 uid="uid://d3hvny81yiko4"]
 
 [ext_resource type="Script" path="res://00_SYSTEMS/Active_mask_at_ready.tres.gd" id="1_3x7it"]
 [ext_resource type="PackedScene" uid="uid://c5e6x8afkk4ml" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Boue/Boue_msh.blend" id="1_3840i"]
@@ -132,6 +132,9 @@ render_priority = 1
 shader = SubResource("VisualShader_gs5la")
 shader_parameter/Lit_color = Color(0.721569, 0.580392, 0.407843, 1)
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_6l3y8"]
+radius = 0.797845
+
 [node name="BouePrefab" type="Node3D"]
 script = ExtResource("1_hw6wc")
 
@@ -167,5 +170,12 @@ surface_material_override/0 = ExtResource("5_mfje0")
 visible = false
 layers = 1024
 surface_material_override/0 = ExtResource("5_mfje0")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="Boue_options" type="Node" parent="Area3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("SphereShape3D_6l3y8")
 
 [editable path="Boue_msh2"]

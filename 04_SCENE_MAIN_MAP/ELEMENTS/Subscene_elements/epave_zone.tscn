@@ -41,6 +41,14 @@ var actual_value : float
 #func _ready():
 	#_show()
 
+
+func _active(condition : bool):
+	
+	if condition:
+		_show()	
+	else:
+		_stop()		
+		
 func _show():
 	
 	if get_tree() == null:
@@ -50,7 +58,7 @@ func _show():
 		t.kill()
 	t = create_tween()
 	
-	t .tween_method(change_value,0.0,0.5,1.0)
+	t .tween_method(change_value,actual_value,0.5,1.0)
 	await create_tween().tween_interval(1.0).finished
 	_hide()
 	
@@ -63,9 +71,21 @@ func _hide():
 		d.kill()
 	d = create_tween()
 	
-	d .tween_method(change_value,0.5,0.0,3.0)
+	d .tween_method(change_value,actual_value,0.0,3.0)
 	await create_tween().tween_interval(3.0).finished
 	_show()
+	
+func _stop():
+	
+	if get_tree() == null:
+		return
+		
+	if d:
+		d.kill()
+	d = create_tween()
+	
+	d.tween_method(change_value,actual_value,0.0,3.0)
+
 
 func change_value(value : float):
 	material.set_shader_parameter(\"Distance\",value)
@@ -253,6 +273,7 @@ script = ExtResource("1_mmyx7")
 
 [node name="collider" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_7qqy6")
+disabled = true
 
 [node name="Epave_visuals" type="Node3D" parent="."]
 

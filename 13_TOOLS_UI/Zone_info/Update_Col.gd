@@ -5,7 +5,6 @@ extends Node
 @export var col : CollisionPolygon3D
 
 
-
 func _ready():
 	_set_collider()
 

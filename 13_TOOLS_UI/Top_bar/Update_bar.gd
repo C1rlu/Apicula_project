@@ -4,8 +4,8 @@ extends Node
 
 func _ready():
 	_global_datas.update_money_amount.connect(update_money)
-
 	
+	_global_datas.current_money = 100
 
 func update_money(value : int):
 	var current = _global_datas.current_money + value

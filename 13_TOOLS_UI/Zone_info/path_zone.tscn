@@ -18,15 +18,15 @@ up_vector_enabled = false
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dai81"]
 shading_mode = 0
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_rcefr"]
-viewport_path = NodePath("SubViewport")
+[sub_resource type="ViewportTexture" id="ViewportTexture_yy6b4"]
+viewport_path = NodePath("SubViewport_zone_name")
 
-[sub_resource type="GDScript" id="GDScript_jd33k"]
+[sub_resource type="GDScript" id="GDScript_8n4n0"]
 script/source = "extends Sprite3D
 
 
 func  _ready():
-	var viewport_texture = $\"../SubViewport\".get_texture()
+	var viewport_texture = $\"../SubViewport_zone_name\".get_texture()
 	texture = viewport_texture
 "
 
@@ -68,16 +68,24 @@ polygon = PackedVector2Array(-4.67827, -5.02476, 1.17283, -4.06467, 1.7294, 0.87
 
 [node name="BouePrefab" parent="." instance=ExtResource("2_8keq4")]
 
-[node name="SubViewport" type="SubViewport" parent="."]
-size = Vector2i(200, 30)
+[node name="SubViewport_zone_name" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(250, 50)
 
-[node name="ProgressBar" type="ProgressBar" parent="SubViewport"]
-offset_right = 204.0
-offset_bottom = 27.0
+[node name="Description_Text" type="Label" parent="SubViewport_zone_name"]
+custom_minimum_size = Vector2(250, 30)
+offset_right = 250.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 30
+text = "Zone name "
+vertical_alignment = 1
+autowrap_mode = 1
 
-[node name="Render" type="Sprite3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.72197, 2.06044, -1.59894)
-visible = false
+[node name="Render_zone_name" type="Sprite3D" parent="."]
+transform = Transform3D(1.1638, 0, 0, 0, 1.1638, 0, 0, 0, 1.1638, -2.15205, 0.210517, -5.58248)
+layers = 262144
 billboard = 1
-texture = SubResource("ViewportTexture_rcefr")
-script = SubResource("GDScript_jd33k")
+texture = SubResource("ViewportTexture_yy6b4")
+script = SubResource("GDScript_8n4n0")
+
+[node name="center_zone" type="Node3D" parent="."]

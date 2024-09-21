@@ -15,9 +15,8 @@ func _ready():
 	# for diving zone
 	_global_datas._backFrom_subscene.connect(check_zone)
 	_global_datas._go_Subscene.connect(close)
-
-	#_global_datas._show_zone_info.connect(check_closeZoneUi)
-
+	
+	_global_datas._check_boat_zone.connect(check_zone)
 
 func check_closeZoneUi(condition):
 	
@@ -67,9 +66,12 @@ func check_zone():
 		if dive_zone:
 			var dive_data = dive_zone.get_dive_data()
 			_global_datas.zoneData = dive_data
-			_global_datas._show_zone_info.emit(true)
+			_global_datas._active_this_zone.emit(true,_global_datas.zoneData)
 
-			
+		var boue_options = a.get_node_or_null("Boue_options")
+		if boue_options:
+			_global_datas._show_boue_options.emit(true)
+				
 func _on_enter_dialogue_zone_area_entered(area):
 	
 	
@@ -89,9 +91,12 @@ func _on_enter_dialogue_zone_area_entered(area):
 			var dive_data = dive_zone.get_dive_data()
 			_global_datas.zoneData = dive_data
 			_global_datas._active_this_zone.emit(true,_global_datas.zoneData)
-			_global_datas._show_zone_info.emit(true)
+			
+			#_global_datas._show_zone_info.emit(true)
 		
-
+		var boue_options = area.get_node_or_null("Boue_options")
+		if boue_options:
+			_global_datas._show_boue_options.emit(true)
 			
 func _on_enter_dialogue_zone_area_exited(area):
 	
@@ -104,6 +109,9 @@ func _on_enter_dialogue_zone_area_exited(area):
 		var dive_zone = area.get_node_or_null("Zone")
 		if dive_zone:
 			_global_datas._active_this_zone.emit(false,_global_datas.zoneData)
-			_global_datas._show_zone_info.emit(false)
+			#_global_datas._show_zone_info.emit(false)
 			_global_datas.zoneData = null
 	
+		var boue_options = area.get_node_or_null("Boue_options")
+		if boue_options:
+			_global_datas._show_boue_options.emit(false)

@@ -19,11 +19,12 @@ func _set_ls(ls_state : int):
 	_take_info(_global_datas.zoneData.zone_node_dialogue.to_lower())
 		
 	
-func _update(_null):
+func _update(condition : bool):
 	
-	if zone_title_text.text != _global_datas.zoneData.zone_node_dialogue:		 
-		zone_title_text.text = _global_datas.zoneData.zone_node_dialogue
-		_take_info(_global_datas.zoneData.zone_node_dialogue.to_lower())
+	if condition:	
+		if zone_title_text.text != _global_datas.zoneData.zone_node_dialogue:		 
+			zone_title_text.text = _global_datas.zoneData.zone_node_dialogue
+			_take_info(_global_datas.zoneData.zone_node_dialogue.to_lower())
 		
 
 func _take_info(zone_index : String):

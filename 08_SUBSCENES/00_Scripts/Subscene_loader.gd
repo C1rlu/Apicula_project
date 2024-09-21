@@ -23,21 +23,23 @@ func _loadscene(condition : bool):
 			child.queue_free()	
 			
 	#LOAD NEW SCENE
-		constant_scene = get_path_from_scene_index()
+		constant_scene = get_scene()
 		if ResourceLoader.exists(constant_scene):
 			ResourceLoader.load_threaded_request(constant_scene)
-
+			
 	#to load in process	
 	_load = condition	
 	$load_sublevel.visible = condition
 
-
+func get_scene():
+	return _global_datas.zoneData.zone_packed_scene.get_path()
+	
 func get_path_from_scene_index():
 	var path = "res://08_SUBSCENES/00_Scene/" + _global_datas.subscene_zone_index +".tscn"
 	return path
 		
 func active_subscene():
-	
+	_global_datas._clear_back_call.emit()
 	_global_datas.Player_InSubScene = true
 	_global_datas._start_ini_subscene.emit()
 	

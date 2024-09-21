@@ -1,6 +1,6 @@
 extends Node
 
-@export var dive_points : Array[TextureRect]
+@export var dive_points : Array[ColorRect]
 @onready var back_time = $"../Back_time"
 
 func _ready():

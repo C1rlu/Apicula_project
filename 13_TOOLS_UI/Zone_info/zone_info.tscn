@@ -1,25 +1,31 @@
 [gd_scene load_steps=6 format=3 uid="uid://bg5086w5cu7aw"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/Zone_info/Show_zone_info.gd" id="1_v730l"]
-[ext_resource type="Script" path="res://13_TOOLS_UI/Zone_info/Dive_in_zone.gd" id="2_k5xwh"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/Zone_info/Update_zone_info.gd" id="2_kpn8h"]
+[ext_resource type="Texture2D" uid="uid://c1ypdphnuc1v8" path="res://13_TOOLS_UI/cadenas.png" id="3_0q2io"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kuhcr"]
-bg_color = Color(0.337255, 0.458824, 0.403922, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xeigu"]
+bg_color = Color(0.215686, 0.313726, 0.321569, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yc860"]
-bg_color = Color(0.407843, 0.345098, 0.247059, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oha7q"]
+bg_color = Color(0.0235294, 0.176471, 0.2, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
 
 [node name="Zone_info" type="Control"]
 layout_mode = 3
-anchors_preset = 7
-anchor_left = 0.5
+anchors_preset = 12
 anchor_top = 1.0
-anchor_right = 0.5
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -189.5
-offset_top = -118.0
-offset_right = 189.5
+offset_top = -184.0
+offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
@@ -30,46 +36,24 @@ info_root = NodePath("..")
 
 [node name="Update_zone_info" type="Node" parent="." node_paths=PackedStringArray("zone_title_text", "zone_text")]
 script = ExtResource("2_kpn8h")
-zone_title_text = NodePath("../VBoxContainer/Description_Text")
-zone_text = NodePath("../VBoxContainer/Zone_info")
+zone_title_text = NodePath("../VBoxContainer6/Description_Text")
+zone_text = NodePath("../VBoxContainer6/Zone_info")
 
-[node name="Dive_in_zone" type="Button" parent="."]
+[node name="VBoxContainer6" type="VBoxContainer" parent="."]
 visible = false
 layout_mode = 1
-anchors_preset = 7
+anchors_preset = 5
 anchor_left = 0.5
-anchor_top = 1.0
 anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -123.5
-offset_top = -149.0
-offset_right = 117.5
-offset_bottom = -72.0
+offset_left = -494.815
+offset_top = 14.725
+offset_right = -244.815
+offset_bottom = 56.725
 grow_horizontal = 2
-grow_vertical = 0
-theme_override_colors/font_color = Color(0.776471, 0.701961, 0.576471, 1)
-theme_override_font_sizes/font_size = 30
-theme_override_styles/normal = SubResource("StyleBoxFlat_kuhcr")
-theme_override_styles/hover = SubResource("StyleBoxFlat_yc860")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_yc860")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_yc860")
-theme_override_styles/focus = SubResource("StyleBoxFlat_yc860")
-text = "DIVE"
-script = ExtResource("2_k5xwh")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 20.5
-offset_top = -50.0
-offset_right = 46.5
-offset_bottom = -47.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Description_Text" type="Label" parent="VBoxContainer"]
+[node name="Description_Text" type="Label" parent="VBoxContainer6"]
+visible = false
+custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.721569, 0.580392, 0.407843, 1)
 theme_override_colors/font_outline_color = Color(0.0235294, 0.117647, 0.12549, 1)
@@ -78,10 +62,377 @@ text = "Lorem ipsum "
 vertical_alignment = 1
 autowrap_mode = 1
 
-[node name="Zone_info" type="Label" parent="VBoxContainer"]
+[node name="Zone_info" type="Label" parent="VBoxContainer6"]
+custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.721569, 0.580392, 0.407843, 1)
 theme_override_font_sizes/font_size = 20
 text = "Blababababa bababa baba "
 vertical_alignment = 1
 autowrap_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+visible = false
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -528.0
+offset_top = -689.115
+offset_right = 472.001
+offset_bottom = -608.115
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="level" type="Control" parent="HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+
+[node name="Button2" type="Button" parent="HBoxContainer/level"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+offset_left = 68.0
+offset_top = 28.0
+offset_right = 128.0
+offset_bottom = 88.0
+focus_mode = 0
+mouse_filter = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_xeigu")
+
+[node name="Button3" type="Button" parent="HBoxContainer/level/Button2"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+offset_left = 3.0
+offset_top = 5.0
+offset_right = 71.0
+offset_bottom = 70.0
+scale = Vector2(0.798216, 0.798216)
+focus_mode = 0
+mouse_filter = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_oha7q")
+
+[node name="Descriptions" type="Label" parent="HBoxContainer/level/Button2/Button3"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -0.5
+offset_top = -14.0
+offset_right = 0.5
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.721569, 0.580392, 0.407843, 1)
+theme_override_font_sizes/font_size = 20
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 1
+
+[node name="Button4" type="Button" parent="HBoxContainer/level"]
+visible = false
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+offset_left = 109.0
+offset_top = 10.505
+offset_right = 169.0
+offset_bottom = 76.505
+scale = Vector2(0.51043, 0.625084)
+focus_mode = 0
+mouse_filter = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_oha7q")
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/level"]
+modulate = Color(0.721569, 0.580392, 0.407843, 1)
+layout_mode = 2
+offset_left = 109.0
+offset_top = 13.505
+offset_right = 140.0
+offset_bottom = 44.505
+texture = ExtResource("3_0q2io")
+expand_mode = 1
+
+[node name="level2" type="Control" parent="HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+
+[node name="Button2" type="Button" parent="HBoxContainer/level2"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+offset_left = 68.0
+offset_top = 28.0
+offset_right = 128.0
+offset_bottom = 88.0
+focus_mode = 0
+mouse_filter = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_xeigu")
+
+[node name="Button3" type="Button" parent="HBoxContainer/level2/Button2"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+offset_left = 3.0
+offset_top = 5.0
+offset_right = 71.0
+offset_bottom = 70.0
+scale = Vector2(0.798216, 0.798216)
+focus_mode = 0
+mouse_filter = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_oha7q")
+
+[node name="Descriptions" type="Label" parent="HBoxContainer/level2/Button2/Button3"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -0.5
+offset_top = -14.0
+offset_right = 0.5
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.721569, 0.580392, 0.407843, 1)
+theme_override_font_sizes/font_size = 20
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 1
+
+[node name="Button4" type="Button" parent="HBoxContainer/level2"]
+visible = false
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+offset_left = 109.0
+offset_top = 10.505
+offset_right = 169.0
+offset_bottom = 76.505
+scale = Vector2(0.51043, 0.625084)
+focus_mode = 0
+mouse_filter = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_oha7q")
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/level2"]
+modulate = Color(0.721569, 0.580392, 0.407843, 1)
+layout_mode = 2
+offset_left = 109.0
+offset_top = 13.505
+offset_right = 140.0
+offset_bottom = 44.505
+texture = ExtResource("3_0q2io")
+expand_mode = 1
+
+[node name="level3" type="Control" parent="HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+
+[node name="Button2" type="Button" parent="HBoxContainer/level3"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+offset_left = 68.0
+offset_top = 28.0
+offset_right = 128.0
+offset_bottom = 88.0
+focus_mode = 0
+mouse_filter = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_xeigu")
+
+[node name="Button3" type="Button" parent="HBoxContainer/level3/Button2"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+offset_left = 3.0
+offset_top = 5.0
+offset_right = 71.0
+offset_bottom = 70.0
+scale = Vector2(0.798216, 0.798216)
+focus_mode = 0
+mouse_filter = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_oha7q")
+
+[node name="Descriptions" type="Label" parent="HBoxContainer/level3/Button2/Button3"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -0.5
+offset_top = -14.0
+offset_right = 0.5
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.721569, 0.580392, 0.407843, 1)
+theme_override_font_sizes/font_size = 20
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 1
+
+[node name="Button4" type="Button" parent="HBoxContainer/level3"]
+visible = false
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+offset_left = 109.0
+offset_top = 10.505
+offset_right = 169.0
+offset_bottom = 76.505
+scale = Vector2(0.51043, 0.625084)
+focus_mode = 0
+mouse_filter = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_oha7q")
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/level3"]
+modulate = Color(0.721569, 0.580392, 0.407843, 1)
+layout_mode = 2
+offset_left = 109.0
+offset_top = 13.505
+offset_right = 140.0
+offset_bottom = 44.505
+texture = ExtResource("3_0q2io")
+expand_mode = 1
+
+[node name="level4" type="Control" parent="HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+
+[node name="Button2" type="Button" parent="HBoxContainer/level4"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+offset_left = 68.0
+offset_top = 28.0
+offset_right = 128.0
+offset_bottom = 88.0
+focus_mode = 0
+mouse_filter = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_xeigu")
+
+[node name="Button3" type="Button" parent="HBoxContainer/level4/Button2"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+offset_left = 3.0
+offset_top = 5.0
+offset_right = 71.0
+offset_bottom = 70.0
+scale = Vector2(0.798216, 0.798216)
+focus_mode = 0
+mouse_filter = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_oha7q")
+
+[node name="Descriptions" type="Label" parent="HBoxContainer/level4/Button2/Button3"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -0.5
+offset_top = -14.0
+offset_right = 0.5
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.721569, 0.580392, 0.407843, 1)
+theme_override_font_sizes/font_size = 20
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 1
+
+[node name="Button4" type="Button" parent="HBoxContainer/level4"]
+visible = false
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+offset_left = 109.0
+offset_top = 10.505
+offset_right = 169.0
+offset_bottom = 76.505
+scale = Vector2(0.51043, 0.625084)
+focus_mode = 0
+mouse_filter = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_oha7q")
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/level4"]
+modulate = Color(0.721569, 0.580392, 0.407843, 1)
+layout_mode = 2
+offset_left = 109.0
+offset_top = 13.505
+offset_right = 140.0
+offset_bottom = 44.505
+texture = ExtResource("3_0q2io")
+expand_mode = 1
+
+[node name="level5" type="Control" parent="HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+
+[node name="Button2" type="Button" parent="HBoxContainer/level5"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+offset_left = 68.0
+offset_top = 28.0
+offset_right = 128.0
+offset_bottom = 88.0
+focus_mode = 0
+mouse_filter = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_xeigu")
+
+[node name="Button3" type="Button" parent="HBoxContainer/level5/Button2"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+offset_left = 3.0
+offset_top = 5.0
+offset_right = 71.0
+offset_bottom = 70.0
+scale = Vector2(0.798216, 0.798216)
+focus_mode = 0
+mouse_filter = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_oha7q")
+
+[node name="Descriptions" type="Label" parent="HBoxContainer/level5/Button2/Button3"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -0.5
+offset_top = -14.0
+offset_right = 0.5
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.721569, 0.580392, 0.407843, 1)
+theme_override_font_sizes/font_size = 20
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 1
+
+[node name="Button4" type="Button" parent="HBoxContainer/level5"]
+visible = false
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+offset_left = 109.0
+offset_top = 10.505
+offset_right = 169.0
+offset_bottom = 76.505
+scale = Vector2(0.51043, 0.625084)
+focus_mode = 0
+mouse_filter = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_oha7q")
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/level5"]
+modulate = Color(0.721569, 0.580392, 0.407843, 1)
+layout_mode = 2
+offset_left = 109.0
+offset_top = 13.505
+offset_right = 140.0
+offset_bottom = 44.505
+texture = ExtResource("3_0q2io")
+expand_mode = 1
