@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=3 uid="uid://bwmu5iwushsl5"]
+[gd_scene load_steps=51 format=3 uid="uid://bwmu5iwushsl5"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/Fade_flash_effect.gd" id="1_1dj2k"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/INSTANCE_NOTE.gd" id="1_fcb2u"]
@@ -56,34 +56,6 @@ func check_photo_exist(photo_Data):
 	for photo in _global_datas.photo_archives:
 		if photo == photo_Data:
 			return true 	
-
-
-"
-
-[sub_resource type="GDScript" id="GDScript_40xas"]
-script/source = "extends Node
-@onready var button = $Button
-
-func _ready():
-	_global_datas.in_dialogue_zone.connect(active_buton)
-	_global_datas._open_dialogue.connect(disable)
-	_global_datas.hide_open_dialogue.connect(disable)
-	
-	
-func active():
-	active_buton(true)		
-	
-func disable():
-	active_buton(false)	
-			
-func active_buton(condition):
-
-	
-	button.visible = condition
-	_global_datas.Player_InDialogue_zone = condition
-
-
-	
 
 
 "
@@ -401,67 +373,6 @@ all_N_note = Array[Resource("res://12_INVENTORY/Words_note/Note_data.gd")]([ExtR
 
 [node name="BACK_LETTERS" type="Node" parent="."]
 script = ExtResource("7_uck14")
-
-[node name="Button_active_Dialogue" type="Node" parent="."]
-script = SubResource("GDScript_40xas")
-
-[node name="Button" type="Control" parent="Button_active_Dialogue"]
-visible = false
-layout_mode = 3
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 25.0001
-offset_top = -43.0
-offset_right = 25.0001
-offset_bottom = -43.0
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(0.4, 0.4)
-mouse_filter = 2
-
-[node name="ColorRect2" type="ColorRect" parent="Button_active_Dialogue/Button"]
-layout_mode = 0
-offset_left = -32.022
-offset_top = -16.0
-offset_right = 117.98
-offset_bottom = 58.505
-rotation = 1.17948
-scale = Vector2(0.577567, 0.231991)
-color = Color(0.952941, 0.815686, 0.690196, 1)
-
-[node name="ColorRect3" type="ColorRect" parent="Button_active_Dialogue/Button"]
-layout_mode = 0
-offset_left = -10.022
-offset_top = -18.0
-offset_right = 139.98
-offset_bottom = 56.505
-rotation = 1.43593
-scale = Vector2(0.577567, 0.231991)
-color = Color(0.952941, 0.815686, 0.690196, 1)
-
-[node name="ColorRect" type="ColorRect" parent="Button_active_Dialogue/Button"]
-layout_mode = 0
-offset_left = -128.0
-offset_top = -40.0
-offset_right = 22.0
-offset_bottom = 34.505
-color = Color(0.952941, 0.815686, 0.690196, 1)
-
-[node name="Label" type="Label" parent="Button_active_Dialogue/Button/ColorRect"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.129412, 0.25098, 0.254902, 1)
-theme_override_font_sizes/font_size = 40
-text = "..."
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="Description" type="Node2D" parent="."]
 position = Vector2(989, 752)

@@ -48,6 +48,7 @@ func active_subscene():
 func disable_subscene():
 	_global_datas.Player_InSubScene = false
 	_global_datas.current_scene_state = game_state.scene_state._Main
+	
 func instance_loaded_scene():
 	
 	_global_datas._photo_data_scene_list.clear()

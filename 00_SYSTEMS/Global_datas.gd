@@ -90,10 +90,12 @@ var attache_node: Node3D
 
 
 
-signal _active_this_zone(condition : bool,zone :ZoneData)
+signal _active_this_dive_zone(condition : bool)
+signal _active_this_npc_zone(condition : bool, Npc_zone : Npc_datas)
 signal _show_boue_options(condition : bool)
 var _in_boue_options : bool 
 var zoneData : ZoneData
+signal _show_cost(condition : bool, cost : int)
 
 signal _load_subscene(condition : bool)
 signal _go_Subscene

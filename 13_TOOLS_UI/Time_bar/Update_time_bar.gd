@@ -5,7 +5,7 @@ extends Node
 
 func _ready():
 	_global_datas._up_time_state.connect(_up_time)
-	_global_datas._backFrom_subscene.connect(_up_time)
+	_global_datas._go_Subscene.connect(_up_time)
 	_global_datas._time_state = 3
 	
 func _up_time():

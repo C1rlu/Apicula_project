@@ -1,4 +1,4 @@
-[gd_scene load_steps=88 format=3 uid="uid://cnmptm7i0xxmj"]
+[gd_scene load_steps=91 format=3 uid="uid://cnmptm7i0xxmj"]
 
 [ext_resource type="Script" path="res://00_SCENE/ZONE_datas.gd" id="1_gm0dt"]
 [ext_resource type="Script" path="res://00_SCENE/Active_Decor_Scene.gd" id="1_ounvv"]
@@ -18,11 +18,12 @@
 [ext_resource type="Material" uid="uid://b64juw612xqpu" path="res://05_SHADER/Sea_sh/Sea_mat.tres" id="7_4y8ld"]
 [ext_resource type="Shader" uid="uid://b8pie7pbqwtks" path="res://05_SHADER/Full_screen/Main_fullscreen.tres" id="8_oftpq"]
 [ext_resource type="Shader" path="res://05_SHADER/Full_screen/Pixel_art/test_pixel.gdshader" id="8_t6l40"]
-[ext_resource type="Script" path="res://00_SCENE/In_Zone_State.gd" id="9_6b1oy"]
 [ext_resource type="Script" path="res://00_SCENE/Day_state.gd" id="9_vbyff"]
 [ext_resource type="Script" path="res://00_SCENE/Input_add_coins.gd" id="10_7vpgw"]
 [ext_resource type="PackedScene" uid="uid://dla1534gcagbl" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Pine/pine_prefabs.tscn" id="10_c6r5x"]
 [ext_resource type="Script" path="res://00_SCENE/Cost_behaviour.gd" id="10_gxs2j"]
+[ext_resource type="Script" path="res://00_SCENE/In_DiveZone_State.gd" id="10_i656g"]
+[ext_resource type="Script" path="res://00_SCENE/In_NpcZone_State.gd" id="11_7hdfu"]
 [ext_resource type="PackedScene" uid="uid://cegdqm3et2y35" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Iceberg/ice_berg_02.tscn" id="11_086vv"]
 [ext_resource type="PackedScene" uid="uid://cgscjv6bjfmtq" path="res://13_TOOLS_UI/Coins/coins_visual.tscn" id="12_aefsl"]
 [ext_resource type="Script" path="res://00_SCENE/Sonar_zone_active.gd" id="12_gjulh"]
@@ -182,6 +183,38 @@ func _input(event):
 		
 "
 
+[sub_resource type="GDScript" id="GDScript_qc6pl"]
+script/source = "extends Node
+
+@export var dialogue_ui : Node3D
+func _ready():
+	_global_datas.in_dialogue_zone.connect(active_buton)
+	_global_datas._open_dialogue.connect(disable)
+	_global_datas.hide_open_dialogue.connect(disable)
+	
+	
+	
+func active():
+	active_buton(true)		
+	
+func disable():
+	active_buton(false)	
+			
+func active_buton(condition):
+	
+	if !_global_datas.Npc_Dialogue:
+		return 
+	var target_pos =  _global_datas.Npc_Dialogue.dialogue_ui_center_position.global_position  + Vector3(0.0,1.0,0.0)
+	dialogue_ui.global_position = target_pos
+	dialogue_ui.visible = condition
+	_global_datas.Player_InDialogue_zone = condition
+
+
+	
+
+
+"
+
 [sub_resource type="GDScript" id="GDScript_8cfdp"]
 script/source = "extends Node
 
@@ -244,7 +277,7 @@ viewport_path = NodePath("01_GAME_UI/MAIN_SCENE_UI/Viewports/UI")
 resource_local_to_scene = true
 shader = ExtResource("8_oftpq")
 shader_parameter/Grid_Color = Color(0.254902, 0.513726, 0.552941, 1)
-shader_parameter/Grid_opacity = 0.2
+shader_parameter/Grid_opacity = 0.15
 shader_parameter/Opacity = 1.0
 shader_parameter/Main = SubResource("ViewportTexture_oj43o")
 shader_parameter/Foam = SubResource("ViewportTexture_e1gkt")
@@ -258,6 +291,9 @@ viewport_path = NodePath("01_GAME_UI/MAIN_SCENE_UI/Viewports/MAIN_Viewport")
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_x5hn5"]
 viewport_path = NodePath("In_Zone_State/Cost_viewport")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_5wdck"]
+viewport_path = NodePath("In_Zone_State/In_NpcZone_State/Button_active_Dialogue/Dialogue_UI")
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ituqr"]
 bounce = 500.0
@@ -419,13 +455,23 @@ script/source = "extends Node
 [sub_resource type="GDScript" id="GDScript_w8xnd"]
 script/source = "extends Area3D
 
+
+
 @export var Npc_data : Npc_datas
 
 
+func _ready():
+	Npc_data.dialogue_ui_center_position = self
+	Npc_data.purchass_done.connect(_purchass_done)
+	
+
+func _purchass_done():
+	print(\"DONE CAN DIALOGUE NOW\")	
+	
 "
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_jvty4"]
-radius = 0.352078
+radius = 0.621117
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_iivpn"]
 radius = 0.7471
@@ -571,7 +617,71 @@ script = ExtResource("4_xkpot")
 
 [node name="In_Zone_State" type="Node" parent="."]
 process_mode = 3
-script = ExtResource("9_6b1oy")
+
+[node name="In_DiveZone_State" type="Node" parent="In_Zone_State"]
+script = ExtResource("10_i656g")
+
+[node name="In_NpcZone_State" type="Node" parent="In_Zone_State"]
+script = ExtResource("11_7hdfu")
+
+[node name="Button_active_Dialogue" type="Node" parent="In_Zone_State/In_NpcZone_State" node_paths=PackedStringArray("dialogue_ui")]
+script = SubResource("GDScript_qc6pl")
+dialogue_ui = NodePath("../../../01_GAME_UI/Dialogue_ui_root")
+
+[node name="Dialogue_UI" type="SubViewport" parent="In_Zone_State/In_NpcZone_State/Button_active_Dialogue"]
+transparent_bg = true
+size = Vector2i(75, 50)
+
+[node name="Button" type="Control" parent="In_Zone_State/In_NpcZone_State/Button_active_Dialogue/Dialogue_UI"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 54.0
+offset_top = 18.0
+offset_right = 54.0
+offset_bottom = 18.0
+scale = Vector2(0.4, 0.4)
+mouse_filter = 2
+
+[node name="ColorRect2" type="ColorRect" parent="In_Zone_State/In_NpcZone_State/Button_active_Dialogue/Dialogue_UI/Button"]
+layout_mode = 0
+offset_left = -32.022
+offset_top = -16.0
+offset_right = 117.98
+offset_bottom = 58.505
+rotation = 1.17948
+scale = Vector2(0.577567, 0.231991)
+color = Color(0.952941, 0.815686, 0.690196, 1)
+
+[node name="ColorRect3" type="ColorRect" parent="In_Zone_State/In_NpcZone_State/Button_active_Dialogue/Dialogue_UI/Button"]
+layout_mode = 0
+offset_left = -10.022
+offset_top = -18.0
+offset_right = 139.98
+offset_bottom = 56.505
+rotation = 1.43593
+scale = Vector2(0.577567, 0.231991)
+color = Color(0.952941, 0.815686, 0.690196, 1)
+
+[node name="ColorRect" type="ColorRect" parent="In_Zone_State/In_NpcZone_State/Button_active_Dialogue/Dialogue_UI/Button"]
+layout_mode = 0
+offset_left = -128.0
+offset_top = -40.0
+offset_right = 22.0
+offset_bottom = 34.505
+color = Color(0.952941, 0.815686, 0.690196, 1)
+
+[node name="Label" type="Label" parent="In_Zone_State/In_NpcZone_State/Button_active_Dialogue/Dialogue_UI/Button/ColorRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.129412, 0.25098, 0.254902, 1)
+theme_override_font_sizes/font_size = 40
+text = "..."
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Input_add_coins" type="Node" parent="In_Zone_State"]
 script = ExtResource("10_7vpgw")
@@ -580,11 +690,10 @@ script = ExtResource("10_7vpgw")
 wait_time = 0.15
 one_shot = true
 
-[node name="Cost_behaviour" type="Node" parent="In_Zone_State" node_paths=PackedStringArray("Viewport_ui", "Sprite_render", "in_zone_state", "progress_bar", "visual_coins")]
+[node name="Cost_behaviour" type="Node" parent="In_Zone_State" node_paths=PackedStringArray("Viewport_ui", "Sprite_render", "progress_bar", "visual_coins")]
 script = ExtResource("10_gxs2j")
 Viewport_ui = NodePath("../Cost_viewport")
-Sprite_render = NodePath("../../01_GAME_UI/Cost_ui_root/Render_options")
-in_zone_state = NodePath("..")
+Sprite_render = NodePath("../../01_GAME_UI/Cost_ui_root")
 progress_bar = NodePath("../Cost_viewport/ProgressBar")
 visual_coins = [NodePath("../Cost_viewport/Coins_grid/Coins_visual"), NodePath("../Cost_viewport/Coins_grid/Coins_visual2"), NodePath("../Cost_viewport/Coins_grid/Coins_visual3"), NodePath("../Cost_viewport/Coins_grid/Coins_visual4"), NodePath("../Cost_viewport/Coins_grid/Coins_visual5"), NodePath("../Cost_viewport/Coins_grid/Coins_visual6"), NodePath("../Cost_viewport/Coins_grid/Coins_visual7"), NodePath("../Cost_viewport/Coins_grid/Coins_visual8"), NodePath("../Cost_viewport/Coins_grid/Coins_visual9"), NodePath("../Cost_viewport/Coins_grid/Coins_visual10"), NodePath("../Cost_viewport/Coins_grid/Coins_visual11"), NodePath("../Cost_viewport/Coins_grid/Coins_visual12")]
 
@@ -758,13 +867,23 @@ expand_mode = 3
 
 [node name="Cost_ui_root" type="Node3D" parent="01_GAME_UI"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75101, 0)
+visible = false
 
 [node name="Render_options" type="Sprite3D" parent="01_GAME_UI/Cost_ui_root"]
 transform = Transform3D(0.660092, 0, 0, 0, 0.660092, 0, 0, 0, 0.660092, 0, 0, 0)
-visible = false
 layers = 262144
 billboard = 1
 texture = SubResource("ViewportTexture_x5hn5")
+
+[node name="Dialogue_ui_root" type="Node3D" parent="01_GAME_UI"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75101, 0)
+visible = false
+
+[node name="Render_dialogue_icon" type="Sprite3D" parent="01_GAME_UI/Dialogue_ui_root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.377417, 0, 0)
+layers = 262144
+billboard = 1
+texture = SubResource("ViewportTexture_5wdck")
 
 [node name="--DECOR--" type="Node3D" parent="."]
 
@@ -985,7 +1104,7 @@ Npc_data = ExtResource("30_ivc7k")
 script = ExtResource("30_ki3ay")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="--DECOR--/NPC_TRIGGER_ZONE/Maurice_NPC_Area"]
-transform = Transform3D(1.66522, 0, 0, 0, 1.66522, 0, 0, 0, 1.66522, 0, 0, 0)
+transform = Transform3D(1.66522, 0, 0, 0, 1.66522, 0, 0, 0, 1.66522, -0.269047, 0, -0.101223)
 shape = SubResource("SphereShape3D_jvty4")
 
 [node name="GardeCote_NPC_Area" type="Area3D" parent="--DECOR--/NPC_TRIGGER_ZONE"]

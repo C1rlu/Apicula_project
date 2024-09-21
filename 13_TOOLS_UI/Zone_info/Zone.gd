@@ -1,8 +1,6 @@
 extends Node
-@onready var path_prefab = $"../../.."
-
-
+@export var zone_root : Node3D
 
 func get_dive_data():
 	
-	return path_prefab.zone_datas
+	return zone_root.zone_datas

@@ -1,16 +1,13 @@
 extends Node
 
 @export var Viewport_ui : SubViewport 
-@export var Sprite_render : Sprite3D
-@export var in_zone_state : Node
+@export var Sprite_render : Node3D
 @export var progress_bar : ProgressBar
 @export var visual_coins : Array[Control]
 
 
 func _ready():
-	var viewport_texture = Viewport_ui.get_texture()
-	Sprite_render.texture = viewport_texture
-	in_zone_state._show_cost.connect(_show_cost)
+	_global_datas._show_cost.connect(_show_cost)
 	_show_cost_amount(0)
 	
 	progress_bar.value_changed.connect(update_coins_in)
@@ -33,9 +30,16 @@ func _show_cost_amount(cost : int):
 
 func update_coins_in(value): # when a coin is in the coin bar
 	
-	if !_global_datas.zoneData:
+	if _global_datas.zoneData:
+		_for_DiveZone(value)
 		return
-	
+
+	if _global_datas.Npc_Dialogue:
+		_for_NpcZone(value)
+		return
+				
+func _for_DiveZone(value):
+
 	var limit_state = _global_datas.zoneData.purchass_state.size()
 	if _global_datas.zoneData.purchass_index_state >= limit_state:
 		return 
@@ -47,7 +51,6 @@ func update_coins_in(value): # when a coin is in the coin bar
 		for i in range(value):
 			visual_coins[i]._coin_in(true)
 		
-	
 	# to end purchass
 	if progress_bar.value > cost:
 		var current_state = _global_datas.zoneData.purchass_index_state
@@ -56,13 +59,32 @@ func update_coins_in(value): # when a coin is in the coin bar
 		_global_datas.zoneData.purchass_index_state += 1
 		_global_datas._check_boat_zone.emit()
 		
-		progress_bar.value = 0
+		_reset_coins_bar()
+	
+func _for_NpcZone(value):
+	
+	if _global_datas.Npc_Dialogue.is_active:
+		return 
 		
-		for c in visual_coins:
-			c._coin_in(false)
-
-
+	var cost = _global_datas.Npc_Dialogue.cost 
+	# to show coins in bar
+	if value <= cost: 	
+		for i in range(value):
+			visual_coins[i]._coin_in(true)
+			
+	# to end purchass
+	if progress_bar.value > cost:
+		_global_datas.update_money_amount.emit(-cost)
+		_global_datas.Npc_Dialogue.purchass_done.emit()
+		_global_datas.Npc_Dialogue.is_active = true
+		_global_datas._check_boat_zone.emit()
+	
+		_reset_coins_bar()	
+			
+					
+			
 func _reset_coins_bar():
+	
 	for c in visual_coins:
 			c._coin_in(false)
 	progress_bar.value = 0

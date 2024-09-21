@@ -21,21 +21,22 @@ func _input(event):
 		return
 	if _global_datas.Player_InSubScene:
 		return
-	if _global_datas._time_state == 0:
-			return	
-			
-	
-			
+
 	if !render_options.visible:
 			return		
-			
-			
+				
 	if event.is_action_pressed("Push_to_subscene"):
 		
-		if _global_datas.zoneData == null:
+		if _global_datas.zoneData:
+			coin_timer.start()
+			_add_coin()	
 			return
-		coin_timer.start()
-
+			
+		if _global_datas.Npc_Dialogue:
+			coin_timer.start()
+			_add_coin()		
+			return
+			
 func _add_coin():
 	progress_bar.value += 1
 	coin_timer.start()

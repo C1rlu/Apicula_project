@@ -1,12 +1,9 @@
 extends Node
 
-
 var disable = true
 
 
-func _ready():
-	pass
-	#_global_datas._show_zone_info.connect(_lock)
+	
 func _input(event):
 	
 	if disable:
