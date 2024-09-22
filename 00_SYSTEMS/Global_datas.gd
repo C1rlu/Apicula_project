@@ -93,7 +93,6 @@ var attache_node: Node3D
 signal _active_this_dive_zone(condition : bool)
 signal _active_this_npc_zone(condition : bool, Npc_zone : Npc_datas)
 signal _show_boue_options(condition : bool)
-var _in_boue_options : bool 
 var zoneData : ZoneData
 signal _show_cost(condition : bool, cost : int)
 
@@ -234,7 +233,7 @@ func _ready():
 	_check_objectZone_Area = null
 	_check_objectZone_col = null
 	_time_state = 3
-	_in_boue_options = false
+
 	
 # TEST BOARD NEWS PROTO SCENE
 signal select_movable_object(object)

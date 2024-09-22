@@ -34,6 +34,9 @@ func _input(event):
 	if event.is_action_released("Speed_boat"):
 		speed = move_speed
 		
+		
+	_global_datas._check_boat_zone.emit()
+	
 func _physics_process(_delta):
 	
 	if _global_datas.Player_In_Inventory:

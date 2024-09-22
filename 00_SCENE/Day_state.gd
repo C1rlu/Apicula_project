@@ -8,7 +8,7 @@ func _ready():
 	_global_datas._set_day.connect(_day)
 
 func _night():
-	RenderingServer.global_shader_parameter_set("Night", 0.8)
+	RenderingServer.global_shader_parameter_set("Night", 0.5)
 	main_light.omni_range = 6.0
 
 func _day():
