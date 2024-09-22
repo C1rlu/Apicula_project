@@ -1,7 +1,7 @@
 extends Node
 
-@export var dive_points : Array[ColorRect]
-@onready var back_time = $"../Back_time"
+@export var index_label : Label
+
 
 func _ready():
 	_global_datas._up_time_state.connect(_up_time)
@@ -15,7 +15,7 @@ func _up_time():
 	if _global_datas._time_state <= 0:
 		_global_datas._time_state = 0
 		_update_dive_amount()
-		back_time.visible = true
+
 		_global_datas._set_night.emit()
 		return
 
@@ -23,9 +23,4 @@ func _up_time():
 	
 
 func _update_dive_amount():
-	for d in dive_points:
-		d.visible = false
-	
-	for i in range(_global_datas._time_state):
-		dive_points[i].visible = true	
-		
+	index_label.text = str(_global_datas._time_state )
