@@ -15,9 +15,10 @@ func _active(condition : bool):
 	if !Npc_zone:
 		return
 		
-	#if _global_datas.Npc_Dialogue == bird_data:
-		#_global_datas._open_dialogue.emit()
-		#return
+	if _global_datas.Npc_Dialogue == bird_data:
+		_global_datas._open_dialogue.emit()
+		_global_datas._disable_bird_meet_for_today.emit(true)
+		return
 					
 	if Npc_zone.is_active:
 		_global_datas.in_dialogue_zone.emit(condition)
