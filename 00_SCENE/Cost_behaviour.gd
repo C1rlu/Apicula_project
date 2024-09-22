@@ -14,12 +14,17 @@ func _ready():
 	
 func _show_cost(condition : bool,position : Vector3, cost : int):
 	
+	for c in visual_coins:
+		c.visible = false
+		
 	Sprite_render.visible = condition
 	if condition:
 		Sprite_render.global_position = position 
 		_show_cost_amount(cost)
 		progress_bar.max_value = cost
 		
+	
+	
 func _show_cost_amount(cost : int):
 	
 	for c in visual_coins:

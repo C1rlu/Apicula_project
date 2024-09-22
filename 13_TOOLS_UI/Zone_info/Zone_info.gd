@@ -1,17 +1,13 @@
 extends Node3D
 
 @export var zone_datas : ZoneData
-@export var epave_if_exist : Area3D
-
 
 func _ready():
 
 	zone_datas.Boue_node_3D = $BouePrefab
 	zone_datas.center_zone_node = $center_zone
-	if epave_if_exist:
-		zone_datas.epave_if_exist = epave_if_exist
-
-
+	zone_datas.epave_if_exist = $Epave_visuals/Fade_out
+		
 	if zone_datas.Boue_active:
 		$BouePrefab._active_boue()	
 	

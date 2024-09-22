@@ -10,6 +10,6 @@ var purchass_index_state : int = 0
 
 var Boue_node_3D : Node3D
 var center_zone_node : Node3D
-var epave_if_exist : Area3D
+var epave_if_exist : Node
 
 

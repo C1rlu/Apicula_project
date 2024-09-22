@@ -13,9 +13,8 @@ func _active(condition : bool):
 
 		if condition:
 			_global_datas._active_sonar.emit(zone.Boue_node_3D.global_position)
-		if zone.epave_if_exist.Fade_out:
-			zone.epave_if_exist.Fade_out._active(condition)
-	
+		
+		zone.epave_if_exist._active(condition)	
 		_global_datas._show_cost.emit(false,Vector3.ZERO,3)
 		
 		if _global_datas._time_state == 0:
