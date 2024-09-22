@@ -11,6 +11,7 @@ extends  Node
 	"up_page_info_state" : null,
 	"active_queste_done" : null,
 	"wait_otis" : null,
+	"hide_bird" : null
 }
 
 func _ready():
@@ -70,9 +71,7 @@ func _on_ez_dialogue_custom_signal_received(value):
 		if variable_name == "can_dive":
 			_global_datas.active_diving.emit()		
 		
-
-
-			
+		
 func update_npc_active_node(ls_node_name : String):
 
 	_global_datas.Npc_Dialogue.Dialogue_active_node = ls_node_name 

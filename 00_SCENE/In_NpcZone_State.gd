@@ -5,19 +5,18 @@ extends Node
 func _ready():
 	_global_datas._active_this_npc_zone.connect(_active)
 
-	
 func _active(condition : bool):
 
 	
 	var Npc_zone = _global_datas.Npc_Dialogue
-	print(Npc_zone)
-	
+
 	if !Npc_zone:
 		return
 		
 	if _global_datas.Npc_Dialogue == bird_data:
-		_global_datas._open_dialogue.emit()
-		_global_datas._disable_bird_meet_for_today.emit(true)
+		if bird_data.is_active:
+			_global_datas._disable_bird_meet_for_today.emit(true)	
+			_global_datas._check_dialogue_photo.emit()
 		return
 					
 	if Npc_zone.is_active:

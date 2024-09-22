@@ -1,4 +1,4 @@
-[gd_scene load_steps=114 format=3 uid="uid://cnmptm7i0xxmj"]
+[gd_scene load_steps=115 format=3 uid="uid://cnmptm7i0xxmj"]
 
 [ext_resource type="Script" path="res://00_SCENE/ZONE_datas.gd" id="1_gm0dt"]
 [ext_resource type="Script" path="res://00_SCENE/Active_Decor_Scene.gd" id="1_ounvv"]
@@ -472,7 +472,8 @@ func _ready():
 	
 
 func _purchass_done():
-	print(\"DONE CAN DIALOGUE NOW\")	
+	_global_datas._check_dialogue_photo.emit()
+	
 	
 "
 
@@ -481,6 +482,9 @@ radius = 0.621117
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_iivpn"]
 radius = 0.7471
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_5l4ea"]
+radius = 0.992206
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_7ftl5"]
 size = Vector2(30, 30)
@@ -1328,13 +1332,14 @@ transform = Transform3D(0.999993, -2.56409e-06, 0.00375245, 2.55832e-06, 1, 1.54
 shape = SubResource("SphereShape3D_iivpn")
 
 [node name="MrBird_NPC_Area" type="Area3D" parent="--DECOR--/NPC_TRIGGER_ZONE"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1045, 2.50339e-06, -5.69349)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.52827, 2.50339e-06, -6.51849)
 input_ray_pickable = false
 script = SubResource("GDScript_w8xnd")
 Npc_data = ExtResource("1_trgwt")
 
 [node name="Disable_Meet_bird_for_today" type="Node" parent="--DECOR--/NPC_TRIGGER_ZONE/MrBird_NPC_Area" node_paths=PackedStringArray("Visual_root", "Collider")]
 script = ExtResource("29_57vaj")
+Npc_data = ExtResource("1_trgwt")
 Visual_root = NodePath("..")
 Collider = NodePath("../CollisionShape3D")
 
@@ -1344,11 +1349,11 @@ Collider = NodePath("../CollisionShape3D")
 script = ExtResource("30_ki3ay")
 
 [node name="Birds" parent="--DECOR--/NPC_TRIGGER_ZONE/MrBird_NPC_Area" instance=ExtResource("21_py3bv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.643425, 0, 0.626134)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.643425, -0.753295, 0.626134)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="--DECOR--/NPC_TRIGGER_ZONE/MrBird_NPC_Area"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.484242, 0, 0.113853)
-shape = SubResource("SphereShape3D_jvty4")
+shape = SubResource("SphereShape3D_5l4ea")
 
 [node name="SEA" type="Node3D" parent="--DECOR--"]
 

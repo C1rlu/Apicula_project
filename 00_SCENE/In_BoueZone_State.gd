@@ -12,8 +12,6 @@ func _active_options(condition : bool):
 		return
 	
 	if condition:
-		#var _target_pos =  _global_datas.zoneData.Boue_node_3D.global_position
-		#_global_datas._active_sonar.emit(_target_pos)
 		_global_datas.subscene_progress_bar_sprite.visible = false	
 		
 		
