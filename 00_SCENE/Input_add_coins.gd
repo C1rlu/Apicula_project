@@ -18,10 +18,15 @@ func _input(event):
 		cost_behaviour._reset_coins_bar()	
 	
 	if _global_datas.Player_InDialogue:
+		_reset()
 		return
 	if _global_datas.Player_InSubScene:
+		_reset()	
 		return
-
+	if _global_datas.Player_InMenu:
+		_reset()
+		return
+	
 	if !render_options.visible:
 			return		
 				
@@ -36,7 +41,11 @@ func _input(event):
 			coin_timer.start()
 			_add_coin()		
 			return
-			
+
+func _reset():
+	coin_timer.stop()
+	cost_behaviour._reset_coins_bar()		
+				
 func _add_coin():
 	progress_bar.value += 1
 	coin_timer.start()

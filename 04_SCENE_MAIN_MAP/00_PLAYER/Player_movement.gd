@@ -35,7 +35,7 @@ func _input(event):
 		speed = move_speed
 		
 		
-	_global_datas._check_boat_zone.emit()
+
 	
 func _physics_process(_delta):
 	

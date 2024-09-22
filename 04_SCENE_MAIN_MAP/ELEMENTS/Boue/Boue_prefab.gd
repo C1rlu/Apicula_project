@@ -38,12 +38,15 @@ func _active_boue():
 	zone_datas.epave_if_exist._show()
 	_dive_collision_shape_3d.disabled = false
 		
-
+	var _target_pos =  _global_datas.zoneData.Boue_node_3D.global_position
+	_global_datas._active_sonar.emit(_target_pos)
 	
 func _active_second_boue_level():
 	print("_active_second_boue_level")	
-
+	var _target_pos =  _global_datas.zoneData.Boue_node_3D.global_position
+	_global_datas._active_sonar.emit(_target_pos)
 func _active_third_boue_level():
 	print("_active_third_boue_level")	
 
-	
+	var _target_pos =  _global_datas.zoneData.Boue_node_3D.global_position
+	_global_datas._active_sonar.emit(_target_pos)	

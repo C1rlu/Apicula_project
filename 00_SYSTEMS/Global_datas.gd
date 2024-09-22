@@ -88,11 +88,13 @@ signal _show_object_legend(condtion : bool, legend : String)
 var player_rg : RigidBody3D
 var attache_node: Node3D
 
-
+signal _check_zone_enter(area)
+signal _check_zone_exit(area)
 
 signal _active_this_dive_zone(condition : bool)
-signal _active_this_npc_zone(condition : bool, Npc_zone : Npc_datas)
+signal _active_this_npc_zone(condition : bool)
 signal _show_boue_options(condition : bool)
+
 var zoneData : ZoneData
 signal _show_cost(condition : bool, cost : int)
 

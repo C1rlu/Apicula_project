@@ -12,6 +12,15 @@ func _ready():
 	
 	progress_bar.value_changed.connect(update_coins_in)
 	
+	
+	_global_datas._open_menu.connect(_disable)
+	
+
+func _disable(condition : bool):
+	
+	Sprite_render.visible = false
+	
+
 func _show_cost(condition : bool,position : Vector3, cost : int):
 	
 	for c in visual_coins:

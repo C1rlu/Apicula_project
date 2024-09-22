@@ -7,7 +7,6 @@
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_xd8sb"]
 [ext_resource type="Script" path="res://03_CAMERA/CameraFollow.gd" id="2_7lb1x"]
 [ext_resource type="Resource" uid="uid://cdef15ggl03fh" path="res://15_GAME_RESSOURCE/00_Zone_data/Apicula_zone.tres" id="2_xqcjl"]
-[ext_resource type="Script" path="res://04_SCENE_MAIN_MAP/00_PLAYER/Sonar/Button_active_sonar.gd" id="3_0rdsq"]
 [ext_resource type="Script" path="res://00_SCENE/MainScene/Grid_Fade.gd" id="3_7fuin"]
 [ext_resource type="Resource" uid="uid://d2ivg06mjrg4v" path="res://15_GAME_RESSOURCE/00_Zone_data/Vortex_zone.tres" id="3_mqlau"]
 [ext_resource type="Shader" uid="uid://bduoqim3kfbs6" path="res://04_SCENE_MAIN_MAP/00_PLAYER/Sonar/Sonar_sh.tres" id="3_todel"]
@@ -18,6 +17,7 @@
 [ext_resource type="Material" uid="uid://b64juw612xqpu" path="res://05_SHADER/Sea_sh/Sea_mat.tres" id="7_4y8ld"]
 [ext_resource type="Shader" uid="uid://b8pie7pbqwtks" path="res://05_SHADER/Full_screen/Main_fullscreen.tres" id="8_oftpq"]
 [ext_resource type="Shader" path="res://05_SHADER/Full_screen/Pixel_art/test_pixel.gdshader" id="8_t6l40"]
+[ext_resource type="Script" path="res://00_SCENE/In_Zone_State.gd" id="9_rhikc"]
 [ext_resource type="Script" path="res://00_SCENE/Day_state.gd" id="9_vbyff"]
 [ext_resource type="Script" path="res://00_SCENE/In_BoueZone_State.gd" id="10_3o5xg"]
 [ext_resource type="Script" path="res://00_SCENE/Input_add_coins.gd" id="10_7vpgw"]
@@ -62,54 +62,6 @@ func _state_change():
 	player_boat.position = prologue_position
 
 	
-
-"
-
-[sub_resource type="GDScript" id="GDScript_xsqte"]
-script/source = "extends Node
-
-func _input(event: InputEvent) -> void:
-	
-	#var _disable = true
-	#if _disable:
-		#return
-	if _global_datas.Player_InMenu:
-		_global_datas._active_progress_subscene.emit(false)
-		_global_datas._load_subscene.emit(false)
-		return
-		
-	if _global_datas.Player_InDialogue:
-		return
-	
-
-	if _global_datas.Player_InSubScene:
-		return
-		
-	if _global_datas._time_state == 0:
-			return	
-	
-	
-	
-	if event.is_action_released(\"Push_to_subscene\"):
-
-		_global_datas._active_progress_subscene.emit(false)
-		_global_datas._load_subscene.emit(false)
-
-
-	if !_global_datas.subscene_progress_bar_sprite.visible:
-		return
-
-	if event.is_action_pressed(\"Push_to_subscene\"):
-		
-		print(_global_datas.zoneData )
-		if _global_datas.zoneData == null:
-			return
-		if _global_datas.Player_In_Inventory:
-			return
-			
-		if _global_datas.zoneData.Boue_active:
-			_global_datas._active_progress_subscene.emit(true)
-			_global_datas._load_subscene.emit(true)
 
 "
 
@@ -189,6 +141,60 @@ func _input(event):
 		_global_datas._check_dialogue_photo.emit()
 
 		
+"
+
+[sub_resource type="GDScript" id="GDScript_xsqte"]
+script/source = "extends Node
+
+func _input(event: InputEvent) -> void:
+	
+	#var _disable = true
+	#if _disable:
+		#return
+	if _global_datas.Player_InMenu:
+		_global_datas._active_progress_subscene.emit(false)
+		_global_datas._load_subscene.emit(false)
+		return
+	if _global_datas.Player_In_Inventory:
+		_global_datas._active_progress_subscene.emit(false)
+		_global_datas._load_subscene.emit(false)		
+		return
+	
+	
+		
+	if _global_datas.Player_InDialogue:
+		return
+	
+
+	if _global_datas.Player_InSubScene:
+		return
+		
+	if _global_datas._time_state == 0:
+			return	
+	
+	
+	
+	if event.is_action_released(\"Push_to_subscene\"):
+
+		_global_datas._active_progress_subscene.emit(false)
+		_global_datas._load_subscene.emit(false)
+
+
+	if !_global_datas.subscene_progress_bar_sprite.visible:
+		return
+
+	if event.is_action_pressed(\"Push_to_subscene\"):
+		
+		print(_global_datas.zoneData )
+		if _global_datas.zoneData == null:
+			return
+		if _global_datas.Player_In_Inventory:
+			return
+			
+		if _global_datas.zoneData.Boue_active:
+			_global_datas._active_progress_subscene.emit(true)
+			_global_datas._load_subscene.emit(true)
+
 "
 
 [sub_resource type="GDScript" id="GDScript_qc6pl"]
@@ -307,7 +313,7 @@ viewport_path = NodePath("In_Zone_State/In_NpcZone_State/Button_active_Dialogue/
 bounce = 500.0
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_yt2xy"]
-radius = 0.629358
+radius = 0.843907
 
 [sub_resource type="VisualShaderNodeProximityFade" id="VisualShaderNodeProximityFade_dnk0e"]
 default_input_values = [0, 1.5]
@@ -580,7 +586,7 @@ cost = 6
 script = ExtResource("41_psdpf")
 cost = 12
 
-[sub_resource type="Resource" id="Resource_irjvk"]
+[sub_resource type="Resource" id="Resource_1e6i6"]
 resource_local_to_scene = true
 script = ExtResource("42_qpl8r")
 zone_node_dialogue = "vortex"
@@ -600,7 +606,7 @@ cost = 6
 script = ExtResource("41_psdpf")
 cost = 12
 
-[sub_resource type="Resource" id="Resource_gko1l"]
+[sub_resource type="Resource" id="Resource_o7oyu"]
 resource_local_to_scene = true
 script = ExtResource("42_qpl8r")
 zone_node_dialogue = "apicula"
@@ -793,12 +799,6 @@ viewports = [NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/MAIN_Viewport"), No
 script = ExtResource("1_xd8sb")
 viewports = [NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/MAIN_Viewport"), NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/FOAM_Viewport"), NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/SONAR_Viewport"), NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/GRID_Viewport"), NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/MAIN_LIGHT_Viewport")]
 
-[node name="Push_to_subscene" type="Node" parent="."]
-script = SubResource("GDScript_xsqte")
-
-[node name="loading_subscene_progress_bar" type="Node" parent="Push_to_subscene"]
-script = ExtResource("12_hkpaj")
-
 [node name="Grid_Fade" type="Node" parent="." node_paths=PackedStringArray("Main_render")]
 script = ExtResource("3_7fuin")
 Main_render = NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/MAIN")
@@ -806,17 +806,22 @@ Main_render = NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/MAIN")
 [node name="Sonar_behaviour" type="Node" parent="."]
 script = SubResource("GDScript_0xo40")
 
-[node name="Input_active_sonar" type="Node" parent="Sonar_behaviour"]
-script = ExtResource("3_0rdsq")
-
 [node name="Open_Dialogue" type="Node" parent="."]
 script = SubResource("GDScript_55qk3")
 
 [node name="Teleport_boat_at_position" type="Node" parent="."]
 script = ExtResource("4_xkpot")
 
-[node name="In_Zone_State" type="Node" parent="."]
+[node name="Push_to_subscene" type="Node" parent="."]
+script = SubResource("GDScript_xsqte")
+
+[node name="loading_subscene_progress_bar" type="Node" parent="Push_to_subscene"]
+script = ExtResource("12_hkpaj")
+
+[node name="In_Zone_State" type="Node" parent="." node_paths=PackedStringArray("area_root")]
 process_mode = 3
+script = ExtResource("9_rhikc")
+area_root = NodePath("../--DECOR--/Player_Boat/Zone_trigger")
 
 [node name="In_BoueZone_State" type="Node" parent="In_Zone_State"]
 script = ExtResource("10_3o5xg")
@@ -826,6 +831,7 @@ script = ExtResource("10_i656g")
 
 [node name="In_NpcZone_State" type="Node" parent="In_Zone_State"]
 script = ExtResource("11_7hdfu")
+bird_data = ExtResource("1_trgwt")
 
 [node name="Button_active_Dialogue" type="Node" parent="In_Zone_State/In_NpcZone_State" node_paths=PackedStringArray("dialogue_ui")]
 script = SubResource("GDScript_qc6pl")
@@ -1102,7 +1108,6 @@ rotation_speed = 4.0
 
 [node name="Check_zone_ui" type="Node" parent="--DECOR--/Player_Boat"]
 script = ExtResource("17_unqeu")
-bird_data = ExtResource("1_trgwt")
 
 [node name="Main_light" type="OmniLight3D" parent="--DECOR--/Player_Boat"]
 transform = Transform3D(1, 0, 0, 2.11758e-22, 0.342545, 0.939501, 0, -0.939501, 0.342545, 0.130404, 3.19906, -0.0379682)
@@ -1113,10 +1118,10 @@ light_volumetric_fog_energy = 0.0
 light_specular = 0.0
 omni_range = 7.0
 
-[node name="Enter_dialogue_zone" type="Area3D" parent="--DECOR--/Player_Boat"]
+[node name="Zone_trigger" type="Area3D" parent="--DECOR--/Player_Boat"]
 input_ray_pickable = false
 
-[node name="Col" type="CollisionShape3D" parent="--DECOR--/Player_Boat/Enter_dialogue_zone"]
+[node name="Col" type="CollisionShape3D" parent="--DECOR--/Player_Boat/Zone_trigger"]
 shape = SubResource("SphereShape3D_yt2xy")
 
 [node name="Sonar" type="Node3D" parent="--DECOR--"]
@@ -1303,6 +1308,8 @@ input_ray_pickable = false
 script = SubResource("GDScript_w8xnd")
 Npc_data = ExtResource("30_ivc7k")
 
+[node name="Zone" type="Node" parent="--DECOR--/NPC_TRIGGER_ZONE/Maurice_NPC_Area"]
+
 [node name="Npc_zone" type="Node" parent="--DECOR--/NPC_TRIGGER_ZONE/Maurice_NPC_Area"]
 script = ExtResource("30_ki3ay")
 
@@ -1318,6 +1325,8 @@ Npc_data = ExtResource("32_pt30g")
 
 [node name="Rampe_Prefab3" parent="--DECOR--/NPC_TRIGGER_ZONE/GardeCote_NPC_Area" instance=ExtResource("18_vvmth")]
 transform = Transform3D(2.98023e-08, 0, -0.628308, 0, 0.628308, 0, 0.628308, 0, 2.98023e-08, 0, 0, 0)
+
+[node name="Zone" type="Node" parent="--DECOR--/NPC_TRIGGER_ZONE/GardeCote_NPC_Area"]
 
 [node name="Npc_zone" type="Node" parent="--DECOR--/NPC_TRIGGER_ZONE/GardeCote_NPC_Area"]
 script = ExtResource("30_ki3ay")
@@ -1387,11 +1396,11 @@ surface_material_override/0 = ExtResource("33_um15u")
 
 [node name="BouePrefab" parent="--DECOR--/DIVE_ZONES" instance=ExtResource("40_kyvn3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.59489, 0, -2.83308)
-zone_datas = SubResource("Resource_irjvk")
+zone_datas = SubResource("Resource_1e6i6")
 
 [node name="BouePrefab2" parent="--DECOR--/DIVE_ZONES" instance=ExtResource("40_kyvn3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.92439, 0, 3.68206)
-zone_datas = SubResource("Resource_gko1l")
+zone_datas = SubResource("Resource_o7oyu")
 
 [node name="Boue_dive_mask" parent="--DECOR--/DIVE_ZONES/BouePrefab2/Boue_msh2" index="1"]
 visible = true
@@ -1405,9 +1414,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2306, 0, 1.93763)
 [node name="mesh" parent="--DECOR--/DIVE_ZONES/BouePrefab2/Dive_zone_area/Epave_visuals" index="1"]
 mesh = SubResource("ArrayMesh_a4mg1")
 surface_material_override/0 = SubResource("ShaderMaterial_f1wsn")
-
-[connection signal="area_entered" from="--DECOR--/Player_Boat/Enter_dialogue_zone" to="--DECOR--/Player_Boat/Check_zone_ui" method="_on_enter_dialogue_zone_area_entered"]
-[connection signal="area_exited" from="--DECOR--/Player_Boat/Enter_dialogue_zone" to="--DECOR--/Player_Boat/Check_zone_ui" method="_on_enter_dialogue_zone_area_exited"]
 
 [editable path="--DECOR--/DIVE_ZONES/BouePrefab2"]
 [editable path="--DECOR--/DIVE_ZONES/BouePrefab2/Boue_msh2"]
