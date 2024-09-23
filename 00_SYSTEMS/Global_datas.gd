@@ -93,10 +93,10 @@ signal _check_zone_exit(area)
 
 signal _active_this_dive_zone(condition : bool)
 signal _active_this_npc_zone(condition : bool)
-signal _show_boue_options(condition : bool)
+
 
 var zoneData : ZoneData
-signal _show_cost(condition : bool, cost : int)
+
 
 signal _load_subscene(condition : bool)
 signal _go_Subscene

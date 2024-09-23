@@ -1,4 +1,4 @@
-[gd_scene load_steps=115 format=3 uid="uid://cnmptm7i0xxmj"]
+[gd_scene load_steps=110 format=3 uid="uid://cnmptm7i0xxmj"]
 
 [ext_resource type="Script" path="res://00_SCENE/ZONE_datas.gd" id="1_gm0dt"]
 [ext_resource type="Script" path="res://00_SCENE/Active_Decor_Scene.gd" id="1_ounvv"]
@@ -19,14 +19,10 @@
 [ext_resource type="Shader" path="res://05_SHADER/Full_screen/Pixel_art/test_pixel.gdshader" id="8_t6l40"]
 [ext_resource type="Script" path="res://00_SCENE/In_Zone_State.gd" id="9_rhikc"]
 [ext_resource type="Script" path="res://00_SCENE/Day_state.gd" id="9_vbyff"]
-[ext_resource type="Script" path="res://00_SCENE/In_BoueZone_State.gd" id="10_3o5xg"]
-[ext_resource type="Script" path="res://00_SCENE/Input_add_coins.gd" id="10_7vpgw"]
 [ext_resource type="PackedScene" uid="uid://dla1534gcagbl" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Pine/pine_prefabs.tscn" id="10_c6r5x"]
-[ext_resource type="Script" path="res://00_SCENE/Cost_behaviour.gd" id="10_gxs2j"]
 [ext_resource type="Script" path="res://00_SCENE/In_DiveZone_State.gd" id="10_i656g"]
 [ext_resource type="Script" path="res://00_SCENE/In_NpcZone_State.gd" id="11_7hdfu"]
 [ext_resource type="PackedScene" uid="uid://cegdqm3et2y35" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Iceberg/ice_berg_02.tscn" id="11_086vv"]
-[ext_resource type="PackedScene" uid="uid://cgscjv6bjfmtq" path="res://13_TOOLS_UI/Coins/coins_visual.tscn" id="12_aefsl"]
 [ext_resource type="Script" path="res://00_SCENE/Sonar_zone_active.gd" id="12_gjulh"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/Loadin_progress.gd" id="12_hkpaj"]
 [ext_resource type="PackedScene" uid="uid://fcjcvy77lg0o" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Lighthouse/lighthouse_prefabs.tscn" id="16_u78ww"]
@@ -295,9 +291,6 @@ shader_parameter/UI = SubResource("ViewportTexture_rd6y1")
 [sub_resource type="ViewportTexture" id="ViewportTexture_4iosc"]
 viewport_path = NodePath("01_GAME_UI/MAIN_SCENE_UI/Viewports/MAIN_Viewport")
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_x5hn5"]
-viewport_path = NodePath("In_Zone_State/Cost_viewport")
-
 [sub_resource type="ViewportTexture" id="ViewportTexture_5wdck"]
 viewport_path = NodePath("In_Zone_State/In_NpcZone_State/Button_active_Dialogue/Dialogue_UI")
 
@@ -461,20 +454,11 @@ script/source = "extends Node
 [sub_resource type="GDScript" id="GDScript_w8xnd"]
 script/source = "extends Area3D
 
-
-
 @export var Npc_data : Npc_datas
-
 
 func _ready():
 	Npc_data.dialogue_ui_center_position = self
-	Npc_data.purchass_done.connect(_purchass_done)
-	
 
-func _purchass_done():
-	_global_datas._check_dialogue_photo.emit()
-	
-	
 "
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_jvty4"]
@@ -582,12 +566,12 @@ cost = 6
 script = ExtResource("41_psdpf")
 cost = 12
 
-[sub_resource type="Resource" id="Resource_4nucg"]
+[sub_resource type="Resource" id="Resource_w3tv2"]
 resource_local_to_scene = true
 script = ExtResource("42_qpl8r")
 zone_node_dialogue = "vortex"
 zone_packed_scene = ExtResource("43_4lxgy")
-Boue_active = false
+Boue_active = true
 purchass_state = Array[ExtResource("41_psdpf")]([SubResource("Resource_mx36y"), SubResource("Resource_iq7dq"), SubResource("Resource_y5osj")])
 
 [sub_resource type="Resource" id="Resource_sjgmn"]
@@ -602,12 +586,12 @@ cost = 6
 script = ExtResource("41_psdpf")
 cost = 12
 
-[sub_resource type="Resource" id="Resource_s6gur"]
+[sub_resource type="Resource" id="Resource_eaxi4"]
 resource_local_to_scene = true
 script = ExtResource("42_qpl8r")
 zone_node_dialogue = "apicula"
 zone_packed_scene = ExtResource("45_2rv3c")
-Boue_active = false
+Boue_active = true
 purchass_state = Array[ExtResource("41_psdpf")]([SubResource("Resource_sjgmn"), SubResource("Resource_3u2s2"), SubResource("Resource_3karu")])
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_gmec4"]
@@ -750,7 +734,7 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_a4mg1"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_xefo8"]
 resource_local_to_scene = true
 resource_name = "Boat_underscene_01-ebbc7278ce3f6736198ea02480c387ec_Cube_001"
 _surfaces = [{
@@ -768,12 +752,12 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_yh6yu")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_f1wsn"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dtavb"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("42_klkyn")
 shader_parameter/Sonar_color = Color(0.25098, 0.607843, 0.447059, 1)
-shader_parameter/Distance = 0.165
+shader_parameter/Distance = 0.3
 
 [node name="02_MAIN_SCENES" type="Node"]
 
@@ -818,9 +802,6 @@ script = ExtResource("12_hkpaj")
 process_mode = 3
 script = ExtResource("9_rhikc")
 area_root = NodePath("../--DECOR--/Player_Boat/Zone_trigger")
-
-[node name="In_BoueZone_State" type="Node" parent="In_Zone_State"]
-script = ExtResource("10_3o5xg")
 
 [node name="In_DiveZone_State" type="Node" parent="In_Zone_State"]
 script = ExtResource("10_i656g")
@@ -887,76 +868,6 @@ theme_override_font_sizes/font_size = 40
 text = "..."
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="Input_add_coins" type="Node" parent="In_Zone_State"]
-script = ExtResource("10_7vpgw")
-
-[node name="coin_timer" type="Timer" parent="In_Zone_State/Input_add_coins"]
-wait_time = 0.15
-one_shot = true
-
-[node name="Cost_behaviour" type="Node" parent="In_Zone_State" node_paths=PackedStringArray("Viewport_ui", "Sprite_render", "progress_bar", "visual_coins")]
-script = ExtResource("10_gxs2j")
-Viewport_ui = NodePath("../Cost_viewport")
-Sprite_render = NodePath("../../01_GAME_UI/Cost_ui_root")
-progress_bar = NodePath("../Cost_viewport/ProgressBar")
-visual_coins = [NodePath("../Cost_viewport/Coins_grid/Coins_visual"), NodePath("../Cost_viewport/Coins_grid/Coins_visual2"), NodePath("../Cost_viewport/Coins_grid/Coins_visual3"), NodePath("../Cost_viewport/Coins_grid/Coins_visual4"), NodePath("../Cost_viewport/Coins_grid/Coins_visual5"), NodePath("../Cost_viewport/Coins_grid/Coins_visual6"), NodePath("../Cost_viewport/Coins_grid/Coins_visual7"), NodePath("../Cost_viewport/Coins_grid/Coins_visual8"), NodePath("../Cost_viewport/Coins_grid/Coins_visual9"), NodePath("../Cost_viewport/Coins_grid/Coins_visual10"), NodePath("../Cost_viewport/Coins_grid/Coins_visual11"), NodePath("../Cost_viewport/Coins_grid/Coins_visual12")]
-
-[node name="Cost_viewport" type="SubViewport" parent="In_Zone_State"]
-transparent_bg = true
-size = Vector2i(320, 100)
-
-[node name="Coins_grid" type="GridContainer" parent="In_Zone_State/Cost_viewport"]
-offset_top = 104.0
-offset_right = 320.0
-offset_bottom = 208.0
-scale = Vector2(1, -1)
-columns = 6
-
-[node name="Coins_visual" parent="In_Zone_State/Cost_viewport/Coins_grid" instance=ExtResource("12_aefsl")]
-layout_mode = 2
-
-[node name="Coins_visual2" parent="In_Zone_State/Cost_viewport/Coins_grid" instance=ExtResource("12_aefsl")]
-layout_mode = 2
-
-[node name="Coins_visual3" parent="In_Zone_State/Cost_viewport/Coins_grid" instance=ExtResource("12_aefsl")]
-layout_mode = 2
-
-[node name="Coins_visual4" parent="In_Zone_State/Cost_viewport/Coins_grid" instance=ExtResource("12_aefsl")]
-layout_mode = 2
-
-[node name="Coins_visual5" parent="In_Zone_State/Cost_viewport/Coins_grid" instance=ExtResource("12_aefsl")]
-layout_mode = 2
-
-[node name="Coins_visual6" parent="In_Zone_State/Cost_viewport/Coins_grid" instance=ExtResource("12_aefsl")]
-layout_mode = 2
-
-[node name="Coins_visual7" parent="In_Zone_State/Cost_viewport/Coins_grid" instance=ExtResource("12_aefsl")]
-layout_mode = 2
-
-[node name="Coins_visual8" parent="In_Zone_State/Cost_viewport/Coins_grid" instance=ExtResource("12_aefsl")]
-layout_mode = 2
-
-[node name="Coins_visual9" parent="In_Zone_State/Cost_viewport/Coins_grid" instance=ExtResource("12_aefsl")]
-layout_mode = 2
-
-[node name="Coins_visual10" parent="In_Zone_State/Cost_viewport/Coins_grid" instance=ExtResource("12_aefsl")]
-layout_mode = 2
-
-[node name="Coins_visual11" parent="In_Zone_State/Cost_viewport/Coins_grid" instance=ExtResource("12_aefsl")]
-layout_mode = 2
-
-[node name="Coins_visual12" parent="In_Zone_State/Cost_viewport/Coins_grid" instance=ExtResource("12_aefsl")]
-layout_mode = 2
-
-[node name="ProgressBar" type="ProgressBar" parent="In_Zone_State/Cost_viewport"]
-visible = false
-offset_left = 31.77
-offset_top = 8.535
-offset_right = 91.77
-offset_bottom = 35.535
-step = 1.0
-allow_greater = true
 
 [node name="Night&Day_state" type="Node" parent="."]
 script = ExtResource("9_vbyff")
@@ -1069,16 +980,6 @@ grow_vertical = 2
 mouse_filter = 2
 texture = SubResource("ViewportTexture_4iosc")
 expand_mode = 3
-
-[node name="Cost_ui_root" type="Node3D" parent="01_GAME_UI"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75101, 0)
-visible = false
-
-[node name="Render_options" type="Sprite3D" parent="01_GAME_UI/Cost_ui_root"]
-transform = Transform3D(0.660092, 0, 0, 0, 0.660092, 0, 0, 0, 0.660092, 0, 0, 0)
-layers = 262144
-billboard = 1
-texture = SubResource("ViewportTexture_x5hn5")
 
 [node name="Dialogue_ui_root" type="Node3D" parent="01_GAME_UI"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75101, 0)
@@ -1395,18 +1296,15 @@ surface_material_override/0 = ExtResource("33_um15u")
 
 [node name="BouePrefab" parent="--DECOR--/DIVE_ZONES" instance=ExtResource("40_kyvn3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.59489, 0, -2.83308)
-zone_datas = SubResource("Resource_4nucg")
+zone_datas = SubResource("Resource_w3tv2")
 
 [node name="BouePrefab2" parent="--DECOR--/DIVE_ZONES" instance=ExtResource("40_kyvn3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.92439, 0, 3.68206)
-zone_datas = SubResource("Resource_s6gur")
+zone_datas = SubResource("Resource_eaxi4")
 
-[node name="Dive_zone_area" parent="--DECOR--/DIVE_ZONES/BouePrefab2" index="5"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2306, 0, 1.93763)
-
-[node name="mesh" parent="--DECOR--/DIVE_ZONES/BouePrefab2/Dive_zone_area/Epave_visuals" index="1"]
-mesh = SubResource("ArrayMesh_a4mg1")
-surface_material_override/0 = SubResource("ShaderMaterial_f1wsn")
+[node name="mesh" parent="--DECOR--/DIVE_ZONES/BouePrefab2/Epave_visuals" index="1"]
+mesh = SubResource("ArrayMesh_xefo8")
+surface_material_override/0 = SubResource("ShaderMaterial_dtavb")
 
 [editable path="--DECOR--/DIVE_ZONES/BouePrefab2"]
 [editable path="--DECOR--/DIVE_ZONES/BouePrefab2/Boue_msh2"]

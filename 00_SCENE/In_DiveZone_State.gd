@@ -8,6 +8,7 @@ func _ready():
 
 func _active(condition : bool):
 	
+	
 	if !_global_datas.zoneData:
 		return
 	
@@ -19,7 +20,9 @@ func _active(condition : bool):
 	if _global_datas.zoneData.zone_packed_scene: 				
 		_global_datas._load_subscene.emit(condition)
 	
-	
 	if condition:
-		_global_datas._show_cost.emit(false,Vector3.ZERO,0)
-
+		var _target_pos =  _global_datas.zoneData.Boue_node_3D.global_position
+		_global_datas._active_sonar.emit(_target_pos)
+		_global_datas._show_object_legend.emit(true,_global_datas.zoneData.zone_node_dialogue)
+	else:
+		_global_datas._show_object_legend.emit(false,"_null")

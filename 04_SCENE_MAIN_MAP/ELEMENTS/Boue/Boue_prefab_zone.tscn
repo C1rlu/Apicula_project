@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://bvmfdpovy4fy8"]
+[gd_scene load_steps=39 format=3 uid="uid://bvmfdpovy4fy8"]
 
 [ext_resource type="Script" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Boue/Boue_prefab.gd" id="1_sibta"]
 [ext_resource type="Script" path="res://00_SYSTEMS/Active_mask_at_ready.tres.gd" id="2_i52ed"]
@@ -184,9 +184,6 @@ nodes/light/0/position = Vector2(2620, 1260)
 render_priority = 1
 shader = SubResource("VisualShader_gs5la")
 shader_parameter/Lit_color = Color(0.721569, 0.580392, 0.407843, 1)
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_6l3y8"]
-radius = 1.18898
 
 [sub_resource type="GDScript" id="GDScript_pvw8l"]
 script/source = "extends Node
@@ -402,8 +399,8 @@ shader = ExtResource("9_41m73")
 shader_parameter/Sonar_color = Color(0.25098, 0.607843, 0.447059, 1)
 shader_parameter/Distance = 0.3
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_dxcs1"]
-radius = 0.741047
+[sub_resource type="SphereShape3D" id="SphereShape3D_6l3y8"]
+radius = 1.18898
 
 [node name="BouePrefab" type="Node3D"]
 script = ExtResource("1_sibta")
@@ -442,6 +439,19 @@ visible = false
 layers = 1024
 surface_material_override/0 = ExtResource("7_61v0j")
 
+[node name="Epave_visuals" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.53516, -1.17706, -0.335505)
+
+[node name="Fade_out" type="Node" parent="Epave_visuals"]
+script = SubResource("GDScript_pvw8l")
+
+[node name="mesh" type="MeshInstance3D" parent="Epave_visuals"]
+transform = Transform3D(0.0832566, -0.00600461, -0.12878, 0.00257089, 0.153347, -0.00548801, 0.128895, 0.000819961, 0.083292, -0.183906, 0.000833273, -0.12179)
+layers = 1025
+mesh = SubResource("ArrayMesh_l6ctl")
+skeleton = NodePath("")
+surface_material_override/0 = SubResource("ShaderMaterial_7ohb8")
+
 [node name="Area3D" type="Area3D" parent="."]
 
 [node name="Zone" type="Node" parent="Area3D"]
@@ -452,30 +462,5 @@ zone_root = NodePath("../..")
 
 [node name="boue_collider" type="CollisionShape3D" parent="Area3D"]
 shape = SubResource("SphereShape3D_6l3y8")
-
-[node name="Dive_zone_area" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.02156, 0, -1.77209)
-
-[node name="Zone" type="Node" parent="Dive_zone_area"]
-
-[node name="Dive_zone" type="Node" parent="Dive_zone_area" node_paths=PackedStringArray("zone_root")]
-script = ExtResource("8_rsvj4")
-zone_root = NodePath("../..")
-
-[node name="Epave_visuals" type="Node3D" parent="Dive_zone_area"]
-
-[node name="Fade_out" type="Node" parent="Dive_zone_area/Epave_visuals"]
-script = SubResource("GDScript_pvw8l")
-
-[node name="mesh" type="MeshInstance3D" parent="Dive_zone_area/Epave_visuals"]
-transform = Transform3D(0.0832566, -0.00600461, -0.12878, 0.00257089, 0.153347, -0.00548801, 0.128895, 0.000819961, 0.083292, -0.183906, 0.000833273, -0.12179)
-layers = 1025
-mesh = SubResource("ArrayMesh_l6ctl")
-skeleton = NodePath("")
-surface_material_override/0 = SubResource("ShaderMaterial_7ohb8")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Dive_zone_area"]
-shape = SubResource("SphereShape3D_dxcs1")
-disabled = true
 
 [editable path="Boue_msh2"]
