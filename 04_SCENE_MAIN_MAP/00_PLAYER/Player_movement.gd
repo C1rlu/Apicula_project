@@ -62,18 +62,9 @@ func _physics_process(_delta):
 	
 	move_c()
 	
-	#if using_pad:
-		#
-	#else:
-		#move_a()
-	
+
 func move_c():
 	
-
-
-
-
-
 	var velocity = Input.get_vector("move_right", "move_left","move_backward" , "move_forward")
 	 # Calculate the torque based on input velocity
 	if velocity.length_squared() > 0.0:

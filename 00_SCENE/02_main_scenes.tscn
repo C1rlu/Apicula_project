@@ -1,4 +1,4 @@
-[gd_scene load_steps=111 format=3 uid="uid://cnmptm7i0xxmj"]
+[gd_scene load_steps=113 format=3 uid="uid://cnmptm7i0xxmj"]
 
 [ext_resource type="Script" path="res://00_SCENE/Active_Decor_Scene.gd" id="1_ounvv"]
 [ext_resource type="PackedScene" uid="uid://vpdvl0v7dubd" path="res://04_SCENE_MAIN_MAP/00_PLAYER/Player_boat.tscn" id="1_qltht"]
@@ -29,6 +29,8 @@
 [ext_resource type="Script" path="res://04_SCENE_MAIN_MAP/00_PLAYER/Check_zone.gd" id="17_unqeu"]
 [ext_resource type="PackedScene" uid="uid://exqao35losp1" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Rampe/Rampe_prefab.tscn" id="18_vvmth"]
 [ext_resource type="PackedScene" uid="uid://cp1aidnp626l4" path="res://04_SCENE_MAIN_MAP/Birds/Birds_prefabs.tscn" id="21_py3bv"]
+[ext_resource type="PackedScene" uid="uid://bme2k8btnc2jn" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Island_set/island_set_02/Island_set_02_prefab.tscn" id="25_bqqm8"]
+[ext_resource type="PackedScene" uid="uid://cmfuqfuw7csk0" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Island_set/island_set_03/Island_set_03_prefab.tscn" id="26_k2gvt"]
 [ext_resource type="Script" path="res://00_SCENE/Disable_Meet_bird_for_today.gd" id="29_57vaj"]
 [ext_resource type="Script" path="res://00_SYSTEMS/Active_mask_at_ready.tres.gd" id="30_7kr1q"]
 [ext_resource type="Resource" uid="uid://xuxu60afj84h" path="res://15_GAME_RESSOURCE/00_Npc_data/Maurice_dialogue_data.tres" id="30_ivc7k"]
@@ -47,15 +49,14 @@
 script/source = "extends Node
 
 @onready var player_boat = $\"../../--DECOR--/Player_Boat\"
-@export var prologue_position : Vector3
-
+@export var start_position : Node3D
 
 func _ready():
 	_global_datas.active_prologue_demo.connect(_state_change)
 
 	
 func _state_change():
-	player_boat.position = prologue_position
+	player_boat.position = start_position.global_position
 
 	
 
@@ -461,13 +462,13 @@ func _ready():
 "
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_jvty4"]
-radius = 0.621117
+radius = 0.856796
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_iivpn"]
 radius = 0.7471
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_5l4ea"]
-radius = 0.992206
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qktbq"]
+height = 6.53992
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_7ftl5"]
 size = Vector2(30, 30)
@@ -565,7 +566,7 @@ cost = 6
 script = ExtResource("41_psdpf")
 cost = 12
 
-[sub_resource type="Resource" id="Resource_rp1j4"]
+[sub_resource type="Resource" id="Resource_8fb60"]
 resource_local_to_scene = true
 script = ExtResource("42_qpl8r")
 zone_node_dialogue = "vortex"
@@ -585,7 +586,7 @@ cost = 6
 script = ExtResource("41_psdpf")
 cost = 12
 
-[sub_resource type="Resource" id="Resource_qt4ri"]
+[sub_resource type="Resource" id="Resource_7gqp3"]
 resource_local_to_scene = true
 script = ExtResource("42_qpl8r")
 zone_node_dialogue = "apicula"
@@ -762,9 +763,9 @@ shader_parameter/Distance = 0.0
 
 [node name="GAME_STATE" type="Node" parent="."]
 
-[node name="Prologue" type="Node" parent="GAME_STATE"]
+[node name="Prologue" type="Node" parent="GAME_STATE" node_paths=PackedStringArray("start_position")]
 script = SubResource("GDScript_ueh7h")
-prologue_position = Vector3(-21, -3.995, 7)
+start_position = NodePath("../../--DECOR--/Prologue_start_pos")
 
 [node name="Active_Decor_Scene" type="Node" parent="." node_paths=PackedStringArray("viewports")]
 script = ExtResource("1_ounvv")
@@ -1037,14 +1038,16 @@ texture = SubResource("ViewportTexture_ubg8j")
 
 [node name="--DECOR--" type="Node3D" parent="."]
 
+[node name="Prologue_start_pos" type="Node3D" parent="--DECOR--"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.21605, 0, 14.8725)
+
 [node name="Player_Boat" parent="--DECOR--" instance=ExtResource("1_qltht")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
 input_ray_pickable = false
 mass = 4.0
 physics_material_override = SubResource("PhysicsMaterial_ituqr")
-max_contacts_reported = 10
-move_speed = 5.0
-maxSpeed = 6.0
+move_speed = 7.0
+maxSpeed = 7.0
 rotation_speed = 4.0
 
 [node name="Check_zone_ui" type="Node" parent="--DECOR--/Player_Boat" node_paths=PackedStringArray("zone_collider")]
@@ -1126,7 +1129,7 @@ script = SubResource("GDScript_i66w8")
 [node name="WORLD_ELEMENTS" type="Node3D" parent="--DECOR--"]
 
 [node name="Island_Set01_Prefab" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("37_b1buk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.63198, 0, -1.17179)
+transform = Transform3D(-0.258819, 0, 0.965926, 0, 1, 0, -0.965926, 0, -0.258819, -12.9038, 0, 17.1162)
 
 [node name="Pine_prefabs20" parent="--DECOR--/WORLD_ELEMENTS/Island_Set01_Prefab" instance=ExtResource("10_c6r5x")]
 transform = Transform3D(0.054515, 0, 0.0545149, 0, 0.0770964, 0, -0.0545149, 0, 0.054515, -0.375629, 1.1954, 0.104752)
@@ -1182,8 +1185,65 @@ transform = Transform3D(0.0269813, 0, -0.0467331, 0, 0.0539632, 0, 0.0467331, 0,
 [node name="Pine_prefabs24" parent="--DECOR--/WORLD_ELEMENTS/Island_Set01_Prefab" instance=ExtResource("10_c6r5x")]
 transform = Transform3D(-0.0147612, 0, -0.0550893, 0, 0.0570331, 0, 0.0550893, 0, -0.0147612, -0.698663, 1.41983, -1.82667)
 
+[node name="Island_Set01_Prefab14" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("37_b1buk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.47429, 0, 4.91969)
+
+[node name="Pine_prefabs20" parent="--DECOR--/WORLD_ELEMENTS/Island_Set01_Prefab14" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(0.054515, 0, 0.0545149, 0, 0.0770964, 0, -0.0545149, 0, 0.054515, -0.375629, 1.1954, 0.104752)
+
+[node name="Pine_prefabs27" parent="--DECOR--/WORLD_ELEMENTS/Island_Set01_Prefab14" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(-0.0199538, 0, 0.0744688, 0, 0.0770964, 0, -0.0744688, 0, -0.0199538, -0.652594, 1.1954, 0.78594)
+
+[node name="Pine_prefabs21" parent="--DECOR--/WORLD_ELEMENTS/Island_Set01_Prefab14" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(0.054515, 0, 0.0545149, 0, 0.0770964, 0, -0.0545149, 0, 0.054515, -0.0794196, 1.1954, 0.460425)
+
+[node name="Pine_prefabs28" parent="--DECOR--/WORLD_ELEMENTS/Island_Set01_Prefab14" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(0.054515, 0, 0.0545149, 0, 0.0770964, 0, -0.0545149, 0, 0.054515, 0.105496, 1.1954, 0.708613)
+
+[node name="Pine_prefabs29" parent="--DECOR--/WORLD_ELEMENTS/Island_Set01_Prefab14" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(0.054515, 0, 0.0545149, 0, 0.0770964, 0, -0.0545149, 0, 0.054515, -0.259017, 1.1954, 0.766273)
+
+[node name="Pine_prefabs30" parent="--DECOR--/WORLD_ELEMENTS/Island_Set01_Prefab14" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(0.0632416, 0, 0.0632415, 0, 0.0894378, 0, -0.0632415, 0, 0.0632416, -0.0331154, 1.1954, 0.0375334)
+
+[node name="Pine_prefabs31" parent="--DECOR--/WORLD_ELEMENTS/Island_Set01_Prefab14" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(-0.0516916, 0, 0.0516917, 0, 0.0731037, 0, -0.0516917, 0, -0.0516916, -0.848262, 1.1954, 0.252339)
+
+[node name="Pine_prefabs26" parent="--DECOR--/WORLD_ELEMENTS/Island_Set01_Prefab14" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(0.0445994, 0, 0.0445993, 0, 0.0630736, 0, -0.0445993, 0, 0.0445994, 0.467635, 1.1954, 1.11407)
+
+[node name="Pine_prefabs25" parent="--DECOR--/WORLD_ELEMENTS/Island_Set01_Prefab14" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(0.0505208, 0, 0.0505207, 0, 0.0714478, 0, -0.0505207, 0, 0.0505208, 0.5899, 1.1954, 0.500174)
+
+[node name="Pine_prefabs32" parent="--DECOR--/WORLD_ELEMENTS/Island_Set01_Prefab14" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(0.0505208, 0, 0.0505207, 0, 0.0714478, 0, -0.0505207, 0, 0.0505208, 0.0613141, 1.1954, 0.290542)
+
+[node name="Pine_prefabs23" parent="--DECOR--/WORLD_ELEMENTS/Island_Set01_Prefab14" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(0.054515, 0, 0.0545149, 0, 0.0770964, 0, -0.0545149, 0, 0.054515, -0.82275, 1.1954, -0.426714)
+
+[node name="Pine_prefabs22" parent="--DECOR--/WORLD_ELEMENTS/Island_Set01_Prefab14" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(-0.0744688, 0, -0.0199538, 0, 0.0770964, 0, 0.0199538, 0, -0.0744688, -0.174576, 1.41983, -1.84248)
+
+[node name="Pine_prefabs33" parent="--DECOR--/WORLD_ELEMENTS/Island_Set01_Prefab14" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(0.0385478, 0, -0.0667669, 0, 0.0770964, 0, 0.0667669, 0, 0.0385478, -0.470364, 1.41983, -1.68054)
+
+[node name="Pine_prefabs34" parent="--DECOR--/WORLD_ELEMENTS/Island_Set01_Prefab14" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(0.0472698, 0, -0.0818738, 0, 0.0945405, 0, 0.0818738, 0, 0.0472698, -0.158409, 1.41983, -1.51818)
+
+[node name="Pine_prefabs35" parent="--DECOR--/WORLD_ELEMENTS/Island_Set01_Prefab14" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(0.0295155, 0, -0.0511225, 0, 0.0590316, 0, 0.0511225, 0, 0.0295155, 0.123791, 1.41983, -1.71651)
+
+[node name="Pine_prefabs36" parent="--DECOR--/WORLD_ELEMENTS/Island_Set01_Prefab14" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(0.0385478, 0, -0.0667669, 0, 0.0770964, 0, 0.0667669, 0, 0.0385478, 0.175279, 1.41983, -1.39689)
+
+[node name="Pine_prefabs37" parent="--DECOR--/WORLD_ELEMENTS/Island_Set01_Prefab14" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(0.0269813, 0, -0.0467331, 0, 0.0539632, 0, 0.0467331, 0, 0.0269813, 0.377231, 1.41983, -1.11539)
+
+[node name="Pine_prefabs24" parent="--DECOR--/WORLD_ELEMENTS/Island_Set01_Prefab14" instance=ExtResource("10_c6r5x")]
+transform = Transform3D(-0.0147612, 0, -0.0550893, 0, 0.0570331, 0, 0.0550893, 0, -0.0147612, -0.698663, 1.41983, -1.82667)
+
 [node name="Island_Set01_Prefab2" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("37_b1buk")]
-transform = Transform3D(-0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, -0.258819, 6.60496, 4.76837e-07, -2.34221)
+transform = Transform3D(-0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, -0.258819, 2.89776, 4.76837e-07, 4.178)
 
 [node name="Pine_prefabs38" parent="--DECOR--/WORLD_ELEMENTS/Island_Set01_Prefab2" instance=ExtResource("10_c6r5x")]
 transform = Transform3D(-0.0667669, 0, 0.0385479, 0, 0.0770964, 0, -0.0385479, 0, -0.0667669, -0.572831, 1.1954, 0.962761)
@@ -1222,30 +1282,120 @@ transform = Transform3D(-0.0564544, 0, 0.032594, 0, 0.0651885, 0, -0.032594, 0, 
 transform = Transform3D(-0.0479626, 0, 0.0276913, 0, 0.055383, 0, -0.0276913, 0, -0.0479626, 0.375602, 1.1954, 1.29205)
 
 [node name="Island_Set01_Prefab3" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("37_b1buk")]
-transform = Transform3D(-0.117388, 0, -0.438098, 0, 0.453552, 0, 0.438098, 0, -0.117388, 3.76142, 7.15256e-07, -2.57018)
+transform = Transform3D(-0.117388, 0, -0.438098, 0, 0.453552, 0, 0.438098, 0, -0.117388, 0.0542229, 7.15256e-07, 3.95003)
 
 [node name="Island_Set01_Prefab5" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("37_b1buk")]
-transform = Transform3D(0.00178955, -0.00219047, -0.317802, 4.43974e-05, 0.317807, -0.00219025, 0.31781, -3.2056e-05, 0.00178981, 3.02464, 8.34465e-07, -3.90716)
+transform = Transform3D(0.00178955, -0.00219047, -0.317802, 4.43974e-05, 0.317807, -0.00219025, 0.31781, -3.2056e-05, 0.00178981, -0.682557, 8.34465e-07, 2.61305)
 
 [node name="Island_Set01_Prefab4" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("37_b1buk")]
-transform = Transform3D(0.293453, 0, 1.09518, 0, 1.13382, 0, -1.09518, 0, 0.293453, 3.80649, -2.38419e-07, 6.28575)
+transform = Transform3D(-0.293453, 0, -1.09518, 0, 1.13382, 0, 1.09518, 0, -0.293453, 0.164, 0, 10.088)
+
+[node name="Island_Set01_Prefab15" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("37_b1buk")]
+transform = Transform3D(1.09518, 0, -0.293453, 0, 1.13382, 0, 0.293453, 0, 1.09518, 0.998722, 0.00811744, 13.761)
+
+[node name="Island_Set01_Prefab23" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("37_b1buk")]
+transform = Transform3D(0.322621, 0, -1.20404, 0, 1.24651, 0, 1.20404, 0, 0.322621, -2.49877, 0.00468898, 19.8238)
+
+[node name="Island_Set01_Prefab19" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("37_b1buk")]
+transform = Transform3D(1.09518, 0, 0.293452, 0, 1.13382, 0, -0.293452, 0, 1.09518, -9.546, 0, 18.497)
+
+[node name="Island_Set01_Prefab35" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("37_b1buk")]
+transform = Transform3D(-0.45975, 0, 0.12319, 0, 0.475971, 0, -0.12319, 0, -0.45975, -10.9805, 0, 12.6498)
+
+[node name="Island_Set01_Prefab17" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("37_b1buk")]
+transform = Transform3D(1.09518, 0, -0.293453, 0, 1.13382, 0, 0.293453, 0, 1.09518, -12.4479, 0.00811744, 13.761)
+
+[node name="Island_Set01_Prefab6" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("25_bqqm8")]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -8.31593, 1.90735e-06, 9.21843)
+
+[node name="Island_Set01_Prefab34" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("25_bqqm8")]
+transform = Transform3D(-0.39221, 0, -0.226442, 0, 0.452885, 0, 0.226442, 0, -0.39221, -2.17317, 1.90735e-06, 8.36215)
+
+[node name="Island_Set01_Prefab30" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("25_bqqm8")]
+transform = Transform3D(0.116761, 0, -0.435757, 0, 0.451129, 0, 0.435757, 0, 0.116761, -2.92273, 1.90735e-06, 13.5903)
+
+[node name="Island_Set01_Prefab32" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("25_bqqm8")]
+transform = Transform3D(-0.914907, 0, -0.528222, 0, 1.05644, 0, 0.528222, 0, -0.914907, -4.36542, 1.90735e-06, 19.5174)
+
+[node name="Island_Set01_Prefab16" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("25_bqqm8")]
+transform = Transform3D(0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, 0.258819, -11.0015, 1.90735e-06, 11.1038)
+
+[node name="Island_Set01_Prefab21" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("25_bqqm8")]
+transform = Transform3D(0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, 0.258819, -11.0015, 1.90735e-06, 11.1038)
+
+[node name="Island_Set01_Prefab7" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("25_bqqm8")]
+transform = Transform3D(0.318708, 0, 0.552019, 0, 0.637416, 0, -0.552019, 0, 0.318708, -10.7628, 1.90735e-06, 15.4839)
+
+[node name="Island_Set01_Prefab27" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("25_bqqm8")]
+transform = Transform3D(0.899578, 0, -4.47035e-08, 0, 1.26787, 0, 4.47035e-08, 0, 0.899578, -1.14616, 0.958439, 18.611)
+
+[node name="Island_Set01_Prefab28" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("25_bqqm8")]
+transform = Transform3D(0.347529, 0, -0.601938, 0, 0.695058, 0, 0.601938, 0, 0.347529, -10.1676, 1.20163, 17.498)
+
+[node name="Island_Set01_Prefab18" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("25_bqqm8")]
+transform = Transform3D(0.552019, 0, 0.318708, 0, 0.637416, 0, -0.318708, 0, 0.552019, -12.6069, 1.39703, 14.3222)
+
+[node name="Island_Set01_Prefab31" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("25_bqqm8")]
+transform = Transform3D(0.720016, 0, 0.415702, 0, 1.67337, 0, -0.415702, 0, 0.720016, -8.00589, 0.155277, 20.31)
+
+[node name="Island_Set01_Prefab13" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("25_bqqm8")]
+transform = Transform3D(-4.37094e-08, 0, -0.999956, 0, 0.999956, 0, 0.999956, 0, -4.37094e-08, -9.74164, 2.38419e-06, 8.83375)
+
+[node name="Island_Set01_Prefab22" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("25_bqqm8")]
+transform = Transform3D(-4.37094e-08, 0, -0.999956, 0, 0.999956, 0, 0.999956, 0, -4.37094e-08, -0.720983, 2.38419e-06, 16.6941)
+
+[node name="Island_Set01_Prefab8" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("25_bqqm8")]
+transform = Transform3D(-4.24785e-08, 0, -0.971795, 0, 0.971795, 0, 0.971795, 0, -4.24785e-08, -1.3604, 1.90735e-06, 11.9282)
+
+[node name="Island_Set01_Prefab24" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("25_bqqm8")]
+transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, -6.487, 1.90735e-06, 20.9495)
+
+[node name="Island_Set01_Prefab9" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("26_k2gvt")]
+transform = Transform3D(0.979262, 0, 0.202599, 0, 1, 0, -0.202599, 0, 0.979262, -8.39245, 1.90735e-06, 7.95631)
+
+[node name="Island_Set01_Prefab29" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("26_k2gvt")]
+transform = Transform3D(-0.761927, 0, -0.84339, 0, 1.13659, 0, 0.84339, 0, -0.761927, -0.552199, 1.90735e-06, 15.4462)
+
+[node name="Island_Set01_Prefab20" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("26_k2gvt")]
+transform = Transform3D(-0.314175, 0, -0.949365, 0, 1, 0, 0.949365, 0, -0.314175, 0.503287, 1.90735e-06, 11.5525)
+
+[node name="Island_Set01_Prefab10" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("26_k2gvt")]
+transform = Transform3D(0.979262, 0, 0.202599, 0, 1, 0, -0.202599, 0, 0.979262, -8.39245, 1.90735e-06, 7.95631)
+
+[node name="Island_Set01_Prefab25" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("26_k2gvt")]
+transform = Transform3D(0.449147, 0, -0.893458, 0, 1, 0, 0.893458, 0, 0.449147, -10.8072, 1.90735e-06, 18.1439)
+
+[node name="Island_Set01_Prefab26" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("26_k2gvt")]
+transform = Transform3D(1.50314, 0, 0.310984, 0, 1.53497, 0, -0.310984, 0, 1.50314, 0.922827, 1.90735e-06, 17.7785)
+
+[node name="Island_Set01_Prefab11" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("26_k2gvt")]
+transform = Transform3D(0.238979, 0, 0.212841, 0, 0.320019, 0, -0.212841, 0, 0.238979, -5.85914, 1.90735e-06, 6.70456)
+
+[node name="Island_Set01_Prefab33" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("26_k2gvt")]
+transform = Transform3D(-0.0880551, 0, 0.175162, 0, 0.196049, 0, -0.175162, 0, -0.0880551, -5.44828, 2.38419e-06, 6.64756)
+
+[node name="Island_Set01_Prefab12" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("26_k2gvt")]
+transform = Transform3D(0.280142, 0, 0.249501, 0, 0.37514, 0, -0.249501, 0, 0.280142, -6.95895, 2.38419e-06, 8.67171)
 
 [node name="IceBerg_05" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("11_086vv")]
-transform = Transform3D(-0.451264, 0, -0.0157661, 0, 0.45154, 0, 0.0157661, 0, -0.451264, 5.42436, 0, -0.59875)
+transform = Transform3D(-0.451264, 0, -0.0157661, 0, 0.45154, 0, 0.0157661, 0, -0.451264, 1.71716, 0, 5.92146)
+
+[node name="IceBerg_06" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("11_086vv")]
+transform = Transform3D(-0.398689, 0, 0.211978, 0, 0.45154, 0, -0.211978, 0, -0.398689, -7.45158, 0, 4.95967)
 
 [node name="Rampe_Prefab" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("18_vvmth")]
-transform = Transform3D(0.444281, 0, 0.444281, 0, 0.628308, 0, -0.444281, 0, 0.444281, 2.8637, 0, -1.78697)
+transform = Transform3D(0.444281, 0, 0.444281, 0, 0.628308, 0, -0.444281, 0, 0.444281, -0.843497, 0, 4.73324)
 
 [node name="Rampe_Prefab2" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("18_vvmth")]
-transform = Transform3D(0.359977, 0, -0.359977, 0, 0.509084, 0, 0.359977, 0, 0.359977, 2.36001, 0, -2.02145)
+transform = Transform3D(0.359977, 0, -0.359977, 0, 0.509084, 0, 0.359977, 0, 0.359977, -1.34719, 0, 4.49876)
 
 [node name="Lighthouse2" parent="--DECOR--/WORLD_ELEMENTS" instance=ExtResource("16_u78ww")]
-transform = Transform3D(4.083e-08, 0, 0.271044, 0, 0.271044, 0, -0.271044, 0, 4.083e-08, 3.5334, 0.473891, -2.59625)
+transform = Transform3D(4.083e-08, 0, 0.271044, 0, 0.271044, 0, -0.271044, 0, 4.083e-08, -0.173797, 0.473891, 3.92396)
 
 [node name="NPC_TRIGGER_ZONE" type="Node3D" parent="--DECOR--"]
 
 [node name="Maurice_NPC_Area" type="Area3D" parent="--DECOR--/NPC_TRIGGER_ZONE"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.70763, 0.166096, -1.66876)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.781679, 0, 4.67582)
 input_ray_pickable = false
 script = SubResource("GDScript_w8xnd")
 Npc_data = ExtResource("30_ivc7k")
@@ -1256,11 +1406,11 @@ Npc_data = ExtResource("30_ivc7k")
 script = ExtResource("30_ki3ay")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="--DECOR--/NPC_TRIGGER_ZONE/Maurice_NPC_Area"]
-transform = Transform3D(1.66522, 0, 0, 0, 1.66522, 0, 0, 0, 1.66522, -0.269047, 0, -0.101223)
+transform = Transform3D(1.66522, 0, 0, 0, 1.66522, 0, 0, 0, 1.66522, 0, 0, 0)
 shape = SubResource("SphereShape3D_jvty4")
 
 [node name="GardeCote_NPC_Area" type="Area3D" parent="--DECOR--/NPC_TRIGGER_ZONE"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.36054, 1.19209e-07, 2.59297)
+transform = Transform3D(-8.9407e-08, 0, -1, 0, 1, 0, 1, 0, -8.9407e-08, -9.76621, 1.19209e-07, 12.5048)
 input_ray_pickable = false
 script = SubResource("GDScript_w8xnd")
 Npc_data = ExtResource("32_pt30g")
@@ -1274,11 +1424,11 @@ transform = Transform3D(2.98023e-08, 0, -0.628308, 0, 0.628308, 0, 0.628308, 0, 
 script = ExtResource("30_ki3ay")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="--DECOR--/NPC_TRIGGER_ZONE/GardeCote_NPC_Area"]
-transform = Transform3D(0.999993, -2.56409e-06, 0.00375245, 2.55832e-06, 1, 1.54372e-06, -0.00375245, -1.53412e-06, 0.999993, 0, 0, 0)
+transform = Transform3D(0.999993, -2.56409e-06, 0.00375241, 2.55832e-06, 1, 1.54372e-06, -0.00375241, -1.53412e-06, 0.999993, 0, 0, 0)
 shape = SubResource("SphereShape3D_iivpn")
 
 [node name="MrBird_NPC_Area" type="Area3D" parent="--DECOR--/NPC_TRIGGER_ZONE"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.52827, 2.50339e-06, -6.51849)
+transform = Transform3D(0.994143, 0, -0.108069, 0, 1, 0, 0.108069, 0, 0.994143, -3.69401, 2.50339e-06, 7.31132)
 input_ray_pickable = false
 script = SubResource("GDScript_w8xnd")
 Npc_data = ExtResource("1_trgwt")
@@ -1295,11 +1445,11 @@ Collider = NodePath("../CollisionShape3D")
 script = ExtResource("30_ki3ay")
 
 [node name="Birds" parent="--DECOR--/NPC_TRIGGER_ZONE/MrBird_NPC_Area" instance=ExtResource("21_py3bv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.643425, -0.753295, 0.626134)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.175196, -0.753295, -0.605568)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="--DECOR--/NPC_TRIGGER_ZONE/MrBird_NPC_Area"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.484242, 0, 0.113853)
-shape = SubResource("SphereShape3D_5l4ea")
+transform = Transform3D(-4.2222e-08, -0.965926, -0.258819, 1, -4.37114e-08, 0, -1.13133e-08, -0.258819, 0.965926, -0.484242, 0.377731, 0.113853)
+shape = SubResource("CapsuleShape3D_qktbq")
 
 [node name="SEA" type="Node3D" parent="--DECOR--"]
 
@@ -1340,12 +1490,12 @@ surface_material_override/0 = ExtResource("33_um15u")
 [node name="DIVE_ZONES" type="Node3D" parent="--DECOR--"]
 
 [node name="BouePrefab" parent="--DECOR--/DIVE_ZONES" instance=ExtResource("40_kyvn3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.59489, 0, -2.83308)
-zone_datas = SubResource("Resource_rp1j4")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.99237, 0, 0.945796)
+zone_datas = SubResource("Resource_8fb60")
 
 [node name="BouePrefab2" parent="--DECOR--/DIVE_ZONES" instance=ExtResource("40_kyvn3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.92439, 0, 3.68206)
-zone_datas = SubResource("Resource_qt4ri")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.22176, 0, -0.0177174)
+zone_datas = SubResource("Resource_7gqp3")
 
 [node name="mesh" parent="--DECOR--/DIVE_ZONES/BouePrefab2/Epave_visuals" index="1"]
 mesh = SubResource("ArrayMesh_xefo8")
