@@ -58,7 +58,7 @@ func find_nearest_cell_to_player():
 
 func get_number(_null):
 	find_nearest_cell_to_player()
-	#_global_datas._show_object_legend.emit(true,_global_datas.subscene_zone_index)			
+		
 	
 func _check_sceneIndex(_null):
 	find_nearest_cell_to_player()

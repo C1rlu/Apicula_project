@@ -1,14 +1,11 @@
-[gd_scene load_steps=110 format=3 uid="uid://cnmptm7i0xxmj"]
+[gd_scene load_steps=111 format=3 uid="uid://cnmptm7i0xxmj"]
 
-[ext_resource type="Script" path="res://00_SCENE/ZONE_datas.gd" id="1_gm0dt"]
 [ext_resource type="Script" path="res://00_SCENE/Active_Decor_Scene.gd" id="1_ounvv"]
 [ext_resource type="PackedScene" uid="uid://vpdvl0v7dubd" path="res://04_SCENE_MAIN_MAP/00_PLAYER/Player_boat.tscn" id="1_qltht"]
 [ext_resource type="Resource" uid="uid://ppxk5i543dfn" path="res://15_GAME_RESSOURCE/00_Npc_data/Mr_Birds_data.tres" id="1_trgwt"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_xd8sb"]
 [ext_resource type="Script" path="res://03_CAMERA/CameraFollow.gd" id="2_7lb1x"]
-[ext_resource type="Resource" uid="uid://cdef15ggl03fh" path="res://15_GAME_RESSOURCE/00_Zone_data/Apicula_zone.tres" id="2_xqcjl"]
 [ext_resource type="Script" path="res://00_SCENE/MainScene/Grid_Fade.gd" id="3_7fuin"]
-[ext_resource type="Resource" uid="uid://d2ivg06mjrg4v" path="res://15_GAME_RESSOURCE/00_Zone_data/Vortex_zone.tres" id="3_mqlau"]
 [ext_resource type="Shader" uid="uid://bduoqim3kfbs6" path="res://04_SCENE_MAIN_MAP/00_PLAYER/Sonar/Sonar_sh.tres" id="3_todel"]
 [ext_resource type="Script" path="res://03_CAMERA/Active_scene_viewports.gd" id="4_tulh2"]
 [ext_resource type="Script" path="res://00_SCENE/MainScene/Teleport_boat_at_position.gd" id="4_xkpot"]
@@ -21,10 +18,13 @@
 [ext_resource type="Script" path="res://00_SCENE/Day_state.gd" id="9_vbyff"]
 [ext_resource type="PackedScene" uid="uid://dla1534gcagbl" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Pine/pine_prefabs.tscn" id="10_c6r5x"]
 [ext_resource type="Script" path="res://00_SCENE/In_DiveZone_State.gd" id="10_i656g"]
+[ext_resource type="Script" path="res://04_SCENE_MAIN_MAP/00_PLAYER/Subsene_progress_bar.gd" id="10_in3yh"]
 [ext_resource type="Script" path="res://00_SCENE/In_NpcZone_State.gd" id="11_7hdfu"]
 [ext_resource type="PackedScene" uid="uid://cegdqm3et2y35" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Iceberg/ice_berg_02.tscn" id="11_086vv"]
+[ext_resource type="Script" path="res://13_TOOLS_UI/Time_bar/Update_time_bar.gd" id="11_bdl8q"]
 [ext_resource type="Script" path="res://00_SCENE/Sonar_zone_active.gd" id="12_gjulh"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/Loadin_progress.gd" id="12_hkpaj"]
+[ext_resource type="Texture2D" uid="uid://dafg2qvpi6wmk" path="res://06_UI/Loader_circle/Loader_circle.png" id="12_ibho5"]
 [ext_resource type="PackedScene" uid="uid://fcjcvy77lg0o" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Lighthouse/lighthouse_prefabs.tscn" id="16_u78ww"]
 [ext_resource type="Script" path="res://04_SCENE_MAIN_MAP/00_PLAYER/Check_zone.gd" id="17_unqeu"]
 [ext_resource type="PackedScene" uid="uid://exqao35losp1" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Rampe/Rampe_prefab.tscn" id="18_vvmth"]
@@ -159,9 +159,6 @@ func _input(event: InputEvent) -> void:
 		
 	if _global_datas._time_state == 0:
 			return	
-	
-	
-	
 	if event.is_action_released(\"Push_to_subscene\"):
 
 		_global_datas._active_progress_subscene.emit(false)
@@ -173,7 +170,6 @@ func _input(event: InputEvent) -> void:
 
 	if event.is_action_pressed(\"Push_to_subscene\"):
 		
-		print(_global_datas.zoneData )
 		if _global_datas.zoneData == null:
 			return
 		if _global_datas.Player_In_Inventory:
@@ -182,7 +178,7 @@ func _input(event: InputEvent) -> void:
 		if _global_datas.zoneData.Boue_active:
 			_global_datas._active_progress_subscene.emit(true)
 			_global_datas._load_subscene.emit(true)
-
+		
 "
 
 [sub_resource type="GDScript" id="GDScript_qc6pl"]
@@ -293,6 +289,9 @@ viewport_path = NodePath("01_GAME_UI/MAIN_SCENE_UI/Viewports/MAIN_Viewport")
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_5wdck"]
 viewport_path = NodePath("In_Zone_State/In_NpcZone_State/Button_active_Dialogue/Dialogue_UI")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_ubg8j"]
+viewport_path = NodePath("Subsene_progress_bar/Progress_bar_ui")
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ituqr"]
 bounce = 500.0
@@ -566,7 +565,7 @@ cost = 6
 script = ExtResource("41_psdpf")
 cost = 12
 
-[sub_resource type="Resource" id="Resource_w3tv2"]
+[sub_resource type="Resource" id="Resource_rp1j4"]
 resource_local_to_scene = true
 script = ExtResource("42_qpl8r")
 zone_node_dialogue = "vortex"
@@ -586,7 +585,7 @@ cost = 6
 script = ExtResource("41_psdpf")
 cost = 12
 
-[sub_resource type="Resource" id="Resource_eaxi4"]
+[sub_resource type="Resource" id="Resource_qt4ri"]
 resource_local_to_scene = true
 script = ExtResource("42_qpl8r")
 zone_node_dialogue = "apicula"
@@ -757,7 +756,7 @@ resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("42_klkyn")
 shader_parameter/Sonar_color = Color(0.25098, 0.607843, 0.447059, 1)
-shader_parameter/Distance = 0.3
+shader_parameter/Distance = 0.0
 
 [node name="02_MAIN_SCENES" type="Node"]
 
@@ -766,10 +765,6 @@ shader_parameter/Distance = 0.3
 [node name="Prologue" type="Node" parent="GAME_STATE"]
 script = SubResource("GDScript_ueh7h")
 prologue_position = Vector3(-21, -3.995, 7)
-
-[node name="ZONE_datas" type="Node" parent="."]
-script = ExtResource("1_gm0dt")
-zones_datas = Array[ExtResource("42_qpl8r")]([ExtResource("2_xqcjl"), ExtResource("3_mqlau")])
 
 [node name="Active_Decor_Scene" type="Node" parent="." node_paths=PackedStringArray("viewports")]
 script = ExtResource("1_ounvv")
@@ -868,6 +863,45 @@ theme_override_font_sizes/font_size = 40
 text = "..."
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Subsene_progress_bar" type="Node" parent="." node_paths=PackedStringArray("_sprite_render_root", "_subscene_progress_bar")]
+script = ExtResource("10_in3yh")
+_sprite_render_root = NodePath("../01_GAME_UI/Dive_progress_ui_root")
+_subscene_progress_bar = NodePath("Progress_bar_ui/DiveZone_infos/ProgressBar")
+
+[node name="Update_time_bar" type="Node" parent="Subsene_progress_bar" node_paths=PackedStringArray("index_label")]
+script = ExtResource("11_bdl8q")
+index_label = NodePath("../Progress_bar_ui/DiveZone_infos/ProgressBar/Label")
+
+[node name="Progress_bar_ui" type="SubViewport" parent="Subsene_progress_bar"]
+transparent_bg = true
+size = Vector2i(100, 100)
+
+[node name="DiveZone_infos" type="Control" parent="Subsene_progress_bar/Progress_bar_ui"]
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+
+[node name="ProgressBar" type="TextureProgressBar" parent="Subsene_progress_bar/Progress_bar_ui/DiveZone_infos"]
+layout_mode = 0
+offset_right = 512.0
+offset_bottom = 512.0
+scale = Vector2(0.15, 0.15)
+fill_mode = 4
+texture_under = ExtResource("12_ibho5")
+texture_progress = ExtResource("12_ibho5")
+tint_under = Color(0.419608, 0.352941, 0.270588, 1)
+tint_progress = Color(0.721569, 0.580392, 0.407843, 1)
+
+[node name="Label" type="Label" parent="Subsene_progress_bar/Progress_bar_ui/DiveZone_infos/ProgressBar"]
+layout_mode = 0
+offset_left = 193.333
+offset_top = 93.0
+offset_right = 324.333
+offset_bottom = 407.0
+theme_override_colors/font_color = Color(0.721569, 0.580392, 0.407843, 1)
+theme_override_font_sizes/font_size = 235
+text = "3"
 
 [node name="Night&Day_state" type="Node" parent="."]
 script = ExtResource("9_vbyff")
@@ -991,6 +1025,16 @@ layers = 262144
 billboard = 1
 texture = SubResource("ViewportTexture_5wdck")
 
+[node name="Dive_progress_ui_root" type="Node3D" parent="01_GAME_UI"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75101, 0)
+visible = false
+
+[node name="Render_dive_Bar" type="Sprite3D" parent="01_GAME_UI/Dive_progress_ui_root"]
+transform = Transform3D(0.491079, 0, 0, 0, 0.491079, 0, 0, 0, 0.491079, 0.0527542, -0.0611725, 0)
+layers = 262144
+billboard = 1
+texture = SubResource("ViewportTexture_ubg8j")
+
 [node name="--DECOR--" type="Node3D" parent="."]
 
 [node name="Player_Boat" parent="--DECOR--" instance=ExtResource("1_qltht")]
@@ -1003,8 +1047,9 @@ move_speed = 5.0
 maxSpeed = 6.0
 rotation_speed = 4.0
 
-[node name="Check_zone_ui" type="Node" parent="--DECOR--/Player_Boat"]
+[node name="Check_zone_ui" type="Node" parent="--DECOR--/Player_Boat" node_paths=PackedStringArray("zone_collider")]
 script = ExtResource("17_unqeu")
+zone_collider = NodePath("../Zone_trigger/Col")
 
 [node name="Main_light" type="OmniLight3D" parent="--DECOR--/Player_Boat"]
 transform = Transform3D(1, 0, 0, 2.11758e-22, 0.342545, 0.939501, 0, -0.939501, 0.342545, 0.130404, 3.19906, -0.0379682)
@@ -1296,11 +1341,11 @@ surface_material_override/0 = ExtResource("33_um15u")
 
 [node name="BouePrefab" parent="--DECOR--/DIVE_ZONES" instance=ExtResource("40_kyvn3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.59489, 0, -2.83308)
-zone_datas = SubResource("Resource_w3tv2")
+zone_datas = SubResource("Resource_rp1j4")
 
 [node name="BouePrefab2" parent="--DECOR--/DIVE_ZONES" instance=ExtResource("40_kyvn3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.92439, 0, 3.68206)
-zone_datas = SubResource("Resource_eaxi4")
+zone_datas = SubResource("Resource_qt4ri")
 
 [node name="mesh" parent="--DECOR--/DIVE_ZONES/BouePrefab2/Epave_visuals" index="1"]
 mesh = SubResource("ArrayMesh_xefo8")

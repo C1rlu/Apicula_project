@@ -44,6 +44,7 @@ func active_subscene():
 	_global_datas._start_ini_subscene.emit()
 	
 	_global_datas.current_scene_state = game_state.scene_state._Subscene
+	_global_datas._show_object_legend.emit(false,"null")
 	
 func disable_subscene():
 	_global_datas.Player_InSubScene = false

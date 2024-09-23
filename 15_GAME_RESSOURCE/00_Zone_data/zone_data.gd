@@ -9,6 +9,6 @@ class_name ZoneData
 var purchass_index_state : int = 0
 
 var Boue_node_3D : Node3D
-
+var fade_out : Node
 
 
