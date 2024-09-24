@@ -1,7 +1,6 @@
-[gd_scene load_steps=25 format=3 uid="uid://cb8k68mtsigvd"]
+[gd_scene load_steps=21 format=3 uid="uid://cb8k68mtsigvd"]
 
 [ext_resource type="Resource" uid="uid://cooqi0giysm3w" path="res://15_GAME_RESSOURCE/MrBirs_photoData.tres" id="1_ls1ba"]
-[ext_resource type="Script" path="res://WorldEnvironment.gd" id="1_qx183"]
 [ext_resource type="Resource" uid="uid://d2ivg06mjrg4v" path="res://15_GAME_RESSOURCE/00_Zone_data/Vortex_zone.tres" id="3_fkmtq"]
 [ext_resource type="Script" path="res://00_SYSTEMS/Global_datas.gd" id="3_qrxv3"]
 [ext_resource type="Script" path="res://00_SYSTEMS/Subscene_datas.gd" id="4_jt81n"]
@@ -18,25 +17,6 @@
 [ext_resource type="PackedScene" uid="uid://bbp1ccoa6te1g" path="res://11_SPEAKER/05_speaker_02.tscn" id="14_yb42j"]
 [ext_resource type="PackedScene" uid="uid://bwmu5iwushsl5" path="res://13_TOOLS_UI/07_screen_tools.tscn" id="15_nfmr8"]
 [ext_resource type="PackedScene" uid="uid://bemddl0bqqfwo" path="res://100_GAME_MENU/08_game_menu.tscn" id="16_5y5wa"]
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_6m7wm"]
-noise_type = 2
-frequency = 0.4774
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_akunh"]
-width = 1280
-height = 720
-seamless = true
-noise = SubResource("FastNoiseLite_6m7wm")
-
-[sub_resource type="Environment" id="Environment_j1rv3"]
-glow_enabled = true
-glow_intensity = 0.7
-glow_strength = 0.51
-glow_bloom = 1.0
-glow_blend_mode = 1
-glow_map_strength = 1.0
-glow_map = SubResource("NoiseTexture2D_akunh")
 
 [sub_resource type="GDScript" id="GDScript_c11gh"]
 script/source = "extends Node
@@ -58,7 +38,7 @@ func _input(event):
 
 
 	if event.is_action_pressed(\"debug_3\"):
-		#_global_datas._give_photo.emit(photo_data)
+
 		_global_datas._open_shop.emit(true)
 		
 	if event.is_action_pressed(\"debug_4\"):
@@ -102,10 +82,6 @@ func _ready():
 
 [node name="Main" type="Node"]
 metadata/_edit_horizontal_guides_ = [-31.0]
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_j1rv3")
-script = ExtResource("1_qx183")
 
 [node name="DEBUG_Dev_shortcut" type="Node" parent="."]
 script = SubResource("GDScript_c11gh")
