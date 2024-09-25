@@ -1,46 +1,13 @@
-[gd_scene load_steps=32 format=3 uid="uid://qgyjfq88teq8"]
+[gd_scene load_steps=22 format=3 uid="uid://qgyjfq88teq8"]
 
-[ext_resource type="Resource" uid="uid://ce1txchg547jd" path="res://15_GAME_RESSOURCE/04_Element/Letter_quest_element.tres" id="1_jq0el"]
-[ext_resource type="Resource" uid="uid://61umivwjjcjs" path="res://12_INVENTORY/Words_note/Birds_goLighthouse_note.tres" id="1_syumr"]
+[ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Movable_obj.gd" id="1_ja2bm"]
+[ext_resource type="Script" path="res://13_TOOLS_UI/Clock_montre/Selection_ini.gd" id="2_bycpu"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="2_ke4da"]
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/On_click_object.gd" id="2_rje64"]
-[ext_resource type="Resource" uid="uid://cnpcuaqr4o443" path="res://15_GAME_RESSOURCE/01_info_data/Ghost_sphere_info/follow.tres" id="2_tu4uh"]
+[ext_resource type="Script" path="res://10_BOARD/Open_order.gd" id="3_xptb8"]
+[ext_resource type="Script" path="res://10_BOARD/Element.gd" id="5_1ltaj"]
 [ext_resource type="Material" uid="uid://yjoyk6fvrm6q" path="res://10_BOARD/00_BOOK/00_SHADER/No_light_surface_mat.tres" id="5_kvfps"]
 [ext_resource type="Shader" uid="uid://8ll6evus625p" path="res://10_BOARD/00_BOOK/00_SHADER/Gradient_surface.tres" id="5_t8aod"]
-
-[sub_resource type="GDScript" id="GDScript_ypp87"]
-script/source = "extends Area3D
-
-@export var element : element_data
-@export var Note_data : Note_Data
-@export var info : info_data
-@onready var note_text = $Render_text
-@onready var note = $Note
-
-@onready var quest_info = $Quest_letter/Text_quest/text
-
-@onready var root = $\".\"
-@export var On_Move : Node
-@export var On_Over : Node
-
-
-func _ready():
-
-	On_Move.On_Move.connect(Open_quest_responce)
-	On_Over.On_Over.connect(_show_quest_info)
-
-
-func _show_quest_info(condition):
-	#_global_datas.show_element_info.emit(condition,element.element_name)
-	_global_datas._show_object_legend.emit(condition,element.element_name)
-	
-func Open_quest_responce(condition : bool):
-	if condition:
-		_global_datas._open_quest_on_board.emit(true)
-		#_global_datas._open_letter_quest.emit(true)
-
-
-"
 
 [sub_resource type="GDScript" id="GDScript_v52rt"]
 script/source = "extends Node
@@ -57,22 +24,12 @@ func _ready():
 script/source = "extends Node
 
 @onready var note = $\"../Text_render/text\"
-@onready var from = $\"../Text_render/text/from\"
+
 
 func _set_note(_text : String, _from: String):
 	note.text = _text
-	from.text = _from
-"
-
-[sub_resource type="GDScript" id="GDScript_ikx4k"]
-script/source = "extends Node
-
-signal On_View
 
 "
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_3jdh6"]
-viewport_path = NodePath("Quest_letter/Text_quest")
 
 [sub_resource type="QuadMesh" id="QuadMesh_4umhe"]
 resource_local_to_scene = true
@@ -84,135 +41,12 @@ gradient = SubResource("Gradient_hh7gt")
 fill_from = Vector2(1, 0)
 fill_to = Vector2(1, 1)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_bgk60"]
-render_priority = 0
-shader = ExtResource("5_t8aod")
-shader_parameter/Color = Color(0.835294, 0.811765, 0.772549, 1)
-shader_parameter/Dither_Opacity = 0.765
-shader_parameter/Gradient_light = SubResource("GradientTexture2D_cttjd")
-
-[sub_resource type="QuadMesh" id="QuadMesh_2j3jf"]
-
-[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_qw2qb"]
-constant = 1.0
-
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_bquyj"]
-size = Vector2(724.789, 654.559)
-expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_h8sli"]
-parameter_name = "Dither_size"
-qualifier = 1
-
-[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_2ulhe"]
-default_input_values = [0, 0.83, 1, 0.0]
-
-[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_kj1yp"]
-constant = Color(0.73, 0.47377, 0.1606, 1)
-
-[sub_resource type="VisualShader" id="VisualShader_or8y4"]
-code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
-
-global uniform float Dither_size;
-
-
-
-void fragment() {
-// ColorConstant:7
-	vec4 n_out7p0 = vec4(0.730000, 0.473770, 0.160600, 1.000000);
-
-
-// FloatConstant:3
-	float n_out3p0 = 1.000000;
-
-
-// FloatParameter:5
-	float n_out5p0 = Dither_size;
-
-
-	float n_out4p0;
-// Expression:4
-	n_out4p0 = 0.0;
-	{
-		const float DITHER_THRESHOLDS[16] ={
-				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-			};
-			
-		vec2 uv = FRAGCOORD.xy * n_out5p0;
-		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-		n_out4p0 = n_out3p0 - DITHER_THRESHOLDS[index];
-	}
-
-
-// Step:6
-	float n_in6p0 = 0.83000;
-	float n_out6p0 = step(n_in6p0, n_out4p0);
-
-
-// Output:0
-	ALBEDO = vec3(n_out7p0.xyz);
-	ALPHA = n_out6p0;
-
-
-}
-"
-graph_offset = Vector2(-573.321, -129.617)
-flags/unshaded = true
-nodes/fragment/0/position = Vector2(580, 220)
-nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_qw2qb")
-nodes/fragment/3/position = Vector2(-1180, 460)
-nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_bquyj")
-nodes/fragment/4/position = Vector2(-900, 460)
-nodes/fragment/4/size = Vector2(724.789, 654.559)
-nodes/fragment/4/input_ports = "0,0,In;1,0,Size;"
-nodes/fragment/4/output_ports = "0,0,Dither_Node;"
-nodes/fragment/4/expression = "const float DITHER_THRESHOLDS[16] ={
-		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-	};
-	
-vec2 uv = FRAGCOORD.xy * Size;
-int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
-nodes/fragment/5/node = SubResource("VisualShaderNodeFloatParameter_h8sli")
-nodes/fragment/5/position = Vector2(-1540, 620)
-nodes/fragment/6/node = SubResource("VisualShaderNodeStep_2ulhe")
-nodes/fragment/6/position = Vector2(130.23, 516.22)
-nodes/fragment/7/node = SubResource("VisualShaderNodeColorConstant_kj1yp")
-nodes/fragment/7/position = Vector2(226.136, 51.1274)
-nodes/fragment/connections = PackedInt32Array(3, 0, 4, 0, 5, 0, 4, 1, 4, 0, 6, 1, 6, 0, 0, 1, 7, 0, 0, 0)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0o376"]
-render_priority = 0
-shader = SubResource("VisualShader_or8y4")
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_bangl"]
-size = Vector3(0.842651, 0.0866016, 0.622497)
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jubt2"]
 render_priority = 0
 shader = ExtResource("5_t8aod")
 shader_parameter/Color = Color(0.639216, 0.6, 0.545098, 1)
 shader_parameter/Dither_Opacity = 0.765
 shader_parameter/Gradient_light = SubResource("GradientTexture2D_cttjd")
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_lq3n1"]
-viewport_path = NodePath("Text_render")
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_2qibs"]
 
@@ -230,114 +64,73 @@ shader_parameter/Color = Color(0.690196, 0.396078, 0.247059, 1)
 shader_parameter/Dither_Opacity = 1.0
 shader_parameter/Gradient_light = SubResource("GradientTexture2D_apshu")
 
-[node name="Letter_area" type="Area3D" node_paths=PackedStringArray("On_Move", "On_Over")]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0.00272226, 0)
-script = SubResource("GDScript_ypp87")
-element = ExtResource("1_jq0el")
-Note_data = ExtResource("1_syumr")
-info = ExtResource("2_tu4uh")
-On_Move = NodePath("On_Move")
-On_Over = NodePath("On_Over")
+[sub_resource type="ViewportTexture" id="ViewportTexture_lq3n1"]
+viewport_path = NodePath("Text_render")
+
+[sub_resource type="GDScript" id="GDScript_ikx4k"]
+script/source = "extends Node
+
+signal On_View
+
+"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bangl"]
+size = Vector3(0.720489, 0.0164453, 0.465195)
+
+[node name="Order_letter_prefab" type="Node3D" node_paths=PackedStringArray("collider", "limit_zone", "move_root", "rotation_root", "On_Move", "element_setter")]
+script = ExtResource("1_ja2bm")
+collider = NodePath("Letter_area/col_area")
+limit_zone = NodePath("Limir_zone")
+move_root = NodePath(".")
+rotation_root = NodePath(".")
+On_Move = NodePath("Letter_area/On_Move")
+r_rotation_degrees = 25.0
+element_setter = NodePath("Letter_area/Element")
 
 [node name="Active" type="Node" parent="." node_paths=PackedStringArray("_active")]
 script = SubResource("GDScript_v52rt")
 _active = NodePath("../photo_light")
 
+[node name="Selection_ini" type="Node" parent="." node_paths=PackedStringArray("root", "Movable", "On_Over")]
+script = ExtResource("2_bycpu")
+root = NodePath("..")
+Movable = NodePath("..")
+On_Over = NodePath("../Letter_area/On_Over")
+
 [node name="Note" type="Node" parent="."]
 script = SubResource("GDScript_4uwx0")
 
-[node name="On_Move" type="Node" parent="."]
-script = ExtResource("2_rje64")
-
-[node name="On_Over" type="Node" parent="."]
-script = ExtResource("2_ke4da")
-
-[node name="On_View" type="Node" parent="."]
-script = SubResource("GDScript_ikx4k")
-
-[node name="Quest_letter" type="Node3D" parent="."]
-transform = Transform3D(0.992874, 0, -0.119166, 0, 1, 0, 0.119166, 0, 0.992874, 0.0088055, 0.00296854, 0.0138789)
-visible = false
-
-[node name="Render_quest" type="Sprite3D" parent="Quest_letter"]
-transform = Transform3D(0.0125883, -1.5134e-09, 6.245e-17, -6.82591e-17, -5.50253e-10, 0.0125883, -1.28057e-09, -0.0125883, -5.50253e-10, 0, 0.000399773, 0)
-layers = 2
-modulate = Color(0.537255, 0.521569, 0.47451, 1)
-texture = SubResource("ViewportTexture_3jdh6")
-
-[node name="photo2" type="MeshInstance3D" parent="Quest_letter"]
-transform = Transform3D(0.0979325, -3.25963e-09, -5.55112e-17, 0, -2.75301e-09, 0.0441622, -1.86265e-09, -0.0629813, -1.93039e-09, 0, 0, 0)
-layers = 2
-mesh = SubResource("QuadMesh_4umhe")
-skeleton = NodePath("")
-surface_material_override/0 = SubResource("ShaderMaterial_bgk60")
-
-[node name="photo_light" type="MeshInstance3D" parent="Quest_letter"]
-transform = Transform3D(0.0979325, -3.25963e-09, -4.16334e-17, 0, -2.75301e-09, 0.0441622, -1.86265e-09, -0.0629813, -1.93039e-09, 0, 0, 0)
-layers = 65536
-mesh = SubResource("QuadMesh_4umhe")
-skeleton = NodePath("")
-surface_material_override/0 = ExtResource("5_kvfps")
-
-[node name="Text_quest" type="SubViewport" parent="Quest_letter"]
-transparent_bg = true
-size = Vector2i(600, 400)
-
-[node name="text" type="Label" parent="Quest_letter/Text_quest"]
-custom_minimum_size = Vector2(600, 400)
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.192157, 0.192157, 0.192157, 1)
-theme_override_font_sizes/font_size = 50
-text = "Please, place what his asked on this board and ring the bell
-Mr Bird:
-need a plume and a photo of myself"
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 2
-
-[node name="IS_SELECT" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.1107, 0, 0, 0, -3.07261e-09, 0.0535114, 0, -0.0702929, -2.33906e-09, 0, 0.000994979, 0)
-visible = false
-layers = 2
-mesh = SubResource("QuadMesh_2j3jf")
-surface_material_override/0 = SubResource("ShaderMaterial_0o376")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(0.131916, 0, 0, 0, 0.131916, 0, 0, 0, 0.131916, 0.00168277, 0.00536683, 0.00729871)
-shape = SubResource("BoxShape3D_bangl")
+[node name="Open_order" type="Node" parent="." node_paths=PackedStringArray("On_View")]
+script = ExtResource("3_xptb8")
+On_View = NodePath("../Letter_area/On_View")
 
 [node name="photo" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.0928963, 0, 0, 0, -2.61143e-09, 0.0418911, 0, -0.0597425, -1.83112e-09, 0.000475392, 0.00130028, 0)
+transform = Transform3D(0.139344, 0, 0, 0, -3.91714e-09, 0.0628367, 0, -0.0896138, -2.74668e-09, 0.000713088, 0.00467268, 0)
 layers = 2
 mesh = SubResource("QuadMesh_4umhe")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("ShaderMaterial_jubt2")
 
 [node name="photo_light" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.0928963, 0, 0, 0, -2.61143e-09, 0.0418911, 0, -0.0597425, -1.83112e-09, 0.000475392, 0.00130028, 0)
+transform = Transform3D(0.139344, 0, 0, 0, -3.91714e-09, 0.0628367, 0, -0.0896138, -2.74668e-09, 0.000713088, 0.00467268, 0)
 visible = false
 layers = 65536
 mesh = SubResource("QuadMesh_4umhe")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("5_kvfps")
 
-[node name="Render_text" type="Sprite3D" parent="."]
-transform = Transform3D(0.0136498, 0, 0, 0, -5.96652e-10, 0.0136498, 0, -0.0136498, -5.96652e-10, 0.000475392, 0.0021256, 0)
-visible = false
-layers = 2
-modulate = Color(0.403922, 0.388235, 0.34902, 1)
-texture = SubResource("ViewportTexture_lq3n1")
-
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.022523, 0, 0, 0, 0.000455902, 0, 0, 0, 0.022523, 0.02257, 0.00178259, -0.0249337)
+transform = Transform3D(0.0337845, 0, 0, 0, 0.000683853, 0, 0, 0, 0.0337845, 0.033855, 0.00539615, -0.0374006)
 layers = 2
 mesh = SubResource("CylinderMesh_2qibs")
 skeleton = NodePath("../photo")
 surface_material_override/0 = SubResource("ShaderMaterial_hqrm5")
+
+[node name="Render_text" type="Sprite3D" parent="."]
+transform = Transform3D(0.0204747, 0, 0, 0, -8.94978e-10, 0.0204747, 0, -0.0204747, -8.94978e-10, 0.000713088, 0.00591066, 0)
+layers = 2
+modulate = Color(0.403922, 0.388235, 0.34902, 1)
+texture = SubResource("ViewportTexture_lq3n1")
 
 [node name="Text_render" type="SubViewport" parent="."]
 transparent_bg = true
@@ -351,25 +144,37 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 80
-text = "QUEST"
+text = "ORDER"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="from" type="Label" parent="Text_render/text"]
-visible = false
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -144.0
-offset_top = -86.0
-offset_bottom = 1.0
-grow_horizontal = 0
-grow_vertical = 0
-theme_override_font_sizes/font_size = 50
-text = "FROM"
-horizontal_alignment = 1
-vertical_alignment = 1
+[node name="Letter_area" type="Area3D" parent="."]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0.00272226, 0)
+
+[node name="Element" type="Node" parent="Letter_area"]
+script = ExtResource("5_1ltaj")
+
+[node name="On_Move" type="Node" parent="Letter_area"]
+script = ExtResource("2_rje64")
+
+[node name="On_Over" type="Node" parent="Letter_area"]
+script = ExtResource("2_ke4da")
+
+[node name="On_View" type="Node" parent="Letter_area"]
+script = SubResource("GDScript_ikx4k")
+
+[node name="col_area" type="CollisionShape3D" parent="Letter_area"]
+transform = Transform3D(0.131916, 0, 0, 0, 0.131916, 0, 0, 0, 0.131916, 0.000295904, 0.000739463, -0.000325061)
+shape = SubResource("BoxShape3D_bangl")
+
+[node name="Limir_zone" type="Area3D" parent="."]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0.00272226, 0)
+collision_layer = 4
+collision_mask = 4
+
+[node name="Limit" type="Node" parent="Limir_zone"]
+
+[node name="col_limit" type="CollisionShape3D" parent="Limir_zone"]
+transform = Transform3D(0.131916, 0, 0, 0, 0.131916, 0, 0, 0, 0.131916, 0.000295904, 0.000739463, -0.000325061)
+shape = SubResource("BoxShape3D_bangl")

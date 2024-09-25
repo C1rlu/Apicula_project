@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=3 uid="uid://bbp1ccoa6te1g"]
+[gd_scene load_steps=56 format=3 uid="uid://bbp1ccoa6te1g"]
 
 [ext_resource type="Script" path="res://11_SPEAKER/Open_Dialogue.gd" id="1_6gph5"]
 [ext_resource type="Script" path="res://11_SPEAKER/00_NPC/Npc_loader.gd" id="2_gecf5"]
@@ -11,6 +11,7 @@
 [ext_resource type="Script" path="res://11_SPEAKER/Dialogue/Dialogue_asset/Dialogue_box.gd" id="9_n4i7c"]
 [ext_resource type="Script" path="res://11_SPEAKER/End_Typing_Button.tres.gd" id="10_o8x3k"]
 [ext_resource type="PackedScene" uid="uid://kfeia6x8pslm" path="res://11_SPEAKER/00_NPC/guy_02_prefab.tscn" id="11_60j22"]
+[ext_resource type="Script" path="res://11_SPEAKER/Deliver_button.gd" id="13_ewnx3"]
 [ext_resource type="PackedScene" uid="uid://d2b7ysl6sho71" path="res://11_SPEAKER/00_NPC/Model/Mr_birds_prefab.tscn" id="13_f7b57"]
 [ext_resource type="PackedScene" uid="uid://bhp5srocc6bwr" path="res://11_SPEAKER/00_NPC/Otis_Npc_prefabs.tscn" id="13_une54"]
 
@@ -466,6 +467,21 @@ shader_parameter/Opacity = 1.0
 [sub_resource type="ViewportTexture" id="ViewportTexture_ah4ff"]
 viewport_path = NodePath("00_NPC_CREATOR/Npc_convas/SubViewport")
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0b4rc"]
+bg_color = Color(0.588235, 0.494118, 0.376471, 1)
+corner_radius_top_left = 35
+corner_radius_top_right = 35
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wjdu5"]
+bg_color = Color(0.768627, 0.619608, 0.439216, 1)
+corner_radius_top_left = 35
+corner_radius_top_right = 35
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ho6ut"]
+bg_color = Color(0.768627, 0.619608, 0.439216, 1)
+corner_radius_top_left = 35
+corner_radius_top_right = 35
+
 [node name="05_SPEAKER" type="Node"]
 script = ExtResource("1_6gph5")
 
@@ -478,8 +494,9 @@ script = ExtResource("2_iqwu8")
 [node name="Dialogue_typing" type="Node" parent="Dialogue"]
 script = ExtResource("4_uwbqv")
 
-[node name="Npc_loader" type="Node" parent="."]
+[node name="Npc_loader" type="Node" parent="." node_paths=PackedStringArray("loader_node")]
 script = ExtResource("2_gecf5")
+loader_node = NodePath("../00_NPC_CREATOR/Npc_convas/SubViewport/Loader")
 
 [node name="set_Resolution" type="Node" parent="." node_paths=PackedStringArray("viewports")]
 script = ExtResource("6_m0hl7")
@@ -536,15 +553,26 @@ mouse_filter = 2
 script = ExtResource("7_yfrxb")
 
 [node name="SubViewport" type="SubViewport" parent="00_NPC_CREATOR/Npc_convas"]
+own_world_3d = true
 transparent_bg = true
 handle_input_locally = false
 size = Vector2i(1920, 1080)
 
 [node name="Camera3D" type="Camera3D" parent="00_NPC_CREATOR/Npc_convas/SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.55, 15.45)
-cull_mask = 32
+cull_mask = 1
 current = true
 fov = 55.0
+
+[node name="Loader" type="Node3D" parent="00_NPC_CREATOR/Npc_convas/SubViewport"]
+
+[node name="Guy_02" parent="00_NPC_CREATOR/Npc_convas/SubViewport/Loader" instance=ExtResource("11_60j22")]
+
+[node name="Mr_Birds" parent="00_NPC_CREATOR/Npc_convas/SubViewport/Loader" instance=ExtResource("13_f7b57")]
+visible = false
+
+[node name="Otis_Npc_prefabs" parent="00_NPC_CREATOR/Npc_convas/SubViewport/Loader" instance=ExtResource("13_une54")]
+visible = false
 
 [node name="CH_RENDER" type="Control" parent="00_NPC_CREATOR/Npc_convas"]
 custom_minimum_size = Vector2(500, 720)
@@ -709,6 +737,26 @@ grow_vertical = 0
 mouse_filter = 2
 theme_override_constants/separation = 10
 
+[node name="Deliver_button" type="Button" parent="00_NPC_CREATOR/Npc_convas"]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 203.0
+offset_top = -85.0
+offset_right = 425.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.909804, 0.807843, 0.690196, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_0b4rc")
+theme_override_styles/hover = SubResource("StyleBoxFlat_wjdu5")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ho6ut")
+text = "DELIVER "
+script = ExtResource("13_ewnx3")
+
 [node name="End_typing_button" type="TextureButton" parent="00_NPC_CREATOR/Npc_convas"]
 layout_direction = 1
 layout_mode = 1
@@ -722,18 +770,6 @@ action_mode = 0
 ignore_texture_size = true
 stretch_mode = 0
 script = ExtResource("10_o8x3k")
-
-[node name="Models" type="Node" parent="00_NPC_CREATOR"]
-
-[node name="Loader" type="Node3D" parent="00_NPC_CREATOR/Models"]
-
-[node name="Guy_02" parent="00_NPC_CREATOR/Models/Loader" instance=ExtResource("11_60j22")]
-
-[node name="Mr_Birds" parent="00_NPC_CREATOR/Models/Loader" instance=ExtResource("13_f7b57")]
-visible = false
-
-[node name="Otis_Npc_prefabs" parent="00_NPC_CREATOR/Models/Loader" instance=ExtResource("13_une54")]
-visible = false
 
 [connection signal="custom_signal_received" from="Dialogue/EzDialogue" to="Dialogue" method="_on_ez_dialogue_custom_signal_received"]
 [connection signal="dialogue_generated" from="Dialogue/EzDialogue" to="Dialogue" method="_on_ez_dialogue_dialogue_generated"]

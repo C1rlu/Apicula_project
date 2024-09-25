@@ -1,4 +1,4 @@
-extends Node3D
+extends Node
 
 @export var element : element_data
 @export var collider : CollisionShape3D
@@ -10,9 +10,6 @@ extends Node3D
 
 @export var On_Move : Node
 @export var r_rotation_degrees : float = 45.0
-
-@export var element_setter : Node
-
 
 signal select_render_state(index_state : int)
 
@@ -30,17 +27,8 @@ func _ready():
 		if rotation_root:
 			On_Move._rotate.connect(_on_rotate)
 
-	if element_setter:
-		element_setter.element = element 
 
-	if element:
-		element.element_board_node = self
 
-func set_element(_element : element_data):
-	element = _element
-	if element_setter:
-		element_setter.element = _element 
-			
 func move_is_active(condition : bool):
 	collider.disabled = condition
 
@@ -50,7 +38,9 @@ func _On_move(condition):
 	if _global_datas.limit_zone: # cant clic if object overlap another limit zone ( so an object )
 		return
 	
-
+	
+	
+	
 	collider.disabled = condition
 
 	if condition:
@@ -90,8 +80,10 @@ func _check_if_in_carton():
 	for e in limit_zone.get_overlapping_areas():
 		var carton = e.get_node_or_null("Carton")
 		if carton:
-			#print("Object in carton")
+			print("Object in carton")
+
 			_global_datas._check_deliver.emit(element)
+			_global_datas._in_delivery_mode.emit(false)
 			return	
 
 	
@@ -153,4 +145,3 @@ func check_limit(raycast_result)-> bool:
 	select_render_state.emit(1)
 	return false
 	
-

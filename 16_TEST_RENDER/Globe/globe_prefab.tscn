@@ -137,10 +137,6 @@ shader_parameter/Color = Color(0.721569, 0.580392, 0.407843, 1)
 shader_parameter/Color2 = Color(0.160784, 0.266667, 0.27451, 1)
 shader_parameter/Opacity = 1.0
 shader_parameter/Isle_color = Color(0, 0, 0, 1)
-shader_parameter/Grid_color = Color(0.470642, 0.389814, 0.097199, 1)
-shader_parameter/Offset = Vector2(0, -1.36)
-shader_parameter/Size = Vector2(1200, 1200)
-shader_parameter/Ligne_widht = 0.015
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_80uts"]
 render_priority = 0
@@ -159,7 +155,13 @@ shader_parameter/BaseGradient = ExtResource("1_by3ti")
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_dex4q"]
 points = PackedVector3Array(0.340971, -0.0174174, -0.0443018, -0.547617, 0.353106, -0.0443018, 0.452238, 2.35282, -0.0443018, 0.0820995, -0.0174174, 0.326011, -0.0660692, -0.0174174, -0.340617, 0.896744, 1.13104, -0.0443018, 0.229985, 2.05607, 0.140822, 0.859702, 1.64913, 0.0667594, 0.156184, 2.05607, -0.118299, -0.25128, -0.0174174, 0.251883, -0.473533, 0.760519, 0.0667594, -0.436491, 0.760519, -0.118299, 0.0450573, 0.0568264, -0.340617, 0.859702, 1.01968, 0.0667594, 0.859702, 1.68578, -0.0443018, -0.103111, 0.0568264, 0.326011, 0.229985, -0.0174174, -0.26649, 0.266886, -0.0174174, 0.251883, 0.119142, 2.09343, 0.0296955, -0.25128, -0.0174174, -0.26649, -0.399449, 0.723629, 0.140822, 0.340971, 2.01942, -0.118299, 0.415055, 2.3157, 0.0667594, -0.547617, 0.389996, 0.0667594, -0.325364, -0.0174174, 0.103693, 0.30407, 2.01942, 0.140822, -0.473533, 0.760519, -0.0813657, 0.82266, 0.908775, -0.0443018, -0.0660692, 0.0568264, -0.340617, 0.340971, -0.0174174, 0.0667594, 0.896744, 1.46352, 0.0667594, 0.0820995, 0.0568264, 0.326011)
 
-[node name="Globe_prefab" type="Node3D"]
+[node name="Globe_prefab" type="Node3D" node_paths=PackedStringArray("collider", "limit_zone", "move_root", "rotation_root", "On_Move")]
+script = ExtResource("5_clu3n")
+collider = NodePath("Clic_zone/CollisionShape3D2")
+limit_zone = NodePath("Limit_Zone")
+move_root = NodePath(".")
+rotation_root = NodePath(".")
+On_Move = NodePath("Clic_zone/On_Move")
 
 [node name="Active" type="Node" parent="." node_paths=PackedStringArray("_active")]
 script = SubResource("GDScript_01gfc")
@@ -198,19 +200,10 @@ layers = 2
 surface_material_override/0 = SubResource("ShaderMaterial_80uts")
 surface_material_override/1 = SubResource("ShaderMaterial_ur08j")
 
-[node name="Movable_object" type="Node" parent="." node_paths=PackedStringArray("collider", "limit_zone", "Position_zone", "move_root", "rotation_root", "On_Move")]
-script = ExtResource("5_clu3n")
-collider = NodePath("../Clic_zone/CollisionShape3D2")
-limit_zone = NodePath("../Limit_Zone")
-Position_zone = NodePath("../Limit_Zone/CollisionShape3D3")
-move_root = NodePath("..")
-rotation_root = NodePath("..")
-On_Move = NodePath("../Clic_zone/On_Move")
-
 [node name="Selection_ini" type="Node" parent="." node_paths=PackedStringArray("root", "Movable_node", "On_Over")]
 script = ExtResource("6_xk6d8")
 root = NodePath("..")
-Movable_node = NodePath("../Movable_object")
+Movable_node = NodePath("")
 On_Over = NodePath("../Clic_zone/On_Over")
 
 [node name="Clic_zone" type="Area3D" parent="."]

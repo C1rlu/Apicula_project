@@ -1,4 +1,4 @@
-[gd_scene load_steps=112 format=3 uid="uid://cnmptm7i0xxmj"]
+[gd_scene load_steps=115 format=3 uid="uid://cnmptm7i0xxmj"]
 
 [ext_resource type="Script" path="res://00_SCENE/Active_Decor_Scene.gd" id="1_ounvv"]
 [ext_resource type="PackedScene" uid="uid://vpdvl0v7dubd" path="res://04_SCENE_MAIN_MAP/00_PLAYER/Player_boat.tscn" id="1_qltht"]
@@ -16,6 +16,7 @@
 [ext_resource type="Script" path="res://00_SCENE/In_Zone_State.gd" id="9_rhikc"]
 [ext_resource type="Script" path="res://00_SCENE/Day_state.gd" id="9_vbyff"]
 [ext_resource type="PackedScene" uid="uid://dla1534gcagbl" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Pine/pine_prefabs.tscn" id="10_c6r5x"]
+[ext_resource type="Script" path="res://00_SCENE/In_Delevery_state.gd" id="10_de1nl"]
 [ext_resource type="Script" path="res://00_SCENE/In_DiveZone_State.gd" id="10_i656g"]
 [ext_resource type="Script" path="res://04_SCENE_MAIN_MAP/00_PLAYER/Subsene_progress_bar.gd" id="10_in3yh"]
 [ext_resource type="Script" path="res://00_SCENE/In_NpcZone_State.gd" id="11_7hdfu"]
@@ -27,6 +28,7 @@
 [ext_resource type="PackedScene" uid="uid://fcjcvy77lg0o" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Lighthouse/lighthouse_prefabs.tscn" id="16_u78ww"]
 [ext_resource type="Script" path="res://04_SCENE_MAIN_MAP/00_PLAYER/Check_zone.gd" id="17_unqeu"]
 [ext_resource type="PackedScene" uid="uid://exqao35losp1" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Rampe/Rampe_prefab.tscn" id="18_vvmth"]
+[ext_resource type="Texture2D" uid="uid://flr7odvrvgkt" path="res://13_TOOLS_UI/delevery_box_logo.png" id="19_wl2lb"]
 [ext_resource type="Script" path="res://00_SCENE/Zone_trigger.gd" id="20_v4ay2"]
 [ext_resource type="PackedScene" uid="uid://cp1aidnp626l4" path="res://04_SCENE_MAIN_MAP/Birds/Birds_prefabs.tscn" id="21_py3bv"]
 [ext_resource type="PackedScene" uid="uid://bme2k8btnc2jn" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Island_set/island_set_02/Island_set_02_prefab.tscn" id="25_bqqm8"]
@@ -109,29 +111,6 @@ func _stop():
 
 "
 
-[sub_resource type="GDScript" id="GDScript_55qk3"]
-script/source = "extends Node
-
-
-func _input(event):
-
-	if _global_datas.Player_In_Inventory:
-		return
-	
-	if _global_datas.Player_InDialogue:
-		return
-	if event.is_action_pressed(\"Push_to_subscene\"):
-		
-		if !_global_datas.Player_InDialogue_zone:
-			return
-		
-		if _global_datas._photo_checking:
-			return
-		_global_datas._check_dialogue_photo.emit()
-
-		
-"
-
 [sub_resource type="GDScript" id="GDScript_xsqte"]
 script/source = "extends Node
 
@@ -212,6 +191,29 @@ func active_buton(condition):
 	
 
 
+"
+
+[sub_resource type="GDScript" id="GDScript_55qk3"]
+script/source = "extends Node
+
+
+func _input(event):
+
+	if _global_datas.Player_In_Inventory:
+		return
+	
+	if _global_datas.Player_InDialogue:
+		return
+	if event.is_action_pressed(\"Push_to_subscene\"):
+		
+		if !_global_datas.Player_InDialogue_zone:
+			return
+		
+		if _global_datas._photo_checking:
+			return
+		_global_datas._check_dialogue_photo.emit()
+
+		
 "
 
 [sub_resource type="GDScript" id="GDScript_8cfdp"]
@@ -461,10 +463,13 @@ func _ready():
 radius = 0.856796
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_iivpn"]
-radius = 0.7471
+radius = 1.08981
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qktbq"]
 height = 6.53992
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_a8sfo"]
+viewport_path = NodePath("In_Zone_State/In_Delevery_state/Delevery_UI")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_7ftl5"]
 size = Vector2(30, 30)
@@ -562,7 +567,7 @@ cost = 6
 script = ExtResource("41_psdpf")
 cost = 12
 
-[sub_resource type="Resource" id="Resource_tyarf"]
+[sub_resource type="Resource" id="Resource_4g8w7"]
 resource_local_to_scene = true
 script = ExtResource("42_qpl8r")
 zone_node_dialogue = "vortex"
@@ -582,7 +587,7 @@ cost = 6
 script = ExtResource("41_psdpf")
 cost = 12
 
-[sub_resource type="Resource" id="Resource_dmih2"]
+[sub_resource type="Resource" id="Resource_fjiav"]
 resource_local_to_scene = true
 script = ExtResource("42_qpl8r")
 zone_node_dialogue = "apicula"
@@ -778,17 +783,8 @@ Main_render = NodePath("../01_GAME_UI/MAIN_SCENE_UI/Viewports/MAIN")
 [node name="Sonar_behaviour" type="Node" parent="."]
 script = SubResource("GDScript_0xo40")
 
-[node name="Open_Dialogue" type="Node" parent="."]
-script = SubResource("GDScript_55qk3")
-
 [node name="Teleport_boat_at_position" type="Node" parent="."]
 script = ExtResource("4_xkpot")
-
-[node name="Push_to_subscene" type="Node" parent="."]
-script = SubResource("GDScript_xsqte")
-
-[node name="loading_subscene_progress_bar" type="Node" parent="Push_to_subscene"]
-script = ExtResource("12_hkpaj")
 
 [node name="In_Zone_State" type="Node" parent="." node_paths=PackedStringArray("area_root")]
 process_mode = 3
@@ -797,6 +793,12 @@ area_root = NodePath("../--DECOR--/Player_Boat/Zone_trigger")
 
 [node name="In_DiveZone_State" type="Node" parent="In_Zone_State"]
 script = ExtResource("10_i656g")
+
+[node name="Push_to_subscene" type="Node" parent="In_Zone_State/In_DiveZone_State"]
+script = SubResource("GDScript_xsqte")
+
+[node name="loading_subscene_progress_bar" type="Node" parent="In_Zone_State/In_DiveZone_State/Push_to_subscene"]
+script = ExtResource("12_hkpaj")
 
 [node name="In_NpcZone_State" type="Node" parent="In_Zone_State"]
 script = ExtResource("11_7hdfu")
@@ -860,6 +862,47 @@ theme_override_font_sizes/font_size = 40
 text = "..."
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Open_Dialogue" type="Node" parent="In_Zone_State/In_NpcZone_State"]
+script = SubResource("GDScript_55qk3")
+
+[node name="In_Delevery_state" type="Node" parent="In_Zone_State" node_paths=PackedStringArray("delevery_ui_node")]
+script = ExtResource("10_de1nl")
+delevery_ui_node = NodePath("../../--DECOR--/NPC_TRIGGER_ZONE/Delevery_zone/Delevery_ui")
+
+[node name="Delevery_UI" type="SubViewport" parent="In_Zone_State/In_Delevery_state"]
+transparent_bg = true
+size = Vector2i(85, 60)
+
+[node name="Button" type="Control" parent="In_Zone_State/In_Delevery_state/Delevery_UI"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 54.0
+offset_top = 18.0
+offset_right = 54.0
+offset_bottom = 18.0
+scale = Vector2(0.4, 0.4)
+mouse_filter = 2
+
+[node name="ColorRect" type="ColorRect" parent="In_Zone_State/In_Delevery_state/Delevery_UI/Button"]
+visible = false
+layout_mode = 0
+offset_left = -115.0
+offset_top = -27.5
+offset_right = 28.0
+offset_bottom = 104.5
+color = Color(0.952941, 0.815686, 0.690196, 1)
+
+[node name="TextureRect" type="TextureRect" parent="In_Zone_State/In_Delevery_state/Delevery_UI/Button"]
+layout_mode = 0
+offset_left = -102.5
+offset_top = -17.5
+offset_right = 153.5
+offset_bottom = 238.5
+scale = Vector2(0.451687, 0.451687)
+texture = ExtResource("19_wl2lb")
+
+[node name="Node" type="Node" parent="In_Zone_State/In_Delevery_state"]
 
 [node name="Subsene_progress_bar" type="Node" parent="." node_paths=PackedStringArray("_sprite_render_root", "_subscene_progress_bar")]
 script = ExtResource("10_in3yh")
@@ -1436,6 +1479,32 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.175196, -0.753295, -0.60556
 transform = Transform3D(-4.2222e-08, -0.965926, -0.258819, 1, -4.37114e-08, 0, -1.13133e-08, -0.258819, 0.965926, -0.484242, 0.377731, 0.113853)
 shape = SubResource("CapsuleShape3D_qktbq")
 
+[node name="Delevery_zone" type="Area3D" parent="--DECOR--/NPC_TRIGGER_ZONE"]
+transform = Transform3D(5.96046e-08, 0, 1, 0, 1, 0, -1, 0, 5.96046e-08, -3.87735, 1.19209e-07, 13.599)
+input_ray_pickable = false
+
+[node name="Delevery_ui" type="Node3D" parent="--DECOR--/NPC_TRIGGER_ZONE/Delevery_zone"]
+transform = Transform3D(5.96047e-08, 0, -1, 0, 1, 0, 1, 0, 5.96047e-08, 0.107277, 1.03917, -0.0169318)
+visible = false
+
+[node name="Render_dive_Bar" type="Sprite3D" parent="--DECOR--/NPC_TRIGGER_ZONE/Delevery_zone/Delevery_ui"]
+transform = Transform3D(1.1735, 0, 0, 0, 1.1735, 0, 0, 0, 1.1735, 0.0527542, -0.0611725, 0)
+layers = 262144
+modulate = Color(0.886275, 0.658824, 0.439216, 1)
+billboard = 1
+texture = SubResource("ViewportTexture_a8sfo")
+
+[node name="Rampe_Prefab3" parent="--DECOR--/NPC_TRIGGER_ZONE/Delevery_zone" instance=ExtResource("18_vvmth")]
+transform = Transform3D(2.98023e-08, 0, -0.628308, 0, 0.628308, 0, 0.628308, 0, 2.98023e-08, 0, 0, 0)
+
+[node name="Zone" type="Node" parent="--DECOR--/NPC_TRIGGER_ZONE/Delevery_zone"]
+
+[node name="Delevery_zone" type="Node" parent="--DECOR--/NPC_TRIGGER_ZONE/Delevery_zone"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="--DECOR--/NPC_TRIGGER_ZONE/Delevery_zone"]
+transform = Transform3D(0.999993, -2.56409e-06, 0.00375241, 2.55832e-06, 1, 1.54372e-06, -0.00375241, -1.53412e-06, 0.999993, 0, 0, 0)
+shape = SubResource("SphereShape3D_iivpn")
+
 [node name="SEA" type="Node3D" parent="--DECOR--"]
 
 [node name="Active_at_ready" type="Node" parent="--DECOR--/SEA" node_paths=PackedStringArray("_active")]
@@ -1476,11 +1545,11 @@ surface_material_override/0 = ExtResource("33_um15u")
 
 [node name="BouePrefab" parent="--DECOR--/DIVE_ZONES" instance=ExtResource("40_kyvn3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.99237, 0, 0.945796)
-zone_datas = SubResource("Resource_tyarf")
+zone_datas = SubResource("Resource_4g8w7")
 
 [node name="BouePrefab2" parent="--DECOR--/DIVE_ZONES" instance=ExtResource("40_kyvn3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.22176, 0, -0.0177174)
-zone_datas = SubResource("Resource_dmih2")
+zone_datas = SubResource("Resource_fjiav")
 
 [node name="mesh" parent="--DECOR--/DIVE_ZONES/BouePrefab2/Epave_visuals" index="1"]
 mesh = SubResource("ArrayMesh_xefo8")

@@ -1,7 +1,7 @@
 [gd_scene load_steps=71 format=3 uid="uid://uwg2qc3svu11"]
 
 [ext_resource type="Script" path="res://10_BOARD/Photo_element.gd" id="1_0a8jl"]
-[ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Movable_obj.gd" id="4_4uyoa"]
+[ext_resource type="Script" path="res://10_BOARD/Movable_object_node.gd" id="2_ykbbq"]
 [ext_resource type="Texture2D" uid="uid://38btbw60olcn" path="res://12_INVENTORY/Photo/IMG/Boat.png" id="4_wljme"]
 [ext_resource type="Material" uid="uid://yjoyk6fvrm6q" path="res://10_BOARD/00_BOOK/00_SHADER/No_light_surface_mat.tres" id="5_b668c"]
 [ext_resource type="Script" path="res://10_BOARD/Element.gd" id="6_6piwc"]
@@ -672,27 +672,26 @@ render_priority = 0
 shader = ExtResource("11_h5w6g")
 shader_parameter/Texture2DParameter = SubResource("ViewportTexture_erm4f")
 
-[node name="Photo_element_root" type="Node3D" node_paths=PackedStringArray("_On_View", "on_over_node", "element_setter")]
+[node name="Photo_element_root" type="Node3D" node_paths=PackedStringArray("Movable_object_node", "_On_View", "on_over_node", "element_setter")]
 script = ExtResource("1_0a8jl")
+Movable_object_node = NodePath("Movable_object_node")
 _On_View = NodePath("Click/On_View")
 on_over_node = NodePath("All_over")
 element_setter = NodePath("Click/Element")
 
-[node name="Movable_object" type="Node" parent="." node_paths=PackedStringArray("collider", "limit_zone", "Position_zone", "move_root", "rotation_root", "On_Move", "element_setter")]
-script = ExtResource("4_4uyoa")
+[node name="Movable_object_node" type="Node" parent="." node_paths=PackedStringArray("collider", "limit_zone", "move_root", "rotation_root", "On_Move")]
+script = ExtResource("2_ykbbq")
 collider = NodePath("../Click/CollisionShape3D")
 limit_zone = NodePath("../Limit")
-Position_zone = NodePath("")
 move_root = NodePath("..")
 rotation_root = NodePath("..")
 On_Move = NodePath("../Click/On_Move")
-rotation_degrees = 15.0
-element_setter = NodePath("../Click/Element")
+r_rotation_degrees = 25.0
 
 [node name="Selection_ini" type="Node" parent="." node_paths=PackedStringArray("root", "Movable_node", "On_Over")]
 script = ExtResource("6_wkbq8")
 root = NodePath("..")
-Movable_node = NodePath("../Movable_object")
+Movable_node = NodePath("../Movable_object_node")
 On_Over = NodePath("../Click/On_Over")
 
 [node name="Active" type="Node" parent="." node_paths=PackedStringArray("_active")]

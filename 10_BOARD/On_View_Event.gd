@@ -14,11 +14,7 @@ func _ready():
 		
 func _focus():
 	
-
 	_global_datas._open_boad_Focus.emit(true,element)
-	#var focus_target = root.global_position
-	#_global_datas.focus_this_on_board.emit(focus_target)
-	#_global_datas.camera_focus_On.emit(focus_data)
 
 	
 func _on_over(condition : bool):

@@ -94,6 +94,7 @@ signal _check_zone_exit(area)
 signal _active_this_dive_zone(condition : bool)
 signal _active_this_npc_zone(condition : bool)
 
+signal _in_delevery_zone(condition : bool)
 
 var zoneData : ZoneData
 
@@ -156,14 +157,21 @@ var movable_root : Node3D
 var board_instance_position : Node3D
 
 
+# Delevery carton mode
+
+signal _in_delivery_mode(condition : bool)
+
+signal _check_deliver(element : element_data)
+signal _close_box(condition: bool)
+
 # quest_state signal in order
 signal active_diving
 var _on_button_ui : bool = false
 signal _open_quest_on_board(condition : bool)
 signal _open_letter_quest(condition : bool)
-signal _in_select_element_state(condition : bool)
-var _in_selection_state : bool 
-var _selected_button : Button
+#signal _in_select_element_state(condition : bool)
+#var _in_selection_state : bool 
+#var _selected_button : Button
 signal _back_letter
 
 
@@ -228,8 +236,6 @@ func _ready():
 	_selected_tool = null
 	_photo_data_scene_list.clear()
 	_photo_checking = false
-	_in_selection_state = false
-	_selected_button = null
 	_on_button_ui  = false
 	bird_is_waiting = false
 	_check_objectZone_Area = null

@@ -17,3 +17,4 @@ class_name element_data
 @export var element_size : int = 0
 var element_collected : bool = false #for subscene
 
+var element_board_node : Node3D

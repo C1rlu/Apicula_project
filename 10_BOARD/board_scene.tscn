@@ -1,4 +1,4 @@
-[gd_scene load_steps=102 format=3 uid="uid://dr73p5vs0sixe"]
+[gd_scene load_steps=94 format=3 uid="uid://dr73p5vs0sixe"]
 
 [ext_resource type="Script" path="res://10_BOARD/Movable_root.gd" id="1_2yoh7"]
 [ext_resource type="Shader" uid="uid://upo0fuo5sqgd" path="res://05_SHADER/Board/Board_sh.tres" id="1_k1enu"]
@@ -12,13 +12,9 @@
 [ext_resource type="PackedScene" uid="uid://qgyjfq88teq8" path="res://10_BOARD/letters_area.tscn" id="9_ajmma"]
 [ext_resource type="PackedScene" uid="uid://bqbbtrchoeoe1" path="res://10_BOARD/Lanterne/Lanterne_prefab.tscn" id="17_sfmpr"]
 [ext_resource type="Resource" uid="uid://dlm0knnql1e6h" path="res://15_GAME_RESSOURCE/Ghost_Scanner_photoData.tres" id="18_gjhpl"]
-[ext_resource type="Resource" uid="uid://ppxk5i543dfn" path="res://15_GAME_RESSOURCE/00_Npc_data/Mr_Birds_data.tres" id="18_k6yfu"]
-[ext_resource type="Resource" uid="uid://duqn0ehtc8aao" path="res://12_INVENTORY/Words_note/FindSeagull_orders.tres" id="19_fvuwa"]
-[ext_resource type="Script" path="res://10_BOARD/Call_birds.gd" id="19_rki13"]
 [ext_resource type="PackedScene" uid="uid://bi5gcavnclfud" path="res://10_BOARD/Decor/Bell.blend" id="22_4fabq"]
 [ext_resource type="Script" path="res://10_BOARD/On_over_node.tres.gd" id="23_4ws66"]
 [ext_resource type="Shader" uid="uid://8ll6evus625p" path="res://10_BOARD/00_BOOK/00_SHADER/Gradient_surface.tres" id="26_bw6mp"]
-[ext_resource type="Script" path="res://10_BOARD/On_View.tres.gd" id="27_s1e6c"]
 [ext_resource type="Material" uid="uid://yjoyk6fvrm6q" path="res://10_BOARD/00_BOOK/00_SHADER/No_light_surface_mat.tres" id="28_s7irk"]
 [ext_resource type="PackedScene" uid="uid://bn54mxsafetjv" path="res://16_TEST_RENDER/Globe/globe_prefab.tscn" id="31_kcpcd"]
 [ext_resource type="PackedScene" uid="uid://cfs26bteyyjw2" path="res://10_BOARD/03_Element/Apicula_maquette/Apicula_board_prefab.tscn" id="31_qn1oc"]
@@ -26,19 +22,17 @@
 [ext_resource type="Shader" uid="uid://bii47ft606xyy" path="res://16_TEST_RENDER/Element_base_sh.tres" id="34_ybc47"]
 [ext_resource type="PackedScene" uid="uid://dkhji76icgbfk" path="res://10_BOARD/Candle/Candle_prefab_02.tscn" id="37_pa00p"]
 [ext_resource type="PackedScene" uid="uid://djffqqvhx1is" path="res://10_BOARD/Candle/Candle_prefab_03.tscn" id="38_2cvak"]
+[ext_resource type="PackedScene" uid="uid://div74aasvjhos" path="res://10_BOARD/Carton/Carton.tscn" id="39_4eyvd"]
 [ext_resource type="Script" path="res://10_BOARD/Show_Map.gd" id="39_mtyfa"]
 [ext_resource type="PackedScene" uid="uid://6p66iuyklraf" path="res://10_BOARD/03_Element/TourneDisque/tourne_disque.tscn" id="40_y0b0a"]
 [ext_resource type="Resource" uid="uid://duegr31kxop3r" path="res://15_GAME_RESSOURCE/04_Element/Disque_element.tres" id="41_6nlf2"]
 [ext_resource type="PackedScene" uid="uid://bcegerjktkbr6" path="res://10_BOARD/Candle/Candle_prefab_01.tscn" id="42_34f14"]
 [ext_resource type="PackedScene" uid="uid://ypiajnwq2wfa" path="res://16_TEST_RENDER/Desk/Desk_prefab.tscn" id="43_3hhej"]
-[ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Movable_obj.gd" id="43_usyd2"]
 [ext_resource type="PackedScene" uid="uid://c18stvbutb83o" path="res://16_TEST_RENDER/Book/Book_prefab.tscn" id="44_8e65i"]
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/On_click_object.gd" id="44_64ctv"]
 [ext_resource type="Script" path="res://10_BOARD/Zone_info.gd" id="44_1277k"]
 [ext_resource type="Texture2D" uid="uid://bf1vkenq7yets" path="res://16_TEST_RENDER/Book/Base_Gradient.png" id="45_rp0l1"]
 [ext_resource type="Resource" uid="uid://2wvymfu1i442" path="res://15_GAME_RESSOURCE/01_info_data/Boat_subscene/i_should_check.tres" id="45_tllkl"]
-[ext_resource type="Script" path="res://10_BOARD/Object_Checker.gd" id="47_a4j5y"]
-[ext_resource type="Script" path="res://13_TOOLS_UI/Clock_montre/Selection_ini.gd" id="49_vb8xx"]
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_ktulk"]
 constant = 0.826
@@ -281,16 +275,6 @@ render_priority = 0
 shader = ExtResource("1_k1enu")
 shader_parameter/Color = null
 
-[sub_resource type="Resource" id="Resource_cltwi"]
-script = ExtResource("5_hxrgl")
-element_name = "Ship to"
-Object_on_Board = false
-Object_broke = false
-focus_start_position = Vector3(0, 0, 0)
-focus_start_rotation_degrees = Vector3(0, 0, 0)
-focus_start_scale = 1.0
-element_size = 0
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_a213g"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_cov0w"]
@@ -325,7 +309,7 @@ shader_parameter/Gradient_light = SubResource("GradientTexture2D_jeod4")
 material = SubResource("ShaderMaterial_isdhd")
 size = Vector2(0.795, 0.795)
 
-[sub_resource type="Resource" id="Resource_q8ggf"]
+[sub_resource type="Resource" id="Resource_c1wf4"]
 resource_local_to_scene = true
 script = ExtResource("5_hxrgl")
 element_name = "Photo_element"
@@ -337,7 +321,7 @@ focus_start_rotation_degrees = Vector3(0, 0, 0)
 focus_start_scale = 1.0
 element_size = 0
 
-[sub_resource type="Resource" id="Resource_6nhhm"]
+[sub_resource type="Resource" id="Resource_r5xol"]
 resource_local_to_scene = true
 script = ExtResource("5_hxrgl")
 element_name = "Photo_element"
@@ -522,8 +506,6 @@ shader_parameter/BaseColor = Color(0.294118, 0.235294, 0.137255, 1)
 shader_parameter/Dither_Opacity = 1.0
 shader_parameter/BaseGradient = ExtResource("45_rp0l1")
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_pbpff"]
-
 [node name="Board_scene" type="Node3D"]
 
 [node name="Broke_position_instance" type="Node" parent="." node_paths=PackedStringArray("board_instance_position", "movable_root")]
@@ -544,13 +526,11 @@ omni_range = 0.367799
 omni_attenuation = 0.297302
 
 [node name="Orders_letter" parent="." instance=ExtResource("9_ajmma")]
-transform = Transform3D(2.18233, 0, 0.534013, 0, 2.24671, 0, -0.534013, 0, 2.18233, -0.293279, 0.00398628, 0.335518)
-monitoring = false
-monitorable = false
-Note_data = ExtResource("19_fvuwa")
+transform = Transform3D(1.32829, 0, -0.170041, 0, 1.33913, 0, 0.170041, 0, 1.32829, 0.239403, 0.00421415, 0.335649)
 
 [node name="Bell" parent="." instance=ExtResource("22_4fabq")]
 transform = Transform3D(0.248807, 0, 0, 0, 0.248807, 0, 0, 0, 0.248807, 0.233781, 0.00295146, 0.374548)
+visible = false
 
 [node name="bell" parent="Bell" index="0"]
 transform = Transform3D(0.765345, 0, 0.146205, 0, 0.779185, 0, -0.146205, 0, 0.765345, 0, 0, 0)
@@ -558,39 +538,12 @@ layers = 2
 surface_material_override/0 = SubResource("ShaderMaterial_kqq05")
 surface_material_override/1 = SubResource("ShaderMaterial_jka2s")
 
-[node name="Movable_object" type="Node" parent="Bell" node_paths=PackedStringArray("collider", "limit_zone", "element_setter")]
-script = ExtResource("43_usyd2")
-element = SubResource("Resource_cltwi")
-collider = NodePath("../Area3D/Col")
-limit_zone = NodePath("../Limit_zone")
-element_setter = NodePath("../Call_birds")
-
-[node name="Call_birds" type="Node" parent="Bell" node_paths=PackedStringArray("On_Move", "On_Over")]
-script = ExtResource("19_rki13")
-Bird_NPC_data = ExtResource("18_k6yfu")
-On_Move = NodePath("../Area3D/On_Move")
-On_Over = NodePath("../Area3D/On_Over")
-
-[node name="Selection_ini" type="Node" parent="Bell" node_paths=PackedStringArray("root", "Movable_node", "On_Over")]
-script = ExtResource("49_vb8xx")
-root = NodePath("..")
-Movable_node = NodePath("../Movable_object")
-On_Over = NodePath("../Area3D/On_Over")
-
 [node name="Area3D" type="Area3D" parent="Bell"]
-
-[node name="On_Move" type="Node" parent="Bell/Area3D"]
-script = ExtResource("44_64ctv")
-
-[node name="On_View_o" type="Node" parent="Bell/Area3D"]
-script = ExtResource("27_s1e6c")
-
-[node name="On_Over" type="Node" parent="Bell/Area3D"]
-script = ExtResource("23_4ws66")
 
 [node name="Col" type="CollisionShape3D" parent="Bell/Area3D"]
 transform = Transform3D(0.367208, 0, 0, 0, 0.367208, 0, 0, 0, 0.367208, 0, 0.0858023, 0)
 shape = SubResource("BoxShape3D_a213g")
+disabled = true
 
 [node name="Limit_zone" type="Area3D" parent="Bell"]
 collision_layer = 4
@@ -614,10 +567,10 @@ script = ExtResource("39_mtyfa")
 collider = NodePath("../CollisionShape3D")
 On_Move = NodePath("../On_Move")
 
+[node name="Position_zone" type="Node" parent="Map/Rotation_root/Position_Area"]
+
 [node name="On_Move" type="Node" parent="Map/Rotation_root/Position_Area"]
 script = ExtResource("44_64ctv")
-
-[node name="Position_zone" type="Node" parent="Map/Rotation_root/Position_Area"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Map/Rotation_root/Position_Area"]
 transform = Transform3D(1, 0, 1.49012e-08, 0, 1, 0, -1.49012e-08, 0, 1, 0.00137317, -0.00646704, -0.00142288)
@@ -652,12 +605,12 @@ transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 
 [node name="GhostFollower_Photo" parent="Movable" instance=ExtResource("1_mtaom")]
 transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, -0.13211, 0.00404238, -0.048042)
 Photo_data = ExtResource("18_gjhpl")
-element = SubResource("Resource_q8ggf")
+element = SubResource("Resource_c1wf4")
 
 [node name="Epave_Photo" parent="Movable" instance=ExtResource("1_mtaom")]
 transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, -0.285342, 0.00278722, 0.0310627)
 Photo_data = ExtResource("5_dvmgt")
-element = SubResource("Resource_6nhhm")
+element = SubResource("Resource_r5xol")
 
 [node name="Clock_prefab" parent="Movable" instance=ExtResource("2_dwu3j")]
 transform = Transform3D(1.19819, 0.00250424, -0.00218251, -0.00250497, 1.19819, -0.000399001, 0.00218168, 0.000403532, 1.19819, 0.0114504, 2.98023e-08, 0.0548816)
@@ -677,7 +630,7 @@ transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 0.764341, 
 [node name="Static" type="Node3D" parent="."]
 
 [node name="Table_broke_zone" type="MeshInstance3D" parent="Static"]
-transform = Transform3D(-1.03475e-08, 0, 0.296399, 0, 0.0222384, 0, -0.236724, 0, -1.2956e-08, -0.00351115, 0.00943295, 0.306215)
+transform = Transform3D(-1.03475e-08, 0, 0.296399, 0, 0.0222384, 0, -0.236724, 0, -1.2956e-08, -0.0635774, 0.00943295, 0.306215)
 layers = 2
 mesh = SubResource("BoxMesh_1smid")
 skeleton = NodePath("../../..")
@@ -712,6 +665,7 @@ script = ExtResource("23_4ws66")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Static/Table_broke_zone/Area3D"]
 transform = Transform3D(0.999999, 0, 3.55271e-15, 0, 1, 0, 2.84217e-14, 0, 1, 0, 0.697328, 0)
 shape = SubResource("BoxShape3D_ydct1")
+disabled = true
 
 [node name="Limit_zone" type="Area3D" parent="Static/Table_broke_zone"]
 transform = Transform3D(1, 0, 3.55271e-15, 0, 1, 0, -3.55271e-15, 0, 1, 0, 0, 0)
@@ -723,7 +677,6 @@ collision_mask = 4
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Static/Table_broke_zone/Limit_zone"]
 transform = Transform3D(0.999999, 0, 3.55271e-15, 0, 1, 0, 2.84217e-14, 0, 1, 0, 0.697328, 0)
 shape = SubResource("BoxShape3D_reae0")
-disabled = true
 
 [node name="Expension_table" type="MeshInstance3D" parent="Static"]
 transform = Transform3D(1.88882, 0, 0, 0, 0.0307837, 0, 0, 0, 0.265752, 0, 0.0872049, -0.598493)
@@ -925,19 +878,8 @@ surface_material_override/0 = SubResource("ShaderMaterial_na4gj")
 [node name="BookPrefab11" parent="Static" instance=ExtResource("44_8e65i")]
 transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 0.749835, 0.0896486, -0.27708)
 
-[node name="Check_ObjectToShip" type="Area3D" parent="."]
-transform = Transform3D(0.73746, 0, 0, 0, 0.523365, 0, 0, 0, 0.612244, -0.0111354, 0.0719392, 0.304847)
-visible = false
-
-[node name="Object_Checker_area" type="Node" parent="Check_ObjectToShip" node_paths=PackedStringArray("Area", "Col")]
-script = ExtResource("47_a4j5y")
-Area = NodePath("..")
-Col = NodePath("../CollisionShape3D")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Check_ObjectToShip"]
-transform = Transform3D(0.334966, 0, 0, 0, 0.334963, 0, 0, 0, 0.334963, 0, 0, 0)
-shape = SubResource("BoxShape3D_pbpff")
-disabled = true
+[node name="Carton" parent="." instance=ExtResource("39_4eyvd")]
+transform = Transform3D(0.941354, 0, 0, 0, 0.66227, 0, 0, 0, 0.885255, 0.36024, -0.0660209, 0.612963)
 
 [editable path="Bell"]
 [editable path="Static/BookPrefab2"]

@@ -1,8 +1,12 @@
 extends Node
 
-@onready var loader_node = $"../00_NPC_CREATOR/Models/Loader"
+@export var loader_node : Node3D
+
+
+
 
 func _ready():
+	
 	_global_datas._open_dialogue.connect(update_npc)
 
 

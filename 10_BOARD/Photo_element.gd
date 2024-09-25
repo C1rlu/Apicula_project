@@ -4,7 +4,7 @@ extends Node3D
 @export var element : element_data
 @onready var photo_element_root = $"."
 
-
+@export var Movable_object_node : Node
 
 @export var _On_View: Node
 #@export var _On_Over: Node
@@ -21,7 +21,10 @@ func _ready():
 
 	if element_setter:
 		element_setter.element = element 
-
+		Movable_object_node.element = element
+		
+	element.element_board_node = self
+	
 func set_element(_element : element_data):
 	element = _element
 	if element_setter:
@@ -29,11 +32,6 @@ func set_element(_element : element_data):
 		
 		
 func focus_or_scanner():
-	
-	
-	#var focus_target = photo_element_root.global_position
-	#_global_datas.focus_this_on_board.emit(focus_target)
-	#_global_datas.camera_focus_On.emit(camera_state)
-	#_global_datas.show_element_info.emit(true,Photo_data.info)	
+
 	_global_datas.show_on_scanner.emit(true)
-	#_global_datas._open_board_focus_2D.emit(true,element)
+

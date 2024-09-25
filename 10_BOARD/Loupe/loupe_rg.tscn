@@ -1,22 +1,6 @@
-[gd_scene load_steps=26 format=3 uid="uid://b3i04ha2iqr4l"]
+[gd_scene load_steps=20 format=3 uid="uid://b3i04ha2iqr4l"]
 
-[ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Movable_obj.gd" id="1_mqtd1"]
-[ext_resource type="Script" path="res://13_TOOLS_UI/Clock_montre/Selection_ini.gd" id="2_bgvp6"]
 [ext_resource type="Shader" uid="uid://8ll6evus625p" path="res://10_BOARD/00_BOOK/00_SHADER/Gradient_surface.tres" id="4_3sk7y"]
-[ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/On_click_object.gd" id="5_lbq18"]
-
-[sub_resource type="GDScript" id="GDScript_rjy76"]
-script/source = "extends Node
-
-signal On_View
-signal On_Over(condition:bool)
-"
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_ynxbc"]
-size = Vector3(0.372009, 0.0619202, 0.188232)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_252gf"]
-size = Vector3(0.373608, 0.0667969, 0.2)
 
 [sub_resource type="Gradient" id="Gradient_andc3"]
 
@@ -185,42 +169,6 @@ render_priority = 0
 shader = SubResource("VisualShader_5uvms")
 
 [node name="Loupe_deco" type="Node3D"]
-
-[node name="Movable_obj" type="Node" parent="." node_paths=PackedStringArray("collider", "limit_zone", "move_root", "rotation_root", "On_Move")]
-script = ExtResource("1_mqtd1")
-collider = NodePath("../Area3D/CollisionShape3D")
-limit_zone = NodePath("../Limit_zone")
-move_root = NodePath("..")
-rotation_root = NodePath("..")
-On_Move = NodePath("../Area3D/On_Move")
-
-[node name="Selection_ini" type="Node" parent="." node_paths=PackedStringArray("root", "Movable_node")]
-script = ExtResource("2_bgvp6")
-root = NodePath("..")
-Movable_node = NodePath("../Movable_obj")
-
-[node name="Area3D" type="Area3D" parent="."]
-
-[node name="On_Move" type="Node" parent="Area3D"]
-script = ExtResource("5_lbq18")
-
-[node name="On_View" type="Node" parent="Area3D"]
-script = SubResource("GDScript_rjy76")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0261535, 0.0357208, 0.0057373)
-shape = SubResource("BoxShape3D_ynxbc")
-
-[node name="Limit_zone" type="Area3D" parent="."]
-collision_layer = 4
-collision_mask = 4
-input_ray_pickable = false
-
-[node name="Limit" type="Node" parent="Limit_zone"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Limit_zone"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0265747, 0.0333984, 0)
-shape = SubResource("BoxShape3D_252gf")
 
 [node name="Loupe" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.244162, 0, 0, 0, 0.244162, 0, 0, 0, 0.244162, 0.0368108, 0.0161147, 0)

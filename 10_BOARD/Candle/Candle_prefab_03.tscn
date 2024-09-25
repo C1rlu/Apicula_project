@@ -333,7 +333,13 @@ shader_parameter/Fresnel_value = 4.795
 height = 0.0962286
 radius = 0.0400508
 
-[node name="CandlePrefab03" type="Node3D"]
+[node name="CandlePrefab03" type="Node3D" node_paths=PackedStringArray("collider", "limit_zone", "move_root", "rotation_root", "On_Move")]
+script = ExtResource("6_xilk2")
+collider = NodePath("Area3D/CollisionShape3D")
+limit_zone = NodePath("Limit_zone")
+move_root = NodePath(".")
+rotation_root = NodePath(".")
+On_Move = NodePath("Area3D/On_Move")
 
 [node name="Active" type="Node" parent="." node_paths=PackedStringArray("_active")]
 script = SubResource("GDScript_egep4")
@@ -376,22 +382,13 @@ On_View = NodePath("../Area3D/On_View")
 Light = NodePath("../LIGHT_scene")
 Flame = NodePath("../Flame")
 
-[node name="Movable_object" type="Node" parent="." node_paths=PackedStringArray("collider", "limit_zone", "Position_zone", "move_root", "rotation_root", "On_Move")]
-script = ExtResource("6_xilk2")
-collider = NodePath("../Area3D/CollisionShape3D")
-limit_zone = NodePath("../Limit_zone")
-Position_zone = NodePath("../Area3D/CollisionShape3D")
-move_root = NodePath("..")
-rotation_root = NodePath("..")
-On_Move = NodePath("../Area3D/On_Move")
-
 [node name="Area3D" type="Area3D" parent="."]
 transform = Transform3D(1, 0, -3.72529e-09, 0, 1, 0, 3.72529e-09, 0, 1, 0, 0, 0)
 
-[node name="Selection_ini" type="Node" parent="Area3D" node_paths=PackedStringArray("root", "Movable_node", "On_Over")]
+[node name="Selection_ini" type="Node" parent="Area3D" node_paths=PackedStringArray("root", "Movable", "On_Over")]
 script = ExtResource("7_3086e")
 root = NodePath("../..")
-Movable_node = NodePath("../../Movable_object")
+Movable = NodePath("../..")
 On_Over = NodePath("../On_Over")
 
 [node name="On_Move" type="Node" parent="Area3D"]

@@ -732,7 +732,13 @@ render_priority = 0
 shader = SubResource("VisualShader_wy34o")
 shader_parameter/ColorParameter = Color(0.905882, 0.690196, 0.388235, 1)
 
-[node name="Lanterne_prefab" type="Node3D"]
+[node name="Lanterne_prefab" type="Node3D" node_paths=PackedStringArray("collider", "limit_zone", "move_root", "rotation_root", "On_Move")]
+script = ExtResource("1_l5fyw")
+collider = NodePath("Clic_zone/Col")
+limit_zone = NodePath("Limit_Zone")
+move_root = NodePath(".")
+rotation_root = NodePath(".")
+On_Move = NodePath("Clic_zone/On_Move")
 
 [node name="Active" type="Node" parent="." node_paths=PackedStringArray("_active")]
 script = SubResource("GDScript_01gfc")
@@ -751,19 +757,10 @@ distance_fade_shadow = 0.0
 omni_range = 0.794
 omni_attenuation = 1.23115
 
-[node name="Movable_object" type="Node" parent="." node_paths=PackedStringArray("collider", "limit_zone", "Position_zone", "move_root", "rotation_root", "On_Move")]
-script = ExtResource("1_l5fyw")
-collider = NodePath("../Clic_zone/Col")
-limit_zone = NodePath("../Limit_Zone")
-Position_zone = NodePath("../Clic_zone/Col")
-move_root = NodePath("..")
-rotation_root = NodePath("..")
-On_Move = NodePath("../Clic_zone/On_Move")
-
-[node name="Selection_ini" type="Node" parent="." node_paths=PackedStringArray("root", "Movable_node", "On_Over")]
+[node name="Selection_ini" type="Node" parent="." node_paths=PackedStringArray("root", "Movable", "On_Over")]
 script = ExtResource("2_vq1q7")
 root = NodePath("..")
-Movable_node = NodePath("../Movable_object")
+Movable = NodePath("..")
 On_Over = NodePath("../Clic_zone/On_Over")
 
 [node name="Light_mask" type="MeshInstance3D" parent="."]

@@ -24,4 +24,4 @@ func done():
 
 func back_call():
 	_global_datas._open_letter_quest.emit(false)	
-	_global_datas._open_quest_on_board.emit(true)
+
