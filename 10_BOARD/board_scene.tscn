@@ -1,4 +1,4 @@
-[gd_scene load_steps=94 format=3 uid="uid://dr73p5vs0sixe"]
+[gd_scene load_steps=97 format=3 uid="uid://dr73p5vs0sixe"]
 
 [ext_resource type="Script" path="res://10_BOARD/Movable_root.gd" id="1_2yoh7"]
 [ext_resource type="Shader" uid="uid://upo0fuo5sqgd" path="res://05_SHADER/Board/Board_sh.tres" id="1_k1enu"]
@@ -33,6 +33,36 @@
 [ext_resource type="Script" path="res://10_BOARD/Zone_info.gd" id="44_1277k"]
 [ext_resource type="Texture2D" uid="uid://bf1vkenq7yets" path="res://16_TEST_RENDER/Book/Base_Gradient.png" id="45_rp0l1"]
 [ext_resource type="Resource" uid="uid://2wvymfu1i442" path="res://15_GAME_RESSOURCE/01_info_data/Boat_subscene/i_should_check.tres" id="45_tllkl"]
+
+[sub_resource type="Resource" id="Resource_mqfcn"]
+script = ExtResource("5_hxrgl")
+element_name = "letter"
+Object_on_Board = true
+Object_broke = false
+focus_start_position = Vector3(0, 0, 0)
+focus_start_rotation_degrees = Vector3(0, 0, 0)
+focus_start_scale = 1.0
+element_size = 0
+
+[sub_resource type="Resource" id="Resource_uxv83"]
+script = ExtResource("5_hxrgl")
+element_name = "obj_name"
+Object_on_Board = true
+Object_broke = false
+focus_start_position = Vector3(0, 0, 0)
+focus_start_rotation_degrees = Vector3(0, 0, 0)
+focus_start_scale = 1.0
+element_size = 0
+
+[sub_resource type="Resource" id="Resource_5n77h"]
+script = ExtResource("5_hxrgl")
+element_name = "obj_name"
+Object_on_Board = true
+Object_broke = false
+focus_start_position = Vector3(0, 0, 0)
+focus_start_rotation_degrees = Vector3(0, 0, 0)
+focus_start_scale = 1.0
+element_size = 0
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_ktulk"]
 constant = 0.826
@@ -309,7 +339,7 @@ shader_parameter/Gradient_light = SubResource("GradientTexture2D_jeod4")
 material = SubResource("ShaderMaterial_isdhd")
 size = Vector2(0.795, 0.795)
 
-[sub_resource type="Resource" id="Resource_c1wf4"]
+[sub_resource type="Resource" id="Resource_0d0gv"]
 resource_local_to_scene = true
 script = ExtResource("5_hxrgl")
 element_name = "Photo_element"
@@ -321,7 +351,7 @@ focus_start_rotation_degrees = Vector3(0, 0, 0)
 focus_start_scale = 1.0
 element_size = 0
 
-[sub_resource type="Resource" id="Resource_r5xol"]
+[sub_resource type="Resource" id="Resource_y83xy"]
 resource_local_to_scene = true
 script = ExtResource("5_hxrgl")
 element_name = "Photo_element"
@@ -527,6 +557,23 @@ omni_attenuation = 0.297302
 
 [node name="Orders_letter" parent="." instance=ExtResource("9_ajmma")]
 transform = Transform3D(1.32829, 0, -0.170041, 0, 1.33913, 0, 0.170041, 0, 1.32829, 0.239403, 0.00421415, 0.335649)
+element = SubResource("Resource_mqfcn")
+is_a_letter = true
+can_be_delevery = false
+
+[node name="Orders_letter2" parent="." node_paths=PackedStringArray("element_setter") instance=ExtResource("9_ajmma")]
+transform = Transform3D(1.31303, 0, 0.263107, 0, 1.33913, 0, -0.263107, 0, 1.31303, -0.416889, 0.00421415, 0.323626)
+element = SubResource("Resource_uxv83")
+element_setter = NodePath("../Orders_letter/Letter_area/Element")
+is_a_letter = true
+can_be_delevery = false
+
+[node name="Orders_letter3" parent="." node_paths=PackedStringArray("element_setter") instance=ExtResource("9_ajmma")]
+transform = Transform3D(1.31303, 0, 0.263107, 0, 1.33913, 0, -0.263107, 0, 1.31303, -0.539572, 0.00421415, 0.202897)
+element = SubResource("Resource_5n77h")
+element_setter = NodePath("../Orders_letter/Letter_area/Element")
+is_a_letter = true
+can_be_delevery = false
 
 [node name="Bell" parent="." instance=ExtResource("22_4fabq")]
 transform = Transform3D(0.248807, 0, 0, 0, 0.248807, 0, 0, 0, 0.248807, 0.233781, 0.00295146, 0.374548)
@@ -592,25 +639,29 @@ mesh = SubResource("PlaneMesh_n7wwh")
 
 [node name="CandlePrefab02" parent="Movable" instance=ExtResource("37_pa00p")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.597538, 5.96046e-08, -0.157466)
+can_be_delevery = false
 
 [node name="CandlePrefab03" parent="Movable" instance=ExtResource("38_2cvak")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.519967, 5.96046e-08, -0.225002)
+can_be_delevery = false
 
 [node name="CandlePrefab01" parent="Movable" instance=ExtResource("42_34f14")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.50878, 0.00217251, -0.131045)
+can_be_delevery = false
 
 [node name="Lanterne_prefab" parent="Movable" instance=ExtResource("17_sfmpr")]
 transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 0.0981736, 0, -0.104072)
+can_be_delevery = false
 
 [node name="GhostFollower_Photo" parent="Movable" instance=ExtResource("1_mtaom")]
 transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, -0.13211, 0.00404238, -0.048042)
 Photo_data = ExtResource("18_gjhpl")
-element = SubResource("Resource_c1wf4")
+element = SubResource("Resource_0d0gv")
 
 [node name="Epave_Photo" parent="Movable" instance=ExtResource("1_mtaom")]
 transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, -0.285342, 0.00278722, 0.0310627)
 Photo_data = ExtResource("5_dvmgt")
-element = SubResource("Resource_r5xol")
+element = SubResource("Resource_y83xy")
 
 [node name="Clock_prefab" parent="Movable" instance=ExtResource("2_dwu3j")]
 transform = Transform3D(1.19819, 0.00250424, -0.00218251, -0.00250497, 1.19819, -0.000399001, 0.00218168, 0.000403532, 1.19819, 0.0114504, 2.98023e-08, 0.0548816)
@@ -879,7 +930,7 @@ surface_material_override/0 = SubResource("ShaderMaterial_na4gj")
 transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 0.749835, 0.0896486, -0.27708)
 
 [node name="Carton" parent="." instance=ExtResource("39_4eyvd")]
-transform = Transform3D(0.941354, 0, 0, 0, 0.66227, 0, 0, 0, 0.885255, 0.36024, -0.0660209, 0.612963)
+transform = Transform3D(0.941354, 0, 0, 0, 0.66227, 0, 0, 0, 0.885255, -0.064127, 0.0266021, 0.294998)
 
 [editable path="Bell"]
 [editable path="Static/BookPrefab2"]

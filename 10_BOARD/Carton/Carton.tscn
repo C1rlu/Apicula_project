@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://div74aasvjhos"]
+[gd_scene load_steps=12 format=3 uid="uid://div74aasvjhos"]
 
 [ext_resource type="Script" path="res://10_BOARD/Carton/Carton_behaviour.gd" id="1_r5ua0"]
 [ext_resource type="Shader" uid="uid://8ll6evus625p" path="res://10_BOARD/00_BOOK/00_SHADER/Gradient_surface.tres" id="1_twfwu"]
@@ -10,6 +10,9 @@ size = Vector3(1.15912, 0.0302734, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_5nl27"]
 size = Vector3(1.15912, 0.755249, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4mh74"]
+size = Vector3(1.15912, 0.306, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_prljd"]
 
@@ -38,10 +41,11 @@ script = ExtResource("1_r5ua0")
 carton_root = NodePath("..")
 Col = NodePath("../position_zone_top/position_zone_top")
 
-[node name="Close_box" type="Node" parent="." node_paths=PackedStringArray("top_collider", "top_mesh")]
+[node name="Close_box" type="Node" parent="." node_paths=PackedStringArray("top_position_collider", "top_mesh", "top_zone_collider")]
 script = ExtResource("2_v8oa2")
-top_collider = NodePath("../position_zone_top/position_zone_top")
+top_position_collider = NodePath("../position_zone_top/position_zone_top")
 top_mesh = NodePath("../Render/Top")
+top_zone_collider = NodePath("../carton_zone_top/carton_zone_top")
 
 [node name="Carton_lightSpot" type="OmniLight3D" parent="."]
 transform = Transform3D(1.0623, 0, 0, 0, 1.50996, 0, 0, 0, 1.12962, 0, 0.388868, 0)
@@ -73,10 +77,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00359771, 0.211028, 0.0007
 [node name="position_zone_top" type="CollisionShape3D" parent="position_zone_top"]
 transform = Transform3D(0.258167, 0, 0, 0, 0.257824, 0, 0, 0, 0.257824, 0.00629107, -0.00712321, 0)
 shape = SubResource("BoxShape3D_pbpff")
-disabled = true
 
 [node name="carton_zone" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00359771, 0.0115509, 0.000786364)
+visible = false
 collision_layer = 4
 collision_mask = 4
 
@@ -85,6 +89,17 @@ collision_mask = 4
 [node name="cartron_zone" type="CollisionShape3D" parent="carton_zone"]
 transform = Transform3D(0.258167, 0, 0, 0, 0.257824, 0, 0, 0, 0.257824, 0.00629107, 0.0863347, 0)
 shape = SubResource("BoxShape3D_5nl27")
+
+[node name="carton_zone_top" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00359771, 0.0115509, 0.000786364)
+collision_layer = 4
+collision_mask = 4
+
+[node name="Carton_top" type="Node" parent="carton_zone_top"]
+
+[node name="carton_zone_top" type="CollisionShape3D" parent="carton_zone_top"]
+transform = Transform3D(0.258167, 0, 0, 0, 0.257824, 0, 0, 0, 0.257824, 0.00629107, 0.226497, 0)
+shape = SubResource("BoxShape3D_4mh74")
 
 [node name="Render" type="Node3D" parent="."]
 

@@ -12,7 +12,8 @@ extends Node3D
 @export var r_rotation_degrees : float = 45.0
 
 @export var element_setter : Node
-
+@export var is_a_letter : bool = false
+@export var can_be_delevery : bool = true
 
 signal select_render_state(index_state : int)
 
@@ -87,15 +88,24 @@ func _On_move(condition):
 
 func _check_if_in_carton():
 	
-	for e in limit_zone.get_overlapping_areas():
-		var carton = e.get_node_or_null("Carton")
-		if carton:
-			#print("Object in carton")
-			_global_datas._check_deliver.emit(element)
-			return	
+
+	if can_be_delevery:	
+		for e in limit_zone.get_overlapping_areas():
+			var carton = e.get_node_or_null("Carton")
+			if carton:
+				#print("Object in carton")
+				_global_datas._check_deliver.emit(element)
+				return	
 
 	
-	
+	if is_a_letter:
+		for e in limit_zone.get_overlapping_areas():
+			var carton_top = e.get_node_or_null("Carton_top")
+			if carton_top:
+				#print("Object Carton_top")
+				_global_datas._in_delivery_mode.emit(false)
+				queue_free()
+				return	
 		
 	
 func _on_move(target, speed, delta):
