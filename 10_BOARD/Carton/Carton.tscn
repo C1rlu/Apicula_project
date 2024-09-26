@@ -1,9 +1,11 @@
-[gd_scene load_steps=12 format=3 uid="uid://div74aasvjhos"]
+[gd_scene load_steps=15 format=3 uid="uid://div74aasvjhos"]
 
 [ext_resource type="Script" path="res://10_BOARD/Carton/Carton_behaviour.gd" id="1_r5ua0"]
 [ext_resource type="Shader" uid="uid://8ll6evus625p" path="res://10_BOARD/00_BOOK/00_SHADER/Gradient_surface.tres" id="1_twfwu"]
 [ext_resource type="Material" uid="uid://yjoyk6fvrm6q" path="res://10_BOARD/00_BOOK/00_SHADER/No_light_surface_mat.tres" id="2_7geod"]
 [ext_resource type="Script" path="res://10_BOARD/Carton/Close_box.gd" id="2_v8oa2"]
+[ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/On_click_object.gd" id="3_jrgp0"]
+[ext_resource type="Script" path="res://10_BOARD/Carton/Active_click_zone.gd" id="3_qr2t5"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_pbpff"]
 size = Vector3(1.15912, 0.0302734, 1)
@@ -14,38 +16,47 @@ size = Vector3(1.15912, 0.755249, 1)
 [sub_resource type="BoxShape3D" id="BoxShape3D_4mh74"]
 size = Vector3(1.15912, 0.306, 1)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_mj1q3"]
+size = Vector3(1.40257, 1.11198, 1.29535)
+
 [sub_resource type="BoxMesh" id="BoxMesh_prljd"]
 
-[sub_resource type="Gradient" id="Gradient_aunq8"]
-offsets = PackedFloat32Array(0.32304, 1)
-colors = PackedColorArray(0, 0, 0, 1, 0.98017, 0.98017, 0.98017, 1)
+[sub_resource type="Gradient" id="Gradient_q0rsx"]
+offsets = PackedFloat32Array(0.338028, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_qlubf"]
-gradient = SubResource("Gradient_aunq8")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_4ru7x"]
+gradient = SubResource("Gradient_q0rsx")
 fill = 1
-fill_from = Vector2(0.517094, 0.491453)
-fill_to = Vector2(0, 0)
+fill_from = Vector2(0.478632, 0.269231)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_cedfo"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_74xk1"]
 render_priority = 0
 shader = ExtResource("1_twfwu")
-shader_parameter/Color = Color(0.317647, 0.25098, 0.160784, 1)
-shader_parameter/Dither_Opacity = 1.0
-shader_parameter/Gradient_light = SubResource("GradientTexture2D_qlubf")
+shader_parameter/Color = Color(0.490196, 0.447059, 0.388235, 1)
+shader_parameter/Dither_Opacity = 0.347
+shader_parameter/Gradient_light = SubResource("GradientTexture2D_4ru7x")
 
 [node name="Carton" type="Node3D"]
 transform = Transform3D(0.941354, 0, 0, 0, 0.66227, 0, 0, 0, 0.885255, 0, 0, 0)
 
-[node name="Carton_behaviour" type="Node" parent="." node_paths=PackedStringArray("carton_root", "Col")]
+[node name="Carton_behaviour" type="Node" parent="." node_paths=PackedStringArray("carton_root", "Col", "carton_zone_col", "On_Move")]
 script = ExtResource("1_r5ua0")
 carton_root = NodePath("..")
-Col = NodePath("../position_zone_top/position_zone_top")
+Col = NodePath("../position_zone/position_zone")
+carton_zone_col = NodePath("../carton_zone/cartron_zone")
+On_Move = NodePath("../Click_top/On_Move")
 
-[node name="Close_box" type="Node" parent="." node_paths=PackedStringArray("top_position_collider", "top_mesh", "top_zone_collider")]
+[node name="Close_box" type="Node" parent="." node_paths=PackedStringArray("top_position_collider", "top_mesh", "top_zone_collider", "Click_top_col")]
 script = ExtResource("2_v8oa2")
 top_position_collider = NodePath("../position_zone_top/position_zone_top")
 top_mesh = NodePath("../Render/Top")
 top_zone_collider = NodePath("../carton_zone_top/carton_zone_top")
+Click_top_col = NodePath("../Click_top/carton_zone_top")
+
+[node name="Letter_is_moving" type="Node" parent="." node_paths=PackedStringArray("click_col")]
+script = ExtResource("3_qr2t5")
+click_col = NodePath("../Click_top/carton_zone_top")
 
 [node name="Carton_lightSpot" type="OmniLight3D" parent="."]
 transform = Transform3D(1.0623, 0, 0, 0, 1.50996, 0, 0, 0, 1.12962, 0, 0.388868, 0)
@@ -61,22 +72,24 @@ omni_attenuation = 0.297302
 
 [node name="position_zone" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00359771, 0.0115509, 0.000786364)
-visible = false
 
 [node name="Position_zone" type="Node" parent="position_zone"]
 
 [node name="position_zone" type="CollisionShape3D" parent="position_zone"]
-transform = Transform3D(0.258167, 0, 0, 0, 0.257824, 0, 0, 0, 0.257824, 0.00629107, -0.00712321, 0)
+transform = Transform3D(0.258167, 0, 0, 0, 0.257824, 0, 0, 0, 0.257824, 0.00629107, 0.0534102, 0)
 shape = SubResource("BoxShape3D_pbpff")
+disabled = true
 
 [node name="position_zone_top" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00359771, 0.211028, 0.000786364)
+visible = false
 
 [node name="Position_zone" type="Node" parent="position_zone_top"]
 
 [node name="position_zone_top" type="CollisionShape3D" parent="position_zone_top"]
 transform = Transform3D(0.258167, 0, 0, 0, 0.257824, 0, 0, 0, 0.257824, 0.00629107, -0.00712321, 0)
 shape = SubResource("BoxShape3D_pbpff")
+disabled = true
 
 [node name="carton_zone" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00359771, 0.0115509, 0.000786364)
@@ -89,9 +102,11 @@ collision_mask = 4
 [node name="cartron_zone" type="CollisionShape3D" parent="carton_zone"]
 transform = Transform3D(0.258167, 0, 0, 0, 0.257824, 0, 0, 0, 0.257824, 0.00629107, 0.0863347, 0)
 shape = SubResource("BoxShape3D_5nl27")
+disabled = true
 
 [node name="carton_zone_top" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00359771, 0.0115509, 0.000786364)
+visible = false
 collision_layer = 4
 collision_mask = 4
 
@@ -101,39 +116,19 @@ collision_mask = 4
 transform = Transform3D(0.258167, 0, 0, 0, 0.257824, 0, 0, 0, 0.257824, 0.00629107, 0.226497, 0)
 shape = SubResource("BoxShape3D_4mh74")
 
+[node name="Click_top" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00359771, 0.0115509, 0.000786364)
+
+[node name="On_Move" type="Node" parent="Click_top"]
+script = ExtResource("3_jrgp0")
+
+[node name="carton_zone_top" type="CollisionShape3D" parent="Click_top"]
+transform = Transform3D(0.258167, 0, 0, 0, 0.257824, 0, 0, 0, 0.257824, 0.00279102, 0.122596, 0.00444551)
+shape = SubResource("BoxShape3D_mj1q3")
+disabled = true
+
 [node name="Render" type="Node3D" parent="."]
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Render"]
-transform = Transform3D(0.0104048, 0, 0, 0, 0.198443, 0, 0, 0, 0.267403, -0.154706, 0.0963793, 1.78814e-07)
-layers = 2
-gi_mode = 0
-mesh = SubResource("BoxMesh_prljd")
-skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("ShaderMaterial_cedfo")
-
-[node name="MeshInstance3D4" type="MeshInstance3D" parent="Render"]
-transform = Transform3D(-4.5481e-10, 0, -0.314823, 0, 0.198443, 0, 0.0104048, 0, -1.37614e-08, -1.54786e-06, 0.0955563, -0.138983)
-layers = 2
-gi_mode = 0
-mesh = SubResource("BoxMesh_prljd")
-skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("ShaderMaterial_cedfo")
-
-[node name="MeshInstance3D5" type="MeshInstance3D" parent="Render"]
-transform = Transform3D(-4.5481e-10, 0, -0.314823, 0, 0.198443, 0, 0.0104048, 0, -1.37614e-08, -1.54786e-06, 0.0955563, 0.138615)
-layers = 2
-gi_mode = 0
-mesh = SubResource("BoxMesh_prljd")
-skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("ShaderMaterial_cedfo")
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="Render"]
-transform = Transform3D(0.0104048, 0, 0, 0, 0.198443, 0, 0, 0, 0.267403, 0.158203, 0.0963793, 1.78814e-07)
-layers = 2
-gi_mode = 0
-mesh = SubResource("BoxMesh_prljd")
-skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("ShaderMaterial_cedfo")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="MeshInstance3D3" type="MeshInstance3D" parent="Render"]
 transform = Transform3D(-4.5481e-10, -0.315499, 0, 0.0104048, -1.37909e-08, 0, 0, 0, 0.267403, -1.54786e-06, -0.000169881, 1.78814e-07)
@@ -141,54 +136,46 @@ layers = 2
 gi_mode = 0
 mesh = SubResource("BoxMesh_prljd")
 skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("ShaderMaterial_cedfo")
+surface_material_override/0 = SubResource("ShaderMaterial_74xk1")
 
-[node name="MeshInstance3D6" type="MeshInstance3D" parent="Render"]
-transform = Transform3D(0.0104048, 0, 0, 0, 0.198443, 0, 0, 0, 0.267403, -0.154706, 0.0963793, 1.78814e-07)
+[node name="MeshInstance3D10" type="MeshInstance3D" parent="Render/MeshInstance3D3"]
+transform = Transform3D(1, 1.13687e-13, 0, -1.11022e-16, 1, 0, 0, 0, 1, 0, -4.54747e-13, 0)
 layers = 65536
 gi_mode = 0
 mesh = SubResource("BoxMesh_prljd")
-skeleton = NodePath("../..")
+skeleton = NodePath("../../..")
 surface_material_override/0 = ExtResource("2_7geod")
 
-[node name="MeshInstance3D7" type="MeshInstance3D" parent="Render"]
-transform = Transform3D(-4.5481e-10, 0, -0.314823, 0, 0.198443, 0, 0.0104048, 0, -1.37614e-08, -1.54786e-06, 0.0955563, -0.138983)
-layers = 65536
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Render"]
+transform = Transform3D(-0.00117569, -0.213524, 0, 0.0103382, -0.0242827, 0, 0, 0, 0.267403, -0.0530476, 0.0099301, 1.78814e-07)
+layers = 2
 gi_mode = 0
 mesh = SubResource("BoxMesh_prljd")
 skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("ShaderMaterial_74xk1")
+
+[node name="MeshInstance3D10" type="MeshInstance3D" parent="Render/MeshInstance3D4"]
+transform = Transform3D(1, 1.13687e-13, 0, -1.11022e-16, 1, 0, 0, 0, 1, 0, -4.54747e-13, 0)
+layers = 65536
+gi_mode = 0
+mesh = SubResource("BoxMesh_prljd")
+skeleton = NodePath("../../..")
 surface_material_override/0 = ExtResource("2_7geod")
 
-[node name="MeshInstance3D8" type="MeshInstance3D" parent="Render"]
-transform = Transform3D(-4.5481e-10, 0, -0.314823, 0, 0.198443, 0, 0.0104048, 0, -1.37614e-08, -1.54786e-06, 0.0955563, 0.138615)
-layers = 65536
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Render"]
+transform = Transform3D(0.000606326, 0.00204401, -0.266936, 0.010251, 0.0345572, 0.0157888, 0.00167607, -0.212093, -1.1463e-08, 0.0238639, 0.0386474, 0.0297559)
+layers = 2
 gi_mode = 0
 mesh = SubResource("BoxMesh_prljd")
 skeleton = NodePath("../..")
-surface_material_override/0 = ExtResource("2_7geod")
+surface_material_override/0 = SubResource("ShaderMaterial_74xk1")
 
-[node name="MeshInstance3D9" type="MeshInstance3D" parent="Render"]
-transform = Transform3D(0.0104048, 0, 0, 0, 0.198443, 0, 0, 0, 0.267403, 0.158203, 0.0963793, 1.78814e-07)
+[node name="MeshInstance3D10" type="MeshInstance3D" parent="Render/MeshInstance3D5"]
+transform = Transform3D(1, 1.13687e-13, 0, -1.11022e-16, 1, 0, 0, 0, 1, 0, -4.54747e-13, 0)
 layers = 65536
 gi_mode = 0
 mesh = SubResource("BoxMesh_prljd")
-skeleton = NodePath("../..")
-surface_material_override/0 = ExtResource("2_7geod")
-
-[node name="MeshInstance3D10" type="MeshInstance3D" parent="Render"]
-transform = Transform3D(-4.5481e-10, -0.315499, 0, 0.0104048, -1.37909e-08, 0, 0, 0, 0.267403, -1.54786e-06, -0.000169881, 1.78814e-07)
-layers = 65536
-gi_mode = 0
-mesh = SubResource("BoxMesh_prljd")
-skeleton = NodePath("../..")
-surface_material_override/0 = ExtResource("2_7geod")
-
-[node name="MeshInstance3D11" type="MeshInstance3D" parent="Render"]
-transform = Transform3D(-4.5481e-10, -0.315499, 0, 0.0104048, -1.37909e-08, 0, 0, 0, 0.267403, -1.54786e-06, -0.000169881, 1.78814e-07)
-layers = 65536
-gi_mode = 0
-mesh = SubResource("BoxMesh_prljd")
-skeleton = NodePath("../..")
+skeleton = NodePath("../../..")
 surface_material_override/0 = ExtResource("2_7geod")
 
 [node name="Top" type="MeshInstance3D" parent="Render"]
@@ -198,10 +185,82 @@ layers = 2
 gi_mode = 0
 mesh = SubResource("BoxMesh_prljd")
 skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("ShaderMaterial_cedfo")
+surface_material_override/0 = SubResource("ShaderMaterial_74xk1")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Render/Top"]
+transform = Transform3D(-4.49863e-08, 19.6286, 0, -0.0333126, -2.77718e-08, 0, 0, 0, 1.05951, -10.3707, 0.489394, -0.0145176)
+layers = 2
+gi_mode = 0
+mesh = SubResource("BoxMesh_prljd")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("ShaderMaterial_74xk1")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Render/Top"]
+transform = Transform3D(1.96642e-15, 19.6286, 1.36117e-06, 1.45615e-09, -2.77718e-08, 1.00796, 0.0412261, 0, -5.45256e-08, -10.4521, -0.00591736, -0.565199)
+layers = 2
+gi_mode = 0
+mesh = SubResource("BoxMesh_prljd")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("ShaderMaterial_74xk1")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Render/Top"]
+transform = Transform3D(1.96642e-15, 19.6286, 1.36117e-06, 1.45615e-09, -2.77718e-08, 1.00796, 0.0412261, 0, -5.45256e-08, -10.4521, -0.00591736, 0.534704)
+layers = 2
+gi_mode = 0
+mesh = SubResource("BoxMesh_prljd")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("ShaderMaterial_74xk1")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Render/Top"]
+transform = Transform3D(-4.49863e-08, 19.6286, 0, -0.0333126, -2.77718e-08, 0, 0, 0, 1.05951, -10.3707, -0.512434, -0.0145176)
+layers = 2
+gi_mode = 0
+mesh = SubResource("BoxMesh_prljd")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("ShaderMaterial_74xk1")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="Render/Top"]
+transform = Transform3D(-4.49863e-08, 19.6286, 0, -0.0333126, -2.77718e-08, 0, 0, 0, 1.05951, -10.3707, 0.489394, -0.0145176)
+layers = 65536
+gi_mode = 0
+mesh = SubResource("BoxMesh_prljd")
+skeleton = NodePath("../../..")
+surface_material_override/0 = ExtResource("2_7geod")
+
+[node name="MeshInstance3D11" type="MeshInstance3D" parent="Render/Top"]
+transform = Transform3D(1.02917, -3.06954e-12, 0, 7.77156e-15, 1.01012, 0, 0, 0, 1.05951, -19.9207, -0.00591735, -0.0145176)
+layers = 65536
+gi_mode = 0
+mesh = SubResource("BoxMesh_prljd")
+skeleton = NodePath("../../..")
+surface_material_override/0 = ExtResource("2_7geod")
+
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="Render/Top"]
+transform = Transform3D(1.96642e-15, 19.6286, 1.36117e-06, 1.45615e-09, -2.77718e-08, 1.00796, 0.0412261, 0, -5.45256e-08, -10.4521, -0.00591736, -0.565199)
+layers = 65536
+gi_mode = 0
+mesh = SubResource("BoxMesh_prljd")
+skeleton = NodePath("../../..")
+surface_material_override/0 = ExtResource("2_7geod")
+
+[node name="MeshInstance3D8" type="MeshInstance3D" parent="Render/Top"]
+transform = Transform3D(1.96642e-15, 19.6286, 1.36117e-06, 1.45615e-09, -2.77718e-08, 1.00796, 0.0412261, 0, -5.45256e-08, -10.4521, -0.00591736, 0.534704)
+layers = 65536
+gi_mode = 0
+mesh = SubResource("BoxMesh_prljd")
+skeleton = NodePath("../../..")
+surface_material_override/0 = ExtResource("2_7geod")
+
+[node name="MeshInstance3D9" type="MeshInstance3D" parent="Render/Top"]
+transform = Transform3D(-4.49863e-08, 19.6286, 0, -0.0333126, -2.77718e-08, 0, 0, 0, 1.05951, -10.3707, -0.512434, -0.0145176)
+layers = 65536
+gi_mode = 0
+mesh = SubResource("BoxMesh_prljd")
+skeleton = NodePath("../../..")
+surface_material_override/0 = ExtResource("2_7geod")
 
 [node name="MeshInstance3D15" type="MeshInstance3D" parent="Render/Top"]
-transform = Transform3D(1, -4.12115e-13, -2.38419e-07, -4.82253e-16, 1, 4.44089e-16, 9.31323e-10, 0, 1, 0, 0, 0)
+transform = Transform3D(1, -3.41061e-13, -2.38419e-07, -3.33067e-16, 1, 4.44089e-16, 9.31323e-10, 0, 1, 0, 4.65661e-10, 0)
 layers = 65536
 gi_mode = 0
 mesh = SubResource("BoxMesh_prljd")

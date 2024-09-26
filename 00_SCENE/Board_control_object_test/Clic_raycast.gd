@@ -101,7 +101,7 @@ func _input(event):
 func check_move(targetPos : Vector2):
 	
 	var ray_target = utility.get_raycast_target(targetPos,Camera)
-
+	#print( ray_target)
 	if !ray_target:	
 		return
 		

@@ -163,6 +163,11 @@ signal _in_delivery_mode(condition : bool)
 
 signal _check_deliver(element : element_data)
 signal _close_box(condition: bool)
+var box_is_closed : bool
+signal _letter_is_moving(condition : bool)
+var in_delevering_element_list : Array[element_data]
+
+signal _deliver_inbox_element
 
 # quest_state signal in order
 signal active_diving

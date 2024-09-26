@@ -41,7 +41,8 @@ func set_element(_element : element_data):
 	element = _element
 	if element_setter:
 		element_setter.element = _element 
-			
+	if element:
+		element.element_board_node = self		
 func move_is_active(condition : bool):
 	collider.disabled = condition
 
@@ -102,8 +103,7 @@ func _check_if_in_carton():
 		for e in limit_zone.get_overlapping_areas():
 			var carton_top = e.get_node_or_null("Carton_top")
 			if carton_top:
-				#print("Object Carton_top")
-				_global_datas._in_delivery_mode.emit(false)
+				_global_datas._deliver_inbox_element.emit()
 				queue_free()
 				return	
 		
@@ -163,4 +163,3 @@ func check_limit(raycast_result)-> bool:
 	select_render_state.emit(1)
 	return false
 	
-

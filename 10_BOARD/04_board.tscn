@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=3 uid="uid://cein0q2eirkay"]
+[gd_scene load_steps=53 format=3 uid="uid://cein0q2eirkay"]
 
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_g3pi7"]
 [ext_resource type="Script" path="res://10_BOARD/Board_CamTarget.gd" id="1_janbq"]
@@ -19,6 +19,7 @@
 [ext_resource type="Resource" uid="uid://ci4gnshy63pep" path="res://15_GAME_RESSOURCE/04_Element/Cube_06_element.tres" id="9_rs7n7"]
 [ext_resource type="Resource" uid="uid://dbi5eh1hx08eb" path="res://15_GAME_RESSOURCE/04_Element/Cube_07_element.tres" id="10_q6p6j"]
 [ext_resource type="Script" path="res://10_BOARD/Board_OBJ_Manager.gd" id="14_johxk"]
+[ext_resource type="Script" path="res://10_BOARD/intance_element_board.gd" id="15_520c2"]
 [ext_resource type="Script" path="res://10_BOARD/Deliver_manager.gd" id="15_mq07p"]
 [ext_resource type="Script" path="res://00_SCENE/Board_control_object_test/Clic_raycast.gd" id="23_osxq7"]
 [ext_resource type="Resource" uid="uid://cd5pseveq582t" path="res://15_GAME_RESSOURCE/03_BoardCam_state/Main_focus_data.tres" id="24_pisk2"]
@@ -47,20 +48,22 @@ func _ready():
 func open_inventory(condition : bool):
 	if !condition:
 		_global_datas.current_scene_state = game_state.scene_state._Main
-		_global_datas._open_quest_on_board.emit(false)
-		_global_datas._open_letter_quest.emit(false)
 		_global_datas._clear_back_call.emit()
 		_global_datas._show_object_legend.emit(false,\"null\")
+		
 	else:
 		_global_datas._add_back_call.emit(back_call)
 		_global_datas.current_scene_state = game_state.scene_state._Boardscene
 		_global_datas._show_object_legend.emit(false,\"null\")
 		_global_datas._check_boat_zone.emit()
 		
+		
+		
 func back_call():
 	_global_datas.Player_In_Inventory = false
 	_global_datas.open_inventory.emit(false)
 	_global_datas._clear_back_call.emit()
+	_global_datas._in_delivery_mode.emit(false)	
 "
 
 [sub_resource type="GDScript" id="GDScript_1a2yk"]
@@ -86,8 +89,8 @@ func _input(event):
 	if event.is_action_pressed(\"Open_Inventory\"):
 		_global_datas.Player_In_Inventory = ! _global_datas.Player_In_Inventory
 		_global_datas.open_inventory.emit(_global_datas.Player_In_Inventory)	
-		
-
+		if !_global_datas.Player_In_Inventory:
+			_global_datas._in_delivery_mode.emit(false)	
 func _open_backfrom_subscene():
 	
 
@@ -333,12 +336,16 @@ Proto_element = Array[Resource("res://15_GAME_RESSOURCE/04_Element/Element_Data/
 script = ExtResource("7_io232")
 camera_focus = ExtResource("27_vvxtf")
 
-[node name="Instantiate_element" type="Node" parent="Element_Manager" node_paths=PackedStringArray("Drop_Element_State")]
+[node name="Instantiate_element_broke" type="Node" parent="Element_Manager" node_paths=PackedStringArray("Drop_Element_State")]
 script = ExtResource("5_dn45r")
 Drop_Element_State = NodePath("../Drop_Element_State")
 
-[node name="Deliver_manager" type="Node" parent="."]
+[node name="intance_element_board" type="Node" parent="Element_Manager/Instantiate_element_broke"]
+script = ExtResource("15_520c2")
+
+[node name="Deliver_manager" type="Node" parent="." node_paths=PackedStringArray("Instantiate_element")]
 script = ExtResource("15_mq07p")
+Instantiate_element = NodePath("../Element_Manager/Instantiate_element_broke/intance_element_board")
 
 [node name="Input_switch" type="Node" parent="."]
 script = ExtResource("2_00g5f")

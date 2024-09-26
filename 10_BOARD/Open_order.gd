@@ -6,4 +6,5 @@ func _ready():
 	
 	
 func _open_order():
-	_global_datas._open_letter_quest.emit(true)
+	#_global_datas._open_letter_quest.emit(true)
+	_global_datas._back_letter.emit()	
