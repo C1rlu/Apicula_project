@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://dla1534gcagbl"]
+[gd_scene load_steps=14 format=3 uid="uid://dla1534gcagbl"]
 
 [ext_resource type="Script" path="res://00_SYSTEMS/Active_mask_at_ready.tres.gd" id="1_4w66s"]
 [ext_resource type="PackedScene" uid="uid://cukwu0ltc71oi" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Pine/Pine_01.blend" id="1_p2sbr"]
@@ -89,6 +89,9 @@ shader_parameter/Color = Color(0.278431, 0.290196, 0.0980392, 1)
 shader_parameter/Dither_strenght = 0.475
 shader_parameter/Gradient_base = ExtResource("4_dbhh4")
 
+[sub_resource type="BoxOccluder3D" id="BoxOccluder3D_wsmyo"]
+size = Vector3(4.7987, 11.3786, 4.92407)
+
 [node name="Pine_prefabs" type="Node3D"]
 transform = Transform3D(0.0845396, 0, 0, 0, 0.0845396, 0, 0, 0, 0.0845396, 0, 0, 0)
 
@@ -115,5 +118,9 @@ surface_material_override/0 = ExtResource("3_5wqao")
 [node name="Pine_01" parent="Pine_013" index="1"]
 surface_material_override/0 = SubResource("ShaderMaterial_8mo3b")
 surface_material_override/1 = SubResource("ShaderMaterial_8hcpt")
+
+[node name="OccluderInstance3D" type="OccluderInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.78463, 0)
+occluder = SubResource("BoxOccluder3D_wsmyo")
 
 [editable path="Pine_013"]

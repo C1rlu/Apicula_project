@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://bme2k8btnc2jn"]
+[gd_scene load_steps=12 format=3 uid="uid://bme2k8btnc2jn"]
 
 [ext_resource type="Script" path="res://00_SYSTEMS/Active_mask_at_ready.tres.gd" id="1_7ixkb"]
 [ext_resource type="Material" uid="uid://yjoyk6fvrm6q" path="res://10_BOARD/00_BOOK/00_SHADER/No_light_surface_mat.tres" id="2_qwpko"]
@@ -21,15 +21,17 @@ shader_parameter/Color = Color(0.278431, 0.290196, 0.0980392, 1)
 shader_parameter/Dither_strenght = 0.485
 shader_parameter/Gradient_base = ExtResource("9_v0alh")
 
+[sub_resource type="BoxOccluder3D" id="BoxOccluder3D_8v1h7"]
+size = Vector3(2.56777, 1.44343, 2.64774)
+
 [node name="Island_Set02_Prefab" type="Node3D"]
 
 [node name="Active_at_ready" type="Node" parent="." node_paths=PackedStringArray("_active")]
 script = ExtResource("1_7ixkb")
 _active = [NodePath("../Island_set_02/Island_set_foam"), NodePath("../Island_set_02/Island_set_mask"), NodePath("../Island_set_02/Island_set_light")]
 
-[node name="Shader_variety_color" type="Node" parent="." node_paths=PackedStringArray("_mesh")]
+[node name="Shader_variety_color" type="Node" parent="."]
 script = ExtResource("2_s6w0a")
-_mesh = NodePath("../Island_set_02/Island_set_02")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -57,5 +59,9 @@ surface_material_override/0 = ExtResource("6_n55b7")
 visible = false
 layers = 32768
 surface_material_override/0 = ExtResource("2_qwpko")
+
+[node name="OccluderInstance3D" type="OccluderInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.588067, 0.17694)
+occluder = SubResource("BoxOccluder3D_8v1h7")
 
 [editable path="Island_set_02"]
