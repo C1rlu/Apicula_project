@@ -1,11 +1,34 @@
-[gd_scene load_steps=25 format=3 uid="uid://fcjcvy77lg0o"]
+[gd_scene load_steps=46 format=3 uid="uid://fcjcvy77lg0o"]
 
 [ext_resource type="Script" path="res://00_SYSTEMS/Active_mask_at_ready.tres.gd" id="1_u3hy5"]
 [ext_resource type="Texture2D" uid="uid://cdnar4v4gpadd" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Lighthouse/Lighthouse_gradient.png" id="2_lv8lt"]
+[ext_resource type="Script" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Lighthouse/Lighhouse_light_anim.gd" id="2_mcqu7"]
 [ext_resource type="Material" uid="uid://ctnqf5d3uj1g7" path="res://05_SHADER/All_Materials/dark_mask.tres" id="3_mvy38"]
 [ext_resource type="Material" uid="uid://yjoyk6fvrm6q" path="res://10_BOARD/00_BOOK/00_SHADER/No_light_surface_mat.tres" id="4_t041h"]
 [ext_resource type="PackedScene" uid="uid://htj4ifkalkjm" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Lighthouse/Lighthouse.blend" id="4_ukkmq"]
 [ext_resource type="Shader" uid="uid://cu2uipuy138c6" path="res://05_SHADER/All_Materials/Main_sceneTest_dither_sh.tres" id="5_n182k"]
+[ext_resource type="PackedScene" uid="uid://cayj2wqyaod67" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Lighthouse/light_cone.blend" id="7_8wbog"]
+
+[sub_resource type="Animation" id="Animation_0qyfb"]
+resource_name = "lighthouse_rotation"
+length = 6.0
+loop_mode = 1
+tracks/0/type = "rotation_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Lighthouse_root")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 1.06581e-14, 0, 1, 6, 1, 0, 1, 0, -5.34642e-08)
+
+[sub_resource type="Animation" id="Animation_dvqrk"]
+length = 0.001
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ysngk"]
+_data = {
+"RESET": SubResource("Animation_dvqrk"),
+"lighthouse_rotation": SubResource("Animation_0qyfb")
+}
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_is5gq"]
 resource_name = "Mat_01"
@@ -244,12 +267,198 @@ render_priority = 1
 shader = SubResource("VisualShader_gs5la")
 shader_parameter/Lit_color = Color(0.721569, 0.580392, 0.407843, 1)
 
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_cnqkx"]
+parameter_name = "Lit_color"
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_i12re"]
+constant = 1.0
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_7d7w7"]
+parameter_name = "Dither_size"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_67b00"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_4t2h4"]
+default_input_values = [0, 0.87, 1, 0.0]
+
+[sub_resource type="Gradient" id="Gradient_bjlve"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_dk63l"]
+gradient = SubResource("Gradient_bjlve")
+fill_to = Vector2(0, 0.529915)
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_ooaxe"]
+texture = SubResource("GradientTexture2D_dk63l")
+
+[sub_resource type="VisualShader" id="VisualShader_lmvsu"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+
+uniform vec4 Lit_color : source_color;
+uniform sampler2D tex_frg_7;
+global uniform float Dither_size;
+
+
+
+void fragment() {
+// ColorParameter:2
+	vec4 n_out2p0 = Lit_color;
+
+
+// Texture2D:7
+	vec4 n_out7p0 = texture(tex_frg_7, UV);
+
+
+// FloatConstant:3
+	float n_out3p0 = 1.000000;
+
+
+// FloatParameter:4
+	float n_out4p0 = Dither_size;
+
+
+	float n_out5p0;
+// Expression:5
+	n_out5p0 = 0.0;
+	{
+		const float DITHER_THRESHOLDS[16] ={
+				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+			};
+			
+		vec2 uv = FRAGCOORD.xy * n_out4p0;
+		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+		n_out5p0 = n_out3p0 - DITHER_THRESHOLDS[index];
+	}
+
+
+// Step:6
+	float n_out6p0 = step(n_out7p0.x, n_out5p0);
+
+
+// Output:0
+	ALBEDO = vec3(n_out2p0.xyz);
+	ALPHA = n_out6p0;
+
+
+}
+"
+graph_offset = Vector2(-1068.98, 33.0034)
+flags/unshaded = true
+nodes/vertex/0/position = Vector2(400, 160)
+nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_cnqkx")
+nodes/fragment/2/position = Vector2(-440, 100)
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_i12re")
+nodes/fragment/3/position = Vector2(-1860, 700)
+nodes/fragment/4/node = SubResource("VisualShaderNodeFloatParameter_7d7w7")
+nodes/fragment/4/position = Vector2(-1940, 920)
+nodes/fragment/5/node = SubResource("VisualShaderNodeExpression_67b00")
+nodes/fragment/5/position = Vector2(-1560, 820)
+nodes/fragment/5/size = Vector2(724.789, 654.559)
+nodes/fragment/5/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/5/output_ports = "0,0,Dither_Node;"
+nodes/fragment/5/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/6/node = SubResource("VisualShaderNodeStep_4t2h4")
+nodes/fragment/6/position = Vector2(-740, 680)
+nodes/fragment/7/node = SubResource("VisualShaderNodeTexture_ooaxe")
+nodes/fragment/7/position = Vector2(-1020, 300)
+nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0, 3, 0, 5, 0, 4, 0, 5, 1, 5, 0, 6, 1, 7, 0, 6, 0, 6, 0, 0, 1)
+nodes/light/0/position = Vector2(2620, 1260)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nvli8"]
+render_priority = 1
+shader = SubResource("VisualShader_lmvsu")
+shader_parameter/Lit_color = Color(0.721569, 0.580392, 0.407843, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gmqbp"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_yssin"]
+_surfaces = [{
+"aabb": AABB(-0.974435, -9.25381, -1.14889, 1.98993, 8.52239, 2.29778),
+"format": 34896613377,
+"index_count": 36,
+"index_data": PackedByteArray(0, 0, 3, 0, 1, 0, 0, 0, 2, 0, 3, 0, 2, 0, 5, 0, 3, 0, 2, 0, 4, 0, 5, 0, 4, 0, 7, 0, 5, 0, 4, 0, 6, 0, 7, 0, 6, 0, 9, 0, 7, 0, 6, 0, 8, 0, 9, 0, 8, 0, 11, 0, 9, 0, 8, 0, 10, 0, 11, 0, 10, 0, 1, 0, 11, 0, 10, 0, 0, 0, 1, 0),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 12,
+"vertex_data": PackedByteArray(255, 127, 0, 0, 0, 0, 0, 0, 255, 127, 255, 255, 55, 101, 0, 0, 255, 255, 0, 0, 255, 63, 0, 0, 199, 154, 255, 255, 155, 114, 0, 0, 255, 255, 0, 0, 255, 191, 0, 0, 199, 154, 255, 255, 99, 141, 0, 0, 255, 127, 0, 0, 255, 255, 0, 0, 255, 127, 255, 255, 199, 154, 0, 0, 0, 0, 0, 0, 255, 191, 0, 0, 55, 101, 255, 255, 99, 141, 0, 0, 0, 0, 0, 0, 255, 63, 0, 0, 55, 101, 255, 255, 155, 114, 0, 0)
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_opv06"]
+resource_name = "light_cone_Cylinder"
+_surfaces = [{
+"aabb": AABB(-0.974435, -9.25381, -1.14889, 1.98993, 8.52239, 2.29778),
+"attribute_data": PackedByteArray(255, 127, 255, 255, 255, 255, 255, 255, 255, 127, 255, 127, 255, 255, 255, 127, 169, 234, 255, 255, 169, 234, 255, 127, 84, 213, 255, 255, 84, 213, 255, 127, 255, 191, 255, 255, 255, 191, 255, 127, 169, 170, 255, 255, 169, 170, 255, 127, 84, 149, 255, 255, 84, 149, 255, 127),
+"format": 34896613399,
+"index_count": 36,
+"index_data": PackedByteArray(1, 0, 5, 0, 3, 0, 1, 0, 4, 0, 5, 0, 4, 0, 7, 0, 5, 0, 4, 0, 6, 0, 7, 0, 6, 0, 9, 0, 7, 0, 6, 0, 8, 0, 9, 0, 8, 0, 11, 0, 9, 0, 8, 0, 10, 0, 11, 0, 10, 0, 13, 0, 11, 0, 10, 0, 12, 0, 13, 0, 12, 0, 2, 0, 13, 0, 12, 0, 0, 0, 2, 0),
+"material": SubResource("StandardMaterial3D_gmqbp"),
+"primitive": 3,
+"uv_scale": Vector4(2, 1, 0, 0),
+"vertex_count": 14,
+"vertex_data": PackedByteArray(255, 127, 0, 0, 0, 0, 221, 255, 255, 127, 0, 0, 0, 0, 221, 255, 255, 127, 255, 255, 55, 101, 221, 255, 255, 127, 255, 255, 55, 101, 221, 255, 255, 255, 0, 0, 255, 63, 101, 213, 199, 154, 255, 255, 155, 114, 101, 213, 255, 255, 0, 0, 255, 191, 220, 170, 199, 154, 255, 255, 99, 141, 220, 170, 255, 127, 0, 0, 255, 255, 83, 132, 255, 127, 255, 255, 199, 154, 83, 132, 0, 0, 0, 0, 255, 191, 220, 170, 55, 101, 255, 255, 99, 141, 220, 170, 0, 0, 0, 0, 255, 63, 101, 213, 55, 101, 255, 255, 155, 114, 101, 213, 155, 131, 27, 246, 226, 137, 156, 3, 155, 131, 27, 246, 226, 137, 156, 3, 230, 137, 159, 3, 230, 137, 159, 3, 58, 144, 74, 10, 58, 144, 74, 10, 254, 255, 255, 127, 254, 255, 255, 127, 73, 138, 196, 239, 73, 138, 196, 239, 159, 131, 24, 246, 159, 131, 24, 246)
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_yssin")
+
+[sub_resource type="VisualShader" id="VisualShader_swao4"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded, ambient_light_disabled;
+
+
+
+"
+flags/unshaded = true
+flags/ambient_light_disabled = true
+nodes/fragment/0/position = Vector2(440, 140)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tdxq4"]
+render_priority = 0
+shader = SubResource("VisualShader_swao4")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jbdx1"]
+render_priority = 0
+shader = SubResource("VisualShader_swao4")
+
 [node name="Lighthouse_prefab" type="Node3D"]
 transform = Transform3D(-0.271044, 0, 2.89823e-08, 0, 0.271044, 0, -2.89823e-08, 0, -0.271044, 0, 0, 0)
 
 [node name="Active_at_ready" type="Node" parent="." node_paths=PackedStringArray("_active")]
 script = ExtResource("1_u3hy5")
-_active = [NodePath("../Lighthouse_mask"), NodePath("../Lighthouse_light")]
+_active = [NodePath("../Lighthouse_mask"), NodePath("../Lighthouse_light"), NodePath("../Lighthouse_root/light_cone3/light_cone2"), NodePath("../Lighthouse_root/light_cone2/light_cone2")]
+
+[node name="Lighhouse_light_anim" type="Node" parent="." node_paths=PackedStringArray("anim")]
+script = ExtResource("2_mcqu7")
+anim = NodePath("../Lighhouse_light")
+
+[node name="Lighhouse_light" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_ysngk")
+}
 
 [node name="Lighthouse_mask" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 1.42109e-14, 0, 1, 0, -1.42109e-14, 0, 1, 0, 0, 0)
@@ -275,4 +484,38 @@ surface_material_override/1 = SubResource("ShaderMaterial_kt5bh")
 surface_material_override/0 = SubResource("ShaderMaterial_402qs")
 surface_material_override/1 = SubResource("ShaderMaterial_1gvy3")
 
+[node name="Lighthouse_root" type="Node3D" parent="."]
+transform = Transform3D(0.424012, 0, -0.905657, 0, 1, 0, 0.905657, 0, 0.424012, 0, 6.4768, 0)
+
+[node name="light_cone2" parent="Lighthouse_root" instance=ExtResource("7_8wbog")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0536928, 0)
+
+[node name="light_cone" parent="Lighthouse_root/light_cone2" index="0"]
+surface_material_override/0 = SubResource("ShaderMaterial_nvli8")
+
+[node name="light_cone2" type="MeshInstance3D" parent="Lighthouse_root/light_cone2"]
+transform = Transform3D(0, 5.96046e-08, 1, -1, 0, 5.96046e-08, -5.96046e-08, -1, 0, 0, 0, 0)
+visible = false
+layers = 32768
+mesh = SubResource("ArrayMesh_opv06")
+skeleton = NodePath("")
+surface_material_override/0 = SubResource("ShaderMaterial_tdxq4")
+
+[node name="light_cone3" parent="Lighthouse_root" instance=ExtResource("7_8wbog")]
+transform = Transform3D(-1, 0, -1.89394e-07, 0, 1, 0, 1.89394e-07, 0, -1, 0, 0.0536928, 0)
+
+[node name="light_cone" parent="Lighthouse_root/light_cone3" index="0"]
+mesh = SubResource("ArrayMesh_opv06")
+surface_material_override/0 = SubResource("ShaderMaterial_nvli8")
+
+[node name="light_cone2" type="MeshInstance3D" parent="Lighthouse_root/light_cone3"]
+transform = Transform3D(0, 5.96046e-08, 1, -1, 0, 5.96046e-08, -5.96046e-08, -1, 0, 0, 0, 0)
+visible = false
+layers = 32768
+mesh = SubResource("ArrayMesh_opv06")
+skeleton = NodePath("")
+surface_material_override/0 = SubResource("ShaderMaterial_jbdx1")
+
 [editable path="Lighthouse2"]
+[editable path="Lighthouse_root/light_cone2"]
+[editable path="Lighthouse_root/light_cone3"]
