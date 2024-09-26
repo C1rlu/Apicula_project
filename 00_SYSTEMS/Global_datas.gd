@@ -158,7 +158,7 @@ var board_instance_position : Node3D
 
 
 # Delevery carton mode
-
+var delevery_birds_amout : int = 3
 signal _in_delivery_mode(condition : bool)
 
 signal _check_deliver(element : element_data)

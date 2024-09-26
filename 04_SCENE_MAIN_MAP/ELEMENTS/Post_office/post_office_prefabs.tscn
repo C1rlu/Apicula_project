@@ -1,0 +1,94 @@
+[gd_scene load_steps=15 format=3 uid="uid://dugml55e868yw"]
+
+[ext_resource type="PackedScene" uid="uid://dv2ya8urvkgto" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Post_office/Post_office.blend" id="1_mtcuq"]
+[ext_resource type="Shader" uid="uid://cu2uipuy138c6" path="res://05_SHADER/All_Materials/Main_sceneTest_dither_sh.tres" id="2_8nrvq"]
+[ext_resource type="Material" uid="uid://ctnqf5d3uj1g7" path="res://05_SHADER/All_Materials/dark_mask.tres" id="2_iryki"]
+[ext_resource type="Material" uid="uid://yjoyk6fvrm6q" path="res://10_BOARD/00_BOOK/00_SHADER/No_light_surface_mat.tres" id="3_113fe"]
+[ext_resource type="Texture2D" uid="uid://chhl6f8t2r2c8" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Rampe/Rampe_gradient.png" id="3_e8da4"]
+
+[sub_resource type="GDScript" id="GDScript_54i77"]
+script/source = "extends Node
+
+@export var _active : Array[MeshInstance3D]
+
+func _ready():
+	
+	for e in _active:
+		e.visible = true
+"
+
+[sub_resource type="Gradient" id="Gradient_0g841"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_qwn6x"]
+gradient = SubResource("Gradient_0g841")
+fill_from = Vector2(0, 0.0042735)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u87ph"]
+render_priority = 1
+shader = ExtResource("2_8nrvq")
+shader_parameter/ColorParameter = Color(0, 0, 0, 1)
+shader_parameter/Color = Color(0.521569, 0.505882, 0.458824, 1)
+shader_parameter/Dither_strenght = 0.67
+shader_parameter/Gradient_base = SubResource("GradientTexture2D_qwn6x")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_85wgn"]
+render_priority = 1
+shader = ExtResource("2_8nrvq")
+shader_parameter/ColorParameter = Color(0, 0, 0, 1)
+shader_parameter/Color = Color(0.419608, 0.317647, 0.176471, 1)
+shader_parameter/Dither_strenght = 0.675
+shader_parameter/Gradient_base = ExtResource("3_e8da4")
+
+[sub_resource type="Gradient" id="Gradient_r2ro3"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_5b3te"]
+gradient = SubResource("Gradient_r2ro3")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h3bee"]
+render_priority = 1
+shader = ExtResource("2_8nrvq")
+shader_parameter/ColorParameter = Color(0, 0, 0, 1)
+shader_parameter/Color = Color(0.25098, 0.239216, 0.211765, 1)
+shader_parameter/Dither_strenght = 0.695
+shader_parameter/Gradient_base = SubResource("GradientTexture2D_5b3te")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_r5mpl"]
+render_priority = 1
+shader = ExtResource("2_8nrvq")
+shader_parameter/ColorParameter = Color(0, 0, 0, 1)
+shader_parameter/Color = Color(0.866667, 0.698039, 0.466667, 1)
+shader_parameter/Dither_strenght = 0.89
+shader_parameter/Gradient_base = ExtResource("3_e8da4")
+
+[node name="Post_office_prefabs" type="Node3D"]
+
+[node name="Active" type="Node" parent="." node_paths=PackedStringArray("_active")]
+script = SubResource("GDScript_54i77")
+_active = [NodePath("../Post_office2/Post_office_foam"), NodePath("../Post_office2/Post_office_light"), NodePath("../Post_office2/Post_office_mask")]
+
+[node name="Post_office2" parent="." instance=ExtResource("1_mtcuq")]
+
+[node name="Post_office" parent="Post_office2" index="0"]
+surface_material_override/0 = SubResource("ShaderMaterial_u87ph")
+surface_material_override/1 = SubResource("ShaderMaterial_85wgn")
+surface_material_override/2 = SubResource("ShaderMaterial_h3bee")
+surface_material_override/3 = SubResource("ShaderMaterial_r5mpl")
+
+[node name="Post_office_foam" parent="Post_office2" index="1"]
+visible = false
+layers = 1024
+surface_material_override/0 = ExtResource("2_iryki")
+
+[node name="Post_office_mask" parent="Post_office2" index="2"]
+visible = false
+layers = 1032
+surface_material_override/0 = ExtResource("2_iryki")
+
+[node name="Post_office_light" parent="Post_office2" index="3"]
+visible = false
+layers = 32768
+surface_material_override/0 = ExtResource("3_113fe")
+
+[editable path="Post_office2"]

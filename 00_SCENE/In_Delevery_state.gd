@@ -10,14 +10,24 @@ func _ready():
 	
 func _in_delevery_zone(condition : bool):
 	
-	if _global_datas._time_state != 0:
+	if _global_datas.delevery_birds_amout == 0:
 		if condition:
-			_global_datas._show_object_legend.emit(true,"delevery post open the evening, come back later")
+			_global_datas._show_object_legend.emit(true,"no delivery post available, come back later")
+			delevery_ui_node.visible = false
 		else:
 			_global_datas._show_object_legend.emit(false,"null")
-		return
-	delevery_ui_node.visible = condition
+			delevery_ui_node.visible = false	
+		return		
 	
+	if _global_datas._time_state != 0:
+		if condition:
+			_global_datas._show_object_legend.emit(true,"delivery post open the evening, come back later")
+		
+		else:
+			_global_datas._show_object_legend.emit(false,"null")
+		return	
+
+	delevery_ui_node.visible = condition
 
 func _input(event):
 	
@@ -29,7 +39,10 @@ func _input(event):
 		
 	if _global_datas.Player_InMenu:
 		return	
+	if _global_datas.delevery_birds_amout == 0:
 		
+		return 
+			
 	if delevery_ui_node.visible:
 		if event.is_action_pressed("Click"):
 			_global_datas._in_delivery_mode.emit(true)	

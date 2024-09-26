@@ -1,10 +1,11 @@
 extends Node
 
 
-@export var _button : Button
+#@export var _button : Button
 
 func _ready():
-	_button.pressed.connect(_ship_to)
+	pass
+	#_button.pressed.connect(_ship_to)
 	
 	
 func _ship_to():
