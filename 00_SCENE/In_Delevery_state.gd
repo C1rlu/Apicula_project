@@ -12,7 +12,7 @@ func _in_delevery_zone(condition : bool):
 	
 	if _global_datas.delevery_birds_amout == 0:
 		if condition:
-			_global_datas._show_object_legend.emit(true,"no delivery post available, come back later")
+			_global_datas._show_object_legend.emit(true,"no birds available, come back later")
 			delevery_ui_node.visible = false
 		else:
 			_global_datas._show_object_legend.emit(false,"null")
@@ -21,7 +21,7 @@ func _in_delevery_zone(condition : bool):
 	
 	if _global_datas._time_state != 0:
 		if condition:
-			_global_datas._show_object_legend.emit(true,"delivery post open the evening, come back later")
+			_global_datas._show_object_legend.emit(true,"closed, come back later")
 		
 		else:
 			_global_datas._show_object_legend.emit(false,"null")

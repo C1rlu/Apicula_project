@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://cb8k68mtsigvd"]
+[gd_scene load_steps=21 format=3 uid="uid://cb8k68mtsigvd"]
 
 [ext_resource type="Resource" uid="uid://cooqi0giysm3w" path="res://15_GAME_RESSOURCE/MrBirs_photoData.tres" id="1_ls1ba"]
 [ext_resource type="Resource" uid="uid://d2ivg06mjrg4v" path="res://15_GAME_RESSOURCE/00_Zone_data/Vortex_zone.tres" id="3_fkmtq"]
@@ -17,8 +17,6 @@
 [ext_resource type="PackedScene" uid="uid://bbp1ccoa6te1g" path="res://11_SPEAKER/05_speaker_02.tscn" id="14_yb42j"]
 [ext_resource type="PackedScene" uid="uid://bwmu5iwushsl5" path="res://13_TOOLS_UI/07_screen_tools.tscn" id="15_nfmr8"]
 [ext_resource type="PackedScene" uid="uid://bemddl0bqqfwo" path="res://100_GAME_MENU/08_game_menu.tscn" id="16_5y5wa"]
-[ext_resource type="Shader" uid="uid://v7wu4reqmbs2" path="res://05_SHADER/Post_process/Noise_vs_effect.tres" id="18_iwo0x"]
-[ext_resource type="Texture2D" uid="uid://d31xi5f7tan5w" path="res://05_SHADER/Full_screen/Dither_pattners/Blue_noise/HDR_LA_7.png" id="19_p1j2b"]
 
 [sub_resource type="GDScript" id="GDScript_c11gh"]
 script/source = "extends Node
@@ -76,12 +74,6 @@ func _ready():
 		Engine.set_max_fps(fps_target)
 	
 "
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_k55uj"]
-shader = ExtResource("18_iwo0x")
-shader_parameter/FloatParameter = 3.0
-shader_parameter/Noise_opacity = 0.9
-shader_parameter/Noise_texture = ExtResource("19_p1j2b")
 
 [node name="Main" type="Node"]
 metadata/_edit_horizontal_guides_ = [-31.0]
@@ -148,14 +140,5 @@ metadata/_edit_horizontal_guides_ = [542.0]
 [node name="07_SCREEN_TOOLS_UI" parent="." instance=ExtResource("15_nfmr8")]
 
 [node name="08_GAME_MENU" parent="." instance=ExtResource("16_5y5wa")]
-
-[node name="Noise_shader" type="ColorRect" parent="."]
-visible = false
-material = SubResource("ShaderMaterial_k55uj")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
 
 [connection signal="timeout" from="01_GAME_MANAGERS/GAME_STATES/Prologue_demo/Timer" to="01_GAME_MANAGERS/GAME_STATES/Prologue_demo" method="_on_timer_timeout"]

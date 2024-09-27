@@ -13,17 +13,19 @@ script/source = "extends Node
 @onready var clock_root = $\"../SubViewport/clock_3d_prefab/clock_3d2/root_equille\"
 @onready var fade_dither = $\"../Fade_dither\"
 
-
+var t
 func _ready():
-	_global_datas.sending_bird.connect(_start_clock)
+	_global_datas._end_ini_subscene.connect(_start_clock)
+	_global_datas._backFrom_subscene.connect(_stop)
 	
+	
+	_stop()
 	
 func _start_clock():
-	_global_datas.bird_is_waiting = true
-	_global_datas.Player_InMenu = true
+
 	fade_dither.fade_in()
-	var time_need = 3.0
-	var t
+	var time_need = 60.0
+	
 	if t:
 		t.kill()
 		
@@ -32,12 +34,16 @@ func _start_clock():
 	t.connect(\"finished\",done)
 
 func done():
-	_global_datas.bird_is_waiting = false
 	fade_dither.fade_out()
-	#_global_datas.Npc_Dialogue = bird_dialogue
-	#_global_datas._open_dialogue.emit()
-	_global_datas._back_letter.emit()	
-			
+	_global_datas._backFrom_subscene.emit()
+	_global_datas._go_Mainscene.emit()
+	
+	
+func _stop():
+	if t:
+		t.kill()
+	fade_dither.fade_out()	
+				
 func _value(value : float):
 	
 	clock_root.rotation_degrees.y = -value
@@ -169,7 +175,7 @@ nodes/fragment/connections = PackedInt32Array(37, 0, 35, 1, 72, 0, 37, 1, 39, 0,
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_08e44"]
 shader = SubResource("VisualShader_5dayk")
-shader_parameter/Opacity = 0.0
+shader_parameter/Opacity = 1.0
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_xhme6"]
 viewport_path = NodePath("SubViewport")

@@ -11,14 +11,13 @@
 [ext_resource type="Texture2D" uid="uid://4bq2l5jjm4r2" path="res://00_SYSTEMS/KeyOrPad/Pad_inputs.png" id="5_jufic"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/BACK_LETTERS.gd" id="7_uck14"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/Main_scene_UI.gd" id="14_isnv0"]
+[ext_resource type="Shader" uid="uid://v7wu4reqmbs2" path="res://05_SHADER/Post_process/Noise_vs_effect.tres" id="15_jcxt0"]
 [ext_resource type="PackedScene" uid="uid://cbgkay5155yn3" path="res://13_TOOLS_UI/Top_bar/Money_bar.tscn" id="15_jqiih"]
 [ext_resource type="Shader" uid="uid://owtikj2jm5h5" path="res://13_TOOLS_UI/PhotoFlash_effect.tres" id="15_kco3d"]
+[ext_resource type="Texture2D" uid="uid://d31xi5f7tan5w" path="res://05_SHADER/Full_screen/Dither_pattners/Blue_noise/HDR_LA_7.png" id="16_8a3k4"]
 [ext_resource type="PackedScene" uid="uid://cdmxq026pdbp7" path="res://09_SHOP/Shop_Ui_scene.tscn" id="16_bicox"]
 [ext_resource type="PackedScene" uid="uid://b4ju0ntcydix8" path="res://13_TOOLS_UI/2D_MAP/2d_map.tscn" id="17_c8quy"]
-[ext_resource type="PackedScene" uid="uid://dykmxu1syt7" path="res://13_TOOLS_UI/Depth_bar/subscene_depth_bar.tscn" id="18_fdcig"]
-[ext_resource type="PackedScene" uid="uid://cqmsm5j5c5ur2" path="res://13_TOOLS_UI/Quest_Selection/Letters/quest_button.tscn" id="28_lw8ft"]
 [ext_resource type="PackedScene" uid="uid://clc3sbquuu1us" path="res://13_TOOLS_UI/Clock_montre/Clock_ui_prefab.tscn" id="31_4ftpd"]
-[ext_resource type="PackedScene" uid="uid://bg5086w5cu7aw" path="res://13_TOOLS_UI/Zone_info/zone_info.tscn" id="33_x70y2"]
 
 [sub_resource type="GDScript" id="GDScript_ebu32"]
 script/source = "extends Node
@@ -159,6 +158,12 @@ func set_shader_value_key(value):
 	material_key.set_shader_parameter(\"Opacity\",value)
 "
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b1qbk"]
+shader = ExtResource("15_jcxt0")
+shader_parameter/FloatParameter = 3.0
+shader_parameter/Noise_opacity = 0.95
+shader_parameter/Noise_texture = ExtResource("16_8a3k4")
+
 [node name="07_SCREEN_UI" type="Node"]
 
 [node name="INSTANCE_PICTURES" type="Node" parent="."]
@@ -218,15 +223,11 @@ autowrap_mode = 2
 
 [node name="Inputs_used" type="Control" parent="."]
 layout_mode = 3
-anchors_preset = 3
-anchor_left = 1.0
+anchors_preset = 2
 anchor_top = 1.0
-anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -128.0
-offset_top = -111.0
-offset_bottom = 17.0
-grow_horizontal = 0
+offset_top = -128.0
+offset_right = 128.0
 grow_vertical = 0
 mouse_filter = 2
 metadata/_edit_use_anchors_ = true
@@ -262,18 +263,6 @@ texture = ExtResource("4_c4v0f")
 expand_mode = 1
 stretch_mode = 4
 
-[node name="Shop" parent="." instance=ExtResource("16_bicox")]
-
-[node name="Subscene_oxy_bar" parent="." instance=ExtResource("18_fdcig")]
-anchors_preset = 0
-anchor_top = 0.0
-anchor_bottom = 0.0
-offset_left = 1171.0
-offset_top = 617.0
-offset_right = 1171.0
-offset_bottom = 617.0
-grow_vertical = 1
-
 [node name="Main_Scene_U" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 15
@@ -291,16 +280,26 @@ layout_mode = 1
 [node name="2D_Map" parent="." instance=ExtResource("17_c8quy")]
 visible = false
 
-[node name="Quest_letter" parent="." instance=ExtResource("28_lw8ft")]
-visible = false
+[node name="Noise_shader" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_b1qbk")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Clock" parent="." instance=ExtResource("31_4ftpd")]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_top = 156.0
-offset_bottom = 156.0
+offset_left = 550.0
+offset_top = 640.0
+offset_right = 550.0
+offset_bottom = 640.0
 grow_horizontal = 2
+scale = Vector2(0.556778, 0.556778)
+
+[node name="Shop" parent="." instance=ExtResource("16_bicox")]
 
 [node name="Front_element" type="Control" parent="."]
 layout_mode = 3
@@ -311,7 +310,5 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 metadata/_edit_use_anchors_ = true
-
-[node name="Zone_info" parent="." instance=ExtResource("33_x70y2")]
 
 [connection signal="timeout" from="Description/Update_description/Timer" to="Description/Update_description" method="_on_timer_timeout"]
