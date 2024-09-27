@@ -1,11 +1,10 @@
-[gd_scene load_steps=60 format=3 uid="uid://nigmie4bbn6"]
+[gd_scene load_steps=63 format=3 uid="uid://nigmie4bbn6"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/00_Scripts/Subscene_loader.gd" id="1_7uoo0"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="2_3srhu"]
 [ext_resource type="PackedScene" uid="uid://g7u8o55jrnyy" path="res://08_SUBSCENES/Player_subscene/Player_sub.tscn" id="2_ri8q1"]
 [ext_resource type="Script" path="res://03_CAMERA/CameraFollow_subscene.gd" id="2_tc6o2"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Tools/Switch_tools_input.gd" id="3_2mtx3"]
-[ext_resource type="Material" uid="uid://dbu2q4lhlk8w5" path="res://05_SHADER/Full_screen/Subscene_screen/Main_subscene_dither.tres" id="3_w42nb"]
 [ext_resource type="Material" uid="uid://b7ffjkgpmtkc6" path="res://05_SHADER/Full_screen/Subscene_screen/Scanner_x_subscene_dither.tres" id="4_bkck3"]
 [ext_resource type="Resource" uid="uid://d11cl4f25dgwg" path="res://08_SUBSCENES/Tools/Main_tool/Flash_light.tres" id="5_bb2gy"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Tools/Tool_selector.gd" id="5_xafm0"]
@@ -21,6 +20,7 @@
 [ext_resource type="Script" path="res://08_SUBSCENES/Clock_sonar_VFX.gd" id="14_xtaeu"]
 [ext_resource type="Material" uid="uid://b1iqs8p4it3ni" path="res://05_SHADER/Full_screen/Subscene_screen/Scanner_subscene_dither.tres" id="15_6os4y"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/ELEMENT_COLLECT.gd" id="16_4hiyp"]
+[ext_resource type="Shader" uid="uid://b8diek1y2u36x" path="res://05_SHADER/Full_screen/Subscene_screen/subscene_MainRender_sh.tres" id="19_hf1w5"]
 [ext_resource type="Script" path="res://03_CAMERA/Active_scene_viewports.gd" id="21_jai7k"]
 [ext_resource type="Material" uid="uid://bxf2r8qu2qvay" path="res://05_SHADER/Subscene_materials/Subscene_basic_rock.tres" id="23_5ld2y"]
 [ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER/Subscene_materials/Subscene_shine_elements_mat.tres" id="27_nfh36"]
@@ -273,6 +273,19 @@ shader = SubResource("VisualShader_w0d7f")
 material = SubResource("ShaderMaterial_eihye")
 size = Vector2(20, 20)
 
+[sub_resource type="ViewportTexture" id="ViewportTexture_g8i05"]
+viewport_path = NodePath("Viewport/Light_pass_SubViewport")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_1gop8"]
+viewport_path = NodePath("Viewport/Main_SubViewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n6ubc"]
+resource_local_to_scene = true
+shader = ExtResource("19_hf1w5")
+shader_parameter/Opacity = 0.0
+shader_parameter/Main_base = SubResource("ViewportTexture_1gop8")
+shader_parameter/Light_pass = SubResource("ViewportTexture_g8i05")
+
 [sub_resource type="ViewportTexture" id="ViewportTexture_gasoh"]
 viewport_path = NodePath("Viewport/Main_SubViewport")
 
@@ -482,7 +495,7 @@ metadata/_edit_horizontal_guides_ = [540.0]
 
 [node name="set_Resolution" type="Node" parent="." node_paths=PackedStringArray("viewports")]
 script = ExtResource("2_3srhu")
-viewports = [NodePath("../Viewport/Main_SubViewport"), NodePath("../Viewport/Scanner_x_SubViewport")]
+viewports = [NodePath("../Viewport/Main_SubViewport"), NodePath("../Viewport/Scanner_x_SubViewport"), NodePath("../Viewport/Light_pass_SubViewport")]
 
 [node name="PhotoData_list_update" type="Node" parent="."]
 script = ExtResource("10_w7dre")
@@ -535,11 +548,11 @@ one_shot = true
 
 [node name="Active_scene_viewports" type="Node" parent="Viewport" node_paths=PackedStringArray("viewports")]
 script = ExtResource("21_jai7k")
-viewports = [NodePath("../Main_SubViewport"), NodePath("../Scanner_x_SubViewport")]
+viewports = [NodePath("../Main_SubViewport"), NodePath("../Scanner_x_SubViewport"), NodePath("../Light_pass_SubViewport")]
 
 [node name="All_cam_follow" type="Node" parent="Viewport" node_paths=PackedStringArray("_all_cam_array")]
 script = ExtResource("2_tc6o2")
-_all_cam_array = [NodePath("../Main_SubViewport/CAM_STATE_MAIN"), NodePath("../Scanner_x_SubViewport/CAM_STATE_BOAT")]
+_all_cam_array = [NodePath("../Main_SubViewport/CAM_STATE_MAIN"), NodePath("../Scanner_x_SubViewport/CAM_STATE_BOAT"), NodePath("../Light_pass_SubViewport/CAM_STATE_LIGHT")]
 basePos = Vector3(0, -0.35, 0)
 dialogue_Pos = Vector3(-1.25, 0.9, 0)
 
@@ -560,6 +573,14 @@ layers = 4
 mesh = SubResource("PlaneMesh_8q6wo")
 skeleton = NodePath("../../../..")
 
+[node name="Light_pass_SubViewport" type="SubViewport" parent="Viewport"]
+handle_input_locally = false
+size = Vector2i(1920, 1080)
+
+[node name="CAM_STATE_LIGHT" type="Camera3D" parent="Viewport/Light_pass_SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 1.8)
+cull_mask = 131072
+
 [node name="Scanner_x_SubViewport" type="SubViewport" parent="Viewport"]
 process_thread_group = 1
 process_thread_group_order = 2
@@ -573,8 +594,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 1.8)
 cull_mask = 4096
 
 [node name="Main" type="TextureRect" parent="Viewport"]
-visible = false
-material = ExtResource("3_w42nb")
+material = SubResource("ShaderMaterial_n6ubc")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
