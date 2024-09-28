@@ -1,4 +1,4 @@
-[gd_scene load_steps=63 format=3 uid="uid://nigmie4bbn6"]
+[gd_scene load_steps=70 format=3 uid="uid://nigmie4bbn6"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/00_Scripts/Subscene_loader.gd" id="1_7uoo0"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="2_3srhu"]
@@ -22,7 +22,8 @@
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/ELEMENT_COLLECT.gd" id="16_4hiyp"]
 [ext_resource type="Shader" uid="uid://b8diek1y2u36x" path="res://05_SHADER/Full_screen/Subscene_screen/subscene_MainRender_sh.tres" id="19_hf1w5"]
 [ext_resource type="Script" path="res://03_CAMERA/Active_scene_viewports.gd" id="21_jai7k"]
-[ext_resource type="Material" uid="uid://bxf2r8qu2qvay" path="res://05_SHADER/Subscene_materials/Subscene_basic_rock.tres" id="23_5ld2y"]
+[ext_resource type="Shader" uid="uid://cu2uipuy138c6" path="res://05_SHADER/All_Materials/Main_sceneTest_dither_sh.tres" id="23_bhsjm"]
+[ext_resource type="Material" uid="uid://yjoyk6fvrm6q" path="res://10_BOARD/00_BOOK/00_SHADER/No_light_surface_mat.tres" id="24_4afhw"]
 [ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER/Subscene_materials/Subscene_shine_elements_mat.tres" id="27_nfh36"]
 
 [sub_resource type="GDScript" id="GDScript_btuws"]
@@ -274,7 +275,10 @@ material = SubResource("ShaderMaterial_eihye")
 size = Vector2(20, 20)
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_g8i05"]
-viewport_path = NodePath("Viewport/Light_pass_SubViewport")
+viewport_path = NodePath("Viewport/Light_Blue_pass_SubViewport")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_mg0is"]
+viewport_path = NodePath("Viewport/Light_Yellow_pass_SubViewport")
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_1gop8"]
 viewport_path = NodePath("Viewport/Main_SubViewport")
@@ -285,6 +289,7 @@ shader = ExtResource("19_hf1w5")
 shader_parameter/Opacity = 0.0
 shader_parameter/Main_base = SubResource("ViewportTexture_1gop8")
 shader_parameter/Light_pass = SubResource("ViewportTexture_g8i05")
+shader_parameter/Light_pass_yellow = SubResource("ViewportTexture_mg0is")
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_gasoh"]
 viewport_path = NodePath("Viewport/Main_SubViewport")
@@ -474,6 +479,21 @@ shader = SubResource("VisualShader_iok4r")
 material = SubResource("ShaderMaterial_5os4v")
 size = Vector2(10, 10)
 
+[sub_resource type="VisualShader" id="VisualShader_swao4"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded, ambient_light_disabled;
+
+
+
+"
+flags/unshaded = true
+flags/ambient_light_disabled = true
+nodes/fragment/0/position = Vector2(440, 140)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_np3pj"]
+render_priority = 0
+shader = SubResource("VisualShader_swao4")
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_qfjre"]
 size = Vector3(2.03379, 0.029557, 10.4284)
 
@@ -483,10 +503,30 @@ size = Vector3(2.03379, 0.029557, 10.4284)
 radial_segments = 8
 rings = 8
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_oq2ds"]
+resource_local_to_scene = true
+render_priority = 1
+shader = ExtResource("23_bhsjm")
+shader_parameter/ColorParameter = Color(0.294118, 0.556863, 0.54902, 1)
+shader_parameter/Color = Color(0.0392157, 0.196078, 0.247059, 1)
+shader_parameter/Dither_strenght = 0.555
+
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_igmwt"]
 data = PackedVector3Array(0, 0.5, 0, 0, 0.5, 0, 0, 0.4698, 0.171, 0, 0.5, 0, 0.1209, 0.4698, 0.1209, 0, 0.4698, 0.171, 0, 0.5, 0, 0, 0.5, 0, 0.1209, 0.4698, 0.1209, 0, 0.5, 0, 0.171, 0.4698, 0, 0.1209, 0.4698, 0.1209, 0, 0.5, 0, 0, 0.5, 0, 0.171, 0.4698, 0, 0, 0.5, 0, 0.1209, 0.4698, -0.1209, 0.171, 0.4698, 0, 0, 0.5, 0, 0, 0.5, 0, 0.1209, 0.4698, -0.1209, 0, 0.5, 0, 0, 0.4698, -0.171, 0.1209, 0.4698, -0.1209, 0, 0.5, 0, 0, 0.5, 0, 0, 0.4698, -0.171, 0, 0.5, 0, -0.1209, 0.4698, -0.1209, 0, 0.4698, -0.171, 0, 0.5, 0, 0, 0.5, 0, -0.1209, 0.4698, -0.1209, 0, 0.5, 0, -0.171, 0.4698, 0, -0.1209, 0.4698, -0.1209, 0, 0.5, 0, 0, 0.5, 0, -0.171, 0.4698, 0, 0, 0.5, 0, -0.1209, 0.4698, 0.1209, -0.171, 0.4698, 0, 0, 0.5, 0, 0, 0.5, 0, -0.1209, 0.4698, 0.1209, 0, 0.5, 0, 0, 0.4698, 0.171, -0.1209, 0.4698, 0.1209, 0, 0.4698, 0.171, 0.1209, 0.4698, 0.1209, 0, 0.383, 0.3214, 0.1209, 0.4698, 0.1209, 0.2273, 0.383, 0.2273, 0, 0.383, 0.3214, 0.1209, 0.4698, 0.1209, 0.171, 0.4698, 0, 0.2273, 0.383, 0.2273, 0.171, 0.4698, 0, 0.3214, 0.383, 0, 0.2273, 0.383, 0.2273, 0.171, 0.4698, 0, 0.1209, 0.4698, -0.1209, 0.3214, 0.383, 0, 0.1209, 0.4698, -0.1209, 0.2273, 0.383, -0.2273, 0.3214, 0.383, 0, 0.1209, 0.4698, -0.1209, 0, 0.4698, -0.171, 0.2273, 0.383, -0.2273, 0, 0.4698, -0.171, 0, 0.383, -0.3214, 0.2273, 0.383, -0.2273, 0, 0.4698, -0.171, -0.1209, 0.4698, -0.1209, 0, 0.383, -0.3214, -0.1209, 0.4698, -0.1209, -0.2273, 0.383, -0.2273, 0, 0.383, -0.3214, -0.1209, 0.4698, -0.1209, -0.171, 0.4698, 0, -0.2273, 0.383, -0.2273, -0.171, 0.4698, 0, -0.3214, 0.383, 0, -0.2273, 0.383, -0.2273, -0.171, 0.4698, 0, -0.1209, 0.4698, 0.1209, -0.3214, 0.383, 0, -0.1209, 0.4698, 0.1209, -0.2273, 0.383, 0.2273, -0.3214, 0.383, 0, -0.1209, 0.4698, 0.1209, 0, 0.4698, 0.171, -0.2273, 0.383, 0.2273, 0, 0.4698, 0.171, 0, 0.383, 0.3214, -0.2273, 0.383, 0.2273, 0, 0.383, 0.3214, 0.2273, 0.383, 0.2273, 0, 0.25, 0.433, 0.2273, 0.383, 0.2273, 0.3062, 0.25, 0.3062, 0, 0.25, 0.433, 0.2273, 0.383, 0.2273, 0.3214, 0.383, 0, 0.3062, 0.25, 0.3062, 0.3214, 0.383, 0, 0.433, 0.25, 0, 0.3062, 0.25, 0.3062, 0.3214, 0.383, 0, 0.2273, 0.383, -0.2273, 0.433, 0.25, 0, 0.2273, 0.383, -0.2273, 0.3062, 0.25, -0.3062, 0.433, 0.25, 0, 0.2273, 0.383, -0.2273, 0, 0.383, -0.3214, 0.3062, 0.25, -0.3062, 0, 0.383, -0.3214, 0, 0.25, -0.433, 0.3062, 0.25, -0.3062, 0, 0.383, -0.3214, -0.2273, 0.383, -0.2273, 0, 0.25, -0.433, -0.2273, 0.383, -0.2273, -0.3062, 0.25, -0.3062, 0, 0.25, -0.433, -0.2273, 0.383, -0.2273, -0.3214, 0.383, 0, -0.3062, 0.25, -0.3062, -0.3214, 0.383, 0, -0.433, 0.25, 0, -0.3062, 0.25, -0.3062, -0.3214, 0.383, 0, -0.2273, 0.383, 0.2273, -0.433, 0.25, 0, -0.2273, 0.383, 0.2273, -0.3062, 0.25, 0.3062, -0.433, 0.25, 0, -0.2273, 0.383, 0.2273, 0, 0.383, 0.3214, -0.3062, 0.25, 0.3062, 0, 0.383, 0.3214, 0, 0.25, 0.433, -0.3062, 0.25, 0.3062, 0, 0.25, 0.433, 0.3062, 0.25, 0.3062, 0, 0.0868, 0.4924, 0.3062, 0.25, 0.3062, 0.3482, 0.0868, 0.3482, 0, 0.0868, 0.4924, 0.3062, 0.25, 0.3062, 0.433, 0.25, 0, 0.3482, 0.0868, 0.3482, 0.433, 0.25, 0, 0.4924, 0.0868, 0, 0.3482, 0.0868, 0.3482, 0.433, 0.25, 0, 0.3062, 0.25, -0.3062, 0.4924, 0.0868, 0, 0.3062, 0.25, -0.3062, 0.3482, 0.0868, -0.3482, 0.4924, 0.0868, 0, 0.3062, 0.25, -0.3062, 0, 0.25, -0.433, 0.3482, 0.0868, -0.3482, 0, 0.25, -0.433, 0, 0.0868, -0.4924, 0.3482, 0.0868, -0.3482, 0, 0.25, -0.433, -0.3062, 0.25, -0.3062, 0, 0.0868, -0.4924, -0.3062, 0.25, -0.3062, -0.3482, 0.0868, -0.3482, 0, 0.0868, -0.4924, -0.3062, 0.25, -0.3062, -0.433, 0.25, 0, -0.3482, 0.0868, -0.3482, -0.433, 0.25, 0, -0.4924, 0.0868, 0, -0.3482, 0.0868, -0.3482, -0.433, 0.25, 0, -0.3062, 0.25, 0.3062, -0.4924, 0.0868, 0, -0.3062, 0.25, 0.3062, -0.3482, 0.0868, 0.3482, -0.4924, 0.0868, 0, -0.3062, 0.25, 0.3062, 0, 0.25, 0.433, -0.3482, 0.0868, 0.3482, 0, 0.25, 0.433, 0, 0.0868, 0.4924, -0.3482, 0.0868, 0.3482, 0, 0.0868, 0.4924, 0.3482, 0.0868, 0.3482, 0, -0.0868, 0.4924, 0.3482, 0.0868, 0.3482, 0.3482, -0.0868, 0.3482, 0, -0.0868, 0.4924, 0.3482, 0.0868, 0.3482, 0.4924, 0.0868, 0, 0.3482, -0.0868, 0.3482, 0.4924, 0.0868, 0, 0.4924, -0.0868, 0, 0.3482, -0.0868, 0.3482, 0.4924, 0.0868, 0, 0.3482, 0.0868, -0.3482, 0.4924, -0.0868, 0, 0.3482, 0.0868, -0.3482, 0.3482, -0.0868, -0.3482, 0.4924, -0.0868, 0, 0.3482, 0.0868, -0.3482, 0, 0.0868, -0.4924, 0.3482, -0.0868, -0.3482, 0, 0.0868, -0.4924, 0, -0.0868, -0.4924, 0.3482, -0.0868, -0.3482, 0, 0.0868, -0.4924, -0.3482, 0.0868, -0.3482, 0, -0.0868, -0.4924, -0.3482, 0.0868, -0.3482, -0.3482, -0.0868, -0.3482, 0, -0.0868, -0.4924, -0.3482, 0.0868, -0.3482, -0.4924, 0.0868, 0, -0.3482, -0.0868, -0.3482, -0.4924, 0.0868, 0, -0.4924, -0.0868, 0, -0.3482, -0.0868, -0.3482, -0.4924, 0.0868, 0, -0.3482, 0.0868, 0.3482, -0.4924, -0.0868, 0, -0.3482, 0.0868, 0.3482, -0.3482, -0.0868, 0.3482, -0.4924, -0.0868, 0, -0.3482, 0.0868, 0.3482, 0, 0.0868, 0.4924, -0.3482, -0.0868, 0.3482, 0, 0.0868, 0.4924, 0, -0.0868, 0.4924, -0.3482, -0.0868, 0.3482, 0, -0.0868, 0.4924, 0.3482, -0.0868, 0.3482, 0, -0.25, 0.433, 0.3482, -0.0868, 0.3482, 0.3062, -0.25, 0.3062, 0, -0.25, 0.433, 0.3482, -0.0868, 0.3482, 0.4924, -0.0868, 0, 0.3062, -0.25, 0.3062, 0.4924, -0.0868, 0, 0.433, -0.25, 0, 0.3062, -0.25, 0.3062, 0.4924, -0.0868, 0, 0.3482, -0.0868, -0.3482, 0.433, -0.25, 0, 0.3482, -0.0868, -0.3482, 0.3062, -0.25, -0.3062, 0.433, -0.25, 0, 0.3482, -0.0868, -0.3482, 0, -0.0868, -0.4924, 0.3062, -0.25, -0.3062, 0, -0.0868, -0.4924, 0, -0.25, -0.433, 0.3062, -0.25, -0.3062, 0, -0.0868, -0.4924, -0.3482, -0.0868, -0.3482, 0, -0.25, -0.433, -0.3482, -0.0868, -0.3482, -0.3062, -0.25, -0.3062, 0, -0.25, -0.433, -0.3482, -0.0868, -0.3482, -0.4924, -0.0868, 0, -0.3062, -0.25, -0.3062, -0.4924, -0.0868, 0, -0.433, -0.25, 0, -0.3062, -0.25, -0.3062, -0.4924, -0.0868, 0, -0.3482, -0.0868, 0.3482, -0.433, -0.25, 0, -0.3482, -0.0868, 0.3482, -0.3062, -0.25, 0.3062, -0.433, -0.25, 0, -0.3482, -0.0868, 0.3482, 0, -0.0868, 0.4924, -0.3062, -0.25, 0.3062, 0, -0.0868, 0.4924, 0, -0.25, 0.433, -0.3062, -0.25, 0.3062, 0, -0.25, 0.433, 0.3062, -0.25, 0.3062, 0, -0.383, 0.3214, 0.3062, -0.25, 0.3062, 0.2273, -0.383, 0.2273, 0, -0.383, 0.3214, 0.3062, -0.25, 0.3062, 0.433, -0.25, 0, 0.2273, -0.383, 0.2273, 0.433, -0.25, 0, 0.3214, -0.383, 0, 0.2273, -0.383, 0.2273, 0.433, -0.25, 0, 0.3062, -0.25, -0.3062, 0.3214, -0.383, 0, 0.3062, -0.25, -0.3062, 0.2273, -0.383, -0.2273, 0.3214, -0.383, 0, 0.3062, -0.25, -0.3062, 0, -0.25, -0.433, 0.2273, -0.383, -0.2273, 0, -0.25, -0.433, 0, -0.383, -0.3214, 0.2273, -0.383, -0.2273, 0, -0.25, -0.433, -0.3062, -0.25, -0.3062, 0, -0.383, -0.3214, -0.3062, -0.25, -0.3062, -0.2273, -0.383, -0.2273, 0, -0.383, -0.3214, -0.3062, -0.25, -0.3062, -0.433, -0.25, 0, -0.2273, -0.383, -0.2273, -0.433, -0.25, 0, -0.3214, -0.383, 0, -0.2273, -0.383, -0.2273, -0.433, -0.25, 0, -0.3062, -0.25, 0.3062, -0.3214, -0.383, 0, -0.3062, -0.25, 0.3062, -0.2273, -0.383, 0.2273, -0.3214, -0.383, 0, -0.3062, -0.25, 0.3062, 0, -0.25, 0.433, -0.2273, -0.383, 0.2273, 0, -0.25, 0.433, 0, -0.383, 0.3214, -0.2273, -0.383, 0.2273, 0, -0.383, 0.3214, 0.2273, -0.383, 0.2273, 0, -0.4698, 0.171, 0.2273, -0.383, 0.2273, 0.1209, -0.4698, 0.1209, 0, -0.4698, 0.171, 0.2273, -0.383, 0.2273, 0.3214, -0.383, 0, 0.1209, -0.4698, 0.1209, 0.3214, -0.383, 0, 0.171, -0.4698, 0, 0.1209, -0.4698, 0.1209, 0.3214, -0.383, 0, 0.2273, -0.383, -0.2273, 0.171, -0.4698, 0, 0.2273, -0.383, -0.2273, 0.1209, -0.4698, -0.1209, 0.171, -0.4698, 0, 0.2273, -0.383, -0.2273, 0, -0.383, -0.3214, 0.1209, -0.4698, -0.1209, 0, -0.383, -0.3214, 0, -0.4698, -0.171, 0.1209, -0.4698, -0.1209, 0, -0.383, -0.3214, -0.2273, -0.383, -0.2273, 0, -0.4698, -0.171, -0.2273, -0.383, -0.2273, -0.1209, -0.4698, -0.1209, 0, -0.4698, -0.171, -0.2273, -0.383, -0.2273, -0.3214, -0.383, 0, -0.1209, -0.4698, -0.1209, -0.3214, -0.383, 0, -0.171, -0.4698, 0, -0.1209, -0.4698, -0.1209, -0.3214, -0.383, 0, -0.2273, -0.383, 0.2273, -0.171, -0.4698, 0, -0.2273, -0.383, 0.2273, -0.1209, -0.4698, 0.1209, -0.171, -0.4698, 0, -0.2273, -0.383, 0.2273, 0, -0.383, 0.3214, -0.1209, -0.4698, 0.1209, 0, -0.383, 0.3214, 0, -0.4698, 0.171, -0.1209, -0.4698, 0.1209, 0, -0.4698, 0.171, 0.1209, -0.4698, 0.1209, 0, -0.5, 0, 0.1209, -0.4698, 0.1209, 0, -0.5, 0, 0, -0.5, 0, 0.1209, -0.4698, 0.1209, 0.171, -0.4698, 0, 0, -0.5, 0, 0.171, -0.4698, 0, 0, -0.5, 0, 0, -0.5, 0, 0.171, -0.4698, 0, 0.1209, -0.4698, -0.1209, 0, -0.5, 0, 0.1209, -0.4698, -0.1209, 0, -0.5, 0, 0, -0.5, 0, 0.1209, -0.4698, -0.1209, 0, -0.4698, -0.171, 0, -0.5, 0, 0, -0.4698, -0.171, 0, -0.5, 0, 0, -0.5, 0, 0, -0.4698, -0.171, -0.1209, -0.4698, -0.1209, 0, -0.5, 0, -0.1209, -0.4698, -0.1209, 0, -0.5, 0, 0, -0.5, 0, -0.1209, -0.4698, -0.1209, -0.171, -0.4698, 0, 0, -0.5, 0, -0.171, -0.4698, 0, 0, -0.5, 0, 0, -0.5, 0, -0.171, -0.4698, 0, -0.1209, -0.4698, 0.1209, 0, -0.5, 0, -0.1209, -0.4698, 0.1209, 0, -0.5, 0, 0, -0.5, 0, -0.1209, -0.4698, 0.1209, 0, -0.4698, 0.171, 0, -0.5, 0, 0, -0.4698, 0.171, 0, -0.5, 0, 0, -0.5, 0)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_an4fj"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vcl6w"]
+render_priority = 0
+shader = SubResource("VisualShader_swao4")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_84qlu"]
+resource_local_to_scene = true
+render_priority = 1
+shader = ExtResource("23_bhsjm")
+shader_parameter/ColorParameter = Color(0.294118, 0.556863, 0.54902, 1)
+shader_parameter/Color = Color(0.0392157, 0.196078, 0.247059, 1)
+shader_parameter/Dither_strenght = 0.555
 
 [node name="03_SUBSCENES" type="Node"]
 script = ExtResource("1_7uoo0")
@@ -495,7 +535,7 @@ metadata/_edit_horizontal_guides_ = [540.0]
 
 [node name="set_Resolution" type="Node" parent="." node_paths=PackedStringArray("viewports")]
 script = ExtResource("2_3srhu")
-viewports = [NodePath("../Viewport/Main_SubViewport"), NodePath("../Viewport/Scanner_x_SubViewport"), NodePath("../Viewport/Light_pass_SubViewport")]
+viewports = [NodePath("../Viewport/Main_SubViewport"), NodePath("../Viewport/Scanner_x_SubViewport"), NodePath("../Viewport/Light_Blue_pass_SubViewport"), NodePath("../Viewport/Light_Yellow_pass_SubViewport")]
 
 [node name="PhotoData_list_update" type="Node" parent="."]
 script = ExtResource("10_w7dre")
@@ -548,11 +588,11 @@ one_shot = true
 
 [node name="Active_scene_viewports" type="Node" parent="Viewport" node_paths=PackedStringArray("viewports")]
 script = ExtResource("21_jai7k")
-viewports = [NodePath("../Main_SubViewport"), NodePath("../Scanner_x_SubViewport"), NodePath("../Light_pass_SubViewport")]
+viewports = [NodePath("../Main_SubViewport"), NodePath("../Scanner_x_SubViewport"), NodePath("../Light_Blue_pass_SubViewport"), NodePath("../Light_Yellow_pass_SubViewport")]
 
 [node name="All_cam_follow" type="Node" parent="Viewport" node_paths=PackedStringArray("_all_cam_array")]
 script = ExtResource("2_tc6o2")
-_all_cam_array = [NodePath("../Main_SubViewport/CAM_STATE_MAIN"), NodePath("../Scanner_x_SubViewport/CAM_STATE_BOAT"), NodePath("../Light_pass_SubViewport/CAM_STATE_LIGHT")]
+_all_cam_array = [NodePath("../Main_SubViewport/CAM_STATE_MAIN"), NodePath("../Scanner_x_SubViewport/CAM_STATE_BOAT"), NodePath("../Light_Blue_pass_SubViewport/CAM_STATE_LIGHT_BLUE"), NodePath("../Light_Yellow_pass_SubViewport/CAM_STATE_LIGHT_YELLOW")]
 basePos = Vector3(0, -0.35, 0)
 dialogue_Pos = Vector3(-1.25, 0.9, 0)
 
@@ -573,13 +613,22 @@ layers = 4
 mesh = SubResource("PlaneMesh_8q6wo")
 skeleton = NodePath("../../../..")
 
-[node name="Light_pass_SubViewport" type="SubViewport" parent="Viewport"]
+[node name="Light_Blue_pass_SubViewport" type="SubViewport" parent="Viewport"]
 handle_input_locally = false
 size = Vector2i(1920, 1080)
 
-[node name="CAM_STATE_LIGHT" type="Camera3D" parent="Viewport/Light_pass_SubViewport"]
+[node name="CAM_STATE_LIGHT_BLUE" type="Camera3D" parent="Viewport/Light_Blue_pass_SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 1.8)
 cull_mask = 131072
+
+[node name="Light_Yellow_pass_SubViewport" type="SubViewport" parent="Viewport"]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(1920, 1080)
+
+[node name="CAM_STATE_LIGHT_YELLOW" type="Camera3D" parent="Viewport/Light_Yellow_pass_SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 1.8)
+cull_mask = 16384
 
 [node name="Scanner_x_SubViewport" type="SubViewport" parent="Viewport"]
 process_thread_group = 1
@@ -636,6 +685,12 @@ transform = Transform3D(11.2155, 0, 0, 0, -7.74673, 4.39024e-08, 0, -6.77241e-07
 layers = 4
 mesh = SubResource("PlaneMesh_llvpy")
 
+[node name="WATER_SURFACE2" type="MeshInstance3D" parent="."]
+transform = Transform3D(11.2155, 0, 0, 0, -7.74673, 4.39024e-08, 0, -6.77241e-07, -0.502185, 0, 0.964028, -0.773959)
+layers = 131072
+mesh = SubResource("PlaneMesh_llvpy")
+surface_material_override/0 = SubResource("ShaderMaterial_np3pj")
+
 [node name="Surface_trigger" type="Area3D" parent="."]
 transform = Transform3D(11.2155, 0, 0, 0, -7.74673, 4.39024e-08, 0, -6.77241e-07, -0.502185, 0, 1.0465, -0.242)
 collision_layer = 4
@@ -660,7 +715,7 @@ shape = SubResource("SphereShape3D_6ormk")
 transform = Transform3D(1.87951, 0, 0, 0, 1.05546, 0, 0, 0, 1.87951, -1.18672, 0.977248, 0.00606135)
 layers = 4
 mesh = SubResource("SphereMesh_aqe8h")
-surface_material_override/0 = ExtResource("23_5ld2y")
+surface_material_override/0 = SubResource("ShaderMaterial_oq2ds")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Boue/MeshInstance3D2"]
 collision_layer = 2
@@ -669,17 +724,47 @@ collision_mask = 2
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Boue/MeshInstance3D2/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_igmwt")
 
+[node name="MeshInstance3D5_light_blue" type="MeshInstance3D" parent="Boue"]
+transform = Transform3D(1.87951, 0, 0, 0, 1.05546, 0, 0, 0, 1.87951, -1.18672, 0.977248, 0.00606135)
+layers = 131072
+mesh = SubResource("SphereMesh_aqe8h")
+surface_material_override/0 = ExtResource("24_4afhw")
+
+[node name="MeshInstance3D5_light_yellow" type="MeshInstance3D" parent="Boue"]
+transform = Transform3D(1.87951, 0, 0, 0, 1.05546, 0, 0, 0, 1.87951, -1.18672, 0.977248, 0.00606135)
+layers = 16384
+mesh = SubResource("SphereMesh_aqe8h")
+surface_material_override/0 = ExtResource("24_4afhw")
+
 [node name="MeshInstance3D3" type="MeshInstance3D" parent="Boue"]
 transform = Transform3D(0.551166, 0, 0, 0, 0.142098, 0, 0, 0, 0.551166, -1.19252, 0.587386, 0)
 layers = 4
 mesh = SubResource("CylinderMesh_an4fj")
 surface_material_override/0 = ExtResource("27_nfh36")
 
+[node name="MeshInstance3D5_light" type="MeshInstance3D" parent="Boue"]
+transform = Transform3D(0.551166, 0, 0, 0, 0.142098, 0, 0, 0, 0.551166, -1.19252, 0.587386, 0)
+layers = 131072
+mesh = SubResource("CylinderMesh_an4fj")
+surface_material_override/0 = SubResource("ShaderMaterial_vcl6w")
+
 [node name="MeshInstance3D4" type="MeshInstance3D" parent="Boue"]
 transform = Transform3D(0.641916, 0, 0, 0, 0.165495, 0, 0, 0, 0.641916, -1.19252, 0.613777, 0)
 layers = 4
 mesh = SubResource("CylinderMesh_an4fj")
-surface_material_override/0 = ExtResource("23_5ld2y")
+surface_material_override/0 = SubResource("ShaderMaterial_84qlu")
+
+[node name="MeshInstance3D5_light_blue2" type="MeshInstance3D" parent="Boue"]
+transform = Transform3D(0.641916, 0, 0, 0, 0.165495, 0, 0, 0, 0.641916, -1.19252, 0.613777, 0)
+layers = 131072
+mesh = SubResource("CylinderMesh_an4fj")
+surface_material_override/0 = ExtResource("24_4afhw")
+
+[node name="MeshInstance3D5_light_yellow2" type="MeshInstance3D" parent="Boue"]
+transform = Transform3D(0.641916, 0, 0, 0, 0.165495, 0, 0, 0, 0.641916, -1.19252, 0.613777, 0)
+layers = 16384
+mesh = SubResource("CylinderMesh_an4fj")
+surface_material_override/0 = ExtResource("24_4afhw")
 
 [node name="LoadScene" type="Node3D" parent="."]
 

@@ -1,17 +1,33 @@
-[gd_scene load_steps=11 format=3 uid="uid://di031pbbucu1n"]
+[gd_scene load_steps=14 format=3 uid="uid://di031pbbucu1n"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/Elements/Magnetable_test/Debris_element.gd" id="1_1yc76"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Elements/Magnetable_test/Element.gd" id="2_grvie"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Oddity/Scanner/Attract.gd" id="2_snwxr"]
 [ext_resource type="Resource" uid="uid://vx7lgrlssiw5" path="res://15_GAME_RESSOURCE/04_Element/Cube_element.tres" id="2_utdp6"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Elements/Magnetable_test/Debris_fadeOnScanner.gd" id="3_jbkwt"]
-[ext_resource type="Material" uid="uid://bx8lxok1s6d6y" path="res://05_SHADER/Subscene_materials/Debris_Mat.tres" id="3_u4ip7"]
+[ext_resource type="Shader" uid="uid://cu2uipuy138c6" path="res://05_SHADER/All_Materials/Main_sceneTest_dither_sh.tres" id="4_i2b1h"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Elements/Magnetable_test/Debris.gd" id="7_37srk"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_pux22"]
 radius = 0.0486438
 
 [sub_resource type="SphereMesh" id="SphereMesh_d743k"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_msxik"]
+frequency = 0.0018
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_t1v52"]
+seamless = true
+noise = SubResource("FastNoiseLite_msxik")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y6irm"]
+resource_local_to_scene = true
+render_priority = 1
+shader = ExtResource("4_i2b1h")
+shader_parameter/ColorParameter = Color(0, 0, 0, 1)
+shader_parameter/Color = Color(0.0745098, 0.294118, 0.364706, 1)
+shader_parameter/Dither_strenght = 0.325
+shader_parameter/Gradient_base = SubResource("NoiseTexture2D_t1v52")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_4726r"]
 radius = 0.0348926
@@ -43,31 +59,31 @@ shape = SubResource("SphereShape3D_pux22")
 transform = Transform3D(0.130903, 0, 0, 0, 0.130903, 0, 0, 0, 0.130903, 0.00250667, 0.00116825, 0.00824188)
 layers = 4
 mesh = SubResource("SphereMesh_d743k")
-surface_material_override/0 = ExtResource("3_u4ip7")
+surface_material_override/0 = SubResource("ShaderMaterial_y6irm")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.0643325, 0, 0, 0, 0.0643325, 0, 0, 0, 0.0643325, 0.0463373, 0.0535235, 0.00824188)
 layers = 4
 mesh = SubResource("SphereMesh_d743k")
-surface_material_override/0 = ExtResource("3_u4ip7")
+surface_material_override/0 = SubResource("ShaderMaterial_y6irm")
 
 [node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.0885947, 0, 0, 0, 0.0885947, 0, 0, 0, 0.0885947, -0.0419973, 0.0535235, 0.00824188)
+transform = Transform3D(-3.8726e-09, -0.0885947, 0, 0.0885947, -3.8726e-09, 0, 0, 0, 0.0885947, -0.0419973, 0.0535235, 0.00824188)
 layers = 4
 mesh = SubResource("SphereMesh_d743k")
-surface_material_override/0 = ExtResource("3_u4ip7")
+surface_material_override/0 = SubResource("ShaderMaterial_y6irm")
 
 [node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.0636671, 0, 0, 0, 0.0636671, 0, 0, 0, 0.0636671, -0.00462911, -0.0668879, 0.00824188)
+transform = Transform3D(0.0636671, 0, 0, 0, -0.0450194, -0.0450194, 0, 0.0450194, -0.0450194, -0.00462911, -0.0668879, 0.00824188)
 layers = 4
 mesh = SubResource("SphereMesh_d743k")
-surface_material_override/0 = ExtResource("3_u4ip7")
+surface_material_override/0 = SubResource("ShaderMaterial_y6irm")
 
 [node name="MeshInstance3D5" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.0731933, 0, 0, 0, 0.0731933, 0, 0, 0, 0.0731933, 0.0172439, 0.0206068, 0.0494108)
 layers = 4
 mesh = SubResource("SphereMesh_d743k")
-surface_material_override/0 = ExtResource("3_u4ip7")
+surface_material_override/0 = SubResource("ShaderMaterial_y6irm")
 
 [node name="Area3D" type="Area3D" parent="."]
 collision_layer = 4

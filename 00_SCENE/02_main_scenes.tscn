@@ -1,4 +1,4 @@
-[gd_scene load_steps=118 format=3 uid="uid://cnmptm7i0xxmj"]
+[gd_scene load_steps=111 format=3 uid="uid://cnmptm7i0xxmj"]
 
 [ext_resource type="Script" path="res://00_SCENE/Active_Decor_Scene.gd" id="1_ounvv"]
 [ext_resource type="PackedScene" uid="uid://vpdvl0v7dubd" path="res://04_SCENE_MAIN_MAP/00_PLAYER/Player_boat.tscn" id="1_qltht"]
@@ -42,7 +42,6 @@
 [ext_resource type="Material" uid="uid://yjoyk6fvrm6q" path="res://10_BOARD/00_BOOK/00_SHADER/No_light_surface_mat.tres" id="33_um15u"]
 [ext_resource type="PackedScene" uid="uid://dh5kdswdhdfq6" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Island_set/Island_set_01/Island_set_01_prefab.tscn" id="37_b1buk"]
 [ext_resource type="PackedScene" uid="uid://bvmfdpovy4fy8" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Boue/Boue_prefab_zone.tscn" id="40_kyvn3"]
-[ext_resource type="Script" path="res://15_GAME_RESSOURCE/00_Zone_data/purchass_data.gd" id="41_psdpf"]
 [ext_resource type="Shader" uid="uid://jjqliete2f27" path="res://04_SCENE_MAIN_MAP/ELEMENTS/Subscene_elements/Subscene_element_sh.tres" id="42_klkyn"]
 [ext_resource type="Script" path="res://15_GAME_RESSOURCE/00_Zone_data/zone_data.gd" id="42_qpl8r"]
 [ext_resource type="PackedScene" uid="uid://bo33th5yn61n1" path="res://08_SUBSCENES/00_Scene/Vortex_scene.tscn" id="43_4lxgy"]
@@ -158,9 +157,9 @@ func _input(event: InputEvent) -> void:
 		if _global_datas.Player_In_Inventory:
 			return
 			
-		if _global_datas.zoneData.Boue_active:
-			_global_datas._active_progress_subscene.emit(true)
-			_global_datas._load_subscene.emit(true)
+
+		_global_datas._active_progress_subscene.emit(true)
+		_global_datas._load_subscene.emit(true)
 		
 "
 
@@ -558,45 +557,17 @@ size = Vector3(30, 0, 30)
 [sub_resource type="BoxMesh" id="BoxMesh_wmrfd"]
 size = Vector3(30, 0, 30)
 
-[sub_resource type="Resource" id="Resource_mx36y"]
-script = ExtResource("41_psdpf")
-cost = 3
-
-[sub_resource type="Resource" id="Resource_iq7dq"]
-script = ExtResource("41_psdpf")
-cost = 6
-
-[sub_resource type="Resource" id="Resource_y5osj"]
-script = ExtResource("41_psdpf")
-cost = 12
-
-[sub_resource type="Resource" id="Resource_qcemc"]
+[sub_resource type="Resource" id="Resource_s40n5"]
 resource_local_to_scene = true
 script = ExtResource("42_qpl8r")
 zone_node_dialogue = "vortex"
 zone_packed_scene = ExtResource("43_4lxgy")
-Boue_active = true
-purchass_state = Array[ExtResource("41_psdpf")]([SubResource("Resource_mx36y"), SubResource("Resource_iq7dq"), SubResource("Resource_y5osj")])
 
-[sub_resource type="Resource" id="Resource_sjgmn"]
-script = ExtResource("41_psdpf")
-cost = 3
-
-[sub_resource type="Resource" id="Resource_3u2s2"]
-script = ExtResource("41_psdpf")
-cost = 6
-
-[sub_resource type="Resource" id="Resource_3karu"]
-script = ExtResource("41_psdpf")
-cost = 12
-
-[sub_resource type="Resource" id="Resource_ulcfn"]
+[sub_resource type="Resource" id="Resource_1qssx"]
 resource_local_to_scene = true
 script = ExtResource("42_qpl8r")
 zone_node_dialogue = "apicula"
 zone_packed_scene = ExtResource("45_2rv3c")
-Boue_active = true
-purchass_state = Array[ExtResource("41_psdpf")]([SubResource("Resource_sjgmn"), SubResource("Resource_3u2s2"), SubResource("Resource_3karu")])
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_gmec4"]
 constant = 0.4
@@ -1730,11 +1701,11 @@ surface_material_override/0 = ExtResource("33_um15u")
 
 [node name="BouePrefab" parent="--DECOR--/DIVE_ZONES" instance=ExtResource("40_kyvn3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.99237, 0, 0.945796)
-zone_datas = SubResource("Resource_qcemc")
+zone_datas = SubResource("Resource_s40n5")
 
 [node name="BouePrefab2" parent="--DECOR--/DIVE_ZONES" instance=ExtResource("40_kyvn3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.22176, 0, -0.0177174)
-zone_datas = SubResource("Resource_ulcfn")
+zone_datas = SubResource("Resource_1qssx")
 
 [node name="mesh" parent="--DECOR--/DIVE_ZONES/BouePrefab2/Epave_visuals" index="1"]
 mesh = SubResource("ArrayMesh_xefo8")

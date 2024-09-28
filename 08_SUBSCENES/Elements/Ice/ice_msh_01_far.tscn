@@ -1,8 +1,7 @@
-[gd_scene load_steps=13 format=3 uid="uid://chipng023vh22"]
+[gd_scene load_steps=12 format=3 uid="uid://chipng023vh22"]
 
 [ext_resource type="PackedScene" uid="uid://duffwm80yuqso" path="res://08_SUBSCENES/Elements/Ice/Ice_msh_01.blend" id="1_qh0n2"]
 [ext_resource type="Shader" uid="uid://cu2uipuy138c6" path="res://05_SHADER/All_Materials/Main_sceneTest_dither_sh.tres" id="2_la36l"]
-[ext_resource type="Texture2D" uid="uid://cshwig7avm2vw" path="res://08_SUBSCENES/Elements/Subrocks/subrock_01/textures/Subrock_01_gradient.png" id="3_jlqyh"]
 [ext_resource type="Material" uid="uid://pvr0u5gwh5ek" path="res://05_SHADER/Subscene_materials/element_subscene_x_ray.tres" id="3_xiug8"]
 [ext_resource type="Material" uid="uid://yjoyk6fvrm6q" path="res://10_BOARD/00_BOOK/00_SHADER/No_light_surface_mat.tres" id="4_w4gae"]
 
@@ -13,7 +12,6 @@ shader = ExtResource("2_la36l")
 shader_parameter/ColorParameter = Color(0.294118, 0.556863, 0.54902, 1)
 shader_parameter/Color = Color(0.0392157, 0.196078, 0.247059, 1)
 shader_parameter/Dither_strenght = 0.555
-shader_parameter/Gradient_base = ExtResource("3_jlqyh")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5ipwg"]
 resource_name = "Material"
@@ -107,7 +105,14 @@ mesh = SubResource("ArrayMesh_lxtf4")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("4_w4gae")
 
-[node name="Ice_msh_xray" type="MeshInstance3D" parent="." index="2"]
+[node name="Ice_msh_LIGHT_yellow" type="MeshInstance3D" parent="." index="2"]
+visible = false
+layers = 16384
+mesh = SubResource("ArrayMesh_lxtf4")
+skeleton = NodePath("")
+surface_material_override/0 = ExtResource("4_w4gae")
+
+[node name="Ice_msh_xray" type="MeshInstance3D" parent="." index="3"]
 transform = Transform3D(0.996896, 0, 0, 0, 0.996896, 0, 0, 0, 0.996896, 0, 0, 0)
 visible = false
 layers = 4096
@@ -115,6 +120,6 @@ mesh = SubResource("ArrayMesh_67s4f")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("3_xiug8")
 
-[node name="Inside" parent="." index="3"]
+[node name="Inside" parent="." index="4"]
 visible = false
 layers = 0

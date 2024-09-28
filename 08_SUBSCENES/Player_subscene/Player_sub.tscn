@@ -1,4 +1,4 @@
-[gd_scene load_steps=97 format=3 uid="uid://g7u8o55jrnyy"]
+[gd_scene load_steps=103 format=3 uid="uid://g7u8o55jrnyy"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Player_sub_behaviour.gd" id="1_o2v73"]
 [ext_resource type="Resource" uid="uid://df0swhar7lchv" path="res://08_SUBSCENES/Tools/Main_tool/Jet_tool.tres" id="2_0pvbg"]
@@ -87,7 +87,7 @@ func done():
 [sub_resource type="GDScript" id="GDScript_8qwgp"]
 script/source = "extends Node
 
-@onready var omni_light_3d = $\"../Light\"
+@onready var omni_light_3d = $\"../Light_blue\"
 @onready var omny_range : float 
 
 var t
@@ -202,6 +202,21 @@ render_priority = 1
 shader = SubResource("VisualShader_gs5la")
 shader_parameter/Lit_color = Color(0.721569, 0.580392, 0.407843, 1)
 
+[sub_resource type="VisualShader" id="VisualShader_swao4"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded, ambient_light_disabled;
+
+
+
+"
+flags/unshaded = true
+flags/ambient_light_disabled = true
+nodes/fragment/0/position = Vector2(440, 140)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rilhs"]
+render_priority = 0
+shader = SubResource("VisualShader_swao4")
+
 [sub_resource type="SphereMesh" id="SphereMesh_yi3h4"]
 
 [sub_resource type="Gradient" id="Gradient_wbvsf"]
@@ -244,6 +259,10 @@ render_priority = 1
 shader = SubResource("VisualShader_gs5la")
 shader_parameter/Lit_color = Color(0.721569, 0.580392, 0.407843, 1)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wek0o"]
+render_priority = 0
+shader = SubResource("VisualShader_swao4")
+
 [sub_resource type="SphereMesh" id="SphereMesh_gj0qo"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_j5ih5"]
@@ -268,6 +287,50 @@ shader_parameter/Color = Color(0.380392, 0.321569, 0.231373, 1)
 shader_parameter/Dither_strenght = 0.5
 shader_parameter/Gradient_base = SubResource("GradientTexture2D_fipfr")
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hpd4i"]
+resource_name = "Material.001"
+cull_mode = 2
+albedo_color = Color(0, 0, 0, 1)
+roughness = 0.5
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_2kert"]
+_surfaces = [{
+"aabb": AABB(-0.219858, -0.665088, -0.924963, 0.439715, 1.33018, 1.84993),
+"format": 34896613377,
+"index_count": 36,
+"index_data": PackedByteArray(11, 0, 0, 0, 5, 0, 11, 0, 6, 0, 0, 0, 9, 0, 6, 0, 11, 0, 9, 0, 7, 0, 6, 0, 3, 0, 10, 0, 2, 0, 3, 0, 8, 0, 10, 0, 8, 0, 11, 0, 10, 0, 8, 0, 9, 0, 11, 0, 2, 0, 4, 0, 1, 0, 2, 0, 10, 0, 4, 0, 10, 0, 5, 0, 4, 0, 10, 0, 11, 0, 5, 0),
+"lods": [0.273244, PackedByteArray(9, 0, 0, 0, 5, 0, 9, 0, 6, 0, 0, 0, 9, 0, 7, 0, 6, 0, 8, 0, 9, 0, 5, 0, 8, 0, 5, 0, 4, 0, 2, 0, 8, 0, 4, 0, 3, 0, 8, 0, 2, 0, 2, 0, 4, 0, 1, 0)],
+"name": "Material.001",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 12,
+"vertex_data": PackedByteArray(0, 0, 80, 227, 95, 235, 0, 0, 0, 0, 80, 227, 159, 20, 0, 0, 196, 86, 82, 137, 0, 0, 0, 0, 196, 86, 165, 18, 0, 0, 0, 0, 196, 86, 255, 255, 85, 85, 0, 0, 196, 86, 255, 255, 170, 170, 0, 0, 196, 86, 82, 137, 255, 255, 0, 0, 196, 86, 165, 18, 255, 255, 0, 0, 255, 255, 0, 0, 236, 71, 0, 0, 255, 255, 0, 0, 18, 184, 0, 0, 255, 255, 248, 155, 236, 71, 0, 0, 255, 255, 248, 155, 18, 184, 0, 0)
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_osd73"]
+resource_name = "Cosmo_Mod_01_Cube_005"
+_surfaces = [{
+"aabb": AABB(-0.219858, -0.665088, -0.924963, 0.439715, 1.33018, 1.84993),
+"attribute_data": PackedByteArray(255, 159, 255, 63, 255, 159, 255, 127, 170, 138, 255, 127, 84, 117, 255, 127, 255, 159, 170, 106, 255, 159, 85, 85, 170, 138, 255, 63, 84, 117, 255, 63, 84, 117, 170, 106, 84, 117, 85, 85, 170, 138, 170, 106, 170, 138, 85, 85),
+"format": 34896613399,
+"index_count": 36,
+"index_data": PackedByteArray(11, 0, 0, 0, 5, 0, 11, 0, 6, 0, 0, 0, 9, 0, 6, 0, 11, 0, 9, 0, 7, 0, 6, 0, 3, 0, 10, 0, 2, 0, 3, 0, 8, 0, 10, 0, 8, 0, 11, 0, 10, 0, 8, 0, 9, 0, 11, 0, 2, 0, 4, 0, 1, 0, 2, 0, 10, 0, 4, 0, 10, 0, 5, 0, 4, 0, 10, 0, 11, 0, 5, 0),
+"lods": [0.273244, PackedByteArray(9, 0, 0, 0, 5, 0, 9, 0, 6, 0, 0, 0, 9, 0, 7, 0, 6, 0, 8, 0, 9, 0, 5, 0, 8, 0, 5, 0, 4, 0, 2, 0, 8, 0, 4, 0, 3, 0, 8, 0, 2, 0, 2, 0, 4, 0, 1, 0)],
+"material": SubResource("StandardMaterial3D_hpd4i"),
+"name": "Material.001",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 12,
+"vertex_data": PackedByteArray(0, 0, 80, 227, 95, 235, 242, 211, 0, 0, 80, 227, 159, 20, 205, 239, 196, 86, 82, 137, 0, 0, 200, 232, 196, 86, 165, 18, 0, 0, 47, 226, 196, 86, 255, 255, 85, 85, 136, 233, 196, 86, 255, 255, 170, 170, 232, 220, 196, 86, 82, 137, 255, 255, 202, 204, 196, 86, 165, 18, 255, 255, 138, 202, 255, 255, 0, 0, 236, 71, 52, 219, 255, 255, 0, 0, 18, 184, 233, 207, 255, 255, 248, 155, 236, 71, 121, 226, 255, 255, 248, 155, 18, 184, 255, 211, 122, 45, 145, 18, 220, 51, 64, 39, 58, 49, 224, 45, 124, 49, 124, 49, 122, 49, 61, 34, 153, 47, 229, 24, 118, 40, 250, 26, 140, 34, 140, 34, 249, 45, 249, 45, 20, 39, 20, 39, 126, 48, 240, 39, 130, 44, 113, 30)
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_2kert")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_j5dvn"]
+render_priority = 0
+shader = SubResource("VisualShader_swao4")
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cnpr2"]
 resource_local_to_scene = true
 render_priority = 1
@@ -275,15 +338,6 @@ shader = ExtResource("19_7vppd")
 shader_parameter/ColorParameter = Color(0.054902, 0.14902, 0.145098, 1)
 shader_parameter/Color = Color(0.298039, 0.247059, 0.172549, 1)
 shader_parameter/Dither_strenght = 0.5
-shader_parameter/Gradient_base = ExtResource("20_btf5l")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_uojie"]
-resource_local_to_scene = true
-render_priority = 1
-shader = ExtResource("19_7vppd")
-shader_parameter/ColorParameter = Color(0.294118, 0.556863, 0.54902, 1)
-shader_parameter/Color = Color(0.0392157, 0.196078, 0.247059, 1)
-shader_parameter/Dither_strenght = 0.555
 shader_parameter/Gradient_base = ExtResource("20_btf5l")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_phcy0"]
@@ -553,12 +607,12 @@ scale_min = 0.03
 scale_max = 0.05
 scale_curve = SubResource("CurveTexture_wj6vn")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_inbo0"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_to4f8"]
 shading_mode = 0
-albedo_color = Color(0.815686, 0.654902, 0.423529, 1)
+albedo_color = Color(0.239216, 0.588235, 0.435294, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_6ufqt"]
-material = SubResource("StandardMaterial3D_inbo0")
+material = SubResource("StandardMaterial3D_to4f8")
 radius = 0.25
 height = 0.5
 radial_segments = 8
@@ -877,7 +931,7 @@ skeleton = NodePath("../../../Player_sub_collider")
 surface_material_override/0 = SubResource("ShaderMaterial_4lopu")
 
 [node name="Teleporter_msh4" type="MeshInstance3D" parent="Render_mesh/Magnet"]
-transform = Transform3D(1.17713, -3.11244e-09, 0, 0, -9.73145e-09, -0.457515, 1.64566e-08, 0.22263, -1.99986e-08, 0.921189, 0.0100367, 0.762457)
+transform = Transform3D(1.17713, -3.11244e-09, 1.77636e-15, 0, -9.73145e-09, -0.457515, 1.64566e-08, 0.22263, -1.99986e-08, 0.921189, 0.0100367, 0.762457)
 layers = 131076
 mesh = SubResource("PrismMesh_cb64w")
 skeleton = NodePath("../../../Player_sub_collider")
@@ -904,6 +958,41 @@ mesh = SubResource("PrismMesh_cb64w")
 skeleton = NodePath("../../../Player_sub_collider")
 surface_material_override/0 = SubResource("ShaderMaterial_4lopu")
 
+[node name="Teleporter_msh8" type="MeshInstance3D" parent="Render_mesh/Magnet"]
+transform = Transform3D(1.17713, -3.11244e-09, 3.55271e-15, 0, -9.73145e-09, -0.457515, 1.64566e-08, 0.22263, -1.99986e-08, 0, 0.0100367, 0.992598)
+layers = 131072
+mesh = SubResource("PrismMesh_cb64w")
+skeleton = NodePath("../../../Player_sub_collider")
+surface_material_override/0 = SubResource("ShaderMaterial_rilhs")
+
+[node name="Teleporter_msh9" type="MeshInstance3D" parent="Render_mesh/Magnet"]
+transform = Transform3D(1.17713, -3.11244e-09, 1.77636e-15, 0, -9.73145e-09, -0.457515, 1.64566e-08, 0.22263, -1.99986e-08, 0.921189, 0.0100367, 0.762457)
+layers = 131072
+mesh = SubResource("PrismMesh_cb64w")
+skeleton = NodePath("../../../Player_sub_collider")
+surface_material_override/0 = SubResource("ShaderMaterial_rilhs")
+
+[node name="Teleporter_msh10" type="MeshInstance3D" parent="Render_mesh/Magnet"]
+transform = Transform3D(1.17713, -3.11244e-09, 0, 0, -9.73145e-09, -0.457515, 1.64566e-08, 0.22263, -1.99986e-08, -0.804593, 0.0100368, 0.762457)
+layers = 131072
+mesh = SubResource("PrismMesh_cb64w")
+skeleton = NodePath("../../../Player_sub_collider")
+surface_material_override/0 = SubResource("ShaderMaterial_rilhs")
+
+[node name="Teleporter_msh11" type="MeshInstance3D" parent="Render_mesh/Magnet"]
+transform = Transform3D(-5.14538e-08, 9.73144e-09, 0.457514, 1.17713, -3.11244e-09, 1.99986e-08, 1.64566e-08, 0.22263, -1.99986e-08, -0.0116968, -0.838556, 0.750735)
+layers = 131072
+mesh = SubResource("PrismMesh_cb64w")
+skeleton = NodePath("../../../Player_sub_collider")
+surface_material_override/0 = SubResource("ShaderMaterial_rilhs")
+
+[node name="Teleporter_msh12" type="MeshInstance3D" parent="Render_mesh/Magnet"]
+transform = Transform3D(-5.14538e-08, 9.73144e-09, 0.457514, 1.17713, -3.11244e-09, 1.99986e-08, 1.64566e-08, 0.22263, -1.99986e-08, -0.0116968, 0.857618, 0.750735)
+layers = 131072
+mesh = SubResource("PrismMesh_cb64w")
+skeleton = NodePath("../../../Player_sub_collider")
+surface_material_override/0 = SubResource("ShaderMaterial_rilhs")
+
 [node name="Teleporter_msh3" type="MeshInstance3D" parent="Render_mesh/Magnet"]
 transform = Transform3D(2.24697, -9.82183e-08, -9.82192e-08, -1.00318e-07, -1.00318e-07, -2.29502, 3.14136e-08, 0.71866, -3.14136e-08, 0, 0.0100367, 0.657824)
 layers = 131076
@@ -926,9 +1015,15 @@ surface_material_override/0 = SubResource("ShaderMaterial_iqsji")
 
 [node name="small" type="MeshInstance3D" parent="Render_mesh/Light"]
 transform = Transform3D(1.32942, 2.55795e-13, 0, 6.39488e-14, 2.78372, 0, 0, 0, 0.352518, -0.0164814, -0.16591, 0.6692)
-layers = 131076
+layers = 4
 mesh = SubResource("BoxMesh_laopn")
 surface_material_override/0 = SubResource("ShaderMaterial_k7kv6")
+
+[node name="small_light" type="MeshInstance3D" parent="Render_mesh/Light"]
+transform = Transform3D(1.32942, 2.55795e-13, 0, 6.39488e-14, 2.78372, 0, 0, 0, 0.352518, -0.0164814, -0.16591, 0.6692)
+layers = 131072
+mesh = SubResource("BoxMesh_laopn")
+surface_material_override/0 = SubResource("ShaderMaterial_wek0o")
 
 [node name="Light_02" type="Node3D" parent="Render_mesh"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00877953, -0.0123595, -0.0143354)
@@ -946,6 +1041,13 @@ layers = 131076
 mesh = SubResource("BoxMesh_3nn6t")
 surface_material_override/0 = SubResource("ShaderMaterial_k03sk")
 
+[node name="msh_helmet_light" type="MeshInstance3D" parent="Render_mesh/Light_02"]
+transform = Transform3D(-1.15839e-09, 0, -0.0251987, 0, 0.0259929, 0, 0.0265009, 0, -1.10147e-09, 0.00877953, 0.225766, 0.0539213)
+layers = 131072
+mesh = SubResource("ArrayMesh_osd73")
+skeleton = NodePath("")
+surface_material_override/0 = SubResource("ShaderMaterial_j5dvn")
+
 [node name="Cosmo_Mod_02" parent="Render_mesh" instance=ExtResource("14_tdqlw")]
 transform = Transform3D(-1.68564e-09, 0, -0.0385629, 0, 0.0385629, 0, 0.0385629, 0, -1.68564e-09, 0, -0.0355417, 0)
 
@@ -953,7 +1055,7 @@ transform = Transform3D(-1.68564e-09, 0, -0.0385629, 0, 0.0385629, 0, 0.0385629,
 transform = Transform3D(0.781885, 0, 0, 0, 1, 0, 0, 0, 1.05004, 0, 4.05517, 0)
 layers = 131076
 surface_material_override/0 = SubResource("ShaderMaterial_cnpr2")
-surface_material_override/1 = SubResource("ShaderMaterial_uojie")
+surface_material_override/1 = SubResource("ShaderMaterial_cnpr2")
 
 [node name="msh_helmet" parent="Render_mesh/Cosmo_Mod_02" index="1"]
 layers = 131076
@@ -975,7 +1077,7 @@ surface_material_override/0 = SubResource("ShaderMaterial_cnpr2")
 surface_material_override/1 = SubResource("ShaderMaterial_iqsji")
 
 [node name="msh_helmet_002" parent="Render_mesh/Cosmo_Mod_02" index="5"]
-layers = 131076
+layers = 4
 surface_material_override/0 = SubResource("ShaderMaterial_phcy0")
 
 [node name="msh_Pod" parent="Render_mesh/Cosmo_Mod_02" index="6"]
@@ -1025,11 +1127,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.135905, 0)
 shape = SubResource("SphereShape3D_47iq4")
 disabled = true
 
-[node name="Light" type="OmniLight3D" parent="."]
+[node name="Light_blue" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.348655, 0.114098)
 layers = 131072
 omni_range = 1.625
 omni_attenuation = 7.46426
+
+[node name="Light_yellow" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.348655, 0.114098)
+layers = 16384
+omni_range = 1.125
 
 [node name="Light_xray" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.348655, 0.114098)
@@ -1049,7 +1156,7 @@ draw_pass_1 = SubResource("SphereMesh_6ufqt")
 
 [node name="Fx_water" type="GPUParticles3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.0390157, 0.999239, 0, -0.999239, 0.0390157, 0.00288114, 0.135205, -0.0997294)
-layers = 4
+layers = 131076
 material_override = SubResource("ShaderMaterial_auo33")
 cast_shadow = 0
 amount = 10
