@@ -1,0 +1,197 @@
+[gd_scene load_steps=18 format=3 uid="uid://dyf40bt6rmt1c"]
+
+[ext_resource type="PackedScene" uid="uid://b4hspc8dsyv14" path="res://08_SUBSCENES/Elements/Tiny_boat/scene_boat_ch_test.tscn" id="1_phh10"]
+[ext_resource type="PackedScene" uid="uid://rncjlplupvhf" path="res://08_SUBSCENES/00_Scene/test_ground/test_ground.blend" id="2_5i1qo"]
+[ext_resource type="Material" uid="uid://cm2mrllr2dj10" path="res://05_SHADER/Board/Board_scanner_mat.tres" id="3_wubkv"]
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_gc51l"]
+source = 5
+
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_o6i6l"]
+function = 1
+
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_licv5"]
+default_input_values = [1, Vector2(1, 0.5), 2, Vector2(0, 0)]
+function = 1
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_ai220"]
+input_name = "time"
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_ov6og"]
+default_input_values = [0, 0.0, 1, 0.001]
+operator = 2
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_8rqak"]
+default_input_values = [0, 0.0, 1, 0.1]
+operator = 2
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_1g27w"]
+
+[sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_kylus"]
+parameter_name = "BlueNoise"
+qualifier = 1
+texture_repeat = 1
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_jnjch"]
+parameter_name = "Dither_blue_noise_size"
+qualifier = 1
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_j8hey"]
+parameter_name = "Opacity"
+hint = 1
+default_value_enabled = true
+default_value = 0.5
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_hej55"]
+input_name = "color"
+
+[sub_resource type="VisualShader" id="VisualShader_gll0c"]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+global uniform float Dither_blue_noise_size;
+global uniform sampler2D BlueNoise : repeat_enable;
+uniform float Opacity : hint_range(0, 1) = 0.5;
+
+
+
+void fragment() {
+// Input:9
+	vec4 n_out9p0 = COLOR;
+
+
+// UVFunc:16
+	vec2 n_in16p1 = vec2(1.00000, 0.50000);
+	vec2 n_in16p2 = vec2(0.00000, 0.00000);
+	vec2 n_out16p0 = (UV - n_in16p2) * n_in16p1 + n_in16p2;
+
+
+// FloatParameter:30
+	float n_out30p0 = Dither_blue_noise_size;
+
+
+// Input:17
+	float n_out17p0 = TIME;
+
+
+// FloatOp:18
+	float n_in18p1 = 0.00100;
+	float n_out18p0 = n_out17p0 * n_in18p1;
+
+
+// FloatOp:19
+	float n_in19p1 = 0.10000;
+	float n_out19p0 = n_out18p0 * n_in19p1;
+
+
+// UVFunc:15
+	vec2 n_out15p0 = (n_out16p0 - vec2(n_out19p0)) * vec2(n_out30p0) + vec2(n_out19p0);
+
+
+	vec4 n_out13p0;
+// Texture2D:13
+	n_out13p0 = texture(BlueNoise, n_out15p0);
+
+
+// FloatParameter:5
+	float n_out5p0 = Opacity;
+
+
+// Step:2
+	float n_out2p0 = step(n_out13p0.x, n_out5p0);
+
+
+// Output:0
+	COLOR.rgb = vec3(n_out9p0.xyz);
+	COLOR.a = n_out2p0;
+
+
+}
+"
+graph_offset = Vector2(-530.998, -193.233)
+mode = 1
+flags/light_only = false
+nodes/fragment/0/position = Vector2(680, 140)
+nodes/fragment/2/node = SubResource("VisualShaderNodeStep_1g27w")
+nodes/fragment/2/position = Vector2(260, 200)
+nodes/fragment/5/node = SubResource("VisualShaderNodeFloatParameter_j8hey")
+nodes/fragment/5/position = Vector2(-200, 380)
+nodes/fragment/9/node = SubResource("VisualShaderNodeInput_hej55")
+nodes/fragment/9/position = Vector2(740, -640)
+nodes/fragment/13/node = SubResource("VisualShaderNodeTexture_gc51l")
+nodes/fragment/13/position = Vector2(-820, -580)
+nodes/fragment/15/node = SubResource("VisualShaderNodeUVFunc_o6i6l")
+nodes/fragment/15/position = Vector2(-1420, -460)
+nodes/fragment/16/node = SubResource("VisualShaderNodeUVFunc_licv5")
+nodes/fragment/16/position = Vector2(-1740, -580)
+nodes/fragment/17/node = SubResource("VisualShaderNodeInput_ai220")
+nodes/fragment/17/position = Vector2(-2020, -200)
+nodes/fragment/18/node = SubResource("VisualShaderNodeFloatOp_ov6og")
+nodes/fragment/18/position = Vector2(-1700, -220)
+nodes/fragment/19/node = SubResource("VisualShaderNodeFloatOp_8rqak")
+nodes/fragment/19/position = Vector2(-1640, -20)
+nodes/fragment/21/node = SubResource("VisualShaderNodeTexture2DParameter_kylus")
+nodes/fragment/21/position = Vector2(-1180, -300)
+nodes/fragment/30/node = SubResource("VisualShaderNodeFloatParameter_jnjch")
+nodes/fragment/30/position = Vector2(-2140, -440)
+nodes/fragment/connections = PackedInt32Array(9, 0, 0, 0, 17, 0, 18, 0, 18, 0, 19, 0, 16, 0, 15, 0, 19, 0, 15, 2, 15, 0, 13, 0, 21, 0, 13, 2, 13, 0, 2, 0, 5, 0, 2, 1, 30, 0, 15, 1, 2, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_oy06w"]
+shader = SubResource("VisualShader_gll0c")
+shader_parameter/Opacity = 0.985
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_s55w6"]
+viewport_path = NodePath("SubViewport")
+
+[node name="GrappinScene" type="Node3D"]
+
+[node name="BACKDROP_FOCUS" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_oy06w")
+clip_contents = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.0705882, 0.12549, 0.129412, 1)
+
+[node name="SubViewport" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(1280, 720)
+
+[node name="Grappin_cam" type="Camera3D" parent="SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 0.956305, 0.292372, 0, -0.292372, 0.956305, 0, 5, 10.856)
+cull_mask = 4
+fov = 45.0
+size = 8.819
+
+[node name="OmniLight3D" type="OmniLight3D" parent="SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.829459, 0.00701758)
+layers = 4
+light_energy = 2.768
+omni_range = 9.60239
+
+[node name="loader" type="Node3D" parent="SubViewport"]
+transform = Transform3D(-0.841511, 0, -0.54024, 0, 1, 0, 0.54024, 0, -0.841511, 0, 0.0487088, 0)
+
+[node name="Scene_boat_ch_test" parent="SubViewport/loader" instance=ExtResource("1_phh10")]
+transform = Transform3D(0.0133498, 0, 0, 0, 0.0133497, 0, 0, 0, 0.0133498, 0, 0, 0)
+
+[node name="test_ground" parent="SubViewport" instance=ExtResource("2_5i1qo")]
+
+[node name="Cube_002" parent="SubViewport/test_ground" index="0"]
+layers = 4
+cast_shadow = 0
+gi_mode = 0
+surface_material_override/0 = ExtResource("3_wubkv")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("ViewportTexture_s55w6")
+
+[editable path="SubViewport/test_ground"]

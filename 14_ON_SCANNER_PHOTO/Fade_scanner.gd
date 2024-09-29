@@ -1,8 +1,8 @@
 extends Node
 
-@onready var backdrop_focus = $"../../BACKDROP_FOCUS"
-@onready var render_scanner = $"../../RENDER_Scanner"
-@onready var render_scanner_noise = $"../../RENDER_Scanner_NOISE"
+@onready var backdrop_focus = $"../../Control/BACKDROP_FOCUS"
+@onready var render_scanner = $"../../Control/RENDER_Scanner"
+@onready var render_scanner_noise = $"../../Control/RENDER_Scanner_NOISE"
 
 
 @onready var render_scanner_material : Material = render_scanner.get_material()
@@ -15,9 +15,13 @@ var fade_in
 var actual_value : float
 
 func _ready():
-	_global_datas.show_on_scanner.connect(start_fade_in)
-
-
+	pass
+	#_global_datas.show_on_scanner.connect(start_fade_in)
+	#_global_datas._go_Subscene.connect(show)
+	
+func show():
+	
+	start_fade_in(true)	
 func start_fade_in(condition : bool):
 
 	if condition:

@@ -1,19 +1,24 @@
 extends Node
 
-@onready var render_scanner = $"../RENDER_Scanner"
+@onready var render_scanner = $"../Control/RENDER_Scanner"
 @onready var loader = $"../InsidePhoto_scanner_scene/loader"
-@onready var backdrop_focus = $"../BACKDROP_FOCUS"
+@onready var backdrop_focus = $"../Control/BACKDROP_FOCUS"
 @onready var active_scene_viewports = $"../Active_scene_viewports"
 
 
 func _ready():
-	_global_datas.show_on_scanner.connect(_show_scanner)
-
+	#_global_datas.show_on_scanner.connect(_show_scanner)
+	
+	#_global_datas._go_Subscene.connect(_show)
+	
 	render_scanner.visible = true
 	backdrop_focus.visible = true
 
 	#stop_scanner()
+func _show():
 	
+	_show_scanner(true)	
+		
 func _show_scanner(condition : bool):
 	
 	_global_datas.in_scanner_mode = condition
@@ -35,7 +40,7 @@ func _show_scanner(condition : bool):
 		#if _global_datas.Npc_Dialogue != null:
 			#_global_datas._start_dialogue_box.emit()
 		#
-	_global_datas._add_back_call.emit(_back_call)	
+	_global_datas._add_back_call.emit(back_call)	
 func stop_scanner():
 
 	var previous = loader.get_children()
@@ -43,7 +48,7 @@ func stop_scanner():
 		e.queue_free()
 
 
-func _back_call():
+func back_call():
 	
 	_global_datas.show_on_scanner.emit(false)
 

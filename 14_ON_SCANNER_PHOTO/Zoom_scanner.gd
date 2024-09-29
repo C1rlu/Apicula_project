@@ -14,7 +14,9 @@ func _ready():
 		
 func _process(delta):
 	
-
+	var disable = true
+	if disable:
+		return
 
 	if !_global_datas.in_scanner_mode:
 		return

@@ -23,6 +23,10 @@ func reset(condition):
 			cam.global_position	= base_position 	
 			
 func _process(delta):
+	
+	var disable = true
+	if disable:
+		return
 	_move_cam(delta)	
 
 func _move_cam(_delta):

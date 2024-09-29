@@ -30,10 +30,10 @@ func _active(condition : bool):
 		_global_datas._show_object_legend.emit(true,result)
 		_set_progress_bar()
 		
-		_global_datas.zoneData.fade_out._show()
+		#_global_datas.zoneData.fade_out._show()
 	else:
 		_global_datas._show_object_legend.emit(false,"_null")
-		_global_datas.zoneData.fade_out._stop()
+		#_global_datas.zoneData.fade_out._stop()
 
 func _set_progress_bar():
 	var _target_pos =  _global_datas.zoneData.Boue_node_3D.global_position + Vector3(0.0,2.0,0.0)
