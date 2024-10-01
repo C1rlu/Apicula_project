@@ -1,4 +1,4 @@
-[gd_resource type="VisualShader" load_steps=41 format=3 uid="uid://be88gec6clk8u"]
+[gd_resource type="VisualShader" load_steps=42 format=3 uid="uid://be88gec6clk8u"]
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_353h7"]
 parameter_name = "Subscene_Darker_color"
@@ -8,6 +8,12 @@ qualifier = 1
 parameter_name = "ColorParameter"
 default_value_enabled = true
 default_value = Color(0.0312504, 0.169194, 0.185179, 1)
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_bk7ml"]
+parameter_name = "Opacity"
+hint = 1
+default_value_enabled = true
+default_value = 1.0
 
 [sub_resource type="VisualShaderNodeClamp" id="VisualShaderNodeClamp_kdtto"]
 
@@ -143,11 +149,12 @@ operator = 2
 
 [resource]
 code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_toon, specular_disabled, shadows_disabled, debug_shadow_splits;
+render_mode blend_mix, depth_draw_always, cull_back, diffuse_toon, specular_disabled, shadows_disabled, debug_shadow_splits;
 
 global uniform float mirror_wave_speed;
 uniform sampler2D tex_vtx_8;
 global uniform vec4 Subscene_Darker_color : source_color;
+uniform float Opacity : hint_range(0, 1) = 1;
 
 
 
@@ -212,12 +219,18 @@ void fragment() {
 	vec4 n_out2p0 = Subscene_Darker_color;
 
 
+// FloatParameter:4
+	float n_out4p0 = Opacity;
+
+
 // Output:0
 	ALBEDO = vec3(n_out2p0.xyz);
+	ALPHA = n_out4p0;
 
 
 }
 "
+modes/depth_draw = 1
 modes/diffuse = 3
 modes/specular = 2
 flags/shadows_disabled = true
@@ -253,7 +266,9 @@ nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_353h7")
 nodes/fragment/2/position = Vector2(-140, 0)
 nodes/fragment/3/node = SubResource("VisualShaderNodeColorParameter_hj4if")
 nodes/fragment/3/position = Vector2(-158.365, 169.567)
-nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0)
+nodes/fragment/4/node = SubResource("VisualShaderNodeFloatParameter_bk7ml")
+nodes/fragment/4/position = Vector2(-80.3626, 550.656)
+nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0, 4, 0, 0, 1)
 nodes/light/0/position = Vector2(1240, 580)
 nodes/light/3/node = SubResource("VisualShaderNodeFloatConstant_33rwj")
 nodes/light/3/position = Vector2(-2160, 840)

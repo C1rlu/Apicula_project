@@ -20,7 +20,7 @@ func create_fracture():
 	var rotation_target = Vector3(random_x,random_y,random_z)
 	var _rotate
 	_rotate = create_tween()
-	_rotate.tween_property(self,"rotation_degrees",rotation_target,5).set_ease(Tween.EASE_OUT)
+	_rotate.tween_property(self,"rotation_degrees",rotation_target,2).set_ease(Tween.EASE_OUT)
 	
 	#var r_x = randf_range(-1,1)
 	#var r_y = randf_range(-1,1)
@@ -30,7 +30,7 @@ func create_fracture():
 	
 	var move
 	move = create_tween()
-	move.tween_property(self,"position",position_target,5)
+	move.tween_property(self,"position",position_target,2)
 	
 	#var s
 	#s = create_tween()
@@ -39,7 +39,7 @@ func create_fracture():
 	
 	var t
 	t = create_tween()
-	t.tween_method(_value,1.0,0.0,4)	
+	t.tween_method(_value,1.0,0.0,2)	
 	t.connect("finished", done)
 	
 

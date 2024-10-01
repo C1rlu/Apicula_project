@@ -2,8 +2,8 @@
 
 [ext_resource type="PackedScene" uid="uid://bqksk5rvc6q2h" path="res://08_SUBSCENES/Elements/Tiny_boat/boat_man_subscene_asset_01.tscn" id="2_s2d0c"]
 [ext_resource type="PackedScene" uid="uid://bneebc6fpaysa" path="res://08_SUBSCENES/Elements/Ice/ice_msh_01.tscn" id="4_e540o"]
+[ext_resource type="PackedScene" uid="uid://di031pbbucu1n" path="res://08_SUBSCENES/Elements/Magnetable_test/Debris_test.tscn" id="5_csxgb"]
 [ext_resource type="PackedScene" uid="uid://chipng023vh22" path="res://08_SUBSCENES/Elements/Ice/ice_msh_01_far.tscn" id="5_ipvrn"]
-[ext_resource type="PackedScene" uid="uid://ddac0wqbwjiqc" path="res://08_SUBSCENES/Elements/Breackable_Ice/Breakable_stone.tscn" id="8_t41ne"]
 [ext_resource type="PackedScene" uid="uid://ciuyel1b0of8e" path="res://08_SUBSCENES/Oddity/Teleporter/Teleporter_prefab.tscn" id="9_nkgxm"]
 
 [node name="BalckHole_zone" type="Node3D"]
@@ -11,15 +11,6 @@
 [node name="Static" type="Node" parent="."]
 
 [node name="Mirror_rg_body" type="Node" parent="Static"]
-
-[node name="BreakableStone3" parent="Static/Mirror_rg_body" instance=ExtResource("8_t41ne")]
-transform = Transform3D(1.8076, 0, 0, 0, 1.8076, 0, 0, 0, 1.8076, 3.3948, -1.97461, -0.00133824)
-
-[node name="BreakableStone4" parent="Static/Mirror_rg_body" instance=ExtResource("8_t41ne")]
-transform = Transform3D(1.8076, 0, 0, 0, 1.8076, 0, 0, 0, 1.8076, -1.33055, -2.41851, -0.00133824)
-
-[node name="BreakableStone5" parent="Static/Mirror_rg_body" instance=ExtResource("8_t41ne")]
-transform = Transform3D(0.9038, 1.56543, 0, -1.56543, 0.9038, 0, 0, 0, 1.8076, 0.860121, -2.41851, -0.00133824)
 
 [node name="Mirror_Static" type="Node" parent="Static"]
 
@@ -111,3 +102,16 @@ transform = Transform3D(-0.430526, 0.434579, 0.0171076, -0.415705, -0.404114, -0
 
 [node name="Ice_msh_14" parent="Static/Normal_decor" instance=ExtResource("5_ipvrn")]
 transform = Transform3D(0.816386, 0.279855, -0.0404084, -0.23767, 0.746054, 0.365176, 0.153181, -0.33395, 0.781953, -0.57117, -9.23777, -3.58519)
+
+[node name="_collect" parent="." instance=ExtResource("5_csxgb")]
+transform = Transform3D(1.00119, 0, 0, 0, 1.00119, 0, 0, 0, 1.00119, 1.067, -2.59324, 0)
+
+[node name="_collect2" parent="." node_paths=PackedStringArray("Element", "Debris") instance=ExtResource("5_csxgb")]
+transform = Transform3D(1.00119, 0, 0, 0, 1.00119, 0, 0, 0, 1.00119, 1.91276, -2.39402, -1.19209e-07)
+Element = NodePath("../_collect/Area3D/Element")
+Debris = NodePath("../_collect/Area3D/Debris")
+
+[node name="_collect3" parent="." node_paths=PackedStringArray("Element", "Debris") instance=ExtResource("5_csxgb")]
+transform = Transform3D(1.00119, 0, 0, 0, 1.00119, 0, 0, 0, 1.00119, -1.49294, -2.6824, -1.19209e-07)
+Element = NodePath("../_collect/Area3D/Element")
+Debris = NodePath("../_collect/Area3D/Debris")

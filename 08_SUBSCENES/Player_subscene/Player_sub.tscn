@@ -1,4 +1,4 @@
-[gd_scene load_steps=111 format=3 uid="uid://g7u8o55jrnyy"]
+[gd_scene load_steps=112 format=3 uid="uid://g7u8o55jrnyy"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Player_sub_behaviour.gd" id="1_o2v73"]
 [ext_resource type="Resource" uid="uid://df0swhar7lchv" path="res://08_SUBSCENES/Tools/Main_tool/Jet_tool.tres" id="2_0pvbg"]
@@ -863,6 +863,10 @@ shader_parameter/R = 0.11
 shader_parameter/Size = 0.7
 shader_parameter/flash_opacity = 0.5
 
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_jgaxt"]
+radius = 0.573
+height = 1.146
+
 [sub_resource type="SphereShape3D" id="SphereShape3D_g1ic5"]
 radius = 0.202504
 
@@ -889,7 +893,7 @@ scale_curve = SubResource("CurveTexture_wj6vn")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_to4f8"]
 shading_mode = 0
-albedo_color = Color(0.517647, 0.929412, 0.921569, 1)
+albedo_color = Color(0.721569, 0.580392, 0.407843, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_6ufqt"]
 material = SubResource("StandardMaterial3D_to4f8")
@@ -1199,6 +1203,7 @@ surface_material_override/0 = SubResource("ShaderMaterial_afy5p")
 
 [node name="Magnet2" type="MeshInstance3D" parent="Render_mesh"]
 transform = Transform3D(-1.7049e-09, -0.038187, 0, 0.0390036, -1.66921e-09, 0, 0, 0, 0.121949, 0.0349853, 0.140869, 0.0650372)
+visible = false
 layers = 131072
 mesh = SubResource("BoxMesh_8vb5i")
 skeleton = NodePath("../../Player_sub_collider")
@@ -1297,6 +1302,7 @@ surface_material_override/0 = SubResource("ShaderMaterial_phcy0")
 
 [node name="msh_Pod" parent="Render_mesh/Cosmo_Mod_02" index="6"]
 transform = Transform3D(1.20551, 0, 7.10543e-15, 0, 1.89647, 0, 0, 0, 1.89647, -3.10158, 5.73374, 0)
+visible = false
 layers = 4
 surface_material_override/0 = SubResource("ShaderMaterial_fysva")
 
@@ -1324,7 +1330,7 @@ surface_material_override/0 = SubResource("ShaderMaterial_afy5p")
 surface_material_override/1 = SubResource("ShaderMaterial_afy5p")
 
 [node name="msh_airsuit2" type="MeshInstance3D" parent="Render_mesh/Cosmo_Mod_02"]
-transform = Transform3D(0.533759, 0, 0, 0, 0.533759, 0, 0, 0, 0.533759, -1.24269, 3.79414, 0)
+transform = Transform3D(0.533759, 0, 1.77636e-15, 0, 0.533759, 0, -1.77636e-15, 0, 0.533759, -1.24269, 3.79414, 0)
 layers = 131072
 mesh = SubResource("ArrayMesh_ysog3")
 skeleton = NodePath("")
@@ -1339,7 +1345,8 @@ skeleton = NodePath("")
 surface_material_override/0 = SubResource("ShaderMaterial_afy5p")
 
 [node name="msh_Pod2" type="MeshInstance3D" parent="Render_mesh/Cosmo_Mod_02"]
-transform = Transform3D(1.20551, 0, 0, 0, 1.89647, 0, 0, 0, 1.89647, -3.10158, 5.73374, 0)
+transform = Transform3D(1.20551, 0, 2.13163e-14, 0, 1.89647, 0, -1.42109e-14, 0, 1.89647, -3.10158, 5.73374, 0)
+visible = false
 layers = 131072
 mesh = SubResource("ArrayMesh_da5nx")
 skeleton = NodePath("")
@@ -1360,6 +1367,15 @@ surface_material_override/0 = SubResource("ShaderMaterial_4j2xv")
 
 [node name="Debris_particule_Hit" type="Node3D" parent="Render_mesh"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0349993, 0.137641, 0.18686)
+
+[node name="Bag" type="MeshInstance3D" parent="Render_mesh"]
+transform = Transform3D(0.184351, 0, 0, 0, 0.184351, 0, 0, 0, 0.184351, 0, 0.153727, -0.154508)
+layers = 4
+mesh = SubResource("CapsuleMesh_jgaxt")
+surface_material_override/0 = SubResource("ShaderMaterial_fysva")
+
+[node name="Node3D" type="Node3D" parent="Render_mesh/Bag"]
+transform = Transform3D(0.999999, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 0.595256, -0.0627379, 0)
 
 [node name="ZoneCollide" type="Area3D" parent="."]
 collision_layer = 4
