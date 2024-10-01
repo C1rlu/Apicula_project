@@ -1,13 +1,11 @@
 extends Node
 
 @onready var backdrop_focus = $"../../Control/BACKDROP_FOCUS"
-@onready var render_scanner = $"../../Control/RENDER_Scanner"
-@onready var render_scanner_noise = $"../../Control/RENDER_Scanner_NOISE"
-
+@onready var render_scanner = $"../../Control/RENDER"
 
 @onready var render_scanner_material : Material = render_scanner.get_material()
 @onready var backdrop_focus_material : Material = backdrop_focus.get_material()
-@onready var render_scanner_noise_material : Material = render_scanner_noise.get_material()
+
 
 
 var fade_in
@@ -17,8 +15,8 @@ var actual_value : float
 func _ready():
 
 	_global_datas.show_on_scanner.connect(start_fade_in)
-	_global_datas._backFrom_subscene.connect(hide)
-	_global_datas._go_Subscene.connect(show)
+	#_global_datas._backFrom_subscene.connect(hide)
+	#_global_datas._go_Subscene.connect(show)
 	
 func show():
 	
@@ -50,6 +48,4 @@ func set_shader_value(value):
 	
 	var clamp_backdrop = clampf(value,0.0,0.9)
 	backdrop_focus_material.set_shader_parameter("Opacity",clamp_backdrop)
-	var clamp_scanner_noise = clampf(value,0.0,0.525)
-	render_scanner_noise_material.set_shader_parameter("Opacity",clamp_scanner_noise )
 	actual_value = value

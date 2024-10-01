@@ -1,4 +1,4 @@
-[gd_scene load_steps=71 format=3 uid="uid://nigmie4bbn6"]
+[gd_scene load_steps=68 format=3 uid="uid://nigmie4bbn6"]
 
 [ext_resource type="Script" path="res://08_SUBSCENES/00_Scripts/Subscene_loader.gd" id="1_7uoo0"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="2_3srhu"]
@@ -19,11 +19,11 @@
 [ext_resource type="Script" path="res://08_SUBSCENES/Tools/PhotoData_list_update.gd" id="10_w7dre"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Clock_sonar_VFX.gd" id="14_xtaeu"]
 [ext_resource type="Material" uid="uid://b1iqs8p4it3ni" path="res://05_SHADER/Full_screen/Subscene_screen/Scanner_subscene_dither.tres" id="15_6os4y"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/ELEMENT_COLLECT.gd" id="16_4hiyp"]
 [ext_resource type="Shader" uid="uid://b8diek1y2u36x" path="res://05_SHADER/Full_screen/Subscene_screen/subscene_MainRender_sh.tres" id="19_hf1w5"]
 [ext_resource type="Script" path="res://03_CAMERA/Active_scene_viewports.gd" id="21_jai7k"]
-[ext_resource type="Shader" uid="uid://cu2uipuy138c6" path="res://05_SHADER/All_Materials/Main_sceneTest_dither_sh.tres" id="23_bhsjm"]
+[ext_resource type="Shader" uid="uid://btl0hgwwfslhj" path="res://08_SUBSCENES/Elements/Magnetable_test/00_SHADER/Debris_scanner_sh.tres" id="23_2nl27"]
 [ext_resource type="Material" uid="uid://yjoyk6fvrm6q" path="res://10_BOARD/00_BOOK/00_SHADER/No_light_surface_mat.tres" id="24_4afhw"]
+[ext_resource type="Shader" uid="uid://be88gec6clk8u" path="res://05_SHADER/Subscene_materials/Subscene_sh.tres" id="24_wfo43"]
 [ext_resource type="PackedScene" uid="uid://bneebc6fpaysa" path="res://08_SUBSCENES/Elements/Ice/ice_msh_01.tscn" id="26_ihpox"]
 [ext_resource type="Material" uid="uid://cnldw4hovjlgd" path="res://05_SHADER/Subscene_materials/Subscene_shine_elements_mat.tres" id="27_nfh36"]
 
@@ -196,25 +196,11 @@ func _ready():
 parameter_name = "Subscene_Darker_color"
 qualifier = 1
 
-[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_dc07x"]
-default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
-op_type = 3
-
-[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_1q26m"]
-size = Vector2(620, 200)
-expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
-grey_value = luminance;"
-
-[sub_resource type="VisualShaderNodeBooleanParameter" id="VisualShaderNodeBooleanParameter_xh1cn"]
-parameter_name = "isGray"
-qualifier = 1
-
 [sub_resource type="VisualShader" id="VisualShader_w0d7f"]
 code = "shader_type spatial;
 render_mode blend_mix, depth_draw_never, cull_back, diffuse_lambert, specular_schlick_ggx, shadows_disabled, debug_shadow_splits;
 
 global uniform vec4 Subscene_Darker_color : source_color;
-global uniform bool isGray;
 
 
 
@@ -223,48 +209,20 @@ void fragment() {
 	vec4 n_out2p0 = Subscene_Darker_color;
 
 
-	float n_out4p0;
-// Expression:4
-	n_out4p0 = 0.0;
-	{
-		float luminance = 0.299 * vec3(n_out2p0.xyz).x + 0.587 * vec3(n_out2p0.xyz).y + 0.114 * vec3(n_out2p0.xyz).z;
-		n_out4p0 = luminance;
-	}
-
-
-// BooleanParameter:5
-	bool n_out5p0 = isGray;
-
-
-// Mix:3
-	vec3 n_out3p0 = mix(vec3(n_out2p0.xyz), vec3(n_out4p0), vec3(n_out5p0 ? 1.0 : 0.0));
-
-
 // Output:0
-	ALBEDO = n_out3p0;
+	ALBEDO = vec3(n_out2p0.xyz);
 
 
 }
 "
-graph_offset = Vector2(-510.35, -38.5579)
+graph_offset = Vector2(-141.992, -224.609)
 modes/depth_draw = 2
 flags/shadows_disabled = true
 flags/debug_shadow_splits = true
-nodes/fragment/0/position = Vector2(660, 60)
+nodes/fragment/0/position = Vector2(800, 0)
 nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_e055c")
-nodes/fragment/2/position = Vector2(-700, 0)
-nodes/fragment/3/node = SubResource("VisualShaderNodeMix_dc07x")
-nodes/fragment/3/position = Vector2(240, 440)
-nodes/fragment/4/node = SubResource("VisualShaderNodeExpression_1q26m")
-nodes/fragment/4/position = Vector2(-440, 240)
-nodes/fragment/4/size = Vector2(620, 200)
-nodes/fragment/4/input_ports = "0,4,color;"
-nodes/fragment/4/output_ports = "0,0,grey_value;"
-nodes/fragment/4/expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
-grey_value = luminance;"
-nodes/fragment/5/node = SubResource("VisualShaderNodeBooleanParameter_xh1cn")
-nodes/fragment/5/position = Vector2(-140, 660)
-nodes/fragment/connections = PackedInt32Array(4, 0, 3, 1, 5, 0, 3, 2, 2, 0, 4, 0, 2, 0, 3, 0, 3, 0, 0, 0)
+nodes/fragment/2/position = Vector2(280, -40)
+nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0)
 nodes/light/0/position = Vector2(1060, 580)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_eihye"]
@@ -275,18 +233,14 @@ shader = SubResource("VisualShader_w0d7f")
 material = SubResource("ShaderMaterial_eihye")
 size = Vector2(20, 20)
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_g8i05"]
-viewport_path = NodePath("Viewport/Light_Blue_pass_SubViewport")
-
 [sub_resource type="ViewportTexture" id="ViewportTexture_1gop8"]
 viewport_path = NodePath("Viewport/Main_SubViewport")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_n6ubc"]
 resource_local_to_scene = true
 shader = ExtResource("19_hf1w5")
-shader_parameter/Opacity = 0.0
+shader_parameter/Opacity = 1.0
 shader_parameter/Main_base = SubResource("ViewportTexture_1gop8")
-shader_parameter/Light_pass = SubResource("ViewportTexture_g8i05")
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_gasoh"]
 viewport_path = NodePath("Viewport/Main_SubViewport")
@@ -316,7 +270,8 @@ constant = Color(0.0157082, 0.0850316, 0.0974775, 1)
 gradient = SubResource("Gradient_wtm6t")
 width = 1024
 height = 1024
-fill_from = Vector2(1, 1)
+fill_from = Vector2(1, 0.820513)
+fill_to = Vector2(1, 0.17094)
 
 [sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_3d0nm"]
 texture = SubResource("GradientTexture2D_twljs")
@@ -353,6 +308,7 @@ qualifier = 1
 code = "shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_disabled, unshaded, ambient_light_disabled;
 
+uniform sampler2D tex_frg_2;
 
 
 
@@ -361,13 +317,18 @@ void fragment() {
 	vec4 n_out8p0 = vec4(0.018176, 0.144868, 0.165902, 1.000000);
 
 
+// Texture2D:2
+	vec4 n_out2p0 = texture(tex_frg_2, UV);
+
+
 // Output:0
 	ALBEDO = vec3(n_out8p0.xyz);
+	ALPHA = n_out2p0.x;
 
 
 }
 "
-graph_offset = Vector2(-600.741, -259.922)
+graph_offset = Vector2(-483.78, -201.305)
 modes/specular = 2
 flags/unshaded = true
 flags/ambient_light_disabled = true
@@ -402,10 +363,10 @@ nodes/fragment/9/position = Vector2(-2160, 480)
 nodes/fragment/13/node = SubResource("VisualShaderNodeMix_d01hj")
 nodes/fragment/13/position = Vector2(-360, -60)
 nodes/fragment/14/node = SubResource("VisualShaderNodeMix_ekmw2")
-nodes/fragment/14/position = Vector2(260, -100)
+nodes/fragment/14/position = Vector2(480, -320)
 nodes/fragment/15/node = SubResource("VisualShaderNodeColorConstant_3i7xl")
 nodes/fragment/15/position = Vector2(-20, -360)
-nodes/fragment/connections = PackedInt32Array(4, 0, 5, 0, 5, 0, 6, 1, 7, 0, 6, 0, 9, 0, 5, 1, 2, 0, 7, 0, 6, 0, 13, 0, 2, 0, 13, 1, 15, 0, 14, 0, 8, 0, 14, 1, 8, 0, 0, 0)
+nodes/fragment/connections = PackedInt32Array(4, 0, 5, 0, 5, 0, 6, 1, 7, 0, 6, 0, 9, 0, 5, 1, 2, 0, 7, 0, 6, 0, 13, 0, 2, 0, 13, 1, 15, 0, 14, 0, 8, 0, 14, 1, 8, 0, 0, 0, 2, 0, 0, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5os4v"]
 render_priority = 0
@@ -454,13 +415,18 @@ size = Vector3(2.03379, 0.029557, 10.4284)
 radial_segments = 8
 rings = 8
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ygjub"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7abhv"]
 resource_local_to_scene = true
-render_priority = 1
-shader = ExtResource("23_bhsjm")
-shader_parameter/ColorParameter = Color(0.294118, 0.556863, 0.54902, 1)
-shader_parameter/Color = Color(0.258824, 0.235294, 0.168627, 1)
-shader_parameter/Dither_strenght = 0.555
+render_priority = 0
+shader = ExtResource("23_2nl27")
+shader_parameter/Color = Color(0.788235, 0.588235, 0.345098, 1)
+shader_parameter/Opacity = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mepxy"]
+resource_local_to_scene = true
+render_priority = 0
+next_pass = SubResource("ShaderMaterial_7abhv")
+shader = ExtResource("24_wfo43")
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_igmwt"]
 data = PackedVector3Array(0, 0.5, 0, 0, 0.5, 0, 0, 0.4698, 0.171, 0, 0.5, 0, 0.1209, 0.4698, 0.1209, 0, 0.4698, 0.171, 0, 0.5, 0, 0, 0.5, 0, 0.1209, 0.4698, 0.1209, 0, 0.5, 0, 0.171, 0.4698, 0, 0.1209, 0.4698, 0.1209, 0, 0.5, 0, 0, 0.5, 0, 0.171, 0.4698, 0, 0, 0.5, 0, 0.1209, 0.4698, -0.1209, 0.171, 0.4698, 0, 0, 0.5, 0, 0, 0.5, 0, 0.1209, 0.4698, -0.1209, 0, 0.5, 0, 0, 0.4698, -0.171, 0.1209, 0.4698, -0.1209, 0, 0.5, 0, 0, 0.5, 0, 0, 0.4698, -0.171, 0, 0.5, 0, -0.1209, 0.4698, -0.1209, 0, 0.4698, -0.171, 0, 0.5, 0, 0, 0.5, 0, -0.1209, 0.4698, -0.1209, 0, 0.5, 0, -0.171, 0.4698, 0, -0.1209, 0.4698, -0.1209, 0, 0.5, 0, 0, 0.5, 0, -0.171, 0.4698, 0, 0, 0.5, 0, -0.1209, 0.4698, 0.1209, -0.171, 0.4698, 0, 0, 0.5, 0, 0, 0.5, 0, -0.1209, 0.4698, 0.1209, 0, 0.5, 0, 0, 0.4698, 0.171, -0.1209, 0.4698, 0.1209, 0, 0.4698, 0.171, 0.1209, 0.4698, 0.1209, 0, 0.383, 0.3214, 0.1209, 0.4698, 0.1209, 0.2273, 0.383, 0.2273, 0, 0.383, 0.3214, 0.1209, 0.4698, 0.1209, 0.171, 0.4698, 0, 0.2273, 0.383, 0.2273, 0.171, 0.4698, 0, 0.3214, 0.383, 0, 0.2273, 0.383, 0.2273, 0.171, 0.4698, 0, 0.1209, 0.4698, -0.1209, 0.3214, 0.383, 0, 0.1209, 0.4698, -0.1209, 0.2273, 0.383, -0.2273, 0.3214, 0.383, 0, 0.1209, 0.4698, -0.1209, 0, 0.4698, -0.171, 0.2273, 0.383, -0.2273, 0, 0.4698, -0.171, 0, 0.383, -0.3214, 0.2273, 0.383, -0.2273, 0, 0.4698, -0.171, -0.1209, 0.4698, -0.1209, 0, 0.383, -0.3214, -0.1209, 0.4698, -0.1209, -0.2273, 0.383, -0.2273, 0, 0.383, -0.3214, -0.1209, 0.4698, -0.1209, -0.171, 0.4698, 0, -0.2273, 0.383, -0.2273, -0.171, 0.4698, 0, -0.3214, 0.383, 0, -0.2273, 0.383, -0.2273, -0.171, 0.4698, 0, -0.1209, 0.4698, 0.1209, -0.3214, 0.383, 0, -0.1209, 0.4698, 0.1209, -0.2273, 0.383, 0.2273, -0.3214, 0.383, 0, -0.1209, 0.4698, 0.1209, 0, 0.4698, 0.171, -0.2273, 0.383, 0.2273, 0, 0.4698, 0.171, 0, 0.383, 0.3214, -0.2273, 0.383, 0.2273, 0, 0.383, 0.3214, 0.2273, 0.383, 0.2273, 0, 0.25, 0.433, 0.2273, 0.383, 0.2273, 0.3062, 0.25, 0.3062, 0, 0.25, 0.433, 0.2273, 0.383, 0.2273, 0.3214, 0.383, 0, 0.3062, 0.25, 0.3062, 0.3214, 0.383, 0, 0.433, 0.25, 0, 0.3062, 0.25, 0.3062, 0.3214, 0.383, 0, 0.2273, 0.383, -0.2273, 0.433, 0.25, 0, 0.2273, 0.383, -0.2273, 0.3062, 0.25, -0.3062, 0.433, 0.25, 0, 0.2273, 0.383, -0.2273, 0, 0.383, -0.3214, 0.3062, 0.25, -0.3062, 0, 0.383, -0.3214, 0, 0.25, -0.433, 0.3062, 0.25, -0.3062, 0, 0.383, -0.3214, -0.2273, 0.383, -0.2273, 0, 0.25, -0.433, -0.2273, 0.383, -0.2273, -0.3062, 0.25, -0.3062, 0, 0.25, -0.433, -0.2273, 0.383, -0.2273, -0.3214, 0.383, 0, -0.3062, 0.25, -0.3062, -0.3214, 0.383, 0, -0.433, 0.25, 0, -0.3062, 0.25, -0.3062, -0.3214, 0.383, 0, -0.2273, 0.383, 0.2273, -0.433, 0.25, 0, -0.2273, 0.383, 0.2273, -0.3062, 0.25, 0.3062, -0.433, 0.25, 0, -0.2273, 0.383, 0.2273, 0, 0.383, 0.3214, -0.3062, 0.25, 0.3062, 0, 0.383, 0.3214, 0, 0.25, 0.433, -0.3062, 0.25, 0.3062, 0, 0.25, 0.433, 0.3062, 0.25, 0.3062, 0, 0.0868, 0.4924, 0.3062, 0.25, 0.3062, 0.3482, 0.0868, 0.3482, 0, 0.0868, 0.4924, 0.3062, 0.25, 0.3062, 0.433, 0.25, 0, 0.3482, 0.0868, 0.3482, 0.433, 0.25, 0, 0.4924, 0.0868, 0, 0.3482, 0.0868, 0.3482, 0.433, 0.25, 0, 0.3062, 0.25, -0.3062, 0.4924, 0.0868, 0, 0.3062, 0.25, -0.3062, 0.3482, 0.0868, -0.3482, 0.4924, 0.0868, 0, 0.3062, 0.25, -0.3062, 0, 0.25, -0.433, 0.3482, 0.0868, -0.3482, 0, 0.25, -0.433, 0, 0.0868, -0.4924, 0.3482, 0.0868, -0.3482, 0, 0.25, -0.433, -0.3062, 0.25, -0.3062, 0, 0.0868, -0.4924, -0.3062, 0.25, -0.3062, -0.3482, 0.0868, -0.3482, 0, 0.0868, -0.4924, -0.3062, 0.25, -0.3062, -0.433, 0.25, 0, -0.3482, 0.0868, -0.3482, -0.433, 0.25, 0, -0.4924, 0.0868, 0, -0.3482, 0.0868, -0.3482, -0.433, 0.25, 0, -0.3062, 0.25, 0.3062, -0.4924, 0.0868, 0, -0.3062, 0.25, 0.3062, -0.3482, 0.0868, 0.3482, -0.4924, 0.0868, 0, -0.3062, 0.25, 0.3062, 0, 0.25, 0.433, -0.3482, 0.0868, 0.3482, 0, 0.25, 0.433, 0, 0.0868, 0.4924, -0.3482, 0.0868, 0.3482, 0, 0.0868, 0.4924, 0.3482, 0.0868, 0.3482, 0, -0.0868, 0.4924, 0.3482, 0.0868, 0.3482, 0.3482, -0.0868, 0.3482, 0, -0.0868, 0.4924, 0.3482, 0.0868, 0.3482, 0.4924, 0.0868, 0, 0.3482, -0.0868, 0.3482, 0.4924, 0.0868, 0, 0.4924, -0.0868, 0, 0.3482, -0.0868, 0.3482, 0.4924, 0.0868, 0, 0.3482, 0.0868, -0.3482, 0.4924, -0.0868, 0, 0.3482, 0.0868, -0.3482, 0.3482, -0.0868, -0.3482, 0.4924, -0.0868, 0, 0.3482, 0.0868, -0.3482, 0, 0.0868, -0.4924, 0.3482, -0.0868, -0.3482, 0, 0.0868, -0.4924, 0, -0.0868, -0.4924, 0.3482, -0.0868, -0.3482, 0, 0.0868, -0.4924, -0.3482, 0.0868, -0.3482, 0, -0.0868, -0.4924, -0.3482, 0.0868, -0.3482, -0.3482, -0.0868, -0.3482, 0, -0.0868, -0.4924, -0.3482, 0.0868, -0.3482, -0.4924, 0.0868, 0, -0.3482, -0.0868, -0.3482, -0.4924, 0.0868, 0, -0.4924, -0.0868, 0, -0.3482, -0.0868, -0.3482, -0.4924, 0.0868, 0, -0.3482, 0.0868, 0.3482, -0.4924, -0.0868, 0, -0.3482, 0.0868, 0.3482, -0.3482, -0.0868, 0.3482, -0.4924, -0.0868, 0, -0.3482, 0.0868, 0.3482, 0, 0.0868, 0.4924, -0.3482, -0.0868, 0.3482, 0, 0.0868, 0.4924, 0, -0.0868, 0.4924, -0.3482, -0.0868, 0.3482, 0, -0.0868, 0.4924, 0.3482, -0.0868, 0.3482, 0, -0.25, 0.433, 0.3482, -0.0868, 0.3482, 0.3062, -0.25, 0.3062, 0, -0.25, 0.433, 0.3482, -0.0868, 0.3482, 0.4924, -0.0868, 0, 0.3062, -0.25, 0.3062, 0.4924, -0.0868, 0, 0.433, -0.25, 0, 0.3062, -0.25, 0.3062, 0.4924, -0.0868, 0, 0.3482, -0.0868, -0.3482, 0.433, -0.25, 0, 0.3482, -0.0868, -0.3482, 0.3062, -0.25, -0.3062, 0.433, -0.25, 0, 0.3482, -0.0868, -0.3482, 0, -0.0868, -0.4924, 0.3062, -0.25, -0.3062, 0, -0.0868, -0.4924, 0, -0.25, -0.433, 0.3062, -0.25, -0.3062, 0, -0.0868, -0.4924, -0.3482, -0.0868, -0.3482, 0, -0.25, -0.433, -0.3482, -0.0868, -0.3482, -0.3062, -0.25, -0.3062, 0, -0.25, -0.433, -0.3482, -0.0868, -0.3482, -0.4924, -0.0868, 0, -0.3062, -0.25, -0.3062, -0.4924, -0.0868, 0, -0.433, -0.25, 0, -0.3062, -0.25, -0.3062, -0.4924, -0.0868, 0, -0.3482, -0.0868, 0.3482, -0.433, -0.25, 0, -0.3482, -0.0868, 0.3482, -0.3062, -0.25, 0.3062, -0.433, -0.25, 0, -0.3482, -0.0868, 0.3482, 0, -0.0868, 0.4924, -0.3062, -0.25, 0.3062, 0, -0.0868, 0.4924, 0, -0.25, 0.433, -0.3062, -0.25, 0.3062, 0, -0.25, 0.433, 0.3062, -0.25, 0.3062, 0, -0.383, 0.3214, 0.3062, -0.25, 0.3062, 0.2273, -0.383, 0.2273, 0, -0.383, 0.3214, 0.3062, -0.25, 0.3062, 0.433, -0.25, 0, 0.2273, -0.383, 0.2273, 0.433, -0.25, 0, 0.3214, -0.383, 0, 0.2273, -0.383, 0.2273, 0.433, -0.25, 0, 0.3062, -0.25, -0.3062, 0.3214, -0.383, 0, 0.3062, -0.25, -0.3062, 0.2273, -0.383, -0.2273, 0.3214, -0.383, 0, 0.3062, -0.25, -0.3062, 0, -0.25, -0.433, 0.2273, -0.383, -0.2273, 0, -0.25, -0.433, 0, -0.383, -0.3214, 0.2273, -0.383, -0.2273, 0, -0.25, -0.433, -0.3062, -0.25, -0.3062, 0, -0.383, -0.3214, -0.3062, -0.25, -0.3062, -0.2273, -0.383, -0.2273, 0, -0.383, -0.3214, -0.3062, -0.25, -0.3062, -0.433, -0.25, 0, -0.2273, -0.383, -0.2273, -0.433, -0.25, 0, -0.3214, -0.383, 0, -0.2273, -0.383, -0.2273, -0.433, -0.25, 0, -0.3062, -0.25, 0.3062, -0.3214, -0.383, 0, -0.3062, -0.25, 0.3062, -0.2273, -0.383, 0.2273, -0.3214, -0.383, 0, -0.3062, -0.25, 0.3062, 0, -0.25, 0.433, -0.2273, -0.383, 0.2273, 0, -0.25, 0.433, 0, -0.383, 0.3214, -0.2273, -0.383, 0.2273, 0, -0.383, 0.3214, 0.2273, -0.383, 0.2273, 0, -0.4698, 0.171, 0.2273, -0.383, 0.2273, 0.1209, -0.4698, 0.1209, 0, -0.4698, 0.171, 0.2273, -0.383, 0.2273, 0.3214, -0.383, 0, 0.1209, -0.4698, 0.1209, 0.3214, -0.383, 0, 0.171, -0.4698, 0, 0.1209, -0.4698, 0.1209, 0.3214, -0.383, 0, 0.2273, -0.383, -0.2273, 0.171, -0.4698, 0, 0.2273, -0.383, -0.2273, 0.1209, -0.4698, -0.1209, 0.171, -0.4698, 0, 0.2273, -0.383, -0.2273, 0, -0.383, -0.3214, 0.1209, -0.4698, -0.1209, 0, -0.383, -0.3214, 0, -0.4698, -0.171, 0.1209, -0.4698, -0.1209, 0, -0.383, -0.3214, -0.2273, -0.383, -0.2273, 0, -0.4698, -0.171, -0.2273, -0.383, -0.2273, -0.1209, -0.4698, -0.1209, 0, -0.4698, -0.171, -0.2273, -0.383, -0.2273, -0.3214, -0.383, 0, -0.1209, -0.4698, -0.1209, -0.3214, -0.383, 0, -0.171, -0.4698, 0, -0.1209, -0.4698, -0.1209, -0.3214, -0.383, 0, -0.2273, -0.383, 0.2273, -0.171, -0.4698, 0, -0.2273, -0.383, 0.2273, -0.1209, -0.4698, 0.1209, -0.171, -0.4698, 0, -0.2273, -0.383, 0.2273, 0, -0.383, 0.3214, -0.1209, -0.4698, 0.1209, 0, -0.383, 0.3214, 0, -0.4698, 0.171, -0.1209, -0.4698, 0.1209, 0, -0.4698, 0.171, 0.1209, -0.4698, 0.1209, 0, -0.5, 0, 0.1209, -0.4698, 0.1209, 0, -0.5, 0, 0, -0.5, 0, 0.1209, -0.4698, 0.1209, 0.171, -0.4698, 0, 0, -0.5, 0, 0.171, -0.4698, 0, 0, -0.5, 0, 0, -0.5, 0, 0.171, -0.4698, 0, 0.1209, -0.4698, -0.1209, 0, -0.5, 0, 0.1209, -0.4698, -0.1209, 0, -0.5, 0, 0, -0.5, 0, 0.1209, -0.4698, -0.1209, 0, -0.4698, -0.171, 0, -0.5, 0, 0, -0.4698, -0.171, 0, -0.5, 0, 0, -0.5, 0, 0, -0.4698, -0.171, -0.1209, -0.4698, -0.1209, 0, -0.5, 0, -0.1209, -0.4698, -0.1209, 0, -0.5, 0, 0, -0.5, 0, -0.1209, -0.4698, -0.1209, -0.171, -0.4698, 0, 0, -0.5, 0, -0.171, -0.4698, 0, 0, -0.5, 0, 0, -0.5, 0, -0.171, -0.4698, 0, -0.1209, -0.4698, 0.1209, 0, -0.5, 0, -0.1209, -0.4698, 0.1209, 0, -0.5, 0, 0, -0.5, 0, -0.1209, -0.4698, 0.1209, 0, -0.4698, 0.171, 0, -0.5, 0, 0, -0.4698, 0.171, 0, -0.5, 0, 0, -0.5, 0)
@@ -489,7 +455,7 @@ metadata/_edit_horizontal_guides_ = [540.0]
 
 [node name="set_Resolution" type="Node" parent="." node_paths=PackedStringArray("viewports")]
 script = ExtResource("2_3srhu")
-viewports = [NodePath("../Viewport/Main_SubViewport"), NodePath("../Viewport/Scanner_x_SubViewport"), NodePath("../Viewport/Light_Blue_pass_SubViewport"), NodePath("../Viewport/Light_Yellow_pass_SubViewport")]
+viewports = [NodePath("../Viewport/Main_SubViewport"), NodePath("../Viewport/Scanner_x_SubViewport")]
 
 [node name="PhotoData_list_update" type="Node" parent="."]
 script = ExtResource("10_w7dre")
@@ -526,11 +492,6 @@ script = SubResource("GDScript_nvaxv")
 [node name="IN_MIRROR_ZONE" type="Node" parent="."]
 script = ExtResource("10_qqphy")
 
-[node name="ELEMENT_COLLECT" type="Node" parent="." node_paths=PackedStringArray("collector_area")]
-script = ExtResource("16_4hiyp")
-collector_area = NodePath("../Boue/Area3D")
-active = true
-
 [node name="MainOddity_Sonar_VFX" type="Node" parent="."]
 script = ExtResource("14_xtaeu")
 
@@ -542,11 +503,11 @@ one_shot = true
 
 [node name="Active_scene_viewports" type="Node" parent="Viewport" node_paths=PackedStringArray("viewports")]
 script = ExtResource("21_jai7k")
-viewports = [NodePath("../Main_SubViewport"), NodePath("../Scanner_x_SubViewport"), NodePath("../Light_Blue_pass_SubViewport"), NodePath("../Light_Yellow_pass_SubViewport")]
+viewports = [NodePath("../Main_SubViewport"), NodePath("../Scanner_x_SubViewport")]
 
 [node name="All_cam_follow" type="Node" parent="Viewport" node_paths=PackedStringArray("_all_cam_array")]
 script = ExtResource("2_tc6o2")
-_all_cam_array = [NodePath("../Main_SubViewport/CAM_STATE_MAIN"), NodePath("../Scanner_x_SubViewport/CAM_STATE_BOAT"), NodePath("../Light_Blue_pass_SubViewport/CAM_STATE_LIGHT_BLUE"), NodePath("../Light_Yellow_pass_SubViewport/CAM_STATE_LIGHT_YELLOW")]
+_all_cam_array = [NodePath("../Main_SubViewport/CAM_STATE_MAIN"), NodePath("../Scanner_x_SubViewport/CAM_STATE_BOAT")]
 basePos = Vector3(0, -0.35, 0)
 dialogue_Pos = Vector3(-1.25, 0.9, 0)
 
@@ -566,24 +527,6 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 
 layers = 4
 mesh = SubResource("PlaneMesh_8q6wo")
 skeleton = NodePath("../../../..")
-
-[node name="Light_Blue_pass_SubViewport" type="SubViewport" parent="Viewport"]
-transparent_bg = true
-handle_input_locally = false
-size = Vector2i(1920, 1080)
-
-[node name="CAM_STATE_LIGHT_BLUE" type="Camera3D" parent="Viewport/Light_Blue_pass_SubViewport"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 1.8)
-cull_mask = 131072
-
-[node name="Light_Yellow_pass_SubViewport" type="SubViewport" parent="Viewport"]
-transparent_bg = true
-handle_input_locally = false
-size = Vector2i(1920, 1080)
-
-[node name="CAM_STATE_LIGHT_YELLOW" type="Camera3D" parent="Viewport/Light_Yellow_pass_SubViewport"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 1.8)
-cull_mask = 16384
 
 [node name="Scanner_x_SubViewport" type="SubViewport" parent="Viewport"]
 process_thread_group = 1
@@ -643,6 +586,7 @@ surface_material_override/0 = SubResource("ShaderMaterial_5os4v")
 
 [node name="WATER_SURFACE2" type="MeshInstance3D" parent="."]
 transform = Transform3D(11.2155, 0, 0, 0, -7.74673, 4.39024e-08, 0, -6.77241e-07, -0.502185, 0, 0.964028, -0.773959)
+visible = false
 layers = 147456
 mesh = SubResource("PlaneMesh_llvpy")
 surface_material_override/0 = SubResource("ShaderMaterial_gtrpy")
@@ -659,6 +603,7 @@ shape = SubResource("BoxShape3D_qfjre")
 
 [node name="Boue" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.021857, 0)
+visible = false
 
 [node name="Area3D" type="Area3D" parent="Boue"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.19174, 0.523995, 0)
@@ -667,12 +612,13 @@ collision_mask = 4
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Boue/Area3D"]
 shape = SubResource("SphereShape3D_6ormk")
+disabled = true
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="Boue"]
 transform = Transform3D(1.87951, 0, 0, 0, 1.05546, 0, 0, 0, 1.87951, -1.18672, 0.977248, 0.00606135)
 layers = 4
 mesh = SubResource("SphereMesh_aqe8h")
-surface_material_override/0 = SubResource("ShaderMaterial_ygjub")
+surface_material_override/0 = SubResource("ShaderMaterial_mepxy")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Boue/MeshInstance3D2"]
 collision_layer = 2
@@ -680,6 +626,7 @@ collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Boue/MeshInstance3D2/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_igmwt")
+disabled = true
 
 [node name="MeshInstance3D5_light_blue" type="MeshInstance3D" parent="Boue"]
 transform = Transform3D(1.87951, 0, 0, 0, 1.05546, 0, 0, 0, 1.87951, -1.18672, 0.977248, 0.00606135)
@@ -709,7 +656,7 @@ surface_material_override/0 = SubResource("ShaderMaterial_vcl6w")
 transform = Transform3D(0.641916, 0, 0, 0, 0.165495, 0, 0, 0, 0.641916, -1.19252, 0.613777, 0)
 layers = 4
 mesh = SubResource("CylinderMesh_an4fj")
-surface_material_override/0 = SubResource("ShaderMaterial_ygjub")
+surface_material_override/0 = SubResource("ShaderMaterial_mepxy")
 
 [node name="MeshInstance3D5_light_blue2" type="MeshInstance3D" parent="Boue"]
 transform = Transform3D(0.641916, 0, 0, 0, 0.165495, 0, 0, 0, 0.641916, -1.19252, 0.613777, 0)

@@ -1,7 +1,15 @@
-[gd_scene load_steps=7 format=3 uid="uid://lh8qiwp2gfcn"]
+[gd_scene load_steps=8 format=3 uid="uid://lh8qiwp2gfcn"]
 
-[ext_resource type="Material" uid="uid://bxf2r8qu2qvay" path="res://05_SHADER/Subscene_materials/Subscene_basic_rock.tres" id="1_gt48w"]
+[ext_resource type="Shader" uid="uid://cu2uipuy138c6" path="res://05_SHADER/All_Materials/Main_sceneTest_dither_sh.tres" id="1_fvsou"]
 [ext_resource type="Script" path="res://10_BOARD/Element_Broke/Hit_particule_effect.gd" id="2_vesfc"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1a1t3"]
+resource_local_to_scene = true
+render_priority = 1
+shader = ExtResource("1_fvsou")
+shader_parameter/ColorParameter = Color(0.294118, 0.556863, 0.54902, 1)
+shader_parameter/Color = Color(0.0784314, 0.298039, 0.368627, 1)
+shader_parameter/Dither_strenght = 0.555
 
 [sub_resource type="Curve" id="Curve_7e5h5"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.0268573), -1.35893, 0.0, 0, 0]
@@ -28,8 +36,8 @@ radial_segments = 6
 rings = 3
 
 [node name="Hit_particule" type="GPUParticles3D"]
-layers = 4
-material_override = ExtResource("1_gt48w")
+layers = 131076
+material_override = SubResource("ShaderMaterial_1a1t3")
 emitting = false
 amount = 15
 one_shot = true

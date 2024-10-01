@@ -1,7 +1,7 @@
 extends Node
 
-@export var _sonar_blue_color : Color
-@export var _sonar_yellow_color : Color
+#@export var _sonar_blue_color : Color
+#@export var _sonar_yellow_color : Color
 
 @export var Rg : RigidBody3D
 @export var hit_node : Node3D
@@ -31,7 +31,7 @@ func _contact(body_rid, body, body_shape_index, local_shape_index):
 		var lootable = body.get_node_or_null("Breaking_me")	
 		var vortex = body.get_node_or_null("Breaking_Vortex")
 		
-		var Scannable = body.get_node_or_null("Scannable")
+		#var Scannable = body.get_node_or_null("Scannable")
 		var Ghost_light = body.get_node_or_null("Ghost_light")
 		if Ghost_light:
 			
@@ -42,16 +42,15 @@ func _contact(body_rid, body, body_shape_index, local_shape_index):
 			return		
 			
 		
-	
-		if Scannable:
-			
-				Scannable._hit()
-				timer.start()
-				check_player_speed(body.global_position)
-
-				_global_datas.subscene_sonar_effect.emit(_global_datas.player_rg.position,_sonar_yellow_color)	
-				return		
-		
+		#if Scannable:
+			#
+				#Scannable._hit()
+				#timer.start()
+				#check_player_speed(body.global_position)
+#
+				#_global_datas.subscene_sonar_effect.emit(_global_datas.player_rg.position,_sonar_yellow_color)	
+				#return		
+		#
 		if vortex:
 			
 			vortex._hit()
@@ -64,15 +63,14 @@ func _contact(body_rid, body, body_shape_index, local_shape_index):
 			
 		if lootable:
 			
-			
-			
-			if hit_index >= 3:
-				hit_index = 0	
-				
-			if hit_index == 0:
-				_global_datas.subscene_sonar_effect.emit(_global_datas.player_rg.position,_sonar_blue_color)	
-				
-			hit_index += 1
+			# removing the sonar effect for the moment
+			#if hit_index >= 3:
+				#hit_index = 0	
+				#
+			#if hit_index == 0:
+				#_global_datas.subscene_sonar_effect.emit(_global_datas.player_rg.position,_sonar_blue_color)	
+				#
+			#hit_index += 1
 			
 			
 			timer.start()

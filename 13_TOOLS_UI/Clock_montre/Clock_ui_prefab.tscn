@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://clc3sbquuu1us"]
+[gd_scene load_steps=20 format=3 uid="uid://clc3sbquuu1us"]
 
 [ext_resource type="PackedScene" uid="uid://b04qmdjf73spd" path="res://13_TOOLS_UI/Clock_montre/clock_3d_ui_prefab.tscn" id="1_71jwj"]
 [ext_resource type="Resource" uid="uid://bcj27libgpl5g" path="res://08_SUBSCENES/Tools/Main_tool/Check_clock.tres" id="1_e231r"]
@@ -180,6 +180,18 @@ shader_parameter/Opacity = 1.0
 [sub_resource type="ViewportTexture" id="ViewportTexture_xhme6"]
 viewport_path = NodePath("SubViewport")
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8lx2s"]
+albedo_color = Color(0.219608, 0.176471, 0.101961, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hajhu"]
+albedo_color = Color(0.0235294, 0.176471, 0.2, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f83j0"]
+albedo_color = Color(0.439216, 0.380392, 0.278431, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0a8hu"]
+albedo_color = Color(0.0235294, 0.176471, 0.2, 1)
+
 [node name="Clock" type="Control"]
 process_mode = 3
 layout_mode = 3
@@ -230,6 +242,19 @@ fov = 40.7
 size = 2.0
 
 [node name="clock_3d_prefab" parent="SubViewport" instance=ExtResource("1_71jwj")]
+
+[node name="clock_all" parent="SubViewport/clock_3d_prefab/clock_3d2" index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_8lx2s")
+surface_material_override/1 = SubResource("StandardMaterial3D_hajhu")
+surface_material_override/2 = SubResource("StandardMaterial3D_f83j0")
+surface_material_override/3 = SubResource("StandardMaterial3D_0a8hu")
+
+[node name="root_equille" parent="SubViewport/clock_3d_prefab/clock_3d2" index="1"]
+surface_material_override/0 = SubResource("StandardMaterial3D_8lx2s")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.969818, 0)
+layers = 524288
 
 [editable path="SubViewport/clock_3d_prefab"]
 [editable path="SubViewport/clock_3d_prefab/clock_3d2"]

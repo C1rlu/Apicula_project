@@ -90,7 +90,7 @@ expression = "const float DITHER_THRESHOLDS[16] ={
 	
 vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
+Dither_Node = In - DITHER_THRESHOLDS[index];SETP"
 
 [sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_d3v40"]
 
@@ -119,67 +119,23 @@ code = "shader_type canvas_item;
 render_mode blend_mix, unshaded;
 
 uniform sampler2D Main_base : filter_nearest;
-uniform sampler2D Light_pass : filter_nearest;
-global uniform float Dither_size;
 uniform float Opacity : hint_range(0, 1) = 1;
+global uniform float Dither_size;
 
 
 
 void fragment() {
-// ColorConstant:51
-	vec4 n_out51p0 = vec4(0.034102, 0.122733, 0.133838, 1.000000);
-
-
 	vec4 n_out36p0;
 // Texture2D:36
 	n_out36p0 = texture(Main_base, UV);
 
 
-	vec4 n_out50p0;
-// Texture2D:50
-	n_out50p0 = texture(Light_pass, UV);
-
-
-// FloatConstant:61
-	float n_out61p0 = 1.000000;
+// FloatParameter:18
+	float n_out18p0 = Opacity;
 
 
 // FloatParameter:32
 	float n_out32p0 = Dither_size;
-
-
-	float n_out62p0;
-// Expression:62
-	n_out62p0 = 0.0;
-	{
-		const float DITHER_THRESHOLDS[16] ={
-				1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
-				13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
-				4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
-				16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
-			};
-			
-		vec2 uv = FRAGCOORD.xy * n_out32p0;
-		int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-		n_out62p0 = n_out61p0 - DITHER_THRESHOLDS[index];
-	}
-
-
-// Step:63
-	float n_out63p0 = step(n_out62p0, n_out50p0.x);
-
-
-// Mix:64
-	float n_in64p2 = 0.20500;
-	float n_out64p0 = mix(n_out50p0.x, n_out63p0, n_in64p2);
-
-
-// Mix:48
-	vec3 n_out48p0 = mix(vec3(n_out51p0.xyz), vec3(n_out36p0.xyz), vec3(n_out64p0));
-
-
-// FloatParameter:18
-	float n_out18p0 = Opacity;
 
 
 	float n_out4p0;
@@ -209,13 +165,12 @@ void fragment() {
 
 
 // Output:0
-	COLOR.rgb = n_out48p0;
+	COLOR.rgb = vec3(n_out36p0.xyz);
 	COLOR.a = n_out33p0;
 
 
 }
 "
-graph_offset = Vector2(-1172.04, 265.387)
 mode = 1
 flags/unshaded = true
 flags/light_only = false
@@ -244,17 +199,17 @@ nodes/fragment/32/position = Vector2(-2980, 1540)
 nodes/fragment/33/node = SubResource("VisualShaderNodeFloatFunc_dlgiy")
 nodes/fragment/33/position = Vector2(320, 1580)
 nodes/fragment/36/node = SubResource("VisualShaderNodeTexture_kxvsb")
-nodes/fragment/36/position = Vector2(-880, -920)
+nodes/fragment/36/position = Vector2(-920, -980)
 nodes/fragment/47/node = SubResource("VisualShaderNodeTexture2DParameter_s04an")
 nodes/fragment/47/position = Vector2(-1300, -1000)
 nodes/fragment/48/node = SubResource("VisualShaderNodeMix_454vm")
-nodes/fragment/48/position = Vector2(-460, -680)
+nodes/fragment/48/position = Vector2(-480, -300)
 nodes/fragment/49/node = SubResource("VisualShaderNodeTexture2DParameter_6mprd")
 nodes/fragment/49/position = Vector2(-2180, -640)
 nodes/fragment/50/node = SubResource("VisualShaderNodeTexture_lh00l")
 nodes/fragment/50/position = Vector2(-1740, -520)
 nodes/fragment/51/node = SubResource("VisualShaderNodeColorConstant_qltd2")
-nodes/fragment/51/position = Vector2(-560, -820)
+nodes/fragment/51/position = Vector2(-580, -440)
 nodes/fragment/52/node = SubResource("VisualShaderNodeTexture2DParameter_ta4vg")
 nodes/fragment/52/position = Vector2(-1960, 180)
 nodes/fragment/53/node = SubResource("VisualShaderNodeTexture_iv2iw")
@@ -296,7 +251,7 @@ nodes/fragment/62/expression = "const float DITHER_THRESHOLDS[16] ={
 	
 vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
-Dither_Node = In - DITHER_THRESHOLDS[index];"
+Dither_Node = In - DITHER_THRESHOLDS[index];SETP"
 nodes/fragment/63/node = SubResource("VisualShaderNodeStep_d3v40")
 nodes/fragment/63/position = Vector2(-1360, -280)
 nodes/fragment/64/node = SubResource("VisualShaderNodeMix_jlscg")
@@ -307,4 +262,4 @@ nodes/fragment/67/node = SubResource("VisualShaderNodeColorOp_blbxw")
 nodes/fragment/67/position = Vector2(-300, -100)
 nodes/fragment/68/node = SubResource("VisualShaderNodeTexture_myfqw")
 nodes/fragment/68/position = Vector2(-740, 80)
-nodes/fragment/connections = PackedInt32Array(32, 0, 4, 1, 18, 0, 4, 0, 4, 0, 7, 1, 7, 0, 33, 0, 33, 0, 0, 1, 47, 0, 36, 2, 49, 0, 50, 2, 51, 0, 48, 0, 36, 0, 48, 1, 52, 0, 53, 2, 32, 0, 57, 1, 58, 0, 57, 0, 57, 0, 56, 0, 53, 0, 56, 1, 61, 0, 62, 0, 32, 0, 62, 1, 50, 0, 64, 0, 63, 0, 64, 1, 64, 0, 48, 2, 62, 0, 63, 0, 50, 0, 63, 1, 53, 0, 65, 0, 56, 0, 65, 1, 65, 0, 68, 0, 48, 0, 67, 0, 68, 0, 67, 1, 48, 0, 0, 0)
+nodes/fragment/connections = PackedInt32Array(32, 0, 4, 1, 18, 0, 4, 0, 4, 0, 7, 1, 7, 0, 33, 0, 33, 0, 0, 1, 47, 0, 36, 2, 49, 0, 50, 2, 51, 0, 48, 0, 36, 0, 48, 1, 52, 0, 53, 2, 32, 0, 57, 1, 58, 0, 57, 0, 57, 0, 56, 0, 53, 0, 56, 1, 61, 0, 62, 0, 32, 0, 62, 1, 50, 0, 64, 0, 63, 0, 64, 1, 64, 0, 48, 2, 62, 0, 63, 0, 50, 0, 63, 1, 53, 0, 65, 0, 56, 0, 65, 1, 65, 0, 68, 0, 48, 0, 67, 0, 68, 0, 67, 1, 36, 0, 0, 0)

@@ -1,17 +1,23 @@
-[gd_scene load_steps=12 format=3 uid="uid://chipng023vh22"]
+[gd_scene load_steps=14 format=3 uid="uid://chipng023vh22"]
 
 [ext_resource type="PackedScene" uid="uid://duffwm80yuqso" path="res://08_SUBSCENES/Elements/Ice/Ice_msh_01.blend" id="1_qh0n2"]
-[ext_resource type="Shader" uid="uid://cu2uipuy138c6" path="res://05_SHADER/All_Materials/Main_sceneTest_dither_sh.tres" id="2_la36l"]
+[ext_resource type="Shader" uid="uid://btl0hgwwfslhj" path="res://08_SUBSCENES/Elements/Magnetable_test/00_SHADER/Debris_scanner_sh.tres" id="2_41vfx"]
+[ext_resource type="Shader" uid="uid://be88gec6clk8u" path="res://05_SHADER/Subscene_materials/Subscene_sh.tres" id="3_r3ykd"]
 [ext_resource type="Material" uid="uid://pvr0u5gwh5ek" path="res://05_SHADER/Subscene_materials/element_subscene_x_ray.tres" id="3_xiug8"]
 [ext_resource type="Material" uid="uid://yjoyk6fvrm6q" path="res://10_BOARD/00_BOOK/00_SHADER/No_light_surface_mat.tres" id="4_w4gae"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_7odsl"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7abhv"]
 resource_local_to_scene = true
-render_priority = 1
-shader = ExtResource("2_la36l")
-shader_parameter/ColorParameter = Color(0.294118, 0.556863, 0.54902, 1)
-shader_parameter/Color = Color(0.0392157, 0.196078, 0.247059, 1)
-shader_parameter/Dither_strenght = 0.555
+render_priority = 0
+shader = ExtResource("2_41vfx")
+shader_parameter/Color = Color(0.788235, 0.588235, 0.345098, 1)
+shader_parameter/Opacity = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dbhyg"]
+resource_local_to_scene = true
+render_priority = 0
+next_pass = SubResource("ShaderMaterial_7abhv")
+shader = ExtResource("3_r3ykd")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5ipwg"]
 resource_name = "Material"
@@ -97,9 +103,10 @@ shadow_mesh = SubResource("ArrayMesh_xrl8t")
 
 [node name="Ice_msh_01" parent="." index="0"]
 layers = 4
-surface_material_override/0 = SubResource("ShaderMaterial_7odsl")
+surface_material_override/0 = SubResource("ShaderMaterial_dbhyg")
 
 [node name="Ice_msh_LIGHT" type="MeshInstance3D" parent="." index="1"]
+visible = false
 layers = 131072
 mesh = SubResource("ArrayMesh_lxtf4")
 skeleton = NodePath("")

@@ -1,16 +1,16 @@
 extends Node
 
-@onready var render_scanner = $"../Control/RENDER_Scanner"
+@onready var render_scanner = $"../Control/RENDER"
 @onready var loader = $"../InsidePhoto_scanner_scene/loader"
 @onready var backdrop_focus = $"../Control/BACKDROP_FOCUS"
 @onready var active_scene_viewports = $"../Active_scene_viewports"
 
 
 func _ready():
-	#_global_datas.show_on_scanner.connect(_show_scanner)
+	_global_datas.show_on_scanner.connect(_show_scanner)
 	
-	_global_datas._go_Subscene.connect(_show)
-	_global_datas._backFrom_subscene.connect(_hide)
+	#_global_datas._go_Subscene.connect(_show)
+	#_global_datas._backFrom_subscene.connect(_hide)
 	render_scanner.visible = true
 	backdrop_focus.visible = true
 

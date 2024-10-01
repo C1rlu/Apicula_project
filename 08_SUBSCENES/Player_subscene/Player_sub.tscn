@@ -10,12 +10,12 @@
 [ext_resource type="Resource" uid="uid://380xcgsxw62f" path="res://08_SUBSCENES/Tools/Main_tool/magnet_tool.tres" id="7_un21c"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Magnet_effect.gd" id="9_wphos"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Subjet_effet.gd" id="10_jdgje"]
+[ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/ELEMENT_COLLECT.gd" id="11_ynt5r"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/ELEMENT_BREAKING.gd" id="12_6dq77"]
 [ext_resource type="Resource" uid="uid://bv88qpfo17i43" path="res://08_SUBSCENES/Tools/Main_tool/magnet_remove_tool.tres" id="14_t3rck"]
 [ext_resource type="PackedScene" uid="uid://bktiy5sdjc87f" path="res://08_SUBSCENES/Player_subscene/Cosmo_Mod_01.blend" id="14_tdqlw"]
 [ext_resource type="Material" uid="uid://yjoyk6fvrm6q" path="res://10_BOARD/00_BOOK/00_SHADER/No_light_surface_mat.tres" id="17_dh0mp"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/look_at_camera.gd" id="17_mnoui"]
-[ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Check_Dialogue_Zone.gd" id="17_o0rcv"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Player_subscene/Push.gd" id="17_qkxfn"]
 [ext_resource type="Shader" uid="uid://cu2uipuy138c6" path="res://05_SHADER/All_Materials/Main_sceneTest_dither_sh.tres" id="19_7vppd"]
 
@@ -23,8 +23,8 @@
 bounce = 0.8
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_lp7h6"]
-radius = 0.128974
-height = 0.375647
+radius = 0.163812
+height = 0.377449
 
 [sub_resource type="GDScript" id="GDScript_lbkea"]
 script/source = "extends Node
@@ -86,7 +86,7 @@ func done():
 [sub_resource type="GDScript" id="GDScript_8qwgp"]
 script/source = "extends Node
 
-@onready var omni_light_3d = $\"../Light_blue\"
+@onready var omni_light_3d = $\"../Main_light\"
 @onready var omny_range : float 
 
 var t
@@ -127,7 +127,7 @@ resource_local_to_scene = true
 render_priority = 1
 shader = ExtResource("19_7vppd")
 shader_parameter/ColorParameter = Color(0.054902, 0.14902, 0.145098, 1)
-shader_parameter/Color = Color(0.47451, 0.396078, 0.188235, 1)
+shader_parameter/Color = Color(0.0588235, 0.160784, 0.152941, 1)
 shader_parameter/Dither_strenght = 0.5
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_4n5uy"]
@@ -864,7 +864,7 @@ shader_parameter/Size = 0.7
 shader_parameter/flash_opacity = 0.5
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_g1ic5"]
-radius = 0.290241
+radius = 0.202504
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_47iq4"]
 radius = 0.705497
@@ -1122,7 +1122,7 @@ Rg = NodePath("..")
 script = ExtResource("3_k136c")
 
 [node name="Player_sub_collider" type="CollisionShape3D" parent="."]
-transform = Transform3D(-4.37114e-08, 1, 4.37114e-08, 0, -4.37114e-08, 1, 1, 4.37114e-08, 1.91069e-15, 0, 0.136192, 0.0477331)
+transform = Transform3D(-4.37114e-08, 1, 4.37114e-08, 0, -4.37114e-08, 1, 1, 4.37114e-08, 1.91069e-15, 6.2154e-09, 0.142192, 2.71684e-16)
 shape = SubResource("CapsuleShape3D_lp7h6")
 
 [node name="Ini_subscene" type="Node" parent="."]
@@ -1148,17 +1148,6 @@ one_shot = true
 [node name="Photo_Flash" type="Node" parent="."]
 script = SubResource("GDScript_8qwgp")
 
-[node name="ELEMENT_BREAKING" type="Node" parent="." node_paths=PackedStringArray("Rg", "hit_node")]
-script = ExtResource("12_6dq77")
-_sonar_blue_color = Color(0.788235, 0.588235, 0.345098, 1)
-_sonar_yellow_color = Color(0.788235, 0.588235, 0.345098, 1)
-Rg = NodePath("..")
-hit_node = NodePath("../Render_mesh/Debris_particule_Hit")
-
-[node name="Timer" type="Timer" parent="ELEMENT_BREAKING"]
-wait_time = 0.5
-one_shot = true
-
 [node name="Magnet_effect" type="Node" parent="." node_paths=PackedStringArray("magnet_fx", "collector_collider", "Magnet_Area")]
 script = ExtResource("9_wphos")
 manget_tool = ExtResource("7_un21c")
@@ -1167,15 +1156,23 @@ magnet_fx = NodePath("../VFX_MAGNET_")
 collector_collider = NodePath("../Magnet_zone/CollisionShape3D")
 Magnet_Area = NodePath("../Magnet_zone")
 
-[node name="Timer_on" type="Timer" parent="Magnet_effect"]
-wait_time = 0.25
-
 [node name="Subjet_effect ( accelerateur )" type="Node" parent="."]
 script = ExtResource("10_jdgje")
 subjet_effect = ExtResource("2_0pvbg")
 
-[node name="Check_Dialogue_Zone" type="Node" parent="."]
-script = ExtResource("17_o0rcv")
+[node name="ELEMENT_BREAKING" type="Node" parent="." node_paths=PackedStringArray("Rg", "hit_node")]
+script = ExtResource("12_6dq77")
+Rg = NodePath("..")
+hit_node = NodePath("../Render_mesh/Debris_particule_Hit")
+
+[node name="Timer" type="Timer" parent="ELEMENT_BREAKING"]
+wait_time = 0.1
+one_shot = true
+
+[node name="ELEMENT_COLLECT" type="Node" parent="." node_paths=PackedStringArray("collector_area")]
+script = ExtResource("11_ynt5r")
+collector_area = NodePath("../ZoneCollide")
+active = true
 
 [node name="Render_mesh" type="Node3D" parent="."]
 
@@ -1234,6 +1231,7 @@ surface_material_override/0 = SubResource("ShaderMaterial_wek0o")
 
 [node name="Light_02" type="Node3D" parent="Render_mesh"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00877953, -0.0123595, -0.0143354)
+visible = false
 
 [node name="lampe" type="MeshInstance3D" parent="Render_mesh/Light_02"]
 transform = Transform3D(-0.0391894, -3.42603e-09, 0, 3.42603e-09, -0.0391894, 0, 0, 0, 0.0391894, 0.059901, 0.397635, -0.0883384)
@@ -1390,23 +1388,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.135905, 0)
 shape = SubResource("SphereShape3D_47iq4")
 disabled = true
 
-[node name="Light_blue" type="OmniLight3D" parent="."]
+[node name="Main_light" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.348655, 0.114098)
-layers = 131072
+layers = 4
 omni_range = 1.625
-omni_attenuation = 7.46426
-
-[node name="Light_yellow" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.348655, 0.114098)
-layers = 16384
-omni_range = 0.956
-omni_attenuation = 0.37893
-
-[node name="Light_xray" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.348655, 0.114098)
-visible = false
-layers = 4096
-omni_range = 1.34799
 
 [node name="VFX_MAGNET_" type="GPUParticles3D" parent="."]
 transform = Transform3D(1.429, 0, 0, 0, 1.429, 0, 0, 0, 1.429, 0.0391031, 0.129062, 0.175887)
@@ -1420,6 +1405,7 @@ draw_pass_1 = SubResource("SphereMesh_6ufqt")
 
 [node name="Fx_water" type="GPUParticles3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.0390157, 0.999239, 0, -0.999239, 0.0390157, 0.00288114, 0.135205, -0.0997294)
+visible = false
 layers = 131076
 material_override = SubResource("ShaderMaterial_auo33")
 cast_shadow = 0
@@ -1432,7 +1418,5 @@ process_material = SubResource("ParticleProcessMaterial_snyp2")
 draw_pass_1 = ExtResource("4_6vpi7")
 
 [connection signal="timeout" from="Ini_subscene/Timer" to="Ini_subscene" method="_on_timer_timeout"]
-[connection signal="area_shape_entered" from="ZoneCollide" to="Check_Dialogue_Zone" method="_area_entered"]
-[connection signal="area_shape_exited" from="ZoneCollide" to="Check_Dialogue_Zone" method="_area_exited"]
 
 [editable path="Render_mesh/Cosmo_Mod_02"]

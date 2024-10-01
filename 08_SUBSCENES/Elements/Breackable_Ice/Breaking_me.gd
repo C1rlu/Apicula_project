@@ -9,6 +9,7 @@ const EXPLOSED_ROCK_VFX = preload("res://08_SUBSCENES/Elements/Breackable_Ice/Bl
 var hit_index : int 
 
 var debris_inside : Array[Node]
+signal breaking_done
 
 #func _ready():
 	#_global_datas._end_ini_subscene.connect(_get_debris_and_freeze)
@@ -37,13 +38,13 @@ func _hit():
 
 func explose_rock():
 	
-	instance_vfx()
+	#instance_vfx()
 	
 	
 	if fracture_mesh:
 		for f in fracture_mesh:
 			f.create_fracture()
-			
+	breaking_done.emit()		
 	root.queue_free()
 	
 	

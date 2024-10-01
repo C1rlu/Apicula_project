@@ -6,7 +6,7 @@
 [ext_resource type="Resource" uid="uid://vx7lgrlssiw5" path="res://15_GAME_RESSOURCE/04_Element/Cube_element.tres" id="2_utdp6"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Elements/Magnetable_test/Debris_fadeOnScanner.gd" id="3_jbkwt"]
 [ext_resource type="Shader" uid="uid://btl0hgwwfslhj" path="res://08_SUBSCENES/Elements/Magnetable_test/00_SHADER/Debris_scanner_sh.tres" id="4_fm6ss"]
-[ext_resource type="Shader" uid="uid://cu2uipuy138c6" path="res://05_SHADER/All_Materials/Main_sceneTest_dither_sh.tres" id="4_i2b1h"]
+[ext_resource type="Shader" uid="uid://be88gec6clk8u" path="res://05_SHADER/Subscene_materials/Subscene_sh.tres" id="5_gr6jq"]
 [ext_resource type="Material" uid="uid://yjoyk6fvrm6q" path="res://10_BOARD/00_BOOK/00_SHADER/No_light_surface_mat.tres" id="5_mfvfk"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Elements/Magnetable_test/Debris.gd" id="7_37srk"]
 
@@ -15,21 +15,18 @@ radius = 0.0486438
 
 [sub_resource type="SphereMesh" id="SphereMesh_d743k"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8aqrl"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7abhv"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("4_fm6ss")
 shader_parameter/Color = Color(0.788235, 0.588235, 0.345098, 1)
 shader_parameter/Opacity = 0.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_wqhpp"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_r1egm"]
 resource_local_to_scene = true
-render_priority = 1
-next_pass = SubResource("ShaderMaterial_8aqrl")
-shader = ExtResource("4_i2b1h")
-shader_parameter/ColorParameter = Color(0.294118, 0.556863, 0.54902, 1)
-shader_parameter/Color = Color(0.0784314, 0.298039, 0.368627, 1)
-shader_parameter/Dither_strenght = 0.555
+render_priority = 0
+next_pass = SubResource("ShaderMaterial_7abhv")
+shader = ExtResource("5_gr6jq")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_4726r"]
 radius = 0.0348926
@@ -61,10 +58,11 @@ shape = SubResource("SphereShape3D_pux22")
 transform = Transform3D(0.130903, 0, 0, 0, 0.130903, 0, 0, 0, 0.130903, 0.00250667, 0.00116825, 0.00824188)
 layers = 4
 mesh = SubResource("SphereMesh_d743k")
-surface_material_override/0 = SubResource("ShaderMaterial_wqhpp")
+surface_material_override/0 = SubResource("ShaderMaterial_r1egm")
 
 [node name="MeshInstance3D_light" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.130903, 0, 0, 0, 0.130903, 0, 0, 0, 0.130903, 0.00250667, 0.00116825, 0.00824188)
+visible = false
 layers = 131072
 mesh = SubResource("SphereMesh_d743k")
 surface_material_override/0 = ExtResource("5_mfvfk")
@@ -76,12 +74,11 @@ collision_mask = 4
 [node name="Element" type="Node" parent="Area3D"]
 script = ExtResource("2_grvie")
 
-[node name="Attract_me" type="Node" parent="Area3D" node_paths=PackedStringArray("rg", "Fade_OnScanner")]
+[node name="Attract_me" type="Node" parent="Area3D" node_paths=PackedStringArray("rg")]
 script = ExtResource("2_snwxr")
 color_attracted = Color(0.788235, 0.588235, 0.345098, 1)
 rg = NodePath("../..")
 strenght = 150.0
-Fade_OnScanner = NodePath("../../Fade_OnScanner")
 
 [node name="Debris" type="Node" parent="Area3D"]
 script = ExtResource("7_37srk")

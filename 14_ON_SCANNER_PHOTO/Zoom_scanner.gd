@@ -2,9 +2,6 @@ extends Node
 
 
 @onready var camera_3d = $"../../SubViewport_scanner/Camp_root_Render/Camera3D"
-@onready var camera_3d_noise = $"../../SubViewport_scanner_Noise/Camp_root_Render/Camera3D"
-
-
 
 var t
 
@@ -31,7 +28,7 @@ func _process(delta):
 		camera_3d.fov += _magnitude* 50* delta
 
 	camera_3d.fov = clampf(camera_3d.fov,10.0,40)
-	camera_3d_noise.fov = camera_3d.fov
+
 	
 	
 func back_from_scanner(condition : bool):
@@ -52,4 +49,4 @@ func zoom_in_scanner():
 	
 func change_fov(value : float):
 	camera_3d.fov = value	
-	camera_3d_noise.fov = camera_3d.fov
+

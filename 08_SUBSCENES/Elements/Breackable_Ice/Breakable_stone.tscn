@@ -1,8 +1,12 @@
-[gd_scene load_steps=10 format=3 uid="uid://ddac0wqbwjiqc"]
+[gd_scene load_steps=14 format=3 uid="uid://ddac0wqbwjiqc"]
 
+[ext_resource type="Script" path="res://08_SUBSCENES/Elements/Breackable_Ice/Breakable_stone.gd" id="1_2771l"]
 [ext_resource type="Material" uid="uid://c23wi5umraqxu" path="res://05_SHADER/Subscene_materials/Subscene_rock_ice.tres" id="1_n67ey"]
 [ext_resource type="Material" uid="uid://bxf2r8qu2qvay" path="res://05_SHADER/Subscene_materials/Subscene_basic_rock.tres" id="2_apfu1"]
+[ext_resource type="Resource" uid="uid://cmp0pwiuhoh2j" path="res://15_GAME_RESSOURCE/04_Element/Clock_element.tres" id="2_ctpmu"]
 [ext_resource type="Script" path="res://08_SUBSCENES/Elements/Breackable_Ice/Breaking_me.gd" id="3_03ww0"]
+[ext_resource type="Resource" uid="uid://cdtu37wcayr7j" path="res://15_GAME_RESSOURCE/04_Element/Apicula_board_element.tres" id="3_unecl"]
+[ext_resource type="Resource" uid="uid://duegr31kxop3r" path="res://15_GAME_RESSOURCE/04_Element/Disque_element.tres" id="4_43tie"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_oxghi"]
 radial_segments = 6
@@ -54,7 +58,10 @@ bounce = 1.0
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_qe235"]
 points = PackedVector3Array(0.512497, -1.71392, -1.16211, 0.109743, 3.81333, 0.14449, 0.0124967, 3.21992, 1.35506, -4.09165, 0.000233992, -0.15598, 1.81418, -1.80306, 1.81659, 1.76396, 2.02714, -1.79517, -2.3086, -1.82565, 1.76081, -2.91361, -0.00765967, -1.97408, -2.29896, 2.00282, 1.84936, -2.10028, 2.40658, -1.76375, -2.30108, -1.81196, -1.76377, 1.63442, 1.40653, 1.86536, 1.93956, 0.294172, -1.97976, -0.0898653, 0.699385, 2.36, 1.93701, 2.82233, 0.145496, -2.49362, 2.7979, 0.143709, 0.121295, -2.34999, 0.0443085, -0.0874308, -0.00812221, -2.37952, 0.118815, 2.82717, -1.98259, 2.36771, 0.59651, 0.044468, -2.90025, -0.102629, 1.9487, 1.93887, -1.52754, -0.157957, -2.71927, -2.03729, 0.246987, 0.107294, -1.50545, -1.96013, 0.116379, 2.82218, 1.96548, -0.694285, -1.91873, 1.95686, 1.93492, 0.395686, 1.96417, -4.11307, -0.00478672, 0.144622, -2.19233, 2.39639, 1.74059, -0.294317, 3.80405, 0.0435833, 0.012457, -0.107542, 2.3636, -0.0885459, 0.598134, -2.37624)
 
-[node name="BreakableStone" type="Node3D"]
+[node name="BreakableStone" type="Node3D" node_paths=PackedStringArray("Breacking_me")]
+script = ExtResource("1_2771l")
+list_of_lootable = Array[Resource("res://15_GAME_RESSOURCE/04_Element/Element_Data/object_data.gd")]([ExtResource("2_ctpmu"), ExtResource("3_unecl"), ExtResource("4_43tie")])
+Breacking_me = NodePath("StaticBody3D/Breaking_me")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.701042, 0, 0, 0, 0.701042, 0, 0, 0, 0.701042, 0, 0, 0)
