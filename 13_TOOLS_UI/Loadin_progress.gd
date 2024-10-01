@@ -26,10 +26,12 @@ func go_subscene():
 	_global_datas._go_Subscene.emit()			
 	_global_datas._add_back_call.emit(back_call)	
 	_global_datas.Player_InMenu = true
+	_global_datas._show_object_legend.emit(false,"null")
 func back_call():
 	_global_datas._go_Mainscene.emit()
 	_global_datas._backFrom_subscene.emit()
 	_global_datas.Player_InMenu = false	
+	
 func _value(value : float):
 	
 	_global_datas.subscene_progress_bar.value = value

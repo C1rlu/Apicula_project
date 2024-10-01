@@ -24,9 +24,9 @@ func reset(condition):
 			
 func _process(delta):
 	
-	var disable = true
-	if disable:
-		return
+	#var disable = true
+	#if disable:
+		#return
 	_move_cam(delta)	
 
 func _move_cam(_delta):

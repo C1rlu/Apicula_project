@@ -1,4 +1,4 @@
-[gd_scene load_steps=67 format=3 uid="uid://cickl1bdjjsqo"]
+[gd_scene load_steps=73 format=3 uid="uid://cickl1bdjjsqo"]
 
 [ext_resource type="Script" path="res://14_ON_SCANNER_PHOTO/Show_OnScanner.gd" id="1_0c44t"]
 [ext_resource type="Script" path="res://13_TOOLS_UI/set_Resolution_viewports.gd" id="1_ifne7"]
@@ -178,6 +178,33 @@ source = 5
 
 [sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_gtw5f"]
 
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_4siql"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_6if6v"]
+constant = 1.0
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_sqcel"]
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_rosfg"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
+op_type = 3
+
+[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_u7y7f"]
+
+[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_fsddr"]
+constant = Color(1.20327e-07, 0.149824, 0.149949, 1)
+
 [sub_resource type="VisualShader" id="VisualShader_evyyy"]
 code = "shader_type canvas_item;
 render_mode blend_mix;
@@ -236,7 +263,7 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-118.905, -351.314)
+graph_offset = Vector2(-45.787, -414.461)
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(1800, -60)
@@ -262,16 +289,41 @@ nodes/fragment/39/position = Vector2(-320, 220)
 nodes/fragment/69/node = SubResource("VisualShaderNodeFloatParameter_6ng33")
 nodes/fragment/69/position = Vector2(-420, 660)
 nodes/fragment/76/node = SubResource("VisualShaderNodeInput_wh4is")
-nodes/fragment/76/position = Vector2(600, -480)
+nodes/fragment/76/position = Vector2(-820, -940)
 nodes/fragment/77/node = SubResource("VisualShaderNodeTexture_qr5as")
-nodes/fragment/77/position = Vector2(1220, -360)
+nodes/fragment/77/position = Vector2(-200, -820)
 nodes/fragment/80/node = SubResource("VisualShaderNodeMix_gtw5f")
-nodes/fragment/80/position = Vector2(1520, 40)
-nodes/fragment/connections = PackedInt32Array(39, 0, 37, 0, 37, 0, 35, 1, 69, 0, 37, 1, 76, 0, 77, 2, 35, 0, 80, 2, 80, 0, 0, 1, 77, 0, 0, 0, 77, 4, 80, 1)
+nodes/fragment/80/position = Vector2(440, 0)
+nodes/fragment/81/node = SubResource("VisualShaderNodeExpression_4siql")
+nodes/fragment/81/position = Vector2(-720, -580)
+nodes/fragment/81/size = Vector2(724.789, 654.559)
+nodes/fragment/81/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/81/output_ports = "0,0,Dither_Node;"
+nodes/fragment/81/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/82/node = SubResource("VisualShaderNodeFloatConstant_6if6v")
+nodes/fragment/82/position = Vector2(-1039.98, -550.037)
+nodes/fragment/83/node = SubResource("VisualShaderNodeStep_sqcel")
+nodes/fragment/83/position = Vector2(280, -520)
+nodes/fragment/84/node = SubResource("VisualShaderNodeMix_rosfg")
+nodes/fragment/84/position = Vector2(771.657, -666.519)
+nodes/fragment/85/node = SubResource("VisualShaderNodeColorConstant_u7y7f")
+nodes/fragment/85/position = Vector2(520, -740)
+nodes/fragment/86/node = SubResource("VisualShaderNodeColorConstant_fsddr")
+nodes/fragment/86/position = Vector2(620, -880)
+nodes/fragment/connections = PackedInt32Array(39, 0, 37, 0, 37, 0, 35, 1, 69, 0, 37, 1, 76, 0, 77, 2, 35, 0, 80, 2, 77, 4, 80, 1, 69, 0, 81, 1, 82, 0, 81, 0, 81, 0, 83, 1, 80, 0, 0, 1, 86, 0, 84, 0, 85, 0, 84, 1, 83, 0, 84, 2, 77, 0, 83, 0, 77, 0, 0, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qojhl"]
 shader = SubResource("VisualShader_evyyy")
-shader_parameter/Opacity = 0.0
+shader_parameter/Opacity = 1.0
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_ev3qb"]
 viewport_path = NodePath("SubViewport_scanner")
@@ -733,7 +785,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="BACKDROP_FOCUS" type="ColorRect" parent="Control"]
-visible = false
 material = SubResource("ShaderMaterial_vn7gh")
 clip_contents = true
 layout_mode = 1
@@ -746,7 +797,6 @@ mouse_filter = 2
 color = Color(0.0705882, 0.12549, 0.129412, 1)
 
 [node name="RENDER_Scanner" type="TextureRect" parent="Control"]
-visible = false
 material = SubResource("ShaderMaterial_qojhl")
 clip_contents = true
 layout_mode = 1

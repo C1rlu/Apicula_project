@@ -9,8 +9,8 @@ extends Node
 func _ready():
 	#_global_datas.show_on_scanner.connect(_show_scanner)
 	
-	#_global_datas._go_Subscene.connect(_show)
-	
+	_global_datas._go_Subscene.connect(_show)
+	_global_datas._backFrom_subscene.connect(_hide)
 	render_scanner.visible = true
 	backdrop_focus.visible = true
 
@@ -18,7 +18,9 @@ func _ready():
 func _show():
 	
 	_show_scanner(true)	
-		
+func _hide():
+	
+	_show_scanner(false)			
 func _show_scanner(condition : bool):
 	
 	_global_datas.in_scanner_mode = condition
