@@ -2,6 +2,9 @@ extends Node
 
 # HERE FOR ALL SUBSCENE GLOBALS OF SUBSCENE
 
+
+signal go_subscene(condition : bool)
+var player_in_subscene : bool 
 # related to depth
 var _current_player_depth : float = 0.0
 signal _update_depth_ui

@@ -44,7 +44,9 @@ func _physics_process(_delta):
 	
 	if _global_datas.Player_InSubScene:
 		return
-		
+	
+	if _subscene_datas.player_in_subscene:
+		return	
 		
 	var translation = get_global_transform().origin
 	_global_datas.player_position = translation

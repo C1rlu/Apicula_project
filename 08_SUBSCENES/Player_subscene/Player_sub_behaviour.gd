@@ -1,7 +1,5 @@
 extends RigidBody3D
 
-
-
 @export var orbe_tool : tool_data
 
 @export var actual_speed: float = 5.0

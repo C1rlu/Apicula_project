@@ -9,7 +9,7 @@ var Player_InMenu : bool
 var Player_InDialogue : bool
 var Player_InDialogue_zone : bool
 var current_scene_state : game_state.scene_state = game_state.scene_state._Main
-var subscene_zone_index : String
+
 
 
 # menu signals
