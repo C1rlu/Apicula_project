@@ -3,7 +3,8 @@ extends Node3D
 
 func _ready():
 
-	zone_datas.Boue_node_3D = self
+	if zone_datas:
+		zone_datas.Boue_node_3D = self
 
 		
 

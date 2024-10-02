@@ -11,8 +11,8 @@ func _process(delta):
 
 func move(delta):
 	
-	#if !_subscene_datas.player_in_subscene:
-		#return
+	if !_subscene_datas.player_in_subscene:
+		return
 		
 	if Input.is_action_pressed("Click"):
 		var goingUp = -transform.basis.y

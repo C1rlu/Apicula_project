@@ -25,8 +25,9 @@ func go_subscene():
 	_global_datas._active_progress_subscene.emit(false)	
 	
 	_global_datas._show_object_legend.emit(false,"null")
-
-	_subscene_datas.go_subscene.emit(true)
+	
+	_global_datas._go_Subscene.emit()
+	#_subscene_datas.go_subscene.emit(true)
 	
 	
 func _value(value : float):

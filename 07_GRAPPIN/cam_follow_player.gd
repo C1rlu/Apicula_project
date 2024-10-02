@@ -13,6 +13,6 @@ func _ready():
 
 func _process(delta):
 
-	#if !_subscene_datas.player_in_subscene:
-		#return
+	if !_subscene_datas.player_in_subscene:
+		return
 	Camera.position = lerp(Camera.position, player_rg.position, smmooth_speed * delta)

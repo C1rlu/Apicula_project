@@ -1,8 +1,32 @@
-[gd_resource type="VisualShader" load_steps=9 format=3 uid="uid://cy2i2x4yqo4j6"]
+[gd_resource type="VisualShader" load_steps=13 format=3 uid="uid://cy2i2x4yqo4j6"]
 
-[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_c6mmi"]
-default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
-op_type = 3
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_2w6g2"]
+size = Vector2(580, 280)
+expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
+grey_value = luminance;"
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_wgaro"]
+size = Vector2(724.789, 654.559)
+expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_meumo"]
+constant = 1.0
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_xc7yl"]
+
+[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_tj2qu"]
+function = 31
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_0dd74"]
 
 [sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_6hxo4"]
 size = Vector2(724.789, 654.559)
@@ -27,10 +51,6 @@ qualifier = 1
 parameter_name = "Opacity"
 hint = 1
 
-[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_rx25a"]
-parameter_name = "Subscene_Darker_color"
-qualifier = 1
-
 [sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_xu5gj"]
 input_name = "texture"
 
@@ -42,27 +62,12 @@ source = 5
 code = "shader_type canvas_item;
 render_mode blend_mix;
 
-global uniform vec4 Subscene_Darker_color : source_color;
 uniform float Opacity : hint_range(0, 1);
 global uniform float Dither_size;
 
 
 
 void fragment() {
-// ColorParameter:7
-	vec4 n_out7p0 = Subscene_Darker_color;
-
-
-	vec4 n_out9p0;
-// Texture2D:9
-	n_out9p0 = texture(TEXTURE, UV);
-	float n_out9p4 = n_out9p0.a;
-
-
-// Mix:10
-	vec3 n_out10p0 = mix(vec3(n_out7p0.xyz), vec3(n_out9p0.xyz), vec3(n_out9p4));
-
-
 // FloatParameter:6
 	float n_out6p0 = Opacity;
 
@@ -94,17 +99,15 @@ void fragment() {
 
 
 // Output:0
-	COLOR.rgb = n_out10p0;
 	COLOR.a = n_out5p0;
 
 
 }
 "
-graph_offset = Vector2(-661.373, -351.485)
 mode = 1
 flags/light_only = false
 nodes/fragment/2/node = SubResource("VisualShaderNodeExpression_6hxo4")
-nodes/fragment/2/position = Vector2(-1220, 360)
+nodes/fragment/2/position = Vector2(-1940, 620)
 nodes/fragment/2/size = Vector2(724.789, 654.559)
 nodes/fragment/2/input_ports = "0,0,In;1,0,Size;"
 nodes/fragment/2/output_ports = "0,0,Dither_Node;"
@@ -119,17 +122,43 @@ vec2 uv = FRAGCOORD.xy * Size;
 int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
 Dither_Node = In - DITHER_THRESHOLDS[index];"
 nodes/fragment/3/node = SubResource("VisualShaderNodeFloatParameter_hh4lf")
-nodes/fragment/3/position = Vector2(-1720, 500)
+nodes/fragment/3/position = Vector2(-2440, 760)
 nodes/fragment/5/node = SubResource("VisualShaderNodeStep_0dw4x")
 nodes/fragment/5/position = Vector2(-260, 180)
 nodes/fragment/6/node = SubResource("VisualShaderNodeFloatParameter_s45l7")
-nodes/fragment/6/position = Vector2(-1480, 140)
-nodes/fragment/7/node = SubResource("VisualShaderNodeColorParameter_rx25a")
-nodes/fragment/7/position = Vector2(-480, -480)
+nodes/fragment/6/position = Vector2(-2200, 400)
 nodes/fragment/8/node = SubResource("VisualShaderNodeInput_xu5gj")
-nodes/fragment/8/position = Vector2(-1040, -300)
+nodes/fragment/8/position = Vector2(-2780, -560)
 nodes/fragment/9/node = SubResource("VisualShaderNodeTexture_db1ps")
-nodes/fragment/9/position = Vector2(-680, -260)
-nodes/fragment/10/node = SubResource("VisualShaderNodeMix_c6mmi")
-nodes/fragment/10/position = Vector2(-220, -200)
-nodes/fragment/connections = PackedInt32Array(3, 0, 2, 1, 5, 0, 0, 1, 2, 0, 5, 1, 6, 0, 2, 0, 8, 0, 9, 2, 9, 4, 10, 2, 10, 0, 0, 0, 9, 0, 10, 1, 7, 0, 10, 0)
+nodes/fragment/9/position = Vector2(-2420, -520)
+nodes/fragment/10/node = SubResource("VisualShaderNodeExpression_2w6g2")
+nodes/fragment/10/position = Vector2(-1920, -680)
+nodes/fragment/10/size = Vector2(580, 280)
+nodes/fragment/10/input_ports = "0,4,color;"
+nodes/fragment/10/output_ports = "0,0,grey_value;"
+nodes/fragment/10/expression = "float luminance = 0.299 * color.x + 0.587 * color.y + 0.114 * color.z;
+grey_value = luminance;"
+nodes/fragment/11/node = SubResource("VisualShaderNodeExpression_wgaro")
+nodes/fragment/11/position = Vector2(-1820, -260)
+nodes/fragment/11/size = Vector2(724.789, 654.559)
+nodes/fragment/11/input_ports = "0,0,In;1,0,Size;"
+nodes/fragment/11/output_ports = "0,0,Dither_Node;"
+nodes/fragment/11/expression = "const float DITHER_THRESHOLDS[16] ={
+		1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
+		13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
+		4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,
+		16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
+	};
+	
+vec2 uv = FRAGCOORD.xy * Size;
+int index = (int(uv.x) % 4) * 4 + int(uv.y) % 4;
+Dither_Node = In - DITHER_THRESHOLDS[index];"
+nodes/fragment/12/node = SubResource("VisualShaderNodeFloatConstant_meumo")
+nodes/fragment/12/position = Vector2(-2365.41, -177.058)
+nodes/fragment/13/node = SubResource("VisualShaderNodeStep_xc7yl")
+nodes/fragment/13/position = Vector2(-504.57, -205.858)
+nodes/fragment/14/node = SubResource("VisualShaderNodeFloatFunc_tj2qu")
+nodes/fragment/14/position = Vector2(-720, -440)
+nodes/fragment/15/node = SubResource("VisualShaderNodeMix_0dd74")
+nodes/fragment/15/position = Vector2(-338.739, -479.838)
+nodes/fragment/connections = PackedInt32Array(3, 0, 2, 1, 5, 0, 0, 1, 2, 0, 5, 1, 8, 0, 9, 2, 9, 0, 10, 0, 6, 0, 2, 0, 3, 0, 11, 1, 12, 0, 11, 0, 11, 0, 13, 1, 10, 0, 14, 0, 14, 0, 13, 0)
